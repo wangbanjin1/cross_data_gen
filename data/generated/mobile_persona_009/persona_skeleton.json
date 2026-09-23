@@ -1,0 +1,171 @@
+{
+  "persona_id": "mobile_persona_009",
+  "category": "移动生活与现场协作",
+  "persona_summary": "高频移动网络使用者",
+  "static_profile": {
+    "user_id": "USER_009",
+    "identity": "城市户外活动爱好者兼现场内容记录者，常在城市街区、公共活动现场及跨区域出行途中活动，对文学中的暴力与虐待描写较为敏感，日常以手机移动核心网为主要联网方式，不依赖家庭宽带或公司固网。",
+    "devices": "5G智能手机＋随身拍摄设备，便携终端确需联网时使用手机热点",
+    "apps": [
+      "微信",
+      "抖音",
+      "腾讯会议",
+      "高德地图"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "干脆利落、偏口语化，带一点现场协作的催促感",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下"
+      ],
+      "typical_habits": "习惯用简短口令确认任务，遇到网络波动会直接要求续传或快速恢复，不喜欢反复解释。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "周末户外现场短视频上传与位置共享",
+      "period_type": "weekly",
+      "days": [
+        "Wednesday",
+        "Saturday"
+      ],
+      "time_range": "14:00-17:00",
+      "application_name": "抖音",
+      "service_name": "短视频",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "抖子",
+          "短视频平台"
+        ],
+        "service_aliases": [
+          "发片",
+          "传现场"
+        ]
+      },
+      "param_mappings": {
+        "resolution": {
+          "高清": "1080p",
+          "清晰点": "1080p"
+        },
+        "rtt": {
+          "低时延": "50ms",
+          "别卡": "50ms"
+        }
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_level": "explicit_long_term_declaration"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_01",
+        "event_name": "跨城户外活动周",
+        "valid_from": "2026-11-01",
+        "valid_to": "2026-11-15",
+        "impact_scope": "temporary",
+        "scene_description": "跨区域出行途中和户外等候区，移动网络覆盖不稳定，需要优先保证消息及时送达与音视频业务稳定。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        },
+        "trigger_reason": "跨城移动场景下弱覆盖路段增多，降低分辨率并收紧时延上限，优先保证任务续传和快速恢复。"
+      }
+    ],
+    "sub_storylines": [
+      {
+        "sub_id": "SUB_MT_01",
+        "name": "现场远程协作沟通",
+        "period_type": "weekly_evening",
+        "days": [
+          "Sunday",
+          "Wednesday"
+        ],
+        "trigger_condition": "现场拍摄后需要与同伴对齐素材和位置时",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "aliases": {
+          "app_aliases": [
+            "微子",
+            "绿泡泡"
+          ],
+          "service_aliases": [
+            "对一下",
+            "视频对齐"
+          ]
+        },
+        "param_mappings": {
+          "resolution": {
+            "标清": "720p"
+          },
+          "rtt": {
+            "能听清就行": "100ms"
+          }
+        }
+      },
+      {
+        "sub_id": "SUB_MT_02",
+        "name": "临时远程会议接入",
+        "period_type": "sporadic_evening",
+        "trigger_condition": "外勤途中临时需要接入团队会议时",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "aliases": {
+          "app_aliases": [
+            "腾讯会",
+            "开会软件"
+          ],
+          "service_aliases": [
+            "线上碰头",
+            "远程会"
+          ]
+        },
+        "param_mappings": {
+          "resolution": {
+            "超清": "1080p"
+          },
+          "rtt": {
+            "不卡": "80ms"
+          }
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "name": "单次看直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "scenario_description": "临时停留点休息时，单次打开直播观看兴趣活动内容。",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "name": "单次地图导航与位置共享",
+        "application_name": "高德地图",
+        "service_name": "视频通话",
+        "scenario_description": "城市街区临时找路时，单次发起位置共享并附带视频通话确认碰头点。",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}
