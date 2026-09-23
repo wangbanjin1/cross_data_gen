@@ -1,4 +1,5 @@
 from .timeline_blueprints import get_15_session_blueprints
+from .trigger_presets import TriggerPresetManager
 from .prompts import (
     build_persona_skeleton_prompt,
     build_batch_dialogue_prompt,
@@ -10,6 +11,7 @@ from .prompts import (
 
 __all__ = [
     "get_15_session_blueprints",
+    "TriggerPresetManager",
     "build_persona_skeleton_prompt",
     "build_batch_dialogue_prompt",
     "build_single_dialogue_prompt",

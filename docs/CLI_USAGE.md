@@ -186,4 +186,120 @@ cross_memory_data/
 
 > **规范化解耦保证**：无论用户口语表达多么地道随性，底层的 `intents.params`、`slot_updates` 与 `memory_events` 均在第一时间内精准归一化为官方枚举标准值，完全满足电信级核心网接口规范。
 
+---
+
+## 七、 触发预设与周期规则完全解耦指南 (`data/whitelist/trigger_presets.json`)
+
+为了让业务人员和研究人员能够自由扩展触发场景，无需侵入或修改任何 Python 代码，系统已将所有周期时段（`daily` / `weekly` / `monthly`）、任务驱动（`task_activity`）以及地理环境驱动（`location_environment`）全量解耦至独立白名单配置文件：
+`data/whitelist/trigger_presets.json`。
+
+### 1. 配置文件层级与结构说明
+
+文件由三大根字段构成：
+
+```json
+{
+  "time_periodic": {
+    "daily": {
+      "slots": [
+        { "time_range": "08:30-10:00", "desc": "每天早高峰通勤与晨间例行业务" }
+      ],
+      "instruction_template": "周期时间驱动【daily日级周期】：设定每天固定时段的高频业务（如{time_range}，{desc}），period_type必须为'daily'，days设为['daily']，time_range设为'{time_range}'，trigger_condition设为明确的日周期描述（如'{desc}'）"
+    },
+    "weekly": {
+      "combos": [
+        { "days": ["Monday", "Friday"], "time_range": "09:30-11:30", "desc": "每周一与周五例会与业务对齐" }
+      ],
+      "instruction_template": "周期时间驱动【weekly周级周期】：设定每周固定周几频次的高频业务，必须多样化，严禁单一重复（已指定周组合：{days}，时段：{time_range}），period_type必须为'weekly'，days设为{days}，time_range设为'{time_range}'，trigger_condition设为明确的周周期描述（如'{desc}'）"
+    },
+    "monthly": {
+      "combos": [
+        { "days": ["1st", "2nd"], "time_range": "09:00-11:00", "desc": "每月月初1-2号例行开门红与月度动员会" }
+      ],
+      "instruction_template": "周期时间驱动【monthly月级周期】：设定每月特定日期的月度高频业务（已指定月度日期：{days}，时段：{time_range}），period_type必须为'monthly'，days设为{days}，time_range设为'{time_range}'，trigger_condition设为明确的月周期描述（如'{desc}'）"
+    }
+  },
+  "task_activity": {
+    "presets": [
+      {
+        "task_name": "客户现场合规审计",
+        "time_range": "14:00-16:00",
+        "trigger_condition": "执行客户现场合规审计任务"
+      }
+    ],
+    "instruction_template": "任务现场驱动：因特定专业活动/现场任务触发（如'客户现场审计'、'婚庆跟拍'等），trigger_condition 必须为执行该特定任务（如'执行{task_name}任务'）"
+  },
+  "location_environment": {
+    "presets": [
+      {
+        "location_name": "利兹露天集结区",
+        "time_range": "15:00-17:00",
+        "trigger_condition": "身处露天集结区弱网区域"
+      }
+    ],
+    "instruction_template": "特定地点驱动：因特定物理空间/环境触发（如'利兹露天集结区'、'地下配电室'），trigger_condition 必须为身处该特定空间（如'身处{location_name}弱网区域'）"
+  }
+}
+```
+
+### 2. 如何自己增添与自定义预设？
+
+直接使用文本编辑器打开 `data/whitelist/trigger_presets.json`，在对应数组中直接追加 JSON 对象即可：
+
+#### 示例 A：新增一个日级周期时段 (`daily`)
+在 `"time_periodic" -> "daily" -> "slots"` 列表中添加：
+```json
+{
+  "time_range": "06:30-08:00",
+  "desc": "每天清晨晨练与户外慢跑推流"
+}
+```
+
+#### 示例 B：新增一个周级周期组合 (`weekly`)
+在 `"time_periodic" -> "weekly" -> "combos"` 列表中添加：
+```json
+{
+  "days": ["Tuesday", "Thursday", "Saturday"],
+  "time_range": "18:30-20:30",
+  "desc": "每周二四六晚间社群研讨与线上答疑"
+}
+```
+
+#### 示例 C：新增一个月度周期组合 (`monthly`)
+在 `"time_periodic" -> "monthly" -> "combos"` 列表中添加：
+```json
+{
+  "days": ["5th", "25th"],
+  "time_range": "10:00-12:00",
+  "desc": "每月5号和25号例行薪酬核算与发票报销"
+}
+```
+
+#### 示例 D：新增一个专业任务现场驱动 (`task_activity`)
+在 `"task_activity" -> "presets"` 列表中添加：
+```json
+{
+  "task_name": "海上风电平台应急搜救",
+  "time_range": "07:00-11:00",
+  "trigger_condition": "执行海上风电平台应急搜救与低空通信保障"
+}
+```
+
+#### 示例 E：新增一个特殊物理空间弱网驱动 (`location_environment`)
+在 `"location_environment" -> "presets"` 列表中添加：
+```json
+{
+  "location_name": "沙漠公路深处无人区",
+  "time_range": "12:00-16:00",
+  "trigger_condition": "身处沙漠公路深处无人区车载卫星中继站周边"
+}
+```
+
+### 3. 自动化调度与自适应时间计算机制
+
+- **哈希轮转与均匀覆盖**：系统基于人物画像的数字 ID (`uid_num`) 进行确定性模运算，自动在显式/隐式、三大触发范式（地点、时间周期、任务）以及日/周/月中进行均匀轮转分配，确保生成样本的多样性。
+- **全动态时间线计算**：无论是 `"06:30-08:00"` 还是 `"18:30-20:30"`，底层的 `DynamicTimelinePlanner` 与 `timeline_blueprints.py` 会自动解析起止时间、准确计算基准会话时长（分钟数）、自动递进各轮会话日期，并在遇到 `T2-5`（时长变更）时智能将 `end_timestamp` 向后扩展一小时，**全程无需人工计算或维护繁琐的时间戳**！
+- **容错回退机制**：若外部 JSON 格式存在语法错误或文件丢失，`TriggerPresetManager` 会自动回退至内置的安全默认配置，保证流水线的高可用性与生产稳定性。
+
+
 

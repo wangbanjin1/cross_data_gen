@@ -2,6 +2,7 @@ import re
 from src.config.settings import Config
 from src.generation.llm_client import LLMClient
 from src.templates.prompts.persona_prompts import build_persona_skeleton_prompt
+from src.templates.trigger_presets import TriggerPresetManager
 
 class PersonaGenerator:
     """
@@ -17,60 +18,9 @@ class PersonaGenerator:
     def generate_skeleton(self, raw_persona: dict) -> dict:
         num_match = re.search(r'\d+', raw_persona.get("persona_id", ""))
         uid_num = int(num_match.group()) if num_match else 1
-        forced_decl_mode = "explicit_declaration" if (uid_num % 2 == 1) else "implicit_induction"
-        trig_mod = uid_num % 3
-
-        if trig_mod == 1:
-            forced_trig_type = "time_periodic"
-            grain_idx = (uid_num // 3) % 3
-            if grain_idx == 0:
-                # 日级周期 (daily)
-                daily_slots = [
-                    ("08:30-10:00", "每天早高峰通勤与晨间例行业务"),
-                    ("12:30-13:30", "每天午间休息与午间复盘业务"),
-                    ("20:00-22:00", "每天晚间黄金档高频业务"),
-                    ("19:00-21:00", "每天傍晚黄金档例行业务"),
-                    ("23:00-00:30", "每天深夜巡检与连线业务")
-                ]
-                time_range_hint, trig_desc_example = daily_slots[uid_num % len(daily_slots)]
-                period_type_hint = "daily"
-                days_hint = ["daily"]
-                trig_instruction = f"周期时间驱动【daily日级周期】：设定每天固定时段的高频业务（如{time_range_hint}，{trig_desc_example}），period_type必须为'daily'，days设为['daily']，time_range设为'{time_range_hint}'，trigger_condition设为明确的日周期描述（如'{trig_desc_example}'）"
-            elif grain_idx == 1:
-                # 周级周期 (weekly 多样化组合，坚决破除单一周三周六)
-                weekly_combos = [
-                    (["Monday", "Friday"], "09:30-11:30", "每周一与周五例会与业务对齐"),
-                    (["Tuesday", "Thursday"], "14:00-16:00", "每周二与周四常规专业培训/研讨"),
-                    (["Saturday", "Sunday"], "15:00-17:00", "每周六与周日周末赛事专场/排位"),
-                    (["Wednesday", "Friday"], "19:00-21:00", "每周三与周五晚间对账与复盘"),
-                    (["Tuesday", "Saturday"], "20:00-22:00", "每周二与周六晚间行业直播"),
-                    (["Monday", "Wednesday", "Friday"], "10:00-12:00", "工作日一三五常规业务例会")
-                ]
-                days_hint, time_range_hint, trig_desc_example = weekly_combos[uid_num % len(weekly_combos)]
-                period_type_hint = "weekly"
-                trig_instruction = f"周期时间驱动【weekly周级周期】：设定每周固定周几频次的高频业务，必须多样化，严禁单一重复（已指定周组合：{days_hint}，时段：{time_range_hint}），period_type必须为'weekly'，days设为{days_hint}，time_range设为'{time_range_hint}'，trigger_condition设为明确的周周期描述（如'{trig_desc_example}'）"
-            else:
-                # 月级周期 (monthly)
-                monthly_combos = [
-                    (["1st", "2nd"], "09:00-11:00", "每月月初1-2号例行开门红与月度动员会"),
-                    (["15th", "16th"], "14:00-16:00", "每月月中15-16号例行综合对账与业务巡检"),
-                    (["28th", "29th"], "20:00-22:00", "每月月末28-29号例行封账冲刺与月度大复盘")
-                ]
-                days_hint, time_range_hint, trig_desc_example = monthly_combos[uid_num % len(monthly_combos)]
-                period_type_hint = "monthly"
-                trig_instruction = f"周期时间驱动【monthly月级周期】：设定每月特定日期的月度高频业务（已指定月度日期：{days_hint}，时段：{time_range_hint}），period_type必须为'monthly'，days设为{days_hint}，time_range设为'{time_range_hint}'，trigger_condition设为明确的月周期描述（如'{trig_desc_example}'）"
-        elif trig_mod == 2:
-            forced_trig_type = "task_activity"
-            period_type_hint = "task_driven"
-            days_hint = ["task_specific"]
-            time_range_hint = "14:00-16:00"
-            trig_instruction = "任务现场驱动：因特定专业活动/现场任务触发（如'客户现场审计'、'婚庆跟拍'、'电力设备巡检'、'医疗会诊'等），trigger_condition 必须为执行该特定任务（如'执行客户现场合规审计任务'）"
-        else:
-            forced_trig_type = "location_environment"
-            period_type_hint = "location_driven"
-            days_hint = ["location_specific"]
-            time_range_hint = "15:00-17:00"
-            trig_instruction = "特定地点驱动：因特定物理空间/环境触发（如'利兹露天集结区'、'地下配电室'、'跨城物流中转站'、'高铁沿线弱网区'），trigger_condition 必须为身处该特定空间（如'身处露天集结区弱网区域'）"
+        forced_decl_mode, forced_trig_type, period_type_hint, days_hint, time_range_hint, trig_instruction = (
+            TriggerPresetManager.resolve_trigger_plan(uid_num)
+        )
 
         prompt = build_persona_skeleton_prompt(
             raw_persona=raw_persona,

@@ -46,6 +46,9 @@ class Config:
         if (WHITELIST_DIR / "expression_vault.json").exists():
             with open(WHITELIST_DIR / "expression_vault.json", "r", encoding="utf-8") as f:
                 cls.expression_vault = json.load(f)
+        if (WHITELIST_DIR / "trigger_presets.json").exists():
+            with open(WHITELIST_DIR / "trigger_presets.json", "r", encoding="utf-8") as f:
+                cls.trigger_presets = json.load(f)
         return cls
 
 Config.load_all()
