@@ -16,6 +16,15 @@ def build_batch_dialogue_prompt(prompt_items: list[dict], identity: str, speech:
 {json.dumps(prompt_items, ensure_ascii=False, indent=2)}
 
 【核心会话轮次与动作规则（严格遵守）】:
+0. 用户台词口语别名多样化（强制遵守）:
+   - 用户台词中严禁机械复述官方标准词（切勿总是生硬复述“抖音开直播1080p50ms”），必须多使用本次会话配置中的 `aliases` 口语化别名与行话：
+     * 应用名：优先多用 `aliases.app_aliases`（如“阿抖”、“某手”、“企微”、“小破站”、“鹅厂会议”等）；
+     * 业务名：优先多用 `aliases.service_aliases`（如“推流”、“开播”、“打视讯”、“连麦”、“对齐开会”、“刷短剧”等）；
+     * 画质：优先多用 `aliases.resolution_aliases`（如“原画”、“顶格清晰度”、“千万别糊”、“蓝光”、“高清”等）；
+     * 时延：优先多用 `aliases.rtt_aliases`（如“别掉链子”、“零卡顿”、“极速响应”、“秒级同步”、“别转圈”等）；
+     * 时长：优先多用 `aliases.duration_aliases`（如“俩小时”、“两钟头”、“播到四点”、“一个半小时”等）；
+     * 周期/触发表达：优先多用 `aliases.period_aliases`（如“每天这个时候”、“老时间”、“周一例会照旧”、“月初开门红”等）。
+
 1. 会话结束与动作总规则：
    - 常规会话最后一轮必须由 Agent 的答复结束，最后一轮 Agent agent_action_types 必须包含 "Acknowledge"！
    - 特例1【纯域外拒绝 T1-2】(rounds == 1):
@@ -31,14 +40,16 @@ def build_batch_dialogue_prompt(prompt_items: list[dict], identity: str, speech:
      * 第2轮 Agent 答复已开通并收尾；agent_action_types 必须为 ["Acknowledge"]。
    - 特例4【时长变更延长 T2-5】(rounds == 2):
      * 第1轮 User 提及老规矩保障；Agent 反问确认老规矩配置（agent_action_types 为 ["Confirm_Slot"]）。
-     * 第2轮 User 确认老规矩但提出因现场活动延长，要求将时长延长至180分钟（3小时）；user_action_types 必须包含 ["Confirm_Slot", "Modify_Request"]。
-     * 第2轮 Agent 确认时长已延长至180分钟并生效；agent_action_types 必须为 ["Acknowledge"]。
+     * 第2轮 User 确认老规矩但提出因现场活动延长，要求将时长延长（user_action_types 必须包含 ["Confirm_Slot", "Modify_Request"]）。
+     * 第2轮 Agent 确认时长已延长并生效；agent_action_types 必须为 ["Acknowledge"]。
 
 2. 首次建联/证据会话 (evidence_session):
    - 若 declaration_mode == "explicit_declaration" (显式声明):
      第1轮 User: 结合现场环境提出模糊需求；Agent 追问确认细节。
-     第2轮 User: 明确说清参数，并【明确显式声明长期偏好与触发条件/暗号】:
-       * 若 storyline_trigger_type == "time_periodic": 如"以后我只要在每周例行时段说'老规矩'，就按这个来：对应应用、画质、时延以内，记一下长期偏好，别掉链子"；
+     第2轮 User: 明确说清参数，并【明确显式声明长期偏好与周期触发条件/暗号】:
+       * 若 storyline_trigger_type == "time_periodic" 且 period_type == "daily": 如"以后我只要每天这个时段说'老规矩'，就按这个来：对应应用、画质、时延以内，记一下长期偏好，别掉链子"；
+       * 若 storyline_trigger_type == "time_periodic" 且 period_type == "weekly": 如"以后我只要在每周例行时段说'老规矩'，就按这个来：对应应用、画质、时延以内，记一下长期偏好，别掉链子"；
+       * 若 storyline_trigger_type == "time_periodic" 且 period_type == "monthly": 如"以后我只要在每月月初/固定月度对账说'老规矩'，就按这个来：对应应用、画质、时延以内，记一下长期偏好，别掉链子"；
        * 若 storyline_trigger_type == "task_activity": 如"以后只要我提到执行【特定任务】现场，老规矩就按这个来：对应应用、画质、时延以内，记一下长期偏好，别掉链子"；
        * 若 storyline_trigger_type == "location_environment": 如"以后只要我身处【特定地点/弱网区域】，老规矩就按这个来：对应应用、画质、时延以内，记一下长期偏好，别掉链子"；
      Agent 必须明确闭环回复：“好的，已为您开通本次保障，并已为您将该配置记录为长期老规矩！”
@@ -48,12 +59,12 @@ def build_batch_dialogue_prompt(prompt_items: list[dict], identity: str, speech:
 
 3. 记忆强化/复用 (reinforcement / reuse):
    - 若 active_memory 中包含 [provisional] (隐式偏好二次发生，触发固化契机):
-     第1轮 User: 再次在相似触发场景下提出需求（如：“今天又来执行XX任务了/又到这个地点了，跟上次一样就行”）。
-     第1轮 Agent: 必须根据历史行为主动反问向用户建议固化：“检测到您在【触发条件】多次使用该配置，是否按上次标准（1080p/50ms）为您开通并设为长期老规矩？”（agent_action_types包含 "Confirm_Slot"）。
+     第1轮 User: 再次在相似触发场景下提出需求（如：“今天又来执行XX任务了/又到这个时间了/又到这个地点了，跟上次一样就行”）。
+     第1轮 Agent: 必须根据历史行为主动反问向用户建议固化：“检测到您在【触发条件】多次使用该配置，是否按上次标准为您开通并设为长期老规矩？”（agent_action_types包含 "Confirm_Slot"）。
      第2轮 User: 明确确认固化（如：“对，以后遇到这个场景就按这个来”）（user_action_types包含 "Confirm_Slot"）。
      第2轮 Agent: 答复已开通并收尾祝福，正式记录老规矩（agent_action_types: ["Acknowledge"]）。
    - 若 active_memory 包含 [active] (常规复用已生效记忆):
-     第1轮 User: 口语化提出需求，提及触发场景并【必须省略应用或画质时延等参数】（如使用"老规矩"、"照上次的来"等）。
+     第1轮 User: 口语化提出需求，提及触发场景并【必须省略应用或画质时延等参数】（如使用"老规矩"、"每天照旧"、"照上周的来"等）。
      第1轮 Agent: 必须明确调取上方 active_memory 中的配置，结合触发条件主动反问向用户确认（agent_action_types包含 "Confirm_Slot"）。
      第2轮 User: 明确确认 Agent 提出的配置（user_action_types包含 "Confirm_Slot"，如"对，开通吧"）。
      第2轮 Agent: 明确确认已开通并收尾祝福（agent_action_types: ["Acknowledge"]）。
@@ -124,17 +135,21 @@ def build_single_dialogue_prompt(s_plan: dict, persona: dict, snapshot_before: d
 {"- 域外诉求目标: " + ood_goal if ood_goal else ""}
 
 【核心会话轮次与动作规则（严格遵守）】:
+0. 用户台词口语别名多样化（强制遵守）:
+   - 用户台词中多使用行话与口语偏好词，避免机械复述；APP、业务、画质、时延、时长、周期尽量使用口语化表达（如“阿抖推流”、“原画”、“别掉链子”、“俩小时”、“每天这个时候”等）。
 1. 最后一轮必须由 Agent 的答复结束！
    - 常规会话最后一轮 Agent agent_action_types 必须包含 "Acknowledge"；
    - T1-2 纯域外拒绝会话 (rounds == 1): Agent 必须礼貌拒绝，agent_action_types 必须为 ["Reject_Request"]；
    - X-1 混合诉求会话 (rounds == 1): Agent 办理保障同时拒绝域外诉求，agent_action_types 必须为 ["Acknowledge", "Reject_Request"]；
    - T2-2 歧义消解会话 (rounds == 2): 第1轮 Agent 反问消解歧义（["Request_Disambiguation"]），第2轮用户说明业务后 Agent 确认开通；
-   - T2-5 时长延长会话 (rounds == 2): 第1轮 Agent 确认老规矩配置（["Confirm_Slot"]），第2轮用户提出延长时长至180分钟（user_action_types 包含 ["Confirm_Slot", "Modify_Request"]），Agent 确认延长并生效。
+   - T2-5 时长延长会话 (rounds == 2): 第1轮 Agent 确认老规矩配置（["Confirm_Slot"]），第2轮用户提出延长时长（user_action_types 包含 ["Confirm_Slot", "Modify_Request"]），Agent 确认延长并生效。
 2. 首次建联/证据会话 (evidence_session):
    - 若 declaration_mode == "explicit_declaration" (显式声明):
      第1轮 User: 结合现场环境提出模糊需求；Agent 追问确认细节。
      第2轮 User: 明确说清参数，并【明确显式声明长期偏好与暗号/触发条件】:
-       * 若 storyline_trigger_type == "time_periodic": 如"以后我只要在每周例行时段说'老规矩'，就按这个来：{tp['application_name']}、{tp['resolution']}、{tp['rtt']}以内，记一下长期偏好，别掉链子"；
+       * 若 storyline_trigger_type == "time_periodic" 且 period_type == "daily": 如"以后我只要每天这个时段说'老规矩'，就按这个来：{tp['application_name']}、{tp['resolution']}、{tp['rtt']}以内，记一下长期偏好，别掉链子"；
+       * 若 storyline_trigger_type == "time_periodic" 且 period_type == "weekly": 如"以后我只要在每周例行时段说'老规矩'，就按这个来：{tp['application_name']}、{tp['resolution']}、{tp['rtt']}以内，记一下长期偏好，别掉链子"；
+       * 若 storyline_trigger_type == "time_periodic" 且 period_type == "monthly": 如"以后我只要在每月月初/固定月度对账说'老规矩'，就按这个来：{tp['application_name']}、{tp['resolution']}、{tp['rtt']}以内，记一下长期偏好，别掉链子"；
        * 若 storyline_trigger_type == "task_activity": 如"以后只要我提到执行【{s_plan.get('trigger_condition', '该任务')}】现场，老规矩就按这个来：{tp['application_name']}、{tp['resolution']}、{tp['rtt']}以内，记一下长期偏好，别掉链子"；
        * 若 storyline_trigger_type == "location_environment": 如"以后只要我身处【{s_plan.get('trigger_condition', env)}】，老规矩就按这个来：{tp['application_name']}、{tp['resolution']}、{tp['rtt']}以内，记一下长期偏好，别掉链子"；
      Agent 必须明确闭环回复：“好的，已为您开通本次保障，并已为您将该配置记录为长期老规矩！”

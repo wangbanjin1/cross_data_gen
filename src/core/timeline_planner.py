@@ -103,6 +103,9 @@ class DynamicTimelinePlanner:
                     "end_timestamp": cfg["end"],
                     "duration": cfg["dur"]
                 },
+                "period_type": main_mt.get("period_type", "weekly"),
+                "base_duration": cfg.get("base_dur", cfg["dur"]),
+                "base_end_timestamp": cfg.get("base_end", cfg["end"]),
                 "aliases": src.get("aliases", {})
             }
             sessions.append(s_obj)

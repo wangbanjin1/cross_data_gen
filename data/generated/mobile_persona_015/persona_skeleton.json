@@ -4,164 +4,135 @@
   "persona_summary": "移动训练与参赛人员",
   "static_profile": {
     "user_id": "USER_015",
-    "identity": "一名意志坚定、体能出众的准海岸警卫队搜救游泳员，日常以户外水域训练、体能拉练和赛事转场为主，长期在道路、巡逻区域、临时处置现场及夜间值守点之间移动，习惯用手机直接联网完成训练记录、路线查看、视频回传和团队调度。",
-    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备（运动相机/胸挂记录仪），便携终端确需联网时使用手机热点。",
+    "identity": "志愿加入海岸警卫队搜救游泳员的体能训练者与参赛选手，日常在道路、巡逻区域、临时处置现场及夜间值守点进行高频移动训练与赛事转场，习惯用手机记录运动数据、查看路线赛程、上传训练视频并接收团队临时通知。",
+    "devices": "主力为5G智能手机，辅助为随身拍摄设备（运动相机/手机云台），便携终端确需联网时使用手机热点。",
     "apps": [
       "微信",
-      "高德地图",
-      "钉钉",
-      "哔哩哔哩"
+      "抖音",
+      "腾讯会议",
+      "高德地图"
     ],
     "speech_archetype": "athlete_speaker",
     "speech_style": {
-      "tone": "干脆、直接、带训练口令感，强调时效和别掉链子",
+      "tone": "干脆利落、带训练口令感，语速偏快，喜欢用运动行话和短句。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "马上回传"
+        "顶格清晰度",
+        "秒开"
       ],
-      "typical_habits": "习惯用短句下达和确认任务，先问位置和网络，再问进度；训练和转场中偏好边移动边同步信息，重要事项会重复确认。"
+      "typical_habits": "习惯在出发前和队友对齐路线与时间，训练中随时口述参数偏好，强调连续覆盖和消息及时送达。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "户外训练与赛事转场中的位置共享与任务调度",
+      "name": "户外训练与赛事转场直播记录",
       "storyline_trigger_type": "location_environment",
-      "trigger_condition": "身处道路、巡逻区域、临时处置现场或夜间值守点等移动执勤环境，需要边移动边共享位置、接收调度并回传现场信息时触发",
-      "period_type": "weekly",
+      "trigger_condition": "身处道路、巡逻区域、临时处置现场或夜间值守点等移动执勤环境，需要边训练边记录并实时回传时触发。",
+      "period_type": "location_driven",
       "days": [
-        "Wednesday",
-        "Saturday"
+        "location_specific"
       ],
-      "time_range": "14:00-17:00",
-      "application_name": "微信",
-      "service_name": "视频通话",
+      "time_range": "15:00-17:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
       "preferred_params": {
         "resolution": "1080p",
         "rtt_max": "50ms"
       },
       "aliases": {
         "app_aliases": [
-          "微信",
-          "绿泡泡"
+          "阿抖",
+          "抖子"
         ],
         "service_aliases": [
-          "对一下画面",
-          "开个视频",
-          "现场连线"
+          "开播",
+          "推流"
+        ],
+        "resolution_aliases": [
+          "顶格清晰度",
+          "千万别糊"
+        ],
+        "rtt_aliases": [
+          "别掉链子",
+          "秒开"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "播到四点"
+        ],
+        "period_aliases": [
+          "老规矩",
+          "每天这个时候"
         ]
       },
-      "param_mappings": {
-        "resolution": {
-          "高清": "1080p",
-          "清晰点": "1080p",
-          "能看清人脸就行": "1080p"
-        },
-        "rtt": {
-          "低时延": "50ms",
-          "别卡": "50ms",
-          "马上通": "50ms"
-        }
-      },
       "declaration_mode": "explicit_declaration",
-      "evidence_level": "explicit_long_term_declaration"
+      "evidence_pattern": "显式口述固定偏好"
     },
     "scenario_events": [
       {
-        "event_id": "EVT_01",
-        "event_name": "海岸救援演练周",
-        "valid_from": "2026-11-01",
-        "valid_to": "2026-11-15",
-        "impact_scope": "temporary",
-        "scene_description": "沿海临时集结区与近岸水域演练现场，弱覆盖路段多、风浪噪声大，需要频繁进行位置共享、现场取证和即时通信。",
+        "event_id": "EVT_2026_01",
+        "name": "海岸警卫队搜救游泳员选拔赛周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "赛事周在沿海露天集结区与临时处置现场之间高频转场，现场人员密集、基站负载高，部分路段弱覆盖。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
-        },
-        "trigger_reason": "演练周内多队伍协同、现场画面回传密集，优先保证低时延和消息及时送达，适当降低分辨率以换取稳定连续覆盖。"
+        }
       }
     ],
     "sub_storylines": [
       {
-        "sub_id": "SUB_MT_01",
-        "name": "训练录像复盘与动作纠正",
-        "period_type": "weekly_evening",
-        "days": [
-          "Sunday",
-          "Wednesday"
-        ],
-        "trigger_condition": "晚间回到值守点或临时驻地后，需要回看白天训练录像、标记动作问题并同步给教练时触发",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "storyline_id": "SUB_01",
+        "name": "训练录像复盘与团队沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
+        "trigger_condition": "训练结束后在临时休息点或夜间值守点与教练、队友复盘动作和路线时触发。",
         "aliases": {
           "app_aliases": [
-            "B站",
-            "哔哩哔哩"
+            "weixin",
+            "wx"
           ],
           "service_aliases": [
-            "看回放",
-            "复盘一下",
-            "刷训练片段"
+            "打视频",
+            "连线"
           ]
-        },
-        "param_mappings": {
-          "resolution": {
-            "标清": "720p",
-            "能看动作就行": "720p"
-          },
-          "rtt": {
-            "能听清就行": "100ms",
-            "别转圈": "100ms"
-          }
         }
       },
       {
-        "sub_id": "SUB_MT_02",
-        "name": "团队临时通知与任务确认",
-        "period_type": "sporadic_evening",
-        "trigger_condition": "夜间值守点或应急集结区收到临时任务通知，需要快速确认人员、路线和装备时触发",
-        "application_name": "钉钉",
+        "storyline_id": "SUB_02",
+        "name": "赛程路线与位置共享调度",
+        "application_name": "高德地图",
         "service_name": "会议",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
+        "trigger_condition": "赛事转场前在道路或集结区需要共享位置、对齐路线和任务调度时触发。",
         "aliases": {
           "app_aliases": [
-            "钉钉",
-            "钉一下"
+            "高德地图"
           ],
           "service_aliases": [
-            "碰个头",
-            "开个短会",
-            "对齐一下"
+            "开会",
+            "进会议室"
           ]
-        },
-        "param_mappings": {
-          "resolution": {
-            "超清": "1080p",
-            "看得清白板": "1080p"
-          },
-          "rtt": {
-            "不卡": "80ms",
-            "别掉线": "80ms"
-          }
         }
       }
     ],
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "name": "休息时刷短视频",
-        "application_name": "抖音",
-        "service_name": "短视频",
-        "scenario_description": "训练间隙或夜间值守点休息时，单次刷短视频放松，不涉及任务调度和现场回传。",
+        "scenario": "单次在夜间值守点用腾讯会议参加跨队协调会",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -169,10 +140,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "临时看赛事直播",
+        "scenario": "单次在临时处置现场休息时刷短视频放松",
         "application_name": "快手",
-        "service_name": "看直播",
-        "scenario_description": "赛事周期间偶尔在临时驻地观看公开赛事直播，属于单次娱乐行为，不影响主线训练与调度参数。",
+        "service_name": "短视频",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

@@ -1,6 +1,10 @@
 import argparse
 import sys
 from pathlib import Path
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding='utf-8')
+
 from src.config import Config
 
 def main():

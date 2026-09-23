@@ -5,6 +5,13 @@
 
 def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
     tp = s_plan["target_params"]
+    aliases = s_plan.get("aliases", {})
+    app_alias = (aliases.get("app_aliases") or [tp["application_name"]])[0]
+    srv_alias = (aliases.get("service_aliases") or [tp["service_name"]])[0]
+    res_alias = (aliases.get("resolution_aliases") or [tp["resolution"]])[0]
+    rtt_alias = (aliases.get("rtt_aliases") or [tp["rtt"]])[0]
+    dur_alias = (aliases.get("duration_aliases") or [tp["duration"]])[0]
+
     app = tp["application_name"]
     srv = tp["service_name"]
     res = tp["resolution"]
@@ -13,38 +20,43 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
     ood_goal = s_plan.get("ood_goal", "")
     decl_mode = s_plan.get("declaration_mode", "explicit_declaration")
     trig_type = s_plan.get("storyline_trigger_type", "time_periodic")
+    period_type = s_plan.get("period_type", "weekly")
     trig_cond = s_plan.get("trigger_condition", "")
     env = s_plan.get("scenario_env", "")
 
     if tid == "T1-2":
         return f"你好，现场这边网络好像有问题，能帮我安排师傅处理一下{ood_goal or '宽带光纤装维报修'}吗？"
     elif tid == "X-1":
-        return f"帮我办理一下今天{tp['start_timestamp'].split('日')[-1]}的{app}{srv}网络保障，另外顺便帮我查询一下{ood_goal or '手机话费充值与账单查询'}。"
+        return f"帮我办理一下今天{tp['start_timestamp'].split('日')[-1]}的{app_alias}{srv_alias}网络保障，另外顺便帮我查询一下{ood_goal or '手机话费充值与账单查询'}。"
     elif tid == "T2-2":
         if turn_idx == 1:
-            return f"在{env}网络不太稳，帮我把{app}保障一下。"
+            return f"在{env}网络不太稳，帮我把{app_alias}保障一下。"
         else:
-            return f"是{srv}业务，画质要求{res}，时延控制在{rtt}以内就行。"
+            return f"是{srv_alias}业务，画质要{res_alias}，时延控制在{rtt_alias}以内就行。"
     elif tid == "T2-5":
         if turn_idx == 1:
-            return f"今天在{env}，按老规矩给我开通{app}{srv}保障。"
+            return f"今天在{env}，按老规矩给我开通{app_alias}{srv_alias}保障。"
         else:
-            return f"对，不过今天现场活动延长了，帮我把保障时长延长到3小时（持续180分钟，到17点结束）。"
+            return f"对，不过今天现场活动延长了，帮我把保障时长延长到{tp['duration']}（持续到{tp['end_timestamp'].split('日')[-1]}）。"
     elif tid == "T2-3":
         if turn_idx == 1:
-            return f"今天在{env}，帮我开通{app}{srv}保障。"
+            return f"今天在{env}，帮我开通{app_alias}{srv_alias}保障。"
         else:
-            return f"不对，今天现场特殊，画质调到{res}，时延要求{rtt}以内，临时按这个来。"
+            return f"不对，今天现场特殊，画质调到{res_alias}，时延要求{rtt_alias}，临时按这个来。"
     elif turn_idx == 1:
-        return f"你好，需要给{app}{srv}做一个网络保障，时间是今天{tp['start_timestamp'].split('日')[-1]}开始，持续{tp['duration']}。"
+        return f"你好，需要给{app_alias}{srv_alias}做一个网络保障，时间是今天{tp['start_timestamp'].split('日')[-1]}开始，持续{dur_alias}。"
     else:
         if role == "evidence_session" and decl_mode == "explicit_declaration":
             if trig_type == "task_activity":
                 return f"好的，确认按这个配置直接开通。以后只要我提到执行【{trig_cond or env}】任务，就按老规矩来：{app}{srv}、{res}、{rtt}以内，记一下长期偏好，别掉链子。"
             elif trig_type == "location_environment":
                 return f"好的，确认按这个配置直接开通。以后只要我处于【{trig_cond or env}】，就按老规矩来：{app}{srv}、{res}、{rtt}以内，记一下长期偏好，别掉链子。"
+            elif period_type == "daily":
+                return f"好的，确认按这个配置直接开通。以后我只要每天这个时段说'老规矩'，就按这个来：{app}{srv}、{res}、{rtt}以内，记一下长期偏好，别掉链子。"
+            elif period_type == "monthly":
+                return f"好的，确认按这个配置直接开通。以后我只要在每月固定月度对账/例会说'老规矩'，就按这个来：{app}{srv}、{res}、{rtt}以内，记一下长期偏好，别掉链子。"
             else:
-                return f"好的，确认按这个配置直接开通。以后我在{env}只要说'下午大直播，老规矩'，就按这个来：{app}{srv}、{res}、{rtt}以内，记一下长期偏好，别掉链子。"
+                return f"好的，确认按这个配置直接开通。以后我只要在每周例行时段说'老规矩'，就按这个来：{app}{srv}、{res}、{rtt}以内，记一下长期偏好，别掉链子。"
         elif role == "evidence_session" and decl_mode == "implicit_induction":
             return "好的，今天就按这个配置开通吧。"
         else:
@@ -60,6 +72,8 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
     tid = s_plan.get("template_id", "")
     ood_goal = s_plan.get("ood_goal", "")
     decl_mode = s_plan.get("declaration_mode", "explicit_declaration")
+    trig_type = s_plan.get("storyline_trigger_type", "time_periodic")
+    period_type = s_plan.get("period_type", "weekly")
     trig_cond = s_plan.get("trigger_condition", "")
     env = s_plan.get("scenario_env", "")
 
@@ -74,9 +88,9 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
             return f"好的，已为您开通{app}{srv}网络保障（{res} / 时延≤{rtt}），祝您使用愉快！"
     elif tid == "T2-5":
         if turn_idx == 1:
-            return f"收到，请问是否按老规矩（{res} / 时延≤{rtt}）为您开通2小时保障？"
+            return f"收到，请问是否按老规矩（{res} / 时延≤{rtt}）为您开通保障？"
         else:
-            return f"好的，已为您将{app}{srv}保障时长延长至180分钟（至17:00），配置保持{res}/时延≤{rtt}，保障已生效！"
+            return f"好的，已为您将{app}{srv}保障时长延长至{tp['duration']}（至{tp['end_timestamp'].split('日')[-1]}），配置保持{res}/时延≤{rtt}，保障已生效！"
     elif tid == "T2-3":
         if turn_idx == 1:
             return f"收到，请问是否按老规矩标准（1080p / 时延≤50ms）为您开通？"
@@ -91,6 +105,14 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
         if role == "reinforcement_session" and decl_mode == "implicit_induction" and s_plan.get("session_id", "").endswith("-03"):
             return f"检测到您在【{trig_cond or env}】多次使用{app}{srv}保障，请问是否按上次标准（{res} / 时延≤{rtt}）为您开通并设为默认老规矩？"
         else:
+            if trig_type == "time_periodic":
+                if period_type == "daily":
+                    p_desc = "每天固定时段"
+                elif period_type == "monthly":
+                    p_desc = "每月固定时段"
+                else:
+                    p_desc = "每周例行时段"
+                return f"收到，检测到您在{p_desc}需要保障，请问{app}{srv}是否按老规矩标准（{res} / 时延≤{rtt}）为您开通？"
             return f"收到，请问{app}{srv}是否按分辨率{res}、时延上限{rtt}的标准来为您开通？"
 
 

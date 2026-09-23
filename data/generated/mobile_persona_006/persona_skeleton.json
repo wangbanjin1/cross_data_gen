@@ -4,38 +4,38 @@
   "persona_summary": "移动执勤人员",
   "static_profile": {
     "user_id": "USER_006",
-    "identity": "国际执法经验丰富的安全官，长期在夜间值守点、事故现场、应急集结区与巡逻道路之间移动执勤，习惯用手机4G/5G直接联网完成现场取证、即时通信、事件上报、地图导航与位置共享，不依赖家庭宽带或普通Wi-Fi。",
-    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点。",
+    "identity": "国际执法经验丰富的安全官，长期在夜间值守点、事故现场、应急集结区与巡逻道路之间移动执勤，负责现场取证、即时通信、事件上报、地图导航、位置共享与任务调度，对文化差异敏感，习惯用手机4G/5G直接联网，便携终端确需联网时开手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式。",
     "apps": [
       "微信",
       "钉钉",
       "腾讯会议",
-      "高德地图"
+      "哔哩哔哩"
     ],
-    "speech_archetype": "field_security_officer",
+    "speech_archetype": "security_officer_speaker",
     "speech_style": {
-      "tone": "简短、克制、指令感强，先确认位置再确认动作，遇到突发情况语速加快但不乱。",
+      "tone": "简洁、克制、指令式，带一点跨文化执勤的谨慎感，强调时效与现场稳定",
       "catchphrases": [
         "老规矩",
         "别掉链子",
-        "先对齐位置",
-        "收到请回话"
+        "对齐一下",
+        "现场先稳住",
+        "秒开才算到位"
       ],
-      "typical_habits": "习惯用短句下达和复述指令，重要信息要求对方重复一遍；现场沟通时先报点位、再报状态、最后报需求。"
+      "typical_habits": "先确认位置与网络，再下达或接收指令；遇到关键回传时反复强调清晰度、时延和连续覆盖，习惯用口语别名指代应用、业务和参数。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "夜间巡逻与现场取证回传",
+      "name": "露天集结区现场取证与即时通信回传",
       "storyline_trigger_type": "location_environment",
-      "trigger_condition": "当身处夜间值守点、事故现场、应急集结区或巡逻道路等移动执勤环境，且需要接收调度、共享位置、查询人员车辆信息或上传现场图片与执法记录时触发。",
-      "period_type": "weekly",
+      "trigger_condition": "身处露天集结区弱网区域，需要立即进行现场取证、即时通信与事件上报，并同步共享位置与接收任务调度",
+      "period_type": "location_driven",
       "days": [
-        "Wednesday",
-        "Saturday"
+        "location_specific"
       ],
-      "time_range": "20:00-23:30",
+      "time_range": "15:00-17:00",
       "application_name": "微信",
       "service_name": "视频通话",
       "preferred_params": {
@@ -44,122 +44,108 @@
       },
       "aliases": {
         "app_aliases": [
-          "值勤群",
-          "指挥群"
+          "微信",
+          "企微",
+          "某信"
         ],
         "service_aliases": [
-          "现场连线",
-          "点对点回传",
-          "报现场"
+          "打视讯",
+          "连麦",
+          "开视频",
+          "现场连线"
+        ],
+        "resolution_aliases": [
+          "原画",
+          "顶格清晰度",
+          "千万别糊",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "别掉链子",
+          "零卡顿",
+          "极速响应",
+          "秒开",
+          "别转圈"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到五点",
+          "一个半小时"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "晚间例行",
+          "到点就开"
         ]
       },
-      "param_mappings": {
-        "resolution": {
-          "高清": "1080p",
-          "清晰点": "1080p",
-          "能看清人脸": "1080p"
-        },
-        "rtt": {
-          "低时延": "50ms",
-          "别卡": "50ms",
-          "消息及时到": "50ms"
-        }
-      },
       "declaration_mode": "implicit_induction",
-      "evidence_level": "explicit_long_term_declaration"
+      "evidence_pattern": "隐式单次保障并随后固化"
     },
     "scenario_events": [
       {
-        "event_id": "EVT_01",
-        "event_name": "跨城联合执法周",
-        "valid_from": "2026-11-03",
-        "valid_to": "2026-11-14",
-        "impact_scope": "temporary",
-        "scene_description": "跨城联合执法周期间，执勤人员频繁进入地下停车场、临时检查站和跨城道路弱网区域，现场图片与视频回传稳定性下降，需要临时降低分辨率并收紧时延要求。",
+        "event_id": "EVT_2026_01",
+        "name": "跨城联合执法演练周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城联合执法演练期间，露天集结区与临时处置现场人员密集、移动频繁，弱网与干扰明显，现场图片和视频回传压力骤增，需要优先保证消息及时送达与连续覆盖。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
-        },
-        "trigger_reason": "跨城联合执法周中弱网与高移动性场景增多，优先保证消息及时送达和视频通话不中断，因此临时降低分辨率并提高时延容忍上限。"
+        }
       }
     ],
     "sub_storylines": [
       {
-        "sub_id": "SUB_MT_01",
-        "name": "值班室录像复盘与案情沟通",
-        "period_type": "weekly_evening",
-        "days": [
-          "Sunday",
-          "Wednesday"
-        ],
-        "trigger_condition": "回到值班室或临时驻点后，需要与同事复盘执法记录、核对现场录像并沟通案情时触发。",
+        "storyline_id": "SUB_01",
+        "name": "巡逻车内录像复盘与任务对齐",
         "application_name": "腾讯会议",
         "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
+        "trigger_condition": "巡逻车返回临时驻点后，需要在车内快速复盘录像并和指挥端对齐任务",
         "aliases": {
           "app_aliases": [
-            "复盘会",
-            "线上碰头"
+            "tencentmeeting",
+            "会议通"
           ],
           "service_aliases": [
-            "过一遍录像",
-            "对一下案情"
+            "开会",
+            "进会议室"
           ]
-        },
-        "param_mappings": {
-          "resolution": {
-            "标清": "720p",
-            "能看清就行": "720p"
-          },
-          "rtt": {
-            "能听清就行": "100ms",
-            "别断线": "100ms"
-          }
         }
       },
       {
-        "sub_id": "SUB_MT_02",
-        "name": "跨区调度与位置共享",
-        "period_type": "sporadic_evening",
-        "trigger_condition": "在巡逻区域、临时处置现场或应急集结区需要跨区调度、共享实时位置并确认人员车辆信息时触发。",
-        "application_name": "钉钉",
-        "service_name": "视频通话",
+        "storyline_id": "SUB_02",
+        "name": "夜间值守点短视频取证留档",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
+        "trigger_condition": "夜间值守点需要把现场短视频快速留档并回传给后方研判",
         "aliases": {
           "app_aliases": [
-            "调度台",
-            "执勤端"
+            "bilibili",
+            "哔站"
           ],
           "service_aliases": [
-            "拉位置",
-            "对点位"
+            "看短视频",
+            "刷视频"
           ]
-        },
-        "param_mappings": {
-          "resolution": {
-            "超清": "1080p",
-            "看清车牌": "1080p"
-          },
-          "rtt": {
-            "不卡": "80ms",
-            "别延迟": "80ms"
-          }
         }
       }
     ],
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "name": "临时内部会议",
-        "application_name": "飞书",
+        "scenario": "单次跨部门临时会议",
+        "application_name": "钉钉",
         "service_name": "会议",
-        "scenario_description": "非执勤时段临时参加内部行政会议，仅需语音和屏幕共享，不涉及现场取证与调度。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -167,10 +153,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "休息时刷短视频",
-        "application_name": "快手",
-        "service_name": "短视频",
-        "scenario_description": "换班休息或等待调度时，用手机刷短视频放松，网络要求低，不涉及执法回传。",
+        "scenario": "单次休息间隙看直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

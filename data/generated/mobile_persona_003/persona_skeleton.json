@@ -4,162 +4,140 @@
   "persona_summary": "户外公益与社群组织者",
   "static_profile": {
     "user_id": "USER_003",
-    "identity": "刑事司法改革倡导者，常驻利兹，长期在户外调研点、临时会议区、群众服务现场与社区走访点之间移动办公，负责组织公益活动、协调志愿者、收集电子反馈并回传政策材料。",
-    "devices": "主力设备为5G智能手机，辅助设备为便携平板；确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "identity": "刑事司法改革倡导者，常驻利兹，长期在户外调研点、临时会议区、群众服务现场与社区走访点之间移动办公，组织公益直播、志愿者协调与政策资料回传。",
+    "devices": "主力设备为5G智能手机，便携终端确需联网时使用手机热点；不依赖家庭宽带、公司固网或普通Wi-Fi。",
     "apps": [
       "腾讯会议",
       "微信",
-      "钉钉",
-      "飞书"
+      "抖音",
+      "钉钉"
     ],
-    "speech_archetype": "outdoor_community_organizer",
+    "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "直接、务实、带现场指挥感，习惯用短句推进协作，强调稳定和别掉链子。",
+      "tone": "干脆、务实、带现场指挥感，喜欢用短句确认状态",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "现场优先"
+        "秒开就行",
+        "千万别糊"
       ],
-      "typical_habits": "在移动中快速发起会议、同步志愿者位置、催材料回传；先确认网络和时延，再安排具体任务。"
+      "typical_habits": "出发前先问网络稳不稳，开播前反复确认画质和时延，结束后立刻回传材料并催志愿者位置。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "利兹露天集结区公益直播与远程会议",
+      "name": "利兹露天集结区公益直播与志愿者协调",
       "storyline_trigger_type": "location_environment",
-      "trigger_condition": "身处利兹露天集结区弱网区域，需要面向社区成员开直播并同步远程会议时触发。",
-      "period_type": "weekly",
+      "trigger_condition": "身处利兹露天集结区弱网区域，需要面向社区群众和远程志愿者同步开展公益宣讲与现场协调",
+      "period_type": "location_driven",
       "days": [
-        "Wednesday",
-        "Saturday"
+        "location_specific"
       ],
-      "time_range": "14:00-17:00",
-      "application_name": "腾讯会议",
-      "service_name": "会议",
+      "time_range": "15:00-17:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
       "preferred_params": {
         "resolution": "1080p",
         "rtt_max": "50ms"
       },
       "aliases": {
         "app_aliases": [
-          "腾讯会议",
-          "会议软件"
+          "阿抖",
+          "某音"
         ],
         "service_aliases": [
-          "开个会",
-          "线上对齐",
-          "远程碰头"
+          "开播",
+          "推流"
+        ],
+        "resolution_aliases": [
+          "原画",
+          "顶格清晰度",
+          "千万别糊"
+        ],
+        "rtt_aliases": [
+          "别掉链子",
+          "秒开",
+          "别转圈"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "播到五点",
+          "大半个下午"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "到了集结区就开"
         ]
       },
-      "param_mappings": {
-        "resolution": {
-          "高清": "1080p",
-          "清晰点": "1080p",
-          "能看清脸": "1080p"
-        },
-        "rtt": {
-          "低时延": "50ms",
-          "别卡": "50ms",
-          "稳一点": "50ms"
-        }
-      },
       "declaration_mode": "explicit_declaration",
-      "evidence_level": "explicit_long_term_declaration"
+      "evidence_pattern": "显式口述固定偏好"
     },
     "scenario_events": [
       {
-        "event_id": "EVT_01",
-        "event_name": "利兹司法改革社区宣传周",
-        "valid_from": "2026-11-01",
-        "valid_to": "2026-11-15",
-        "impact_scope": "temporary",
-        "scene_description": "利兹市中心露天广场与周边街区人流密集，临时搭建的社区宣传点网络拥塞，需在移动中维持直播与会议协同。",
+        "event_id": "EVT_2026_01",
+        "name": "利兹司法改革社区宣讲周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "连续多日在利兹露天集结区与社区走访点之间转场，现场人流密集、基站拥塞，直播与视频会议并发，需优先保障低时延和稳定推流。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
-        },
-        "trigger_reason": "宣传周期间现场人流大、无线环境复杂，优先保证低时延和连接稳定，适当降低分辨率。"
+        }
       }
     ],
     "sub_storylines": [
       {
-        "sub_id": "SUB_MT_01",
-        "name": "志愿者位置同步与即时通信",
-        "period_type": "weekly_evening",
-        "days": [
-          "Sunday",
-          "Wednesday"
-        ],
-        "trigger_condition": "社区走访结束后，需要在移动途中快速同步志愿者位置和任务进度时触发。",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "storyline_id": "SUB_01",
+        "name": "跨区志愿者视频调度",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
+        "trigger_condition": "跨区域通勤途中或临时会议区需要快速拉齐多个志愿者小组",
         "aliases": {
           "app_aliases": [
-            "微信",
-            "绿泡泡"
+            "tencentmeeting",
+            "会议通"
           ],
           "service_aliases": [
-            "打个视频",
-            "对一下位置"
+            "开会",
+            "进会议室"
           ]
-        },
-        "param_mappings": {
-          "resolution": {
-            "标清": "720p",
-            "能看就行": "720p"
-          },
-          "rtt": {
-            "能听清就行": "100ms",
-            "别太卡": "100ms"
-          }
         }
       },
       {
-        "sub_id": "SUB_MT_02",
-        "name": "政策材料回传与表单核对",
-        "period_type": "sporadic_evening",
-        "trigger_condition": "在临时会议区或跨区域通勤途中，需要回传政策资料并核对电子表单时触发。",
+        "storyline_id": "SUB_02",
+        "name": "政策资料与现场记录回传",
         "application_name": "钉钉",
-        "service_name": "会议",
+        "service_name": "视频通话",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
+        "trigger_condition": "社区走访点收集完电子表单和现场记录后，需要即时回传并远程确认材料",
         "aliases": {
           "app_aliases": [
-            "钉钉",
-            "钉一下"
+            "dingding",
+            "钉"
           ],
           "service_aliases": [
-            "材料过一下",
-            "表单对齐"
+            "打视频",
+            "连线"
           ]
-        },
-        "param_mappings": {
-          "resolution": {
-            "超清": "1080p",
-            "清楚点": "1080p"
-          },
-          "rtt": {
-            "不卡": "80ms",
-            "顺一点": "80ms"
-          }
         }
       }
     ],
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "name": "午休刷短视频",
-        "application_name": "抖音",
+        "scenario": "临时查看公益培训短视频",
+        "application_name": "哔哩哔哩",
         "service_name": "短视频",
-        "scenario_description": "在社区走访间隙短暂休息，刷本地新闻和公益相关短视频。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -167,10 +145,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "晚间看直播",
-        "application_name": "哔哩哔哩",
+        "scenario": "晚间在通勤途中观看活动回放直播",
+        "application_name": "快手",
         "service_name": "看直播",
-        "scenario_description": "回到住处后偶尔观看政策解读或公共事务相关直播，非工作必需。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

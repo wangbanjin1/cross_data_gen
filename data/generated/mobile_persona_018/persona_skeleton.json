@@ -4,38 +4,38 @@
   "persona_summary": "移动训练与参赛人员",
   "static_profile": {
     "user_id": "USER_018",
-    "identity": "一名常年进行户外训练与跨城参赛的登山运动员，长期目标为攀登美国北喀斯喀特山脉，日常在露天训练场、赛道、球场及赛事集结区之间高频转场，依赖手机移动核心网完成训练记录、赛事直播、团队调度与视频回传。",
+    "identity": "一名常年在外转场的登山运动员，主攻美国北喀斯喀特山脉攀登目标，日常在露天训练场、赛道、球场及赛事集结区进行高强度训练与参赛，频繁往返客场与临时休息点，全程依赖手机移动核心网完成训练记录、赛事直播与团队调度。",
     "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备（运动相机/手机云台），便携终端确需联网时使用手机热点。",
     "apps": [
-      "微信",
       "抖音",
+      "微信",
       "腾讯会议",
       "哔哩哔哩"
     ],
     "speech_archetype": "athlete_speaker",
     "speech_style": {
-      "tone": "干脆利落、指令式、带户外运动圈的直爽口吻，习惯用短句确认状态和安排。",
+      "tone": "干脆利落、带点户外人的直爽，习惯用短句和行话，语速偏快，偶尔夹杂训练口令式表达。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "先把信号稳住"
+        "顶格清晰度",
+        "秒开才行"
       ],
-      "typical_habits": "出发前先确认路线和赛程，训练中随时记录数据，转场途中用语音和短视频同步团队，遇到弱网会反复强调先保通信再保画质。"
+      "typical_habits": "说话前先确认时间和地点，喜欢用'老时间''老地方'指代固定安排；布置任务时强调网络别卡、画质别糊、上传别断；习惯在转场途中用语音快速同步团队。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "露天集结区赛事直播与团队调度",
+      "name": "露天集结区训练直播与团队调度",
       "storyline_trigger_type": "location_environment",
-      "trigger_condition": "身处露天训练场、赛道、球场或赛事集结区，且需要向团队同步赛程、训练画面与临时调度信息时触发。",
-      "period_type": "weekly",
+      "trigger_condition": "身处露天训练场、赛道或赛事集结区等户外弱网/人群密集区域，需要即时开播记录训练并同步团队",
+      "period_type": "location_driven",
       "days": [
-        "Wednesday",
-        "Saturday"
+        "location_specific"
       ],
-      "time_range": "14:00-17:00",
+      "time_range": "15:00-17:00",
       "application_name": "抖音",
       "service_name": "开直播",
       "preferred_params": {
@@ -44,124 +44,107 @@
       },
       "aliases": {
         "app_aliases": [
+          "阿抖",
           "抖子",
-          "抖音直播"
+          "某音"
         ],
         "service_aliases": [
           "开播",
-          "拉个直播",
-          "把现场推出去"
+          "推流",
+          "上播",
+          "拉个直播"
+        ],
+        "resolution_aliases": [
+          "顶格清晰度",
+          "原画",
+          "千万别糊",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "别掉链子",
+          "秒开",
+          "零卡顿",
+          "别转圈"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到五点",
+          "大半个下午"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "到了集结区就开",
+          "老地方老规矩"
         ]
       },
-      "param_mappings": {
-        "resolution": {
-          "高清": "1080p",
-          "清晰点": "1080p",
-          "能看清动作": "1080p"
-        },
-        "rtt": {
-          "低时延": "50ms",
-          "别卡": "50ms",
-          "实时一点": "50ms"
-        }
-      },
       "declaration_mode": "implicit_induction",
-      "evidence_level": "explicit_long_term_declaration"
+      "evidence_pattern": "隐式单次保障并随后固化"
     },
     "scenario_events": [
       {
-        "event_id": "EVT_01",
-        "event_name": "北喀斯喀特赛前集训周",
-        "valid_from": "2026-11-01",
-        "valid_to": "2026-11-15",
-        "impact_scope": "temporary",
-        "scene_description": "赛前集训周在山区露天集结区与临时休息点之间高频转场，人群密集、上行带宽紧张，需要优先保证团队即时通信和训练视频回传稳定。",
+        "event_id": "EVT_2026_01",
+        "name": "北喀斯喀特登山赛事周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "赛事周期间集结区与赛道沿线人群高度密集，基站负载骤增，上行带宽紧张，转场途中频繁穿越山谷弱网区，需要临时降低画质并收紧时延以保障直播与调度不中断。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
-        },
-        "trigger_reason": "赛前集训期间团队调度和即时通信优先级高于直播画质，弱网环境下主动降低分辨率以换取更低时延和更稳的上行链路。"
+        }
       }
     ],
     "sub_storylines": [
       {
-        "sub_id": "SUB_MT_01",
+        "storyline_id": "SUB_01",
         "name": "转场大巴视频调度会",
-        "period_type": "weekly_evening",
-        "days": [
-          "Sunday",
-          "Wednesday"
-        ],
-        "trigger_condition": "客场转场途中或训练结束后在临时休息点，团队需要快速对齐次日训练安排和赛事保障事项时触发。",
         "application_name": "腾讯会议",
         "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
+        "trigger_condition": "客场转场途中在大巴或临时休息点，团队需要快速对齐赛程与人员安排",
         "aliases": {
           "app_aliases": [
-            "腾讯会",
-            "开会那个"
+            "tencentmeeting",
+            "会议通"
           ],
           "service_aliases": [
-            "对齐一下",
-            "碰个头",
-            "开个短会"
+            "开会",
+            "进会议室"
           ]
-        },
-        "param_mappings": {
-          "resolution": {
-            "标清": "720p",
-            "能看清人就行": "720p"
-          },
-          "rtt": {
-            "能听清就行": "100ms",
-            "别断线": "100ms"
-          }
         }
       },
       {
-        "sub_id": "SUB_MT_02",
-        "name": "训练录像复盘与视频回传",
-        "period_type": "sporadic_evening",
-        "trigger_condition": "训练结束后回到临时休息点，需要把随身拍摄设备中的训练视频上传并和教练远程复盘动作细节时触发。",
+        "storyline_id": "SUB_02",
+        "name": "训练录像复盘上传",
         "application_name": "哔哩哔哩",
-        "service_name": "视频通话",
+        "service_name": "短视频",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
+        "trigger_condition": "训练结束后在临时休息点回看并上传训练片段，供教练团队复盘分析",
         "aliases": {
           "app_aliases": [
-            "B站",
-            "小破站"
+            "bilibili",
+            "哔站"
           ],
           "service_aliases": [
-            "过一遍录像",
-            "看回放",
-            "复盘一下"
+            "看短视频",
+            "刷视频"
           ]
-        },
-        "param_mappings": {
-          "resolution": {
-            "超清": "1080p",
-            "看清动作细节": "1080p"
-          },
-          "rtt": {
-            "不卡": "80ms",
-            "别拖影": "80ms"
-          }
         }
       }
     ],
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "name": "休息点刷短视频放松",
-        "application_name": "快手",
-        "service_name": "短视频",
-        "scenario_description": "训练结束后在临时休息点短暂放松，刷登山和户外训练相关短视频，属于单次低优先级业务。",
+        "scenario": "赛前与家人单次视频通话报平安",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -169,10 +152,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "赛事集结区看直播",
-        "application_name": "微信",
+        "scenario": "休息点单次观看赛事直播回放",
+        "application_name": "快手",
         "service_name": "看直播",
-        "scenario_description": "在赛事集结区等待检录时，通过微信观看其他赛区或队友的直播，属于偶发单次业务。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

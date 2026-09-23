@@ -115,7 +115,7 @@ class BatchPipeline:
         # 7. 统计耗时与调用花销
         usage = self.llm.get_usage()
         elapsed = time.time() - t0
-        print(f"    [Cost & Tokens] Calls: {usage['calls']} | Tokens: {usage['total_tokens']} (In: {usage['total_prompt_tokens']}, Out: {usage['completion_tokens']}) | Cost: ¥{usage['cost_rmb']:.4f} 元")
+        print(f"    [Cost & Tokens] Calls: {usage['calls']} | Tokens: {usage['total_tokens']} (In: {usage['total_prompt_tokens']}, Out: {usage['completion_tokens']}) | Cost: RMB {usage['cost_rmb']:.4f}")
         print(f"    [QC Report] Pass Rate: {qc_report['pass_rate']} ({qc_report['passed_sessions']}/{qc_report['total_sessions']})")
         if qc_report["issues"]:
             print(f"    [!] QC Warnings/Issues: {qc_report['issues']}")
@@ -164,5 +164,5 @@ class BatchPipeline:
 
         print(f"\n=======================================================")
         print(f"=== Batch Finished! Processed {len(target_personas)} personas ===")
-        print(f"=== Total Tokens: {total_tokens} | Total Cost: ¥{total_cost:.4f} 元 ===")
+        print(f"=== Total Tokens: {total_tokens} | Total Cost: RMB {total_cost:.4f} ===")
         print(f"=======================================================\n")

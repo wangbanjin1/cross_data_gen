@@ -4,40 +4,38 @@
   "persona_summary": "户外视觉创作者",
   "static_profile": {
     "user_id": "USER_019",
-    "identity": "户外视觉创作者兼音乐制作人，脾气火爆但才华横溢，常在城市街区、音乐节、展览布置区与临时排练现场进行采风、拍摄与直播，习惯用手机4G/5G直接联网完成现场音视频采集、作品上传与团队沟通。",
-    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点。",
+    "identity": "脾气火爆但才华横溢的音乐制作人兼户外视觉创作者，常年在音乐节、街头活动、临时排练现场与城市采风路线之间移动，一边逼着艺人突破极限，一边用手机和平板完成现场音视频采集、直播推流、作品上传与云端素材同步。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
     "apps": [
       "抖音",
       "快手",
       "哔哩哔哩",
-      "微信",
-      "钉钉",
-      "小红书"
+      "微信"
     ],
     "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "急促直接、带命令感，偶尔夹杂行业黑话，情绪上来时语速加快。",
+      "tone": "直接、急躁、带压迫感，像在排练现场催进度，但谈到作品质量时又极其较真。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "这条必须过"
+        "这条必须顶格",
+        "别给我转圈"
       ],
-      "typical_habits": "习惯在开播前用短句快速确认参数，遇到卡顿会直接要求切网络或降清晰度，收工后喜欢用语音复盘。"
+      "typical_habits": "习惯用命令式短句推进协作，先确认画面和上行稳不稳，再谈内容；遇到卡顿会立刻要求切备用方案。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "户外音乐现场直播与作品上传",
+      "name": "深夜户外演出直播与素材回传",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每周三周六下午常规业务，在户外演出点、展览布置区或城市采风路线进行现场直播与高清作品上传",
-      "period_type": "weekly",
+      "trigger_condition": "每天深夜23:00-00:30，在音乐节、街头活动或临时排练现场进行户外演出直播，并同步回传高清音视频素材给团队与客户。",
+      "period_type": "daily",
       "days": [
-        "Wednesday",
-        "Saturday"
+        "daily"
       ],
-      "time_range": "14:00-17:00",
+      "time_range": "23:00-00:30",
       "application_name": "抖音",
       "service_name": "开直播",
       "preferred_params": {
@@ -46,124 +44,108 @@
       },
       "aliases": {
         "app_aliases": [
+          "阿抖",
           "抖子",
-          "抖音直播"
+          "抖音"
         ],
         "service_aliases": [
           "开播",
-          "上直播",
-          "推流"
+          "推流",
+          "上播",
+          "开直播"
+        ],
+        "resolution_aliases": [
+          "顶格清晰度",
+          "原画",
+          "千万别糊",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "别掉链子",
+          "零卡顿",
+          "秒开",
+          "别转圈",
+          "毫秒级"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到后半夜",
+          "一个半小时"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "晚间例行",
+          "深夜档老规矩"
         ]
       },
-      "param_mappings": {
-        "resolution": {
-          "高清": "1080p",
-          "清晰点": "1080p",
-          "超清": "1080p"
-        },
-        "rtt": {
-          "低时延": "50ms",
-          "别卡": "50ms",
-          "跟手": "50ms"
-        }
-      },
       "declaration_mode": "explicit_declaration",
-      "evidence_level": "explicit_long_term_declaration"
+      "evidence_pattern": "显式口述固定偏好"
     },
     "scenario_events": [
       {
-        "event_id": "EVT_01",
-        "event_name": "城市音乐节密集人群直播周",
-        "valid_from": "2026-11-01",
-        "valid_to": "2026-11-15",
-        "impact_scope": "temporary",
-        "scene_description": "音乐节现场人群密集、基站负载高，户外移动直播需要优先保证连接可用与上行稳定，避免因拥塞导致直播中断。",
+        "event_id": "EVT_2026_01",
+        "name": "跨城音乐节密集演出周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城音乐节连续演出，现场人群密集、基站拥塞，后台与舞台之间频繁移动，直播互动和素材回传必须优先保障可用性。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
-        },
-        "trigger_reason": "密集人群下1080p上行压力大，临时降为720p并收紧时延上限，优先保障直播互动低时延与连接可用。"
+        }
       }
     ],
     "sub_storylines": [
       {
-        "sub_id": "SUB_MT_01",
-        "name": "团队视频复盘与素材同步",
-        "period_type": "weekly_evening",
-        "days": [
-          "Sunday",
-          "Wednesday"
-        ],
-        "trigger_condition": "每周日与周三晚间收工后，与团队进行视频通话复盘当日拍摄素材并同步云端文件",
+        "storyline_id": "SUB_01",
+        "name": "排练录像复盘与团队沟通",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
+        "trigger_condition": "排练结束后与艺人、摄影和剪辑团队远程复盘录像，确认下一场演出调整点。",
         "aliases": {
           "app_aliases": [
-            "微信视频",
-            "绿泡泡"
+            "weixin",
+            "wx"
           ],
           "service_aliases": [
-            "对一下",
-            "复盘通话",
-            "碰一下"
+            "打视频",
+            "连线"
           ]
-        },
-        "param_mappings": {
-          "resolution": {
-            "标清": "720p",
-            "能看就行": "720p"
-          },
-          "rtt": {
-            "能听清就行": "100ms",
-            "别断": "100ms"
-          }
         }
       },
       {
-        "sub_id": "SUB_MT_02",
-        "name": "客户方案远程沟通",
-        "period_type": "sporadic_evening",
-        "trigger_condition": "客户临时要求确认设计稿或演出方案时，在晚间发起远程会议沟通",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "storyline_id": "SUB_02",
+        "name": "云端素材同步与客户预览",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
+        "trigger_condition": "客户或合作方在异地观看测试直播流，需要同步检查画面、声音和弹幕互动效果。",
         "aliases": {
           "app_aliases": [
-            "腾讯会议",
-            "会议号"
+            "bilibili",
+            "哔站"
           ],
           "service_aliases": [
-            "对齐一下",
-            "过方案",
-            "拉个会"
+            "观赛",
+            "刷直播"
           ]
-        },
-        "param_mappings": {
-          "resolution": {
-            "超清": "1080p",
-            "清楚点": "1080p"
-          },
-          "rtt": {
-            "不卡": "80ms",
-            "流畅": "80ms"
-          }
         }
       }
     ],
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "name": "通勤路上刷短视频",
-        "application_name": "快手",
-        "service_name": "短视频",
-        "scenario_description": "通勤或转场途中单次刷短视频放松，非固定周期，不涉及直播推流。",
+        "scenario": "临时参加行业线上会议，讨论演出排期与版权事项。",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -171,10 +153,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "休息时看同行直播",
-        "application_name": "哔哩哔哩",
-        "service_name": "看直播",
-        "scenario_description": "夜间休息或等待素材导出时，单次观看同行音乐直播，非工作主线。",
+        "scenario": "通勤途中刷短视频找视觉参考和音乐采样灵感。",
+        "application_name": "快手",
+        "service_name": "短视频",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

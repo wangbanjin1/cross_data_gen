@@ -4,39 +4,39 @@
   "persona_summary": "外访型金融顾问",
   "static_profile": {
     "user_id": "USER_002",
-    "identity": "外访型金融顾问，主要协助客户维护与跨境资金转移业务，每周3至5次外出任务，活动范围覆盖市集、门店外摆区、客户拜访点、配送路线、展会现场、商圈户外区域及临时经营点，全程依赖手机4G/5G移动核心网直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi，便携终端确需联网时使用手机热点。",
-    "devices": "主力设备为5G智能手机，辅助设备为便携终端（通过手机热点联网）",
+    "identity": "外访型金融顾问，主要协助客户维护与跨境资金转移业务，日常在市集、门店外摆区、客户拜访点、配送路线、展会现场及商圈户外区域之间移动办公，全程依赖手机4G/5G移动核心网直连，不依赖家庭宽带或公司固网。",
+    "devices": "主力设备为5G智能手机，便携终端（如平板/笔记本）确需联网时使用手机热点共享。",
     "apps": [
       "微信",
-      "抖音",
       "腾讯会议",
+      "抖音",
       "钉钉"
     ],
     "speech_archetype": "business_advisor",
     "speech_style": {
-      "tone": "干练、务实、略带催促感，习惯用金融与业务术语夹杂口语化表达",
+      "tone": "干练务实、节奏快，习惯用金融与移动办公行话，边走路边交代任务。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "先走流程"
+        "秒开就行",
+        "千万别糊"
       ],
-      "typical_habits": "在客户拜访途中快速核对行情与账户资料，通过加密通信确认跨境转账信息并上传电子签署文件，沟通时喜欢先确认关键节点再推进下一步，常用'对齐一下'来同步信息。"
+      "typical_habits": "习惯在客户拜访途中用语音或短视频快速确认信息，开会前必说'对齐一下'，上传文件前反复叮嘱'别掉链子'。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "客户拜访途中跨境转账信息确认与电子签署文件上传",
+      "name": "客户拜访途中跨境转账视频确认与电子签署上传",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "执行客户现场资金维护与跨境转账确认任务时",
-      "period_type": "weekly",
+      "trigger_condition": "执行客户现场资金维护与跨境转账确认任务时，需通过视频通话核对账户资料并上传电子签署文件",
+      "period_type": "task_driven",
       "days": [
-        "Wednesday",
-        "Saturday"
+        "task_specific"
       ],
-      "time_range": "14:00-17:00",
-      "application_name": "微信",
+      "time_range": "14:00-16:00",
+      "application_name": "腾讯会议",
       "service_name": "视频通话",
       "preferred_params": {
         "resolution": "1080p",
@@ -44,115 +44,107 @@
       },
       "aliases": {
         "app_aliases": [
-          "微",
-          "V信"
+          "企鹅会议",
+          "腾讯会议那个",
+          "小企鹅"
         ],
         "service_aliases": [
-          "视频对一下",
-          "开个视频"
+          "打视讯",
+          "连麦确认",
+          "开视频对一下",
+          "视讯核对"
+        ],
+        "resolution_aliases": [
+          "顶格清晰度",
+          "原画",
+          "千万别糊",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "别掉链子",
+          "秒开",
+          "零卡顿",
+          "别转圈"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到四点",
+          "大半个下午"
+        ],
+        "period_aliases": [
+          "老时间",
+          "每天这个时候",
+          "老规矩",
+          "下午例行"
         ]
       },
-      "param_mappings": {
-        "resolution": {
-          "高清": "1080p",
-          "清晰点": "1080p"
-        },
-        "rtt": {
-          "低时延": "50ms",
-          "别卡": "50ms"
-        }
-      },
       "declaration_mode": "implicit_induction",
-      "evidence_level": "explicit_long_term_declaration"
+      "evidence_pattern": "隐式单次保障并随后固化"
     },
     "scenario_events": [
       {
-        "event_id": "EVT_01",
-        "event_name": "跨境金融展会现场集中签约周",
-        "valid_from": "2026-11-01",
-        "valid_to": "2026-11-15",
-        "impact_scope": "temporary",
-        "scene_description": "展会现场人群密集，移动网络拥塞，需在临时展位完成多笔跨境转账确认与电子签署文件上传，对时延和稳定性要求更高。",
+        "event_id": "EVT_2026_01",
+        "name": "跨境金融展会现场驻点周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "展会现场人群密集、无线环境复杂，需在临时展位高频进行跨境转账视频确认与电子签署上传，网络拥塞明显。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
-        },
-        "trigger_reason": "人群密集区连接稳定性优先，降低分辨率以保障支付与订单消息及时送达，并确保弱覆盖路段任务能够续传或快速恢复。"
+        }
       }
     ],
     "sub_storylines": [
       {
-        "sub_id": "SUB_MT_01",
-        "name": "客户远程沟通与短视频营销素材回传",
-        "period_type": "weekly_evening",
-        "days": [
-          "Sunday",
-          "Wednesday"
-        ],
-        "trigger_condition": "完成客户拜访后需要远程沟通并上传短视频营销素材时",
-        "application_name": "抖音",
-        "service_name": "短视频",
+        "storyline_id": "SUB_01",
+        "name": "客户拜访途中行情与账户资料核对",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
+        "trigger_condition": "在客户拜访点或配送路线途中需快速核对行情与账户资料时",
         "aliases": {
           "app_aliases": [
-            "抖",
-            "DY"
+            "weixin",
+            "wx"
           ],
           "service_aliases": [
-            "发个短片",
-            "传个视频"
+            "打视频",
+            "连线"
           ]
-        },
-        "param_mappings": {
-          "resolution": {
-            "标清": "720p"
-          },
-          "rtt": {
-            "能听清就行": "100ms"
-          }
         }
       },
       {
-        "sub_id": "SUB_MT_02",
-        "name": "远程协作会议与订单库存同步",
-        "period_type": "sporadic_evening",
-        "trigger_condition": "需要与团队远程协作处理订单、库存或客户沟通时",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "storyline_id": "SUB_02",
+        "name": "短视频营销素材拍摄与上传",
+        "application_name": "抖音",
+        "service_name": "短视频",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
+        "trigger_condition": "在市集、门店外摆区或商圈户外区域拍摄金融知识短视频并上传时",
         "aliases": {
           "app_aliases": [
-            "腾讯会",
-            "TX会议"
+            "douyin",
+            "阿抖"
           ],
           "service_aliases": [
-            "开个会",
-            "对齐一下"
+            "看短视频",
+            "刷视频"
           ]
-        },
-        "param_mappings": {
-          "resolution": {
-            "超清": "1080p"
-          },
-          "rtt": {
-            "不卡": "80ms"
-          }
         }
       }
     ],
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "name": "临时看直播",
-        "application_name": "哔哩哔哩",
-        "service_name": "看直播",
-        "scenario_description": "在展会现场休息间隙，偶尔打开哔哩哔哩看财经直播，属于单次无关业务。",
+        "scenario": "临时参加内部远程协作会议",
+        "application_name": "钉钉",
+        "service_name": "会议",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -160,10 +152,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "临时视频通话",
-        "application_name": "钉钉",
-        "service_name": "视频通话",
-        "scenario_description": "在非任务时段，偶尔使用钉钉与同事进行简短视频通话，属于单次无关业务。",
+        "scenario": "午休时在展会现场刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

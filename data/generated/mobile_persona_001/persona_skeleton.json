@@ -4,38 +4,37 @@
   "persona_summary": "巡回活动讲者",
   "static_profile": {
     "user_id": "USER_001",
-    "identity": "前残奥高山滑雪运动员，现为巡回励志演讲者与公益体育活动推广人；长期跨城转场，在露天训练场、赛道、球场及赛事集结区开展户外公益活动、移动直播、演讲片段上传与观众反馈收集。",
-    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "identity": "前残奥高山滑雪运动员，现为巡回励志演讲者与户外公益活动推广大使，常年跨城转场，在露天训练场、赛道、球场及赛事集结区开展公益演讲与运动推广活动",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑，便携终端确需联网时使用手机热点",
     "apps": [
       "抖音",
       "微信",
       "腾讯会议",
-      "哔哩哔哩"
+      "快手"
     ],
     "speech_archetype": "athlete_speaker",
     "speech_style": {
-      "tone": "干脆、鼓舞式、带赛场口令感，习惯把技术参数说成训练口令",
+      "tone": "干脆利落、带运动员的节奏感，喜欢用短句和行动指令，偶尔夹带滑雪行话",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "稳一点，别卡"
+        "稳住了"
       ],
-      "typical_habits": "先确认时间和网络，再安排直播或上传；喜欢用短句下达指令，常把清晰度、时延说成‘高清点’‘低时延’‘别卡’。"
+      "typical_habits": "习惯在活动前用一句话对齐流程，直播前反复确认上行画质与时延，喜欢用'老时间''老规矩'指代固定安排"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "户外公益直播与演讲片段上传",
+      "name": "午间公益直播与团队调度",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每周三周六下午常规业务，在户外公益活动、跨城转场或赛事集结区进行移动直播与演讲片段上传",
-      "period_type": "weekly",
+      "trigger_condition": "每天午间休息与午间复盘业务，固定12:30-13:30进行公益直播推流与团队调度",
+      "period_type": "daily",
       "days": [
-        "Wednesday",
-        "Saturday"
+        "daily"
       ],
-      "time_range": "14:00-17:00",
+      "time_range": "12:30-13:30",
       "application_name": "抖音",
       "service_name": "开直播",
       "preferred_params": {
@@ -44,122 +43,96 @@
       },
       "aliases": {
         "app_aliases": [
-          "抖子",
-          "抖音直播"
+          "阿抖",
+          "抖家"
         ],
         "service_aliases": [
-          "开播",
-          "上播",
-          "推流"
+          "推流",
+          "开播"
+        ],
+        "resolution_aliases": [
+          "原画",
+          "顶格清晰度"
+        ],
+        "rtt_aliases": [
+          "别掉链子",
+          "零卡顿"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "一个钟头"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间"
         ]
       },
-      "param_mappings": {
-        "resolution": {
-          "高清": "1080p",
-          "清晰点": "1080p",
-          "超清": "1080p"
-        },
-        "rtt": {
-          "低时延": "50ms",
-          "别卡": "50ms",
-          "稳一点": "50ms"
-        }
-      },
       "declaration_mode": "explicit_declaration",
-      "evidence_level": "explicit_long_term_declaration"
+      "evidence_pattern": "显式口述固定偏好"
     },
     "scenario_events": [
       {
-        "event_id": "EVT_01",
-        "event_name": "跨城公益演讲周与赛事集结直播",
-        "valid_from": "2026-11-01",
-        "valid_to": "2026-11-15",
-        "impact_scope": "temporary",
-        "scene_description": "跨城转场途中、露天训练场与赛事集结区人群密集，移动网络波动大，需优先保证直播连续与低时延互动。",
+        "event_id": "EVT_2026_01",
+        "name": "跨城公益演讲赛事周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城转场期间在露天赛事集结区与人群密集的公益演讲现场，移动网络拥塞且转场频繁",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
-        },
-        "trigger_reason": "人群密集和转场移动导致上行带宽紧张，临时降低分辨率并收紧时延上限，优先保障直播不中断和即时互动。"
+        }
       }
     ],
     "sub_storylines": [
       {
-        "sub_id": "SUB_MT_01",
+        "storyline_id": "SUB_01",
         "name": "大巴转场视频调度",
-        "period_type": "weekly_evening",
-        "days": [
-          "Sunday",
-          "Wednesday"
-        ],
-        "trigger_condition": "周日晚间或周三晚间在大巴转场途中进行团队视频调度与流程对齐",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
+        "trigger_condition": "跨城转场途中在大巴上与团队进行视频通话调度",
         "aliases": {
           "app_aliases": [
-            "微信电话",
-            "绿泡泡"
+            "weixin",
+            "wx"
           ],
           "service_aliases": [
-            "对一下",
-            "视频对齐"
+            "打视频",
+            "连线"
           ]
-        },
-        "param_mappings": {
-          "resolution": {
-            "标清": "720p",
-            "能看清人就行": "720p"
-          },
-          "rtt": {
-            "能听清就行": "100ms",
-            "别断": "100ms"
-          }
         }
       },
       {
-        "sub_id": "SUB_MT_02",
-        "name": "训练录像复盘与演讲片段回传",
-        "period_type": "sporadic_evening",
-        "trigger_condition": "训练或演讲结束后临时发起，上传训练视频、演讲片段并进行回放复盘",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "storyline_id": "SUB_02",
+        "name": "训练录像复盘会议",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
+        "trigger_condition": "晚间在临时休息点与教练团队进行训练录像复盘与数据回放",
         "aliases": {
           "app_aliases": [
-            "B站",
-            "哔哩"
+            "tencentmeeting",
+            "会议通"
           ],
           "service_aliases": [
-            "传片子",
-            "回放复盘"
+            "开会",
+            "进会议室"
           ]
-        },
-        "param_mappings": {
-          "resolution": {
-            "超清": "1080p",
-            "看清楚动作": "1080p"
-          },
-          "rtt": {
-            "不卡": "80ms",
-            "顺一点": "80ms"
-          }
         }
       }
     ],
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "name": "临时线上会议",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
-        "scenario_description": "临时受邀参加公益组织线上筹备会，非周期性，仅一次。",
+        "scenario": "单次与赞助商临时沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -167,10 +140,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "休息时看直播",
+        "scenario": "单次休息时刷短视频放松",
         "application_name": "快手",
-        "service_name": "看直播",
-        "scenario_description": "在临时休息点偶尔观看体育赛事直播，单次、非固定周期。",
+        "service_name": "短视频",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

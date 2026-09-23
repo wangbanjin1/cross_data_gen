@@ -55,7 +55,9 @@ class SessionAssembler:
             return cls._assemble_t2_5(
                 sid, uid, ref_time, tid, role, b_type, env, act,
                 app_name, srv_name, res_val, rtt_val, start_ts, end_ts, dur_val,
-                event_sequence, snapshot_before, memory_events, gold_after
+                event_sequence, snapshot_before, memory_events, gold_after,
+                base_end_ts=s_plan.get("base_end_timestamp"),
+                base_dur=s_plan.get("base_duration")
             )
         elif tid == "T2-3":
             return cls._assemble_t2_3(
@@ -256,9 +258,11 @@ class SessionAssembler:
         }
 
     @classmethod
-    def _assemble_t2_5(cls, sid, uid, ref_time, tid, role, b_type, env, act, app, srv, res, rtt, start, end, dur, events, snap, mems, gold):
+    def _assemble_t2_5(cls, sid, uid, ref_time, tid, role, b_type, env, act, app, srv, res, rtt, start, end, dur, events, snap, mems, gold, base_end_ts=None, base_dur=None):
         sig = f"T2-5|2|1|I1:{app}/{srv}/1/amend/resolved|none"
-        base_end_ts = end.replace("17时00分", "16时00分") if "17时00分" in end else end
+        if not base_end_ts:
+            base_end_ts = end.replace("17时00分", "16时00分") if "17时00分" in end else end
+        base_dur = base_dur or "120min"
         intents = [
             {
                 "intent_id": "I1",
@@ -293,7 +297,7 @@ class SessionAssembler:
                             "timestamp": {
                                 "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
                                 "end_timestamp": {"value": base_end_ts, "source_type": "Turn", "source_ref": "U1"},
-                                "duration": {"value": "120min", "source_type": "Context", "source_ref": "U1"},
+                                "duration": {"value": base_dur, "source_type": "Context", "source_ref": "U1"},
                             },
                         },
                     },
@@ -353,6 +357,9 @@ class SessionAssembler:
                 },
             }
         ]
+        mf_001 = snap.get("MF_001", {}) if snap else {}
+        base_res = mf_001.get("resolution", "1080p")
+        base_rtt = mf_001.get("rtt_max", "50ms")
         slot_updates = [
             {
                 "intent_id": "I1",
@@ -362,8 +369,8 @@ class SessionAssembler:
                         "params": {
                             "application_name": {"value": app, "source_type": "Memory", "source_ref": "MF_001"},
                             "service_name": {"value": srv, "source_type": "Memory", "source_ref": "MF_001"},
-                            "resolution": {"min_value": {"value": "1080p", "source_type": "Memory", "source_ref": "MF_001"}},
-                            "rtt": {"max_value": {"value": "50ms", "source_type": "Memory", "source_ref": "MF_001"}},
+                            "resolution": {"min_value": {"value": base_res, "source_type": "Memory", "source_ref": "MF_001"}},
+                            "rtt": {"max_value": {"value": base_rtt, "source_type": "Memory", "source_ref": "MF_001"}},
                             "timestamp": {
                                 "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
                                 "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},

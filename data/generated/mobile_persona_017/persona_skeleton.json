@@ -4,158 +4,146 @@
   "persona_summary": "移动文化服务人员",
   "static_profile": {
     "user_id": "USER_017",
-    "identity": "韩国公共图书馆儿童文学馆员，长期负责社区阅读推广、馆藏外借流转与户外文化活动现场服务，深度关注李基勋作品并经常组织相关主题共读活动。",
-    "devices": "主力设备为5G智能手机，辅助设备为平板电脑，便携终端确需联网时使用手机热点。",
+    "identity": "韩国公共图书馆儿童文学馆员，长期负责社区阅读推广、馆藏外借流转与户外文化活动现场服务，同时是李基勋作品的忠实读者与研究者，经常跨区域参加读书会、作家见面会与童书展览。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；外出任务中平板电脑通过手机热点联网，全程不依赖家庭宽带、公司固网或普通Wi-Fi。",
     "apps": [
       "微信",
       "腾讯会议",
       "抖音",
-      "哔哩哔哩"
+      "小红书"
     ],
-    "speech_archetype": "librarian_field_coordinator",
+    "speech_archetype": "cultural_outreach_librarian",
     "speech_style": {
-      "tone": "温和耐心、条理清晰，现场协调时干脆利落，习惯用阅读推广人的口吻确认信息。",
+      "tone": "温和亲切、条理清楚，带一点书卷气和现场调度感，喜欢用生活化比喻说明网络与画质要求。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "先登记再流转"
+        "孩子们等着呢"
       ],
-      "typical_habits": "出发前先确认馆藏清单和活动流程，现场用手机快速检索、登记和共享位置，遇到弱覆盖会提醒同伴稍等重连。"
+      "typical_habits": "出发前先确认设备电量和热点，现场习惯用口语化指令描述画质、时延和时长，遇到弱覆盖会反复强调续传和恢复。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "社区阅读活动与馆藏外借现场协作",
+      "name": "社区阅读活动现场直播与远程协作",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "执行社区阅读推广活动或馆藏外借流转任务时触发，需要在城市街区、公共活动现场及跨区域出行途中进行远程协作与信息登记。",
-      "period_type": "weekly",
+      "trigger_condition": "执行社区儿童阅读推广活动、童书展外借流转或户外文化活动现场任务时",
+      "period_type": "task_driven",
       "days": [
-        "Wednesday",
-        "Saturday"
+        "task_specific"
       ],
-      "time_range": "14:00-17:00",
-      "application_name": "腾讯会议",
-      "service_name": "会议",
+      "time_range": "14:00-16:00",
+      "application_name": "微信",
+      "service_name": "开直播",
       "preferred_params": {
         "resolution": "1080p",
         "rtt_max": "50ms"
       },
       "aliases": {
         "app_aliases": [
-          "腾讯会议",
-          "会议软件"
+          "微信",
+          "某信",
+          "小绿标"
         ],
         "service_aliases": [
-          "开个会",
-          "线上对齐",
-          "远程碰一下"
+          "开播",
+          "推流",
+          "开直播",
+          "现场连一下"
+        ],
+        "resolution_aliases": [
+          "顶格清晰度",
+          "超清",
+          "千万别糊",
+          "蓝光画质"
+        ],
+        "rtt_aliases": [
+          "别掉链子",
+          "零卡顿",
+          "秒开",
+          "别转圈"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到四点",
+          "大半个下午"
+        ],
+        "period_aliases": [
+          "老规矩",
+          "老时间",
+          "每周外出任务这个点",
+          "现场任务一开就播"
         ]
       },
-      "param_mappings": {
-        "resolution": {
-          "高清": "1080p",
-          "清晰点": "1080p"
-        },
-        "rtt": {
-          "低时延": "50ms",
-          "别卡": "50ms"
-        }
-      },
       "declaration_mode": "explicit_declaration",
-      "evidence_level": "explicit_long_term_declaration"
+      "evidence_pattern": "显式口述固定偏好"
     },
     "scenario_events": [
       {
-        "event_id": "EVT_01",
-        "event_name": "跨城儿童文学巡展与户外共读周",
-        "valid_from": "2026-11-01",
-        "valid_to": "2026-11-15",
-        "impact_scope": "temporary",
-        "scene_description": "跨城巡展期间在户外广场、临时展棚和移动途中进行远程协作，网络覆盖波动较大，需要优先保证音视频稳定和消息及时送达。",
+        "event_id": "EVT_2026_01",
+        "name": "跨城童书展与作家见面会周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城展馆、户外排队区与临时活动棚内人流密集，移动网络拥塞且部分路段弱覆盖，需要优先保证直播不断线、消息及时送达和任务续传。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
-        },
-        "trigger_reason": "户外临时场地和跨区域移动导致带宽与覆盖不稳定，降低分辨率并收紧时延上限以保证会议连续性和任务续传。"
+        }
       }
     ],
     "sub_storylines": [
       {
-        "sub_id": "SUB_MT_01",
-        "name": "活动图文与短视频发布",
-        "period_type": "weekly_evening",
-        "days": [
-          "Sunday",
-          "Wednesday"
-        ],
-        "trigger_condition": "社区阅读活动或展品外借结束后，需要整理现场图文并发布活动记录。",
-        "application_name": "抖音",
-        "service_name": "短视频",
+        "storyline_id": "SUB_01",
+        "name": "馆藏流转与志愿者远程对齐",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
+        "trigger_condition": "在社区阅读活动或展品外借现场，需要与馆内同事、志愿者远程核对馆藏流转信息时",
         "aliases": {
           "app_aliases": [
-            "抖音",
-            "短视频平台"
+            "tencentmeeting",
+            "会议通"
           ],
           "service_aliases": [
-            "发个现场",
-            "传段视频",
-            "活动记录"
+            "开会",
+            "进会议室"
           ]
-        },
-        "param_mappings": {
-          "resolution": {
-            "标清": "720p"
-          },
-          "rtt": {
-            "能听清就行": "100ms"
-          }
         }
       },
       {
-        "sub_id": "SUB_MT_02",
-        "name": "远程馆藏查询与即时沟通",
-        "period_type": "sporadic_evening",
-        "trigger_condition": "在户外等候区或临时停留点需要查询馆藏、确认流转信息或与同事即时沟通时触发。",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "storyline_id": "SUB_02",
+        "name": "活动图文短视频发布与复盘",
+        "application_name": "抖音",
+        "service_name": "短视频",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
+        "trigger_condition": "活动现场结束后，需要快速剪辑并发布活动图文、短视频，或回看录像复盘时",
         "aliases": {
           "app_aliases": [
-            "微信",
-            "绿泡泡"
+            "douyin",
+            "阿抖"
           ],
           "service_aliases": [
-            "视频一下",
-            "打个视频",
-            "远程确认"
+            "看短视频",
+            "刷视频"
           ]
-        },
-        "param_mappings": {
-          "resolution": {
-            "超清": "1080p"
-          },
-          "rtt": {
-            "不卡": "80ms"
-          }
         }
       }
     ],
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "name": "临时观看儿童文学直播",
-        "application_name": "哔哩哔哩",
-        "service_name": "看直播",
-        "scenario_description": "在临时停留点偶然看到李基勋相关儿童文学直播，短暂观看了解活动灵感。",
+        "scenario": "单次与外地童书作者临时视频通话确认见面会细节",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -163,10 +151,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "休息时浏览短视频",
-        "application_name": "抖音",
+        "scenario": "午休时在活动现场单次刷小红书看童书展攻略",
+        "application_name": "小红书",
         "service_name": "短视频",
-        "scenario_description": "户外活动间隙休息时刷短视频放松，与主线任务无关。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

@@ -4,8 +4,8 @@
   "persona_summary": "移动训练与赛事人员",
   "static_profile": {
     "user_id": "USER_008",
-    "identity": "职业篮球得分后卫，长期随队进行跨区域客场转场、露天训练与赛事集结，日常以手机移动核心网完成训练记录、团队调度与赛事直播互动。",
-    "devices": "主力设备为5G智能手机，辅助设备为可穿戴运动手环/手表；便携终端确需联网时使用手机热点。",
+    "identity": "职业篮球得分后卫，长期随队进行跨区域客场转场、露天球场训练与赛事集结，日常以5G手机和可穿戴设备完成训练记录、团队调度与赛事直播保障。",
+    "devices": "主力设备为5G智能手机，辅助设备为运动可穿戴设备（心率/定位手环），便携终端确需联网时使用手机热点。",
     "apps": [
       "抖音",
       "微信",
@@ -14,28 +14,28 @@
     ],
     "speech_archetype": "athlete_speaker",
     "speech_style": {
-      "tone": "直来直去、节奏快，带点球场上的命令感和兄弟间的调侃。",
+      "tone": "干脆利落、带球场口令感，喜欢用短句和行话，语速偏快。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "先看回放"
+        "顶格清晰度",
+        "秒开"
       ],
-      "typical_habits": "习惯用短句同步战术和行程，遇到网络问题会直接说‘别卡’‘稳住’，训练后喜欢边看回放边在群里发语音。"
+      "typical_habits": "习惯在转场途中或热身间隙用手机快速处理团队消息与视频上传，说话常带训练口令和赛事术语，偏好用口语别名指代应用与业务。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "客场转场与露天训练直播调度",
+      "name": "客场转场途中赛事直播与团队调度",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "执行客场转场、露天训练或赛事集结任务时，需要向团队和粉丝同步现场画面、进行即时通信与团队调度。",
-      "period_type": "weekly",
+      "trigger_condition": "执行客场转场或露天球场赛前集结任务时，需在移动途中进行赛事直播、即时通信与团队调度",
+      "period_type": "task_driven",
       "days": [
-        "Wednesday",
-        "Saturday"
+        "task_specific"
       ],
-      "time_range": "14:00-17:00",
+      "time_range": "14:00-16:00",
       "application_name": "抖音",
       "service_name": "开直播",
       "preferred_params": {
@@ -44,123 +44,96 @@
       },
       "aliases": {
         "app_aliases": [
-          "抖子",
-          "DY"
+          "阿抖",
+          "抖子"
         ],
         "service_aliases": [
-          "开播",
-          "上直播",
-          "推流"
+          "推流",
+          "开播"
+        ],
+        "resolution_aliases": [
+          "顶格清晰度",
+          "千万别糊"
+        ],
+        "rtt_aliases": [
+          "别掉链子",
+          "秒开"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "播到四点"
+        ],
+        "period_aliases": [
+          "老规矩",
+          "转场老时间"
         ]
       },
-      "param_mappings": {
-        "resolution": {
-          "高清": "1080p",
-          "清晰点": "1080p",
-          "蓝光": "1080p"
-        },
-        "rtt": {
-          "低时延": "50ms",
-          "别卡": "50ms",
-          "稳住": "50ms"
-        }
-      },
       "declaration_mode": "implicit_induction",
-      "evidence_level": "explicit_long_term_declaration"
+      "evidence_pattern": "隐式单次保障并随后固化"
     },
     "scenario_events": [
       {
-        "event_id": "EVT_01",
-        "event_name": "跨城客场赛事周",
-        "valid_from": "2026-11-01",
-        "valid_to": "2026-11-15",
-        "impact_scope": "temporary",
-        "scene_description": "连续跨城转场、场馆人群密集、移动网络拥塞，需要在高铁、大巴和临时休息点保持直播与团队通信连续。",
+        "event_id": "EVT_2026_01",
+        "name": "跨城客场赛事周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "连续跨城转场与多场客场赛事，球场及集结区人群密集，移动网络拥塞，需优先保障低时延通信与稳定上行。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
-        },
-        "trigger_reason": "人群密集和移动转场导致上行带宽波动，降低分辨率并收紧时延上限以保证直播连续和团队调度不中断。"
+        }
       }
     ],
     "sub_storylines": [
       {
-        "sub_id": "SUB_MT_01",
-        "name": "大巴转场视频调度",
-        "period_type": "weekly_evening",
-        "days": [
-          "Sunday",
-          "Wednesday"
-        ],
-        "trigger_condition": "客场转场大巴途中需要与教练组、队友进行视频通话并同步行程和战术安排。",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "storyline_id": "SUB_01",
+        "name": "大巴转场视频调度会",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
+        "trigger_condition": "客场转场大巴途中，教练组临时召集战术对齐与人员调度",
         "aliases": {
           "app_aliases": [
-            "V信",
-            "绿泡泡"
+            "tencentmeeting",
+            "会议通"
           ],
           "service_aliases": [
-            "视频一下",
-            "对个视频"
+            "开会",
+            "进会议室"
           ]
-        },
-        "param_mappings": {
-          "resolution": {
-            "标清": "720p",
-            "能看清人就行": "720p"
-          },
-          "rtt": {
-            "能听清就行": "100ms",
-            "别断": "100ms"
-          }
         }
       },
       {
-        "sub_id": "SUB_MT_02",
-        "name": "训练录像复盘与上传",
-        "period_type": "sporadic_evening",
-        "trigger_condition": "训练结束后需要上传训练视频、记录数据并与团队进行回放复盘。",
+        "storyline_id": "SUB_02",
+        "name": "训练录像复盘上传",
         "application_name": "哔哩哔哩",
         "service_name": "短视频",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
+        "trigger_condition": "训练结束后需将现场训练视频上传供团队复盘与数据记录",
         "aliases": {
           "app_aliases": [
-            "B站",
-            "小破站"
+            "bilibili",
+            "哔站"
           ],
           "service_aliases": [
-            "传录像",
-            "看回放",
-            "复盘视频"
+            "看短视频",
+            "刷视频"
           ]
-        },
-        "param_mappings": {
-          "resolution": {
-            "超清": "1080p",
-            "清楚点": "1080p"
-          },
-          "rtt": {
-            "不卡": "80ms",
-            "流畅": "80ms"
-          }
         }
       }
     ],
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "name": "临时线上会议",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
-        "scenario_description": "临时被拉入赞助商或赛事组委会的线上沟通会，非高频主线业务。",
+        "scenario": "赛前临时与家人视频通话",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -168,10 +141,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "休息时刷直播",
+        "scenario": "休息点单次观看赛事直播",
         "application_name": "快手",
         "service_name": "看直播",
-        "scenario_description": "在临时休息点或酒店放松时观看其他赛事直播，单次、非固定。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

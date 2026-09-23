@@ -4,38 +4,37 @@
   "persona_summary": "外业科研协作人员",
   "static_profile": {
     "user_id": "USER_010",
-    "identity": "一位严谨细致的实验物理学家，长期从事外业科研调查与跨机构协作，频繁在采样点、临时实验现场、博物馆外场及跨校通勤路线中完成文献查询、观测记录、数据上传与远程讨论。",
-    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "identity": "一名严谨的实验物理学家，长期在外业调查点、临时实验现场、博物馆外场或资料采集点进行观测与数据采集，频繁跨校通勤并参与学术活动，依赖移动网络完成文献查询、数据上传、远程讨论与视频协作。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点。",
     "apps": [
       "腾讯会议",
-      "钉钉",
       "微信",
+      "钉钉",
       "飞书"
     ],
     "speech_archetype": "meticulous_researcher",
     "speech_style": {
-      "tone": "严谨、克制、注重细节，表达偏精确，习惯先确认条件再推进任务",
+      "tone": "严谨、精确、略带学术口吻，强调数据可靠与流程连续",
       "catchphrases": [
-        "先对齐一下",
-        "数据别掉链子",
-        "按老规矩复核",
-        "这个参数要记准"
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "数据不能断"
       ],
-      "typical_habits": "说话时喜欢先确认时间、地点和网络条件，再安排上传、会议或复核；常用‘对齐’‘复核’‘留痕’等词强调科研协作的准确性。"
+      "typical_habits": "习惯在固定时段发起或参与远程协作，先确认网络与参数，再进入正式任务；对画质、时延和续传能力有明确要求。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "外业科研数据上传与远程协作会议",
+      "name": "晨间外业数据回传与团队视频对齐",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每周三、周六下午常规外业科研协作时段，在采样点、临时实验现场或跨校通勤途中发起",
-      "period_type": "weekly",
+      "trigger_condition": "每天早高峰通勤与晨间例行业务，08:30-10:00在跨校通勤路线或外业调查点通过手机移动核心网接入，进行数据上传与视频协作。",
+      "period_type": "daily",
       "days": [
-        "Wednesday",
-        "Saturday"
+        "daily"
       ],
-      "time_range": "14:00-17:00",
+      "time_range": "08:30-10:00",
       "application_name": "腾讯会议",
       "service_name": "会议",
       "preferred_params": {
@@ -44,126 +43,108 @@
       },
       "aliases": {
         "app_aliases": [
-          "腾讯会议",
-          "会议软件",
-          "远程会"
+          "企鹅会议",
+          "腾讯会",
+          "小企鹅开会"
         ],
         "service_aliases": [
-          "开个会",
-          "远程讨论",
-          "视频协作",
-          "对齐一下"
+          "对齐开会",
+          "连麦讨论",
+          "远程例会",
+          "视频对齐"
+        ],
+        "resolution_aliases": [
+          "原画",
+          "顶格清晰度",
+          "超清",
+          "千万别糊"
+        ],
+        "rtt_aliases": [
+          "别掉链子",
+          "零卡顿",
+          "秒开",
+          "毫秒级",
+          "别转圈"
+        ],
+        "duration_aliases": [
+          "一个半小时",
+          "俩小时",
+          "两钟头",
+          "大半个上午"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "晨间例行",
+          "早高峰老规矩"
         ]
       },
-      "param_mappings": {
-        "resolution": {
-          "高清": "1080p",
-          "清晰点": "1080p",
-          "能看清图表": "1080p"
-        },
-        "rtt": {
-          "低时延": "50ms",
-          "别卡": "50ms",
-          "实时对齐": "50ms"
-        }
-      },
       "declaration_mode": "implicit_induction",
-      "evidence_level": "explicit_long_term_declaration"
+      "evidence_pattern": "隐式单次保障并随后固化"
     },
     "scenario_events": [
       {
-        "event_id": "EVT_01",
-        "event_name": "跨校联合外业采样与数据复核周",
-        "valid_from": "2026-11-01",
-        "valid_to": "2026-11-15",
-        "impact_scope": "temporary",
-        "scene_description": "跨校联合外业采样期间，团队在山区、博物馆外场和临时实验点之间移动，弱覆盖路段增多，需优先保证数据续传和远程复核稳定。",
+        "event_id": "EVT_2026_01",
+        "name": "跨校联合外业调查周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨校联合外业调查期间，团队在偏远调查点与博物馆外场之间频繁转场，部分路段弱覆盖，需优先保障数据续传与低时延视频协作。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
-        },
-        "trigger_reason": "弱覆盖和移动场景下，降低分辨率以换取更低时延和更稳的连接，确保观测数据与复核会议不中断。"
+        }
       }
     ],
     "sub_storylines": [
       {
-        "sub_id": "SUB_MT_01",
-        "name": "外业录像复盘与团队沟通",
-        "period_type": "weekly_evening",
-        "days": [
-          "Sunday",
-          "Wednesday"
-        ],
-        "trigger_condition": "每周日、周三晚间回到驻地后，对当天外业录像和观测记录进行复盘沟通",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "storyline_id": "SUB_01",
+        "name": "外业采样数据即时上传",
+        "application_name": "钉钉",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
+        "trigger_condition": "在临时实验现场或资料采集点完成观测后，需要立即上传数据文件与研究影像供团队复核。",
         "aliases": {
           "app_aliases": [
-            "微信",
-            "绿泡泡"
+            "dingding",
+            "钉"
           ],
           "service_aliases": [
-            "视频一下",
-            "复盘通话",
-            "对一下记录"
+            "开会",
+            "进会议室"
           ]
-        },
-        "param_mappings": {
-          "resolution": {
-            "标清": "720p",
-            "能看清就行": "720p"
-          },
-          "rtt": {
-            "能听清就行": "100ms",
-            "别太卡": "100ms"
-          }
         }
       },
       {
-        "sub_id": "SUB_MT_02",
-        "name": "跨机构协作文档同步与远程讨论",
-        "period_type": "sporadic_evening",
-        "trigger_condition": "跨机构合作项目需要临时同步协作文档或讨论实验参数时，通常在晚间发起",
+        "storyline_id": "SUB_02",
+        "name": "跨机构协作文档与远程讨论",
         "application_name": "飞书",
         "service_name": "会议",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
+        "trigger_condition": "跨校通勤路线或学术活动场地中，需要与异地团队进行协作文档编辑与远程讨论。",
         "aliases": {
           "app_aliases": [
-            "飞书",
-            "协作平台"
+            "feishu",
+            "lark"
           ],
           "service_aliases": [
-            "同步一下",
-            "远程讨论",
-            "过一下文档"
+            "开会",
+            "进会议室"
           ]
-        },
-        "param_mappings": {
-          "resolution": {
-            "超清": "1080p",
-            "文档要清楚": "1080p"
-          },
-          "rtt": {
-            "不卡": "80ms",
-            "流畅点": "80ms"
-          }
         }
       }
     ],
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "name": "临时学术直播观看",
-        "application_name": "哔哩哔哩",
-        "service_name": "看直播",
-        "scenario_description": "在外业调查点休息时，偶尔打开哔哩哔哩观看学术讲座或实验技术直播，属于单次非主线行为。",
+        "scenario": "单次临时与博物馆外场人员沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -171,10 +152,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "通勤途中短视频浏览",
-        "application_name": "抖音",
-        "service_name": "短视频",
-        "scenario_description": "跨校通勤路线上短暂浏览短视频放松，不属于科研协作主线，也不影响周期性会议安排。",
+        "scenario": "单次晚间观看学术直播回放",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

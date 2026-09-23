@@ -69,6 +69,16 @@ class DialogueGenerator:
             else:
                 snap_str = "无"
 
+            p_aliases = s_plan.get("aliases", {})
+            aliases_info = {
+                "app_aliases": p_aliases.get("app_aliases", []),
+                "service_aliases": p_aliases.get("service_aliases", []),
+                "resolution_aliases": p_aliases.get("resolution_aliases", []),
+                "rtt_aliases": p_aliases.get("rtt_aliases", []),
+                "duration_aliases": p_aliases.get("duration_aliases", []),
+                "period_aliases": p_aliases.get("period_aliases", []),
+            }
+
             prompt_items.append({
                 "session_id": sid,
                 "rounds": rounds,
@@ -78,6 +88,7 @@ class DialogueGenerator:
                 "ood_goal": s_plan.get("ood_goal", ""),
                 "declaration_mode": s_plan.get("declaration_mode", "explicit_declaration"),
                 "storyline_trigger_type": s_plan.get("storyline_trigger_type", "time_periodic"),
+                "period_type": s_plan.get("period_type", "weekly"),
                 "trigger_condition": s_plan.get("trigger_condition", ""),
                 "time": s_plan["reference_time"],
                 "env": env,
@@ -87,7 +98,8 @@ class DialogueGenerator:
                 "resolution": tp["resolution"],
                 "rtt": tp["rtt"],
                 "duration": tp["duration"],
-                "time_range": f"{tp['start_timestamp']} 至 {tp['end_timestamp']}"
+                "time_range": f"{tp['start_timestamp']} 至 {tp['end_timestamp']}",
+                "aliases": aliases_info
             })
 
         prompt = build_batch_dialogue_prompt(prompt_items, identity, speech)
