@@ -1,0 +1,159 @@
+{
+  "persona_id": "mobile_persona_001",
+  "category": "体育训练与赛事保障",
+  "persona_summary": "巡回活动讲者",
+  "static_profile": {
+    "user_id": "USER_001",
+    "identity": "前残奥高山滑雪运动员，现为励志演讲者，长期在全国各地进行公益宣讲与赛事推广活动，日常频繁跨城转场，在户外热身区、临时休息点、露天训练场、赛道、球场及赛事集结区完成移动直播、流程接收、演讲片段上传与观众反馈收集。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "抖音",
+      "微信",
+      "腾讯会议",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "athlete_speaker",
+    "speech_style": {
+      "tone": "干脆利落、带赛场口令感，习惯用短句推进节奏，讲话像在给团队做临场调度。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "顶住上行",
+        "秒开才算稳"
+      ],
+      "typical_habits": "先确认时间窗口，再点名应用和画质要求；遇到转场或人群密集场景会反复强调上行带宽、连续性和低时延。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "午间演讲片段直播与观众反馈上传",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每天午间休息与午间复盘业务，固定进行演讲片段直播、观众反馈收集与团队同步。",
+      "period_type": "daily",
+      "days": [
+        "daily"
+      ],
+      "time_range": "12:30-13:30",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音号"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "上直播"
+        ],
+        "resolution_aliases": [
+          "原画",
+          "顶格清晰度",
+          "千万别糊"
+        ],
+        "rtt_aliases": [
+          "别掉链子",
+          "零卡顿",
+          "秒开"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到一点半"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "午间例行"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城公益宣讲与赛事推广周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城转场密集，户外临时场地和赛事集结区人群拥挤，移动网络波动明显，需要优先保证直播连续与低时延互动。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "大巴转场视频调度",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "跨城转场途中在大巴或临时休息点进行团队调度与路线确认。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "训练与演讲录像复盘",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "晚间或训练结束后与教练、活动团队进行录像回放和流程对齐。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次与赞助方临时沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次观看赛事直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

@@ -87,6 +87,9 @@ class SessionAssembler:
                 "params": {},
             }
         ]
+        if events and len(events) >= 1:
+            events[0]["requested_params"] = []
+            events[0]["turn_intents"] = intents
         return {
             "session_id": sid,
             "user_id": uid,
@@ -166,6 +169,9 @@ class SessionAssembler:
                 ],
             }
         ]
+        if events and len(events) >= 1:
+            events[0]["requested_params"] = []
+            events[0]["turn_intents"] = intents
         return {
             "session_id": sid,
             "user_id": uid,
@@ -236,6 +242,27 @@ class SessionAssembler:
                 ],
             }
         ]
+        if events and len(events) >= 2:
+            events[0]["requested_params"] = ["service_name"]
+            events[0]["turn_intents"] = [
+                {
+                    "intent_id": "I1",
+                    "status": "in_progress",
+                    "closure_path": "clarify",
+                    "expression_level": 3,
+                    "intent": f"{app}保障",
+                    "params": {
+                        "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
+                        "timestamp": {
+                            "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
+                            "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
+                            "duration": {"value": dur, "source_type": "Context", "source_ref": "U1"},
+                        },
+                    },
+                }
+            ]
+            events[1]["requested_params"] = []
+            events[1]["turn_intents"] = intents
         return {
             "session_id": sid,
             "user_id": uid,
@@ -313,6 +340,30 @@ class SessionAssembler:
                 ],
             }
         ]
+        if events and len(events) >= 2:
+            events[0]["requested_params"] = []
+            events[0]["turn_intents"] = [
+                {
+                    "intent_id": "I1",
+                    "status": "in_progress",
+                    "closure_path": "amend",
+                    "expression_level": 1,
+                    "intent": f"{app}{srv}保障",
+                    "params": {
+                        "application_name": {"value": app, "source_type": "Memory", "source_ref": "MF_001"},
+                        "service_name": {"value": srv, "source_type": "Memory", "source_ref": "MF_001"},
+                        "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}},
+                        "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}},
+                        "timestamp": {
+                            "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
+                            "end_timestamp": {"value": base_end_ts, "source_type": "Turn", "source_ref": "U1"},
+                            "duration": {"value": base_dur, "source_type": "Context", "source_ref": "U1"},
+                        },
+                    },
+                }
+            ]
+            events[1]["requested_params"] = []
+            events[1]["turn_intents"] = intents
         return {
             "session_id": sid,
             "user_id": uid,
@@ -387,6 +438,30 @@ class SessionAssembler:
                 ],
             }
         ]
+        if events and len(events) >= 2:
+            events[0]["requested_params"] = []
+            events[0]["turn_intents"] = [
+                {
+                    "intent_id": "I1",
+                    "status": "in_progress",
+                    "closure_path": "correct",
+                    "expression_level": 4,
+                    "intent": f"{app}{srv}保障",
+                    "params": {
+                        "application_name": {"value": app, "source_type": "Memory", "source_ref": "MF_001"},
+                        "service_name": {"value": srv, "source_type": "Memory", "source_ref": "MF_001"},
+                        "resolution": {"min_value": {"value": base_res, "source_type": "Memory", "source_ref": "MF_001"}},
+                        "rtt": {"max_value": {"value": base_rtt, "source_type": "Memory", "source_ref": "MF_001"}},
+                        "timestamp": {
+                            "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
+                            "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
+                            "duration": {"value": dur, "source_type": "Context", "source_ref": "U1"},
+                        },
+                    },
+                }
+            ]
+            events[1]["requested_params"] = []
+            events[1]["turn_intents"] = intents
         return {
             "session_id": sid,
             "user_id": uid,
@@ -419,7 +494,8 @@ class SessionAssembler:
         if b_type == "main":
             if role == "evidence_session":
                 closure_path = "clarified"
-                app_src, app_ref = "Turn", "U2"
+                app_src, app_ref = "Turn", "U1"
+                srv_src, srv_ref = "Turn", "U1"
                 res_src, res_ref = "Turn", "U2"
                 rtt_src, rtt_ref = "Turn", "U2"
             elif role in ["reinforcement_session", "reuse_session"]:
@@ -432,6 +508,8 @@ class SessionAssembler:
         elif b_type == "sub_01":
             if role == "evidence_session":
                 closure_path = "clarified"
+                app_src, app_ref = "Turn", "U1"
+                srv_src, srv_ref = "Turn", "U1"
                 res_src, res_ref = "Turn", "U2"
                 rtt_src, rtt_ref = "Turn", "U2"
             elif role in ["reinforcement_session", "reuse_session"]:
@@ -444,6 +522,8 @@ class SessionAssembler:
         elif b_type == "sub_02":
             if role == "evidence_session":
                 closure_path = "clarified"
+                app_src, app_ref = "Turn", "U1"
+                srv_src, srv_ref = "Turn", "U1"
                 res_src, res_ref = "Turn", "U2"
                 rtt_src, rtt_ref = "Turn", "U2"
             elif role in ["reinforcement_session", "reuse_session"]:
@@ -471,6 +551,7 @@ class SessionAssembler:
         for t_idx in range(1, round_count + 1):
             if t_idx == 1:
                 t_params = {
+                    "application_name": {"value": app, "source_type": app_src, "source_ref": app_ref},
                     "service_name": {"value": srv, "source_type": srv_src, "source_ref": srv_ref},
                     "timestamp": {
                         "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
@@ -478,7 +559,6 @@ class SessionAssembler:
                     },
                 }
                 if role not in ["evidence_session", "correction_session"]:
-                    t_params["application_name"] = {"value": app, "source_type": app_src, "source_ref": app_ref}
                     t_params["resolution"] = {"min_value": {"value": res, "source_type": res_src, "source_ref": res_ref}}
                     t_params["rtt"] = {"max_value": {"value": rtt, "source_type": rtt_src, "source_ref": rtt_ref}}
                 slot_updates_turn.append({"turn": 1, "params": t_params})
@@ -486,7 +566,6 @@ class SessionAssembler:
                 t_params = {}
                 if role in ["evidence_session", "correction_session"]:
                     t_params = {
-                        "application_name": {"value": app, "source_type": app_src, "source_ref": app_ref},
                         "resolution": {"min_value": {"value": res, "source_type": res_src, "source_ref": res_ref}},
                         "rtt": {"max_value": {"value": rtt, "source_type": rtt_src, "source_ref": rtt_ref}},
                     }
@@ -513,6 +592,58 @@ class SessionAssembler:
                 },
             }
         ]
+
+        if events and len(events) == 1:
+            events[0]["requested_params"] = []
+            events[0]["turn_intents"] = intents
+        elif events and len(events) >= 2:
+            if role == "evidence_session":
+                events[0]["requested_params"] = ["resolution", "rtt"]
+                events[0]["turn_intents"] = [
+                    {
+                        "intent_id": "I1",
+                        "status": "in_progress",
+                        "closure_path": "clarify",
+                        "expression_level": 1,
+                        "intent": f"{app}{srv}保障",
+                        "params": {
+                            "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
+                            "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
+                            "timestamp": {
+                                "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
+                                "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
+                                "duration": {"value": dur, "source_type": "Context", "source_ref": "U1"},
+                            },
+                        },
+                    }
+                ]
+                events[1]["requested_params"] = []
+                events[1]["turn_intents"] = intents
+            else:
+                events[0]["requested_params"] = []
+                events[0]["turn_intents"] = [
+                    {
+                        "intent_id": "I1",
+                        "status": "in_progress",
+                        "closure_path": closure_path,
+                        "expression_level": 1,
+                        "intent": f"{app}{srv}保障",
+                        "params": {
+                            "application_name": {"value": app, "source_type": app_src, "source_ref": app_ref},
+                            "service_name": {"value": srv, "source_type": srv_src, "source_ref": srv_ref},
+                            "resolution": {"min_value": {"value": res, "source_type": res_src, "source_ref": res_ref}},
+                            "rtt": {"max_value": {"value": rtt, "source_type": rtt_src, "source_ref": rtt_ref}},
+                            "timestamp": {
+                                "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
+                                "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
+                                "duration": {"value": dur, "source_type": "Context", "source_ref": "U1"},
+                            },
+                        },
+                    }
+                ]
+                events[1]["requested_params"] = []
+                events[1]["turn_intents"] = intents
+
         return {
             "session_id": sid,
             "user_id": uid,

@@ -44,19 +44,22 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
         else:
             return f"不对，今天现场特殊，画质调到{res_alias}，时延要求{rtt_alias}，临时按这个来。"
     elif turn_idx == 1:
-        return f"你好，需要给{app_alias}{srv_alias}做一个网络保障，时间是今天{tp['start_timestamp'].split('日')[-1]}开始，持续{dur_alias}。"
+        if role == "evidence_session":
+            return f"你好，需要给{app}{srv}做一个网络保障，时间是今天{tp['start_timestamp'].split('日')[-1]}开始，持续{dur_alias}。"
+        else:
+            return f"你好，需要给{app_alias}{srv_alias}做一个网络保障，时间是今天{tp['start_timestamp'].split('日')[-1]}开始，持续{dur_alias}。"
     else:
         if role == "evidence_session" and decl_mode == "explicit_declaration":
             if trig_type == "task_activity":
-                return f"好的，确认按这个配置直接开通。以后只要我提到执行【{trig_cond or env}】任务，就按老规矩来：{app}{srv}、{res}、{rtt}以内，记一下长期偏好，别掉链子。"
+                return f"好的，确认按这个配置直接开通。我平时习惯叫它'{app_alias}{srv_alias}'，以后只要我提到执行【{trig_cond or env}】任务，就按老规矩来：{app}{srv}、{res}、{rtt}以内，记一下长期偏好，别掉链子。"
             elif trig_type == "location_environment":
-                return f"好的，确认按这个配置直接开通。以后只要我处于【{trig_cond or env}】，就按老规矩来：{app}{srv}、{res}、{rtt}以内，记一下长期偏好，别掉链子。"
+                return f"好的，确认按这个配置直接开通。我平时习惯叫它'{app_alias}{srv_alias}'，以后只要我处于【{trig_cond or env}】，就按老规矩来：{app}{srv}、{res}、{rtt}以内，记一下长期偏好，别掉链子。"
             elif period_type == "daily":
-                return f"好的，确认按这个配置直接开通。以后我只要每天这个时段说'老规矩'，就按这个来：{app}{srv}、{res}、{rtt}以内，记一下长期偏好，别掉链子。"
+                return f"好的，确认按这个配置直接开通。我平时习惯叫它'{app_alias}{srv_alias}'，以后我只要每天这个时段说'老规矩'，就按这个来：{app}{srv}、{res}、{rtt}以内，记一下长期偏好，别掉链子。"
             elif period_type == "monthly":
-                return f"好的，确认按这个配置直接开通。以后我只要在每月固定月度对账/例会说'老规矩'，就按这个来：{app}{srv}、{res}、{rtt}以内，记一下长期偏好，别掉链子。"
+                return f"好的，确认按这个配置直接开通。我平时习惯叫它'{app_alias}{srv_alias}'，以后我只要在每月固定月度对账/例会说'老规矩'，就按这个来：{app}{srv}、{res}、{rtt}以内，记一下长期偏好，别掉链子。"
             else:
-                return f"好的，确认按这个配置直接开通。以后我只要在每周例行时段说'老规矩'，就按这个来：{app}{srv}、{res}、{rtt}以内，记一下长期偏好，别掉链子。"
+                return f"好的，确认按这个配置直接开通。我平时习惯叫它'{app_alias}{srv_alias}'，以后我只要在每周例行时段说'老规矩'，就按这个来：{app}{srv}、{res}、{rtt}以内，记一下长期偏好，别掉链子。"
         elif role == "evidence_session" and decl_mode == "implicit_induction":
             return "好的，今天就按这个配置开通吧。"
         else:
@@ -102,7 +105,9 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
         else:
             return f"好的，已为您成功受理{app}{srv}网络保障（{res} / 时延≤{rtt}），祝您使用愉快！"
     else:
-        if role == "reinforcement_session" and decl_mode == "implicit_induction" and s_plan.get("session_id", "").endswith("-03"):
+        if role == "evidence_session":
+            return f"收到，已为您锁定{app}{srv}保障，时间从{tp['start_timestamp'].split('日')[-1]}开始。请问您需要保障的清晰度和时延上限分别是多少呢？"
+        elif role == "reinforcement_session" and decl_mode == "implicit_induction" and s_plan.get("session_id", "").endswith("-03"):
             return f"检测到您在【{trig_cond or env}】多次使用{app}{srv}保障，请问是否按上次标准（{res} / 时延≤{rtt}）为您开通并设为默认老规矩？"
         else:
             if trig_type == "time_periodic":

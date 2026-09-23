@@ -1,0 +1,165 @@
+{
+  "persona_id": "mobile_persona_002",
+  "category": "移动经营与客户服务",
+  "persona_summary": "外访型金融顾问",
+  "static_profile": {
+    "user_id": "USER_002",
+    "identity": "外访型金融顾问，主要协助客户维护与跨境资金转移，日常在市集、门店外摆区、客户拜访点、配送路线、展会现场及商圈户外区域移动办公，全程依赖手机4G/5G直接联网，不依赖固网或普通Wi-Fi。",
+    "devices": "主力设备为5G智能手机，便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "抖音",
+      "腾讯会议",
+      "钉钉"
+    ],
+    "speech_archetype": "business_advisor",
+    "speech_style": {
+      "tone": "干练、务实、带点金融行业特有的谨慎与催促感，习惯用短句确认关键信息。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "秒开才行",
+        "千万别糊"
+      ],
+      "typical_habits": "在客户拜访途中核对行情与账户资料，通过加密通信确认跨境转账信息并上传电子签署文件；习惯用口语化指令确认网络和任务状态。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "外访客户跨境资金转移远程协作",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在15:00-17:00执行外访客户拜访与跨境资金转移任务时，需通过腾讯会议与后台团队远程协作核对账户资料、确认转账信息并上传电子签署文件。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "15:00-17:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会",
+          "小企鹅开会"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦核对",
+          "远程对一下",
+          "开个会"
+        ],
+        "resolution_aliases": [
+          "顶格清晰度",
+          "超清",
+          "千万别糊",
+          "蓝光"
+        ],
+        "rtt_aliases": [
+          "别掉链子",
+          "秒开",
+          "毫秒级",
+          "别转圈"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到五点",
+          "大半个下午"
+        ],
+        "period_aliases": [
+          "老时间",
+          "每天这个时候",
+          "下午三点老规矩",
+          "外访任务时段"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨境金融展会现场集中签约周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "展会现场人群密集、无线环境复杂，客户集中咨询跨境资金转移业务，需频繁进行视频通话与文件上传，网络连接稳定性压力大。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "客户拜访途中行情与账户资料核对",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在客户拜访途中需要快速核对行情与账户资料时，通过微信视频通话与客户或同事确认信息。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "短视频营销与远程协作",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在展会现场或商圈户外区域进行短视频营销内容拍摄与上传，并与远程团队协作发布。",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时参加内部培训会议",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "午休时单次观看直播放松",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

@@ -79,12 +79,14 @@ class DialogueGenerator:
                 "period_aliases": p_aliases.get("period_aliases", []),
             }
 
+            t1_rule = "【大记忆点首次建立：第1轮严禁使用'老规矩'/'老时间'与别名，必须直述标准应用名与业务名】" if role == "evidence_session" else "【后续复用/强化：鼓励自然使用已沉淀的别名与老规矩】"
             prompt_items.append({
                 "session_id": sid,
                 "rounds": rounds,
                 "role": role,
                 "blueprint_type": b_type,
                 "template_id": s_plan.get("template_id", "T2-1"),
+                "turn1_requirement": t1_rule,
                 "ood_goal": s_plan.get("ood_goal", ""),
                 "declaration_mode": s_plan.get("declaration_mode", "explicit_declaration"),
                 "storyline_trigger_type": s_plan.get("storyline_trigger_type", "time_periodic"),
@@ -141,7 +143,7 @@ class DialogueGenerator:
 
             req_params = []
             if turn_idx == 1 and role == "evidence_session" and tid != "T2-2":
-                req_params = ["application_name", "resolution", "rtt"]
+                req_params = ["resolution", "rtt"]
             elif turn_idx == 1 and tid == "T2-2":
                 req_params = ["service_name"]
 
@@ -181,6 +183,11 @@ class DialogueGenerator:
             )
         if not u_text:
             u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+
+        if turn_idx == 1 and role == "evidence_session":
+            for kw in ["老规矩，", "老规矩、", "老规矩 ", "老规矩", "老时间，", "老时间、", "老时间 ", "老时间", "老样子，", "老样子、", "老样子 "]:
+                u_text = u_text.replace(kw, "")
+            u_text = u_text.strip("，, ")
 
         a_text = ""
         if isinstance(t_data, dict):

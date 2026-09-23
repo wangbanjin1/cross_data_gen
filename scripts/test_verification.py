@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import sys
 import json
 from pathlib import Path
@@ -39,6 +40,23 @@ def test_file(jsonl_path: Path):
         required_keys = ['session_id', 'user_id', 'reference_time', 'session_meta', 'event_sequence', 'intents', 'relations', 'slot_updates']
         for k in required_keys:
             assert k in session, f"Missing key {k} in session {sid}"
+
+        # 4. 验证 Turn 级意图隔离性与无泄露
+        for ev_idx, ev in enumerate(events):
+            assert "turn_intents" in ev, f"Session {sid} turn {ev_idx+1} missing turn_intents!"
+            assert "requested_params" in ev, f"Session {sid} turn {ev_idx+1} missing requested_params!"
+
+        if role == "evidence_session" and len(events) >= 2:
+            t1_params = events[0]["turn_intents"][0].get("params", {})
+            assert "resolution" not in t1_params, f"Session {sid} Turn 1 intent answers leaked resolution!"
+            assert "rtt" not in t1_params, f"Session {sid} Turn 1 intent answers leaked rtt!"
+            t1_u_utt = events[0]["user"]["utterance"]
+            assert not any(kw in t1_u_utt for kw in ["老规矩", "老时间", "老样子"]), f"Evidence session {sid} Turn 1 user utterance has premature rule codewords: {t1_u_utt}"
+            for su in session.get("slot_updates", []):
+                for tu in su.get("turn_updates", []):
+                    if tu.get("turn") == 1:
+                        p = tu.get("params", {})
+                        assert "resolution" not in p and "rtt" not in p, f"Session {sid} Turn 1 slot_updates leaked resolution/rtt!"
             
         intent = session["intents"][0]
         if intent.get("status") == "rejected":

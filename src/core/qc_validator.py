@@ -19,7 +19,8 @@ class QCValidator:
                 "multi_turn_confirmation_check": True,
                 "source_type_integrity_check": True,
                 "memory_trace_fields_check": True,
-                "whitelist_compliance_check": True
+                "whitelist_compliance_check": True,
+                "turn_intent_isolation_check": True
             },
             "issues": []
         }
@@ -69,6 +70,36 @@ class QCValidator:
                     report["issues"].append(f"[{sid}] 意图参数缺失应用或业务值")
                     report["rule_checks"]["whitelist_compliance_check"] = False
                     s_passed = False
+
+            # 5. 验证 Turn 级意图隔离性（Turn-level Intent Isolation）与无未来信息泄漏
+            for ev_idx, ev in enumerate(events):
+                if "turn_intents" not in ev:
+                    report["issues"].append(f"[{sid}] Turn {ev_idx+1} 缺少 turn_intents 字段")
+                    report["rule_checks"]["turn_intent_isolation_check"] = False
+                    s_passed = False
+                if "requested_params" not in ev:
+                    report["issues"].append(f"[{sid}] Turn {ev_idx+1} 缺少 requested_params 字段")
+                    report["rule_checks"]["turn_intent_isolation_check"] = False
+                    s_passed = False
+
+            if role == "evidence_session" and len(events) >= 2:
+                t1_intents = events[0].get("turn_intents", [])
+                if t1_intents:
+                    t1_params = t1_intents[0].get("params", {})
+                    if "resolution" in t1_params or "rtt" in t1_params:
+                        report["issues"].append(f"[{sid}] 证据会话第1轮意图答案泄漏了未提及的参数(resolution/rtt)")
+                        report["rule_checks"]["turn_intent_isolation_check"] = False
+                        s_passed = False
+
+                # 检查 slot_updates 第1轮不能包含未提及的参数
+                for su in s.get("slot_updates", []):
+                    for tu in su.get("turn_updates", []):
+                        if tu.get("turn") == 1:
+                            p = tu.get("params", {})
+                            if "resolution" in p or "rtt" in p:
+                                report["issues"].append(f"[{sid}] 证据会话第1轮 slot_updates 泄漏了未提及的参数(resolution/rtt)")
+                                report["rule_checks"]["turn_intent_isolation_check"] = False
+                                s_passed = False
 
             if s_passed:
                 report["passed_sessions"] += 1

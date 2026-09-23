@@ -31,6 +31,12 @@ class MemoryTracker:
             trig_cond = s_plan.get("trigger_condition", "每周常规周期时段")
             scope_val = "weekly_cycle" if trig_type == "time_periodic" else ("task_mission" if trig_type == "task_activity" else "location_boundary")
 
+            p_aliases = s_plan.get("aliases", {})
+            alias_map = {
+                "app_aliases": p_aliases.get("app_aliases", []),
+                "service_aliases": p_aliases.get("service_aliases", [])
+            }
+
             if role == "evidence_session":
                 if decl_mode == "explicit_declaration":
                     # 主线记忆显式初建 (One-shot)
@@ -44,6 +50,7 @@ class MemoryTracker:
                         "service_name": tp["service_name"],
                         "resolution": tp["resolution"],
                         "rtt_max": tp["rtt"],
+                        "alias_mapping": alias_map,
                         "scope": scope_val,
                         "status": "active",
                         "evidence_count": 1,
@@ -54,7 +61,7 @@ class MemoryTracker:
                     memory_events.append({
                         "event_type": "form_memory_explicit",
                         "memory_id": "MF_001",
-                        "description": f"用户首次明确显式声明长期偏好（触发条件：{trig_cond}）：{tp['application_name']}{tp['service_name']}（{tp['resolution']}, {tp['rtt']}），设立老规矩指令。",
+                        "description": f"用户首次明确显式声明长期偏好（触发条件：{trig_cond}）：{tp['application_name']}{tp['service_name']}（{tp['resolution']}, {tp['rtt']}），设立老规矩指令，登记个性化别名小记忆点。",
                         "target_slots": ["application_name", "service_name", "resolution", "rtt_max"]
                     })
                 else:
@@ -69,6 +76,7 @@ class MemoryTracker:
                         "service_name": tp["service_name"],
                         "resolution": tp["resolution"],
                         "rtt_max": tp["rtt"],
+                        "alias_mapping": alias_map,
                         "scope": scope_val,
                         "status": "provisional",  # 候选/待归纳状态
                         "evidence_count": 1,
@@ -107,6 +115,11 @@ class MemoryTracker:
                         })
 
         elif b_type == "sub_01":
+            p_aliases = s_plan.get("aliases", {})
+            sub1_map = {
+                "app_aliases": p_aliases.get("app_aliases", []),
+                "service_aliases": p_aliases.get("service_aliases", [])
+            }
             if role == "evidence_session":
                 mem_item = {
                     "memory_id": "SUB_001",
@@ -115,6 +128,7 @@ class MemoryTracker:
                     "service_name": tp["service_name"],
                     "resolution": tp["resolution"],
                     "rtt_max": tp["rtt"],
+                    "alias_mapping": sub1_map,
                     "scope": "transit_evening",
                     "status": "active",
                     "evidence_count": 1,
@@ -125,7 +139,7 @@ class MemoryTracker:
                 memory_events.append({
                     "event_type": "form_memory",
                     "memory_id": "SUB_001",
-                    "description": f"建立支线1条件记忆：{tp['application_name']}{tp['service_name']}在转场大巴上采用（{tp['resolution']}, {tp['rtt']}）。",
+                    "description": f"建立支线1条件记忆：{tp['application_name']}{tp['service_name']}在转场大巴上采用（{tp['resolution']}, {tp['rtt']}），登记代称小记忆点。",
                     "target_slots": ["application_name", "service_name", "resolution", "rtt_max"]
                 })
             elif role in ["reinforcement_session", "reuse_session"]:
@@ -140,6 +154,11 @@ class MemoryTracker:
                     })
 
         elif b_type == "sub_02":
+            p_aliases = s_plan.get("aliases", {})
+            sub2_map = {
+                "app_aliases": p_aliases.get("app_aliases", []),
+                "service_aliases": p_aliases.get("service_aliases", [])
+            }
             if role == "evidence_session":
                 mem_item = {
                     "memory_id": "SUB_002",
@@ -148,6 +167,7 @@ class MemoryTracker:
                     "service_name": tp["service_name"],
                     "resolution": tp["resolution"],
                     "rtt_max": tp["rtt"],
+                    "alias_mapping": sub2_map,
                     "scope": "hotel_evening_review",
                     "status": "active",
                     "evidence_count": 1,
@@ -158,7 +178,7 @@ class MemoryTracker:
                 memory_events.append({
                     "event_type": "form_memory",
                     "memory_id": "SUB_002",
-                    "description": f"建立支线2条件记忆：酒店休息复盘录像采用（{tp['resolution']}, {tp['rtt']}）。",
+                    "description": f"建立支线2条件记忆：酒店休息复盘录像采用（{tp['resolution']}, {tp['rtt']}），登记代称小记忆点。",
                     "target_slots": ["application_name", "service_name", "resolution", "rtt_max"]
                 })
             elif role in ["reinforcement_session", "reuse_session"]:
