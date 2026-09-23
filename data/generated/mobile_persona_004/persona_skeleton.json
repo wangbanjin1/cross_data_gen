@@ -1,0 +1,180 @@
+{
+  "persona_id": "mobile_persona_004",
+  "category": "移动采编与内容生产",
+  "persona_summary": "外勤型项目申报人员",
+  "static_profile": {
+    "user_id": "USER_004",
+    "identity": "外勤型项目申报人员（公益项目申报专员），长期在活动现场、街区采访点、临时拍摄地与转场途中工作，负责记录需求、拍摄佐证材料、撰写申请文本与预算附件，并通过手机移动核心网完成短视频拍摄上传、移动直播、素材回传、即时通信与云端协作。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备（手机云台/运动相机/便携补光灯），便携终端确需联网时使用手机热点。",
+    "apps": [
+      "抖音",
+      "快手",
+      "微信",
+      "腾讯会议"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "外勤行动派，语速偏快，强调现场感、时效和别掉链子，习惯用短句推进任务。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "先对齐一下",
+        "这条能发"
+      ],
+      "typical_habits": "出发前先确认直播和上传参数，现场边拍边同步协作群；遇到弱覆盖会先保素材续传，再催团队对齐。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "公益活动现场短视频拍摄上传与移动直播",
+      "period_type": "weekly",
+      "days": [
+        "Wednesday",
+        "Saturday"
+      ],
+      "time_range": "14:00-17:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "抖子",
+          "抖音号"
+        ],
+        "service_aliases": [
+          "开播",
+          "现场直播",
+          "推流"
+        ]
+      },
+      "param_mappings": {
+        "resolution": {
+          "高清": "1080p",
+          "清晰点": "1080p",
+          "能看清人": "1080p"
+        },
+        "rtt": {
+          "低时延": "50ms",
+          "别卡": "50ms",
+          "画面稳一点": "50ms"
+        }
+      },
+      "evidence_level": "explicit_long_term_declaration"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_01",
+        "event_name": "跨城公益项目考察与直播周",
+        "valid_from": "2026-11-01",
+        "valid_to": "2026-11-15",
+        "impact_scope": "temporary",
+        "scene_description": "跨城转场、户外临时拍摄点与弱覆盖路段增多，需要在移动中持续直播和回传素材。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        },
+        "trigger_reason": "跨城转场和弱覆盖路段导致上行波动，优先保证直播不断线和低时延互动，临时降低分辨率。"
+      }
+    ],
+    "sub_storylines": [
+      {
+        "sub_id": "SUB_MT_01",
+        "name": "活动素材回传与云端协作",
+        "period_type": "weekly_evening",
+        "days": [
+          "Sunday",
+          "Wednesday"
+        ],
+        "trigger_condition": "活动结束后需要把拍摄素材和预算附件同步给协作团队。",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "aliases": {
+          "app_aliases": [
+            "微信",
+            "绿泡泡"
+          ],
+          "service_aliases": [
+            "对一下",
+            "视频对齐",
+            "远程过一下"
+          ]
+        },
+        "param_mappings": {
+          "resolution": {
+            "标清": "720p",
+            "能看就行": "720p"
+          },
+          "rtt": {
+            "能听清就行": "100ms",
+            "别太卡": "100ms"
+          }
+        }
+      },
+      {
+        "sub_id": "SUB_MT_02",
+        "name": "项目复盘与远程会议",
+        "period_type": "sporadic_evening",
+        "trigger_condition": "项目阶段汇报、预算调整或跨团队复盘时发起。",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "aliases": {
+          "app_aliases": [
+            "腾讯会议",
+            "会议号"
+          ],
+          "service_aliases": [
+            "开个会",
+            "对齐一下",
+            "复盘会"
+          ]
+        },
+        "param_mappings": {
+          "resolution": {
+            "超清": "1080p",
+            "清楚点": "1080p"
+          },
+          "rtt": {
+            "不卡": "80ms",
+            "稳一点": "80ms"
+          }
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "name": "临时看同行直播",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "scenario_description": "在活动现场等待转场时，临时打开同行公益直播参考话术和镜头。",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "name": "通勤刷短视频找选题",
+        "application_name": "小红书",
+        "service_name": "短视频",
+        "scenario_description": "通勤途中刷公益传播案例和项目申报经验，寻找选题灵感。",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

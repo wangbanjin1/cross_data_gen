@@ -1,0 +1,147 @@
+import json
+from pathlib import Path
+from src.config import Config
+
+class PersonaBuilder:
+    """
+    负责将原始粗画像扩充为具备【周期性主线 + 场景化事件 + 丰富支线 + 干扰项 + 语体风格】的详细画像骨架。
+    所有支线记忆、干扰场景均作为素材明确定义在骨架中。
+    """
+    
+    @staticmethod
+    def build_persona_001(raw_persona_dict: dict) -> dict:
+        vault = Config.expression_vault
+        athlete_style = vault["persona_styles"]["athlete_speaker"]
+        
+        persona = {
+            "persona_id": raw_persona_dict.get("persona_id", "mobile_persona_001"),
+            "category": raw_persona_dict.get("category", "体育训练与赛事保障"),
+            "persona_summary": raw_persona_dict.get("persona_summary", "巡回活动讲者"),
+            "static_profile": {
+                "user_id": "USER_001",
+                "identity": "退役残疾人高山滑雪运动员，现全职励志巡回演讲师及公益推广大使。每周3至6次在客运大巴、训练场看台与露天赛事集结区进行多地巡回演讲与移动直播，完全依赖手机移动核心网（4G/5G）。",
+                "devices": "主力设备：华为Mate 60 Pro（5G，负责推流直播与个人热点）；辅助设备：iPad Pro 5G版（看讲义与回放）",
+                "apps": ["抖音", "微信", "快手", "腾讯会议"],
+                "speech_archetype": "athlete_speaker",
+                "speech_style": {
+                    "tone": athlete_style["tone"],
+                    "catchphrases": athlete_style["catchphrases"],
+                    "typical_habits": "说话果断干脆、注重现场动机（大巴颠簸、雪场风大、集结区拥塞），偏好'老规矩'、'利索点'、'别掉链子'。"
+                }
+            },
+            "dynamic_profile": {
+                "periodic_main_storyline": {
+                    "storyline_id": "MAIN_MT_01",
+                    "name": "周三与周六下午巡讲直播推流",
+                    "period_type": "weekly",
+                    "days": ["Wednesday", "Saturday"],
+                    "time_range": "14:00-17:00",
+                    "application_name": "抖音",
+                    "service_name": "开直播",
+                    "preferred_params": {
+                        "resolution": "1080p",
+                        "rtt_max": "50ms"
+                    },
+                    "aliases": {
+                        "app_aliases": ["阿抖", "抖音平台"],
+                        "service_aliases": ["巡讲推流", "现场开播", "推流保障", "做直播"]
+                    },
+                    "param_mappings": {
+                        "resolution": {
+                            "高清": "1080p",
+                            "细节看得清": "1080p",
+                            "别糊": "1080p"
+                        },
+                        "rtt": {
+                            "低时延": "50ms",
+                            "别卡顿": "50ms",
+                            "别掉链子": "50ms"
+                        }
+                    },
+                    "evidence_level": "explicit_long_term_declaration"
+                },
+                "scenario_events": [
+                    {
+                        "event_id": "EVT_WINTER_GAMES",
+                        "event_name": "冬季全国残运巡回选拔赛",
+                        "valid_from": "2026-11-01",
+                        "valid_to": "2026-11-15",
+                        "impact_scope": "temporary",
+                        "scene_description": "高山雪场户外低温、看台人流密集且伴随降雪，上行信道受限",
+                        "preference_override": {
+                            "resolution": "720p",
+                            "rtt_max": "30ms"
+                        },
+                        "trigger_reason": "极端环境且人流密集，主动降画质保超低时延与抗抖动"
+                    }
+                ],
+                "sub_storylines": [
+                    {
+                        "sub_id": "SUB_MT_01",
+                        "name": "转场大巴与领队视频调度",
+                        "period_type": "weekly_evening",
+                        "days": ["Sunday", "Wednesday"],
+                        "trigger_condition": "在大巴跨城高速转场途中（通常在傍晚18:00-20:00）",
+                        "application_name": "微信",
+                        "service_name": "视频通话",
+                        "preferred_params": {
+                            "resolution": "720p",
+                            "rtt_max": "100ms"
+                        },
+                        "aliases": {
+                            "app_aliases": ["微信", "微信号"],
+                            "service_aliases": ["跟领队碰头", "团队连线", "对流程视频"]
+                        },
+                        "param_mappings": {
+                            "resolution": {"标清": "720p", "看得清人脸": "720p"},
+                            "rtt": {"能说清就行": "100ms", "别中断": "100ms"}
+                        }
+                    },
+                    {
+                        "sub_id": "SUB_MT_02",
+                        "name": "驻地酒店赛事录像复盘",
+                        "period_type": "sporadic_evening",
+                        "trigger_condition": "周四晚间在酒店休息区复盘滑雪运动员比赛与训练录像",
+                        "application_name": "快手",
+                        "service_name": "看直播",
+                        "preferred_params": {
+                            "resolution": "1080p",
+                            "rtt_max": "80ms"
+                        },
+                        "aliases": {
+                            "app_aliases": ["快手", "老铁平台"],
+                            "service_aliases": ["赛事录像复盘", "看回放", "复盘比赛"]
+                        },
+                        "param_mappings": {
+                            "resolution": {"超清": "1080p", "大屏清晰": "1080p"},
+                            "rtt": {"流畅不卡": "80ms", "别频繁加载": "80ms"}
+                        }
+                    }
+                ],
+                "distractor_pool": [
+                    {
+                        "distractor_id": "DIST_01",
+                        "name": "组委会宣讲通气会",
+                        "application_name": "腾讯会议",
+                        "service_name": "会议",
+                        "scenario_description": "驻地酒店临时旁听半小时主办方通气会",
+                        "params": {
+                            "resolution": "720p",
+                            "rtt_max": "80ms"
+                        }
+                    },
+                    {
+                        "distractor_id": "DIST_02",
+                        "name": "周末休息刷短视频",
+                        "application_name": "微信",
+                        "service_name": "短视频",
+                        "scenario_description": "午休时间刷刷视频资讯",
+                        "params": {
+                            "resolution": "720p",
+                            "rtt_max": "80ms"
+                        }
+                    }
+                ]
+            }
+        }
+        return persona

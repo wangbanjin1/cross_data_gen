@@ -1,0 +1,188 @@
+{
+  "persona_id": "mobile_persona_003",
+  "category": "公共事务与外勤协作",
+  "persona_summary": "户外公益与社群组织者",
+  "static_profile": {
+    "user_id": "USER_003",
+    "identity": "居住于利兹的刑事司法改革倡导者与户外公益社群组织者，长期在户外调研点、临时会议区、群众服务现场、社区走访点和跨区域通勤途中移动，通过手机移动核心网组织活动、协调志愿者、直播宣讲、收集电子反馈并回传现场材料。",
+    "devices": "主力设备为5G智能手机，辅助设备包括便携麦克风、移动电源和轻量平板；确需联网时使用手机热点。全程以手机4G/5G直接联网，不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "抖音",
+      "飞书",
+      "哔哩哔哩",
+      "快手",
+      "小红书"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "直接、热情、带外勤动员感，关注现场稳定、消息可达和团队不掉线。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "能听清就行",
+        "先稳住画面"
+      ],
+      "typical_habits": "出发前确认电量和信号，活动前用短句对齐流程；移动中偏好语音消息和视频通话；网络波动时先降清晰度保连通，再处理材料回传。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "社区公益户外直播与现场协调",
+      "period_type": "weekly",
+      "days": [
+        "Wednesday",
+        "Saturday"
+      ],
+      "time_range": "14:00-17:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "抖抖",
+          "抖音直播",
+          "抖音号"
+        ],
+        "service_aliases": [
+          "开播",
+          "上播",
+          "户外开播",
+          "拉个直播"
+        ]
+      },
+      "param_mappings": {
+        "resolution": {
+          "高清": "1080p",
+          "清晰点": "1080p",
+          "清楚就行": "1080p"
+        },
+        "rtt": {
+          "低时延": "50ms",
+          "别卡": "50ms",
+          "稳住": "50ms"
+        }
+      },
+      "evidence_level": "explicit_long_term_declaration"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_01",
+        "event_name": "利兹刑事司法改革倡导巡回周",
+        "valid_from": "2026-10-26",
+        "valid_to": "2026-11-06",
+        "impact_scope": "temporary",
+        "scene_description": "跨城通勤、临时户外会场和社区中心之间移动；现场人流密集、无线网络拥塞，需在移动中持续开直播并与后方志愿者会议协同。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        },
+        "trigger_reason": "巡回周网络拥塞且移动频繁，主线1080p/50ms难以稳定，临时降低分辨率并放宽时延上限，优先保证直播连续和消息及时送达。"
+      }
+    ],
+    "sub_storylines": [
+      {
+        "sub_id": "SUB_MT_01",
+        "name": "志愿者晚间视频调度会",
+        "period_type": "weekly_evening",
+        "days": [
+          "Sunday",
+          "Wednesday"
+        ],
+        "trigger_condition": "次日有社区走访或跨区活动前，晚间需分派路线、确认物料与志愿者位置。",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "aliases": {
+          "app_aliases": [
+            "腾讯会",
+            "腾讯会议App",
+            "会宝"
+          ],
+          "service_aliases": [
+            "开个短会",
+            "碰一下",
+            "对齐一下"
+          ]
+        },
+        "param_mappings": {
+          "resolution": {
+            "标清": "720p",
+            "能看清脸就行": "720p"
+          },
+          "rtt": {
+            "能听清就行": "100ms",
+            "别断线": "100ms"
+          }
+        }
+      },
+      {
+        "sub_id": "SUB_MT_02",
+        "name": "活动后短视频复盘与政策讲解",
+        "period_type": "sporadic_evening",
+        "trigger_condition": "大型社区活动、直播结束后，或有新的司法改革政策材料需要讲解时。",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "aliases": {
+          "app_aliases": [
+            "B站",
+            "小破站",
+            "哔哩"
+          ],
+          "service_aliases": [
+            "刷片",
+            "短片复盘",
+            "发个短视频"
+          ]
+        },
+        "param_mappings": {
+          "resolution": {
+            "超清": "1080p",
+            "高清": "1080p"
+          },
+          "rtt": {
+            "不卡": "80ms",
+            "顺一点": "80ms"
+          }
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "name": "休闲看公益直播",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "scenario_description": "周末在家或通勤途中偶尔打开快手看其他公益组织直播，非工作调度，不联动志愿者。",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "name": "通勤刷政策科普短视频",
+        "application_name": "小红书",
+        "service_name": "短视频",
+        "scenario_description": "跨区域通勤途中用手机流量刷司法改革相关图文或短视频，单次休闲浏览，不影响主线调度。",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}
