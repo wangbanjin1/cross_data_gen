@@ -38,16 +38,19 @@ class LLMClient:
         self.completion_tokens = 0
         self.total_calls = 0
 
-    def get_usage(self) -> dict:
+    def get_usage(self, is_peak: bool = False) -> dict:
         total_prompt = self.prompt_cache_miss_tokens + self.prompt_cache_hit_tokens
-        # DeepSeek 官方定价:
-        # Cache Hit: 0.1 元 / 1M tokens
-        # Cache Miss: 1.0 元 / 1M tokens
-        # Output: 2.0 元 / 1M tokens
+        # DeepSeek-V4.1-Flash 精确阶梯定价:
+        # 空闲时段: Cache Hit: 0.02元/M, Cache Miss: 1.0元/M, Output: 4.0元/M
+        # 高峰时段: Cache Hit: 0.04元/M, Cache Miss: 2.0元/M, Output: 8.0元/M
+        hit_rate = 0.04 if is_peak else 0.02
+        miss_rate = 2.0 if is_peak else 1.0
+        out_rate = 8.0 if is_peak else 4.0
+
         cost_rmb = (
-            (self.prompt_cache_hit_tokens / 1_000_000) * 0.1 +
-            (self.prompt_cache_miss_tokens / 1_000_000) * 1.0 +
-            (self.completion_tokens / 1_000_000) * 2.0
+            (self.prompt_cache_hit_tokens / 1_000_000) * hit_rate +
+            (self.prompt_cache_miss_tokens / 1_000_000) * miss_rate +
+            (self.completion_tokens / 1_000_000) * out_rate
         )
         return {
             "calls": self.total_calls,
