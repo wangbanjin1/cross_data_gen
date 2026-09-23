@@ -4,25 +4,24 @@
   "persona_summary": "户外视觉创作者",
   "static_profile": {
     "user_id": "USER_005",
-    "identity": "退休音乐人，拥有丰富的词曲创作与制作经验，活跃于户外演出、音乐节、街头活动与临时排练现场，长期在移动场景中进行音视频采集、直播与作品上传，并乐于向年轻创作者传授经验。",
-    "devices": "主力设备为5G智能手机与平板电脑，便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "identity": "退休音乐人，擅长词曲创作与音乐制作，活跃于户外演出点、展览布置区及城市采风路线，常在音乐节、街头活动或临时排练现场进行现场音视频采集、直播与作品上传，并乐于向年轻创作者传授经验。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点。",
     "apps": [
       "抖音",
-      "快手",
+      "微信",
       "哔哩哔哩",
-      "微信"
+      "腾讯会议"
     ],
     "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "老练、直接、带点江湖气和音乐人的随性，喜欢用行话和口语化表达，强调现场感和效率。",
+      "tone": "老练随性，带点音乐人的江湖气，说话直接但讲究节奏",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "顶格清晰度",
-        "秒开"
+        "这条得重来"
       ],
-      "typical_habits": "习惯在演出或采风现场直接开播，边拍边讲，遇到网络波动会立刻提醒团队并调整参数，喜欢用口语别名指代应用和业务。"
+      "typical_habits": "习惯用音乐行话和现场术语沟通，遇到网络问题会反复强调稳定和低时延，喜欢在任务前先确认设备和参数。"
     }
   },
   "dynamic_profile": {
@@ -30,12 +29,12 @@
       "storyline_id": "MAIN_MT_01",
       "name": "户外音乐现场直播与作品上传",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "执行户外音乐演出、街头采风或临时排练现场的直播与作品上传任务",
+      "trigger_condition": "在户外演出点、音乐节或街头活动进行现场音视频采集、直播与作品上传时触发",
       "period_type": "task_driven",
       "days": [
         "task_specific"
       ],
-      "time_range": "14:00-16:00",
+      "time_range": "08:30-10:30",
       "application_name": "抖音",
       "service_name": "开直播",
       "preferred_params": {
@@ -49,28 +48,23 @@
         ],
         "service_aliases": [
           "开播",
-          "推流",
-          "连麦"
+          "推流"
         ],
         "resolution_aliases": [
           "原画",
-          "顶格清晰度",
-          "千万别糊"
+          "顶格清晰度"
         ],
         "rtt_aliases": [
           "别掉链子",
-          "零卡顿",
-          "秒开"
+          "零卡顿"
         ],
         "duration_aliases": [
           "俩小时",
-          "两钟头",
-          "播到四点"
+          "两钟头"
         ],
         "period_aliases": [
-          "老规矩",
           "每天这个时候",
-          "现场任务一来就开"
+          "老时间"
         ]
       },
       "declaration_mode": "explicit_declaration",
@@ -79,10 +73,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "城市音乐节密集直播周",
+        "name": "城市音乐节密集演出周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "音乐节现场人群密集、网络拥塞，户外移动网络波动明显，需要优先保障直播互动低时延与音视频上行稳定。",
+        "scene_description": "音乐节现场人群密集、网络拥塞，户外演出点与临时排练现场需要稳定上行和低时延直播互动。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -92,39 +86,39 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "团队排练视频通话对齐",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "name": "团队排练视频会议",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "临时排练现场需要与团队成员快速对齐编曲和演出安排",
+        "trigger_condition": "在临时排练现场与乐队成员或制作团队远程对齐排练安排时触发",
         "aliases": {
           "app_aliases": [
-            "weixin",
-            "wx"
+            "tencentmeeting",
+            "会议通"
           ],
           "service_aliases": [
-            "打视频",
-            "连线"
+            "开会",
+            "进会议室"
           ]
         }
       },
       {
         "storyline_id": "SUB_02",
-        "name": "演出录像复盘与云端同步",
-        "application_name": "哔哩哔哩",
+        "name": "作品短视频发布与社交互动",
+        "application_name": "微信",
         "service_name": "短视频",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "演出结束后上传录像片段并进行复盘与社交发布",
+        "trigger_condition": "在采风或演出结束后向客户、粉丝发布作品片段并进行社交沟通时触发",
         "aliases": {
           "app_aliases": [
-            "bilibili",
-            "哔站"
+            "weixin",
+            "wx"
           ],
           "service_aliases": [
             "看短视频",
@@ -136,9 +130,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次与客户进行远程会议沟通",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "scenario": "单次与远方朋友视频通话",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -147,7 +141,7 @@
       {
         "distractor_id": "DIST_02",
         "scenario": "单次观看音乐节线上直播",
-        "application_name": "快手",
+        "application_name": "哔哩哔哩",
         "service_name": "看直播",
         "params": {
           "resolution": "720p",

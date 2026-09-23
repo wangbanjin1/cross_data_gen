@@ -73,7 +73,7 @@ def test_file(jsonl_path: Path):
     assert (jsonl_path.parent / "memory_traces.json").exists(), f"Missing memory_traces.json in {parent_dir}"
     assert (jsonl_path.parent / "qc_report.json").exists(), f"Missing qc_report.json in {parent_dir}"
 
-    print(f"\n[SUCCESS] [{parent_dir}]: All 15 sessions + skeleton + memory_traces + qc_report passed 100% strict verification!")
+    print(f"\n[SUCCESS] [{parent_dir}]: All {total} sessions + skeleton + memory_traces + qc_report passed 100% strict verification!")
 
 def main(output_dir: str = None):
     base_gen = Path(output_dir or "data/generated")

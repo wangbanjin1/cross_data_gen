@@ -4,38 +4,37 @@
   "persona_summary": "高频移动网络使用者",
   "static_profile": {
     "user_id": "USER_009",
-    "identity": "城市外勤内容采集与现场协作人员，日常在城市街区、公共活动现场、跨区域出行途中及户外等候区之间移动，以手机4G/5G直接联网完成地图导航、信息检索、位置共享、即时通信、短视频浏览上传与远程协作，对暴力与虐待类文学描写较为敏感。",
-    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备；便携终端确需联网时使用手机热点。",
+    "identity": "城市户外活动爱好者兼现场内容记录者，日常在城市街区、公共活动现场、跨区域出行途中及户外等候区、临时停留点之间高频移动，全程依赖手机4G/5G直接联网，不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式，便携终端确需联网时使用手机热点。",
+    "devices": "5G智能手机＋随身拍摄设备（运动相机/手机云台）",
     "apps": [
       "微信",
       "抖音",
       "腾讯会议",
-      "高德地图"
+      "小红书"
     ],
     "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "干脆利落、带点外勤人的急脾气，喜欢用短句和行话确认事情，不爱绕弯子。",
+      "tone": "干脆利落、带点现场感，喜欢用短句和行话，强调别掉链子",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "秒开才算数",
-        "千万别糊"
+        "秒开就行"
       ],
-      "typical_habits": "出发前先确认路线和网络，现场习惯用语音和位置共享同步进度，遇到弱覆盖会反复强调续传和恢复。"
+      "typical_habits": "出发前先确认网络和电量，现场边拍边发，遇到弱覆盖会提前说'先缓存，等会儿续传'，习惯用口语别名指代应用和业务。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "城市活动现场短视频采集与远程协作",
+      "name": "晚间户外现场短视频上传与远程协作",
       "storyline_trigger_type": "location_environment",
-      "trigger_condition": "身处城市公共活动现场、户外等候区或临时停留点，需要边移动边采集现场短视频并同步给远程协作方时触发。",
+      "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，20:00-22:00进入人流密集或弱覆盖路段时，需要即时上传现场短视频并与同伴远程协作。",
       "period_type": "location_driven",
       "days": [
         "location_specific"
       ],
-      "time_range": "15:00-17:00",
+      "time_range": "20:00-22:00",
       "application_name": "抖音",
       "service_name": "短视频",
       "preferred_params": {
@@ -45,38 +44,32 @@
       "aliases": {
         "app_aliases": [
           "阿抖",
-          "某音",
-          "抖子"
+          "某音"
         ],
         "service_aliases": [
           "刷短视频",
-          "拍段子",
           "推流上传",
-          "发片"
+          "发片儿"
         ],
         "resolution_aliases": [
           "原画",
           "顶格清晰度",
-          "千万别糊",
-          "超清"
+          "千万别糊"
         ],
         "rtt_aliases": [
           "别掉链子",
-          "零卡顿",
           "秒开",
           "别转圈"
         ],
         "duration_aliases": [
           "俩小时",
           "两钟头",
-          "大半个下午",
-          "播到五点"
+          "播到十点"
         ],
         "period_aliases": [
           "每天这个时候",
           "老时间",
-          "老规矩",
-          "到了现场就开"
+          "晚间例行"
         ]
       },
       "declaration_mode": "explicit_declaration",
@@ -85,10 +78,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨城展会周现场采集与弱网续传保障",
+        "name": "跨城户外市集活动周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "跨城展会周期间，展馆周边人流密集、临时停留点多，部分路段进入弱覆盖区域，需要保证短视频上传和远程协作任务可续传或快速恢复。",
+        "scene_description": "跨城参加户外市集活动，现场人流密集、基站拥塞，晚间20:00-22:00处于临时摊位区弱覆盖环境，需要临时降低画质并优先保证低时延上传。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -98,35 +91,14 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "大巴途中视频调度与位置同步",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "name": "大巴途中视频调度",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "跨区域出行途中在大巴或临时停留点需要与同伴视频通话、共享位置并调度下一步行动时触发。",
-        "aliases": {
-          "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
-          ]
-        }
-      },
-      {
-        "storyline_id": "SUB_02",
-        "name": "现场录像复盘与远程会议对齐",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
-        "preferred_params": {
-          "resolution": "1080p",
-          "rtt_max": "80ms"
-        },
-        "trigger_condition": "当天现场采集结束后，在户外等候区或临时停留点需要与远程同事开会复盘素材、对齐次日安排时触发。",
+        "trigger_condition": "跨区域出行途中在大巴或临时停留点需要与同伴对齐行程和素材安排时。",
         "aliases": {
           "app_aliases": [
             "tencentmeeting",
@@ -137,13 +109,34 @@
             "进会议室"
           ]
         }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "现场素材复盘沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "活动结束后在户外等候区或临时停留点与同伴复盘现场素材、确认次日安排时。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ]
+        }
       }
     ],
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次临时观看直播活动",
-        "application_name": "快手",
+        "scenario": "单次临时看直播",
+        "application_name": "哔哩哔哩",
         "service_name": "看直播",
         "params": {
           "resolution": "720p",
@@ -152,9 +145,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次临时游戏娱乐",
-        "application_name": "哔哩哔哩",
-        "service_name": "云游戏",
+        "scenario": "单次临时开直播",
+        "application_name": "快手",
+        "service_name": "开直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

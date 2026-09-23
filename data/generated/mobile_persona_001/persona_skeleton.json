@@ -4,24 +4,25 @@
   "persona_summary": "巡回活动讲者",
   "static_profile": {
     "user_id": "USER_001",
-    "identity": "前残奥高山滑雪运动员，现为巡回励志演讲者与户外公益活动推广大使，常年跨城转场，在露天训练场、赛道、球场及赛事集结区开展公益演讲与运动推广活动",
-    "devices": "主力设备为5G智能手机，辅助设备为平板电脑，便携终端确需联网时使用手机热点",
+    "identity": "前残奥高山滑雪运动员，现为巡回励志演讲者与户外公益活动推广大使，常年跨城转场，在露天训练场、赛道、球场及赛事集结区开展公益演讲与运动推广活动，全程依赖手机移动核心网完成直播、调度与内容上传。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑，便携终端确需联网时使用手机热点。",
     "apps": [
       "抖音",
       "微信",
       "腾讯会议",
-      "快手"
+      "哔哩哔哩"
     ],
     "speech_archetype": "athlete_speaker",
     "speech_style": {
-      "tone": "干脆利落、带运动员的节奏感，喜欢用短句和行动指令，偶尔夹带滑雪行话",
+      "tone": "干脆利落、带运动员的节奏感，习惯用短句和行动指令，偶尔夹杂滑雪圈行话。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "稳住了"
+        "秒开才行",
+        "顶格清晰度"
       ],
-      "typical_habits": "习惯在活动前用一句话对齐流程，直播前反复确认上行画质与时延，喜欢用'老时间''老规矩'指代固定安排"
+      "typical_habits": "习惯在固定时段主动口述自己的网络与业务偏好，喜欢用口语别名指代应用和参数，强调移动转场中的连续性与人群密集时的稳定性。"
     }
   },
   "dynamic_profile": {
@@ -56,11 +57,11 @@
         ],
         "rtt_aliases": [
           "别掉链子",
-          "零卡顿"
+          "秒开"
         ],
         "duration_aliases": [
           "俩小时",
-          "一个钟头"
+          "两钟头"
         ],
         "period_aliases": [
           "每天这个时候",
@@ -76,7 +77,7 @@
         "name": "跨城公益演讲赛事周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "跨城转场期间在露天赛事集结区与人群密集的公益演讲现场，移动网络拥塞且转场频繁",
+        "scene_description": "跨城转场途中与露天赛事集结区，人群密集、移动频繁，网络需在高速移动与高密度用户下保持稳定。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -93,7 +94,7 @@
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "跨城转场途中在大巴上与团队进行视频通话调度",
+        "trigger_condition": "客场转场途中在大巴上进行团队视频调度与即时通信",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -107,22 +108,22 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "训练录像复盘会议",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "name": "训练录像复盘",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "晚间在临时休息点与教练团队进行训练录像复盘与数据回放",
+        "trigger_condition": "晚间在临时休息点观看训练录像回放与赛事直播复盘",
         "aliases": {
           "app_aliases": [
-            "tencentmeeting",
-            "会议通"
+            "bilibili",
+            "哔站"
           ],
           "service_aliases": [
-            "开会",
-            "进会议室"
+            "观赛",
+            "刷直播"
           ]
         }
       }
@@ -130,9 +131,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次与赞助商临时沟通",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "scenario": "单次与赞助方临时会议",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -140,7 +141,7 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次休息时刷短视频放松",
+        "scenario": "单次休息时刷短视频",
         "application_name": "快手",
         "service_name": "短视频",
         "params": {

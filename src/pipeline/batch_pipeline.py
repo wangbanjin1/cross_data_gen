@@ -92,7 +92,7 @@ class BatchPipeline:
                 "gold_state_after": gold_after
             })
 
-        print(f"    - Batch rendering 15 sessions with DeepSeek Flash (thinking disabled)...")
+        print(f"    - Batch rendering {len(timeline)} sessions with DeepSeek Flash (thinking disabled)...")
         rendered_sessions = self.dialogue_gen.generate_sessions_batch(planned_items, persona_skeleton, batch_size=self.batch_size)
 
         # 4. 保存标准对话 sessions.jsonl

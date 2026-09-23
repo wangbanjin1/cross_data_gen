@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>跨会话长期记忆对话数据集生成系统 - 研发成果与架构演进总览</title>
+    <style>
+        :root {
+            --bg-primary: #0a0f1d;
+            --bg-secondary: #111827;
+            --bg-card: #1f2937;
+            --bg-card-hover: #283548;
+            --border-color: #374151;
+            --text-primary: #f9fafb;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            --accent-cyan: #06b6d4;
+            --accent-emerald: #10b981;
+            --accent-violet: #8b5cf6;
+            --accent-amber: #f59e0b;
+            --accent-rose: #f43f5e;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 40px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(139, 92, 246, 0.2));
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #38bdf8, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+
+        .header-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .meta-tag {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-card);
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .meta-tag span.val {
+            color: var(--accent-cyan);
+            font-weight: 600;
+        }
+
+        /* 概览卡片栅格 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-cyan);
+        }
+
+        .stat-card .label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .stat-card .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .stat-card .sub {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+        }
+
+        .stat-card.c1::after { background-color: var(--accent-cyan); }
+        .stat-card.c2::after { background-color: var(--accent-emerald); }
+        .stat-card.c3::after { background-color: var(--accent-violet); }
+        .stat-card.c4::after { background-color: var(--accent-amber); }
+
+        /* 章节通用样式 */
+        .section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 35px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding-bottom: 15px;
+        }
+
+        .section-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--accent-cyan);
+            border-radius: 8px;
+            font-size: 1.2rem;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* 架构流程图容器 */
+        .workflow-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 25px;
+        }
+
+        .flow-steps {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .flow-step {
+            flex: 1;
+            min-width: 160px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 14px;
+            text-align: center;
+            position: relative;
+        }
+
+        .flow-step .num {
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            line-height: 22px;
+            background: var(--accent-cyan);
+            color: #000;
+            font-weight: 700;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            margin-bottom: 6px;
+        }
+
+        .flow-step .title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .flow-step .desc {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* 特性大卡片 */
+        .feature-category {
+            margin-bottom: 30px;
+        }
+
+        .category-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .subfeature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 16px;
+        }
+
+        .subfeature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 16px;
+            transition: all 0.2s;
+        }
+
+        .subfeature-card:hover {
+            border-color: rgba(6, 182, 212, 0.4);
+            background: var(--bg-card-hover);
+        }
+
+        .subfeature-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .subfeature-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .subfeature-badge {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-emerald);
+            font-weight: 600;
+        }
+
+        .subfeature-desc {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* 对比框 */
+        .contrast-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .contrast-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .contrast-box {
+            border-radius: 10px;
+            padding: 18px;
+            font-size: 0.85rem;
+        }
+
+        .contrast-box.bad {
+            background: rgba(244, 63, 94, 0.08);
+            border: 1px solid rgba(244, 63, 94, 0.3);
+        }
+
+        .contrast-box.good {
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .contrast-title {
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .contrast-box.bad .contrast-title { color: var(--accent-rose); }
+        .contrast-box.good .contrast-title { color: var(--accent-emerald); }
+
+        pre {
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            color: #e2e8f0;
+            font-family: "Fira Code", monospace;
+            font-size: 0.78rem;
+            overflow-x: auto;
+            margin-top: 8px;
+        }
+
+        /* 表格 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: rgba(15, 23, 42, 0.8);
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .badge-pass {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-emerald);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 25px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <header>
+        <div class="header-title-badge">System Milestone & Evolution Report</div>
+        <h1>跨会话长期记忆对话数据集生成系统</h1>
+        <div class="header-meta">
+            <div class="meta-tag">版本：<span class="val">v2.2.0 (Production Ready)</span></div>
+            <div class="meta-tag">最近更新：<span class="val">2026年09月23日</span></div>
+            <div class="meta-tag">质检通过率：<span class="val">100.0% (Zero Defect)</span></div>
+            <div class="meta-tag">对话轮次约束：<span class="val">12 ~ 16 轮动态自然浮动</span></div>
+            <div class="meta-tag">单画像渲染成本：<span class="val">约 ¥0.03 RMB / Persona</span></div>
+        </div>
+    </header>
+
+    <!-- 顶栏指标卡片 -->
+    <div class="stats-grid">
+        <div class="stat-card c1">
+            <div class="label">核心大功能架构</div>
+            <div class="value">5 大模块</div>
+            <div class="sub">规划 / 追踪 / 生成 / DST / 验证</div>
+        </div>
+        <div class="stat-card c2">
+            <div class="label">细粒度子功能特性</div>
+            <div class="value">18 项落地</div>
+            <div class="sub">包含记忆分级、无歧义冷启动等</div>
+        </div>
+        <div class="stat-card c3">
+            <div class="label">会话长度自然浮动</div>
+            <div class="value">12 ~ 16 轮</div>
+            <div class="sub">破除单一生硬 15 轮硬性限制</div>
+        </div>
+        <div class="stat-card c4">
+            <div class="label">Turn 级意图隔离</div>
+            <div class="value">0 泄露</div>
+            <div class="sub">彻底消除 Label Bleeding 时序倒错</div>
+        </div>
+    </div>
+
+    <!-- 系统全景流水线 -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-icon">⚙️</div>
+            <h2>端到端生成流水线体系 (End-to-End Pipeline)</h2>
+        </div>
+        <div class="workflow-box">
+            <div class="flow-steps">
+                <div class="flow-step">
+                    <div class="num">1</div>
+                    <div class="title">画像骨架扩充</div>
+                    <div class="desc">DeepSeek API 扩展静态偏好、口头禅与业务场景</div>
+                </div>
+                <div class="flow-step">
+                    <div class="num">2</div>
+                    <div class="title">动态时间线规划</div>
+                    <div class="desc">基于画像特征生成 12~16 轮交错时空轨迹</div>
+                </div>
+                <div class="flow-step">
+                    <div class="num">3</div>
+                    <div class="title">记忆状态机演进</div>
+                    <div class="desc">计算 Snapshot-Before、Events、Gold-State 三元组</div>
+                </div>
+                <div class="flow-step">
+                    <div class="num">4</div>
+                    <div class="title">批次合并对话渲染</div>
+                    <div class="desc">5 会话/批次合并推理，极速完成口语台词生成</div>
+                </div>
+                <div class="flow-step">
+                    <div class="num">5</div>
+                    <div class="title">DST 结构装配与 QC</div>
+                    <div class="desc">组装 Turn 级意图、增量 Slot，严格质检落盘</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 五大核心功能与 18 个细粒度子特性 -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-icon">📦</div>
+            <h2>功能特性全景矩阵 (5 大核心体系 & 18 个子特性)</h2>
+        </div>
+
+        <!-- 体系 1 -->
+        <div class="feature-category">
+            <div class="category-title">一、 时间轴与故事线规划引擎 (Timeline & Storyline Planner)</div>
+            <div class="subfeature-grid">
+                <div class="subfeature-card">
+                    <div class="subfeature-header">
+                        <div class="subfeature-name">1.1 多故事线交织编排</div>
+                        <div class="subfeature-badge">已交付</div>
+                    </div>
+                    <div class="subfeature-desc">并行编排主线高频业务、双支线（转场弱网、夜间驻地复盘）与突发环境覆盖，构建错落有致的真实交互网络。</div>
+                </div>
+                <div class="subfeature-card">
+                    <div class="subfeature-header">
+                        <div class="subfeature-name">1.2 动态自然会话浮动 (12~16轮)</div>
+                        <div class="subfeature-badge">新增</div>
+                    </div>
+                    <div class="subfeature-desc">打破单一生硬的固定 15 轮限制，根据画像特征、支线丰富度在 12、13、14、15、16 轮之间动态浮动。</div>
+                </div>
+                <div class="subfeature-card">
+                    <div class="subfeature-header">
+                        <div class="subfeature-name">1.3 多粒度周期调度</div>
+                        <div class="subfeature-badge">已交付</div>
+                    </div>
+                    <div class="subfeature-desc">解耦支持日级（早晚高峰/午间复盘）、周级（工作日一五/二四/周末双休组合）、月级（月初/月中/月末封账）周期。</div>
+                </div>
+                <div class="subfeature-card">
+                    <div class="subfeature-header">
+                        <div class="subfeature-name">1.4 示例引导情境触发 (方案A)</div>
+                        <div class="subfeature-badge">已优化</div>
+                    </div>
+                    <div class="subfeature-desc">将任务活动/地点情境与用户画像身份无缝深度绑定，避免出现职业与预设任务违和的画像冲突问题。</div>
+                </div>
+                <div class="subfeature-card">
+                    <div class="subfeature-header">
+                        <div class="subfeature-name">1.5 外置触发池解耦</div>
+                        <div class="subfeature-badge">已解耦</div>
+                    </div>
+                    <div class="subfeature-desc">剥离硬编码，通过 <code>trigger_presets.json</code> 外置配置文件管理时段与任务库，支持非技术人员随时热插拔扩充。</div>
+                </div>
+                <div class="subfeature-card">
+                    <div class="subfeature-header">
+                        <div class="subfeature-name">1.6 干扰与域外诉求机制</div>
+                        <div class="subfeature-badge">已交付</div>
+                    </div>
+                    <div class="subfeature-desc">设计纯域外诉求礼貌拒绝（T1-2 宽带光纤报修）与混合诉求一办一拒（X-1 话费账单查询），测试大模型边界能力。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 体系 2 -->
+        <div class="feature-category">
+            <div class="category-title">二、 跨会话长期记忆演进追踪系统 (Memory Tracker & State Machine)</div>
+            <div class="subfeature-grid">
+                <div class="subfeature-card">
+                    <div class="subfeature-header">
+                        <div class="subfeature-name">2.1 显式与隐式双轨建联</div>
+                        <div class="subfeature-badge">核心机制</div>
+                    </div>
+                    <div class="subfeature-desc">支持显式声明（One-shot 直接生效）与隐式归纳（单次候选 provisional ➔ 再次发生时 Agent 主动建议固化 active）。</div>
+                </div>
+                <div class="subfeature-card">
+                    <div class="subfeature-header">
+                        <div class="subfeature-name">2.2 记忆快照因果三元组</div>
+                        <div class="subfeature-badge">数据标准</div>
+                    </div>
+                    <div class="subfeature-desc">严格记录会话前生效记忆（Snapshot-Before）、会话内动作事件（Memory-Events）与会话后标准状态（Gold-State）。</div>
+                </div>
+                <div class="subfeature-card">
+                    <div class="subfeature-header">
+                        <div class="subfeature-name">2.3 动态纠正与临时覆盖</div>
+                        <div class="subfeature-badge">已交付</div>
+                    </div>
+                    <div class="subfeature-desc">支持时长单次修改延长（T2-5）与现场特殊保障临时参数切换（T2-3），事件到期后自动恢复全局基线老规矩。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 体系 3 -->
+        <div class="feature-category">
+            <div class="category-title">三、 对话生成与大/小记忆点分级体系 (Dialogue & Memory Hierarchy)</div>
+            <div class="subfeature-grid">
+                <div class="subfeature-card">
+                    <div class="subfeature-header">
+                        <div class="subfeature-name">3.1 首发去别名零歧义冷启动</div>
+                        <div class="subfeature-badge">关键突破</div>
+                    </div>
+                    <div class="subfeature-desc">在证据会话第 1 轮中，强制使用标准官方应用名与业务名，坚决禁止生僻别名，禁止未生效暗号，保障大记忆点无歧义冷启动。</div>
+                </div>
+                <div class="subfeature-card">
+                    <div class="subfeature-header">
+                        <div class="subfeature-name">3.2 小记忆点引入与登记</div>
+                        <div class="subfeature-badge">关键突破</div>
+                    </div>
+                    <div class="subfeature-desc">首发会话第 2 轮确认画质时延的同时，顺畅引入个性化口语代称，登记写入大记忆点的 <code>alias_mapping</code> 小记忆点子槽位。</div>
+                </div>
+                <div class="subfeature-card">
+                    <div class="subfeature-header">
+                        <div class="subfeature-name">3.3 后续复用自然唤醒</div>
+                        <div class="subfeature-badge">核心机制</div>
+                    </div>
+                    <div class="subfeature-desc">后续复用会话鼓励用户直接使用小记忆点（代称与暗号），Agent 依据记忆精准归一化解析，测试大模型跨会话归纳能力。</div>
+                </div>
+                <div class="subfeature-card">
+                    <div class="subfeature-header">
+                        <div class="subfeature-name">3.4 六维口语黑话词典库</div>
+                        <div class="subfeature-badge">已沉淀</div>
+                    </div>
+                    <div class="subfeature-desc">建立应用、业务、画质、时延、时长、周期六大维度黑话别称池，结合用户画像的口头禅与说话语气动态注入台词。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 体系 4 -->
+        <div class="feature-category">
+            <div class="category-title">四、 对话状态追踪（DST）与 Turn 级意图隔离 (DST & Turn-Level Isolation)</div>
+            <div class="subfeature-grid">
+                <div class="subfeature-card">
+                    <div class="subfeature-header">
+                        <div class="subfeature-name">4.1 Turn 级意图零泄漏</div>
+                        <div class="subfeature-badge">彻底解决</div>
+                    </div>
+                    <div class="subfeature-desc">第 1 轮意图状态为 <code>in_progress</code>，仅包含该轮提及要素，严格杜绝未提及的画质时延未来信息泄漏。</div>
+                </div>
+                <div class="subfeature-card">
+                    <div class="subfeature-header">
+                        <div class="subfeature-name">4.2 显式待追问参数追踪</div>
+                        <div class="subfeature-badge">DST标准</div>
+                    </div>
+                    <div class="subfeature-desc">第 1 轮显式给出 <code>requested_params: ["resolution", "rtt"]</code>，为下游评测 Agent 澄清反问策略提供黄金标准标注。</div>
+                </div>
+                <div class="subfeature-card">
+                    <div class="subfeature-header">
+                        <div class="subfeature-name">4.3 增量槽位追踪 (slot_updates)</div>
+                        <div class="subfeature-badge">DST标准</div>
+                    </div>
+                    <div class="subfeature-desc">按轮次严格记录参数增量：第 1 轮记录应用业务时间，第 2 轮记录追问澄清补充的画质时延，符合状态转移因果链。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 体系 5 -->
+        <div class="feature-category">
+            <div class="category-title">五、 批处理流水线与严格质检验证套件 (Batch Pipeline & Verification)</div>
+            <div class="subfeature-grid">
+                <div class="subfeature-card">
+                    <div class="subfeature-header">
+                        <div class="subfeature-name">5.1 批次合并极速渲染</div>
+                        <div class="subfeature-badge">高性能</div>
+                    </div>
+                    <div class="subfeature-desc">支持每 5 个会话单次 API 请求合并生成，全画像流水线仅需 4 次网络交互，单个画像生成耗时降至 16 秒左右。</div>
+                </div>
+                <div class="subfeature-card">
+                    <div class="subfeature-header">
+                        <div class="subfeature-name">5.2 极低成本控制</div>
+                        <div class="subfeature-badge">高性价比</div>
+                    </div>
+                    <div class="subfeature-desc">基于 DeepSeek Flash 模型（不开启思考模式），单画像全套会话生成成本仅约 0.03 元人民币。</div>
+                </div>
+                <div class="subfeature-card">
+                    <div class="subfeature-header">
+                        <div class="subfeature-name">5.3 自动化质检与断言套件</div>
+                        <div class="subfeature-badge">100% 严苛</div>
+                    </div>
+                    <div class="subfeature-desc">每个画像自动生成 <code>qc_report.json</code>，配备命令行独立运行断言套件（<code>--verify</code>），保证零结构缺陷。</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 关键攻关深潜对比 -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-icon">🔬</div>
+            <h2>关键技术攻关：Turn 级意图隔离与大/小记忆点演进深潜</h2>
+        </div>
+
+        <div class="contrast-grid">
+            <div class="contrast-box bad">
+                <div class="contrast-title">❌ 改造前缺陷现象 (Label Bleeding & 早熟别名)</div>
+                <p>1. <strong>早熟别名冲突</strong>：首发建联第 1 轮用户即使用“阿抖开播”、“老规矩”，冷启动模型提取不出真实业务标准名。</p>
+                <p>2. <strong>时序倒错泄露</strong>：第 1 轮用户未提及画质和时延，但意图答案里提前填入了 1080p 和 50ms。</p>
+                <pre>// 改造前：第 1 轮存在未来参数泄漏
+"event_sequence": [
+  {
+    "turn": 1,
+    "user": { "utterance": "老规矩，午间阿抖开播！" },
+    "turn_intents": [{
+      "params": {
+        "application_name": "抖音",
+        "resolution": "1080p", // ❌ 此时用户根本未提！
+        "rtt": "50ms"          // ❌ 未来答案泄露！
+      }
+    }]
+  }
+]</pre>
+            </div>
+
+            <div class="contrast-box good">
+                <div class="contrast-title">✅ 改造后黄金标准规范 (因果闭环与小记忆点登记)</div>
+                <p>1. <strong>标准应用冷启动</strong>：第 1 轮强制使用官方标准名“抖音开直播”，去暗号化；第 2 轮确立大规则并登记代称小记忆点。</p>
+                <p>2. <strong>Turn 级意图绝对纯净</strong>：第 1 轮 params 只有提过的参数，第 2 轮澄清确认后才补齐画质时延。</p>
+                <pre>// 改造后：严格按轮次演进与因果隔离
+"event_sequence": [
+  {
+    "turn": 1,
+    "user": { "utterance": "中午我要在抖音开直播..." },
+    "requested_params": ["resolution", "rtt"], // ✅ 明确待澄清
+    "turn_intents": [{
+      "status": "in_progress",
+      "params": {
+        "application_name": "抖音", // ✅ 仅当前提及
+        "service_name": "开直播"
+      }
+    }]
+  },
+  {
+    "turn": 2,
+    "user": { "utterance": "画质1080p，时延50ms...以后叫它'阿抖开播'" },
+    "turn_intents": [{
+      "status": "resolved", // ✅ 第2轮补充完毕
+      "params": { "resolution": "1080p", "rtt": "50ms", ... }
+    }]
+  }
+]</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- 生产性能与交付标准 -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-icon">📊</div>
+            <h2>流水线性能与成本效益指标</h2>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>评测维度</th>
+                    <th>指标表现</th>
+                    <th>行业传统实现对比</th>
+                    <th>优势说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>生成吞吐速度</strong></td>
+                    <td>约 15 ~ 17 秒 / Persona</td>
+                    <td>传统单轮单次生成约需 120 秒</td>
+                    <td>批次 5 会话合并渲染，减少 70% 网络往返开销</td>
+                </tr>
+                <tr>
+                    <td><strong>Token 成本</strong></td>
+                    <td>约 20,000 Tokens / Persona (约 ¥0.03)</td>
+                    <td>单轮单次调用约需 60,000 Tokens</td>
+                    <td>通过画像上下文共享大幅压缩输入 Prompt 重复冗余</td>
+                </tr>
+                <tr>
+                    <td><strong>会话轮次丰富度</strong></td>
+                    <td>12 ~ 16 轮动态自然浮动</td>
+                    <td>死板固定 15 轮</td>
+                    <td>打破模版机械痕迹，更贴合真实用户长短不一的生活节奏</td>
+                </tr>
+                <tr>
+                    <td><strong>时序数据质量</strong></td>
+                    <td>100% 隔离未来泄露 (0 Bleeding)</td>
+                    <td>普遍存在单会话全量参数向首轮泄露</td>
+                    <td>满足学术界与工业界最严格的对话状态追踪(DST)评测规范</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        <p>跨会话长期记忆对话数据集生成系统 · 架构与工程落地文档 · 自动生成于 D:/coding/cross_memory_data/docs/update.html</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

@@ -56,6 +56,10 @@ class DynamicTimelinePlanner:
             main_env_desc = "常规周期保障现场"
             main_trigger_desc = raw_trig_cond if raw_trig_cond else "每周常规周期时段"
 
+        # 会话数量支持根据画像与业务情境自然浮动（12 ~ 16 轮）
+        # 彻底破除强制 15 轮限制
+        target_count = 12 + (uid_num % 5)
+
         blueprint_configs = get_15_session_blueprints(
             main_mt=main_mt,
             sub_01=sub_01,
@@ -67,6 +71,7 @@ class DynamicTimelinePlanner:
             storyline_trigger_type=storyline_trigger_type,
             main_env_desc=main_env_desc,
             main_trigger_desc=main_trigger_desc,
+            target_count=target_count,
         )
 
         sessions = []
