@@ -40,9 +40,9 @@ class TriggerPresetManager:
         return cls.get_presets()
 
     @classmethod
-    def resolve_trigger_plan(cls, uid_num: int) -> tuple[str, str, str, list, str, str]:
+    def resolve_trigger_plan(cls, uid_num: int, raw_persona: dict = None) -> tuple[str, str, str, list, str, str]:
         """
-        根据用户序号 (uid_num) 均匀映射并解析触发偏好配置。
+        根据用户序号 (uid_num) 与画像上下文均匀映射并解析触发偏好配置。
         返回: (forced_decl_mode, forced_trig_type, period_type_hint, days_hint, time_range_hint, trig_instruction)
         """
         presets = cls.get_presets()
@@ -115,7 +115,7 @@ class TriggerPresetManager:
                 trig_instruction = tpl.format(days=days_hint, time_range=time_range_hint, desc=desc)
 
         elif trig_mod == 2:
-            # 4. 任务现场驱动 (task_activity)
+            # 4. 任务现场驱动 (task_activity) - 时段从预设取模，任务人设从画像深度提炼，参考预设样例
             forced_trig_type = "task_activity"
             period_type_hint = "task_driven"
             days_hint = ["task_specific"]
@@ -127,17 +127,21 @@ class TriggerPresetManager:
                 {"task_name": "高压变电站设备现场巡检", "time_range": "15:00-17:00", "trigger_condition": "执行高压变电站设备现场巡检任务"}
             ])
             chosen = presets_list[uid_num % len(presets_list)]
-            task_name = chosen.get("task_name", "特定专业任务")
+            task_name = chosen.get("task_name", "客户现场业务")
             time_range_hint = chosen.get("time_range", "14:00-16:00")
 
             tpl = task_cfg.get(
                 "instruction_template",
-                "任务现场驱动：因特定专业活动/现场任务触发（如'客户现场审计'、'婚庆跟拍'、'电力设备巡检'、'医疗会诊'等），trigger_condition 必须为执行该特定任务（如'执行{task_name}任务'）"
+                "任务现场驱动【task_activity】：设定在特定专业活动/现场任务时段（已指定时段：{time_range}）。trigger_condition 必须【深度结合上方输入原始画像的职业身份与业务场景】提炼出符合该人设的真实任务（参考范例格式如：'执行{example_task}任务'，严禁脱离人设或跨行业生搬硬套），period_type必须为'task_driven'，days设为['task_specific']，time_range设为'{time_range}'"
             )
-            trig_instruction = tpl.format(task_name=task_name)
+            trig_instruction = tpl.format(
+                time_range=time_range_hint,
+                example_task=task_name,
+                task_name=task_name
+            )
 
         else:
-            # 5. 特定地点驱动 (location_environment)
+            # 5. 特定地点驱动 (location_environment) - 时段从预设取模，物理弱网空间从画像典型环境深度提炼
             forced_trig_type = "location_environment"
             period_type_hint = "location_driven"
             days_hint = ["location_specific"]
@@ -154,8 +158,12 @@ class TriggerPresetManager:
 
             tpl = loc_cfg.get(
                 "instruction_template",
-                "特定地点驱动：因特定物理空间/环境触发（如'利兹露天集结区'、'地下配电室'、'跨城物流中转站'、'高铁沿线弱网区'），trigger_condition 必须为身处该特定空间（如'身处{location_name}弱网区域'）"
+                "特定地点驱动【location_environment】：设定在特定物理空间/弱网环境时段（已指定时段：{time_range}）。trigger_condition 必须【深度结合上方输入原始画像的典型活动环境与活动半径】提炼出符合该人设的真实弱网空间（参考范例格式如：'身处{example_loc}弱网区域'，严禁脱离人设日常工作生活范围），period_type必须为'location_driven'，days设为['location_specific']，time_range设为'{time_range}'"
             )
-            trig_instruction = tpl.format(location_name=location_name)
+            trig_instruction = tpl.format(
+                time_range=time_range_hint,
+                example_loc=location_name,
+                location_name=location_name
+            )
 
         return forced_decl_mode, forced_trig_type, period_type_hint, days_hint, time_range_hint, trig_instruction

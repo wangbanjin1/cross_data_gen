@@ -8,7 +8,7 @@
 
 | 目标任务 | 推荐执行命令 | 说明 |
 | :--- | :--- | :--- |
-| **一键批量生成** | `python run.py` | 读取 `config.json` 默认配置执行（默认生成 20 个人物画像） |
+| **一键批量生成** | `python run.py` | 读取 `config.json` 默认配置执行（默认生成 5 个人物画像） |
 | **按数量生成** | `python run.py --start 0 --count 10` | 从第 0 个画像开始，生成 10 个人物（共 150 个会话） |
 | **更换原始画像** | `python run.py --input data/original/custom.json --count 5` | 指定自定义原始画像池，不修改全局配置 |
 | **更换输出目录** | `python run.py --output data/experiment_v2 --count 5` | 将生成样本保存至指定的新目录 |
@@ -28,7 +28,7 @@
   "output_dir": "data/generated",
   "batch_size": 5,
   "default_start_idx": 0,
-  "default_count": 20,
+  "default_count": 5,
   "model": "deepseek-flash",
   "base_url": "https://api.deepseek.com",
   "enable_thinking": false
@@ -227,7 +227,7 @@ cross_memory_data/
         "trigger_condition": "执行客户现场合规审计任务"
       }
     ],
-    "instruction_template": "任务现场驱动：因特定专业活动/现场任务触发（如'客户现场审计'、'婚庆跟拍'等），trigger_condition 必须为执行该特定任务（如'执行{task_name}任务'）"
+    "instruction_template": "任务现场驱动【task_activity】：设定在特定专业活动/现场任务时段（已指定时段：{time_range}）。trigger_condition 必须【深度结合上方输入原始画像的职业身份与业务场景】提炼出符合该人设的真实任务（参考范例格式如：'执行{example_task}任务'，严禁脱离人设或跨行业生搬硬套），period_type必须为'task_driven'，days设为['task_specific']，time_range设为'{time_range}'"
   },
   "location_environment": {
     "presets": [
@@ -237,7 +237,7 @@ cross_memory_data/
         "trigger_condition": "身处露天集结区弱网区域"
       }
     ],
-    "instruction_template": "特定地点驱动：因特定物理空间/环境触发（如'利兹露天集结区'、'地下配电室'），trigger_condition 必须为身处该特定空间（如'身处{location_name}弱网区域'）"
+    "instruction_template": "特定地点驱动【location_environment】：设定在特定物理空间/弱网环境时段（已指定时段：{time_range}）。trigger_condition 必须【深度结合上方输入原始画像的典型活动环境与活动半径】提炼出符合该人设的真实弱网空间（参考范例格式如：'身处{example_loc}弱网区域'，严禁脱离人设日常工作生活范围），period_type必须为'location_driven'，days设为['location_specific']，time_range设为'{time_range}'"
   }
 }
 ```

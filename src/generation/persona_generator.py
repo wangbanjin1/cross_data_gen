@@ -19,7 +19,7 @@ class PersonaGenerator:
         num_match = re.search(r'\d+', raw_persona.get("persona_id", ""))
         uid_num = int(num_match.group()) if num_match else 1
         forced_decl_mode, forced_trig_type, period_type_hint, days_hint, time_range_hint, trig_instruction = (
-            TriggerPresetManager.resolve_trigger_plan(uid_num)
+            TriggerPresetManager.resolve_trigger_plan(uid_num, raw_persona)
         )
 
         prompt = build_persona_skeleton_prompt(

@@ -133,7 +133,7 @@
         "trigger_condition": "执行公路马拉松现场移动跟拍与赛事推流"
       }
     ],
-    "instruction_template": "任务现场驱动：因特定专业活动/现场任务触发（如'客户现场审计'、'婚庆跟拍'、'电力设备巡检'、'医疗会诊'等），trigger_condition 必须为执行该特定任务（如'执行{task_name}任务'）"
+    "instruction_template": "任务现场驱动【task_activity】：设定在特定专业活动/现场任务时段（已指定时段：{time_range}）。trigger_condition 必须【深度结合上方输入原始画像的职业身份与业务场景】提炼出符合该人设的真实任务（参考范例格式如：'执行{example_task}任务'，严禁脱离人设或跨行业生搬硬套），period_type必须为'task_driven'，days设为['task_specific']，time_range设为'{time_range}'"
   },
   "location_environment": {
     "presets": [
@@ -173,6 +173,6 @@
         "trigger_condition": "身处海岛沿岸潮汐基站覆盖边缘"
       }
     ],
-    "instruction_template": "特定地点驱动：因特定物理空间/环境触发（如'利兹露天集结区'、'地下配电室'、'跨城物流中转站'、'高铁沿线弱网区'），trigger_condition 必须为身处该特定空间（如'身处{location_name}弱网区域'）"
+    "instruction_template": "特定地点驱动【location_environment】：设定在特定物理空间/弱网环境时段（已指定时段：{time_range}）。trigger_condition 必须【深度结合上方输入原始画像的典型活动环境与活动半径】提炼出符合该人设的真实弱网空间（参考范例格式如：'身处{example_loc}弱网区域'，严禁脱离人设日常工作生活范围），period_type必须为'location_driven'，days设为['location_specific']，time_range设为'{time_range}'"
   }
 }
