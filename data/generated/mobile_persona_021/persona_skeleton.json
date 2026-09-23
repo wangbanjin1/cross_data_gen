@@ -1,0 +1,181 @@
+{
+  "persona_id": "mobile_persona_021",
+  "category": "移动生活与现场协作",
+  "persona_summary": "高频移动网络使用者",
+  "static_profile": {
+    "user_id": "USER_021",
+    "identity": "资深立法起草顾问，长期为团队提供草案指导与反馈；高频移动办公，常在户外等候区、临时停留点、兴趣活动现场及跨区域出行途中处理即时通信、远程协作、位置共享与现场素材上传。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携工作终端；便携终端确需联网时使用手机热点，全程以手机4G/5G直接接入移动核心网。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "business_advisor",
+    "speech_style": {
+      "tone": "沉稳、务实、带一点催促感，习惯用工作口令推进协作，强调别掉链子和及时对齐。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先记一下"
+      ],
+      "typical_habits": "先确认对方是否在线，再快速给出修改意见；移动中偏好语音和短视频说明，重要事项会要求共享位置或开远程会议。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "移动远程草案评审会",
+      "period_type": "weekly",
+      "days": [
+        "Wednesday",
+        "Saturday"
+      ],
+      "time_range": "14:00-17:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "腾讯会",
+          "会议软件"
+        ],
+        "service_aliases": [
+          "对齐一下",
+          "远程碰一下",
+          "过草案"
+        ]
+      },
+      "param_mappings": {
+        "resolution": {
+          "高清": "1080p",
+          "清晰点": "1080p",
+          "看得清字": "1080p"
+        },
+        "rtt": {
+          "低时延": "50ms",
+          "别卡": "50ms",
+          "别掉链子": "50ms"
+        }
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_level": "explicit_long_term_declaration"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_01",
+        "event_name": "跨城立法调研周",
+        "valid_from": "2026-11-01",
+        "valid_to": "2026-11-15",
+        "impact_scope": "temporary",
+        "scene_description": "跨城出差季，频繁在高铁、会场周边和临时办公点之间移动，网络环境波动大，需要优先保证语音和屏幕共享稳定。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        },
+        "trigger_reason": "跨城移动中带宽和覆盖不稳定，降低分辨率并收紧时延上限，优先保证会议音频和共享内容不中断。"
+      }
+    ],
+    "sub_storylines": [
+      {
+        "sub_id": "SUB_MT_01",
+        "name": "大巴视频调度沟通",
+        "period_type": "weekly_evening",
+        "days": [
+          "Sunday",
+          "Wednesday"
+        ],
+        "trigger_condition": "团队在移动途中需要临时对齐行程、确认现场安排或远程查看材料时触发。",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "aliases": {
+          "app_aliases": [
+            "微信",
+            "V信"
+          ],
+          "service_aliases": [
+            "视频一下",
+            "对一下行程",
+            "能听清就行"
+          ]
+        },
+        "param_mappings": {
+          "resolution": {
+            "标清": "720p",
+            "能看人就行": "720p"
+          },
+          "rtt": {
+            "能听清就行": "100ms",
+            "别断": "100ms"
+          }
+        }
+      },
+      {
+        "sub_id": "SUB_MT_02",
+        "name": "现场录像复盘",
+        "period_type": "sporadic_evening",
+        "trigger_condition": "白天在活动现场拍摄了短视频或照片，晚间需要回看、标注并同步给团队时触发。",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "aliases": {
+          "app_aliases": [
+            "B站",
+            "哔哩"
+          ],
+          "service_aliases": [
+            "看回放",
+            "复盘素材",
+            "刷一下现场"
+          ]
+        },
+        "param_mappings": {
+          "resolution": {
+            "超清": "1080p",
+            "清楚点": "1080p"
+          },
+          "rtt": {
+            "不卡": "80ms",
+            "流畅点": "80ms"
+          }
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "name": "临时看直播",
+        "application_name": "抖音",
+        "service_name": "看直播",
+        "scenario_description": "在户外等候区临时打开抖音看兴趣活动直播，属于单次消遣，不纳入长期主线。",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "name": "随手刷短视频",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "scenario_description": "跨区域出行途中随手刷快手短视频，单次发生，不作为固定周期业务。",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

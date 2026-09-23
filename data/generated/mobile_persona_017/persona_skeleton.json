@@ -1,0 +1,178 @@
+{
+  "persona_id": "mobile_persona_017",
+  "category": "移动生活与现场协作",
+  "persona_summary": "移动文化服务人员",
+  "static_profile": {
+    "user_id": "USER_017",
+    "identity": "韩国籍儿童文学图书馆员，长期关注李基勋作品，负责社区阅读推广、展品外借与户外文化活动执行，每周多次在城市街区、公共活动现场及跨区域途中移动办公。",
+    "devices": "主力：5G智能手机；辅助：平板电脑；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "抖音",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "亲切、利落、带一点现场指挥感，喜欢用短句确认安排",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先记一下"
+      ],
+      "typical_habits": "习惯先口头确认时间地点和网络状态，再补一句‘按老规矩来’；遇到弱覆盖会主动提醒同伴续传或重连。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "社区阅读活动移动直播与远程协作",
+      "period_type": "weekly",
+      "days": [
+        "Wednesday",
+        "Saturday"
+      ],
+      "time_range": "14:00-17:00",
+      "application_name": "微信",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "微信直播",
+          "绿泡泡"
+        ],
+        "service_aliases": [
+          "开播",
+          "现场连线"
+        ]
+      },
+      "param_mappings": {
+        "resolution": {
+          "高清": "1080p",
+          "清晰点": "1080p",
+          "清楚点": "1080p"
+        },
+        "rtt": {
+          "低时延": "50ms",
+          "别卡": "50ms",
+          "稳一点": "50ms"
+        }
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_level": "explicit_long_term_declaration"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_01",
+        "event_name": "跨城儿童文学展外借与现场直播周",
+        "valid_from": "2026-11-01",
+        "valid_to": "2026-11-15",
+        "impact_scope": "temporary",
+        "scene_description": "跨城展馆、户外等候区与临时停留点，移动过程中弱覆盖路段增多，需保证直播与位置共享连续可用。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        },
+        "trigger_reason": "跨城移动和展馆人流密集导致网络波动，优先保证低时延与连续覆盖，临时降低分辨率以稳定直播。"
+      }
+    ],
+    "sub_storylines": [
+      {
+        "sub_id": "SUB_MT_01",
+        "name": "展品流转远程沟通",
+        "period_type": "weekly_evening",
+        "days": [
+          "Sunday",
+          "Wednesday"
+        ],
+        "trigger_condition": "展品外借登记或流转信息需要与馆内同事远程确认时",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "aliases": {
+          "app_aliases": [
+            "腾讯会议",
+            "会议号"
+          ],
+          "service_aliases": [
+            "对齐一下",
+            "远程碰一下"
+          ]
+        },
+        "param_mappings": {
+          "resolution": {
+            "标清": "720p",
+            "能看清就行": "720p"
+          },
+          "rtt": {
+            "能听清就行": "100ms",
+            "别断": "100ms"
+          }
+        }
+      },
+      {
+        "sub_id": "SUB_MT_02",
+        "name": "活动短视频素材回传",
+        "period_type": "sporadic_evening",
+        "trigger_condition": "户外文化活动结束后需要上传活动图文与短视频素材时",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "aliases": {
+          "app_aliases": [
+            "抖音",
+            "短视频平台"
+          ],
+          "service_aliases": [
+            "发个视频",
+            "传素材"
+          ]
+        },
+        "param_mappings": {
+          "resolution": {
+            "超清": "1080p",
+            "高清": "1080p"
+          },
+          "rtt": {
+            "不卡": "80ms",
+            "快点传": "80ms"
+          }
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "name": "临时看直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "scenario_description": "午休或等候时单次观看儿童文学相关直播，不属于固定安排。",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "name": "临时视频通话",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "scenario_description": "与同事临时确认展品位置或活动变更，单次发生，不形成周期。",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,184 @@
+{
+  "persona_id": "mobile_persona_020",
+  "category": "移动生活与现场协作",
+  "persona_summary": "高频移动网络使用者",
+  "static_profile": {
+    "user_id": "USER_020",
+    "identity": "录音棚主理人，专注基督教敬拜专辑制作，常年往返城市街区、教会活动现场、户外敬拜聚会与跨区域巡演途中，负责现场收音、远程协作与素材回传",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑，便携终端联网时以手机热点共享",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "抖音",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "studio_producer",
+    "speech_style": {
+      "tone": "温和笃定、带点制作人式的干脆，习惯用敬拜与录音棚行话沟通",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "这条轨要干净"
+      ],
+      "typical_habits": "先确认现场网络与设备状态，再安排录制或连线；喜欢用简短口令同步进度，遇到弱覆盖会立刻要求续传或切换方案"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "敬拜现场远程协作与素材回传",
+      "period_type": "weekly",
+      "days": [
+        "Wednesday",
+        "Saturday"
+      ],
+      "time_range": "14:00-17:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "会议软件",
+          "线上棚",
+          "远程棚"
+        ],
+        "service_aliases": [
+          "对齐一下",
+          "过一遍轨",
+          "远程排练"
+        ]
+      },
+      "param_mappings": {
+        "resolution": {
+          "高清": "1080p",
+          "清晰点": "1080p",
+          "看得清脸": "1080p"
+        },
+        "rtt": {
+          "低时延": "50ms",
+          "别卡": "50ms",
+          "跟得上拍子": "50ms"
+        }
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_level": "explicit_long_term_declaration"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_01",
+        "event_name": "跨城敬拜巡演周",
+        "valid_from": "2026-11-01",
+        "valid_to": "2026-11-15",
+        "impact_scope": "temporary",
+        "scene_description": "跨城巡演途中，城市街区、教会场地与户外临时舞台之间频繁移动，弱覆盖路段增多，需保证远程连线与素材回传不中断",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        },
+        "trigger_reason": "巡演期间移动范围大、弱覆盖路段多，优先保证连线稳定与消息及时送达，临时降低分辨率并收紧时延上限"
+      }
+    ],
+    "sub_storylines": [
+      {
+        "sub_id": "SUB_MT_01",
+        "name": "巡演大巴上的视频调度",
+        "period_type": "weekly_evening",
+        "days": [
+          "Sunday",
+          "Wednesday"
+        ],
+        "trigger_condition": "巡演或外出途中在大巴上需要与团队同步行程、场地与设备安排",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "aliases": {
+          "app_aliases": [
+            "微",
+            "信儿",
+            "群里"
+          ],
+          "service_aliases": [
+            "对一下行程",
+            "车上碰个头",
+            "视频调度"
+          ]
+        },
+        "param_mappings": {
+          "resolution": {
+            "标清": "720p",
+            "能看清人就行": "720p"
+          },
+          "rtt": {
+            "能听清就行": "100ms",
+            "别断线": "100ms"
+          }
+        }
+      },
+      {
+        "sub_id": "SUB_MT_02",
+        "name": "录音棚录像复盘与客户沟通",
+        "period_type": "sporadic_evening",
+        "trigger_condition": "完成一次录制或敬拜现场后，需要回看录像、与客户或团队沟通修改意见",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "aliases": {
+          "app_aliases": [
+            "B站",
+            "小破站",
+            "哔哩"
+          ],
+          "service_aliases": [
+            "复盘",
+            "看回放",
+            "过一遍现场"
+          ]
+        },
+        "param_mappings": {
+          "resolution": {
+            "超清": "1080p",
+            "看清楚细节": "1080p"
+          },
+          "rtt": {
+            "不卡": "80ms",
+            "流畅点": "80ms"
+          }
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "name": "临时刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "scenario_description": "户外等候区或临时停留点，单次浏览敬拜音乐与现场花絮，非固定习惯",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "name": "单次看敬拜直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "scenario_description": "某次临时观看外地敬拜现场直播，仅发生一次，不属于周期性安排",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,181 @@
+{
+  "persona_id": "mobile_persona_016",
+  "category": "移动生活与现场协作",
+  "persona_summary": "户外观赛与兴趣社群用户",
+  "static_profile": {
+    "user_id": "USER_016",
+    "identity": "中年高达模型爱好者与户外观赛社群活跃成员，常在城市街区、公共活动现场及跨区域出行途中参与观赛集结与兴趣社群活动，习惯用手机进行现场拍摄、短视频分享与社群实时互动。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备（运动相机/手机云台），便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "抖音",
+      "哔哩哔哩",
+      "腾讯会议"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "直爽、干脆，带点老玩家式的调侃与催促感，喜欢用行话和简称。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "现场见"
+      ],
+      "typical_habits": "习惯在出发前和活动前用短句快速确认安排，遇到网络波动会直接说“别卡”“稳住”，对社群协作和现场分享的时效性要求高。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "周末户外观赛与社群直播分享",
+      "period_type": "weekly",
+      "days": [
+        "Wednesday",
+        "Saturday"
+      ],
+      "time_range": "14:00-17:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "抖子",
+          "短视频平台"
+        ],
+        "service_aliases": [
+          "开播",
+          "现场播一下",
+          "给大家看看现场"
+        ]
+      },
+      "param_mappings": {
+        "resolution": {
+          "高清": "1080p",
+          "清晰点": "1080p",
+          "清楚点": "1080p"
+        },
+        "rtt": {
+          "低时延": "50ms",
+          "别卡": "50ms",
+          "稳住": "50ms"
+        }
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_level": "explicit_long_term_declaration"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_01",
+        "event_name": "高达模型展与跨城观赛周",
+        "valid_from": "2026-11-01",
+        "valid_to": "2026-11-15",
+        "impact_scope": "temporary",
+        "scene_description": "跨城参加高达模型展和现场观赛，场馆与户外集结点人流密集、网络拥塞，需要优先保证直播与短视频上传稳定。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        },
+        "trigger_reason": "展会现场网络拥塞且需要长时间移动直播，降低分辨率并收紧时延上限以保障连续覆盖和消息及时送达。"
+      }
+    ],
+    "sub_storylines": [
+      {
+        "sub_id": "SUB_MT_01",
+        "name": "赛后录像复盘与社群讨论",
+        "period_type": "weekly_evening",
+        "days": [
+          "Sunday",
+          "Wednesday"
+        ],
+        "trigger_condition": "观赛或模型活动结束后，社群成员在群里发起复盘讨论并需要共享录像片段。",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "aliases": {
+          "app_aliases": [
+            "微子",
+            "群里"
+          ],
+          "service_aliases": [
+            "对一下录像",
+            "复盘一下",
+            "开个视频聊聊"
+          ]
+        },
+        "param_mappings": {
+          "resolution": {
+            "标清": "720p",
+            "能看清就行": "720p"
+          },
+          "rtt": {
+            "能听清就行": "100ms",
+            "别断": "100ms"
+          }
+        }
+      },
+      {
+        "sub_id": "SUB_MT_02",
+        "name": "远程协作与素材同步",
+        "period_type": "sporadic_evening",
+        "trigger_condition": "需要与异地同好或合作方同步拍摄素材、确认剪辑方向或协调活动安排。",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "aliases": {
+          "app_aliases": [
+            "会议软件",
+            "腾讯会"
+          ],
+          "service_aliases": [
+            "对齐一下",
+            "碰一下",
+            "开个会"
+          ]
+        },
+        "param_mappings": {
+          "resolution": {
+            "超清": "1080p",
+            "清楚点": "1080p"
+          },
+          "rtt": {
+            "不卡": "80ms",
+            "稳一点": "80ms"
+          }
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "name": "临时看直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "scenario_description": "在户外等候区临时打开哔哩哔哩观看高达模型相关直播，属于单次非固定行为。",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "name": "随手刷短视频",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "scenario_description": "在跨区域出行途中随手刷快手短视频打发时间，与主线观赛直播和社群协作无固定关联。",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}
