@@ -14,13 +14,15 @@ from src.memory_tracker import MemoryTracker
 from src.qc_validator import QCValidator
 
 class BatchPipeline:
-    def __init__(self, output_dir: str = "data/generated"):
-        self.output_dir = Path(output_dir)
+    def __init__(self, output_dir: str = None, raw_persona_path: str = None, batch_size: int = None, model: str = None, base_url: str = None):
+        self.output_dir = Path(output_dir or Config.output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
         
+        self.raw_persona_path = Path(raw_persona_path or Config.raw_persona_path)
+        self.batch_size = batch_size or Config.batch_size
         self.ckpt_path = self.output_dir / "checkpoint.json"
         self.checkpoint = self._load_checkpoint()
-        self.llm = LLMClient()
+        self.llm = LLMClient(model=model or Config.model, base_url=base_url or Config.base_url)
         self.persona_gen = PersonaGenerator(self.llm)
         self.dialogue_gen = DialogueGenerator(self.llm)
 
@@ -86,7 +88,7 @@ class BatchPipeline:
             })
 
         print(f"    - Batch rendering 15 sessions with DeepSeek Flash (thinking disabled)...")
-        rendered_sessions = self.dialogue_gen.generate_sessions_batch(planned_items, persona_skeleton, batch_size=5)
+        rendered_sessions = self.dialogue_gen.generate_sessions_batch(planned_items, persona_skeleton, batch_size=self.batch_size)
 
         # 4. 保存标准对话 sessions.jsonl
         out_sessions_path = sample_dir / "sessions.jsonl"
@@ -122,11 +124,29 @@ class BatchPipeline:
 
         return True
 
-    def run_batch(self, start_idx: int = 0, count: int = 1):
-        with open("data/original/mobile_network_personas_500.json", "r", encoding="utf-8") as f:
+    def run_batch(self, start_idx: int = None, count: int = None, raw_persona_path: str = None):
+        start_idx = start_idx if start_idx is not None else Config.default_start_idx
+        count = count if count is not None else Config.default_count
+        target_path = Path(raw_persona_path or self.raw_persona_path)
+
+        if not target_path.exists():
+            raise FileNotFoundError(f"Raw persona file not found: {target_path}")
+
+        with open(target_path, "r", encoding="utf-8-sig") as f:
             raw_data = json.load(f)
-        personas_to_run = raw_data["personas"][start_idx : start_idx + count]
+
+        if isinstance(raw_data, list):
+            personas_all = raw_data
+        elif isinstance(raw_data, dict):
+            personas_all = raw_data.get("personas") or raw_data.get("data") or list(raw_data.values())[0]
+        else:
+            raise ValueError(f"Unrecognized persona data format in {target_path}")
+
+        personas_to_run = personas_all[start_idx : start_idx + count]
         print(f"=== Starting Batch Pipeline: {len(personas_to_run)} personas (index {start_idx} to {start_idx + count - 1}) ===")
+        print(f"    Raw Personas File -> {target_path}")
+        print(f"    Output Directory  -> {self.output_dir}")
+        print(f"    LLM Model         -> {self.llm.model}")
 
         total_cost = 0.0
         total_tokens = 0
@@ -147,9 +167,15 @@ class BatchPipeline:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Batch pipeline for cross-session memory dataset generation")
-    parser.add_argument("--start", type=int, default=0, help="Start persona index (0-based)")
-    parser.add_argument("--count", type=int, default=1, help="Number of personas to process")
+    parser.add_argument("--config", "-c", type=str, default=None, help="Path to config.json")
+    parser.add_argument("--input", "-i", type=str, default=None, help="Path to raw persona JSON file")
+    parser.add_argument("--output", "-o", type=str, default=None, help="Output directory for generated datasets")
+    parser.add_argument("--start", "-s", type=int, default=None, help="Start persona index (0-based)")
+    parser.add_argument("--count", "-n", type=int, default=None, help="Number of personas to process")
     args = parser.parse_args()
 
-    pipeline = BatchPipeline()
-    pipeline.run_batch(start_idx=args.start, count=args.count)
+    if args.config:
+        Config.load_all(args.config)
+
+    pipeline = BatchPipeline(output_dir=args.output, raw_persona_path=args.input)
+    pipeline.run_batch(start_idx=args.start, count=args.count, raw_persona_path=args.input)

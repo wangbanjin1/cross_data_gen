@@ -1,10 +1,10 @@
 import json
 from pathlib import Path
 
-def main():
-    base = Path("data/generated")
-    skeletons = sorted(base.glob("mobile_persona_*/persona_skeleton.json"))
-    print(f"Total skeletons found: {len(skeletons)}")
+def main(output_dir: str = None):
+    base = Path(output_dir or "data/generated")
+    skeletons = sorted(base.glob("*/persona_skeleton.json"))
+    print(f"Total skeletons found in '{base}': {len(skeletons)}")
     
     mode_counts = {}
     trig_counts = {}
@@ -28,4 +28,8 @@ def main():
     print("Storyline Triggers:", trig_counts)
 
 if __name__ == "__main__":
-    main()
+    import argparse
+    parser = argparse.ArgumentParser(description="Inspect dataset distribution")
+    parser.add_argument("--output", "-o", type=str, default="data/generated", help="Output directory to inspect")
+    args = parser.parse_args()
+    main(output_dir=args.output)

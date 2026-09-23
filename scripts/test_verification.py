@@ -54,12 +54,16 @@ def test_file(jsonl_path: Path):
 
     print(f"\n[SUCCESS] [{parent_dir}]: All 15 sessions + skeleton + memory_traces + qc_report passed 100% strict verification!")
 
-def main():
-    base_gen = Path("data/generated")
+def main(output_dir: str = None):
+    base_gen = Path(output_dir or "data/generated")
     session_files = list(base_gen.glob("*/sessions.jsonl"))
-    print(f"Found {len(session_files)} persona sample folders to verify.")
+    print(f"Found {len(session_files)} persona sample folders in '{base_gen}' to verify.")
     for f in sorted(session_files):
         test_file(f)
 
 if __name__ == "__main__":
-    main()
+    import argparse
+    parser = argparse.ArgumentParser(description="Verify generated datasets")
+    parser.add_argument("--output", "-o", type=str, default="data/generated", help="Output directory to verify")
+    args = parser.parse_args()
+    main(output_dir=args.output)
