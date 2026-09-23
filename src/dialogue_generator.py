@@ -67,6 +67,7 @@ class DialogueGenerator:
                 "rounds": rounds,
                 "role": role,
                 "blueprint_type": b_type,
+                "declaration_mode": s_plan.get("declaration_mode", "explicit_declaration"),
                 "time": s_plan["reference_time"],
                 "env": env,
                 "active_memory": snap_str,
@@ -90,14 +91,24 @@ class DialogueGenerator:
 
 【核心会话轮次与动作规则（严格遵守）】:
 1. 每个会话最后一轮必须由 Agent 的答复结束！最后一轮 Agent agent_action_types 必须包含 "Acknowledge"。
-2. 记忆强化/复用 (reinforcement / reuse):
-   - 第1轮 User: 口语化提出需求，【必须省略应用或画质时延等参数】（如使用"老规矩"、"照上次的来"等）。
-   - 第1轮 Agent: 必须明确调取上方 active_memory 中的配置，主动反问向用户确认（agent_action_types包含 "Confirm_Slot"）。
-   - 第2轮 User: 必须明确确认 Agent 提出的配置（user_action_types包含 "Confirm_Slot"，如"对，开通吧"）。
-   - 第2轮 Agent: 明确确认已开通并收尾祝福（agent_action_types: ["Acknowledge"]）。
-3. 首次建立记忆 (evidence):
-   - 第1轮 User: 结合现场环境提出模糊需求；Agent 追问确认细节。
-   - 第2轮 User: 明确说清参数，并明确声明长期偏好（如"以后周X我说...就按这个办"）；Agent 确认并记录长期偏好。
+2. 首次建联/证据会话 (evidence_session):
+   - 若 declaration_mode == "explicit_declaration" (显式声明):
+     第1轮 User: 结合现场环境提出模糊需求；Agent 追问确认细节。
+     第2轮 User: 明确说清参数，并【明确显式声明长期偏好与暗号】（如：“以后我在XX只要说‘下午大直播，老规矩’，就按这个来：抖音直播、1080p、50ms以内，先保连通再保清晰。记一下长期偏好，别掉链子”）；Agent 必须明确闭环回复：“好的，已为您开通本次保障，并已为您将该配置记录为长期老规矩！”
+   - 若 declaration_mode == "implicit_induction" (隐式归纳):
+     第1轮 User: 仅提出本次单次保障需求，【严禁出现任何‘记一下/以后都按这个/老规矩’等元指令词】（如：“今天下午有个网络保障，帮我开个抖音直播，1080p、50ms”）；Agent 追问确认细节。
+     第2轮 User: 仅确认本次单次任务参数（如：“好的，今天就按这个配置开通”）；Agent 确认受理单次任务结束，不擅自假设长期偏好。
+3. 记忆强化/复用 (reinforcement / reuse):
+   - 若 active_memory 中包含 [provisional] (隐式偏好二次发生，触发固化契机):
+     第1轮 User: 再次提出需求（如：“今天还是老时间开直播，跟上次一样就行”）。
+     第1轮 Agent: 必须根据历史行为主动反问向用户建议固化：“检测到您周三下午多次使用该配置，是否按上次标准（1080p/50ms）为您开通并设为长期老规矩？”（agent_action_types包含 "Confirm_Slot"）。
+     第2轮 User: 明确确认固化（如：“对，以后周三就按这个来”）（user_action_types包含 "Confirm_Slot"）。
+     第2轮 Agent: 答复已开通并收尾祝福，正式记录老规矩（agent_action_types: ["Acknowledge"]）。
+   - 若 active_memory 包含 [active] (常规复用已生效记忆):
+     第1轮 User: 口语化提出需求，【必须省略应用或画质时延等参数】（如使用"老规矩"、"照上次的来"等）。
+     第1轮 Agent: 必须明确调取上方 active_memory 中的配置，主动反问向用户确认（agent_action_types包含 "Confirm_Slot"）。
+     第2轮 User: 明确确认 Agent 提出的配置（user_action_types包含 "Confirm_Slot"，如"对，开通吧"）。
+     第2轮 Agent: 明确确认已开通并收尾祝福（agent_action_types: ["Acknowledge"]）。
 4. 纠正覆盖 (correction / event_override):
    - 用户明确因当前特定事件/临时环境纠正旧参数，切换为新标准。
 5. 单轮干扰项 (distractor):
@@ -328,11 +339,17 @@ class DialogueGenerator:
                 or (t_data.get("user", {}).get("utterance") if isinstance(t_data.get("user"), dict) else t_data.get("user"))
                 or ""
             )
+        decl_mode = s_plan.get("declaration_mode", "explicit_declaration")
         if not u_text:
             if turn_idx == 1:
                 u_text = f"你好，需要给{app}{srv}做一个网络保障，时间是今天{tp['start_timestamp'].split('日')[-1]}开始，持续{tp['duration']}。"
             else:
-                u_text = "好的，确认按这个配置直接开通。"
+                if role == "evidence_session" and decl_mode == "explicit_declaration":
+                    u_text = f"好的，确认按这个配置直接开通。以后我在{env}只要说'下午大直播，老规矩'，就按这个来：{app}{srv}、{res}、{rtt}以内，记一下长期偏好，别掉链子。"
+                elif role == "evidence_session" and decl_mode == "implicit_induction":
+                    u_text = "好的，今天就按这个配置开通吧。"
+                else:
+                    u_text = "好的，确认按这个配置直接开通。"
 
         a_text = ""
         if isinstance(t_data, dict):
@@ -347,19 +364,35 @@ class DialogueGenerator:
             )
         if not a_text:
             if is_last:
-                a_text = f"好的，已为您成功受理{app}{srv}网络保障（{res} / 时延≤{rtt}），祝您使用愉快！"
+                if role == "evidence_session" and decl_mode == "explicit_declaration":
+                    a_text = f"好的，已为您成功受理本次保障，并已为您将该配置记录为长期老规矩，祝您使用愉快！"
+                else:
+                    a_text = f"好的，已为您成功受理{app}{srv}网络保障（{res} / 时延≤{rtt}），祝您使用愉快！"
             else:
-                a_text = f"收到，请问{app}{srv}是否按分辨率{res}、时延上限{rtt}的标准来为您开通？"
+                if role == "reinforcement_session" and decl_mode == "implicit_induction" and s_plan.get("session_id", "").endswith("-03"):
+                    a_text = f"检测到您周三下午多次使用{app}{srv}保障，请问是否按上次标准（{res} / 时延≤{rtt}）为您开通并设为默认老规矩？"
+                else:
+                    a_text = f"收到，请问{app}{srv}是否按分辨率{res}、时延上限{rtt}的标准来为您开通？"
 
         u_acts = t_data.get("user_action_types") if isinstance(t_data, dict) else None
-        if not u_acts:
-            u_acts = ["Create_Intent_Request", "Inform_Slot"] if turn_idx == 1 else ["Confirm_Slot"]
-        elif isinstance(u_acts, str):
-            u_acts = [u_acts]
+        if turn_idx == 1:
+            if not u_acts:
+                u_acts = ["Create_Intent_Request", "Inform_Slot"]
+            elif isinstance(u_acts, str):
+                u_acts = [u_acts]
+        else:
+            if role in ["reinforcement_session", "reuse_session"]:
+                u_acts = ["Confirm_Slot"]
+            elif not u_acts:
+                u_acts = ["Confirm_Slot"]
+            elif isinstance(u_acts, str):
+                u_acts = [u_acts]
 
         a_acts = t_data.get("agent_action_types") if isinstance(t_data, dict) else None
         if is_last:
             a_acts = ["Acknowledge"]
+        elif role in ["reinforcement_session", "reuse_session"]:
+            a_acts = ["Confirm_Slot"]
         elif not a_acts:
             a_acts = ["Request_Slot"] if role == "evidence_session" else ["Confirm_Slot"]
         elif isinstance(a_acts, str):
@@ -397,21 +430,32 @@ class DialogueGenerator:
 - 发生时间: {s_plan['reference_time']}
 - 现场环境: {env}
 - 会话角色: {role} (类型: {b_type})
+- 偏好模式: {s_plan.get('declaration_mode', 'explicit_declaration')}
 - 目标保障业务: 应用={tp['application_name']}, 业务={tp['service_name']}, 分辨率={tp['resolution']}, 时延上限={tp['rtt']}, 时段={tp['start_timestamp']} 至 {tp['end_timestamp']} (时长{tp['duration']})
 
 【核心会话轮次与动作规则（严格遵守）】:
 1. 最后一轮必须由 Agent 的答复结束！最后一轮 Agent agent_action_types 必须包含 "Acknowledge"。
-2. 如果是记忆强化/复用 (reinforcement / reuse):
-   - 第1轮 User: 结合现场动机口语化提出需求，【必须省略应用或画质时延等参数】（如使用"老规矩"、"照上次的来"等）。
-   - 第1轮 Agent: 必须明确调取上方【当前生效的历史记忆】中的配置，主动反问向用户确认（agent_action_types包含 "Confirm_Slot"）。
-   - 第2轮 User: 必须明确确认 Agent 提出的配置（user_action_types包含 "Confirm_Slot"，如"对，开通吧"）。
-   - 第2轮 Agent: 明确确认已开通并收尾祝福（agent_action_types: ["Acknowledge"]）。
-3. 如果是首次建立记忆 (evidence):
-   - 第1轮 User: 结合现场环境提出需求，可能用模糊词；Agent 追问确认细节。
-   - 第2轮 User: 明确说清参数，并明确声明长期偏好（如"以后周X我说...就按这个办"）；Agent 确认并记录长期偏好。
-4. 如果是纠正 (correction):
-   - 用户明确纠正旧参数，指明由于当前特定事件/环境，临时切换为新标准。
-5. 如果是单轮干扰项 (distractor):
+2. 首次建联/证据会话 (evidence_session):
+   - 若 declaration_mode == "explicit_declaration" (显式声明):
+     第1轮 User: 结合现场环境提出模糊需求；Agent 追问确认细节。
+     第2轮 User: 明确说清参数，并【明确显式声明长期偏好与暗号】（如：“以后我在XX只要说‘下午大直播，老规矩’，就按这个来：抖音直播、1080p、50ms以内，先保连通再保清晰。记一下长期偏好，别掉链子”）；Agent 必须明确闭环回复：“好的，已为您开通本次保障，并已为您将该配置记录为长期老规矩！”
+   - 若 declaration_mode == "implicit_induction" (隐式归纳):
+     第1轮 User: 仅提出本次单次保障需求，【严禁出现任何‘记一下/以后都按这个/老规矩’等元指令词】（如：“今天下午有个网络保障，帮我开个抖音直播，1080p、50ms”）；Agent 追问确认细节。
+     第2轮 User: 仅确认本次单次任务参数（如：“好的，今天就按这个配置开通”）；Agent 确认受理单次任务结束，不擅自假设长期偏好。
+3. 记忆强化/复用 (reinforcement / reuse):
+   - 若上方记忆快照包含 [provisional] (隐式偏好二次发生，触发固化契机):
+     第1轮 User: 再次提出需求（如：“今天还是老时间开直播，跟上次一样就行”）。
+     第1轮 Agent: 必须根据历史行为主动反问向用户建议固化：“检测到您周三下午多次使用该配置，是否按上次标准（1080p/50ms）为您开通并设为长期老规矩？”（agent_action_types包含 "Confirm_Slot"）。
+     第2轮 User: 明确确认固化（如：“对，以后周三就按这个来”）（user_action_types包含 "Confirm_Slot"）。
+     第2轮 Agent: 答复已开通并收尾祝福，正式记录老规矩（agent_action_types: ["Acknowledge"]）。
+   - 若上方记忆快照包含 [active] (常规复用已生效记忆):
+     第1轮 User: 口语化提出需求，【必须省略应用或画质时延等参数】（如使用"老规矩"、"照上次的来"等）。
+     第1轮 Agent: 必须明确调取上方 active_memory 中的配置，主动反问向用户确认（agent_action_types包含 "Confirm_Slot"）。
+     第2轮 User: 明确确认 Agent 提出的配置（user_action_types包含 "Confirm_Slot"，如"对，开通吧"）。
+     第2轮 Agent: 明确确认已开通并收尾祝福（agent_action_types: ["Acknowledge"]）。
+4. 纠正覆盖 (correction / event_override):
+   - 用户明确因当前特定事件/临时环境纠正旧参数，切换为新标准。
+5. 单轮干扰项 (distractor):
    - 单轮内用户全部说清，Agent 正常受理直接结束。
 
 【输出 JSON 格式（必须包含 {round_count} 轮）】:

@@ -23,40 +23,79 @@ class MemoryTracker:
         ref_time = s_plan["reference_time"]
         memory_events = []
 
+        decl_mode = s_plan.get("declaration_mode", "explicit_declaration")
+
         if b_type == "main":
             if role == "evidence_session":
-                # 主线记忆初建
-                mem_item = {
-                    "memory_id": "MF_001",
-                    "category": "periodic_main_storyline",
-                    "application_name": tp["application_name"],
-                    "service_name": tp["service_name"],
-                    "resolution": tp["resolution"],
-                    "rtt_max": tp["rtt"],
-                    "scope": "weekly_cycle",
-                    "status": "active",
-                    "evidence_count": 1,
-                    "first_declared_at": ref_time,
-                    "last_reinforced_at": ref_time
-                }
-                self.active_memories["MF_001"] = mem_item
-                memory_events.append({
-                    "event_type": "form_memory",
-                    "memory_id": "MF_001",
-                    "description": f"用户首次明确声明主线偏好：{tp['application_name']}{tp['service_name']}（{tp['resolution']}, {tp['rtt']}），设立长期老规矩。",
-                    "target_slots": ["application_name", "service_name", "resolution", "rtt_max"]
-                })
+                if decl_mode == "explicit_declaration":
+                    # 主线记忆显式初建 (One-shot)
+                    mem_item = {
+                        "memory_id": "MF_001",
+                        "category": "periodic_main_storyline",
+                        "declaration_mode": "explicit_declaration",
+                        "application_name": tp["application_name"],
+                        "service_name": tp["service_name"],
+                        "resolution": tp["resolution"],
+                        "rtt_max": tp["rtt"],
+                        "scope": "weekly_cycle",
+                        "status": "active",
+                        "evidence_count": 1,
+                        "first_declared_at": ref_time,
+                        "last_reinforced_at": ref_time
+                    }
+                    self.active_memories["MF_001"] = mem_item
+                    memory_events.append({
+                        "event_type": "form_memory_explicit",
+                        "memory_id": "MF_001",
+                        "description": f"用户首次明确显式声明长期偏好：{tp['application_name']}{tp['service_name']}（{tp['resolution']}, {tp['rtt']}），设立老规矩指令。",
+                        "target_slots": ["application_name", "service_name", "resolution", "rtt_max"]
+                    })
+                else:
+                    # 隐式归纳路径：首次仅作为任务历史日志 (provisional)，防止单次行为过拟合
+                    mem_item = {
+                        "memory_id": "MF_001",
+                        "category": "periodic_main_storyline",
+                        "declaration_mode": "implicit_induction",
+                        "application_name": tp["application_name"],
+                        "service_name": tp["service_name"],
+                        "resolution": tp["resolution"],
+                        "rtt_max": tp["rtt"],
+                        "scope": "weekly_cycle",
+                        "status": "provisional",  # 候选/待归纳状态
+                        "evidence_count": 1,
+                        "first_declared_at": ref_time,
+                        "last_reinforced_at": ref_time
+                    }
+                    self.active_memories["MF_001"] = mem_item
+                    memory_events.append({
+                        "event_type": "log_task_history",
+                        "memory_id": "MF_001",
+                        "description": f"用户发生单次保障行为：{tp['application_name']}{tp['service_name']}，未显式声明长期偏好，记录单次历史日志（防单次行为过拟合）。",
+                        "target_slots": ["application_name", "service_name", "resolution", "rtt_max"]
+                    })
             elif role in ["reinforcement_session", "reuse_session"]:
                 # 主线记忆强化或复用
                 if "MF_001" in self.active_memories:
+                    prev_status = self.active_memories["MF_001"].get("status")
                     self.active_memories["MF_001"]["evidence_count"] += 1
                     self.active_memories["MF_001"]["last_reinforced_at"] = ref_time
-                    memory_events.append({
-                        "event_type": "reinforce_memory",
-                        "memory_id": "MF_001",
-                        "description": f"用户省略参数复用主线记忆，Agent 成功补全并经用户确认，证据强度增至 {self.active_memories['MF_001']['evidence_count']} 次。",
-                        "retrieved_slots": ["application_name", "service_name", "resolution", "rtt_max"]
-                    })
+
+                    if prev_status == "provisional":
+                        # 隐式归纳满足证据阈值 (N>=2)，正式固化为 active 长期老规矩
+                        self.active_memories["MF_001"]["status"] = "active"
+                        memory_events.append({
+                            "event_type": "crystallize_implicit_memory",
+                            "memory_id": "MF_001",
+                            "description": f"用户再次在相似周期场景发起相同配置，满足隐式归纳证据阈值(N>=2)，经Agent反问确认，正式固化为长期老规矩。",
+                            "retrieved_slots": ["application_name", "service_name", "resolution", "rtt_max"]
+                        })
+                    else:
+                        memory_events.append({
+                            "event_type": "reinforce_memory",
+                            "memory_id": "MF_001",
+                            "description": f"用户省略参数复用主线记忆，Agent 成功补全并经用户确认，证据强度增至 {self.active_memories['MF_001']['evidence_count']} 次。",
+                            "retrieved_slots": ["application_name", "service_name", "resolution", "rtt_max"]
+                        })
 
         elif b_type == "sub_01":
             if role == "evidence_session":

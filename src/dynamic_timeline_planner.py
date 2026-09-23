@@ -22,25 +22,36 @@ class DynamicTimelinePlanner:
             "scene_description": "现场人流拥塞临时防抖保障"
         }
 
+        # 判定长期记忆声明模式：严格按人物ID进行50/50奇偶分流，保障显式声明与隐式归纳均匀分布
+        import re
+        num_match = re.search(r'\d+', user_id)
+        uid_num = int(num_match.group()) if num_match else 1
+        decl_mode = "explicit_declaration" if (uid_num % 2 == 1) else "implicit_induction"
+
         # 15个会话的蓝图定义
         blueprint_configs = [
             # 01: Main Evidence
             {
                 "idx": 1, "ref_time": "2026年10月07日13时45分", "template_id": "T2-4", "role": "evidence_session",
                 "source": main_mt, "type": "main", "start": "2026年10月07日14时00分", "end": "2026年10月07日16时00分", "dur": "120min",
-                "env": "露天现场集结区", "action": "declare_long_term_rule"
+                "env": "露天现场集结区", 
+                "action": "declare_explicit_rule" if decl_mode == "explicit_declaration" else "single_task_implicit_behavior",
+                "declaration_mode": decl_mode
             },
             # 02: Sub 1 Evidence
             {
                 "idx": 2, "ref_time": "2026年10月11日18时30分", "template_id": "T2-1", "role": "evidence_session",
                 "source": sub_01, "type": "sub_01", "start": "2026年10月11日18时45分", "end": "2026年10月11日19时45分", "dur": "60min",
-                "env": "大巴跨城转场高速公路", "action": "establish_sub_storyline_1"
+                "env": "大巴跨城转场高速公路", "action": "establish_sub_storyline_1",
+                "declaration_mode": "implicit_induction"
             },
             # 03: Main Reinforcement
             {
                 "idx": 3, "ref_time": "2026年10月14日13时50分", "template_id": "T2-1", "role": "reinforcement_session",
                 "source": main_mt, "type": "main", "start": "2026年10月14日14时00分", "end": "2026年10月14日16时00分", "dur": "120min",
-                "env": "转场大巴刚到现场", "action": "reinforce_main_memory"
+                "env": "转场大巴刚到现场", 
+                "action": "reinforce_explicit_memory" if decl_mode == "explicit_declaration" else "crystallize_implicit_memory",
+                "declaration_mode": decl_mode
             },
             # 04: Sub 2 Evidence
             {
@@ -139,6 +150,7 @@ class DynamicTimelinePlanner:
                 "blueprint_type": cfg["type"],
                 "scenario_env": cfg["env"],
                 "memory_action": cfg["action"],
+                "declaration_mode": cfg.get("declaration_mode", decl_mode),
                 "target_params": {
                     "application_name": src["application_name"],
                     "service_name": src["service_name"],

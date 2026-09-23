@@ -1,0 +1,182 @@
+{
+  "persona_id": "mobile_persona_006",
+  "category": "公共安全与移动执勤",
+  "persona_summary": "移动执勤人员",
+  "static_profile": {
+    "user_id": "USER_006",
+    "identity": "国际执法经验丰富的安全官，长期从事跨境巡逻、夜间值守、事故现场处置与应急集结任务，对文化差异高度敏感，工作全程依赖手机移动核心网（4G/5G）直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "钉钉",
+      "腾讯会议",
+      "高德地图"
+    ],
+    "speech_archetype": "security_officer_speaker",
+    "speech_style": {
+      "tone": "简洁、克制、指令感强，习惯用短句确认任务与位置，强调时效与安全。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "收到请回复",
+        "按预案走"
+      ],
+      "typical_habits": "先确认位置与时限，再下达或接收指令；对模糊表达会主动追问具体参数，如清晰度、时延和回传稳定性。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "夜间巡逻与现场取证回传",
+      "period_type": "weekly",
+      "days": [
+        "Wednesday",
+        "Saturday"
+      ],
+      "time_range": "20:00-23:00",
+      "application_name": "微信",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "微讯",
+          "执勤群"
+        ],
+        "service_aliases": [
+          "现场连线",
+          "视频报位",
+          "老规矩连线"
+        ]
+      },
+      "param_mappings": {
+        "resolution": {
+          "高清": "1080p",
+          "清晰点": "1080p",
+          "能看清人脸": "1080p"
+        },
+        "rtt": {
+          "低时延": "50ms",
+          "别卡": "50ms",
+          "及时送达": "50ms"
+        }
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_level": "explicit_long_term_declaration"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_01",
+        "event_name": "跨城联合执法专项行动周",
+        "valid_from": "2026-11-02",
+        "valid_to": "2026-11-08",
+        "impact_scope": "temporary",
+        "scene_description": "跨城高速路口、临时检查站与应急集结区，移动过程中网络切换频繁，现场需要快速回传人员车辆核验图片并保持调度语音畅通。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        },
+        "trigger_reason": "跨城行动中基站切换频繁且现场带宽竞争激烈，优先保障调度消息与位置共享的极低时延，适当降低视频分辨率以换取稳定回传。"
+      }
+    ],
+    "sub_storylines": [
+      {
+        "sub_id": "SUB_MT_01",
+        "name": "值班室录像复盘与案情沟通",
+        "period_type": "weekly_evening",
+        "days": [
+          "Sunday",
+          "Wednesday"
+        ],
+        "trigger_condition": "值班结束回到驻点后，需要与同事复盘执法记录、核对案情细节。",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "aliases": {
+          "app_aliases": [
+            "腾讯会",
+            "复盘会"
+          ],
+          "service_aliases": [
+            "碰一下案情",
+            "复盘会",
+            "对一下记录"
+          ]
+        },
+        "param_mappings": {
+          "resolution": {
+            "标清": "720p",
+            "能看清就行": "720p"
+          },
+          "rtt": {
+            "能听清就行": "100ms",
+            "别断线": "100ms"
+          }
+        }
+      },
+      {
+        "sub_id": "SUB_MT_02",
+        "name": "跨部门临时调度与位置共享",
+        "period_type": "sporadic_evening",
+        "trigger_condition": "突发警情或临时集结时，需要与交警、消防或医疗等多部门快速对齐位置与任务。",
+        "application_name": "钉钉",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "aliases": {
+          "app_aliases": [
+            "钉钉群",
+            "调度台"
+          ],
+          "service_aliases": [
+            "拉个会",
+            "对齐一下",
+            "共享位置"
+          ]
+        },
+        "param_mappings": {
+          "resolution": {
+            "超清": "1080p",
+            "看细节": "1080p"
+          },
+          "rtt": {
+            "不卡": "80ms",
+            "快点连上": "80ms"
+          }
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "name": "个人休息时刷短视频",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "scenario_description": "非执勤时段在宿舍或家中用手机随意浏览短视频，与工作任务无关。",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "name": "家属临时视频通话",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "scenario_description": "执勤间隙或休息日与家人进行单次视频通话，不属于周期性任务通信。",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

@@ -21,7 +21,7 @@ class PersonaGenerator:
 1. 涉及的应用必须使用标准中文名（如：微信、抖音、快手、腾讯会议、钉钉、飞书、哔哩哔哩、小红书等）。
 2. 支持的标准业务仅限：开直播、看直播、视频通话、会议、短视频、游戏、云游戏。
 3. 必须明确解耦出：
-   - periodic_main_storyline (周期性主线记忆): 该职业核心高频活动，指定周几/时段、APP、业务、分辨率、时延上限、口语别名及模糊词映射。
+   - periodic_main_storyline (周期性主线记忆): 该职业核心高频活动，指定周几/时段、APP、业务、分辨率、时延上限、口语别名及模糊词映射、以及 declaration_mode ("explicit_declaration" 用户首轮主动声明"记一下/以后按老规矩"，或 "implicit_induction" 首轮普通单次需求，后续多次发生后由Agent提议固化)。
    - scenario_events (场景化事件驱动记忆): 1个具有代表性的突发/阶段性事件（如促销展会、赛事周、跨城出差季），具有起止日期（在2026年10月-11月之间）、特定环境、以及对主线参数的临时纠正值。
    - sub_storylines (支线记忆): 2条次频非主线业务（如大巴视频调度、录像复盘、客户沟通等），包含触发条件、APP、业务、偏好参数。
    - distractor_pool (干扰项): 2个单次无关业务（如会议、刷短视频、看直播等），说明场景与参数。
@@ -65,6 +65,7 @@ class PersonaGenerator:
         "resolution": {{"高清": "1080p", "清晰点": "1080p"}},
         "rtt": {{"低时延": "50ms", "别卡": "50ms"}}
       }},
+      "declaration_mode": "explicit_declaration",
       "evidence_level": "explicit_long_term_declaration"
     }},
     "scenario_events": [
