@@ -4,8 +4,8 @@
   "persona_summary": "移动训练与赛事人员",
   "static_profile": {
     "user_id": "USER_008",
-    "identity": "职业得分后卫兼球队移动训练与赛事保障人员，长期随队跨区域转场，在露天球场、赛道及赛事集结区完成训练、比赛与现场保障任务，习惯深夜与队友联机打虚拟篮球游戏。",
-    "devices": "主力设备为5G智能手机，辅助设备为可穿戴运动手表与便携运动相机；便携终端确需联网时使用手机热点。",
+    "identity": "职业篮球得分后卫，长期随队进行跨区域客场转场、露天训练与赛事集结，日常以手机移动核心网完成训练记录、团队调度与赛事直播互动。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴运动手环/手表；便携终端确需联网时使用手机热点。",
     "apps": [
       "抖音",
       "微信",
@@ -14,22 +14,22 @@
     ],
     "speech_archetype": "athlete_speaker",
     "speech_style": {
-      "tone": "干脆直接、带点球场口令感，语速偏快，喜欢用短句和运动术语。",
+      "tone": "直来直去、节奏快，带点球场上的命令感和兄弟间的调侃。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "稳住节奏"
+        "先看回放"
       ],
-      "typical_habits": "布置任务前先确认网络和位置，习惯用‘老规矩’指代固定流程，用‘别掉链子’提醒队友保持状态，用‘对齐一下’确认战术或调度信息。"
+      "typical_habits": "习惯用短句同步战术和行程，遇到网络问题会直接说‘别卡’‘稳住’，训练后喜欢边看回放边在群里发语音。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "赛事直播与团队即时调度",
+      "name": "客场转场与露天训练直播调度",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "执行客场转场、露天训练或赛事集结保障任务时，需要向团队同步现场画面并保持即时调度通信。",
+      "trigger_condition": "执行客场转场、露天训练或赛事集结任务时，需要向团队和粉丝同步现场画面、进行即时通信与团队调度。",
       "period_type": "weekly",
       "days": [
         "Wednesday",
@@ -44,22 +44,25 @@
       },
       "aliases": {
         "app_aliases": [
-          "抖音直播",
-          "抖子"
+          "抖子",
+          "DY"
         ],
         "service_aliases": [
           "开播",
+          "上直播",
           "推流"
         ]
       },
       "param_mappings": {
         "resolution": {
           "高清": "1080p",
-          "清晰点": "1080p"
+          "清晰点": "1080p",
+          "蓝光": "1080p"
         },
         "rtt": {
           "低时延": "50ms",
-          "别卡": "50ms"
+          "别卡": "50ms",
+          "稳住": "50ms"
         }
       },
       "declaration_mode": "implicit_induction",
@@ -68,80 +71,85 @@
     "scenario_events": [
       {
         "event_id": "EVT_01",
-        "event_name": "跨城赛事周密集转场保障",
+        "event_name": "跨城客场赛事周",
         "valid_from": "2026-11-01",
         "valid_to": "2026-11-15",
         "impact_scope": "temporary",
-        "scene_description": "跨城赛事周期间，球队连续转场，赛事集结区与露天球场人群密集，移动网络拥塞，视频上行带宽波动明显。",
+        "scene_description": "连续跨城转场、场馆人群密集、移动网络拥塞，需要在高铁、大巴和临时休息点保持直播与团队通信连续。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
         },
-        "trigger_reason": "人群密集导致上行带宽紧张，为保证直播连续与调度指令及时，临时降低分辨率并收紧时延上限。"
+        "trigger_reason": "人群密集和移动转场导致上行带宽波动，降低分辨率并收紧时延上限以保证直播连续和团队调度不中断。"
       }
     ],
     "sub_storylines": [
       {
         "sub_id": "SUB_MT_01",
-        "name": "大巴转场视频调度会",
+        "name": "大巴转场视频调度",
         "period_type": "weekly_evening",
         "days": [
           "Sunday",
           "Wednesday"
         ],
-        "trigger_condition": "球队大巴转场途中需要临时召开视频调度会，确认次日训练与赛事安排。",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "trigger_condition": "客场转场大巴途中需要与教练组、队友进行视频通话并同步行程和战术安排。",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
         "aliases": {
           "app_aliases": [
-            "腾讯会议",
-            "会议号"
+            "V信",
+            "绿泡泡"
           ],
           "service_aliases": [
-            "开个会",
-            "对齐一下"
+            "视频一下",
+            "对个视频"
           ]
         },
         "param_mappings": {
           "resolution": {
-            "标清": "720p"
+            "标清": "720p",
+            "能看清人就行": "720p"
           },
           "rtt": {
-            "能听清就行": "100ms"
+            "能听清就行": "100ms",
+            "别断": "100ms"
           }
         }
       },
       {
         "sub_id": "SUB_MT_02",
-        "name": "训练录像复盘与战术沟通",
+        "name": "训练录像复盘与上传",
         "period_type": "sporadic_evening",
-        "trigger_condition": "训练或比赛结束后，需要与教练组远程回看录像并沟通战术调整。",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "trigger_condition": "训练结束后需要上传训练视频、记录数据并与团队进行回放复盘。",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
         "aliases": {
           "app_aliases": [
-            "微信",
-            "绿泡泡"
+            "B站",
+            "小破站"
           ],
           "service_aliases": [
-            "视频复盘",
-            "看录像"
+            "传录像",
+            "看回放",
+            "复盘视频"
           ]
         },
         "param_mappings": {
           "resolution": {
-            "超清": "1080p"
+            "超清": "1080p",
+            "清楚点": "1080p"
           },
           "rtt": {
-            "不卡": "80ms"
+            "不卡": "80ms",
+            "流畅": "80ms"
           }
         }
       }
@@ -149,10 +157,10 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "name": "深夜联机虚拟篮球游戏",
-        "application_name": "哔哩哔哩",
-        "service_name": "云游戏",
-        "scenario_description": "深夜在临时休息点与队友联机打虚拟篮球游戏，属于放松性单次活动，不纳入主线调度。",
+        "name": "临时线上会议",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "scenario_description": "临时被拉入赞助商或赛事组委会的线上沟通会，非高频主线业务。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -160,10 +168,10 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "赛前刷短视频放松",
-        "application_name": "抖音",
-        "service_name": "短视频",
-        "scenario_description": "赛前在集结区刷短视频放松，属于单次娱乐行为，不影响主线直播与调度参数。",
+        "name": "休息时刷直播",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "scenario_description": "在临时休息点或酒店放松时观看其他赛事直播，单次、非固定。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

@@ -65,11 +65,11 @@ class DynamicTimelinePlanner:
                 "storyline_trigger_type": storyline_trigger_type,
                 "trigger_condition": main_trigger_desc
             },
-            # 02: Sub 1 Evidence
+            # 02: Sub 1 Evidence (T2-2 歧义消解)
             {
-                "idx": 2, "ref_time": "2026年10月11日18时30分", "template_id": "T2-1", "role": "evidence_session",
+                "idx": 2, "ref_time": "2026年10月11日18时30分", "template_id": "T2-2", "role": "evidence_session",
                 "source": sub_01, "type": "sub_01", "start": "2026年10月11日18时45分", "end": "2026年10月11日19时45分", "dur": "60min",
-                "env": "大巴跨城转场高速公路", "action": "establish_sub_storyline_1",
+                "env": "大巴跨城转场高速公路", "action": "disambiguate_sub_storyline_1",
                 "declaration_mode": "implicit_induction",
                 "storyline_trigger_type": "location_environment",
                 "trigger_condition": "大巴转场弱网环境"
@@ -93,11 +93,12 @@ class DynamicTimelinePlanner:
                 "storyline_trigger_type": "location_environment",
                 "trigger_condition": "驻地酒店休息区"
             },
-            # 05: Distractor 1
+            # 05: Distractor 1 (T1-2 纯域外拒绝，如宽带光纤报修)
             {
-                "idx": 5, "ref_time": "2026年10月18日10时00分", "template_id": "T1-1", "role": "distractor_session",
-                "source": dist_01, "type": "distractor", "start": "2026年10月18日10时00分", "end": "2026年10月18日10时30分", "dur": "30min",
-                "env": "酒店临时办公区", "action": "distractor_no_memory"
+                "idx": 5, "ref_time": "2026年10月18日10时00分", "template_id": "T1-2", "role": "distractor_session",
+                "source": dist_01, "type": "distractor_ood", "start": "2026年10月18日10时00分", "end": "2026年10月18日10时30分", "dur": "30min",
+                "env": "酒店临时办公区网络故障", "action": "reject_out_of_domain",
+                "ood_goal": "宽带光纤装维报修"
             },
             # 06: Sub 1 Reinforcement
             {
@@ -105,11 +106,11 @@ class DynamicTimelinePlanner:
                 "source": sub_01, "type": "sub_01", "start": "2026年10月21日19时00分", "end": "2026年10月21日20时00分", "dur": "60min",
                 "env": "大巴转场途中", "action": "reinforce_sub_storyline_1"
             },
-            # 07: Main Reuse
+            # 07: Main Reuse (T2-5 延长保障时长至 180min)
             {
-                "idx": 7, "ref_time": "2026年10月24日13时45分", "template_id": "T2-1", "role": "reuse_session",
-                "source": main_mt, "type": "main", "start": "2026年10月24日14时00分", "end": "2026年10月24日16时00分", "dur": "120min",
-                "env": main_env_desc, "action": "reuse_main_memory",
+                "idx": 7, "ref_time": "2026年10月24日13时45分", "template_id": "T2-5", "role": "reuse_session",
+                "source": main_mt, "type": "main", "start": "2026年10月24日14时00分", "end": "2026年10月24日17时00分", "dur": "180min",
+                "env": main_env_desc, "action": "extend_duration_amend",
                 "storyline_trigger_type": storyline_trigger_type,
                 "trigger_condition": main_trigger_desc
             },
@@ -127,11 +128,12 @@ class DynamicTimelinePlanner:
                 "source": sub_02, "type": "sub_02", "start": "2026年10月29日20时30分", "end": "2026年10月29日22时00分", "dur": "90min",
                 "env": "驻地复盘业务", "action": "reinforce_sub_storyline_2"
             },
-            # 10: Distractor 2
+            # 10: Distractor 2 (X-1 混合诉求一办一拒)
             {
-                "idx": 10, "ref_time": "2026年11月01日12时30分", "template_id": "T1-1", "role": "distractor_session",
-                "source": dist_02, "type": "distractor", "start": "2026年11月01日12时30分", "end": "2026年11月01日13时30分", "dur": "60min",
-                "env": "周末午休个人时间", "action": "distractor_no_memory"
+                "idx": 10, "ref_time": "2026年11月01日12时30分", "template_id": "X-1", "role": "distractor_session",
+                "source": dist_02, "type": "distractor_mixed", "start": "2026年11月01日12时30分", "end": "2026年11月01日13时30分", "dur": "60min",
+                "env": "周末午休个人时间", "action": "mixed_in_out_domain",
+                "ood_goal": "手机话费充值与账单查询"
             },
             # 11: Event Correction
             {
@@ -186,13 +188,14 @@ class DynamicTimelinePlanner:
                 "reference_time": cfg["ref_time"],
                 "template_id": cfg["template_id"],
                 "memory_role": cfg["role"],
-                "round_count": 1 if cfg["template_id"].startswith("T1") else 2,
+                "round_count": 1 if (cfg["template_id"].startswith("T1") or cfg["template_id"].startswith("X-1")) else 2,
                 "blueprint_type": cfg["type"],
                 "scenario_env": cfg["env"],
                 "memory_action": cfg["action"],
                 "declaration_mode": cfg.get("declaration_mode", decl_mode),
                 "storyline_trigger_type": cfg.get("storyline_trigger_type", storyline_trigger_type if cfg["type"].startswith("main") else "time_periodic"),
                 "trigger_condition": cfg.get("trigger_condition", main_trigger_desc if cfg["type"].startswith("main") else ""),
+                "ood_goal": cfg.get("ood_goal", ""),
                 "target_params": {
                     "application_name": src["application_name"],
                     "service_name": src["service_name"],

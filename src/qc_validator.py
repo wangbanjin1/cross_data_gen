@@ -30,14 +30,15 @@ class QCValidator:
             events = s.get("event_sequence", [])
             s_passed = True
 
-            # 1. 验证必须以 Agent 结束
+            # 1. 验证必须以 Agent 结束，动作必须包含 Acknowledge 或 Reject_Request
             if not events or "agent" not in events[-1] or not events[-1]["agent"].get("utterance"):
                 report["issues"].append(f"[{sid}] 缺少 Agent 最终答复")
                 report["rule_checks"]["agent_ending_check"] = False
                 s_passed = False
-            elif "Acknowledge" not in events[-1]["agent"].get("action_types", []):
-                # 记录告警或强制要求
-                pass
+            elif not any(act in events[-1]["agent"].get("action_types", []) for act in ["Acknowledge", "Reject_Request"]):
+                report["issues"].append(f"[{sid}] Agent 最终答复动作必须为 Acknowledge 或 Reject_Request")
+                report["rule_checks"]["agent_ending_check"] = False
+                s_passed = False
 
             # 2. 验证强化/复用必须 ≥ 2 轮确认
             if role in ["reinforcement_session", "reuse_session"]:
@@ -48,7 +49,7 @@ class QCValidator:
                 else:
                     t1_a_acts = events[0].get("agent", {}).get("action_types", [])
                     t2_u_acts = events[1].get("user", {}).get("action_types", [])
-                    if "Confirm_Slot" not in t1_a_acts and "Request_Slot" not in t1_a_acts:
+                    if not any(act in t1_a_acts for act in ["Confirm_Slot", "Request_Slot", "Request_Disambiguation"]):
                         report["issues"].append(f"[{sid}] 第1轮 Agent 未执行反问确认动作")
                         report["rule_checks"]["multi_turn_confirmation_check"] = False
                         s_passed = False
@@ -59,9 +60,9 @@ class QCValidator:
                 report["rule_checks"]["memory_trace_fields_check"] = False
                 s_passed = False
 
-            # 4. 验证白名单合规性
+            # 4. 验证白名单合规性（域外拒绝意图除外）
             intents = s.get("intents", [])
-            if intents:
+            if intents and intents[0].get("status") != "rejected":
                 app_val = intents[0].get("params", {}).get("application_name", {}).get("value")
                 srv_val = intents[0].get("params", {}).get("service_name", {}).get("value")
                 if not app_val or not srv_val:

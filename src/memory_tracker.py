@@ -225,10 +225,10 @@ class MemoryTracker:
                 "description": "临时赛事保障窗口已到期，Agent 提示恢复并成功激活原长期主线偏好（1080p, 50ms）。"
             })
 
-        elif b_type == "distractor":
+        elif b_type in ["distractor", "distractor_ood", "distractor_mixed"]:
             memory_events.append({
                 "event_type": "no_memory_change",
-                "description": "单次任务业务，与长期偏好无关，不发生记忆变更。"
+                "description": "单次任务业务或域外诉求，与长期偏好无关，不发生记忆变更。"
             })
 
         gold_after = copy.deepcopy(self.active_memories)

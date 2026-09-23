@@ -4,63 +4,65 @@
   "persona_summary": "户外公益与社群组织者",
   "static_profile": {
     "user_id": "USER_003",
-    "identity": "刑事司法改革倡导者，常驻利兹，长期在户外调研点、临时会议区、群众服务现场及社区走访点组织公益活动、协调志愿者、发布通知并收集电子反馈，全程依赖手机移动核心网直接联网。",
-    "devices": "主力设备为5G智能手机，辅助便携终端在确需联网时使用手机热点。",
+    "identity": "刑事司法改革倡导者，常驻利兹，长期在户外调研点、临时会议区、群众服务现场与社区走访点之间移动办公，负责组织公益活动、协调志愿者、收集电子反馈并回传政策材料。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携平板；确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
     "apps": [
       "腾讯会议",
       "微信",
       "钉钉",
-      "哔哩哔哩"
+      "飞书"
     ],
-    "speech_archetype": "outdoor_streamer",
+    "speech_archetype": "outdoor_community_organizer",
     "speech_style": {
-      "tone": "干脆利落、带现场指挥感，常用短句推动协作，语气务实且带一点社群号召力。",
+      "tone": "直接、务实、带现场指挥感，习惯用短句推进协作，强调稳定和别掉链子。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "现场见"
+        "现场优先"
       ],
-      "typical_habits": "习惯在出发前先发定位和议程，现场用语音加文字快速确认人员位置，遇到网络不稳会直接说‘切热点’或‘先保会议’。"
+      "typical_habits": "在移动中快速发起会议、同步志愿者位置、催材料回传；先确认网络和时延，再安排具体任务。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "利兹露天集结区公益直播与志愿者调度",
+      "name": "利兹露天集结区公益直播与远程会议",
       "storyline_trigger_type": "location_environment",
-      "trigger_condition": "身处利兹露天集结区弱网区域，需要面向社区走访点与跨区域通勤志愿者进行现场直播、即时通信和材料回传时触发。",
+      "trigger_condition": "身处利兹露天集结区弱网区域，需要面向社区成员开直播并同步远程会议时触发。",
       "period_type": "weekly",
       "days": [
         "Wednesday",
         "Saturday"
       ],
       "time_range": "14:00-17:00",
-      "application_name": "哔哩哔哩",
-      "service_name": "开直播",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
       "preferred_params": {
         "resolution": "1080p",
         "rtt_max": "50ms"
       },
       "aliases": {
         "app_aliases": [
-          "B站",
-          "哔哩"
+          "腾讯会议",
+          "会议软件"
         ],
         "service_aliases": [
-          "开播",
-          "现场直播",
-          "公益直播"
+          "开个会",
+          "线上对齐",
+          "远程碰头"
         ]
       },
       "param_mappings": {
         "resolution": {
           "高清": "1080p",
-          "清晰点": "1080p"
+          "清晰点": "1080p",
+          "能看清脸": "1080p"
         },
         "rtt": {
           "低时延": "50ms",
-          "别卡": "50ms"
+          "别卡": "50ms",
+          "稳一点": "50ms"
         }
       },
       "declaration_mode": "explicit_declaration",
@@ -69,82 +71,84 @@
     "scenario_events": [
       {
         "event_id": "EVT_01",
-        "event_name": "利兹司法改革社区行动周",
+        "event_name": "利兹司法改革社区宣传周",
         "valid_from": "2026-11-01",
         "valid_to": "2026-11-15",
         "impact_scope": "temporary",
-        "scene_description": "在利兹露天集结区、社区走访点和临时会议区连续开展行动周活动，现场人流密集、移动网络拥塞，需优先保障视频会议与材料回传稳定。",
+        "scene_description": "利兹市中心露天广场与周边街区人流密集，临时搭建的社区宣传点网络拥塞，需在移动中维持直播与会议协同。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
         },
-        "trigger_reason": "行动周期间现场并发直播与会议增多，为降低卡顿和丢包，临时降低分辨率并收紧时延上限，确保会议通信稳定和材料传输可靠。"
+        "trigger_reason": "宣传周期间现场人流大、无线环境复杂，优先保证低时延和连接稳定，适当降低分辨率。"
       }
     ],
     "sub_storylines": [
       {
         "sub_id": "SUB_MT_01",
-        "name": "志愿者晚间视频调度会",
+        "name": "志愿者位置同步与即时通信",
         "period_type": "weekly_evening",
         "days": [
           "Sunday",
           "Wednesday"
         ],
-        "trigger_condition": "结束白天社区走访后，在临时会议区或通勤途中需要与跨区域志愿者对齐次日安排时触发。",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "trigger_condition": "社区走访结束后，需要在移动途中快速同步志愿者位置和任务进度时触发。",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
         "aliases": {
           "app_aliases": [
-            "腾讯会",
-            "会议App"
+            "微信",
+            "绿泡泡"
           ],
           "service_aliases": [
-            "碰一下",
-            "线上对齐",
-            "开个短会"
+            "打个视频",
+            "对一下位置"
           ]
         },
         "param_mappings": {
           "resolution": {
-            "标清": "720p"
+            "标清": "720p",
+            "能看就行": "720p"
           },
           "rtt": {
-            "能听清就行": "100ms"
+            "能听清就行": "100ms",
+            "别太卡": "100ms"
           }
         }
       },
       {
         "sub_id": "SUB_MT_02",
-        "name": "政策资料与现场记录回传",
+        "name": "政策材料回传与表单核对",
         "period_type": "sporadic_evening",
-        "trigger_condition": "在社区走访点或公共活动现场收集完电子表单、照片和现场记录后，需要即时回传并查询政策资料时触发。",
+        "trigger_condition": "在临时会议区或跨区域通勤途中，需要回传政策资料并核对电子表单时触发。",
         "application_name": "钉钉",
-        "service_name": "视频通话",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
         "aliases": {
           "app_aliases": [
-            "钉钉办公",
-            "Ding"
+            "钉钉",
+            "钉一下"
           ],
           "service_aliases": [
-            "对一下材料",
-            "回传确认",
-            "视频核对"
+            "材料过一下",
+            "表单对齐"
           ]
         },
         "param_mappings": {
           "resolution": {
-            "超清": "1080p"
+            "超清": "1080p",
+            "清楚点": "1080p"
           },
           "rtt": {
-            "不卡": "80ms"
+            "不卡": "80ms",
+            "顺一点": "80ms"
           }
         }
       }
@@ -152,10 +156,10 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "name": "临时查看短视频",
+        "name": "午休刷短视频",
         "application_name": "抖音",
         "service_name": "短视频",
-        "scenario_description": "在跨区域通勤途中短暂刷短视频放松，非工作主线，不涉及志愿者调度或材料回传。",
+        "scenario_description": "在社区走访间隙短暂休息，刷本地新闻和公益相关短视频。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -163,10 +167,10 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "围观公益直播",
-        "application_name": "快手",
+        "name": "晚间看直播",
+        "application_name": "哔哩哔哩",
         "service_name": "看直播",
-        "scenario_description": "在临时会议区等待人员集合时，偶尔打开快手观看其他公益直播，属于单次无关业务。",
+        "scenario_description": "回到住处后偶尔观看政策解读或公共事务相关直播，非工作必需。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

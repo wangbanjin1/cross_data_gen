@@ -4,24 +4,24 @@
   "persona_summary": "移动文化服务人员",
   "static_profile": {
     "user_id": "USER_017",
-    "identity": "韩国公共图书馆儿童文学馆员，长期关注作家李基勋的作品，负责社区阅读推广、馆藏外借流转与户外文化活动现场服务，每周有3至5次外出任务，全程依赖手机4G/5G移动核心网直接联网。",
+    "identity": "韩国公共图书馆儿童文学馆员，长期负责社区阅读推广、馆藏外借流转与户外文化活动现场服务，深度关注李基勋作品并经常组织相关主题共读活动。",
     "devices": "主力设备为5G智能手机，辅助设备为平板电脑，便携终端确需联网时使用手机热点。",
     "apps": [
       "微信",
       "腾讯会议",
       "抖音",
-      "高德地图"
+      "哔哩哔哩"
     ],
-    "speech_archetype": "cultural_service_librarian",
+    "speech_archetype": "librarian_field_coordinator",
     "speech_style": {
-      "tone": "温和亲切、条理清晰，带一点书卷气，遇到现场任务时语速会加快并反复确认细节。",
+      "tone": "温和耐心、条理清晰，现场协调时干脆利落，习惯用阅读推广人的口吻确认信息。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "我这边先登记好"
+        "先登记再流转"
       ],
-      "typical_habits": "习惯在出发前先确认路线和馆藏清单，活动现场用语音消息同步进度，遇到网络波动会立刻提醒同伴切换热点或重连。"
+      "typical_habits": "出发前先确认馆藏清单和活动流程，现场用手机快速检索、登记和共享位置，遇到弱覆盖会提醒同伴稍等重连。"
     }
   },
   "dynamic_profile": {
@@ -29,7 +29,7 @@
       "storyline_id": "MAIN_MT_01",
       "name": "社区阅读活动与馆藏外借现场协作",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "执行社区阅读推广活动、展品外借登记或户外文化活动现场任务时触发",
+      "trigger_condition": "执行社区阅读推广活动或馆藏外借流转任务时触发，需要在城市街区、公共活动现场及跨区域出行途中进行远程协作与信息登记。",
       "period_type": "weekly",
       "days": [
         "Wednesday",
@@ -44,13 +44,13 @@
       },
       "aliases": {
         "app_aliases": [
-          "会议软件",
-          "腾讯会议那个"
+          "腾讯会议",
+          "会议软件"
         ],
         "service_aliases": [
           "开个会",
-          "现场连线",
-          "远程协作"
+          "线上对齐",
+          "远程碰一下"
         ]
       },
       "param_mappings": {
@@ -69,28 +69,28 @@
     "scenario_events": [
       {
         "event_id": "EVT_01",
-        "event_name": "跨城儿童文学巡展周",
+        "event_name": "跨城儿童文学巡展与户外共读周",
         "valid_from": "2026-11-01",
         "valid_to": "2026-11-15",
         "impact_scope": "temporary",
-        "scene_description": "跨城巡展期间在户外广场、临时展棚和移动途中进行馆藏查询、流转登记与活动图文发布，现场人流密集、网络覆盖波动较大。",
+        "scene_description": "跨城巡展期间在户外广场、临时展棚和移动途中进行远程协作，网络覆盖波动较大，需要优先保证音视频稳定和消息及时送达。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
         },
-        "trigger_reason": "跨城巡展现场网络环境复杂，需要更低时延保障即时通信和位置共享，适当降低分辨率以换取连接稳定性。"
+        "trigger_reason": "户外临时场地和跨区域移动导致带宽与覆盖不稳定，降低分辨率并收紧时延上限以保证会议连续性和任务续传。"
       }
     ],
     "sub_storylines": [
       {
         "sub_id": "SUB_MT_01",
-        "name": "活动图文短视频发布",
+        "name": "活动图文与短视频发布",
         "period_type": "weekly_evening",
         "days": [
           "Sunday",
           "Wednesday"
         ],
-        "trigger_condition": "社区阅读活动或展品外借结束后整理现场图文并发布短视频时触发",
+        "trigger_condition": "社区阅读活动或展品外借结束后，需要整理现场图文并发布活动记录。",
         "application_name": "抖音",
         "service_name": "短视频",
         "preferred_params": {
@@ -99,12 +99,13 @@
         },
         "aliases": {
           "app_aliases": [
-            "短视频软件",
-            "抖音那个"
+            "抖音",
+            "短视频平台"
           ],
           "service_aliases": [
-            "发个短视频",
-            "传一下现场"
+            "发个现场",
+            "传段视频",
+            "活动记录"
           ]
         },
         "param_mappings": {
@@ -118,9 +119,9 @@
       },
       {
         "sub_id": "SUB_MT_02",
-        "name": "馆藏流转远程沟通",
+        "name": "远程馆藏查询与即时沟通",
         "period_type": "sporadic_evening",
-        "trigger_condition": "馆藏外借流转信息需要与馆内同事远程核对或临时沟通时触发",
+        "trigger_condition": "在户外等候区或临时停留点需要查询馆藏、确认流转信息或与同事即时沟通时触发。",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
@@ -129,12 +130,13 @@
         },
         "aliases": {
           "app_aliases": [
-            "微信那个",
-            "聊天软件"
+            "微信",
+            "绿泡泡"
           ],
           "service_aliases": [
             "视频一下",
-            "打个视频"
+            "打个视频",
+            "远程确认"
           ]
         },
         "param_mappings": {
@@ -150,10 +152,10 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "name": "临时线上会议",
-        "application_name": "钉钉",
-        "service_name": "会议",
-        "scenario_description": "偶尔被邀请参加跨馆协作线上会议，属于单次非主线业务。",
+        "name": "临时观看儿童文学直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "scenario_description": "在临时停留点偶然看到李基勋相关儿童文学直播，短暂观看了解活动灵感。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -161,10 +163,10 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "休息时看直播",
-        "application_name": "哔哩哔哩",
-        "service_name": "看直播",
-        "scenario_description": "午休或等候间隙偶尔观看文化类直播，属于单次非主线业务。",
+        "name": "休息时浏览短视频",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "scenario_description": "户外活动间隙休息时刷短视频放松，与主线任务无关。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

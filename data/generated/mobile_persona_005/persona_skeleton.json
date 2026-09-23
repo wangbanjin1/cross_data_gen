@@ -4,8 +4,8 @@
   "persona_summary": "户外视觉创作者",
   "static_profile": {
     "user_id": "USER_005",
-    "identity": "退休音乐人，拥有丰富的词曲创作与制作经验，活跃于户外演出、音乐节与街头活动，常在城市采风路线和展览布置区进行现场音视频采集、直播与作品上传，并乐于向年轻创作者传授经验。",
-    "devices": "主力设备为5G智能手机，辅助设备为平板电脑，便携终端确需联网时使用手机热点。",
+    "identity": "退休音乐人，深耕词曲创作与音乐制作，常在户外演出点、音乐节、街头活动或临时排练现场进行现场音视频采集、直播与作品上传，并乐于向年轻创作者传授经验。",
+    "devices": "5G智能手机＋平板电脑，便携终端确需联网时使用手机热点",
     "apps": [
       "抖音",
       "快手",
@@ -14,14 +14,14 @@
     ],
     "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "随性、直接、带点老派音乐人的江湖气，喜欢用行话和现场术语。",
+      "tone": "老练、直接、带点舞台腔，喜欢用音乐行话和现场口令",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "这条过了"
+        "这条过"
       ],
-      "typical_habits": "习惯在开播前确认网络和机位，喜欢用简短口令指挥团队，遇到卡顿会立刻要求切换或重连。"
+      "typical_habits": "习惯在开播前快速确认上行和时延，现场用口语化指令让团队对齐参数，遇到弱覆盖会立刻要求续传或切热点。"
     }
   },
   "dynamic_profile": {
@@ -29,7 +29,7 @@
       "storyline_id": "MAIN_MT_01",
       "name": "户外音乐现场直播与作品上传",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "执行户外音乐演出、街头活动或音乐节现场直播任务时",
+      "trigger_condition": "执行户外音乐演出、街头采风或临时排练现场的直播与作品上传任务",
       "period_type": "weekly",
       "days": [
         "Wednesday",
@@ -44,8 +44,8 @@
       },
       "aliases": {
         "app_aliases": [
-          "抖音直播",
-          "抖子"
+          "抖子",
+          "抖音直播"
         ],
         "service_aliases": [
           "开播",
@@ -57,7 +57,7 @@
         "resolution": {
           "高清": "1080p",
           "清晰点": "1080p",
-          "全高清": "1080p"
+          "1080P": "1080p"
         },
         "rtt": {
           "低时延": "50ms",
@@ -75,24 +75,24 @@
         "valid_from": "2026-11-01",
         "valid_to": "2026-11-15",
         "impact_scope": "temporary",
-        "scene_description": "音乐节现场人群密集，基站负载高，上行带宽波动明显，需要优先保证直播互动低时延和连接可用。",
+        "scene_description": "音乐节现场人群密集、基站负载高，户外演出点与临时排练现场需要稳定上行和低时延互动。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
         },
-        "trigger_reason": "密集人群导致网络拥塞，降低分辨率并收紧时延上限以保障直播互动流畅。"
+        "trigger_reason": "密集人群导致网络拥塞，优先保证直播互动低时延和连接可用，临时降低分辨率以稳住上行。"
       }
     ],
     "sub_storylines": [
       {
         "sub_id": "SUB_MT_01",
-        "name": "演出录像复盘与团队沟通",
+        "name": "排练录像复盘与团队沟通",
         "period_type": "weekly_evening",
         "days": [
           "Sunday",
           "Wednesday"
         ],
-        "trigger_condition": "演出结束后与团队复盘录像、讨论剪辑和上传计划时",
+        "trigger_condition": "排练结束后与乐队成员复盘录像、沟通编曲细节",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
@@ -102,29 +102,29 @@
         "aliases": {
           "app_aliases": [
             "微信视频",
-            "绿信"
+            "绿泡泡"
           ],
           "service_aliases": [
-            "对一下画面",
-            "复盘通话"
+            "对一下",
+            "碰一下"
           ]
         },
         "param_mappings": {
           "resolution": {
             "标清": "720p",
-            "能看就行": "720p"
+            "能看清就行": "720p"
           },
           "rtt": {
             "能听清就行": "100ms",
-            "别太卡": "100ms"
+            "别断": "100ms"
           }
         }
       },
       {
         "sub_id": "SUB_MT_02",
-        "name": "云端素材同步与客户预览",
+        "name": "云端素材同步与社交发布",
         "period_type": "sporadic_evening",
-        "trigger_condition": "完成现场拍摄后需要将高清图片和设计稿上传给客户预览时",
+        "trigger_condition": "现场采集完成后需要同步高清素材并发布短视频",
         "application_name": "哔哩哔哩",
         "service_name": "短视频",
         "preferred_params": {
@@ -134,21 +134,21 @@
         "aliases": {
           "app_aliases": [
             "B站",
-            "哔哩"
+            "小破站"
           ],
           "service_aliases": [
-            "传片",
-            "发预览"
+            "发片",
+            "上传"
           ]
         },
         "param_mappings": {
           "resolution": {
             "超清": "1080p",
-            "高清": "1080p"
+            "原画": "1080p"
           },
           "rtt": {
             "不卡": "80ms",
-            "流畅": "80ms"
+            "顺滑": "80ms"
           }
         }
       }
@@ -159,7 +159,7 @@
         "name": "临时线上会议",
         "application_name": "腾讯会议",
         "service_name": "会议",
-        "scenario_description": "偶尔在户外采风间隙参加合作方临时召集的线上会议，非固定周期。",
+        "scenario_description": "偶尔在户外临时接入主办方或合作方的线上会议，非主线高频活动。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -167,10 +167,10 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "休息时刷短视频",
+        "name": "休息时看直播",
         "application_name": "快手",
-        "service_name": "短视频",
-        "scenario_description": "在演出间隙或采风路上休息时刷短视频放松，单次行为，无固定规律。",
+        "service_name": "看直播",
+        "scenario_description": "休息间隙刷同行直播或音乐节直播，单次、非任务驱动。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

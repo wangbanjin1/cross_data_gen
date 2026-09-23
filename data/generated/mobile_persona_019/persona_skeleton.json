@@ -4,35 +4,34 @@
   "persona_summary": "户外视觉创作者",
   "static_profile": {
     "user_id": "USER_019",
-    "identity": "脾气火爆但才华横溢的音乐制作人兼户外视觉创作者，长期在户外演出点、展览布置区、城市采风路线、音乐节、街头活动或临时排练现场工作，负责现场音视频采集、直播、作品上传、云端素材同步与团队沟通。",
-    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "identity": "户外视觉创作者兼音乐制作人，脾气火爆但才华横溢，常在城市街区、音乐节、展览布置区与临时排练现场进行采风、拍摄与直播，习惯用手机4G/5G直接联网完成现场音视频采集、作品上传与团队沟通。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点。",
     "apps": [
       "抖音",
       "快手",
       "哔哩哔哩",
       "微信",
       "钉钉",
-      "腾讯会议"
+      "小红书"
     ],
     "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "直接、急躁、带压迫感，习惯用命令式短句推进工作，但对作品质量要求极高。",
+      "tone": "急促直接、带命令感，偶尔夹杂行业黑话，情绪上来时语速加快。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "这条必须过",
-        "现场别给我卡"
+        "这条必须过"
       ],
-      "typical_habits": "在排练、采风和直播前反复确认网络与设备状态；遇到卡顿会立刻要求切换参数或重连；习惯用口语化指令让团队快速执行。"
+      "typical_habits": "习惯在开播前用短句快速确认参数，遇到卡顿会直接要求切网络或降清晰度，收工后喜欢用语音复盘。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "户外演出与采风现场直播上传",
+      "name": "户外音乐现场直播与作品上传",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每周三周六下午常规业务，在户外演出点、展览布置区、城市采风路线、音乐节或街头活动现场进行现场音视频采集、直播与作品上传。",
+      "trigger_condition": "每周三周六下午常规业务，在户外演出点、展览布置区或城市采风路线进行现场直播与高清作品上传",
       "period_type": "weekly",
       "days": [
         "Wednesday",
@@ -47,25 +46,25 @@
       },
       "aliases": {
         "app_aliases": [
-          "抖音直播",
-          "抖子"
+          "抖子",
+          "抖音直播"
         ],
         "service_aliases": [
           "开播",
           "上直播",
-          "现场推流"
+          "推流"
         ]
       },
       "param_mappings": {
         "resolution": {
           "高清": "1080p",
           "清晰点": "1080p",
-          "别糊": "1080p"
+          "超清": "1080p"
         },
         "rtt": {
           "低时延": "50ms",
           "别卡": "50ms",
-          "互动要快": "50ms"
+          "跟手": "50ms"
         }
       },
       "declaration_mode": "explicit_declaration",
@@ -74,86 +73,86 @@
     "scenario_events": [
       {
         "event_id": "EVT_01",
-        "event_name": "跨城音乐节密集演出周",
+        "event_name": "城市音乐节密集人群直播周",
         "valid_from": "2026-11-01",
         "valid_to": "2026-11-15",
         "impact_scope": "temporary",
-        "scene_description": "跨城参加音乐节，连续多日在高密度人群、临时舞台和弱覆盖路段进行直播、音视频采集与作品上传，网络拥塞和移动切换频繁。",
+        "scene_description": "音乐节现场人群密集、基站负载高，户外移动直播需要优先保证连接可用与上行稳定，避免因拥塞导致直播中断。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
         },
-        "trigger_reason": "密集人群中连接可用优先，降低分辨率以保障直播互动低时延和音视频上行稳定，避免任务中断。"
+        "trigger_reason": "密集人群下1080p上行压力大，临时降为720p并收紧时延上限，优先保障直播互动低时延与连接可用。"
       }
     ],
     "sub_storylines": [
       {
         "sub_id": "SUB_MT_01",
-        "name": "团队远程会议对齐",
+        "name": "团队视频复盘与素材同步",
         "period_type": "weekly_evening",
         "days": [
           "Sunday",
           "Wednesday"
         ],
-        "trigger_condition": "每周日与周三晚间，与经纪、摄影、后期和客户远程对齐演出素材、剪辑方向与发布节奏。",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "trigger_condition": "每周日与周三晚间收工后，与团队进行视频通话复盘当日拍摄素材并同步云端文件",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
         "aliases": {
           "app_aliases": [
-            "腾讯会议",
-            "会议App"
+            "微信视频",
+            "绿泡泡"
           ],
           "service_aliases": [
-            "对齐一下",
-            "开个会",
+            "对一下",
+            "复盘通话",
             "碰一下"
           ]
         },
         "param_mappings": {
           "resolution": {
             "标清": "720p",
-            "能看清脸就行": "720p"
+            "能看就行": "720p"
           },
           "rtt": {
             "能听清就行": "100ms",
-            "别断线": "100ms"
+            "别断": "100ms"
           }
         }
       },
       {
         "sub_id": "SUB_MT_02",
-        "name": "演出录像复盘与短视频发布",
+        "name": "客户方案远程沟通",
         "period_type": "sporadic_evening",
-        "trigger_condition": "演出或采风结束后当晚，临时进行录像复盘、素材筛选，并在短视频平台发布作品。",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "trigger_condition": "客户临时要求确认设计稿或演出方案时，在晚间发起远程会议沟通",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
         "aliases": {
           "app_aliases": [
-            "B站",
-            "哔哩哔哩"
+            "腾讯会议",
+            "会议号"
           ],
           "service_aliases": [
-            "发片",
-            "传作品",
-            "复盘片"
+            "对齐一下",
+            "过方案",
+            "拉个会"
           ]
         },
         "param_mappings": {
           "resolution": {
             "超清": "1080p",
-            "画质拉满": "1080p"
+            "清楚点": "1080p"
           },
           "rtt": {
             "不卡": "80ms",
-            "上传别掉": "80ms"
+            "流畅": "80ms"
           }
         }
       }
@@ -161,10 +160,10 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "name": "临时看同行直播",
+        "name": "通勤路上刷短视频",
         "application_name": "快手",
-        "service_name": "看直播",
-        "scenario_description": "在采风间隙或等待设备调试时，单次打开快手观看同行音乐节直播，参考现场机位和互动方式。",
+        "service_name": "短视频",
+        "scenario_description": "通勤或转场途中单次刷短视频放松，非固定周期，不涉及直播推流。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -172,10 +171,10 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "与客户视频通话确认设计稿",
-        "application_name": "微信",
-        "service_name": "视频通话",
-        "scenario_description": "在展览布置区临时与客户视频通话，确认高清图片、设计稿和现场布置细节。",
+        "name": "休息时看同行直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "scenario_description": "夜间休息或等待素材导出时，单次观看同行音乐直播，非工作主线。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

@@ -4,65 +4,65 @@
   "persona_summary": "高频移动网络使用者",
   "static_profile": {
     "user_id": "USER_007",
-    "identity": "休闲棒球爱好者，依赖博客预测经营梦幻棒球联盟，每周多次在城市街区、公共活动现场及跨区域出行途中使用移动网络完成信息查询、位置共享、即时通信与短视频上传，全程以手机4G/5G直接联网。",
+    "identity": "一名休闲棒球爱好者，依赖博客的预测来经营自己的梦幻棒球联盟；日常频繁在城市街区、公共活动现场及跨区域出行途中活动，习惯用手机移动核心网完成信息查询、位置共享、即时通信与短视频上传。",
     "devices": "主力设备为5G智能手机，辅助设备为可穿戴设备；便携终端确需联网时使用手机热点。",
     "apps": [
       "微信",
       "抖音",
       "腾讯会议",
-      "哔哩哔哩"
+      "小红书"
     ],
-    "speech_archetype": "casual_fan_mobile",
+    "speech_archetype": "casual_fan_mobile_user",
     "speech_style": {
-      "tone": "轻松随意、带点球迷圈子的调侃感，说话直接不绕弯。",
+      "tone": "轻松随意、带点球迷圈子的口语化表达，偶尔夹杂棒球术语和网络用语。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
-        "对齐一下",
-        "稳一手"
+        "先看一眼预测",
+        "这波稳不稳"
       ],
-      "typical_habits": "习惯用短句快速确认信息，遇到网络波动会立刻提醒对方，喜欢在移动中同步位置和赛况。"
+      "typical_habits": "习惯在移动途中快速确认信息、分享位置和短视频，遇到关键赛事或联盟决策时会反复核对博客预测，并催促同伴及时同步。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "每周梦幻棒球数据同步与短视频上传",
+      "name": "每周梦幻棒球预测同步与移动协作",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每周三周六下午常规业务，外出途中或公共活动现场进行梦幻棒球数据查询、位置共享与现场短视频上传",
+      "trigger_condition": "每周三、周六下午常规业务：查看博客预测、同步梦幻棒球联盟信息并完成移动协作",
       "period_type": "weekly",
       "days": [
         "Wednesday",
         "Saturday"
       ],
       "time_range": "14:00-17:00",
-      "application_name": "抖音",
-      "service_name": "短视频",
+      "application_name": "微信",
+      "service_name": "视频通话",
       "preferred_params": {
         "resolution": "1080p",
         "rtt_max": "50ms"
       },
       "aliases": {
         "app_aliases": [
-          "抖子",
-          "短视频平台"
+          "微信电话",
+          "绿泡泡"
         ],
         "service_aliases": [
-          "发个现场",
-          "传段小视频",
-          "刷一下"
+          "对一下预测",
+          "开个视频聊聊",
+          "线上碰一下"
         ]
       },
       "param_mappings": {
         "resolution": {
           "高清": "1080p",
           "清晰点": "1080p",
-          "别糊": "1080p"
+          "看得清人就行": "1080p"
         },
         "rtt": {
           "低时延": "50ms",
           "别卡": "50ms",
-          "秒传": "50ms"
+          "别掉链子": "50ms"
         }
       },
       "declaration_mode": "explicit_declaration",
@@ -71,43 +71,43 @@
     "scenario_events": [
       {
         "event_id": "EVT_01",
-        "event_name": "跨城棒球观赛周",
+        "event_name": "梦幻棒球季后赛冲刺周",
         "valid_from": "2026-11-01",
         "valid_to": "2026-11-15",
         "impact_scope": "temporary",
-        "scene_description": "跨城出行途中和户外等候区，移动网络覆盖不稳定，需要临时降低分辨率并收紧时延以保证直播和短视频上传不中断。",
+        "scene_description": "季后赛冲刺阶段，用户频繁在户外等候区、临时停留点和跨区域出行途中查看博客预测，并与联盟成员进行视频通话和位置共享；网络环境波动较大，需要优先保证音视频稳定和消息及时送达。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
         },
-        "trigger_reason": "跨城移动场景下弱覆盖路段增多，为保证音视频业务稳定和任务续传，临时降低分辨率并提高时延要求。"
+        "trigger_reason": "赛事关键期需要更低时延和更稳定的音视频连接，适当降低分辨率以换取移动过程中的连续覆盖与快速恢复。"
       }
     ],
     "sub_storylines": [
       {
         "sub_id": "SUB_MT_01",
-        "name": "周日周三晚间棒球群语音复盘",
+        "name": "周日与周三晚间联盟语音复盘",
         "period_type": "weekly_evening",
         "days": [
           "Sunday",
           "Wednesday"
         ],
-        "trigger_condition": "每周日周三晚间与梦幻棒球联盟队友进行语音复盘和位置共享",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "trigger_condition": "每周日、周三晚间联盟成员复盘梦幻棒球表现时",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
         "aliases": {
           "app_aliases": [
-            "微子",
-            "绿泡泡"
+            "腾讯会议",
+            "会议号"
           ],
           "service_aliases": [
-            "语音一下",
-            "对个线",
-            "聊两句"
+            "复盘一下",
+            "语音碰头",
+            "开个会"
           ]
         },
         "param_mappings": {
@@ -117,30 +117,30 @@
           },
           "rtt": {
             "能听清就行": "100ms",
-            "别断": "100ms"
+            "别太卡": "100ms"
           }
         }
       },
       {
         "sub_id": "SUB_MT_02",
-        "name": "临时远程协作与赛事直播观看",
+        "name": "临时查看棒球短视频与预测片段",
         "period_type": "sporadic_evening",
-        "trigger_condition": "临时需要与异地朋友远程协作或观看棒球赛事直播时",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "trigger_condition": "晚间临时刷到棒球集锦、博客预测片段或联盟交易消息时",
+        "application_name": "抖音",
+        "service_name": "短视频",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
         "aliases": {
           "app_aliases": [
-            "腾讯会",
-            "开会宝"
+            "抖音",
+            "抖子"
           ],
           "service_aliases": [
-            "对齐一下",
-            "碰个头",
-            "看个直播"
+            "刷个集锦",
+            "看个片段",
+            "刷两下"
           ]
         },
         "param_mappings": {
@@ -150,7 +150,7 @@
           },
           "rtt": {
             "不卡": "80ms",
-            "稳一点": "80ms"
+            "秒开": "80ms"
           }
         }
       }
@@ -158,10 +158,10 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "name": "单次哔哩哔哩看直播",
-        "application_name": "哔哩哔哩",
-        "service_name": "看直播",
-        "scenario_description": "某次在户外等候区临时打开哔哩哔哩观看棒球相关直播，属于单次非周期性行为。",
+        "name": "临时参加线上会议",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "scenario_description": "非棒球相关的临时工作或社群线上会议，单次发生，与主线梦幻棒球预测同步无关。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -169,10 +169,10 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "单次快手短视频浏览",
-        "application_name": "快手",
-        "service_name": "短视频",
-        "scenario_description": "某次在跨区域出行途中临时刷快手短视频，属于单次非周期性行为。",
+        "name": "随手看直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "scenario_description": "在移动途中偶然打开一场非棒球主题直播，单次浏览，不构成周期性业务。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

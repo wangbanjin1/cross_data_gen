@@ -4,39 +4,38 @@
   "persona_summary": "户外视觉创作者",
   "static_profile": {
     "user_id": "USER_011",
-    "identity": "阿曼籍平面设计师，长期跨城采风与户外拍摄，以手机5G移动核心网作为唯一接入方式，在街区、展览、拍摄现场与跨城途中完成灵感检索、作品预览与高清设计稿交付。",
-    "devices": "主力设备为5G智能手机，辅助设备为便携平板与相机，平板需联网时使用手机热点。",
+    "identity": "阿曼籍平面设计师，长期跨城采风与拍摄，频繁在高速公路服务区、车站、港区或机场外场等移动环境工作，以手机4G/5G直接联网完成设计沟通、素材回传与客户交付。",
+    "devices": "主力设备为5G智能手机，辅助设备包括便携相机、平板电脑与移动电源；便携终端确需联网时使用手机热点。",
     "apps": [
       "微信",
       "钉钉",
       "高德地图",
-      "小红书"
+      "哔哩哔哩"
     ],
-    "speech_archetype": "outdoor_creator",
+    "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "干脆利落、带点现场指挥感，常用短句确认进度，偶尔夹杂设计行业口语。",
+      "tone": "直接、务实，带现场感，习惯用短句确认进度和网络状态。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
-        "对齐一下",
-        "先看效果"
+        "对齐一下"
       ],
-      "typical_habits": "出发前先确认路线和交付节点，现场用手机快速预览与上传，遇到网络波动会立刻要求切换更稳的链路。"
+      "typical_habits": "出发前先确认路线和网络，现场用语音快速调度，上传设计稿前反复确认清晰度和时延。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "跨城采风与设计稿交付",
+      "name": "跨城采风与设计稿回传",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "执行跨城采风、展览拍摄或客户现场视觉采集任务时",
+      "trigger_condition": "执行跨城采风、展览拍摄或客户现场视觉采集任务时，需要实时检索参考资料、预览作品并将高清图片和设计稿上传给客户。",
       "period_type": "weekly",
       "days": [
         "Wednesday",
         "Saturday"
       ],
       "time_range": "14:00-17:00",
-      "application_name": "钉钉",
+      "application_name": "微信",
       "service_name": "视频通话",
       "preferred_params": {
         "resolution": "1080p",
@@ -44,25 +43,22 @@
       },
       "aliases": {
         "app_aliases": [
-          "钉钉工作台",
-          "客户对接端"
+          "薇信",
+          "威信"
         ],
         "service_aliases": [
-          "对一下稿",
-          "远程看片",
-          "现场连线"
+          "对一下画面",
+          "开个视频"
         ]
       },
       "param_mappings": {
         "resolution": {
           "高清": "1080p",
-          "清晰点": "1080p",
-          "能看清细节": "1080p"
+          "清晰点": "1080p"
         },
         "rtt": {
           "低时延": "50ms",
-          "别卡": "50ms",
-          "实时一点": "50ms"
+          "别卡": "50ms"
         }
       },
       "declaration_mode": "explicit_declaration",
@@ -71,84 +67,80 @@
     "scenario_events": [
       {
         "event_id": "EVT_01",
-        "event_name": "跨城设计展会驻场周",
+        "event_name": "跨城设计展跟拍周",
         "valid_from": "2026-11-01",
         "valid_to": "2026-11-15",
         "impact_scope": "temporary",
-        "scene_description": "展会现场人流密集、场馆外场与港区周边基站切换频繁，需在高速移动和临时停靠点持续上传高清设计稿并保持客户视频连线。",
+        "scene_description": "跨城展览跟拍期间，频繁在展馆外场、高速公路服务区和临时停靠点进行高清素材回传与客户视频确认，网络切换频繁且对时延敏感。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
         },
-        "trigger_reason": "展会期间跨区切换密集，优先保证连线不中断和上传及时，适当降低分辨率以换取更低时延。"
+        "trigger_reason": "展会现场人流密集、基站负载高，为保证视频通话和设计稿上传不中断，临时降低分辨率并收紧时延上限。"
       }
     ],
     "sub_storylines": [
       {
         "sub_id": "SUB_MT_01",
-        "name": "采风素材回传与复盘",
+        "name": "现场素材复盘与团队沟通",
         "period_type": "weekly_evening",
         "days": [
           "Sunday",
           "Wednesday"
         ],
-        "trigger_condition": "当天采风结束回到临时停靠点或服务区后，需要把素材回传并和团队复盘",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "trigger_condition": "采风或拍摄结束后，与团队复盘素材、确认设计方向并同步客户反馈。",
+        "application_name": "钉钉",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
         "aliases": {
           "app_aliases": [
-            "微信语音",
-            "工作微信"
+            "钉钉会议",
+            "钉一下"
           ],
           "service_aliases": [
-            "过一遍素材",
-            "复盘一下"
+            "碰一下",
+            "开个短会"
           ]
         },
         "param_mappings": {
           "resolution": {
-            "标清": "720p",
-            "能看就行": "720p"
+            "标清": "720p"
           },
           "rtt": {
-            "能听清就行": "100ms",
-            "别断线": "100ms"
+            "能听清就行": "100ms"
           }
         }
       },
       {
         "sub_id": "SUB_MT_02",
-        "name": "客户现场方案沟通",
+        "name": "路线导航与位置共享",
         "period_type": "sporadic_evening",
-        "trigger_condition": "客户临时要求确认设计方向或修改意见时",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "trigger_condition": "跨城途中或偏远路段需要实时导航、路线更新并与客户或团队共享位置。",
+        "application_name": "高德地图",
+        "service_name": "视频通话",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
         "aliases": {
           "app_aliases": [
-            "腾讯会议端",
-            "客户会议室"
+            "高德",
+            "地图"
           ],
           "service_aliases": [
-            "碰一下方案",
-            "开个短会"
+            "共享位置",
+            "看下路线"
           ]
         },
         "param_mappings": {
           "resolution": {
-            "超清": "1080p",
-            "看清楚稿子": "1080p"
+            "超清": "1080p"
           },
           "rtt": {
-            "不卡": "80ms",
-            "顺畅点": "80ms"
+            "不卡": "80ms"
           }
         }
       }
@@ -156,10 +148,10 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "name": "服务区刷短视频",
-        "application_name": "抖音",
+        "name": "休息时刷短视频",
+        "application_name": "哔哩哔哩",
         "service_name": "短视频",
-        "scenario_description": "高速公路服务区临时休息时刷短视频找灵感，单次使用，不影响主线交付。",
+        "scenario_description": "在服务区或临时停靠点休息时，单次刷设计灵感和旅行短视频，非工作必需。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -167,10 +159,10 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "夜间看直播放松",
-        "application_name": "哔哩哔哩",
+        "name": "偶然看直播",
+        "application_name": "抖音",
         "service_name": "看直播",
-        "scenario_description": "跨城出差夜间在酒店临时看设计类直播，单次娱乐行为，不纳入长期记忆主线。",
+        "scenario_description": "夜间在酒店或停靠点偶尔观看设计类或旅行类直播，单次行为，不影响主线业务。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

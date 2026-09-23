@@ -4,8 +4,8 @@
   "persona_summary": "户外内容创作者",
   "static_profile": {
     "user_id": "USER_012",
-    "identity": "户外内容创作者与新手博主，主要在城市街区、活动现场与突发事件现场进行短视频拍摄、移动直播与素材回传，每周约3至5次外出采编任务，全程依赖手机4G/5G移动核心网，不依赖家庭宽带或固定Wi-Fi。",
-    "devices": "主力设备为5G智能手机，辅助设备包括随身拍摄设备（运动相机、无线麦克风、便携补光灯），便携终端确需联网时使用手机热点。",
+    "identity": "户外内容创作者与新手博主，主要在城市街区、活动现场、临时拍摄地和突发事件现场进行短视频拍摄、移动直播与素材回传，依赖手机移动核心网完成采编与云端协作。",
+    "devices": "主力设备为5G智能手机，辅助设备包括随身拍摄设备、便携麦克风与移动电源；便携终端确需联网时使用手机热点。",
     "apps": [
       "抖音",
       "快手",
@@ -14,14 +14,14 @@
     ],
     "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "口语化、节奏快、带点自嘲和打气感，常用短句催促自己或同伴。",
+      "tone": "直接、节奏快，带一点户外现场感和新手博主的自嘲式表达",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "先保上传",
-        "这条能爆"
+        "这条能发"
       ],
-      "typical_habits": "开拍前先确认信号和上行，转场时反复念叨别断传，遇到弱覆盖会立刻切热点或换位置，习惯用模糊词表达画质和时延要求。"
+      "typical_habits": "习惯用短句确认任务状态，拍摄前先看信号和上行，转场时反复提醒素材别断传，直播中关注画面稳定和互动反馈。"
     }
   },
   "dynamic_profile": {
@@ -29,7 +29,7 @@
       "storyline_id": "MAIN_MT_01",
       "name": "街区采风短视频拍摄与移动直播",
       "storyline_trigger_type": "location_environment",
-      "trigger_condition": "身处城市街区采访点、活动现场或临时拍摄地，需要边拍边传并可能随时开直播时触发。",
+      "trigger_condition": "身处街区采访点、活动现场或临时拍摄地，需要边拍边传并可能随时开直播时触发",
       "period_type": "weekly",
       "days": [
         "Wednesday",
@@ -50,7 +50,7 @@
         "service_aliases": [
           "开播",
           "上直播",
-          "推流"
+          "现场播"
         ]
       },
       "param_mappings": {
@@ -62,7 +62,7 @@
         "rtt": {
           "低时延": "50ms",
           "别卡": "50ms",
-          "跟得上": "50ms"
+          "画面稳一点": "50ms"
         }
       },
       "declaration_mode": "implicit_induction",
@@ -71,28 +71,28 @@
     "scenario_events": [
       {
         "event_id": "EVT_01",
-        "event_name": "跨城音乐节现场直播周",
+        "event_name": "城市秋季节庆活动现场直播周",
         "valid_from": "2026-11-01",
         "valid_to": "2026-11-15",
         "impact_scope": "temporary",
-        "scene_description": "跨城音乐节露天场地，人群密集、基站拥塞，转场通道与舞台边缘存在弱覆盖路段，需要持续上行推流和素材分段回传。",
+        "scene_description": "活动现场人流密集、基站负载高，转场频繁且临时拍摄点信号波动明显，需要优先保证直播互动和素材续传。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
         },
-        "trigger_reason": "现场网络拥塞且移动频繁，优先保证直播不断流和低时延互动，临时降低分辨率以换取更稳的上行带宽。"
+        "trigger_reason": "现场网络拥塞且直播互动要求更高，降低分辨率以换取更低时延和更稳画面，避免掉线影响活动直播。"
       }
     ],
     "sub_storylines": [
       {
         "sub_id": "SUB_MT_01",
-        "name": "收工后素材复盘与云端协作",
+        "name": "素材回传与云端协作",
         "period_type": "weekly_evening",
         "days": [
           "Sunday",
           "Wednesday"
         ],
-        "trigger_condition": "回到临时住处或转场车内，需要与剪辑伙伴对齐素材和脚本时触发。",
+        "trigger_condition": "拍摄结束回到临时休息点或转场途中，需要把原始素材分段上传云端并和剪辑伙伴沟通时触发",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
@@ -101,13 +101,13 @@
         },
         "aliases": {
           "app_aliases": [
-            "微信",
-            "V信"
+            "微子",
+            "绿泡泡"
           ],
           "service_aliases": [
             "对一下",
-            "视频对齐",
-            "过一遍素材"
+            "远程碰一下",
+            "过素材"
           ]
         },
         "param_mappings": {
@@ -123,11 +123,11 @@
       },
       {
         "sub_id": "SUB_MT_02",
-        "name": "突发事件现场素材回传与即时通信",
+        "name": "直播复盘与互动数据查看",
         "period_type": "sporadic_evening",
-        "trigger_condition": "在突发事件现场或临时拍摄地拍到关键素材，需要快速回传给合作方或编辑时触发。",
+        "trigger_condition": "直播结束后或次日晚上，需要回看直播片段、查看互动数据并和粉丝沟通时触发",
         "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "service_name": "看直播",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
@@ -135,22 +135,22 @@
         "aliases": {
           "app_aliases": [
             "B站",
-            "哔哩"
+            "小破站"
           ],
           "service_aliases": [
-            "传素材",
-            "发短片",
-            "回传"
+            "回看",
+            "复盘直播",
+            "看回放"
           ]
         },
         "param_mappings": {
           "resolution": {
             "超清": "1080p",
-            "原画": "1080p"
+            "清楚点": "1080p"
           },
           "rtt": {
             "不卡": "80ms",
-            "快点传": "80ms"
+            "顺一点": "80ms"
           }
         }
       }
@@ -161,7 +161,7 @@
         "name": "临时线上会议",
         "application_name": "腾讯会议",
         "service_name": "会议",
-        "scenario_description": "偶尔在转场途中被品牌方拉进临时线上沟通会，只开语音、不常开摄像头。",
+        "scenario_description": "偶尔在转场途中被品牌方拉进临时线上会议，讨论脚本和排期，不属于核心采编主线。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -169,10 +169,10 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "休息时刷直播",
+        "name": "休息时刷短视频",
         "application_name": "快手",
-        "service_name": "看直播",
-        "scenario_description": "拍摄间隙在车内或路边休息，随便看看同行直播找灵感，不涉及上传和推流。",
+        "service_name": "短视频",
+        "scenario_description": "拍摄间隙或收工后放松刷短视频找灵感，单次发生，不影响主线采编任务。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

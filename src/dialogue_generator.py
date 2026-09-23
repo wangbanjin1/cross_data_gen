@@ -67,6 +67,8 @@ class DialogueGenerator:
                 "rounds": rounds,
                 "role": role,
                 "blueprint_type": b_type,
+                "template_id": s_plan.get("template_id", "T2-1"),
+                "ood_goal": s_plan.get("ood_goal", ""),
                 "declaration_mode": s_plan.get("declaration_mode", "explicit_declaration"),
                 "storyline_trigger_type": s_plan.get("storyline_trigger_type", "time_periodic"),
                 "trigger_condition": s_plan.get("trigger_condition", ""),
@@ -92,7 +94,24 @@ class DialogueGenerator:
 {json.dumps(prompt_items, ensure_ascii=False, indent=2)}
 
 【核心会话轮次与动作规则（严格遵守）】:
-1. 每个会话最后一轮必须由 Agent 的答复结束！最后一轮 Agent agent_action_types 必须包含 "Acknowledge"。
+1. 会话结束与动作总规则：
+   - 常规会话最后一轮必须由 Agent 的答复结束，最后一轮 Agent agent_action_types 必须包含 "Acknowledge"！
+   - 特例1【纯域外拒绝 T1-2】(rounds == 1):
+     * 用户因网络故障提出非手机保障类诉求（即 ood_goal，如宽带光纤装维报修）；user_action_types 为 ["Create_Intent_Request"]。
+     * Agent 礼貌拒绝该域外需求，说明本助手仅支持手机移动网络保障加速，不支持光纤宽带装维报修，建议拨打专线；agent_action_types 必须为 ["Reject_Request"]！
+   - 特例2【混合诉求一办一拒 X-1】(rounds == 1):
+     * 用户单句同时提出手机网络保障需求 (app/service) 和域外诉求（即 ood_goal，如话费充值与账单查询）；user_action_types 为 ["Create_Intent_Request", "Inform_Slot"]。
+     * Agent 接受并受理移动网络保障，同时拒绝域外诉求；agent_action_types 必须为 ["Acknowledge", "Reject_Request"]！
+   - 特例3【歧义消解 T2-2】(rounds == 2):
+     * 第1轮 User 提出模糊需求（如仅提app未说清具体service）；user_action_types 为 ["Create_Intent_Request", "Inform_Slot"]。
+     * 第1轮 Agent 执行歧义追问确认（如询问进行哪个业务保障）；agent_action_types 必须为 ["Request_Disambiguation"]。
+     * 第2轮 User 明确消解歧义并说明参数；user_action_types 为 ["Inform_Slot"]。
+     * 第2轮 Agent 答复已开通并收尾；agent_action_types 必须为 ["Acknowledge"]。
+   - 特例4【时长变更延长 T2-5】(rounds == 2):
+     * 第1轮 User 提及老规矩保障；Agent 反问确认老规矩配置（agent_action_types 为 ["Confirm_Slot"]）。
+     * 第2轮 User 确认老规矩但提出因现场活动延长，要求将时长延长至180分钟（3小时）；user_action_types 必须包含 ["Confirm_Slot", "Modify_Request"]。
+     * 第2轮 Agent 确认时长已延长至180分钟并生效；agent_action_types 必须为 ["Acknowledge"]。
+
 2. 首次建联/证据会话 (evidence_session):
    - 若 declaration_mode == "explicit_declaration" (显式声明):
      第1轮 User: 结合现场环境提出模糊需求；Agent 追问确认细节。
@@ -160,6 +179,7 @@ class DialogueGenerator:
         tp = s_plan["target_params"]
         env = s_plan["scenario_env"]
         act = s_plan["memory_action"]
+        ood_goal = s_plan.get("ood_goal", "")
 
         app_name = tp["application_name"]
         srv_name = tp["service_name"]
@@ -169,83 +189,19 @@ class DialogueGenerator:
         end_ts = tp["end_timestamp"]
         dur_val = tp["duration"]
 
-        closure_path = "direct"
-        app_src, app_ref = "Turn", "U1"
-        srv_src, srv_ref = "Turn", "U1"
-        res_src, res_ref = "Turn", "U1"
-        rtt_src, rtt_ref = "Turn", "U1"
-
-        if b_type == "main":
-            if role == "evidence_session":
-                closure_path = "clarified"
-                app_src, app_ref = "Turn", "U2"
-                res_src, res_ref = "Turn", "U2"
-                rtt_src, rtt_ref = "Turn", "U2"
-            elif role in ["reinforcement_session", "reuse_session"]:
-                closure_path = "memory_filled"
-                app_src, app_ref = "Memory", "MF_001"
-                srv_src, srv_ref = "Memory", "MF_001"
-                res_src, res_ref = "Memory", "MF_001"
-                rtt_src, rtt_ref = "Memory", "MF_001"
-
-        elif b_type == "sub_01":
-            if role == "evidence_session":
-                closure_path = "clarified"
-                res_src, res_ref = "Turn", "U2"
-                rtt_src, rtt_ref = "Turn", "U2"
-            elif role in ["reinforcement_session", "reuse_session"]:
-                closure_path = "memory_filled"
-                app_src, app_ref = "Memory", "SUB_001"
-                srv_src, srv_ref = "Memory", "SUB_001"
-                res_src, res_ref = "Memory", "SUB_001"
-                rtt_src, rtt_ref = "Memory", "SUB_001"
-
-        elif b_type == "sub_02":
-            if role == "evidence_session":
-                closure_path = "clarified"
-                res_src, res_ref = "Turn", "U2"
-                rtt_src, rtt_ref = "Turn", "U2"
-            elif role in ["reinforcement_session", "reuse_session"]:
-                closure_path = "memory_filled"
-                app_src, app_ref = "Memory", "SUB_002"
-                srv_src, srv_ref = "Memory", "SUB_002"
-                res_src, res_ref = "Memory", "SUB_002"
-                rtt_src, rtt_ref = "Memory", "SUB_002"
-
-        elif b_type == "event_override":
-            closure_path = "corrected"
-            app_src, app_ref = "Memory", "MF_001"
-            srv_src, srv_ref = "Memory", "MF_001"
-            res_src, res_ref = "Turn", "U2"
-            rtt_src, rtt_ref = "Turn", "U2"
-
-        elif b_type == "event_reuse":
-            closure_path = "memory_filled"
-            app_src, app_ref = "Memory", "MF_001_v2"
-            srv_src, srv_ref = "Memory", "MF_001_v2"
-            res_src, res_ref = "Memory", "MF_001_v2"
-            rtt_src, rtt_ref = "Memory", "MF_001_v2"
-
-        elif b_type == "main_recovery":
-            closure_path = "memory_filled"
-            app_src, app_ref = "Memory", "MF_001"
-            srv_src, srv_ref = "Memory", "MF_001"
-            res_src, res_ref = "Memory", "MF_001"
-            rtt_src, rtt_ref = "Memory", "MF_001"
-
         target_rounds = s_plan["round_count"]
         event_sequence = []
-        slot_updates_turn = []
-
         for turn_idx in range(1, target_rounds + 1):
             t_data = raw_turns[turn_idx - 1] if turn_idx <= len(raw_turns) else {}
             is_last = (turn_idx == target_rounds)
             u_text, u_acts, a_text, a_acts = self._normalize_turn(t_data, turn_idx, role, is_last, s_plan)
-
             req_params = []
-            if turn_idx == 1 and role == "evidence_session":
+            if turn_idx == 1 and role == "evidence_session" and tid != "T2-2":
                 req_params = ["application_name", "resolution", "rtt"]
+            elif turn_idx == 1 and tid == "T2-2":
+                req_params = ["service_name"]
 
+            rel_ids = ["I1", "I2"] if tid == "X-1" else ["I1"]
             ev_item = {
                 "turn": turn_idx,
                 "user": {
@@ -256,52 +212,345 @@ class DialogueGenerator:
                     "utterance": a_text,
                     "action_types": a_acts
                 },
-                "related_intent_ids": ["I1"],
+                "related_intent_ids": rel_ids,
                 "requested_params": req_params
             }
             event_sequence.append(ev_item)
 
-            if turn_idx == 1:
-                t_params = {
-                    "service_name": {"value": srv_name, "source_type": srv_src, "source_ref": srv_ref},
-                    "timestamp": {
-                        "start_timestamp": {"value": start_ts, "source_type": "Turn", "source_ref": "U1"},
-                        "end_timestamp": {"value": end_ts, "source_type": "Turn", "source_ref": "U1"}
-                    }
+        # 针对 8 种模版组装 intents, slot_updates 与 skeleton_signature
+        if tid == "T1-2":
+            goal_text = ood_goal or "宽带光纤装维报修"
+            sig = f"T1-2|1|1|I1:{goal_text}/0/rejected/rejected|none|none|out_of_domain"
+            intents = [
+                {
+                    "intent_id": "I1",
+                    "status": "rejected",
+                    "closure_path": "rejected",
+                    "expression_level": 0,
+                    "intent": goal_text,
+                    "params": {}
                 }
-                if role not in ["evidence_session", "correction_session"]:
-                    t_params["application_name"] = {"value": app_name, "source_type": app_src, "source_ref": app_ref}
-                    t_params["resolution"] = {"min_value": {"value": res_val, "source_type": res_src, "source_ref": res_ref}}
-                    t_params["rtt"] = {"max_value": {"value": rtt_val, "source_type": rtt_src, "source_ref": rtt_ref}}
-                slot_updates_turn.append({"turn": 1, "params": t_params})
-            elif turn_idx == 2:
-                t_params = {}
-                if role in ["evidence_session", "correction_session"]:
-                    t_params = {
-                        "application_name": {"value": app_name, "source_type": app_src, "source_ref": app_ref},
-                        "resolution": {"min_value": {"value": res_val, "source_type": res_src, "source_ref": res_ref}},
-                        "rtt": {"max_value": {"value": rtt_val, "source_type": rtt_src, "source_ref": rtt_ref}}
-                    }
-                slot_updates_turn.append({"turn": 2, "params": t_params})
+            ]
+            slot_updates = []
+            scenario_meta = {
+                "environment": env,
+                "blueprint_type": b_type,
+                "memory_action": act,
+                "request_type": "life_service"
+            }
 
-        session_obj = {
-            "session_id": sid,
-            "user_id": uid,
-            "reference_time": ref_time,
-            "session_meta": {
-                "template_id": tid,
-                "round_count": len(event_sequence),
-                "intent_count": 1,
-                "memory_role": role,
-                "skeleton_signature": f"{tid}|{len(event_sequence)}|1|I1:{app_name}/{srv_name}/1/{closure_path}/resolved|none",
-                "scenario": {
-                    "environment": env,
-                    "blueprint_type": b_type,
-                    "memory_action": act
+        elif tid == "X-1":
+            goal_text = ood_goal or "手机话费充值与账单查询"
+            sig = f"X-1|1|2|I1:{app_name}/{srv_name}/1/direct/resolved;I2:{goal_text}/0/rejected/rejected|none|none|mixed_reject"
+            intents = [
+                {
+                    "intent_id": "I1",
+                    "status": "resolved",
+                    "closure_path": "direct",
+                    "expression_level": 1,
+                    "intent": f"{app_name}{srv_name}保障",
+                    "params": {
+                        "application_name": {"value": app_name, "source_type": "Turn", "source_ref": "U1"},
+                        "service_name": {"value": srv_name, "source_type": "Turn", "source_ref": "U1"},
+                        "resolution": {"min_value": {"value": res_val, "source_type": "Turn", "source_ref": "U1"}},
+                        "rtt": {"max_value": {"value": rtt_val, "source_type": "Turn", "source_ref": "U1"}},
+                        "timestamp": {
+                            "start_timestamp": {"value": start_ts, "source_type": "Turn", "source_ref": "U1"},
+                            "end_timestamp": {"value": end_ts, "source_type": "Turn", "source_ref": "U1"},
+                            "duration": {"value": dur_val, "source_type": "Context", "source_ref": "U1"}
+                        }
+                    }
+                },
+                {
+                    "intent_id": "I2",
+                    "status": "rejected",
+                    "closure_path": "rejected",
+                    "expression_level": 0,
+                    "intent": goal_text,
+                    "params": {}
                 }
-            },
-            "event_sequence": event_sequence,
-            "intents": [
+            ]
+            slot_updates = [
+                {
+                    "intent_id": "I1",
+                    "turn_updates": [
+                        {
+                            "turn": 1,
+                            "params": {
+                                "application_name": {"value": app_name, "source_type": "Turn", "source_ref": "U1"},
+                                "service_name": {"value": srv_name, "source_type": "Turn", "source_ref": "U1"},
+                                "resolution": {"min_value": {"value": res_val, "source_type": "Turn", "source_ref": "U1"}},
+                                "rtt": {"max_value": {"value": rtt_val, "source_type": "Turn", "source_ref": "U1"}},
+                                "timestamp": {
+                                    "start_timestamp": {"value": start_ts, "source_type": "Turn", "source_ref": "U1"},
+                                    "end_timestamp": {"value": end_ts, "source_type": "Turn", "source_ref": "U1"},
+                                    "duration": {"value": dur_val, "source_type": "Context", "source_ref": "U1"}
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+            scenario_meta = {
+                "environment": env,
+                "blueprint_type": b_type,
+                "memory_action": act
+            }
+
+        elif tid == "T2-2":
+            sig = f"T2-2|2|1|I1:{app_name}/{srv_name}/3/clarify/resolved|none"
+            intents = [
+                {
+                    "intent_id": "I1",
+                    "status": "resolved",
+                    "closure_path": "clarify",
+                    "expression_level": 3,
+                    "intent": f"{app_name}{srv_name}保障",
+                    "params": {
+                        "application_name": {"value": app_name, "source_type": "Turn", "source_ref": "U1"},
+                        "service_name": {"value": srv_name, "source_type": "Turn", "source_ref": "U2"},
+                        "resolution": {"min_value": {"value": res_val, "source_type": "Turn", "source_ref": "U2"}},
+                        "rtt": {"max_value": {"value": rtt_val, "source_type": "Turn", "source_ref": "U2"}},
+                        "timestamp": {
+                            "start_timestamp": {"value": start_ts, "source_type": "Turn", "source_ref": "U1"},
+                            "end_timestamp": {"value": end_ts, "source_type": "Turn", "source_ref": "U1"},
+                            "duration": {"value": dur_val, "source_type": "Context", "source_ref": "U1"}
+                        }
+                    }
+                }
+            ]
+            slot_updates = [
+                {
+                    "intent_id": "I1",
+                    "turn_updates": [
+                        {
+                            "turn": 1,
+                            "params": {
+                                "application_name": {"value": app_name, "source_type": "Turn", "source_ref": "U1"},
+                                "timestamp": {
+                                    "start_timestamp": {"value": start_ts, "source_type": "Turn", "source_ref": "U1"},
+                                    "end_timestamp": {"value": end_ts, "source_type": "Turn", "source_ref": "U1"},
+                                    "duration": {"value": dur_val, "source_type": "Context", "source_ref": "U1"}
+                                }
+                            }
+                        },
+                        {
+                            "turn": 2,
+                            "params": {
+                                "service_name": {"value": srv_name, "source_type": "Turn", "source_ref": "U2"},
+                                "resolution": {"min_value": {"value": res_val, "source_type": "Turn", "source_ref": "U2"}},
+                                "rtt": {"max_value": {"value": rtt_val, "source_type": "Turn", "source_ref": "U2"}}
+                            }
+                        }
+                    ]
+                }
+            ]
+            scenario_meta = {
+                "environment": env,
+                "blueprint_type": b_type,
+                "memory_action": act
+            }
+
+        elif tid == "T2-5":
+            sig = f"T2-5|2|1|I1:{app_name}/{srv_name}/1/amend/resolved|none"
+            base_end_ts = end_ts.replace("17时00分", "16时00分") if "17时00分" in end_ts else end_ts
+            intents = [
+                {
+                    "intent_id": "I1",
+                    "status": "resolved",
+                    "closure_path": "amend",
+                    "expression_level": 1,
+                    "intent": f"{app_name}{srv_name}保障",
+                    "params": {
+                        "application_name": {"value": app_name, "source_type": "Memory", "source_ref": "MF_001"},
+                        "service_name": {"value": srv_name, "source_type": "Memory", "source_ref": "MF_001"},
+                        "resolution": {"min_value": {"value": res_val, "source_type": "Memory", "source_ref": "MF_001"}},
+                        "rtt": {"max_value": {"value": rtt_val, "source_type": "Memory", "source_ref": "MF_001"}},
+                        "timestamp": {
+                            "start_timestamp": {"value": start_ts, "source_type": "Turn", "source_ref": "U1"},
+                            "end_timestamp": {"value": end_ts, "source_type": "Turn", "source_ref": "U2"},
+                            "duration": {"value": dur_val, "source_type": "Turn", "source_ref": "U2"}
+                        }
+                    }
+                }
+            ]
+            slot_updates = [
+                {
+                    "intent_id": "I1",
+                    "turn_updates": [
+                        {
+                            "turn": 1,
+                            "params": {
+                                "application_name": {"value": app_name, "source_type": "Memory", "source_ref": "MF_001"},
+                                "service_name": {"value": srv_name, "source_type": "Memory", "source_ref": "MF_001"},
+                                "resolution": {"min_value": {"value": res_val, "source_type": "Memory", "source_ref": "MF_001"}},
+                                "rtt": {"max_value": {"value": rtt_val, "source_type": "Memory", "source_ref": "MF_001"}},
+                                "timestamp": {
+                                    "start_timestamp": {"value": start_ts, "source_type": "Turn", "source_ref": "U1"},
+                                    "end_timestamp": {"value": base_end_ts, "source_type": "Turn", "source_ref": "U1"},
+                                    "duration": {"value": "120min", "source_type": "Context", "source_ref": "U1"}
+                                }
+                            }
+                        },
+                        {
+                            "turn": 2,
+                            "params": {
+                                "timestamp": {
+                                    "end_timestamp": {"value": end_ts, "source_type": "Turn", "source_ref": "U2"},
+                                    "duration": {"value": dur_val, "source_type": "Turn", "source_ref": "U2"}
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+            scenario_meta = {
+                "environment": env,
+                "blueprint_type": b_type,
+                "memory_action": act
+            }
+
+        elif tid == "T2-3":
+            sig = f"T2-3|2|1|I1:{app_name}/{srv_name}/4/correct/resolved|none"
+            intents = [
+                {
+                    "intent_id": "I1",
+                    "status": "resolved",
+                    "closure_path": "correct",
+                    "expression_level": 4,
+                    "intent": f"{app_name}{srv_name}保障",
+                    "params": {
+                        "application_name": {"value": app_name, "source_type": "Memory", "source_ref": "MF_001"},
+                        "service_name": {"value": srv_name, "source_type": "Memory", "source_ref": "MF_001"},
+                        "resolution": {"min_value": {"value": res_val, "source_type": "Turn", "source_ref": "U2"}},
+                        "rtt": {"max_value": {"value": rtt_val, "source_type": "Turn", "source_ref": "U2"}},
+                        "timestamp": {
+                            "start_timestamp": {"value": start_ts, "source_type": "Turn", "source_ref": "U1"},
+                            "end_timestamp": {"value": end_ts, "source_type": "Turn", "source_ref": "U1"},
+                            "duration": {"value": dur_val, "source_type": "Context", "source_ref": "U1"}
+                        }
+                    }
+                }
+            ]
+            slot_updates = [
+                {
+                    "intent_id": "I1",
+                    "turn_updates": [
+                        {
+                            "turn": 1,
+                            "params": {
+                                "application_name": {"value": app_name, "source_type": "Memory", "source_ref": "MF_001"},
+                                "service_name": {"value": srv_name, "source_type": "Memory", "source_ref": "MF_001"},
+                                "resolution": {"min_value": {"value": "1080p", "source_type": "Memory", "source_ref": "MF_001"}},
+                                "rtt": {"max_value": {"value": "50ms", "source_type": "Memory", "source_ref": "MF_001"}},
+                                "timestamp": {
+                                    "start_timestamp": {"value": start_ts, "source_type": "Turn", "source_ref": "U1"},
+                                    "end_timestamp": {"value": end_ts, "source_type": "Turn", "source_ref": "U1"}
+                                }
+                            }
+                        },
+                        {
+                            "turn": 2,
+                            "params": {
+                                "resolution": {"min_value": {"value": res_val, "source_type": "Turn", "source_ref": "U2"}},
+                                "rtt": {"max_value": {"value": rtt_val, "source_type": "Turn", "source_ref": "U2"}}
+                            }
+                        }
+                    ]
+                }
+            ]
+            scenario_meta = {
+                "environment": env,
+                "blueprint_type": b_type,
+                "memory_action": act
+            }
+
+        else:
+            # 标准会话模版 (T2-4, T2-1, T1-1)
+            closure_path = "direct"
+            app_src, app_ref = "Turn", "U1"
+            srv_src, srv_ref = "Turn", "U1"
+            res_src, res_ref = "Turn", "U1"
+            rtt_src, rtt_ref = "Turn", "U1"
+
+            if b_type == "main":
+                if role == "evidence_session":
+                    closure_path = "clarified"
+                    app_src, app_ref = "Turn", "U2"
+                    res_src, res_ref = "Turn", "U2"
+                    rtt_src, rtt_ref = "Turn", "U2"
+                elif role in ["reinforcement_session", "reuse_session"]:
+                    closure_path = "memory_filled"
+                    app_src, app_ref = "Memory", "MF_001"
+                    srv_src, srv_ref = "Memory", "MF_001"
+                    res_src, res_ref = "Memory", "MF_001"
+                    rtt_src, rtt_ref = "Memory", "MF_001"
+
+            elif b_type == "sub_01":
+                if role == "evidence_session":
+                    closure_path = "clarified"
+                    res_src, res_ref = "Turn", "U2"
+                    rtt_src, rtt_ref = "Turn", "U2"
+                elif role in ["reinforcement_session", "reuse_session"]:
+                    closure_path = "memory_filled"
+                    app_src, app_ref = "Memory", "SUB_001"
+                    srv_src, srv_ref = "Memory", "SUB_001"
+                    res_src, res_ref = "Memory", "SUB_001"
+                    rtt_src, rtt_ref = "Memory", "SUB_001"
+
+            elif b_type == "sub_02":
+                if role == "evidence_session":
+                    closure_path = "clarified"
+                    res_src, res_ref = "Turn", "U2"
+                    rtt_src, rtt_ref = "Turn", "U2"
+                elif role in ["reinforcement_session", "reuse_session"]:
+                    closure_path = "memory_filled"
+                    app_src, app_ref = "Memory", "SUB_002"
+                    srv_src, srv_ref = "Memory", "SUB_002"
+                    res_src, res_ref = "Memory", "SUB_002"
+                    rtt_src, rtt_ref = "Memory", "SUB_002"
+
+            elif b_type == "event_reuse":
+                closure_path = "memory_filled"
+                app_src, app_ref = "Memory", "MF_001_v2"
+                srv_src, srv_ref = "Memory", "MF_001_v2"
+                res_src, res_ref = "Memory", "MF_001_v2"
+                rtt_src, rtt_ref = "Memory", "MF_001_v2"
+
+            elif b_type == "main_recovery":
+                closure_path = "memory_filled"
+                app_src, app_ref = "Memory", "MF_001"
+                srv_src, srv_ref = "Memory", "MF_001"
+                res_src, res_ref = "Memory", "MF_001"
+                rtt_src, rtt_ref = "Memory", "MF_001"
+
+            slot_updates_turn = []
+            for t_idx in range(1, target_rounds + 1):
+                if t_idx == 1:
+                    t_params = {
+                        "service_name": {"value": srv_name, "source_type": srv_src, "source_ref": srv_ref},
+                        "timestamp": {
+                            "start_timestamp": {"value": start_ts, "source_type": "Turn", "source_ref": "U1"},
+                            "end_timestamp": {"value": end_ts, "source_type": "Turn", "source_ref": "U1"}
+                        }
+                    }
+                    if role not in ["evidence_session", "correction_session"]:
+                        t_params["application_name"] = {"value": app_name, "source_type": app_src, "source_ref": app_ref}
+                        t_params["resolution"] = {"min_value": {"value": res_val, "source_type": res_src, "source_ref": res_ref}}
+                        t_params["rtt"] = {"max_value": {"value": rtt_val, "source_type": rtt_src, "source_ref": rtt_ref}}
+                    slot_updates_turn.append({"turn": 1, "params": t_params})
+                elif t_idx == 2:
+                    t_params = {}
+                    if role in ["evidence_session", "correction_session"]:
+                        t_params = {
+                            "application_name": {"value": app_name, "source_type": app_src, "source_ref": app_ref},
+                            "resolution": {"min_value": {"value": res_val, "source_type": res_src, "source_ref": res_ref}},
+                            "rtt": {"max_value": {"value": rtt_val, "source_type": rtt_src, "source_ref": rtt_ref}}
+                        }
+                    slot_updates_turn.append({"turn": 2, "params": t_params})
+
+            sig = f"{tid}|{len(event_sequence)}|1|I1:{app_name}/{srv_name}/1/{closure_path}/resolved|none"
+            intents = [
                 {
                     "intent_id": "I1",
                     "status": "resolved",
@@ -320,9 +569,30 @@ class DialogueGenerator:
                         }
                     }
                 }
-            ],
+            ]
+            slot_updates = [{"intent_id": "I1", "turn_updates": slot_updates_turn}]
+            scenario_meta = {
+                "environment": env,
+                "blueprint_type": b_type,
+                "memory_action": act
+            }
+
+        session_obj = {
+            "session_id": sid,
+            "user_id": uid,
+            "reference_time": ref_time,
+            "session_meta": {
+                "template_id": tid,
+                "round_count": len(event_sequence),
+                "intent_count": len(intents),
+                "memory_role": role,
+                "skeleton_signature": sig,
+                "scenario": scenario_meta
+            },
+            "event_sequence": event_sequence,
+            "intents": intents,
             "relations": [],
-            "slot_updates": [{"intent_id": "I1", "turn_updates": slot_updates_turn}],
+            "slot_updates": slot_updates,
             "memory_snapshot_before": snapshot_before,
             "memory_events_after": memory_events,
             "gold_memory_state_after": gold_after
@@ -335,6 +605,12 @@ class DialogueGenerator:
         srv = tp["service_name"]
         res = tp["resolution"]
         rtt = tp["rtt"]
+        tid = s_plan.get("template_id", "")
+        ood_goal = s_plan.get("ood_goal", "")
+        decl_mode = s_plan.get("declaration_mode", "explicit_declaration")
+        trig_type = s_plan.get("storyline_trigger_type", "time_periodic")
+        trig_cond = s_plan.get("trigger_condition", "")
+        env = s_plan.get("scenario_env", "")
 
         u_text = ""
         if isinstance(t_data, dict):
@@ -345,11 +621,27 @@ class DialogueGenerator:
                 or (t_data.get("user", {}).get("utterance") if isinstance(t_data.get("user"), dict) else t_data.get("user"))
                 or ""
             )
-        decl_mode = s_plan.get("declaration_mode", "explicit_declaration")
-        trig_type = s_plan.get("storyline_trigger_type", "time_periodic")
-        trig_cond = s_plan.get("trigger_condition", "")
         if not u_text:
-            if turn_idx == 1:
+            if tid == "T1-2":
+                u_text = f"你好，现场这边网络好像有问题，能帮我安排师傅处理一下{ood_goal or '宽带光纤装维报修'}吗？"
+            elif tid == "X-1":
+                u_text = f"帮我办理一下今天{tp['start_timestamp'].split('日')[-1]}的{app}{srv}网络保障，另外顺便帮我查询一下{ood_goal or '手机话费充值与账单查询'}。"
+            elif tid == "T2-2":
+                if turn_idx == 1:
+                    u_text = f"在{env}网络不太稳，帮我把{app}保障一下。"
+                else:
+                    u_text = f"是{srv}业务，画质要求{res}，时延控制在{rtt}以内就行。"
+            elif tid == "T2-5":
+                if turn_idx == 1:
+                    u_text = f"今天在{env}，按老规矩给我开通{app}{srv}保障。"
+                else:
+                    u_text = f"对，不过今天现场活动延长了，帮我把保障时长延长到3小时（持续180分钟，到17点结束）。"
+            elif tid == "T2-3":
+                if turn_idx == 1:
+                    u_text = f"今天在{env}，帮我开通{app}{srv}保障。"
+                else:
+                    u_text = f"不对，今天现场特殊，画质调到{res}，时延要求{rtt}以内，临时按这个来。"
+            elif turn_idx == 1:
                 u_text = f"你好，需要给{app}{srv}做一个网络保障，时间是今天{tp['start_timestamp'].split('日')[-1]}开始，持续{tp['duration']}。"
             else:
                 if role == "evidence_session" and decl_mode == "explicit_declaration":
@@ -376,7 +668,26 @@ class DialogueGenerator:
                 or ""
             )
         if not a_text:
-            if is_last:
+            if tid == "T1-2":
+                a_text = f"抱歉，本智能助手仅提供手机移动网络加速与保障服务，暂不支持办理{ood_goal or '宽带光纤装维报修'}业务，建议您联系宽带专线处理。"
+            elif tid == "X-1":
+                a_text = f"好的，已为您成功受理{app}{srv}网络保障（{res} / 时延≤{rtt}）；另外关于{ood_goal or '手机话费充值与账单查询'}，目前暂不支持在线代办，请前往掌上营业厅查看。"
+            elif tid == "T2-2":
+                if turn_idx == 1:
+                    a_text = f"收到，请问您是要进行'{app}{srv}'还是其他业务的保障？画质和时延有什么具体要求吗？"
+                else:
+                    a_text = f"好的，已为您开通{app}{srv}网络保障（{res} / 时延≤{rtt}），祝您使用愉快！"
+            elif tid == "T2-5":
+                if turn_idx == 1:
+                    a_text = f"收到，请问是否按老规矩（{res} / 时延≤{rtt}）为您开通2小时保障？"
+                else:
+                    a_text = f"好的，已为您将{app}{srv}保障时长延长至180分钟（至17:00），配置保持{res}/时延≤{rtt}，保障已生效！"
+            elif tid == "T2-3":
+                if turn_idx == 1:
+                    a_text = f"收到，请问是否按老规矩标准（1080p / 时延≤50ms）为您开通？"
+                else:
+                    a_text = f"收到，已临时为您调整为画质{res}、时延上限{rtt}，保障已为您生效！"
+            elif is_last:
                 if role == "evidence_session" and decl_mode == "explicit_declaration":
                     a_text = f"好的，已为您成功受理本次保障，并已为您将该配置记录为长期老规矩，祝您使用愉快！"
                 else:
@@ -387,29 +698,58 @@ class DialogueGenerator:
                 else:
                     a_text = f"收到，请问{app}{srv}是否按分辨率{res}、时延上限{rtt}的标准来为您开通？"
 
+        # 动作类型规范化
         u_acts = t_data.get("user_action_types") if isinstance(t_data, dict) else None
-        if turn_idx == 1:
-            if not u_acts:
+        if tid == "T1-2":
+            u_acts = ["Create_Intent_Request"]
+            a_acts = ["Reject_Request"]
+        elif tid == "X-1":
+            u_acts = ["Create_Intent_Request", "Inform_Slot"]
+            a_acts = ["Acknowledge", "Reject_Request"]
+        elif tid == "T2-2":
+            if turn_idx == 1:
                 u_acts = ["Create_Intent_Request", "Inform_Slot"]
-            elif isinstance(u_acts, str):
-                u_acts = [u_acts]
+                a_acts = ["Request_Disambiguation"]
+            else:
+                u_acts = ["Inform_Slot"]
+                a_acts = ["Acknowledge"]
+        elif tid == "T2-5":
+            if turn_idx == 1:
+                u_acts = ["Create_Intent_Request", "Inform_Slot"]
+                a_acts = ["Confirm_Slot"]
+            else:
+                u_acts = ["Confirm_Slot", "Modify_Request"]
+                a_acts = ["Acknowledge"]
+        elif tid == "T2-3":
+            if turn_idx == 1:
+                u_acts = ["Create_Intent_Request", "Inform_Slot"]
+                a_acts = ["Confirm_Slot"]
+            else:
+                u_acts = ["Correct_Previous_Input", "Inform_Slot"]
+                a_acts = ["Acknowledge"]
         else:
-            if role in ["reinforcement_session", "reuse_session"]:
-                u_acts = ["Confirm_Slot"]
-            elif not u_acts:
-                u_acts = ["Confirm_Slot"]
-            elif isinstance(u_acts, str):
-                u_acts = [u_acts]
+            if turn_idx == 1:
+                if not u_acts:
+                    u_acts = ["Create_Intent_Request", "Inform_Slot"]
+                elif isinstance(u_acts, str):
+                    u_acts = [u_acts]
+            else:
+                if role in ["reinforcement_session", "reuse_session"]:
+                    u_acts = ["Confirm_Slot"]
+                elif not u_acts:
+                    u_acts = ["Confirm_Slot"]
+                elif isinstance(u_acts, str):
+                    u_acts = [u_acts]
 
-        a_acts = t_data.get("agent_action_types") if isinstance(t_data, dict) else None
-        if is_last:
-            a_acts = ["Acknowledge"]
-        elif role in ["reinforcement_session", "reuse_session"]:
-            a_acts = ["Confirm_Slot"]
-        elif not a_acts:
-            a_acts = ["Request_Slot"] if role == "evidence_session" else ["Confirm_Slot"]
-        elif isinstance(a_acts, str):
-            a_acts = [a_acts]
+            a_acts = t_data.get("agent_action_types") if isinstance(t_data, dict) else None
+            if is_last:
+                a_acts = ["Acknowledge"]
+            elif role in ["reinforcement_session", "reuse_session"]:
+                a_acts = ["Confirm_Slot"]
+            elif not a_acts:
+                a_acts = ["Request_Slot"] if role == "evidence_session" else ["Confirm_Slot"]
+            elif isinstance(a_acts, str):
+                a_acts = [a_acts]
 
         return u_text, u_acts, a_text, a_acts
 
@@ -421,6 +761,8 @@ class DialogueGenerator:
         speech = persona["static_profile"]["speech_style"]
         identity = persona["static_profile"]["identity"]
         round_count = s_plan["round_count"]
+        tid = s_plan.get("template_id", "T2-1")
+        ood_goal = s_plan.get("ood_goal", "")
 
         if snapshot_before:
             memory_context_str = "当前已建立的记忆快照 (Memory Snapshot Before):\n"
@@ -440,15 +782,21 @@ class DialogueGenerator:
 {memory_context_str}
 
 【当前场景与网络动机】:
+- 会话模版: {tid} (角色: {role}, 类型: {b_type})
 - 发生时间: {s_plan['reference_time']}
 - 现场环境: {env}
-- 会话角色: {role} (类型: {b_type})
 - 偏好模式: {s_plan.get('declaration_mode', 'explicit_declaration')}
 - 触发类型: {s_plan.get('storyline_trigger_type', 'time_periodic')} (触发条件: {s_plan.get('trigger_condition', env)})
 - 目标保障业务: 应用={tp['application_name']}, 业务={tp['service_name']}, 分辨率={tp['resolution']}, 时延上限={tp['rtt']}, 时段={tp['start_timestamp']} 至 {tp['end_timestamp']} (时长{tp['duration']})
+{"- 域外诉求目标: " + ood_goal if ood_goal else ""}
 
 【核心会话轮次与动作规则（严格遵守）】:
-1. 最后一轮必须由 Agent 的答复结束！最后一轮 Agent agent_action_types 必须包含 "Acknowledge"。
+1. 最后一轮必须由 Agent 的答复结束！
+   - 常规会话最后一轮 Agent agent_action_types 必须包含 "Acknowledge"；
+   - T1-2 纯域外拒绝会话 (rounds == 1): Agent 必须礼貌拒绝，agent_action_types 必须为 ["Reject_Request"]；
+   - X-1 混合诉求会话 (rounds == 1): Agent 办理保障同时拒绝域外诉求，agent_action_types 必须为 ["Acknowledge", "Reject_Request"]；
+   - T2-2 歧义消解会话 (rounds == 2): 第1轮 Agent 反问消解歧义（["Request_Disambiguation"]），第2轮用户说明业务后 Agent 确认开通；
+   - T2-5 时长延长会话 (rounds == 2): 第1轮 Agent 确认老规矩配置（["Confirm_Slot"]），第2轮用户提出延长时长至180分钟（user_action_types 包含 ["Confirm_Slot", "Modify_Request"]），Agent 确认延长并生效。
 2. 首次建联/证据会话 (evidence_session):
    - 若 declaration_mode == "explicit_declaration" (显式声明):
      第1轮 User: 结合现场环境提出模糊需求；Agent 追问确认细节。
@@ -499,3 +847,4 @@ class DialogueGenerator:
         if isinstance(res, dict):
             return res.get("turns") or res.get("conversation") or res.get("dialogue") or []
         return []
+
