@@ -115,3 +115,46 @@
    - 监控训练集和测试集中各应用、业务、闭环路径的交叉组合比例，防止训练数据在某种路径（如全是 direct 闭环）上发生过拟合。
 4. **电信运营商与标准协议对齐**：
    - 完全对齐标准评测模板 `pilot100_0813` 规范，下游模型可无缝接入现有的评估脚本与评测流水线。
+
+---
+
+## 五、 代码分级架构与模块职责说明
+
+为避免 Prompt、模版定义与业务逻辑互相交织耦合，系统采用清晰的分层解耦架构：
+
+```
+cross_memory_data/
+├── run.py                          # 顶层命令行统一入口
+├── config.json                     # 全局可调参数集中配置文件
+├── src/
+│   ├── config/                     # 【配置层】
+│   │   ├── settings.py             # 全局配置类与环境变量加载 (Config)
+│   │   └── __init__.py
+│   ├── core/                       # 【核心领域状态与质检层】
+│   │   ├── timeline_planner.py     # 15会话动态时间线规划器 (DynamicTimelinePlanner)
+│   │   ├── memory_tracker.py       # 跨会话记忆演进追踪器与状态机 (MemoryTracker)
+│   │   ├── qc_validator.py         # 100% 规则验证器 (QCValidator)
+│   │   └── __init__.py
+│   ├── generation/                 # 【生成与装配引擎】
+│   │   ├── llm_client.py           # DeepSeek 客户端、Token计费与重试机制 (LLMClient)
+│   │   ├── persona_generator.py    # 画像骨架扩充生成器 (PersonaGenerator)
+│   │   ├── dialogue_generator.py   # 对话批量渲染引擎 (DialogueGenerator)
+│   │   ├── session_assembler.py    # 8 大模版数据装配器 (SessionAssembler)
+│   │   └── __init__.py
+│   ├── pipeline/                   # 【流水线调度层】
+│   │   ├── batch_pipeline.py       # 自动化流水线调度与检查点控制 (BatchPipeline)
+│   │   └── __init__.py
+│   └── templates/                  # 【模版与 Prompt 独立层（解耦抽离）】
+│       ├── timeline_blueprints.py  # 15 会话生命周期序列蓝图配置模版
+│       └── prompts/                # 纯净 Prompt 与兜底台词库
+│           ├── persona_prompts.py  # 画像骨架扩充 Prompt 模版
+│           ├── dialogue_prompts.py # 批量与单会话台词渲染 Prompt 模版
+│           ├── dialogue_fallbacks.py# 各模版确定性兜底台词与动作规范
+│           └── __init__.py
+```
+
+### 核心解耦优势：
+1. **Prompt 纯净维护**：所有向大模型发送的指令、规则和 JSON Schema 集中在 `src/templates/prompts/` 中，调优台词或微调语气无需改动任何生成逻辑。
+2. **模版装配隔离**：8 大模版（`T2-4`, `T2-2`, `T2-1`, `T1-2`, `T2-5`, `X-1`, `T2-3`, `T1-1`）的标准 JSON 结构与槽位流转逻辑全部封装在 `SessionAssembler` 中，新增或变更模版不影响渲染器。
+3. **100% 平滑向下兼容**：顶层 `src/` 提供了兼容性 Facade 引用，现有外部工具脚本无需修改即可直接使用。
+
