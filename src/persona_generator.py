@@ -12,16 +12,36 @@ class PersonaGenerator:
         self.support_matrix = Config.support_matrix
 
     def generate_skeleton(self, raw_persona: dict) -> dict:
+        import re
+        num_match = re.search(r'\d+', raw_persona.get("persona_id", ""))
+        uid_num = int(num_match.group()) if num_match else 1
+        forced_decl_mode = "explicit_declaration" if (uid_num % 2 == 1) else "implicit_induction"
+        trig_mod = uid_num % 3
+        if trig_mod == 1:
+            forced_trig_type = "time_periodic"
+            trig_instruction = "周期时间驱动：设定每周固定周期频次（如每周三周六下午），trigger_condition 必须为明确的周期时间描述（如'每周三周六下午常规业务'）"
+        elif trig_mod == 2:
+            forced_trig_type = "task_activity"
+            trig_instruction = "任务现场驱动：因特定专业活动/现场任务触发（如'客户现场审计'、'婚庆跟拍'、'电力设备巡检'），trigger_condition 必须为执行该特定任务（如'执行客户现场合规审计任务'）"
+        else:
+            forced_trig_type = "location_environment"
+            trig_instruction = "特定地点驱动：因特定物理空间/环境触发（如'利兹露天集结区'、'地下配电室'、'跨城物流中转站'），trigger_condition 必须为身处该特定空间（如'身处露天集结区弱网区域'）"
+
         prompt = f"""你是一个核心网通信与长程记忆专家。请将以下粗粒度的人物网络画像，扩充为结构化的【解耦画像骨架】。
 
 【输入原始画像】:
 {json.dumps(raw_persona, ensure_ascii=False, indent=2)}
 
-【业务与白名单约束】:
-1. 涉及的应用必须使用标准中文名（如：微信、抖音、快手、腾讯会议、钉钉、飞书、哔哩哔哩、小红书等）。
-2. 支持的标准业务仅限：开直播、看直播、视频通话、会议、短视频、游戏、云游戏。
-3. 必须明确解耦出：
-   - periodic_main_storyline (周期性主线记忆): 该职业核心高频活动，指定周几/时段、APP、业务、分辨率、时延上限、口语别名及模糊词映射、以及 declaration_mode ("explicit_declaration" 用户首轮主动声明"记一下/以后按老规矩"，或 "implicit_induction" 首轮普通单次需求，后续多次发生后由Agent提议固化)。
+【本次画像强制约束（严格遵守）】:
+1. declaration_mode 必须设为: "{forced_decl_mode}"
+2. storyline_trigger_type 必须设为: "{forced_trig_type}"（{trig_instruction}）
+3. 涉及的应用必须使用标准中文名（如：微信、抖音、快手、腾讯会议、钉钉、飞书、哔哩哔哩、小红书等）。
+4. 支持的标准业务仅限：开直播、看直播、视频通话、会议、短视频、游戏、云游戏。
+5. 必须明确解耦出：
+   - periodic_main_storyline (核心主线记忆): 该职业核心高频活动，指定APP、业务、分辨率、时延上限、口语别名及模糊词映射，以及：
+     * storyline_trigger_type: "{forced_trig_type}"
+     * trigger_condition: 结合职业定制的触发条件
+     * declaration_mode: "{forced_decl_mode}"
    - scenario_events (场景化事件驱动记忆): 1个具有代表性的突发/阶段性事件（如促销展会、赛事周、跨城出差季），具有起止日期（在2026年10月-11月之间）、特定环境、以及对主线参数的临时纠正值。
    - sub_storylines (支线记忆): 2条次频非主线业务（如大巴视频调度、录像复盘、客户沟通等），包含触发条件、APP、业务、偏好参数。
    - distractor_pool (干扰项): 2个单次无关业务（如会议、刷短视频、看直播等），说明场景与参数。
@@ -48,6 +68,8 @@ class PersonaGenerator:
     "periodic_main_storyline": {{
       "storyline_id": "MAIN_MT_01",
       "name": "主线业务名称",
+      "storyline_trigger_type": "{forced_trig_type}",
+      "trigger_condition": "根据上述约束生成的具体触发条件描述",
       "period_type": "weekly",
       "days": ["Wednesday", "Saturday"],
       "time_range": "14:00-17:00",
@@ -65,7 +87,7 @@ class PersonaGenerator:
         "resolution": {{"高清": "1080p", "清晰点": "1080p"}},
         "rtt": {{"低时延": "50ms", "别卡": "50ms"}}
       }},
-      "declaration_mode": "explicit_declaration",
+      "declaration_mode": "{forced_decl_mode}",
       "evidence_level": "explicit_long_term_declaration"
     }},
     "scenario_events": [

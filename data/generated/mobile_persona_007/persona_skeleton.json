@@ -4,30 +4,32 @@
   "persona_summary": "高频移动网络使用者",
   "static_profile": {
     "user_id": "USER_007",
-    "identity": "休闲棒球爱好者，依赖博客预测运营自己的梦幻棒球联盟；每周3至5次外出任务，在城市街区、公共活动现场及跨区域出行途中活动，全程以手机4G/5G直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi，便携终端确需联网时使用手机热点。",
-    "devices": "主力设备为5G智能手机，辅助设备为可穿戴设备（智能手表/手环），便携终端通过手机热点联网。",
+    "identity": "休闲棒球爱好者，依赖博客预测经营梦幻棒球联盟，每周多次在城市街区、公共活动现场及跨区域出行途中使用移动网络完成信息查询、位置共享、即时通信与短视频上传，全程以手机4G/5G直接联网。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴设备；便携终端确需联网时使用手机热点。",
     "apps": [
       "微信",
       "抖音",
       "腾讯会议",
       "哔哩哔哩"
     ],
-    "speech_archetype": "mobile_fan_collaborator",
+    "speech_archetype": "casual_fan_mobile",
     "speech_style": {
-      "tone": "随意、口语化，带点球迷圈子的调侃和催促感，谈正事时干脆利落。",
+      "tone": "轻松随意、带点球迷圈子的调侃感，说话直接不绕弯。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "稳一点"
+        "稳一手"
       ],
-      "typical_habits": "习惯用简短口语下达需求，常以“老规矩”指代固定配置；遇到网络波动会直接要求“别卡”“续上”；在群聊和远程协作中喜欢先确认位置再同步信息。"
+      "typical_habits": "习惯用短句快速确认信息，遇到网络波动会立刻提醒对方，喜欢在移动中同步位置和赛况。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "梦幻棒球赛事周现场直播与远程协作",
+      "name": "每周梦幻棒球数据同步与短视频上传",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每周三周六下午常规业务，外出途中或公共活动现场进行梦幻棒球数据查询、位置共享与现场短视频上传",
       "period_type": "weekly",
       "days": [
         "Wednesday",
@@ -35,7 +37,7 @@
       ],
       "time_range": "14:00-17:00",
       "application_name": "抖音",
-      "service_name": "开直播",
+      "service_name": "短视频",
       "preferred_params": {
         "resolution": "1080p",
         "rtt_max": "50ms"
@@ -43,24 +45,24 @@
       "aliases": {
         "app_aliases": [
           "抖子",
-          "短视频那个"
+          "短视频平台"
         ],
         "service_aliases": [
-          "开播",
-          "推流",
-          "现场直播"
+          "发个现场",
+          "传段小视频",
+          "刷一下"
         ]
       },
       "param_mappings": {
         "resolution": {
           "高清": "1080p",
           "清晰点": "1080p",
-          "清楚点": "1080p"
+          "别糊": "1080p"
         },
         "rtt": {
           "低时延": "50ms",
           "别卡": "50ms",
-          "稳一点": "50ms"
+          "秒传": "50ms"
         }
       },
       "declaration_mode": "explicit_declaration",
@@ -69,28 +71,28 @@
     "scenario_events": [
       {
         "event_id": "EVT_01",
-        "event_name": "跨城梦幻棒球联盟线下观赛周",
+        "event_name": "跨城棒球观赛周",
         "valid_from": "2026-11-01",
         "valid_to": "2026-11-15",
         "impact_scope": "temporary",
-        "scene_description": "跨城出行途中及户外公共观赛活动现场，人流密集、移动网络覆盖波动较大，需在移动过程中保持直播与远程协作稳定。",
+        "scene_description": "跨城出行途中和户外等候区，移动网络覆盖不稳定，需要临时降低分辨率并收紧时延以保证直播和短视频上传不中断。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
         },
-        "trigger_reason": "跨城移动和现场人流导致带宽波动，降低分辨率并收紧时延上限，优先保证直播连续性和消息及时送达。"
+        "trigger_reason": "跨城移动场景下弱覆盖路段增多，为保证音视频业务稳定和任务续传，临时降低分辨率并提高时延要求。"
       }
     ],
     "sub_storylines": [
       {
         "sub_id": "SUB_MT_01",
-        "name": "赛后录像复盘视频通话",
+        "name": "周日周三晚间棒球群语音复盘",
         "period_type": "weekly_evening",
         "days": [
           "Sunday",
           "Wednesday"
         ],
-        "trigger_condition": "梦幻棒球联盟赛后需要与盟友复盘球员表现和博客预测偏差时发起。",
+        "trigger_condition": "每周日周三晚间与梦幻棒球联盟队友进行语音复盘和位置共享",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
@@ -103,15 +105,15 @@
             "绿泡泡"
           ],
           "service_aliases": [
-            "对一下",
-            "复盘一下",
-            "视频聊聊"
+            "语音一下",
+            "对个线",
+            "聊两句"
           ]
         },
         "param_mappings": {
           "resolution": {
             "标清": "720p",
-            "能看清人就行": "720p"
+            "能看清就行": "720p"
           },
           "rtt": {
             "能听清就行": "100ms",
@@ -121,9 +123,9 @@
       },
       {
         "sub_id": "SUB_MT_02",
-        "name": "临时远程协作会议",
+        "name": "临时远程协作与赛事直播观看",
         "period_type": "sporadic_evening",
-        "trigger_condition": "外出途中或临时停留点接到协作需求，需要快速对齐信息或处理即时任务时发起。",
+        "trigger_condition": "临时需要与异地朋友远程协作或观看棒球赛事直播时",
         "application_name": "腾讯会议",
         "service_name": "会议",
         "preferred_params": {
@@ -133,12 +135,12 @@
         "aliases": {
           "app_aliases": [
             "腾讯会",
-            "会议那个"
+            "开会宝"
           ],
           "service_aliases": [
             "对齐一下",
-            "开个会",
-            "碰一下"
+            "碰个头",
+            "看个直播"
           ]
         },
         "param_mappings": {
@@ -156,10 +158,10 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "name": "临时看直播",
+        "name": "单次哔哩哔哩看直播",
         "application_name": "哔哩哔哩",
         "service_name": "看直播",
-        "scenario_description": "在户外等候区或临时停留点，单次观看棒球相关直播或博主分析，非固定周期行为。",
+        "scenario_description": "某次在户外等候区临时打开哔哩哔哩观看棒球相关直播，属于单次非周期性行为。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -167,10 +169,10 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "随手刷短视频",
-        "application_name": "抖音",
+        "name": "单次快手短视频浏览",
+        "application_name": "快手",
         "service_name": "短视频",
-        "scenario_description": "跨区域出行途中或活动现场间隙，单次浏览棒球集锦和博客预测片段，非固定周期行为。",
+        "scenario_description": "某次在跨区域出行途中临时刷快手短视频，属于单次非周期性行为。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

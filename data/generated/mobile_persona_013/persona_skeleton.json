@@ -4,37 +4,40 @@
   "persona_summary": "移动执勤人员",
   "static_profile": {
     "user_id": "USER_013",
-    "identity": "一线警务指挥人员，具备强领导力，负责基于数据分析员的研判结果做出关键决策；日常以巡逻、夜间值守、事故现场处置和应急集结为主，全程依赖手机移动核心网（4G/5G）直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi，便携终端确需联网时使用手机热点。",
-    "devices": "主力设备为5G智能手机，辅助设备为可穿戴设备（智能手表/执法记录仪联动终端）",
+    "identity": "一线警务指挥人员，具备强领导力，负责基于数据分析员研判结果做出关键决策；日常在巡逻区域、事故现场、夜间值守点与应急集结区之间高频移动，全程依赖手机移动核心网（4G/5G）完成现场取证、即时通信、事件上报、地图导航、位置共享与任务调度，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴终端（智能手表/执法记录仪），便携终端确需联网时使用手机热点。",
     "apps": [
       "微信",
       "钉钉",
-      "高德地图",
-      "腾讯会议"
+      "腾讯会议",
+      "高德地图"
     ],
-    "speech_archetype": "field_commander",
+    "speech_archetype": "police_commander",
     "speech_style": {
-      "tone": "干脆利落、命令式与确认式并存，语速偏快，强调时效与责任",
+      "tone": "干脆利落、命令式与确认式并用，强调时效与责任到人，语速偏快，关键信息会重复一遍。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
+        "收到请回复",
         "按预案走"
       ],
-      "typical_habits": "习惯用简短口令布置任务，先确认位置与时限，再要求回传现场证据；对通信质量敏感，常以‘别卡’‘要稳’表达网络诉求"
+      "typical_habits": "布置任务前先对齐目标与位置，关键节点要求对方复述确认；遇到突发情况先压住节奏再分派，习惯用短句和编号下达指令。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "夜间巡逻值守与现场取证上报",
+      "name": "每周三周六下午巡逻调度与现场取证回传",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每周三周六下午常规业务，14:00-17:00巡逻执勤与事件处置时段自动进入高频调度与取证回传模式",
       "period_type": "weekly",
       "days": [
         "Wednesday",
         "Saturday"
       ],
-      "time_range": "20:00-23:00",
-      "application_name": "微信",
+      "time_range": "14:00-17:00",
+      "application_name": "钉钉",
       "service_name": "视频通话",
       "preferred_params": {
         "resolution": "1080p",
@@ -42,13 +45,13 @@
       },
       "aliases": {
         "app_aliases": [
-          "微信",
-          "工作微信"
+          "警务通",
+          "指挥台"
         ],
         "service_aliases": [
-          "视频通话",
           "现场连线",
-          "视频汇报"
+          "点对点调度",
+          "视频上报"
         ]
       },
       "param_mappings": {
@@ -69,87 +72,86 @@
     "scenario_events": [
       {
         "event_id": "EVT_01",
-        "event_name": "跨区域应急集结与联合处置周",
+        "event_name": "跨区应急集结与大型活动安保周",
         "valid_from": "2026-11-01",
         "valid_to": "2026-11-15",
         "impact_scope": "temporary",
-        "scene_description": "跨区域应急集结区、临时处置现场与道路巡逻区域，人员与车辆高度移动，现场网络拥塞且覆盖波动，需要优先保障指挥调度与现场视频回传的稳定性。",
+        "scene_description": "跨区应急集结区与大型活动安保现场，人员密集、基站负载高、移动速度快，需多警种协同与实时视频回传。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
         },
-        "trigger_reason": "应急集结期间多单位协同、链路拥塞风险高，降低分辨率以换取更低时延和更稳定的消息送达与视频回传"
+        "trigger_reason": "现场基站拥塞且需优先保障指挥指令与位置共享的极低时延，主动降低视频分辨率以换取更稳定的消息送达与更快响应。"
       }
     ],
     "sub_storylines": [
       {
         "sub_id": "SUB_MT_01",
-        "name": "值班室录像复盘与案情沟通",
+        "name": "周日晚间执法记录仪录像复盘与案情沟通",
         "period_type": "weekly_evening",
         "days": [
           "Sunday",
           "Wednesday"
         ],
-        "trigger_condition": "值班结束或案件阶段复盘时，需要与数据分析员、法制员远程沟通并回看执法记录",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "trigger_condition": "每周日与周三晚间20:00-21:30非执勤时段，回看执法记录仪与现场视频并进行案情沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
         "aliases": {
           "app_aliases": [
-            "腾讯会议",
-            "会议号"
+            "工作微信",
+            "警务微信"
           ],
           "service_aliases": [
             "复盘会",
-            "碰一下情况",
-            "开个短会"
+            "对一下录像",
+            "碰一下案情"
           ]
         },
         "param_mappings": {
           "resolution": {
             "标清": "720p",
-            "能看清就行": "720p"
+            "看得清就行": "720p"
           },
           "rtt": {
             "能听清就行": "100ms",
-            "别太卡": "100ms"
+            "别断线": "100ms"
           }
         }
       },
       {
         "sub_id": "SUB_MT_02",
-        "name": "巡逻途中位置共享与任务调度",
+        "name": "临时专案组远程会议与情报同步",
         "period_type": "sporadic_evening",
-        "trigger_condition": "巡逻或临时处置过程中需要共享位置、接收调度指令并查询人员或车辆信息",
-        "application_name": "高德地图",
-        "service_name": "视频通话",
+        "trigger_condition": "专案推进或跨部门情报同步需要时，临时在晚间发起远程会议",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
         "aliases": {
           "app_aliases": [
-            "高德",
-            "高德地图",
-            "地图"
+            "腾讯会",
+            "专案会议室"
           ],
           "service_aliases": [
-            "位置共享",
-            "对个位置",
-            "视频通话"
+            "开个会",
+            "情报同步",
+            "专案对齐"
           ]
         },
         "param_mappings": {
           "resolution": {
             "超清": "1080p",
-            "清楚点": "1080p"
+            "共享屏幕要清楚": "1080p"
           },
           "rtt": {
             "不卡": "80ms",
-            "稳一点": "80ms"
+            "别延迟": "80ms"
           }
         }
       }
@@ -157,10 +159,10 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "name": "单次跨部门临时会议",
-        "application_name": "钉钉",
-        "service_name": "会议",
-        "scenario_description": "临时接到通知参加跨部门案情通报会，属于单次非周期性业务，不纳入主线记忆",
+        "name": "个人休息时刷短视频",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "scenario_description": "非执勤个人休息时间，在宿舍或家中用手机随意浏览短视频，与警务调度无关。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -168,10 +170,10 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "休息间隙刷短视频",
-        "application_name": "抖音",
-        "service_name": "短视频",
-        "scenario_description": "备勤休息间隙个人放松，单次发生，与执勤主线无关",
+        "name": "观看体育赛事直播放松",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "scenario_description": "轮休期间在手机上观看赛事或游戏直播放松，属于单次个人娱乐行为，不涉及执勤业务。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

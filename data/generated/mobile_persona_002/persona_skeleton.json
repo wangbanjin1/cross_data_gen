@@ -4,8 +4,8 @@
   "persona_summary": "外访型金融顾问",
   "static_profile": {
     "user_id": "USER_002",
-    "identity": "外访型金融顾问，主要帮助客户维护账户、核对行情资料并完成跨境资金转移与电子签署；通常每周3至5次外出任务，活动范围包括市集、门店外摆区、客户拜访点、配送路线、展会现场、商圈户外区域及临时经营点。全程使用手机4G/5G移动核心网直连，不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式；重点完成移动支付、订单处理与库存查询、客户沟通、短视频营销与远程协作，便携终端确需联网时使用手机热点。",
-    "devices": "主力设备为5G智能手机，辅助设备为便携平板/轻薄笔记本，确需联网时使用手机热点共享。",
+    "identity": "外访型金融顾问，主要协助客户维护与跨境资金转账业务，日常在市集、门店外摆区、客户拜访点、配送路线、展会现场、商圈户外区域或临时经营点之间移动办公，全程依赖手机4G/5G移动核心网直接联网，不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式，便携终端确需联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备包括便携平板与移动热点终端。",
     "apps": [
       "微信",
       "腾讯会议",
@@ -14,20 +14,22 @@
     ],
     "speech_archetype": "business_advisor",
     "speech_style": {
-      "tone": "干练、克制、带金融行话的口语，先确认时间节点再谈细节，语气像在对接流程，遇到网络问题会直接要求切低画质或换网络。",
+      "tone": "干练、务实、带一点催促感，习惯用金融与业务术语快速对齐事项。",
       "catchphrases": [
         "老规矩",
-        "资金路径对齐一下",
         "别掉链子",
-        "到点连线"
+        "对齐一下",
+        "这笔要盯紧"
       ],
-      "typical_habits": "开口先问对方是否方便，再确认账户、金额与到账时间；习惯用“对齐”“走流程”“稳一手”来收束话题，重要信息会重复确认并让对方回一个字。"
+      "typical_habits": "在客户现场先确认网络和资料状态，再推进转账、签署与沟通；遇到弱覆盖会反复强调续传和恢复。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "外访途中跨境转账视频确认",
+      "name": "外访客户现场跨境转账与电子签署",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "执行外访客户现场资金维护与跨境转账确认任务时触发，需在移动核心网下完成加密通信、账户资料核对、电子签署文件上传与支付订单处理。",
       "period_type": "weekly",
       "days": [
         "Wednesday",
@@ -43,114 +45,110 @@
       "aliases": {
         "app_aliases": [
           "微聊",
-          "V信",
-          "威信"
+          "客户通道"
         ],
         "service_aliases": [
-          "视频对一下",
-          "连线确认",
-          "开个视频"
+          "对一下",
+          "远程确认",
+          "视频核身"
         ]
       },
       "param_mappings": {
         "resolution": {
           "高清": "1080p",
-          "清楚点": "1080p",
-          "正常画质": "1080p"
+          "清晰点": "1080p",
+          "能看清文件": "1080p"
         },
         "rtt": {
           "低时延": "50ms",
           "别卡": "50ms",
-          "秒回": "50ms"
+          "要跟得上": "50ms"
         }
       },
+      "declaration_mode": "implicit_induction",
       "evidence_level": "explicit_long_term_declaration"
     },
     "scenario_events": [
       {
         "event_id": "EVT_01",
-        "event_name": "跨境金融展会客户集中签约周",
+        "event_name": "跨境金融展会驻场服务周",
         "valid_from": "2026-11-01",
         "valid_to": "2026-11-15",
         "impact_scope": "temporary",
-        "scene_description": "展会现场与商圈户外临时签约点，人群密集，手机4G/5G上行拥塞明显，客户分散在多个展位外摆区，需要边走边核对账户并完成电子签署。",
+        "scene_description": "展会现场与商圈户外区域人群密集，移动核心网负载高，客户咨询、转账确认和电子签署集中发生，需要优先保证消息及时与连接稳定。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
         },
-        "trigger_reason": "现场人流密集导致上行带宽紧张，支付与订单消息必须及时到达，优先降低分辨率并压低时延，保证视频确认和文件续传不中断。"
+        "trigger_reason": "人群密集区带宽竞争加剧，降低分辨率并收紧时延上限，优先保障支付与订单消息及时、视频核身不中断。"
       }
     ],
     "sub_storylines": [
       {
         "sub_id": "SUB_MT_01",
-        "name": "晚间客户科普短视频素材上传",
+        "name": "客户远程复盘与资料沟通",
         "period_type": "weekly_evening",
         "days": [
           "Sunday",
           "Wednesday"
         ],
-        "trigger_condition": "白天拜访中拍摄了行情解读或资金合规提醒素材，晚上需要剪辑并上传短视频用于客户触达。",
-        "application_name": "抖音",
-        "service_name": "短视频",
+        "trigger_condition": "结束外访后与客户或团队远程复盘账户资料、转账进度与签署状态时触发。",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
         "aliases": {
           "app_aliases": [
-            "抖抖",
-            "D音",
-            "抖音短视频"
+            "会议通",
+            "远程会"
           ],
           "service_aliases": [
-            "小视频",
-            "发个段子",
-            "短视频营销"
+            "复盘一下",
+            "过一遍资料"
           ]
         },
         "param_mappings": {
           "resolution": {
             "标清": "720p",
-            "省点流量": "720p"
+            "能看就行": "720p"
           },
           "rtt": {
             "能听清就行": "100ms",
-            "别转圈": "100ms"
+            "别断线": "100ms"
           }
         }
       },
       {
         "sub_id": "SUB_MT_02",
-        "name": "临时跨境资金方案远程评审会",
+        "name": "短视频营销素材上传与远程协作",
         "period_type": "sporadic_evening",
-        "trigger_condition": "客户跨境资金路径临时变更，或合规材料需要团队远程复核时，发起线上会议。",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "trigger_condition": "在门店外摆区、展会现场或临时经营点拍摄金融知识短视频后，需要上传素材并与团队远程协作时触发。",
+        "application_name": "抖音",
+        "service_name": "短视频",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
         "aliases": {
           "app_aliases": [
-            "腾讯会",
-            "开会软件",
-            "会议App"
+            "抖一下",
+            "短视频号"
           ],
           "service_aliases": [
-            "线上碰一下",
-            "远程对齐",
-            "开个会"
+            "发素材",
+            "传片子"
           ]
         },
         "param_mappings": {
           "resolution": {
             "超清": "1080p",
-            "高清": "1080p"
+            "清楚点": "1080p"
           },
           "rtt": {
             "不卡": "80ms",
-            "顺畅": "80ms"
+            "上传快点": "80ms"
           }
         }
       }
@@ -158,10 +156,10 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "name": "与家人临时微信视频",
-        "application_name": "微信",
-        "service_name": "视频通话",
-        "scenario_description": "外访结束回到车内或临时休息点，与家人短暂视频报平安，属于单次非经营沟通，不涉及资金与客户资料。",
+        "name": "临时看直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "scenario_description": "午休或等待客户时偶尔打开直播消遣，与核心金融外访任务无关。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -169,10 +167,10 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "午休刷财经直播",
-        "application_name": "哔哩哔哩",
-        "service_name": "看直播",
-        "scenario_description": "午休或等客户间隙，在商圈户外用手机看财经类直播放松，单次行为，不影响主线任务参数。",
+        "name": "临时云游戏",
+        "application_name": "咪咕快游",
+        "service_name": "云游戏",
+        "scenario_description": "晚间回到住处后偶尔尝试云游戏，属于单次娱乐行为，不影响主线业务参数。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

@@ -4,8 +4,8 @@
   "persona_summary": "高频移动网络使用者",
   "static_profile": {
     "user_id": "USER_009",
-    "identity": "城市户外活动爱好者兼现场内容记录者，常在城市街区、公共活动现场及跨区域出行途中活动，对文学中的暴力与虐待描写较为敏感，日常以手机移动核心网为主要联网方式，不依赖家庭宽带或公司固网。",
-    "devices": "5G智能手机＋随身拍摄设备，便携终端确需联网时使用手机热点",
+    "identity": "常年在城市街区、公共活动现场与跨区域出行途中活动的移动内容创作者与现场协作人员，日常以手机4G/5G直连网络完成地图导航、信息检索、位置共享、即时通信、短视频拍摄上传与远程协作，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备（运动相机/手机云台），便携终端确需联网时使用手机热点。",
     "apps": [
       "微信",
       "抖音",
@@ -14,19 +14,22 @@
     ],
     "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "干脆利落、偏口语化，带一点现场协作的催促感",
+      "tone": "干脆利落、现场感强，习惯用短句同步进度，带一点外勤人的催促感。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
-        "对齐一下"
+        "对齐一下",
+        "先保消息"
       ],
-      "typical_habits": "习惯用简短口令确认任务，遇到网络波动会直接要求续传或快速恢复，不喜欢反复解释。"
+      "typical_habits": "出发前先确认路线和电量，现场先发定位再开工，遇到弱网会反复强调“先续传、别断”。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "周末户外现场短视频上传与位置共享",
+      "name": "城市现场短视频拍摄与远程协作",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处城市街区、公共活动现场或跨区域出行途中的户外等候区、临时停留点、兴趣活动现场，需要边移动边拍摄并上传现场素材时触发。",
       "period_type": "weekly",
       "days": [
         "Wednesday",
@@ -45,18 +48,21 @@
           "短视频平台"
         ],
         "service_aliases": [
-          "发片",
-          "传现场"
+          "拍一段",
+          "传素材",
+          "发现场"
         ]
       },
       "param_mappings": {
         "resolution": {
           "高清": "1080p",
-          "清晰点": "1080p"
+          "清晰点": "1080p",
+          "能看清脸": "1080p"
         },
         "rtt": {
           "低时延": "50ms",
-          "别卡": "50ms"
+          "别卡": "50ms",
+          "传快点": "50ms"
         }
       },
       "declaration_mode": "explicit_declaration",
@@ -65,28 +71,28 @@
     "scenario_events": [
       {
         "event_id": "EVT_01",
-        "event_name": "跨城户外活动周",
+        "event_name": "跨城活动周现场连拍与远程协作",
         "valid_from": "2026-11-01",
         "valid_to": "2026-11-15",
         "impact_scope": "temporary",
-        "scene_description": "跨区域出行途中和户外等候区，移动网络覆盖不稳定，需要优先保证消息及时送达与音视频业务稳定。",
+        "scene_description": "跨城参加公共活动，白天在露天集结区、场馆外围和交通接驳点之间移动，现场人流密集、基站切换频繁，需要边拍边传并与后方远程对齐素材。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
         },
-        "trigger_reason": "跨城移动场景下弱覆盖路段增多，降低分辨率并收紧时延上限，优先保证任务续传和快速恢复。"
+        "trigger_reason": "跨城活动周网络切换频繁、上传并发高，临时降低分辨率并收紧时延上限，优先保证素材续传和远程协作消息及时送达。"
       }
     ],
     "sub_storylines": [
       {
         "sub_id": "SUB_MT_01",
-        "name": "现场远程协作沟通",
+        "name": "晚间素材复盘与远程沟通",
         "period_type": "weekly_evening",
         "days": [
           "Sunday",
           "Wednesday"
         ],
-        "trigger_condition": "现场拍摄后需要与同伴对齐素材和位置时",
+        "trigger_condition": "回到临时停留点或户外等候区后，需要与协作者复盘当天素材并确认次日拍摄安排时触发。",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
@@ -100,23 +106,25 @@
           ],
           "service_aliases": [
             "对一下",
-            "视频对齐"
+            "过一遍素材"
           ]
         },
         "param_mappings": {
           "resolution": {
-            "标清": "720p"
+            "标清": "720p",
+            "能看就行": "720p"
           },
           "rtt": {
-            "能听清就行": "100ms"
+            "能听清就行": "100ms",
+            "别太卡": "100ms"
           }
         }
       },
       {
         "sub_id": "SUB_MT_02",
-        "name": "临时远程会议接入",
+        "name": "临时远程协作会议",
         "period_type": "sporadic_evening",
-        "trigger_condition": "外勤途中临时需要接入团队会议时",
+        "trigger_condition": "在跨区域出行途中或临时停留点接到协作方临时会议邀请，需要快速接入讨论拍摄方案时触发。",
         "application_name": "腾讯会议",
         "service_name": "会议",
         "preferred_params": {
@@ -126,19 +134,21 @@
         "aliases": {
           "app_aliases": [
             "腾讯会",
-            "开会软件"
+            "会议号"
           ],
           "service_aliases": [
-            "线上碰头",
-            "远程会"
+            "拉个会",
+            "对齐一下"
           ]
         },
         "param_mappings": {
           "resolution": {
-            "超清": "1080p"
+            "超清": "1080p",
+            "清楚点": "1080p"
           },
           "rtt": {
-            "不卡": "80ms"
+            "不卡": "80ms",
+            "稳一点": "80ms"
           }
         }
       }
@@ -146,10 +156,10 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "name": "单次看直播",
+        "name": "临时看直播",
         "application_name": "哔哩哔哩",
         "service_name": "看直播",
-        "scenario_description": "临时停留点休息时，单次打开直播观看兴趣活动内容。",
+        "scenario_description": "在户外等候区临时休息时，用手机看一场兴趣相关的直播，属于单次非主线行为。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -157,10 +167,10 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "单次地图导航与位置共享",
-        "application_name": "高德地图",
-        "service_name": "视频通话",
-        "scenario_description": "城市街区临时找路时，单次发起位置共享并附带视频通话确认碰头点。",
+        "name": "碎片时间刷短视频",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "scenario_description": "在通勤或跨区域出行途中，用手机刷短视频打发时间，不属于主线拍摄上传任务。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

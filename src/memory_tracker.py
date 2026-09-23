@@ -26,18 +26,24 @@ class MemoryTracker:
         decl_mode = s_plan.get("declaration_mode", "explicit_declaration")
 
         if b_type == "main":
+            trig_type = s_plan.get("storyline_trigger_type", "time_periodic")
+            trig_cond = s_plan.get("trigger_condition", "每周常规周期时段")
+            scope_val = "weekly_cycle" if trig_type == "time_periodic" else ("task_mission" if trig_type == "task_activity" else "location_boundary")
+
             if role == "evidence_session":
                 if decl_mode == "explicit_declaration":
                     # 主线记忆显式初建 (One-shot)
                     mem_item = {
                         "memory_id": "MF_001",
                         "category": "periodic_main_storyline",
+                        "storyline_trigger_type": trig_type,
+                        "trigger_condition": trig_cond,
                         "declaration_mode": "explicit_declaration",
                         "application_name": tp["application_name"],
                         "service_name": tp["service_name"],
                         "resolution": tp["resolution"],
                         "rtt_max": tp["rtt"],
-                        "scope": "weekly_cycle",
+                        "scope": scope_val,
                         "status": "active",
                         "evidence_count": 1,
                         "first_declared_at": ref_time,
@@ -47,7 +53,7 @@ class MemoryTracker:
                     memory_events.append({
                         "event_type": "form_memory_explicit",
                         "memory_id": "MF_001",
-                        "description": f"用户首次明确显式声明长期偏好：{tp['application_name']}{tp['service_name']}（{tp['resolution']}, {tp['rtt']}），设立老规矩指令。",
+                        "description": f"用户首次明确显式声明长期偏好（触发条件：{trig_cond}）：{tp['application_name']}{tp['service_name']}（{tp['resolution']}, {tp['rtt']}），设立老规矩指令。",
                         "target_slots": ["application_name", "service_name", "resolution", "rtt_max"]
                     })
                 else:
@@ -55,12 +61,14 @@ class MemoryTracker:
                     mem_item = {
                         "memory_id": "MF_001",
                         "category": "periodic_main_storyline",
+                        "storyline_trigger_type": trig_type,
+                        "trigger_condition": trig_cond,
                         "declaration_mode": "implicit_induction",
                         "application_name": tp["application_name"],
                         "service_name": tp["service_name"],
                         "resolution": tp["resolution"],
                         "rtt_max": tp["rtt"],
-                        "scope": "weekly_cycle",
+                        "scope": scope_val,
                         "status": "provisional",  # 候选/待归纳状态
                         "evidence_count": 1,
                         "first_declared_at": ref_time,
@@ -70,7 +78,7 @@ class MemoryTracker:
                     memory_events.append({
                         "event_type": "log_task_history",
                         "memory_id": "MF_001",
-                        "description": f"用户发生单次保障行为：{tp['application_name']}{tp['service_name']}，未显式声明长期偏好，记录单次历史日志（防单次行为过拟合）。",
+                        "description": f"用户在场景（{trig_cond}）发生单次保障行为：{tp['application_name']}{tp['service_name']}，未显式声明长期偏好，记录单次历史日志（防单次行为过拟合）。",
                         "target_slots": ["application_name", "service_name", "resolution", "rtt_max"]
                     })
             elif role in ["reinforcement_session", "reuse_session"]:
@@ -86,14 +94,14 @@ class MemoryTracker:
                         memory_events.append({
                             "event_type": "crystallize_implicit_memory",
                             "memory_id": "MF_001",
-                            "description": f"用户再次在相似周期场景发起相同配置，满足隐式归纳证据阈值(N>=2)，经Agent反问确认，正式固化为长期老规矩。",
+                            "description": f"用户再次在相似场景（{trig_cond}）发起相同配置，满足隐式归纳证据阈值(N>=2)，经Agent反问确认，正式固化为长期老规矩。",
                             "retrieved_slots": ["application_name", "service_name", "resolution", "rtt_max"]
                         })
                     else:
                         memory_events.append({
                             "event_type": "reinforce_memory",
                             "memory_id": "MF_001",
-                            "description": f"用户省略参数复用主线记忆，Agent 成功补全并经用户确认，证据强度增至 {self.active_memories['MF_001']['evidence_count']} 次。",
+                            "description": f"用户在（{trig_cond}）省略参数复用主线记忆，Agent 成功补全并经用户确认，证据强度增至 {self.active_memories['MF_001']['evidence_count']} 次。",
                             "retrieved_slots": ["application_name", "service_name", "resolution", "rtt_max"]
                         })
 

@@ -28,36 +28,70 @@ class DynamicTimelinePlanner:
         uid_num = int(num_match.group()) if num_match else 1
         decl_mode = "explicit_declaration" if (uid_num % 2 == 1) else "implicit_induction"
 
+        # 判定主线记忆触发类型：三大核心主线类型（周期时间型、任务/现场型、特定地点型）均匀分布
+        explicit_trig_type = main_mt.get("storyline_trigger_type")
+        if explicit_trig_type in ["time_periodic", "task_activity", "location_environment"]:
+            storyline_trigger_type = explicit_trig_type
+        else:
+            trig_mod = uid_num % 3
+            if trig_mod == 1:
+                storyline_trigger_type = "time_periodic"
+            elif trig_mod == 2:
+                storyline_trigger_type = "task_activity"
+            else:
+                storyline_trigger_type = "location_environment"
+
+        task_name = main_mt.get("name", "业务现场任务")
+        raw_trig_cond = main_mt.get("trigger_condition")
+        if storyline_trigger_type == "task_activity":
+            main_env_desc = f"{task_name}现场"
+            main_trigger_desc = raw_trig_cond if raw_trig_cond else f"执行【{task_name}】任务"
+        elif storyline_trigger_type == "location_environment":
+            main_env_desc = raw_trig_cond if raw_trig_cond else "利兹露天集结区"
+            main_trigger_desc = raw_trig_cond if raw_trig_cond else "处于【利兹露天集结区/特定弱网区域】"
+        else:
+            main_env_desc = "常规周期保障现场"
+            main_trigger_desc = raw_trig_cond if raw_trig_cond else "每周常规周期时段"
+
         # 15个会话的蓝图定义
         blueprint_configs = [
             # 01: Main Evidence
             {
                 "idx": 1, "ref_time": "2026年10月07日13时45分", "template_id": "T2-4", "role": "evidence_session",
                 "source": main_mt, "type": "main", "start": "2026年10月07日14时00分", "end": "2026年10月07日16时00分", "dur": "120min",
-                "env": "露天现场集结区", 
+                "env": main_env_desc, 
                 "action": "declare_explicit_rule" if decl_mode == "explicit_declaration" else "single_task_implicit_behavior",
-                "declaration_mode": decl_mode
+                "declaration_mode": decl_mode,
+                "storyline_trigger_type": storyline_trigger_type,
+                "trigger_condition": main_trigger_desc
             },
             # 02: Sub 1 Evidence
             {
                 "idx": 2, "ref_time": "2026年10月11日18时30分", "template_id": "T2-1", "role": "evidence_session",
                 "source": sub_01, "type": "sub_01", "start": "2026年10月11日18时45分", "end": "2026年10月11日19时45分", "dur": "60min",
                 "env": "大巴跨城转场高速公路", "action": "establish_sub_storyline_1",
-                "declaration_mode": "implicit_induction"
+                "declaration_mode": "implicit_induction",
+                "storyline_trigger_type": "location_environment",
+                "trigger_condition": "大巴转场弱网环境"
             },
             # 03: Main Reinforcement
             {
                 "idx": 3, "ref_time": "2026年10月14日13时50分", "template_id": "T2-1", "role": "reinforcement_session",
                 "source": main_mt, "type": "main", "start": "2026年10月14日14时00分", "end": "2026年10月14日16时00分", "dur": "120min",
-                "env": "转场大巴刚到现场", 
+                "env": main_env_desc, 
                 "action": "reinforce_explicit_memory" if decl_mode == "explicit_declaration" else "crystallize_implicit_memory",
-                "declaration_mode": decl_mode
+                "declaration_mode": decl_mode,
+                "storyline_trigger_type": storyline_trigger_type,
+                "trigger_condition": main_trigger_desc
             },
             # 04: Sub 2 Evidence
             {
                 "idx": 4, "ref_time": "2026年10月15日20时00分", "template_id": "T2-1", "role": "evidence_session",
                 "source": sub_02, "type": "sub_02", "start": "2026年10月15日20时15分", "end": "2026年10月15日21时45分", "dur": "90min",
-                "env": "驻地酒店休息区", "action": "establish_sub_storyline_2"
+                "env": "驻地酒店休息区", "action": "establish_sub_storyline_2",
+                "declaration_mode": "implicit_induction",
+                "storyline_trigger_type": "location_environment",
+                "trigger_condition": "驻地酒店休息区"
             },
             # 05: Distractor 1
             {
@@ -75,13 +109,17 @@ class DynamicTimelinePlanner:
             {
                 "idx": 7, "ref_time": "2026年10月24日13时45分", "template_id": "T2-1", "role": "reuse_session",
                 "source": main_mt, "type": "main", "start": "2026年10月24日14时00分", "end": "2026年10月24日16时00分", "dur": "120min",
-                "env": "周六现场看台", "action": "reuse_main_memory"
+                "env": main_env_desc, "action": "reuse_main_memory",
+                "storyline_trigger_type": storyline_trigger_type,
+                "trigger_condition": main_trigger_desc
             },
             # 08: Main Reinforcement
             {
                 "idx": 8, "ref_time": "2026年10月28日13时50分", "template_id": "T2-1", "role": "reinforcement_session",
                 "source": main_mt, "type": "main", "start": "2026年10月28日14时00分", "end": "2026年10月28日16时00分", "dur": "120min",
-                "env": "常规工作转场途中", "action": "reinforce_main_memory"
+                "env": main_env_desc, "action": "reinforce_main_memory",
+                "storyline_trigger_type": storyline_trigger_type,
+                "trigger_condition": main_trigger_desc
             },
             # 09: Sub 2 Reinforcement
             {
@@ -125,7 +163,9 @@ class DynamicTimelinePlanner:
             {
                 "idx": 15, "ref_time": "2026年11月18日13时45分", "template_id": "T2-1", "role": "reuse_session",
                 "source": main_mt, "type": "main_recovery", "start": "2026年11月18日14时00分", "end": "2026年11月18日16时00分", "dur": "120min",
-                "env": "恢复日常常规现场", "action": "recover_long_term_rule"
+                "env": main_env_desc, "action": "recover_long_term_rule",
+                "storyline_trigger_type": storyline_trigger_type,
+                "trigger_condition": main_trigger_desc
             }
         ]
 
@@ -151,6 +191,8 @@ class DynamicTimelinePlanner:
                 "scenario_env": cfg["env"],
                 "memory_action": cfg["action"],
                 "declaration_mode": cfg.get("declaration_mode", decl_mode),
+                "storyline_trigger_type": cfg.get("storyline_trigger_type", storyline_trigger_type if cfg["type"].startswith("main") else "time_periodic"),
+                "trigger_condition": cfg.get("trigger_condition", main_trigger_desc if cfg["type"].startswith("main") else ""),
                 "target_params": {
                     "application_name": src["application_name"],
                     "service_name": src["service_name"],

@@ -4,31 +4,32 @@
   "persona_summary": "移动训练与赛事人员",
   "static_profile": {
     "user_id": "USER_008",
-    "identity": "职业得分后卫/射手位球员，长期随队进行跨区域客场转场、露天训练与赛事集结，日常以5G手机＋可穿戴设备为主要联网终端，习惯在移动与户外环境中完成赛事直播、团队调度、训练视频上传与数据回放。",
-    "devices": "主力设备：5G智能手机；辅助设备：可穿戴设备（运动手表/心率带）、便携运动相机；便携终端确需联网时使用手机热点。",
+    "identity": "职业得分后卫兼球队移动训练与赛事保障人员，长期随队跨区域转场，在露天球场、赛道及赛事集结区完成训练、比赛与现场保障任务，习惯深夜与队友联机打虚拟篮球游戏。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴运动手表与便携运动相机；便携终端确需联网时使用手机热点。",
     "apps": [
-      "微信",
       "抖音",
+      "微信",
       "腾讯会议",
       "哔哩哔哩"
     ],
     "speech_archetype": "athlete_speaker",
     "speech_style": {
-      "tone": "直给、干脆、带点球场口令感，习惯用短句和行动指令，不爱绕弯子。",
+      "tone": "干脆直接、带点球场口令感，语速偏快，喜欢用短句和运动术语。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "先记上",
-        "回头按这个来"
+        "稳住节奏"
       ],
-      "typical_habits": "训练和转场间隙用语音或短消息快速确认安排；遇到固定安排会说“记一下，以后按老规矩”；对网络最常提“别卡”“稳一点”“上行要够”。"
+      "typical_habits": "布置任务前先确认网络和位置，习惯用‘老规矩’指代固定流程，用‘别掉链子’提醒队友保持状态，用‘对齐一下’确认战术或调度信息。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "周三/周六训练直播与团队调度",
+      "name": "赛事直播与团队即时调度",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "执行客场转场、露天训练或赛事集结保障任务时，需要向团队同步现场画面并保持即时调度通信。",
       "period_type": "weekly",
       "days": [
         "Wednesday",
@@ -43,113 +44,104 @@
       },
       "aliases": {
         "app_aliases": [
-          "抖子",
-          "抖音直播"
+          "抖音直播",
+          "抖子"
         ],
         "service_aliases": [
           "开播",
-          "把训练挂上去",
-          "开个直播"
+          "推流"
         ]
       },
       "param_mappings": {
         "resolution": {
           "高清": "1080p",
-          "清晰点": "1080p",
-          "清楚点": "1080p"
+          "清晰点": "1080p"
         },
         "rtt": {
           "低时延": "50ms",
-          "别卡": "50ms",
-          "稳一点": "50ms"
+          "别卡": "50ms"
         }
       },
-      "declaration_mode": "explicit_declaration",
+      "declaration_mode": "implicit_induction",
       "evidence_level": "explicit_long_term_declaration"
     },
     "scenario_events": [
       {
         "event_id": "EVT_01",
-        "event_name": "跨城客场赛事周",
+        "event_name": "跨城赛事周密集转场保障",
         "valid_from": "2026-11-01",
         "valid_to": "2026-11-15",
         "impact_scope": "temporary",
-        "scene_description": "连续客场转场，赛事集结区与露天球场人群密集，移动网络拥塞明显，需优先保证团队调度与低时延通信。",
+        "scene_description": "跨城赛事周期间，球队连续转场，赛事集结区与露天球场人群密集，移动网络拥塞，视频上行带宽波动明显。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
         },
-        "trigger_reason": "客场赛事周人群密集、转场频繁，优先保通信连续和低时延，直播分辨率临时降档以稳住上行。"
+        "trigger_reason": "人群密集导致上行带宽紧张，为保证直播连续与调度指令及时，临时降低分辨率并收紧时延上限。"
       }
     ],
     "sub_storylines": [
       {
         "sub_id": "SUB_MT_01",
-        "name": "大巴转场视频调度",
+        "name": "大巴转场视频调度会",
         "period_type": "weekly_evening",
         "days": [
           "Sunday",
           "Wednesday"
         ],
-        "trigger_condition": "球队大巴转场途中或临时休息点，需要快速对齐行程与人员安排。",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "trigger_condition": "球队大巴转场途中需要临时召开视频调度会，确认次日训练与赛事安排。",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
         "aliases": {
           "app_aliases": [
-            "微信视频",
-            "绿泡泡"
+            "腾讯会议",
+            "会议号"
           ],
           "service_aliases": [
-            "对一下",
-            "视频对齐",
-            "车上碰一下"
+            "开个会",
+            "对齐一下"
           ]
         },
         "param_mappings": {
           "resolution": {
-            "标清": "720p",
-            "能看清人就行": "720p"
+            "标清": "720p"
           },
           "rtt": {
-            "能听清就行": "100ms",
-            "别断就行": "100ms"
+            "能听清就行": "100ms"
           }
         }
       },
       {
         "sub_id": "SUB_MT_02",
-        "name": "训练录像复盘与数据回放",
+        "name": "训练录像复盘与战术沟通",
         "period_type": "sporadic_evening",
-        "trigger_condition": "训练或比赛结束后，教练组要求上传录像、回放关键回合并做数据记录。",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "trigger_condition": "训练或比赛结束后，需要与教练组远程回看录像并沟通战术调整。",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
         "aliases": {
           "app_aliases": [
-            "B站",
-            "小破站"
+            "微信",
+            "绿泡泡"
           ],
           "service_aliases": [
-            "传录像",
-            "复盘片段",
-            "回放一下"
+            "视频复盘",
+            "看录像"
           ]
         },
         "param_mappings": {
           "resolution": {
-            "超清": "1080p",
-            "看清楚点": "1080p"
+            "超清": "1080p"
           },
           "rtt": {
-            "不卡": "80ms",
-            "流畅点": "80ms"
+            "不卡": "80ms"
           }
         }
       }
@@ -157,10 +149,10 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "name": "临时线上会议",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
-        "scenario_description": "偶发的赞助商或球队管理线上沟通，单次发生，不属于固定周期安排。",
+        "name": "深夜联机虚拟篮球游戏",
+        "application_name": "哔哩哔哩",
+        "service_name": "云游戏",
+        "scenario_description": "深夜在临时休息点与队友联机打虚拟篮球游戏，属于放松性单次活动，不纳入主线调度。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -168,10 +160,10 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "睡前刷直播",
-        "application_name": "快手",
-        "service_name": "看直播",
-        "scenario_description": "晚上休息时随手看篮球或游戏直播，单次娱乐行为，不构成长期主线。",
+        "name": "赛前刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "scenario_description": "赛前在集结区刷短视频放松，属于单次娱乐行为，不影响主线直播与调度参数。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

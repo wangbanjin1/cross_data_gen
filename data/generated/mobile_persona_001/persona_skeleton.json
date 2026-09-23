@@ -4,31 +4,32 @@
   "persona_summary": "巡回活动讲者",
   "static_profile": {
     "user_id": "USER_001",
-    "identity": "退役残疾人高山滑雪运动员，现全职励志巡回演讲师及公益推广大使。每周3至6次在客运大巴、训练场看台与露天赛事集结区进行多地巡回演讲与移动直播，完全依赖手机移动核心网（4G/5G）。",
-    "devices": "主力设备：华为Mate 60 Pro（5G，负责推流直播与个人热点）；辅助设备：iPad Pro 5G版（看讲义与回放）",
+    "identity": "前残奥高山滑雪运动员，现为巡回励志演讲者与户外公益活动推广大使，常年跨城转场，在露天训练场、赛道、球场及赛事集结区开展公益直播、演讲片段上传与观众互动。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
     "apps": [
       "抖音",
       "微信",
-      "快手",
-      "腾讯会议"
+      "腾讯会议",
+      "哔哩哔哩"
     ],
     "speech_archetype": "athlete_speaker",
     "speech_style": {
-      "tone": "坚毅干练、雷厉风行、不拖泥带水",
+      "tone": "干脆利落、带赛场口令感，鼓励式与调度式并存，语速偏快，常用短句推进。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
-        "利索点保上",
-        "保一下推流",
-        "抓紧开通"
+        "对齐一下",
+        "稳住，我们能赢"
       ],
-      "typical_habits": "说话果断干脆、注重现场动机（大巴颠簸、雪场风大、集结区拥塞），偏好'老规矩'、'利索点'、'别掉链子'。"
+      "typical_habits": "习惯在活动前用短句确认流程，直播前强调上行和稳定，转场中频繁用语音同步位置与设备状态。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "周三与周六下午巡讲直播推流",
+      "name": "每周固定公益直播与演讲片段上传",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每周三周六下午常规业务，在户外公益活动或跨城转场期间进行移动直播与演讲片段上传",
       "period_type": "weekly",
       "days": [
         "Wednesday",
@@ -43,113 +44,111 @@
       },
       "aliases": {
         "app_aliases": [
-          "阿抖",
-          "抖音平台"
+          "抖子",
+          "抖音号"
         ],
         "service_aliases": [
-          "巡讲推流",
-          "现场开播",
-          "推流保障",
-          "做直播"
+          "开播",
+          "上播",
+          "拉直播"
         ]
       },
       "param_mappings": {
         "resolution": {
           "高清": "1080p",
-          "细节看得清": "1080p",
-          "别糊": "1080p"
+          "清晰点": "1080p",
+          "清楚点": "1080p"
         },
         "rtt": {
           "低时延": "50ms",
-          "别卡顿": "50ms",
-          "别掉链子": "50ms"
+          "别卡": "50ms",
+          "稳住": "50ms"
         }
       },
+      "declaration_mode": "explicit_declaration",
       "evidence_level": "explicit_long_term_declaration"
     },
     "scenario_events": [
       {
-        "event_id": "EVT_WINTER_GAMES",
-        "event_name": "冬季全国残运巡回选拔赛",
+        "event_id": "EVT_01",
+        "event_name": "跨城公益演讲周与赛事集结区直播保障",
         "valid_from": "2026-11-01",
         "valid_to": "2026-11-15",
         "impact_scope": "temporary",
-        "scene_description": "高山雪场户外低温、看台人流密集且伴随降雪，上行信道受限",
+        "scene_description": "跨城转场途中、露天训练场与赛事集结区人群密集，移动网络拥塞，需优先保证直播上行连续与低时延互动。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
         },
-        "trigger_reason": "极端环境且人流密集，主动降画质保超低时延与抗抖动"
+        "trigger_reason": "人群密集与转场切换导致上行波动，临时降低分辨率并收紧时延上限，优先保障直播不中断与互动实时性。"
       }
     ],
     "sub_storylines": [
       {
         "sub_id": "SUB_MT_01",
-        "name": "转场大巴与领队视频调度",
+        "name": "大巴转场中的团队视频调度",
         "period_type": "weekly_evening",
         "days": [
           "Sunday",
           "Wednesday"
         ],
-        "trigger_condition": "在大巴跨城高速转场途中（通常在傍晚18:00-20:00）",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "trigger_condition": "周日晚与周三晚转场大巴途中，与团队进行视频调度和流程对齐",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
         "aliases": {
           "app_aliases": [
-            "微信",
-            "微信号"
+            "腾讯会",
+            "会议号"
           ],
           "service_aliases": [
-            "跟领队碰头",
-            "团队连线",
-            "对流程视频"
+            "对齐一下",
+            "开个短会"
           ]
         },
         "param_mappings": {
           "resolution": {
             "标清": "720p",
-            "看得清人脸": "720p"
+            "能看就行": "720p"
           },
           "rtt": {
-            "能说清就行": "100ms",
-            "别中断": "100ms"
+            "能听清就行": "100ms",
+            "别断": "100ms"
           }
         }
       },
       {
         "sub_id": "SUB_MT_02",
-        "name": "驻地酒店赛事录像复盘",
+        "name": "训练与演讲录像复盘上传",
         "period_type": "sporadic_evening",
-        "trigger_condition": "周四晚间在酒店休息区复盘滑雪运动员比赛与训练录像",
-        "application_name": "快手",
-        "service_name": "看直播",
+        "trigger_condition": "晚间回到临时休息点后，上传训练视频与演讲片段并进行回放复盘",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
         "aliases": {
           "app_aliases": [
-            "快手",
-            "老铁平台"
+            "B站",
+            "小破站"
           ],
           "service_aliases": [
-            "赛事录像复盘",
-            "看回放",
-            "复盘比赛"
+            "传片子",
+            "复盘片"
           ]
         },
         "param_mappings": {
           "resolution": {
             "超清": "1080p",
-            "大屏清晰": "1080p"
+            "清楚点": "1080p"
           },
           "rtt": {
-            "流畅不卡": "80ms",
-            "别频繁加载": "80ms"
+            "不卡": "80ms",
+            "顺一点": "80ms"
           }
         }
       }
@@ -157,10 +156,10 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "name": "组委会宣讲通气会",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
-        "scenario_description": "驻地酒店临时旁听半小时主办方通气会",
+        "name": "临时与主办方视频通话",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "scenario_description": "活动前临时与主办方确认场地与流程，单次短时视频通话",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -168,10 +167,10 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "周末休息刷短视频",
-        "application_name": "微信",
+        "name": "休息时刷短视频",
+        "application_name": "快手",
         "service_name": "短视频",
-        "scenario_description": "午休时间刷刷视频资讯",
+        "scenario_description": "临时休息点放松时刷短视频，非业务性单次行为",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

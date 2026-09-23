@@ -4,37 +4,39 @@
   "persona_summary": "户外视觉创作者",
   "static_profile": {
     "user_id": "USER_011",
-    "identity": "阿曼籍平面设计师与户外视觉创作者，长期跨城采风、拍摄与展览布展，主要活动在跨城途中、偏远路段、临时停靠点、高速公路服务区、车站、港区与机场外场，全程依赖手机4G/5G移动核心网直接联网，不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式，便携终端确需联网时使用手机热点。",
-    "devices": "主力设备为5G智能手机，辅助设备为便携相机与笔记本电脑（通过手机热点联网）",
+    "identity": "阿曼籍平面设计师，长期跨城采风与户外拍摄，以手机5G移动核心网作为唯一接入方式，在街区、展览、拍摄现场与跨城途中完成灵感检索、作品预览与高清设计稿交付。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携平板与相机，平板需联网时使用手机热点。",
     "apps": [
       "微信",
       "钉钉",
       "高德地图",
-      "腾讯会议"
+      "小红书"
     ],
-    "speech_archetype": "outdoor_streamer",
+    "speech_archetype": "outdoor_creator",
     "speech_style": {
-      "tone": "干脆利落、带点催促感，习惯用短句确认安排，强调别耽误拍摄和交付",
+      "tone": "干脆利落、带点现场指挥感，常用短句确认进度，偶尔夹杂设计行业口语。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "路上说"
+        "先看效果"
       ],
-      "typical_habits": "出发前先确认路线和客户需求，途中随时语音沟通、上传设计稿和现场图，遇到信号切换会主动提醒对方稍等"
+      "typical_habits": "出发前先确认路线和交付节点，现场用手机快速预览与上传，遇到网络波动会立刻要求切换更稳的链路。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "跨城采风与设计稿回传",
+      "name": "跨城采风与设计稿交付",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "执行跨城采风、展览拍摄或客户现场视觉采集任务时",
       "period_type": "weekly",
       "days": [
         "Wednesday",
         "Saturday"
       ],
       "time_range": "14:00-17:00",
-      "application_name": "微信",
+      "application_name": "钉钉",
       "service_name": "视频通话",
       "preferred_params": {
         "resolution": "1080p",
@@ -42,14 +44,13 @@
       },
       "aliases": {
         "app_aliases": [
-          "微信",
-          "V信",
-          "那个绿图标"
+          "钉钉工作台",
+          "客户对接端"
         ],
         "service_aliases": [
           "对一下稿",
           "远程看片",
-          "视频过一下"
+          "现场连线"
         ]
       },
       "param_mappings": {
@@ -61,7 +62,7 @@
         "rtt": {
           "低时延": "50ms",
           "别卡": "50ms",
-          "实时点": "50ms"
+          "实时一点": "50ms"
         }
       },
       "declaration_mode": "explicit_declaration",
@@ -70,44 +71,42 @@
     "scenario_events": [
       {
         "event_id": "EVT_01",
-        "event_name": "2026年11月跨城展览布展季",
+        "event_name": "跨城设计展会驻场周",
         "valid_from": "2026-11-01",
         "valid_to": "2026-11-15",
         "impact_scope": "temporary",
-        "scene_description": "跨城展览布展与现场拍摄期间，频繁在港区、机场外场和高速公路服务区临时停靠，网络切换密集，需要与客户和搭建团队保持稳定沟通",
+        "scene_description": "展会现场人流密集、场馆外场与港区周边基站切换频繁，需在高速移动和临时停靠点持续上传高清设计稿并保持客户视频连线。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
         },
-        "trigger_reason": "布展现场环境嘈杂、切换频繁，优先保证通话连续和调度消息及时，适当降低分辨率以换取更低时延"
+        "trigger_reason": "展会期间跨区切换密集，优先保证连线不中断和上传及时，适当降低分辨率以换取更低时延。"
       }
     ],
     "sub_storylines": [
       {
         "sub_id": "SUB_MT_01",
-        "name": "晚间素材复盘与客户沟通",
+        "name": "采风素材回传与复盘",
         "period_type": "weekly_evening",
         "days": [
           "Sunday",
           "Wednesday"
         ],
-        "trigger_condition": "当天采风或拍摄结束后，回到临时住处或停靠点，需要与客户快速复盘素材",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "trigger_condition": "当天采风结束回到临时停靠点或服务区后，需要把素材回传并和团队复盘",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
         "aliases": {
           "app_aliases": [
-            "腾讯会议",
-            "会议号",
-            "那个开会软件"
+            "微信语音",
+            "工作微信"
           ],
           "service_aliases": [
-            "复盘一下",
             "过一遍素材",
-            "碰一下"
+            "复盘一下"
           ]
         },
         "param_mappings": {
@@ -117,41 +116,39 @@
           },
           "rtt": {
             "能听清就行": "100ms",
-            "别断就行": "100ms"
+            "别断线": "100ms"
           }
         }
       },
       {
         "sub_id": "SUB_MT_02",
-        "name": "途中任务调度与电子单据上传",
+        "name": "客户现场方案沟通",
         "period_type": "sporadic_evening",
-        "trigger_condition": "跨城途中或临时停靠点收到新任务、需要上传电子单据或同步位置给协作方",
-        "application_name": "钉钉",
-        "service_name": "视频通话",
+        "trigger_condition": "客户临时要求确认设计方向或修改意见时",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
         "aliases": {
           "app_aliases": [
-            "钉钉",
-            "那个打卡软件",
-            "工作台"
+            "腾讯会议端",
+            "客户会议室"
           ],
           "service_aliases": [
-            "对齐一下",
-            "传个单子",
-            "同步位置"
+            "碰一下方案",
+            "开个短会"
           ]
         },
         "param_mappings": {
           "resolution": {
             "超清": "1080p",
-            "看清楚点": "1080p"
+            "看清楚稿子": "1080p"
           },
           "rtt": {
             "不卡": "80ms",
-            "稳一点": "80ms"
+            "顺畅点": "80ms"
           }
         }
       }
@@ -159,10 +156,10 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "name": "临时看直播找灵感",
+        "name": "服务区刷短视频",
         "application_name": "抖音",
-        "service_name": "看直播",
-        "scenario_description": "在服务区休息时偶尔刷到设计类或户外直播，停留观看几分钟找灵感，不属于固定安排",
+        "service_name": "短视频",
+        "scenario_description": "高速公路服务区临时休息时刷短视频找灵感，单次使用，不影响主线交付。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -170,10 +167,10 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "单次短视频放松",
-        "application_name": "快手",
-        "service_name": "短视频",
-        "scenario_description": "长途驾驶后在临时停靠点短暂刷短视频放松，单次发生，不形成周期性记忆",
+        "name": "夜间看直播放松",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "scenario_description": "跨城出差夜间在酒店临时看设计类直播，单次娱乐行为，不纳入长期记忆主线。",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

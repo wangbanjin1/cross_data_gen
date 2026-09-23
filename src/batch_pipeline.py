@@ -26,7 +26,7 @@ class BatchPipeline:
 
     def _load_checkpoint(self) -> dict:
         if self.ckpt_path.exists():
-            with open(self.ckpt_path, "r", encoding="utf-8") as f:
+            with open(self.ckpt_path, "r", encoding="utf-8-sig") as f:
                 return json.load(f)
         return {"completed_personas": []}
 

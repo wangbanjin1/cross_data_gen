@@ -4,8 +4,8 @@
   "persona_summary": "移动训练与参赛人员",
   "static_profile": {
     "user_id": "USER_015",
-    "identity": "一名意志坚定、体能出众的准海岸警卫队搜救游泳员候选人，日常以户外水域训练、体能拉练和赛事转场为主，长期在道路、巡逻区域、临时处置现场及夜间值守点活动，全程依赖手机4G/5G移动核心网直连，不使用家庭宽带、公司固网或普通Wi-Fi，便携终端联网时以手机热点补充。",
-    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备（运动相机/胸挂记录仪），必要时以手机热点为便携终端提供联网。",
+    "identity": "志愿加入海岸警卫队搜救泳队的体能训练者与参赛选手，日常在道路、巡逻区域、临时处置现场及夜间值守点进行高强度户外训练与赛事转场，全程依赖手机移动核心网完成运动数据记录、路线查看、视频回传与团队调度",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备（运动相机/手机云台），便携终端确需联网时使用手机热点",
     "apps": [
       "微信",
       "钉钉",
@@ -14,53 +14,56 @@
     ],
     "speech_archetype": "athlete_speaker",
     "speech_style": {
-      "tone": "干脆利落、指令感强，习惯用训练和执勤术语，语速偏快，强调时间节点和动作到位。",
+      "tone": "干脆利落、指令式、带训练口令感，语速偏快，强调时效与安全",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "按训练标准来"
+        "稳住节奏",
+        "马上回传"
       ],
-      "typical_habits": "说话动机以任务调度、路线确认和团队同步为主，习惯先报位置再报需求，常用简短口令式表达，遇到弱覆盖会主动要求续传或恢复。"
+      "typical_habits": "习惯用短句下达和确认任务，先报位置再报状态，训练和赛事中频繁用口头禅催促队友同步进度，遇到弱网会反复强调续传与恢复"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "户外训练与赛事转场直播调度",
+      "name": "户外训练与赛事转场实时调度",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处道路、巡逻区域、临时处置现场或夜间值守点等移动执勤环境，需要边移动边完成位置共享、任务调度与现场取证回传时触发",
       "period_type": "weekly",
       "days": [
         "Wednesday",
         "Saturday"
       ],
       "time_range": "14:00-17:00",
-      "application_name": "哔哩哔哩",
-      "service_name": "开直播",
+      "application_name": "钉钉",
+      "service_name": "视频通话",
       "preferred_params": {
         "resolution": "1080p",
         "rtt_max": "50ms"
       },
       "aliases": {
         "app_aliases": [
-          "B站",
-          "小破站"
+          "钉钉工作台",
+          "任务钉"
         ],
         "service_aliases": [
-          "开播",
-          "拉个直播",
-          "现场推流"
+          "现场连线",
+          "任务对讲",
+          "视频回传"
         ]
       },
       "param_mappings": {
         "resolution": {
           "高清": "1080p",
           "清晰点": "1080p",
-          "清楚点": "1080p"
+          "看得清脸": "1080p"
         },
         "rtt": {
           "低时延": "50ms",
           "别卡": "50ms",
-          "跟得上": "50ms"
+          "马上到": "50ms"
         }
       },
       "declaration_mode": "explicit_declaration",
@@ -69,16 +72,16 @@
     "scenario_events": [
       {
         "event_id": "EVT_01",
-        "event_name": "海岸警卫队搜救游泳员选拔赛周",
+        "event_name": "海岸警卫队搜救泳队选拔赛周",
         "valid_from": "2026-11-01",
         "valid_to": "2026-11-15",
         "impact_scope": "temporary",
-        "scene_description": "赛事周期间在沿海开放水域、临时集结区和夜间值守点之间高频转场，现场网络以4G/5G移动核心网为主，部分路段和海域存在弱覆盖与信号抖动，需要保证直播和位置共享不中断。",
+        "scene_description": "沿海选拔赛区及周边临时集结区，夜间值守点与事故模拟现场交替，移动过程中弱覆盖路段增多，现场图片和视频需稳定回传",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
         },
-        "trigger_reason": "赛事周对实时性和稳定性要求更高，降低分辨率以换取更低时延和更稳的回传，避免弱覆盖路段直播卡顿影响团队调度。"
+        "trigger_reason": "选拔赛周任务密度高、现场环境复杂，需优先保证低时延消息及时送达与弱覆盖路段任务续传，适当降低分辨率以换取更稳定的回传"
       }
     ],
     "sub_storylines": [
@@ -90,7 +93,7 @@
           "Sunday",
           "Wednesday"
         ],
-        "trigger_condition": "训练结束后回到值守点或临时驻地，需要与教练和队友复盘动作、核对训练数据并同步次日安排。",
+        "trigger_condition": "晚间回到值守点或临时驻地，需要回看训练录像并与团队沟通改进动作时触发",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
@@ -99,56 +102,54 @@
         },
         "aliases": {
           "app_aliases": [
-            "微信",
-            "V信"
+            "微信语音",
+            "绿泡泡"
           ],
           "service_aliases": [
-            "对一下",
-            "视频复盘",
-            "拉个视频"
+            "复盘连线",
+            "对一下动作"
           ]
         },
         "param_mappings": {
           "resolution": {
             "标清": "720p",
-            "能看清动作就行": "720p"
+            "能看清就行": "720p"
           },
           "rtt": {
             "能听清就行": "100ms",
-            "别断就行": "100ms"
+            "别断线": "100ms"
           }
         }
       },
       {
         "sub_id": "SUB_MT_02",
-        "name": "夜间值守点任务调度与事件上报",
+        "name": "赛事路线与训练数据上传",
         "period_type": "sporadic_evening",
-        "trigger_condition": "夜间值守点或事故现场出现临时任务，需要快速上报现场情况、共享位置并接收调度指令。",
-        "application_name": "钉钉",
-        "service_name": "会议",
+        "trigger_condition": "完成一次长距离训练或赛事转场后，需要上传运动数据、查看路线与赛程并接收团队临时通知时触发",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
         "aliases": {
           "app_aliases": [
-            "钉钉",
-            "钉一下"
+            "B站",
+            "小破站"
           ],
           "service_aliases": [
-            "拉个会",
-            "对齐一下",
-            "调度会"
+            "传训练视频",
+            "发路线记录"
           ]
         },
         "param_mappings": {
           "resolution": {
             "超清": "1080p",
-            "看清楚现场": "1080p"
+            "高清": "1080p"
           },
           "rtt": {
             "不卡": "80ms",
-            "及时就行": "80ms"
+            "快点传": "80ms"
           }
         }
       }
@@ -156,10 +157,10 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "name": "休息日刷短视频",
-        "application_name": "抖音",
-        "service_name": "短视频",
-        "scenario_description": "休息日在驻地或家中用手机随意刷短视频放松，与训练和执勤任务无关，属于单次非周期性行为。",
+        "name": "临时线上会议",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "scenario_description": "偶尔被召集参加临时线上协调会，讨论训练计划或赛事安排，属于单次非主线业务",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -167,10 +168,10 @@
       },
       {
         "distractor_id": "DIST_02",
-        "name": "临时看赛事直播",
+        "name": "休息时看直播",
         "application_name": "快手",
         "service_name": "看直播",
-        "scenario_description": "偶尔在晚间观看他人赛事直播或公开训练直播，属于单次娱乐性观看，不涉及自身任务调度。",
+        "scenario_description": "训练间隙或夜间休息时偶尔打开快手观看户外运动直播，属于单次无关业务",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
