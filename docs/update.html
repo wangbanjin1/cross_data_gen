@@ -770,6 +770,51 @@ User: "对，就按这个来，别掉链子。"
         </div>
     </div>
 
+    <!-- 参数别名对齐律与复用槽位省略法则 -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-icon">🎯</div>
+            <h2>关键质量治理：参数别名对齐律 (Parameter Alias Alignment) 与复用槽位省略</h2>
+        </div>
+
+        <div class="contrast-grid">
+            <div class="contrast-box bad">
+                <div class="contrast-title">❌ 改造前缺陷现象 (参数别名打架 & 记忆复用冗余复读)</div>
+                <p>1. <strong>参数别名层级错位与冲突</strong>：如 1080p（高清/原画）在后续复用会话中被大模型随机生成为“顶格清晰度”，但“顶格清晰度”在实际业务中通常指代 2K 或 4K，造成认知混淆与前后矛盾。</p>
+                <p>2. <strong>生造未奠基的物理失真词汇</strong>：如时延 50ms 在会话中被模型自由发挥写成“零卡顿”，但首发记忆中从未登记过该代称，且“零卡顿”在物理网络中不可能存在，纯属幻觉。</p>
+                <p>3. <strong>复用会话重复复读参数</strong>：在 S-08 等已固化生效的记忆复用会话中，用户本应只说“老时间/老规矩”，却把“顶格清晰度、零卡顿、俩小时”全量参数像背书一样重新念了一遍，完全失去了记忆复用的业务意义。</p>
+            </div>
+
+            <div class="contrast-box good">
+                <div class="contrast-title">✅ 改造后黄金标准规范 (精准对齐 & 槽位省略)</div>
+                <p>1. <strong>数值档位与别名严格客观对齐</strong>：
+                    <br>• <strong>1080p</strong>：全局统一限定为“1080p”、“1080p原画”或“超清”，坚决取缔易与 2K/4K 混淆的“顶格清晰度”；
+                    <br>• <strong>720p</strong>：全局统一限定为“720p”或“高清”；
+                    <br>• <strong>50ms</strong>：全局统一限定为“50ms以内”、“50毫秒以内”或“低时延”，严禁使用失真夸大的“零卡顿”；
+                    <br>• <strong>100ms</strong>：全局统一限定为“100ms以内”或“100毫秒”。
+                </p>
+                <p>2. <strong>复用会话强制省略已记忆槽位 (Slot Omission)</strong>：
+                    <br>• 在常规复用/强化会话中，用户第 1 轮只提供暗号（“老规矩”、“老时间”）与已登记业务代称，<strong>强制省略画质、时延、时长等已记忆参数</strong>！
+                    <br>• 必须由助手根据记忆主动调取参数向用户反问确认（<code>Confirm_Slot</code>），用户第 2 轮只需简短确认（如“对，开通吧”），完美贴合真实人类助手交互。
+                </p>
+            </div>
+        </div>
+
+        <div style="margin-top: 20px; background: rgba(15, 23, 42, 0.6); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color);">
+            <div style="font-weight: 600; color: var(--accent-cyan); margin-bottom: 8px;">实测治理后的 S-USER_003-08 记忆复用真实对话：</div>
+            <pre style="margin: 0; background: #0b1120; padding: 14px; border-radius: 6px; font-size: 0.88rem; overflow-x: auto;">
+[S-USER_003-08 复用会话：用户触发暗号，助手调取记忆]
+Turn 1
+User: "老规矩，企鹅会议，老时间，帮我开一下。"  // ✅ 槽位省略：仅凭暗号与已奠基代称发起，绝无多余参数复读与失真词汇
+Agent: "收到，您是要按老规矩开通腾讯会议保障对吧？我这边调取到历史配置：1080p原画、50ms以内、持续120分钟，确认按这个开通吗？"  // ✅ 助手从记忆库自动补全
+
+Turn 2
+User: "对，开通吧。"  // ✅ 极简确认
+Agent: "好的，已为您开通腾讯会议保障，1080p原画、50ms以内、持续120分钟。祝会议顺利，别掉链子！"
+            </pre>
+        </div>
+    </div>
+
     <!-- 生产性能与交付标准 -->
     <div class="section">
         <div class="section-header">

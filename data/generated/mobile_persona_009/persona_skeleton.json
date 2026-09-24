@@ -4,8 +4,8 @@
   "persona_summary": "高频移动网络使用者",
   "static_profile": {
     "user_id": "USER_009",
-    "identity": "城市户外活动爱好者兼现场内容记录者，日常频繁穿梭于城市街区、公共活动现场、跨区域出行途中及户外等候区、临时停留点或兴趣活动现场，全程依赖手机4G/5G移动核心网直接联网，不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式，便携终端确需联网时使用手机热点。",
-    "devices": "5G智能手机＋随身拍摄设备",
+    "identity": "一位对文学中暴力和虐待描写敏感的休闲读者，同时也是高频移动网络使用者。日常在城市街区、公共活动现场及跨区域出行途中活动，习惯在户外等候区、临时停留点或兴趣活动现场停留，全程依赖手机4G/5G直接联网，不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式。主要使用5G智能手机和随身拍摄设备，通过手机热点为便携终端提供联网。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备，便携终端确需联网时使用手机热点。",
     "apps": [
       "微信",
       "抖音",
@@ -14,22 +14,22 @@
     ],
     "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "干脆利落、带点现场感，喜欢用短句和行话，偶尔夹杂户外活动圈的口语。",
+      "tone": "随性但注重效率，说话直接，偶尔带点文艺读者的敏感与细腻。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "秒开就行"
+        "稳一点"
       ],
-      "typical_habits": "习惯在出发前或现场临时停留时快速确认网络与任务状态，喜欢用口语化别名指代应用和业务，对画质和时延有明确底线，常把‘能续传’挂在嘴边。"
+      "typical_habits": "习惯在移动中快速确认信息，遇到弱网会提前提醒同伴，喜欢用简短口语同步状态。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "晚间户外现场短视频上传与远程协作",
+      "name": "晚间户外活动现场短视频上传与位置共享",
       "storyline_trigger_type": "location_environment",
-      "trigger_condition": "身处城市街区、公共活动现场或跨区域出行途中的户外等候区、临时停留点或兴趣活动现场，且处于20:00-22:00时段，需要即时上传现场照片或短视频并同步进行远程协作。",
+      "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
       "period_type": "location_driven",
       "days": [
         "location_specific"
@@ -44,22 +44,22 @@
       "aliases": {
         "app_aliases": [
           "阿抖",
-          "某音"
+          "抖子"
         ],
         "service_aliases": [
           "刷短视频",
-          "传片子",
-          "推流上传"
+          "传短视频",
+          "推短视频"
         ],
         "resolution_aliases": [
-          "原画",
-          "顶格清晰度",
-          "千万别糊"
+          "1080p原画",
+          "1080p",
+          "超清"
         ],
         "rtt_aliases": [
-          "别掉链子",
-          "秒开",
-          "别转圈"
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
         ],
         "duration_aliases": [
           "俩小时",
@@ -78,10 +78,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨城兴趣活动现场直播周",
+        "name": "城市音乐节现场短视频上传保障",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "跨城参加兴趣活动现场，场地周边网络拥塞，户外临时停留点信号波动大，需要临时提高上传优先级并降低画质以保障消息及时送达和音视频稳定。",
+        "scene_description": "城市音乐节期间，现场人流密集，网络拥塞严重，用户需要在户外等候区和临时停留点上传现场短视频并共享位置。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -91,14 +91,14 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "移动途中即时通信与位置共享",
+        "name": "跨区域出行途中的即时通信与位置共享",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "在城市街区、公共活动现场或跨区域出行途中需要与同伴共享位置、处理即时消息或发起短时视频通话时。",
+        "trigger_condition": "在跨区域出行途中或临时停留点需要与同伴保持联系并共享位置时",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -107,19 +107,27 @@
           "service_aliases": [
             "打视频",
             "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
           ]
         }
       },
       {
         "storyline_id": "SUB_02",
-        "name": "临时停留点远程协作会议",
+        "name": "兴趣活动现场的远程协作会议",
         "application_name": "腾讯会议",
         "service_name": "会议",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "在户外等候区或临时停留点需要接入远程协作会议，进行音视频沟通和屏幕共享时。",
+        "trigger_condition": "在兴趣活动现场需要临时加入远程协作会议时",
         "aliases": {
           "app_aliases": [
             "tencentmeeting",
@@ -128,6 +136,14 @@
           "service_aliases": [
             "开会",
             "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
           ]
         }
       }
@@ -135,9 +151,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次在兴趣活动现场用小红书发布图文笔记",
-        "application_name": "小红书",
-        "service_name": "短视频",
+        "scenario": "单次在户外等候区观看直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -145,9 +161,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次在跨区域出行途中用哔哩哔哩观看直播",
-        "application_name": "哔哩哔哩",
-        "service_name": "看直播",
+        "scenario": "单次在临时停留点进行游戏",
+        "application_name": "快手",
+        "service_name": "游戏",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

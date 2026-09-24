@@ -1,4 +1,5 @@
 import json
+import re
 from src.generation.llm_client import LLMClient
 from src.generation.session_assembler import SessionAssembler
 from src.templates.prompts import (
@@ -70,14 +71,22 @@ class DialogueGenerator:
                 snap_str = "无"
 
             p_aliases = s_plan.get("aliases", {})
-            aliases_info = {
-                "app_aliases": p_aliases.get("app_aliases", []),
-                "service_aliases": p_aliases.get("service_aliases", []),
-                "resolution_aliases": p_aliases.get("resolution_aliases", []),
-                "rtt_aliases": p_aliases.get("rtt_aliases", []),
-                "duration_aliases": p_aliases.get("duration_aliases", []),
-                "period_aliases": p_aliases.get("period_aliases", []),
-            }
+            # 在常规复用/强化会话中，大记忆点已生效，用户只需使用应用/业务代称与暗号，必须省略画质/时延/时长参数
+            if role in ["reinforcement_session", "reuse_session"] and s_plan.get("template_id") not in ["T2-3", "T2-5"]:
+                aliases_info = {
+                    "app_aliases": p_aliases.get("app_aliases", []),
+                    "service_aliases": p_aliases.get("service_aliases", []),
+                    "period_aliases": p_aliases.get("period_aliases", []),
+                }
+            else:
+                aliases_info = {
+                    "app_aliases": p_aliases.get("app_aliases", []),
+                    "service_aliases": p_aliases.get("service_aliases", []),
+                    "resolution_aliases": [r for r in p_aliases.get("resolution_aliases", []) if not any(b in r for b in ["顶格", "最高", "极限"])],
+                    "rtt_aliases": [r for r in p_aliases.get("rtt_aliases", []) if not any(b in r for b in ["零卡顿", "秒开", "极速"])],
+                    "duration_aliases": p_aliases.get("duration_aliases", []),
+                    "period_aliases": p_aliases.get("period_aliases", []),
+                }
 
             primary_app_alias = p_aliases.get("app_aliases", [""])[0] if p_aliases.get("app_aliases") else ""
             primary_srv_alias = p_aliases.get("service_aliases", [""])[0] if p_aliases.get("service_aliases") else ""
@@ -85,13 +94,18 @@ class DialogueGenerator:
 
             decl_mode = s_plan.get("declaration_mode", "explicit_declaration")
             is_implicit_reinf = (role == "reinforcement_session" and decl_mode == "implicit_induction" and sid.endswith("-03"))
+            tid = s_plan.get("template_id", "T2-1")
 
             if role == "evidence_session":
                 t1_rule = f"【首次建联/证据会话：第1轮必须直述标准应用名({tp['application_name']})与业务名({tp['service_name']})，严禁使用'老规矩'与生僻别名；第2轮在确认参数的同时，正式向助手介绍并登记习惯代称（如：'我平时习惯叫它{primary_alias}，帮我把这个习惯记好'），以便后续会话复用！】"
             elif is_implicit_reinf:
                 t1_rule = f"【隐式归纳二次发生固化契机：第1轮严禁使用'老规矩'与生僻别名，请说'配置跟上次一样就行'；第1轮客服主动询问是否设为老规矩；第2轮用户确认并正式登记习惯代称'{primary_alias}'】"
+            elif tid == "T2-5":
+                t1_rule = f"【时长延长会话：第1轮用户说'老规矩，{primary_alias}开通保障'（严禁在第1轮提及画质与时延！）；第1轮客服反问确认老规矩配置；第2轮用户确认老规矩但提出将时长延长到{tp['duration']}】"
+            elif tid == "T2-3":
+                t1_rule = f"【临时纠正覆盖会话：第1轮用户说'老规矩，{primary_alias}开通保障'；第1轮客服反问确认老规矩；第2轮用户提出因现场特殊临时调整画质为{tp['resolution']}、时延为{tp['rtt']}】"
             else:
-                t1_rule = f"【后续复用/强化：此时规则与代称（'{primary_alias}'）已在历史会话中正式登记，鼓励第1轮自然使用已沉淀的口语代称（如'{primary_alias}'）与'老规矩'】"
+                t1_rule = f"【常规复用/强化会话：大记忆点已在历史记忆中生效！第1轮用户口语化表达需求（使用'老规矩'/'老时间'及已登记的代称'{primary_alias}'），【严禁在第1轮重复提及画质、时延与持续时长，严禁生造'零卡顿'/'顶格清晰度'等与数值冲突的别名】！必须由 Agent 从记忆中调取配置（{tp['resolution']}, {tp['rtt']}, {tp['duration']}）主动向用户反问确认；第2轮用户仅需简短确认（如'对，开通吧'）！】"
 
             prompt_items.append({
                 "session_id": sid,
@@ -203,6 +217,32 @@ class DialogueGenerator:
                 u_text = u_text.replace(kw, "")
             u_text = u_text.strip("，, ")
 
+        tp = s_plan.get("target_params", {})
+        tid = s_plan.get("template_id", "T2-1")
+
+        # 规范化画质别名（严禁使用与数值冲突的'顶格清晰度'等词）
+        for bad_word in ["顶格清晰度", "顶格画质", "最高画质", "极限画质", "最高清晰度"]:
+            if bad_word in u_text:
+                u_text = u_text.replace(bad_word, "1080p原画" if tp.get("resolution") == "1080p" else tp.get("resolution", ""))
+
+        # 规范化时延别名（严禁使用失真夸大的'零卡顿'等词）
+        for bad_word in ["零卡顿", "秒开", "极速响应"]:
+            if bad_word in u_text:
+                u_text = u_text.replace(bad_word, f"{tp.get('rtt', '')}以内")
+
+        # 常规复用/强化会话第 1 轮：大记忆点已生效，用户提及老规矩/代称时，若仍堆砌了已沉淀的画质/时延/时长，予以自然精简
+        if turn_idx == 1 and role in ["reinforcement_session", "reuse_session"] and tid not in ["T2-3", "T2-5"]:
+            has_shorthand = any(k in u_text for k in ["老规矩", "老时间", "老样子", "照旧", "按习惯", "跟上次一样"])
+            if has_shorthand:
+                patterns_to_strip = [
+                    r'，?(?:顶格清晰度|1080p原画|1080p|720p|超清|高清)[、，]?(?:零卡顿|\d+ms以内|\d+毫秒以内)[、，]?(?:俩小时|两小时|\d+分钟|\d+min)?',
+                    r'[、，]?(?:顶格清晰度|1080p原画|1080p|720p|超清|高清)',
+                    r'[、，]?(?:零卡顿|\d+ms以内|\d+毫秒以内)',
+                ]
+                for pat in patterns_to_strip:
+                    u_text = re.sub(pat, '', u_text)
+                u_text = re.sub(r'，\s*，', '，', u_text).strip("，, ")
+
         a_text = ""
         if isinstance(t_data, dict):
             a_text = (
@@ -216,6 +256,14 @@ class DialogueGenerator:
             )
         if not a_text:
             a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
+
+        # 同样规范化客服台词中的画质与时延
+        for bad_word in ["顶格清晰度", "顶格画质", "最高画质", "极限画质", "最高清晰度"]:
+            if bad_word in a_text:
+                a_text = a_text.replace(bad_word, "1080p原画" if tp.get("resolution") == "1080p" else tp.get("resolution", ""))
+        for bad_word in ["零卡顿", "秒开", "极速响应"]:
+            if bad_word in a_text:
+                a_text = a_text.replace(bad_word, f"{tp.get('rtt', '')}以内")
 
         raw_u_acts = t_data.get("user_action_types") if isinstance(t_data, dict) else None
         raw_a_acts = t_data.get("agent_action_types") if isinstance(t_data, dict) else None

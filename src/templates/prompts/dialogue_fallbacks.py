@@ -47,8 +47,10 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
     elif turn_idx == 1:
         if role == "evidence_session" or (role == "reinforcement_session" and decl_mode == "implicit_induction" and s_plan.get("session_id", "").endswith("-03")):
             return f"你好，需要给{app}{srv}做一个网络保障，时间是今天{tp['start_timestamp'].split('日')[-1]}开始。"
+        elif role in ["reinforcement_session", "reuse_session"]:
+            return f"老规矩，在{env}要用{app_alias}{srv_alias}，帮我把保障开上。"
         else:
-            return f"你好，需要给{app_alias}{srv_alias}做一个网络保障，时间是今天{tp['start_timestamp'].split('日')[-1]}开始，持续{dur_alias}。"
+            return f"你好，需要给{app_alias}{srv_alias}做一个网络保障，时间是今天{tp['start_timestamp'].split('日')[-1]}开始。"
     else:
         if role == "evidence_session" and decl_mode == "explicit_declaration":
             dur_text = f"，预计持续{dur_alias}（到{tp['end_timestamp'].split('日')[-1]}）"

@@ -77,15 +77,37 @@ class PersonaGenerator:
             srv_syns = synonyms.get("services", {}).get(srv, {}).get("general_aliases", [])
             aliases["service_aliases"] = [s for s in srv_syns if s != srv][:3] if srv_syns else [srv]
 
-        # 3. 补齐 resolution_aliases
+        # 3. 补齐 resolution_aliases（严格对应数值档位，严禁使用混淆 2K/4K 的'顶格清晰度'）
         if not aliases.get("resolution_aliases"):
-            res_syns = synonyms.get("resolution", {}).get(res, {}).get("good_expressions", [])
-            aliases["resolution_aliases"] = res_syns[:3] if res_syns else ["高清", "原画", "顶格画质"]
+            if res == "1080p":
+                aliases["resolution_aliases"] = ["1080p原画", "1080p", "超清"]
+            elif res == "720p":
+                aliases["resolution_aliases"] = ["720p", "高清"]
+            elif res == "4K":
+                aliases["resolution_aliases"] = ["4K", "4K超高清"]
+            else:
+                aliases["resolution_aliases"] = [res, f"{res}清晰"]
+        else:
+            cleaned_res = [r for r in aliases["resolution_aliases"] if not any(b in r for b in ["顶格", "最高", "极限", "极致", "蓝光"])]
+            if res == "1080p" and not cleaned_res:
+                cleaned_res = ["1080p原画", "1080p", "超清"]
+            aliases["resolution_aliases"] = cleaned_res or [res]
 
-        # 4. 补齐 rtt_aliases
+        # 4. 补齐 rtt_aliases（严格对应时延数值档位，严禁使用夸大失真的'零卡顿'）
         if not aliases.get("rtt_aliases"):
-            rtt_syns = synonyms.get("rtt", {}).get(rtt, {}).get("good_expressions", [])
-            aliases["rtt_aliases"] = rtt_syns[:3] if rtt_syns else ["别掉链子", "零卡顿", "极速响应"]
+            if rtt == "50ms":
+                aliases["rtt_aliases"] = ["50ms以内", "50毫秒以内", "低时延"]
+            elif rtt == "30ms":
+                aliases["rtt_aliases"] = ["30ms以内", "30毫秒以内", "超低时延"]
+            elif rtt == "100ms":
+                aliases["rtt_aliases"] = ["100ms以内", "100毫秒以内"]
+            else:
+                aliases["rtt_aliases"] = [f"{rtt}以内", rtt]
+        else:
+            cleaned_rtt = [r for r in aliases["rtt_aliases"] if not any(b in r for b in ["零卡顿", "秒开", "极速"])]
+            if rtt == "50ms" and not cleaned_rtt:
+                cleaned_rtt = ["50ms以内", "50毫秒以内", "低时延"]
+            aliases["rtt_aliases"] = cleaned_rtt or [f"{rtt}以内"]
 
         # 5. 补齐 duration_aliases
         if not aliases.get("duration_aliases"):
@@ -110,6 +132,8 @@ class PersonaGenerator:
         for sub in sk["dynamic_profile"].get("sub_storylines", []):
             s_app = sub.get("application_name", "")
             s_srv = sub.get("service_name", "")
+            s_res = sub.get("preferred_params", {}).get("resolution", "720p")
+            s_rtt = sub.get("preferred_params", {}).get("rtt_max", "100ms")
             s_aliases = sub.get("aliases", {})
             if not isinstance(s_aliases, dict):
                 s_aliases = {}
@@ -123,6 +147,10 @@ class PersonaGenerator:
             if not s_aliases.get("service_aliases"):
                 s_srv_syns = synonyms.get("services", {}).get(s_srv, {}).get("general_aliases", [])
                 s_aliases["service_aliases"] = [s for s in s_srv_syns if s != s_srv][:2] if s_srv_syns else [s_srv]
+            if not s_aliases.get("resolution_aliases"):
+                s_aliases["resolution_aliases"] = ["1080p原画", "1080p"] if s_res == "1080p" else [s_res, "高清" if s_res == "720p" else s_res]
+            if not s_aliases.get("rtt_aliases"):
+                s_aliases["rtt_aliases"] = [f"{s_rtt}以内", f"{s_rtt.replace('ms', '毫秒')}以内"]
             sub["aliases"] = s_aliases
 
         return sk

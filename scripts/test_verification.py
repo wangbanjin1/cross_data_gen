@@ -66,10 +66,12 @@ def test_file(jsonl_path: Path):
                         assert "end_timestamp" not in p_ts, f"Session {sid} Turn 1 slot_updates leaked end_timestamp!"
                         assert "duration" not in p_ts, f"Session {sid} Turn 1 slot_updates leaked duration!"
 
-        # 5. 验证用户台词不含研发元术语
+        # 5. 验证用户台词不含研发元术语及与数值冲突的别名
         for ev_idx, ev in enumerate(events):
             u_utt = ev.get("user", {}).get("utterance", "")
-            assert not any(bad in u_utt for bad in ["长期偏好", "元指令", "意图槽位"]), f"Session {sid} turn {ev_idx+1} user utterance contains unnatural jargon: {u_utt}"
+            assert not any(bad in u_utt for bad in ["长期偏好", "元指令", "意图槽位", "顶格清晰度", "零卡顿"]), f"Session {sid} turn {ev_idx+1} user utterance contains unnatural/conflicting terms: {u_utt}"
+            a_utt = ev.get("agent", {}).get("utterance", "")
+            assert not any(bad in a_utt for bad in ["顶格清晰度", "零卡顿"]), f"Session {sid} turn {ev_idx+1} agent utterance contains unnatural/conflicting terms: {a_utt}"
             
         intent = session["intents"][0]
         if intent.get("status") == "rejected":

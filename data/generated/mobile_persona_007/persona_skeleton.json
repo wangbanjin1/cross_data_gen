@@ -4,7 +4,7 @@
   "persona_summary": "高频移动网络使用者",
   "static_profile": {
     "user_id": "USER_007",
-    "identity": "一名休闲棒球爱好者，依赖博客的预测来管理自己的梦幻棒球联盟，日常频繁在城市街区、公共活动现场及跨区域出行途中使用移动网络，进行信息查询、位置共享、即时通信和短视频上传，属于中高频移动网络使用者。",
+    "identity": "一名休闲棒球爱好者，依赖博客预测来管理自己的梦幻棒球联盟，日常高频外出，在城市街区、公共活动现场及跨区域出行途中使用手机移动核心网完成信息查询、位置共享、即时通信和短视频上传，便携终端确需联网时使用手机热点。",
     "devices": "5G智能手机＋可穿戴设备",
     "apps": [
       "微信",
@@ -12,56 +12,54 @@
       "腾讯会议",
       "小红书"
     ],
-    "speech_archetype": "casual_fan_speaker",
+    "speech_archetype": "casual_fan_mobile_user",
     "speech_style": {
-      "tone": "轻松随意，略带球迷圈子的调侃与急切",
+      "tone": "轻松随意，带点球迷圈子的调侃和直接，喜欢用短句和口语化表达。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "秒开就行"
+        "稳一手"
       ],
-      "typical_habits": "喜欢用口语化简称指代应用和业务，习惯在固定时间点主动发起或参与线上互动，对网络延迟和画质有直观但非专业的表达。"
+      "typical_habits": "习惯在移动中快速确认信息，遇到重要节点会反复强调时间和画质，喜欢用球迷行话和网络口语描述业务。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "月度梦幻棒球数据盘点与线上沟通",
+      "name": "月度梦幻棒球数据盘点与巡回沟通直播",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每月逢十例行综合盘点与巡回沟通，固定在10日和20日15:00-17:00进行",
+      "trigger_condition": "每月逢十例行综合盘点与巡回沟通，固定在10日和20日15:00-17:00进行梦幻棒球数据复盘、联盟成员沟通和现场信息同步。",
       "period_type": "monthly",
       "days": [
         "10th",
         "20th"
       ],
       "time_range": "15:00-17:00",
-      "application_name": "腾讯会议",
-      "service_name": "会议",
+      "application_name": "抖音",
+      "service_name": "开直播",
       "preferred_params": {
         "resolution": "1080p",
         "rtt_max": "50ms"
       },
       "aliases": {
         "app_aliases": [
-          "企鹅会议",
-          "鹅会",
-          "腾讯会议"
+          "阿抖",
+          "抖音"
         ],
         "service_aliases": [
-          "对齐开会",
-          "连麦聊数据",
-          "线上碰头"
+          "开播",
+          "推流"
         ],
         "resolution_aliases": [
-          "原画",
-          "顶格清晰度",
-          "千万别糊"
+          "1080p原画",
+          "1080p",
+          "超清"
         ],
         "rtt_aliases": [
-          "别掉链子",
-          "零卡顿",
-          "秒开"
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
         ],
         "duration_aliases": [
           "俩小时",
@@ -83,7 +81,7 @@
         "name": "梦幻棒球季后赛冲刺周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "梦幻棒球联盟进入季后赛冲刺阶段，用户频繁在户外移动中参与线上会议讨论阵容，网络环境复杂，需要临时降低画质以保证流畅。",
+        "scene_description": "梦幻棒球季后赛冲刺阶段，用户频繁在户外、通勤途中和临时停留点通过手机移动网络参与联盟紧急沟通、查看实时数据并上传现场短视频，网络环境复杂且移动性强。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -93,43 +91,59 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "移动中短视频快速上传",
-        "application_name": "抖音",
-        "service_name": "短视频",
+        "name": "大巴途中视频调度沟通",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "在公共活动现场或出行途中拍摄并上传短视频，通常为即时分享",
+        "trigger_condition": "跨区域出行途中需要与联盟成员临时对齐阵容和交易策略时。",
         "aliases": {
           "app_aliases": [
-            "douyin",
-            "阿抖"
+            "tencentmeeting",
+            "会议通"
           ],
           "service_aliases": [
-            "看短视频",
-            "刷视频"
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
           ]
         }
       },
       {
         "storyline_id": "SUB_02",
-        "name": "与联盟好友视频通话",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "name": "赛后录像复盘与短视频分享",
+        "application_name": "小红书",
+        "service_name": "短视频",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "临时讨论球员交易或比赛实况，多在傍晚或比赛结束后",
+        "trigger_condition": "比赛结束后在临时停留点或户外等候区快速剪辑并上传复盘短视频。",
         "aliases": {
           "app_aliases": [
-            "weixin",
-            "wx"
+            "xiaohongshu",
+            "红薯"
           ],
           "service_aliases": [
-            "打视频",
-            "连线"
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
           ]
         }
       }
@@ -137,9 +151,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次观看棒球比赛直播",
-        "application_name": "哔哩哔哩",
-        "service_name": "看直播",
+        "scenario": "单次与朋友视频通话确认观赛安排",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -147,9 +161,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次与远方朋友视频通话",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "scenario": "单次观看棒球赛事直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
