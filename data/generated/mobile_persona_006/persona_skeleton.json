@@ -4,33 +4,32 @@
   "persona_summary": "移动执勤人员",
   "static_profile": {
     "user_id": "USER_006",
-    "identity": "国际执法背景的公共安全移动执勤人员，长期在夜间值守点、事故现场、应急集结区、道路与巡逻区域之间机动，负责现场取证、即时通信、事件上报、地图导航、位置共享与任务调度；对跨文化沟通敏感，习惯用手机移动核心网直接联网，不依赖固网或普通Wi-Fi。",
-    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点。",
+    "identity": "国际执法背景的移动执勤安全官，长期在夜间值守点、事故现场、应急集结区、道路与巡逻区域之间机动，负责现场取证、即时通信、事件上报、地图导航、位置共享与任务调度；全程依赖手机4G/5G移动核心网直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi，便携终端确需联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑，二者通过手机热点或移动核心网协同使用。",
     "apps": [
       "微信",
       "钉钉",
       "腾讯会议",
       "高德地图"
     ],
-    "speech_archetype": "security_officer_speaker",
+    "speech_archetype": "field_security_officer",
     "speech_style": {
-      "tone": "简洁、克制、指令感强，先确认位置与时限，再谈画面和回传质量。",
+      "tone": "简短、克制、指令感强，带执法与调度口吻，重视时效与现场稳定。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
-        "先保消息到",
-        "画面别糊",
-        "位置发我"
+        "对齐一下",
+        "先保畅通"
       ],
-      "typical_habits": "习惯用短句同步任务状态，强调消息及时送达、现场图片和视频稳定回传、移动过程中的连续覆盖；遇到弱网会主动降画质保连通。"
+      "typical_habits": "习惯先确认位置与网络状态，再下达或接受任务；汇报时偏好用最短语句说明现场、画面和时延情况。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "巡逻线现场取证与事件上报",
+      "name": "巡逻线现场视频回传与调度",
       "storyline_trigger_type": "location_environment",
-      "trigger_condition": "当上午09:00-11:00进入道路巡逻区域、事故现场或应急集结区等移动执勤弱网空间时，使用手机移动核心网进行现场取证、即时通信与事件上报。",
+      "trigger_condition": "当执勤人员进入道路、巡逻区域及临时处置现场，尤其是夜间值守点、事故现场或应急集结区周边的移动弱网路段时，在09:00-11:00时段触发现场视频回传、位置共享与任务调度。",
       "period_type": "location_driven",
       "days": [
         "location_specific"
@@ -45,13 +44,13 @@
       "aliases": {
         "app_aliases": [
           "微信",
-          "某信",
-          "企微"
+          "企微",
+          "工作号"
         ],
         "service_aliases": [
           "打视讯",
           "连麦",
-          "视频对讲",
+          "视频回传",
           "现场连线"
         ],
         "resolution_aliases": [
@@ -64,20 +63,19 @@
           "别掉链子",
           "零卡顿",
           "秒开",
-          "毫秒级",
           "别转圈"
         ],
         "duration_aliases": [
           "俩小时",
           "两钟头",
-          "一个半小时",
-          "大半个上午"
+          "播到十一点",
+          "一个半小时"
         ],
         "period_aliases": [
           "每天这个时候",
           "老时间",
           "上午例行",
-          "巡逻线老规矩"
+          "到点就开"
         ]
       },
       "declaration_mode": "implicit_induction",
@@ -89,7 +87,7 @@
         "name": "跨区域联合执法演练周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "跨区域联合执法演练期间，巡逻线与临时处置现场人员密集、移动频繁，现场网络拥塞且覆盖波动，需要优先保障指令消息和低码率视频回传。",
+        "scene_description": "跨区域联合执法演练期间，巡逻线与临时处置现场人员密集、车辆移动频繁，局部路段出现高干扰与弱覆盖，需优先保障调度消息和现场画面稳定回传。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -99,14 +97,35 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "指挥中心视频调度",
-        "application_name": "腾讯会议",
+        "name": "大巴视频调度与车队位置同步",
+        "application_name": "钉钉",
         "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "在应急集结区或临时处置现场需要与指挥中心对齐任务、共享位置和调度资源时。",
+        "trigger_condition": "在应急集结区或道路巡逻区域进行车队编组、人员转运和大巴视频调度时触发。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "执法记录复盘与远程沟通",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "回到值守点或临时处置现场后，需要与后方或跨区域同事复盘执法记录、对齐证据材料时触发。",
         "aliases": {
           "app_aliases": [
             "tencentmeeting",
@@ -117,35 +136,14 @@
             "进会议室"
           ]
         }
-      },
-      {
-        "storyline_id": "SUB_02",
-        "name": "执法记录复盘",
-        "application_name": "钉钉",
-        "service_name": "视频通话",
-        "preferred_params": {
-          "resolution": "1080p",
-          "rtt_max": "80ms"
-        },
-        "trigger_condition": "回到值守点后，对现场图片、执法记录和事件上报材料进行复盘沟通时。",
-        "aliases": {
-          "app_aliases": [
-            "dingding",
-            "钉"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
-          ]
-        }
       }
     ],
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次跨部门临时会议",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "scenario": "单次夜间值守点短暂休息时刷短视频",
+        "application_name": "抖音",
+        "service_name": "短视频",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -153,9 +151,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次休息间隙刷短视频",
-        "application_name": "抖音",
-        "service_name": "短视频",
+        "scenario": "单次事故现场等待支援时观看直播了解路况",
+        "application_name": "快手",
+        "service_name": "看直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

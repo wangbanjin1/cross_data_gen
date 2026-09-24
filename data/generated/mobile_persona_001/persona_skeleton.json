@@ -4,8 +4,8 @@
   "persona_summary": "巡回活动讲者",
   "static_profile": {
     "user_id": "USER_001",
-    "identity": "前残奥高山滑雪运动员，现为巡回励志演讲者与户外公益活动推广大使；日常跨城转场、在露天训练场与赛事集结区进行公益直播、演讲片段上传与团队调度。",
-    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "identity": "前残奥高山滑雪运动员，现为巡回励志演讲者与户外公益活动推广大使，常年跨城转场，在露天训练场、赛道、球场及赛事集结区开展公益演讲与运动推广活动，全程依赖手机移动核心网完成直播、调度与素材回传。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑，便携终端确需联网时使用手机热点。",
     "apps": [
       "抖音",
       "微信",
@@ -14,23 +14,23 @@
     ],
     "speech_archetype": "athlete_speaker",
     "speech_style": {
-      "tone": "干脆利落、带运动员式鼓劲口吻，常用短句和行动指令，习惯把网络保障说成比赛保障。",
+      "tone": "干脆利落、带运动员式的鼓劲感，习惯用短句下指令，语速偏快但咬字清楚。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
         "顶格清晰度",
-        "秒开才算稳"
+        "秒开才行"
       ],
-      "typical_habits": "开播前先喊团队对齐流程，转场途中反复确认上行和时延，喜欢用比赛术语描述网络质量。"
+      "typical_habits": "习惯在活动前用一句话确认流程与网络状态，喜欢用口语化别名指代应用与业务，对画质和时延有明确的显式要求，常把'老时间''老规矩'挂在嘴边。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "午间公益直播与演讲片段回传",
+      "name": "午间公益演讲直播与观众反馈回传",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每天午间休息与午间复盘业务，固定进行公益直播、演讲片段上传和观众反馈整理",
+      "trigger_condition": "每天午间休息与午间复盘业务，12:30准时开播公益演讲片段并回传观众反馈",
       "period_type": "daily",
       "days": [
         "daily"
@@ -45,32 +45,27 @@
       "aliases": {
         "app_aliases": [
           "阿抖",
-          "抖音号"
+          "抖子"
         ],
         "service_aliases": [
           "开播",
-          "推流",
-          "上播"
+          "推流"
         ],
         "resolution_aliases": [
           "原画",
-          "顶格清晰度",
-          "千万别糊"
+          "顶格清晰度"
         ],
         "rtt_aliases": [
           "别掉链子",
-          "秒开",
-          "零卡顿"
+          "秒开"
         ],
         "duration_aliases": [
           "俩小时",
-          "一个半小时",
-          "播到一点半"
+          "一个半小时"
         ],
         "period_aliases": [
           "每天这个时候",
-          "老时间",
-          "午间例行"
+          "老时间"
         ]
       },
       "declaration_mode": "explicit_declaration",
@@ -79,10 +74,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨城公益演讲与赛事集结周",
+        "name": "跨城公益演讲巡回周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "跨城转场频繁，赛事集结区与露天训练场人群密集，移动网络拥塞明显，需优先保障直播上行连续与低时延互动。",
+        "scene_description": "跨城转场途中与露天赛事集结区人群密集，移动网络拥塞，需临时降低画质并收紧时延以保障直播连续。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -99,7 +94,7 @@
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "客场转场途中在大巴或临时休息点进行团队调度与即时通信",
+        "trigger_condition": "客场转场途中在大巴上与团队进行视频调度与流程对齐",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -113,14 +108,14 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "训练录像复盘与远程对齐",
+        "name": "训练录像复盘会",
         "application_name": "腾讯会议",
         "service_name": "会议",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "晚间或训练结束后与教练团队复盘训练视频、数据记录与回放",
+        "trigger_condition": "晚间在临时休息点与教练团队进行训练视频上传、数据记录与回放复盘",
         "aliases": {
           "app_aliases": [
             "tencentmeeting",
@@ -136,9 +131,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次与赞助方临时沟通",
+        "scenario": "单次与赞助商临时沟通",
         "application_name": "微信",
-        "service_name": "会议",
+        "service_name": "视频通话",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -146,7 +141,7 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次休息时刷短视频放松",
+        "scenario": "单次赛前放松刷短视频",
         "application_name": "哔哩哔哩",
         "service_name": "短视频",
         "params": {

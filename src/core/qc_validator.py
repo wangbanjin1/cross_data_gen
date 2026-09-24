@@ -20,7 +20,8 @@ class QCValidator:
                 "source_type_integrity_check": True,
                 "memory_trace_fields_check": True,
                 "whitelist_compliance_check": True,
-                "turn_intent_isolation_check": True
+                "turn_intent_isolation_check": True,
+                "natural_dialogue_check": True
             },
             "issues": []
         }
@@ -110,6 +111,14 @@ class QCValidator:
                                 report["issues"].append(f"[{sid}] 证据会话第1轮 slot_updates 泄漏了未提及的结束时间/时长(end_timestamp/duration)")
                                 report["rule_checks"]["turn_intent_isolation_check"] = False
                                 s_passed = False
+
+            # 6. 验证用户台词自然口语化（严禁系统/学术术语出戏，如“长期偏好”、“元指令”等）
+            for ev_idx, ev in enumerate(events):
+                u_utt = ev.get("user", {}).get("utterance", "")
+                if any(bad in u_utt for bad in ["长期偏好", "元指令", "意图槽位"]):
+                    report["issues"].append(f"[{sid}] Turn {ev_idx+1} 用户台词包含非自然研发术语(长期偏好/元指令/意图槽位): '{u_utt}'")
+                    report["rule_checks"]["natural_dialogue_check"] = False
+                    s_passed = False
 
             if s_passed:
                 report["passed_sessions"] += 1

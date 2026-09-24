@@ -52,15 +52,15 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
         if role == "evidence_session" and decl_mode == "explicit_declaration":
             dur_text = f"，预计持续{dur_alias}（到{tp['end_timestamp'].split('日')[-1]}）"
             if trig_type == "task_activity":
-                return f"好的，画质用{res}，时延{rtt}以内{dur_text}。我平时习惯叫它'{app_alias}{srv_alias}'，以后只要我提到执行【{trig_cond or env}】任务，就按老规矩来：{app}{srv}、{res}、{rtt}以内，记一下长期偏好，别掉链子。"
+                return f"好的，画质用{res}，时延{rtt}以内{dur_text}。我平时习惯叫它'{app_alias}{srv_alias}'，以后只要我提到执行【{trig_cond or env}】任务，就按老规矩来：{app}{srv}、{res}、{rtt}以内，帮我把这个习惯记好，别掉链子。"
             elif trig_type == "location_environment":
-                return f"好的，画质用{res}，时延{rtt}以内{dur_text}。我平时习惯叫它'{app_alias}{srv_alias}'，以后只要我处于【{trig_cond or env}】，就按老规矩来：{app}{srv}、{res}、{rtt}以内，记一下长期偏好，别掉链子。"
+                return f"好的，画质用{res}，时延{rtt}以内{dur_text}。我平时习惯叫它'{app_alias}{srv_alias}'，以后只要我处于【{trig_cond or env}】，就按老规矩来：{app}{srv}、{res}、{rtt}以内，帮我把这个习惯记好，别掉链子。"
             elif period_type == "daily":
-                return f"好的，画质用{res}，时延{rtt}以内{dur_text}。我平时习惯叫它'{app_alias}{srv_alias}'，以后我只要每天这个时段说'老规矩'，就按这个来：{app}{srv}、{res}、{rtt}以内，记一下长期偏好，别掉链子。"
+                return f"好的，画质用{res}，时延{rtt}以内{dur_text}。我平时习惯叫它'{app_alias}{srv_alias}'，以后我只要每天这个时段说'老规矩'，就按这个来：{app}{srv}、{res}、{rtt}以内，记住这个习惯哈，别掉链子。"
             elif period_type == "monthly":
-                return f"好的，画质用{res}，时延{rtt}以内{dur_text}。我平时习惯叫它'{app_alias}{srv_alias}'，以后我只要在每月固定月度对账/例会说'老规矩'，就按这个来：{app}{srv}、{res}、{rtt}以内，记一下长期偏好，别掉链子。"
+                return f"好的，画质用{res}，时延{rtt}以内{dur_text}。我平时习惯叫它'{app_alias}{srv_alias}'，以后我只要在每月固定月度对账/例会说'老规矩'，就按这个来：{app}{srv}、{res}、{rtt}以内，把这个规矩记一下哈，别掉链子。"
             else:
-                return f"好的，画质用{res}，时延{rtt}以内{dur_text}。我平时习惯叫它'{app_alias}{srv_alias}'，以后我只要在每周例行时段说'老规矩'，就按这个来：{app}{srv}、{res}、{rtt}以内，记一下长期偏好，别掉链子。"
+                return f"好的，画质用{res}，时延{rtt}以内{dur_text}。我平时习惯叫它'{app_alias}{srv_alias}'，以后我只要在每周例行时段说'老规矩'，就按这个来：{app}{srv}、{res}、{rtt}以内，记住这个习惯哈，别掉链子。"
         elif role == "evidence_session" and decl_mode == "implicit_induction":
             return f"好的，画质用{res}，时延{rtt}以内，预计持续{dur_alias}，今天就按这个配置开通吧。"
         else:

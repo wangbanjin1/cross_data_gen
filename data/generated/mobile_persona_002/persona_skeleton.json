@@ -4,8 +4,8 @@
   "persona_summary": "外访型金融顾问",
   "static_profile": {
     "user_id": "USER_002",
-    "identity": "外访型金融顾问，主要协助客户维护与跨境转账资金，日常在市集、门店外摆区、客户拜访点、配送路线、展会现场及商圈户外区域之间移动办公，全程依赖手机4G/5G直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi。",
-    "devices": "主力设备为5G智能手机，便携终端确需联网时使用手机热点作为辅助接入方式。",
+    "identity": "外访型金融顾问，主要协助客户维护与跨境转账资金，日常在市集、门店外摆区、客户拜访点、配送路线、展会现场及商圈户外区域之间移动办公，全程依赖手机4G/5G直接联网完成移动支付、订单处理、库存查询、客户沟通、短视频营销与远程协作。",
+    "devices": "主力设备为5G智能手机，便携终端确需联网时使用手机热点；不依赖家庭宽带、公司固网或普通Wi-Fi。",
     "apps": [
       "微信",
       "腾讯会议",
@@ -14,23 +14,23 @@
     ],
     "speech_archetype": "business_advisor",
     "speech_style": {
-      "tone": "干练、务实、带一点金融行业特有的谨慎与催促感，说话节奏快，喜欢用短句确认关键信息。",
+      "tone": "干练、务实、带一点金融行业特有的谨慎与催促感，习惯用短句确认关键信息。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "这笔要盯紧",
-        "路上再说"
+        "这笔要稳",
+        "路上也能办"
       ],
-      "typical_habits": "习惯在移动途中用语音或短视频快速沟通，重要事项会反复确认时延和上传状态，常用‘老时间’‘老规矩’指代固定任务安排。"
+      "typical_habits": "在客户拜访途中先核对行情与账户资料，再用加密通信确认跨境转账信息并上传电子签署文件；说话时喜欢先定时间点，再强调网络和到账时效。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "外访途中跨境转账资料核验与电子签署上传",
+      "name": "外访途中跨境转账确认与电子签署文件上传",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "在15:00-17:00客户拜访或商圈外摆点驻留时段，金融顾问需要现场核对客户行情与账户资料，通过加密通信确认跨境转账信息，并上传电子签署文件与短视频凭证。",
+      "trigger_condition": "在15:00-17:00客户拜访或商圈临时经营点现场，完成行情核对后，通过加密通信确认跨境转账信息并上传电子签署文件",
       "period_type": "task_driven",
       "days": [
         "task_specific"
@@ -45,8 +45,8 @@
       "aliases": {
         "app_aliases": [
           "微信",
-          "企微",
-          "某信"
+          "某信",
+          "企微"
         ],
         "service_aliases": [
           "打视讯",
@@ -75,8 +75,8 @@
         "period_aliases": [
           "每天这个时候",
           "老时间",
-          "下午外访档期",
-          "老规矩三点后"
+          "下午这趟",
+          "客户拜访点老规矩"
         ]
       },
       "declaration_mode": "implicit_induction",
@@ -85,10 +85,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨境金融展会驻场服务周",
+        "name": "跨境金融展会现场集中签约周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "展会现场人群密集、无线环境复杂，金融顾问需在展位与临时洽谈点之间频繁移动，重点保障支付消息、订单处理与短视频上传稳定，视频通话画质可临时降低以优先保证低时延。",
+        "scene_description": "展会现场人群密集、商圈户外区域信号竞争强，客户集中咨询跨境转账与签署文件，需要临时提高连接稳定性与消息及时性。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -98,14 +98,14 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "客户远程会议与资料对齐",
+        "name": "客户远程沟通与资料复核",
         "application_name": "腾讯会议",
         "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "客户临时要求远程说明转账进度或签署安排时，在拜访点或车内通过手机热点接入腾讯会议进行短时对齐。",
+        "trigger_condition": "客户临时要求远程复核账户资料或跨境转账材料时",
         "aliases": {
           "app_aliases": [
             "tencentmeeting",
@@ -119,14 +119,14 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "短视频营销素材拍摄与上传",
+        "name": "短视频营销与产品讲解",
         "application_name": "抖音",
         "service_name": "短视频",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "在市集、门店外摆区或展会现场拍摄金融知识科普与客户案例短视频，需要快速上传并检查播放效果。",
+        "trigger_condition": "在门店外摆区或展会现场拍摄并上传金融知识、转账流程讲解短视频时",
         "aliases": {
           "app_aliases": [
             "douyin",
@@ -142,9 +142,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "午休时在商圈户外临时点单次观看金融行业直播",
-        "application_name": "哔哩哔哩",
-        "service_name": "看直播",
+        "scenario": "临时参加内部培训会议",
+        "application_name": "钉钉",
+        "service_name": "会议",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -152,9 +152,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "晚间回程途中单次与同事进行游戏放松",
-        "application_name": "王者荣耀",
-        "service_name": "游戏",
+        "scenario": "午休时刷短视频放松",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

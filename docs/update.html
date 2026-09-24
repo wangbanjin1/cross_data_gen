@@ -662,6 +662,7 @@
                 <p>1. <strong>早熟别名冲突</strong>：首发建联第 1 轮用户即使用“阿抖开播”、“老规矩”，冷启动模型提取不出真实业务标准名。</p>
                 <p>2. <strong>时序倒错泄露 (QoS参数)</strong>：第 1 轮用户未提及画质和时延，但意图答案里提前填入了 1080p 和 50ms。</p>
                 <p>3. <strong>时间跨度超前标注 (时间槽位早泄)</strong>：第 1 轮用户仅提出“今晚8点开会”，客服甚至还在反问“会议大概持续多久？”，但第 1 轮意图和槽位更新已将 <code>end_timestamp</code>（22:00）与 <code>duration</code>（120min）强行写死，彻底违反 DST 对话状态追踪因果律。</p>
+                <p>4. <strong>研发术语出戏 (违背口语习惯)</strong>：提示词直接引导用户说出“记一下长期偏好，别掉链子”，普通真实用户根本不会具备“长期偏好/元指令/槽位”等系统研发概念，严重失真。</p>
                 <pre>// 改造前：第 1 轮存在未来参数泄漏 (包含画质、时延、结束时间与时长)
 "event_sequence": [
   {
@@ -689,6 +690,7 @@
                 <p>1. <strong>标准应用冷启动</strong>：第 1 轮强制使用官方标准名“腾讯会议视频会”，去暗号化；第 2 轮确立大规则并登记代称小记忆点。</p>
                 <p>2. <strong>Turn 级意图绝对纯净</strong>：第 1 轮 params 只有提过的参数；时间槽位仅有 <code>start_timestamp</code>，严格隔离 <code>end_timestamp</code> 与 <code>duration</code>。</p>
                 <p>3. <strong>DST 待澄清槽位显式追踪</strong>：第 1 轮 <code>requested_params</code> 明确记录 <code>["resolution", "rtt", "duration"]</code>；第 2 轮用户澄清后，槽位更新精准溯源至 <code>("Turn", "U2")</code>。</p>
+                <p>4. <strong>生活化口语祛除研发术语</strong>：严禁出现“长期偏好”等概念，全面替换为“记住这个习惯哈，别掉链子”、“帮我把这个习惯记好”、“把这个规矩记一下，以后省得每次重新挑”等日常口语，并通过 <code>natural_dialogue_check</code> 硬核拦截。</p>
                 <pre>// 改造后：严格按轮次演进与因果隔离 (时间与参数逐轮落地)
 "event_sequence": [
   {
@@ -707,7 +709,7 @@
   },
   {
     "turn": 2,
-    "user": { "utterance": "画质1080p，时延50ms以内，预计持续2小时...以后叫'企鹅例会'" },
+    "user": { "utterance": "画质1080p，时延50ms以内，预计持续2小时。我平时习惯叫它'企鹅例会'，帮我把这个习惯记好，别掉链子。" },
     "turn_intents": [{
       "status": "resolved", // ✅ 第2轮补充完毕
       "params": {

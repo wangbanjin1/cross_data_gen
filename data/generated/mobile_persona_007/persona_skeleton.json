@@ -4,25 +4,24 @@
   "persona_summary": "高频移动网络使用者",
   "static_profile": {
     "user_id": "USER_007",
-    "identity": "一名休闲棒球爱好者，依赖博客的预测来运营自己的梦幻棒球联盟；日常频繁在城市街区、公共活动现场及跨区域出行途中使用移动网络，属于高频移动网络使用者，通常每周有3至5次外出任务，全程以手机4G/5G直接联网，不依赖家庭宽带或普通Wi-Fi。",
-    "devices": "主力设备为5G智能手机，辅助设备为可穿戴设备；便携终端确需联网时使用手机热点。",
+    "identity": "休闲棒球爱好者，依赖博客预测运营梦幻棒球联盟，日常在城市街区、公共活动现场及跨区域出行途中活动，习惯用手机移动核心网完成信息查询、位置共享、即时通信与短视频上传",
+    "devices": "5G智能手机＋可穿戴设备，便携终端确需联网时使用手机热点",
     "apps": [
       "微信",
       "抖音",
       "腾讯会议",
       "小红书"
     ],
-    "speech_archetype": "casual_mobile_planner",
+    "speech_archetype": "casual_mobile_fan",
     "speech_style": {
-      "tone": "轻松随意、口语化，带点球迷圈子的调侃感，习惯用短句和行话快速沟通。",
+      "tone": "轻松随意、偏口语化，带一点球迷和移动办公混合的节奏感",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "秒开就行",
-        "千万别糊"
+        "我先看眼预测"
       ],
-      "typical_habits": "喜欢在移动途中快速处理信息，习惯用口语别名指代应用和业务，遇到网络波动会直接抱怨‘又转圈了’，对画质和时延有明确但口语化的要求。"
+      "typical_habits": "习惯先确认网络稳不稳，再开视频或上传内容；常把固定时间安排说成“老时间”“到点就搞”；遇到弱覆盖会反复强调续传和恢复"
     }
   },
   "dynamic_profile": {
@@ -30,7 +29,7 @@
       "storyline_id": "MAIN_MT_01",
       "name": "月度梦幻棒球数据盘点与远程协作",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每月逢十例行综合盘点与巡回沟通，固定在10日和20日15:00-17:00进行梦幻棒球数据复盘与远程协作。",
+      "trigger_condition": "每月逢10日、20日15:00-17:00进行梦幻棒球联盟数据盘点、博客预测核对与远程沟通",
       "period_type": "monthly",
       "days": [
         "10th",
@@ -47,16 +46,15 @@
         "app_aliases": [
           "企鹅会议",
           "鹅会",
-          "腾讯开会"
+          "腾讯会"
         ],
         "service_aliases": [
           "对齐开会",
-          "连麦复盘",
-          "线上碰头"
+          "连麦盘点",
+          "远程碰一下"
         ],
         "resolution_aliases": [
-          "超清",
-          "蓝光",
+          "原画",
           "顶格清晰度",
           "千万别糊"
         ],
@@ -64,7 +62,6 @@
           "别掉链子",
           "零卡顿",
           "秒开",
-          "毫秒级",
           "别转圈"
         ],
         "duration_aliases": [
@@ -77,7 +74,7 @@
           "每月逢十老规矩",
           "十号二十号老时间",
           "月度例行盘点",
-          "月初月中碰头"
+          "到点就对齐"
         ]
       },
       "declaration_mode": "explicit_declaration",
@@ -86,10 +83,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "梦幻棒球季后赛冲刺周",
+        "name": "跨城梦幻棒球线下观赛与临时直播周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "梦幻棒球季后赛冲刺阶段，用户频繁在户外移动场景中通过手机热点参与远程会议和视频通话，现场网络环境复杂，存在弱覆盖路段和临时停留点。",
+        "scene_description": "跨城出行参加棒球观赛活动，现场人流密集、移动网络波动明显，需要在户外等候区和临时停留点保持视频通话、位置共享和短视频上传",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -99,14 +96,14 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "移动途中短视频浏览与上传",
+        "name": "通勤途中短视频浏览与上传",
         "application_name": "抖音",
         "service_name": "短视频",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "在城市街区、公共活动现场或跨区域出行途中，临时停留时快速浏览和上传现场短视频。",
+        "trigger_condition": "跨区域出行途中或户外等候时，刷棒球集锦并上传现场短视频",
         "aliases": {
           "app_aliases": [
             "douyin",
@@ -120,14 +117,14 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "即时通信与位置共享",
+        "name": "联盟群聊即时沟通与位置共享",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "在户外等候区、临时停留点或兴趣活动现场，与朋友或联盟成员共享位置并进行视频通话。",
+        "trigger_condition": "梦幻棒球联盟临时讨论交易、伤病和预测时，发起群视频通话并共享位置",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -143,9 +140,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次临时会议，与梦幻棒球无关的普通工作沟通。",
-        "application_name": "钉钉",
-        "service_name": "会议",
+        "scenario": "单次临时观看棒球比赛直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -153,9 +150,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次观看棒球比赛直播，非周期性行为。",
-        "application_name": "哔哩哔哩",
-        "service_name": "看直播",
+        "scenario": "单次与朋友云游戏试玩",
+        "application_name": "腾讯会议",
+        "service_name": "云游戏",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
