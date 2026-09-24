@@ -4,8 +4,8 @@
   "persona_summary": "外访型金融顾问",
   "static_profile": {
     "user_id": "USER_002",
-    "identity": "外访型金融顾问，主要协助客户维护与跨境转账资金，日常在市集、门店外摆区、客户拜访点、配送路线、展会现场及商圈户外区域之间移动办公，全程依赖手机4G/5G直接联网完成移动支付、订单处理、库存查询、客户沟通、短视频营销与远程协作。",
-    "devices": "主力设备为5G智能手机，便携终端确需联网时使用手机热点；不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "identity": "外访型金融顾问，主要协助客户维护与跨境资金转账至中国。日常在市集、门店外摆区、客户拜访点、配送路线、展会现场、商圈户外区域或临时经营点之间移动办公，全程依赖手机4G/5G移动核心网直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi。核心工作包括核对行情与账户资料、通过加密通信确认跨境转账信息、上传电子签署文件、移动支付、订单处理与库存查询、客户沟通、短视频营销与远程协作。",
+    "devices": "主力设备为5G智能手机，辅助便携终端在确需联网时使用手机热点共享网络。",
     "apps": [
       "微信",
       "腾讯会议",
@@ -14,29 +14,29 @@
     ],
     "speech_archetype": "business_advisor",
     "speech_style": {
-      "tone": "干练、务实、带一点金融行业特有的谨慎与催促感，习惯用短句确认关键信息。",
+      "tone": "干练、务实、略带催促感，习惯用金融与移动办公行话快速对齐事项。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "这笔要稳",
-        "路上也能办"
+        "秒开才行",
+        "顶格清晰度"
       ],
-      "typical_habits": "在客户拜访途中先核对行情与账户资料，再用加密通信确认跨境转账信息并上传电子签署文件；说话时喜欢先定时间点，再强调网络和到账时效。"
+      "typical_habits": "在客户拜访途中或展会现场，习惯先确认网络与画质，再快速发起视频通话或上传签署文件；遇到弱覆盖会反复强调续传和恢复。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "外访途中跨境转账确认与电子签署文件上传",
+      "name": "外访金融顾问跨境转账视频核验与电子签署上传",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "在15:00-17:00客户拜访或商圈临时经营点现场，完成行情核对后，通过加密通信确认跨境转账信息并上传电子签署文件",
+      "trigger_condition": "在15:00-17:00客户拜访或展会现场任务时段，金融顾问需要与客户及后台合规人员通过视频通话核对跨境转账信息，并上传电子签署文件与账户资料。",
       "period_type": "task_driven",
       "days": [
         "task_specific"
       ],
       "time_range": "15:00-17:00",
-      "application_name": "微信",
+      "application_name": "腾讯会议",
       "service_name": "视频通话",
       "preferred_params": {
         "resolution": "1080p",
@@ -44,26 +44,26 @@
       },
       "aliases": {
         "app_aliases": [
-          "微信",
-          "某信",
-          "企微"
+          "企鹅会议",
+          "腾讯会",
+          "小企鹅开会"
         ],
         "service_aliases": [
           "打视讯",
-          "连麦确认",
-          "视频对一下",
+          "连麦核验",
+          "视频对账",
           "远程面签"
         ],
         "resolution_aliases": [
-          "原画",
           "顶格清晰度",
+          "原画",
           "千万别糊",
           "超清"
         ],
         "rtt_aliases": [
           "别掉链子",
-          "零卡顿",
           "秒开",
+          "毫秒级",
           "别转圈"
         ],
         "duration_aliases": [
@@ -73,10 +73,10 @@
           "大半个下午"
         ],
         "period_aliases": [
-          "每天这个时候",
           "老时间",
-          "下午这趟",
-          "客户拜访点老规矩"
+          "每天这个时候",
+          "下午三点老规矩",
+          "外访任务时段"
         ]
       },
       "declaration_mode": "implicit_induction",
@@ -88,7 +88,7 @@
         "name": "跨境金融展会现场集中签约周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "展会现场人群密集、商圈户外区域信号竞争强，客户集中咨询跨境转账与签署文件，需要临时提高连接稳定性与消息及时性。",
+        "scene_description": "展会现场人群密集、无线环境复杂，金融顾问需要在临时展位和商圈户外区域连续完成跨境转账视频核验、电子签署与资料上传，网络拥塞明显。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -98,35 +98,14 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "客户远程沟通与资料复核",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "name": "客户拜访途中短视频营销素材上传",
+        "application_name": "抖音",
+        "service_name": "短视频",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "客户临时要求远程复核账户资料或跨境转账材料时",
-        "aliases": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
-          ]
-        }
-      },
-      {
-        "storyline_id": "SUB_02",
-        "name": "短视频营销与产品讲解",
-        "application_name": "抖音",
-        "service_name": "短视频",
-        "preferred_params": {
-          "resolution": "1080p",
-          "rtt_max": "80ms"
-        },
-        "trigger_condition": "在门店外摆区或展会现场拍摄并上传金融知识、转账流程讲解短视频时",
+        "trigger_condition": "在客户拜访点或配送路线途中，需要快速上传金融知识短视频或产品营销素材，保持图片和短视频上传顺畅。",
         "aliases": {
           "app_aliases": [
             "douyin",
@@ -137,14 +116,35 @@
             "刷视频"
           ]
         }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "远程协作与订单库存对齐会议",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在门店外摆区或临时经营点，需要与后台团队远程协作，处理移动支付、订单处理与库存查询，并快速对齐客户需求。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ]
+        }
       }
     ],
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "临时参加内部培训会议",
-        "application_name": "钉钉",
-        "service_name": "会议",
+        "scenario": "展会现场休息间隙单次观看行业直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -152,8 +152,8 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "午休时刷短视频放松",
-        "application_name": "哔哩哔哩",
+        "scenario": "临时经营点单次发起客户群短视频沟通",
+        "application_name": "微信",
         "service_name": "短视频",
         "params": {
           "resolution": "720p",

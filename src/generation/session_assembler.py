@@ -111,9 +111,6 @@ class SessionAssembler:
             "intents": intents,
             "relations": [],
             "slot_updates": [],
-            "memory_snapshot_before": snap,
-            "memory_events_after": mems,
-            "gold_memory_state_after": gold,
         }
 
     @classmethod
@@ -188,9 +185,6 @@ class SessionAssembler:
             "intents": intents,
             "relations": [],
             "slot_updates": slot_updates,
-            "memory_snapshot_before": snap,
-            "memory_events_after": mems,
-            "gold_memory_state_after": gold,
         }
 
     @classmethod
@@ -274,9 +268,6 @@ class SessionAssembler:
             "intents": intents,
             "relations": [],
             "slot_updates": slot_updates,
-            "memory_snapshot_before": snap,
-            "memory_events_after": mems,
-            "gold_memory_state_after": gold,
         }
 
     @classmethod
@@ -375,9 +366,6 @@ class SessionAssembler:
             "intents": intents,
             "relations": [],
             "slot_updates": slot_updates,
-            "memory_snapshot_before": snap,
-            "memory_events_after": mems,
-            "gold_memory_state_after": gold,
         }
 
     @classmethod
@@ -473,9 +461,6 @@ class SessionAssembler:
             "intents": intents,
             "relations": [],
             "slot_updates": slot_updates,
-            "memory_snapshot_before": snap,
-            "memory_events_after": mems,
-            "gold_memory_state_after": gold,
         }
 
     @classmethod
@@ -667,7 +652,4 @@ class SessionAssembler:
             "intents": intents,
             "relations": [],
             "slot_updates": [{"intent_id": "I1", "turn_updates": slot_updates_turn}],
-            "memory_snapshot_before": snap,
-            "memory_events_after": mems,
-            "gold_memory_state_after": gold,
         }

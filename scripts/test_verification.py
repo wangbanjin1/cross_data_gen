@@ -36,10 +36,12 @@ def test_file(jsonl_path: Path):
             assert any(act in t1_agent["action_types"] for act in ["Confirm_Slot", "Request_Slot", "Request_Disambiguation"]), f"Session {sid} turn 1 agent should ask confirmation or disambiguation!"
             assert "Confirm_Slot" in t2_user["action_types"], f"Session {sid} turn 2 user should confirm slot!"
             
-        # 3. 验证必需字段与记忆追踪字段
+        # 3. 验证必需字段与纯对话解耦（避免冗余存储记忆快照）
         required_keys = ['session_id', 'user_id', 'reference_time', 'session_meta', 'event_sequence', 'intents', 'relations', 'slot_updates']
         for k in required_keys:
             assert k in session, f"Missing key {k} in session {sid}"
+        for redundant in ['memory_snapshot_before', 'memory_events_after', 'gold_memory_state_after']:
+            assert redundant not in session, f"Redundant memory key '{redundant}' found in sessions.jsonl for {sid}! It should be purely decoupled into memory_traces.json."
 
         # 4. 验证 Turn 级意图隔离性与无泄露
         for ev_idx, ev in enumerate(events):
@@ -81,7 +83,16 @@ def test_file(jsonl_path: Path):
 
     # 4. 检查该文件夹下是否有配套文件
     assert (jsonl_path.parent / "persona_skeleton.json").exists(), f"Missing persona_skeleton.json in {parent_dir}"
-    assert (jsonl_path.parent / "memory_traces.json").exists(), f"Missing memory_traces.json in {parent_dir}"
+    traces_path = jsonl_path.parent / "memory_traces.json"
+    assert traces_path.exists(), f"Missing memory_traces.json in {parent_dir}"
+    with open(traces_path, "r", encoding="utf-8") as f:
+        traces_data = json.load(f)
+    assert len(traces_data) == total, f"memory_traces count {len(traces_data)} != sessions count {total} in {parent_dir}"
+    for tr in traces_data:
+        assert "session_id" in tr, f"Trace missing session_id in {parent_dir}"
+        assert "snapshot_before" in tr, f"Trace missing snapshot_before in {parent_dir}"
+        assert "memory_events" in tr, f"Trace missing memory_events in {parent_dir}"
+        assert "gold_state_after" in tr, f"Trace missing gold_state_after in {parent_dir}"
     assert (jsonl_path.parent / "qc_report.json").exists(), f"Missing qc_report.json in {parent_dir}"
 
     print(f"\n[SUCCESS] [{parent_dir}]: All {total} sessions + skeleton + memory_traces + qc_report passed 100% strict verification!")

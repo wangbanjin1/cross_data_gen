@@ -79,7 +79,20 @@ class DialogueGenerator:
                 "period_aliases": p_aliases.get("period_aliases", []),
             }
 
-            t1_rule = "【大记忆点首次建立：第1轮严禁使用'老规矩'/'老时间'与别名，必须直述标准应用名与业务名】" if role == "evidence_session" else "【后续复用/强化：鼓励自然使用已沉淀的别名与老规矩】"
+            primary_app_alias = p_aliases.get("app_aliases", [""])[0] if p_aliases.get("app_aliases") else ""
+            primary_srv_alias = p_aliases.get("service_aliases", [""])[0] if p_aliases.get("service_aliases") else ""
+            primary_alias = primary_app_alias or primary_srv_alias or tp["application_name"]
+
+            decl_mode = s_plan.get("declaration_mode", "explicit_declaration")
+            is_implicit_reinf = (role == "reinforcement_session" and decl_mode == "implicit_induction" and sid.endswith("-03"))
+
+            if role == "evidence_session":
+                t1_rule = f"【首次建联/证据会话：第1轮必须直述标准应用名({tp['application_name']})与业务名({tp['service_name']})，严禁使用'老规矩'与生僻别名；第2轮在确认参数的同时，正式向助手介绍并登记习惯代称（如：'我平时习惯叫它{primary_alias}，帮我把这个习惯记好'），以便后续会话复用！】"
+            elif is_implicit_reinf:
+                t1_rule = f"【隐式归纳二次发生固化契机：第1轮严禁使用'老规矩'与生僻别名，请说'配置跟上次一样就行'；第1轮客服主动询问是否设为老规矩；第2轮用户确认并正式登记习惯代称'{primary_alias}'】"
+            else:
+                t1_rule = f"【后续复用/强化：此时规则与代称（'{primary_alias}'）已在历史会话中正式登记，鼓励第1轮自然使用已沉淀的口语代称（如'{primary_alias}'）与'老规矩'】"
+
             prompt_items.append({
                 "session_id": sid,
                 "rounds": rounds,
@@ -87,8 +100,9 @@ class DialogueGenerator:
                 "blueprint_type": b_type,
                 "template_id": s_plan.get("template_id", "T2-1"),
                 "turn1_requirement": t1_rule,
+                "primary_alias": primary_alias,
                 "ood_goal": s_plan.get("ood_goal", ""),
-                "declaration_mode": s_plan.get("declaration_mode", "explicit_declaration"),
+                "declaration_mode": decl_mode,
                 "storyline_trigger_type": s_plan.get("storyline_trigger_type", "time_periodic"),
                 "period_type": s_plan.get("period_type", "weekly"),
                 "trigger_condition": s_plan.get("trigger_condition", ""),

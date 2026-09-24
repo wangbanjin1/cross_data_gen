@@ -727,6 +727,49 @@
         </div>
     </div>
 
+    <!-- 别名奠基律与纯对话/记忆基准双轨解耦深潜 -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-icon">🧩</div>
+            <h2>最新架构特性：别名奠基律 (Alias Grounding Law) 与双轨彻底解耦</h2>
+        </div>
+
+        <div class="contrast-grid">
+            <div class="contrast-box bad">
+                <div class="contrast-title">❌ 改造前缺陷现象 (凭空冒出别名 & 格式冗余臃肿)</div>
+                <p>1. <strong>别名凭空突现 (Unfounded Alias)</strong>：如在 <code>mobile_persona_008</code> 的 S-02 (歧义消解会话) 中，用户仅说“腾讯会议、会议业务”，从未提过“会议通”；但到了 S-06 复用会话第 1 轮，用户突然没头没脑地说“用会议通，帮我保障一下”，完全不符合真实用户对话认知逻辑。</p>
+                <p>2. <strong>对话文件混杂冗余 (Schema Duplication)</strong>：<code>sessions.jsonl</code> 每条会话中重复内嵌了 <code>memory_snapshot_before</code>、<code>memory_events_after</code>、<code>gold_memory_state_after</code>，导致单个文件膨胀至数百KB，且与专门的 <code>memory_traces.json</code> 完全重复，破坏了纯对话 DST 评测集的整洁标准。</p>
+            </div>
+
+            <div class="contrast-box good">
+                <div class="contrast-title">✅ 改造后架构标准 (三阶生命周期奠基律 & 双轨清晰解耦)</div>
+                <p>1. <strong>别名奠基三阶法则 (Alias Grounding Law)</strong>：
+                    <br>• <strong>首发建联 (Evidence Turn 1 & 2)</strong>：Turn 1 强制使用官方全称（如“腾讯会议”）；Turn 2 在用户确认参数的同时，正式向助手登记代称（“我平时习惯叫它'会议通'，帮我把这个习惯记好，别掉链子”），Agent 答复明确登记习惯。
+                    <br>• <strong>隐式晶化 (Crystallization Turn 1 & 2)</strong>：Turn 1 仅说“配置跟上次一样”，禁用生僻别名与“老规矩”；Turn 2 在用户明确固化老规矩时，正式登记代称。
+                    <br>• <strong>后续复用 (Reuse / Reinforcement)</strong>：仅在先验会话奠基成功后，后续会话的 Turn 1 才允许口语化调用“老规矩”与代称。
+                </p>
+                <p>2. <strong>纯净对话与记忆追踪双轨解耦</strong>：
+                    <br>• <code>sessions.jsonl</code>：收敛为纯粹的标准 8 大对话与 DST 槽位追踪核心字段，零记忆冗余，体积缩减 60% 以上。
+                    <br>• <code>memory_traces.json</code>：专职负责评测基准，完整闭环记录每个会话的前置快照、状态转移事件与 Gold 记忆状态。
+                </p>
+            </div>
+        </div>
+
+        <div style="margin-top: 20px; background: rgba(15, 23, 42, 0.6); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color);">
+            <div style="font-weight: 600; color: var(--accent-cyan); margin-bottom: 8px;">实测生成的 S-02 与 S-06 因果对照样例（Persona 008 移动训练与赛事人员）：</div>
+            <pre style="margin: 0; background: #0b1120; padding: 14px; border-radius: 6px; font-size: 0.88rem; overflow-x: auto;">
+[S-USER_008-02 首发证据会话 Turn 2 登记别名]
+User: "对，会议业务，720p，100ms以内，持续1小时。我平时习惯叫它tencentmeeting，帮我把这个习惯记好，别掉链子。"
+Agent: "好的，已为您开通腾讯会议保障：720p，100ms，持续60分钟。并已记录您的习惯代称“tencentmeeting”。"
+
+[S-USER_008-06 后续复用会话 Turn 1 自然调用已登记别名]
+User: "老规矩，tencentmeeting开会，720p、100ms以内，今晚6点45开，1小时，帮我把保障开上。"
+Agent: "收到，您是要用腾讯会议开会议对吧？画质720p、时延100ms以内、持续1小时，我按这个给您开通保障。"
+User: "对，就按这个来，别掉链子。"
+            </pre>
+        </div>
+    </div>
+
     <!-- 生产性能与交付标准 -->
     <div class="section">
         <div class="section-header">

@@ -30,9 +30,10 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
         return f"帮我办理一下今天{tp['start_timestamp'].split('日')[-1]}的{app_alias}{srv_alias}网络保障，另外顺便帮我查询一下{ood_goal or '手机话费充值与账单查询'}。"
     elif tid == "T2-2":
         if turn_idx == 1:
-            return f"在{env}网络不太稳，帮我把{app_alias}保障一下。"
+            return f"在{env}网络不太稳，帮我把{app}保障一下。"
         else:
-            return f"是{srv_alias}业务，画质要{res_alias}，时延控制在{rtt_alias}以内，从今天{tp['start_timestamp'].split('日')[-1]}开始，预计持续{dur_alias}。"
+            alias_intro = f"我平时习惯叫它'{app_alias}'，帮我把这个习惯记好，别掉链子。" if app_alias != app else "帮我把这个习惯记好，别掉链子。"
+            return f"是{srv_alias}业务，画质要{res_alias}，时延控制在{rtt_alias}以内，从今天{tp['start_timestamp'].split('日')[-1]}开始，预计持续{dur_alias}。{alias_intro}"
     elif tid == "T2-5":
         if turn_idx == 1:
             return f"今天在{env}，按老规矩给我开通{app_alias}{srv_alias}保障。"
@@ -44,25 +45,30 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
         else:
             return f"不对，今天现场特殊，画质调到{res_alias}，时延要求{rtt_alias}，临时按这个来。"
     elif turn_idx == 1:
-        if role == "evidence_session":
+        if role == "evidence_session" or (role == "reinforcement_session" and decl_mode == "implicit_induction" and s_plan.get("session_id", "").endswith("-03")):
             return f"你好，需要给{app}{srv}做一个网络保障，时间是今天{tp['start_timestamp'].split('日')[-1]}开始。"
         else:
             return f"你好，需要给{app_alias}{srv_alias}做一个网络保障，时间是今天{tp['start_timestamp'].split('日')[-1]}开始，持续{dur_alias}。"
     else:
         if role == "evidence_session" and decl_mode == "explicit_declaration":
             dur_text = f"，预计持续{dur_alias}（到{tp['end_timestamp'].split('日')[-1]}）"
+            alias_intro = f"我平时习惯叫它'{app_alias}'，" if app_alias != app else ""
             if trig_type == "task_activity":
-                return f"好的，画质用{res}，时延{rtt}以内{dur_text}。我平时习惯叫它'{app_alias}{srv_alias}'，以后只要我提到执行【{trig_cond or env}】任务，就按老规矩来：{app}{srv}、{res}、{rtt}以内，帮我把这个习惯记好，别掉链子。"
+                return f"好的，画质用{res}，时延{rtt}以内{dur_text}。{alias_intro}以后只要我提到执行【{trig_cond or env}】任务，就按老规矩来：{app}{srv}、{res}、{rtt}以内，帮我把这个习惯记好，别掉链子。"
             elif trig_type == "location_environment":
-                return f"好的，画质用{res}，时延{rtt}以内{dur_text}。我平时习惯叫它'{app_alias}{srv_alias}'，以后只要我处于【{trig_cond or env}】，就按老规矩来：{app}{srv}、{res}、{rtt}以内，帮我把这个习惯记好，别掉链子。"
+                return f"好的，画质用{res}，时延{rtt}以内{dur_text}。{alias_intro}以后只要我处于【{trig_cond or env}】，就按老规矩来：{app}{srv}、{res}、{rtt}以内，帮我把这个习惯记好，别掉链子。"
             elif period_type == "daily":
-                return f"好的，画质用{res}，时延{rtt}以内{dur_text}。我平时习惯叫它'{app_alias}{srv_alias}'，以后我只要每天这个时段说'老规矩'，就按这个来：{app}{srv}、{res}、{rtt}以内，记住这个习惯哈，别掉链子。"
+                return f"好的，画质用{res}，时延{rtt}以内{dur_text}。{alias_intro}以后我只要每天这个时段说'老规矩'，就按这个来：{app}{srv}、{res}、{rtt}以内，记住这个习惯哈，别掉链子。"
             elif period_type == "monthly":
-                return f"好的，画质用{res}，时延{rtt}以内{dur_text}。我平时习惯叫它'{app_alias}{srv_alias}'，以后我只要在每月固定月度对账/例会说'老规矩'，就按这个来：{app}{srv}、{res}、{rtt}以内，把这个规矩记一下哈，别掉链子。"
+                return f"好的，画质用{res}，时延{rtt}以内{dur_text}。{alias_intro}以后我只要在每月固定月度对账/例会说'老规矩'，就按这个来：{app}{srv}、{res}、{rtt}以内，把这个规矩记一下哈，别掉链子。"
             else:
-                return f"好的，画质用{res}，时延{rtt}以内{dur_text}。我平时习惯叫它'{app_alias}{srv_alias}'，以后我只要在每周例行时段说'老规矩'，就按这个来：{app}{srv}、{res}、{rtt}以内，记住这个习惯哈，别掉链子。"
+                return f"好的，画质用{res}，时延{rtt}以内{dur_text}。{alias_intro}以后我只要在每周例行时段说'老规矩'，就按这个来：{app}{srv}、{res}、{rtt}以内，记住这个习惯哈，别掉链子。"
         elif role == "evidence_session" and decl_mode == "implicit_induction":
-            return f"好的，画质用{res}，时延{rtt}以内，预计持续{dur_alias}，今天就按这个配置开通吧。"
+            alias_intro = f"我平时习惯叫它'{app_alias}'，" if app_alias != app else ""
+            return f"好的，画质用{res}，时延{rtt}以内，预计持续{dur_alias}。{alias_intro}今天就按这个配置开通吧。"
+        elif role == "reinforcement_session" and decl_mode == "implicit_induction" and s_plan.get("session_id", "").endswith("-03"):
+            alias_intro = f"我平时习惯叫它'{app_alias}'，" if app_alias != app else ""
+            return f"对，就按这个标准来。{alias_intro}以后我都这么用，帮我把这个习惯记好，别掉链子。"
         else:
             return "好的，确认按这个配置直接开通。"
 
@@ -89,7 +95,7 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
         if turn_idx == 1:
             return f"收到，请问您是要进行'{app}{srv}'还是其他业务的保障？画质、时延和持续时长有什么具体要求吗？"
         else:
-            return f"好的，已为您开通{app}{srv}网络保障（{res} / 时延≤{rtt}），祝您使用愉快！"
+            return f"好的，已为您开通{app}{srv}网络保障（{res} / 时延≤{rtt}），并已为您记录习惯'{app_alias}'，祝您使用愉快！"
     elif tid == "T2-5":
         if turn_idx == 1:
             return f"收到，请问是否按老规矩（{res} / 时延≤{rtt}）为您开通保障？"
@@ -103,6 +109,8 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
     elif is_last:
         if role == "evidence_session" and decl_mode == "explicit_declaration":
             return f"好的，已为您成功受理本次保障，并已为您将该配置记录为长期老规矩，祝您使用愉快！"
+        elif role == "reinforcement_session" and decl_mode == "implicit_induction" and s_plan.get("session_id", "").endswith("-03"):
+            return f"好的，已为您将该配置固化为您的长期网络保障老规矩，祝您使用愉快！"
         else:
             return f"好的，已为您成功受理{app}{srv}网络保障（{res} / 时延≤{rtt}），祝您使用愉快！"
     else:

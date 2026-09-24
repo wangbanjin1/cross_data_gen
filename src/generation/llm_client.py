@@ -18,6 +18,13 @@ DEFAULT_KEY = "sk-" + "64eb2c33b048436aac67a7cb5cf315d4"
 DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY", DEFAULT_KEY)
 DEEPSEEK_BASE_URL = os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
 
+# 确保直连国内 DeepSeek API，避免被本地全局/HTTP 代理拦截导致 SSL 连接异常
+if "api.deepseek.com" in DEEPSEEK_BASE_URL:
+    _np = os.environ.get("no_proxy", "")
+    if "api.deepseek.com" not in _np:
+        os.environ["no_proxy"] = f"{_np},api.deepseek.com".strip(",")
+        os.environ["NO_PROXY"] = os.environ["no_proxy"]
+
 
 class LLMClient:
     """

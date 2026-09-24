@@ -4,25 +4,24 @@
   "persona_summary": "高频移动网络使用者",
   "static_profile": {
     "user_id": "USER_009",
-    "identity": "城市户外活动爱好者兼现场内容记录者，日常频繁穿梭于城市街区、公共活动现场、跨区域出行途中及户外等候区，习惯用手机4G/5G直接联网完成地图导航、信息检索、位置共享、即时通信、短视频浏览上传与远程协作，不依赖家庭宽带或公司固网。",
-    "devices": "5G智能手机＋随身拍摄设备（运动相机/手机云台），便携终端确需联网时使用手机热点。",
+    "identity": "城市户外活动爱好者兼现场内容记录者，日常频繁穿梭于城市街区、公共活动现场、跨区域出行途中及户外等候区、临时停留点或兴趣活动现场，全程依赖手机4G/5G移动核心网直接联网，不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式，便携终端确需联网时使用手机热点。",
+    "devices": "5G智能手机＋随身拍摄设备",
     "apps": [
       "微信",
       "抖音",
       "腾讯会议",
-      "高德地图"
+      "小红书"
     ],
     "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "干脆利落、带点户外行动派的直爽，习惯用短句和行动指令，偶尔夹杂现场环境描述。",
+      "tone": "干脆利落、带点现场感，喜欢用短句和行话，偶尔夹杂户外活动圈的口语。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "秒开就行",
-        "千万别糊"
+        "秒开就行"
       ],
-      "typical_habits": "出发前先确认路线和网络，活动间隙习惯性刷一眼消息和短视频，遇到弱覆盖路段会提前提醒同伴“可能要转圈”，事后喜欢用“老时间老地方”总结固定安排。"
+      "typical_habits": "习惯在出发前或现场临时停留时快速确认网络与任务状态，喜欢用口语化别名指代应用和业务，对画质和时延有明确底线，常把‘能续传’挂在嘴边。"
     }
   },
   "dynamic_profile": {
@@ -30,7 +29,7 @@
       "storyline_id": "MAIN_MT_01",
       "name": "晚间户外现场短视频上传与远程协作",
       "storyline_trigger_type": "location_environment",
-      "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，20:00-22:00时段需要即时上传现场短视频并参与远程协作。",
+      "trigger_condition": "身处城市街区、公共活动现场或跨区域出行途中的户外等候区、临时停留点或兴趣活动现场，且处于20:00-22:00时段，需要即时上传现场照片或短视频并同步进行远程协作。",
       "period_type": "location_driven",
       "days": [
         "location_specific"
@@ -50,7 +49,7 @@
         "service_aliases": [
           "刷短视频",
           "传片子",
-          "推流"
+          "推流上传"
         ],
         "resolution_aliases": [
           "原画",
@@ -79,10 +78,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨城户外音乐节现场协作周",
+        "name": "跨城兴趣活动现场直播周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "跨城参加户外音乐节，现场人流密集、基站拥塞，临时停留点位于场馆外围弱覆盖区域，需要临时降低画质保障消息与短视频上传及时送达。",
+        "scene_description": "跨城参加兴趣活动现场，场地周边网络拥塞，户外临时停留点信号波动大，需要临时提高上传优先级并降低画质以保障消息及时送达和音视频稳定。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -92,14 +91,14 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "通勤途中位置共享与即时通信",
+        "name": "移动途中即时通信与位置共享",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "跨区域出行途中或城市街区通勤时，与同伴共享位置并临时发起视频通话确认碰头点。",
+        "trigger_condition": "在城市街区、公共活动现场或跨区域出行途中需要与同伴共享位置、处理即时消息或发起短时视频通话时。",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -113,14 +112,14 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "现场活动远程协作会议",
+        "name": "临时停留点远程协作会议",
         "application_name": "腾讯会议",
         "service_name": "会议",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "在公共活动现场临时停留点，需要与远程团队对齐现场素材和协作安排。",
+        "trigger_condition": "在户外等候区或临时停留点需要接入远程协作会议，进行音视频沟通和屏幕共享时。",
         "aliases": {
           "app_aliases": [
             "tencentmeeting",
@@ -136,9 +135,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次在户外等候区看直播打发时间",
-        "application_name": "哔哩哔哩",
-        "service_name": "看直播",
+        "scenario": "单次在兴趣活动现场用小红书发布图文笔记",
+        "application_name": "小红书",
+        "service_name": "短视频",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -146,9 +145,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次在临时停留点开直播分享现场",
-        "application_name": "快手",
-        "service_name": "开直播",
+        "scenario": "单次在跨区域出行途中用哔哩哔哩观看直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

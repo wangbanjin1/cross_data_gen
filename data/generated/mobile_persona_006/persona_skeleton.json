@@ -4,32 +4,32 @@
   "persona_summary": "移动执勤人员",
   "static_profile": {
     "user_id": "USER_006",
-    "identity": "国际执法背景的移动执勤安全官，长期在夜间值守点、事故现场、应急集结区、道路与巡逻区域之间机动，负责现场取证、即时通信、事件上报、地图导航、位置共享与任务调度；全程依赖手机4G/5G移动核心网直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi，便携终端确需联网时使用手机热点。",
-    "devices": "主力设备为5G智能手机，辅助设备为平板电脑，二者通过手机热点或移动核心网协同使用。",
+    "identity": "一名具有国际执法经验、对文化差异敏感的移动执勤安全官，长期在夜间值守点、事故现场、应急集结区、道路及巡逻区域执行任务，全程依赖手机4G/5G移动核心网直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi，重点完成现场取证、即时通信、事件上报、地图导航、位置共享与任务调度。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点。",
     "apps": [
       "微信",
       "钉钉",
       "腾讯会议",
-      "高德地图"
+      "哔哩哔哩"
     ],
-    "speech_archetype": "field_security_officer",
+    "speech_archetype": "security_officer_speaker",
     "speech_style": {
-      "tone": "简短、克制、指令感强，带执法与调度口吻，重视时效与现场稳定。",
+      "tone": "简洁、克制、指令感强，带现场处置口吻，偶尔夹杂跨文化沟通中的谨慎表达。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
-        "对齐一下",
-        "先保畅通"
+        "先对齐一下",
+        "现场情况我马上回传"
       ],
-      "typical_habits": "习惯先确认位置与网络状态，再下达或接受任务；汇报时偏好用最短语句说明现场、画面和时延情况。"
+      "typical_habits": "习惯先确认位置与网络状态，再下达或执行任务；汇报时强调画面清楚、消息及时、位置连续，不喜欢拖泥带水。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "巡逻线现场视频回传与调度",
+      "name": "巡逻线现场取证与即时调度回传",
       "storyline_trigger_type": "location_environment",
-      "trigger_condition": "当执勤人员进入道路、巡逻区域及临时处置现场，尤其是夜间值守点、事故现场或应急集结区周边的移动弱网路段时，在09:00-11:00时段触发现场视频回传、位置共享与任务调度。",
+      "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边移动弱网区域，且时间为09:00-11:00时，触发微信现场取证、位置共享与任务调度回传。",
       "period_type": "location_driven",
       "days": [
         "location_specific"
@@ -45,12 +45,12 @@
         "app_aliases": [
           "微信",
           "企微",
-          "工作号"
+          "某信"
         ],
         "service_aliases": [
           "打视讯",
           "连麦",
-          "视频回传",
+          "视频对讲",
           "现场连线"
         ],
         "resolution_aliases": [
@@ -68,14 +68,14 @@
         "duration_aliases": [
           "俩小时",
           "两钟头",
-          "播到十一点",
-          "一个半小时"
+          "大半个上午",
+          "到十一点"
         ],
         "period_aliases": [
           "每天这个时候",
           "老时间",
           "上午例行",
-          "到点就开"
+          "巡逻线上老规矩"
         ]
       },
       "declaration_mode": "implicit_induction",
@@ -87,7 +87,7 @@
         "name": "跨区域联合执法演练周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "跨区域联合执法演练期间，巡逻线与临时处置现场人员密集、车辆移动频繁，局部路段出现高干扰与弱覆盖，需优先保障调度消息和现场画面稳定回传。",
+        "scene_description": "跨区域联合执法演练期间，巡逻线与临时集结区人员密集、建筑遮挡严重，移动网络拥塞明显，现场视频回传与位置共享需要更高稳定性。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -104,7 +104,7 @@
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "在应急集结区或道路巡逻区域进行车队编组、人员转运和大巴视频调度时触发。",
+        "trigger_condition": "执勤车队在道路巡逻区域转移或临时集结时，通过钉钉发起视频调度会议，同步车队位置与任务安排。",
         "aliases": {
           "app_aliases": [
             "dingding",
@@ -118,14 +118,14 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "执法记录复盘与远程沟通",
+        "name": "执法记录录像复盘与案情沟通",
         "application_name": "腾讯会议",
         "service_name": "会议",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "回到值守点或临时处置现场后，需要与后方或跨区域同事复盘执法记录、对齐证据材料时触发。",
+        "trigger_condition": "回到值守点或临时处置现场后，需要与同事复盘执法记录、沟通案情时，通过腾讯会议进行视频会议。",
         "aliases": {
           "app_aliases": [
             "tencentmeeting",
@@ -141,9 +141,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次夜间值守点短暂休息时刷短视频",
-        "application_name": "抖音",
-        "service_name": "短视频",
+        "scenario": "单次跨部门临时协调会",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -151,9 +151,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次事故现场等待支援时观看直播了解路况",
-        "application_name": "快手",
-        "service_name": "看直播",
+        "scenario": "单次休息间隙刷短视频放松",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

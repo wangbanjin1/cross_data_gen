@@ -107,7 +107,7 @@ class BatchPipeline:
             json.dump(memory_traces, f, ensure_ascii=False, indent=2)
 
         # 6. 执行自动化质检并保存报告
-        qc_report = QCValidator.validate_sessions(rendered_sessions)
+        qc_report = QCValidator.validate_sessions(rendered_sessions, memory_traces=memory_traces)
         out_qc_path = sample_dir / "qc_report.json"
         with open(out_qc_path, "w", encoding="utf-8") as f:
             json.dump(qc_report, f, ensure_ascii=False, indent=2)

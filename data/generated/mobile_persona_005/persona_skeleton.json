@@ -4,32 +4,33 @@
   "persona_summary": "户外视觉创作者",
   "static_profile": {
     "user_id": "USER_005",
-    "identity": "退休音乐人兼户外视觉创作者，擅长词曲创作与音乐制作，活跃于街头演出、音乐节与城市采风现场，以手机移动核心网完成现场音视频采集、直播推流与作品云端同步，并乐于向年轻创作者传授经验",
-    "devices": "主力设备为5G智能手机，辅助设备为平板电脑，便携终端确需联网时使用手机热点",
+    "identity": "退休音乐人兼词曲创作与制作导师，长期在户外演出点、展览布置区、城市采风路线、音乐节、街头活动或临时排练现场进行现场音视频采集、直播、作品上传、云端素材同步与团队沟通，并指导年轻创作者。",
+    "devices": "主力设备为5G智能手机与平板电脑，便携终端确需联网时使用手机热点；不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式。",
     "apps": [
       "抖音",
       "微信",
       "哔哩哔哩",
-      "剪映"
+      "腾讯会议"
     ],
     "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "老练随性、带点音乐人的江湖气，说话直接不绕弯，喜欢用行话和口头禅带节奏",
+      "tone": "老练、直接、带点舞台人的节奏感，喜欢用行话和口头禅压场，强调现场别掉链子。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "这条必须原画"
+        "原画走起",
+        "秒开才算稳"
       ],
-      "typical_habits": "习惯在开播前先跟团队对齐流程，强调画质和时延不能糊弄，遇到弱覆盖会立刻要求续传或切热点"
+      "typical_habits": "习惯在任务开始前先明确画质、时延和时长要求，现场边拍边讲，遇到弱覆盖会立刻要求续传或恢复。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "户外音乐现场直播与作品上传",
+      "name": "户外音乐采风直播与作品上传",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "在户外演出点、音乐节或街头活动进行现场音乐表演时，执行音视频采集、直播推流与高清作品上传任务",
+      "trigger_condition": "在户外演出点、展览布置区或城市采风路线执行音乐采风、现场排练或作品展示任务时，需要边采集音视频边直播互动，并把高清图片、设计稿和音视频素材上传给客户或团队。",
       "period_type": "task_driven",
       "days": [
         "task_specific"
@@ -48,23 +49,28 @@
         ],
         "service_aliases": [
           "开播",
-          "推流"
+          "推流",
+          "连麦"
         ],
         "resolution_aliases": [
           "原画",
-          "顶格清晰度"
+          "顶格清晰度",
+          "千万别糊"
         ],
         "rtt_aliases": [
           "别掉链子",
-          "零卡顿"
+          "零卡顿",
+          "秒开"
         ],
         "duration_aliases": [
           "俩小时",
-          "两钟头"
+          "两钟头",
+          "播到十点半"
         ],
         "period_aliases": [
           "每天这个时候",
-          "老时间"
+          "老时间",
+          "早间现场老规矩"
         ]
       },
       "declaration_mode": "explicit_declaration",
@@ -73,10 +79,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨城音乐节巡演周",
+        "name": "城市音乐节密集人群直播周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "跨城参加音乐节，现场人群密集、网络拥塞，需在弱覆盖环境下保障直播互动与作品上传",
+        "scene_description": "音乐节现场人群密集、移动网络拥塞，户外演出点与临时排练现场需要优先保证直播互动低时延和音视频上行稳定。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -86,14 +92,35 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "团队视频沟通与素材对齐",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "name": "团队排练视频会议对齐",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "演出前与团队沟通流程、确认素材与设备状态",
+        "trigger_condition": "临时排练现场或街头活动后，与乐队成员、制作团队对齐编曲、拍摄计划和素材回传安排。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "作品复盘与社交发布沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "采风或演出结束后，与客户、合作方或年轻创作者沟通作品修改、发布节奏和素材交付。",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -104,34 +131,13 @@
             "连线"
           ]
         }
-      },
-      {
-        "storyline_id": "SUB_02",
-        "name": "演出录像复盘与短视频发布",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
-        "preferred_params": {
-          "resolution": "1080p",
-          "rtt_max": "80ms"
-        },
-        "trigger_condition": "演出结束后回看录像、剪辑精彩片段并发布",
-        "aliases": {
-          "app_aliases": [
-            "bilibili",
-            "哔站"
-          ],
-          "service_aliases": [
-            "看短视频",
-            "刷视频"
-          ]
-        }
       }
     ],
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "临时与远方乐手进行视频会议沟通合作",
-        "application_name": "腾讯会议",
+        "scenario": "单次临时跨城沟通",
+        "application_name": "钉钉",
         "service_name": "会议",
         "params": {
           "resolution": "720p",
@@ -140,9 +146,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "休息时观看其他音乐人直播",
-        "application_name": "快手",
-        "service_name": "看直播",
+        "scenario": "休息时刷短视频找灵感",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

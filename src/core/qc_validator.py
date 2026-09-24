@@ -9,7 +9,7 @@ class QCValidator:
     """
 
     @classmethod
-    def validate_sessions(cls, sessions: list[dict]) -> dict:
+    def validate_sessions(cls, sessions: list[dict], memory_traces: list[dict] = None) -> dict:
         report = {
             "total_sessions": len(sessions),
             "passed_sessions": 0,
@@ -56,11 +56,13 @@ class QCValidator:
                         report["rule_checks"]["multi_turn_confirmation_check"] = False
                         s_passed = False
 
-            # 3. 验证记忆追踪三字段完整性
-            if "memory_snapshot_before" not in s or "memory_events_after" not in s or "gold_memory_state_after" not in s:
-                report["issues"].append(f"[{sid}] 缺失 memory_snapshot_before/memory_events_after/gold_memory_state_after 字段")
-                report["rule_checks"]["memory_trace_fields_check"] = False
-                s_passed = False
+            # 3. 验证会话必需字段完整性
+            required_keys = ['session_id', 'user_id', 'reference_time', 'session_meta', 'event_sequence', 'intents', 'relations', 'slot_updates']
+            for k in required_keys:
+                if k not in s:
+                    report["issues"].append(f"[{sid}] 缺失会话必需字段 {k}")
+                    report["rule_checks"]["source_type_integrity_check"] = False
+                    s_passed = False
 
             # 4. 验证白名单合规性（域外拒绝意图除外）
             intents = s.get("intents", [])
@@ -124,6 +126,13 @@ class QCValidator:
                 report["passed_sessions"] += 1
             else:
                 report["failed_sessions"] += 1
+
+        if memory_traces is not None:
+            for t in memory_traces:
+                t_sid = t.get("session_id", "unknown")
+                if "snapshot_before" not in t or "memory_events" not in t or "gold_state_after" not in t:
+                    report["issues"].append(f"[{t_sid}] memory_traces 缺失 snapshot_before/memory_events/gold_state_after 字段")
+                    report["rule_checks"]["memory_trace_fields_check"] = False
 
         report["pass_rate"] = f"{(report['passed_sessions'] / report['total_sessions']) * 100:.1f}%" if report['total_sessions'] > 0 else "0%"
         return report
