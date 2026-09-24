@@ -660,17 +660,24 @@
             <div class="contrast-box bad">
                 <div class="contrast-title">❌ 改造前缺陷现象 (Label Bleeding & 早熟别名)</div>
                 <p>1. <strong>早熟别名冲突</strong>：首发建联第 1 轮用户即使用“阿抖开播”、“老规矩”，冷启动模型提取不出真实业务标准名。</p>
-                <p>2. <strong>时序倒错泄露</strong>：第 1 轮用户未提及画质和时延，但意图答案里提前填入了 1080p 和 50ms。</p>
-                <pre>// 改造前：第 1 轮存在未来参数泄漏
+                <p>2. <strong>时序倒错泄露 (QoS参数)</strong>：第 1 轮用户未提及画质和时延，但意图答案里提前填入了 1080p 和 50ms。</p>
+                <p>3. <strong>时间跨度超前标注 (时间槽位早泄)</strong>：第 1 轮用户仅提出“今晚8点开会”，客服甚至还在反问“会议大概持续多久？”，但第 1 轮意图和槽位更新已将 <code>end_timestamp</code>（22:00）与 <code>duration</code>（120min）强行写死，彻底违反 DST 对话状态追踪因果律。</p>
+                <pre>// 改造前：第 1 轮存在未来参数泄漏 (包含画质、时延、结束时间与时长)
 "event_sequence": [
   {
     "turn": 1,
-    "user": { "utterance": "老规矩，午间阿抖开播！" },
+    "user": { "utterance": "今晚8点要在腾讯会议上开个视频会..." },
     "turn_intents": [{
       "params": {
-        "application_name": "抖音",
+        "application_name": "腾讯会议",
+        "service_name": "视频会",
         "resolution": "1080p", // ❌ 此时用户根本未提！
-        "rtt": "50ms"          // ❌ 未来答案泄露！
+        "rtt": "50ms",          // ❌ 未来答案泄露！
+        "timestamp": {
+          "start_timestamp": "2026年10月10日20时00分",
+          "end_timestamp": "2026年10月10日22时00分", // ❌ 第1轮根本未提！
+          "duration": "120分钟"                     // ❌ 答案早泄！
+        }
       }
     }]
   }
@@ -679,28 +686,38 @@
 
             <div class="contrast-box good">
                 <div class="contrast-title">✅ 改造后黄金标准规范 (因果闭环与小记忆点登记)</div>
-                <p>1. <strong>标准应用冷启动</strong>：第 1 轮强制使用官方标准名“抖音开直播”，去暗号化；第 2 轮确立大规则并登记代称小记忆点。</p>
-                <p>2. <strong>Turn 级意图绝对纯净</strong>：第 1 轮 params 只有提过的参数，第 2 轮澄清确认后才补齐画质时延。</p>
-                <pre>// 改造后：严格按轮次演进与因果隔离
+                <p>1. <strong>标准应用冷启动</strong>：第 1 轮强制使用官方标准名“腾讯会议视频会”，去暗号化；第 2 轮确立大规则并登记代称小记忆点。</p>
+                <p>2. <strong>Turn 级意图绝对纯净</strong>：第 1 轮 params 只有提过的参数；时间槽位仅有 <code>start_timestamp</code>，严格隔离 <code>end_timestamp</code> 与 <code>duration</code>。</p>
+                <p>3. <strong>DST 待澄清槽位显式追踪</strong>：第 1 轮 <code>requested_params</code> 明确记录 <code>["resolution", "rtt", "duration"]</code>；第 2 轮用户澄清后，槽位更新精准溯源至 <code>("Turn", "U2")</code>。</p>
+                <pre>// 改造后：严格按轮次演进与因果隔离 (时间与参数逐轮落地)
 "event_sequence": [
   {
     "turn": 1,
-    "user": { "utterance": "中午我要在抖音开直播..." },
-    "requested_params": ["resolution", "rtt"], // ✅ 明确待澄清
+    "user": { "utterance": "今晚8点要在腾讯会议上开个科研视频会..." },
+    "agent": { "utterance": "收到，画质、时延和持续时长有什么具体要求吗？" },
+    "requested_params": ["resolution", "rtt", "duration"], // ✅ 待澄清槽位
     "turn_intents": [{
       "status": "in_progress",
       "params": {
-        "application_name": "抖音", // ✅ 仅当前提及
-        "service_name": "开直播"
+        "application_name": "腾讯会议",
+        "service_name": "视频会",
+        "timestamp": { "start_timestamp": "2026年10月10日20时00分" } // ✅ 仅当前提及
       }
     }]
   },
   {
     "turn": 2,
-    "user": { "utterance": "画质1080p，时延50ms...以后叫它'阿抖开播'" },
+    "user": { "utterance": "画质1080p，时延50ms以内，预计持续2小时...以后叫'企鹅例会'" },
     "turn_intents": [{
       "status": "resolved", // ✅ 第2轮补充完毕
-      "params": { "resolution": "1080p", "rtt": "50ms", ... }
+      "params": {
+        "resolution": "1080p", "rtt": "50ms",
+        "timestamp": {
+          "start_timestamp": "...20时00分",
+          "end_timestamp": "...22时00分", // ✅ 溯源自 U2
+          "duration": "120分钟"           // ✅ 溯源自 U2
+        }
+      }
     }]
   }
 ]</pre>

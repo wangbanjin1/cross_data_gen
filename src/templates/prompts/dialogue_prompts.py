@@ -18,10 +18,9 @@ def build_batch_dialogue_prompt(prompt_items: list[dict], identity: str, speech:
 【核心会话轮次与动作规则（严格遵守）】:
 0. 用户台词口语别名与大/小记忆点分级规则（强制遵守）:
    - 【大记忆点首次登场（evidence_session，即 S-01 主线首发、S-02 支线1首发、S-04 支线2首发）】:
-     * 第1轮 User：必须使用清晰、标准、无歧义的官方应用名（app）与业务名（service），如“抖音”、“微信”、“腾讯会议”；“开直播”、“视频通话”、“会议”。
-       【严禁在第1轮使用生僻别名（如'阿抖'、'某手'），严禁使用'老规矩'、'老时间'等未生效的暗号】！确保大记忆点冷启动清晰无误；
-     * 第1轮 Agent：识别并明确确认用户提出的应用与业务（如“收到，您是要在抖音开直播对吧？”），仅针对未提及的画质（resolution）、时延（rtt）、时长进行细节追问；
-     * 第2轮 User：补充确认画质与时延（如原画1080p，50ms）。若为显式声明（explicit_declaration），在确认参数的同时【正式引入并登记个性化代称/暗号作为小记忆点】（如：“行，1080p原画，50ms。我平时习惯叫它'阿抖开播'，以后只要我提到'老规矩阿抖开播'，就按这个来！”）。
+     * 第1轮 User：必须使用清晰、标准、无歧义的官方应用名（app）与业务名（service），如“抖音”、“微信”、“腾讯会议”；“开直播”、“视频通话”、“会议”。可提开始时间（如“今晚8点”），【严禁在第1轮提及结束时间或持续时长，严禁在第1轮使用生僻别名（如'阿抖'、'某手'），严禁使用'老规矩'、'老时间'等未生效的暗号】！确保大记忆点冷启动清晰无误；
+     * 第1轮 Agent：识别并明确确认用户提出的应用与业务（如“收到，您是要在抖音开直播对吧？”），仅针对未提及的画质（resolution）、时延（rtt）、持续时长（duration）进行细节追问；
+     * 第2轮 User：补充确认画质、时延与预计持续时长（如原画1080p，50ms，持续2小时）。若为显式声明（explicit_declaration），在确认参数的同时【正式引入并登记个性化代称/暗号作为小记忆点】（如：“行，1080p原画，50ms，持续2小时。我平时习惯叫它'阿抖开播'，以后只要我提到'老规矩阿抖开播'，就按这个来！”）。
    - 【后续复用与强化会话（reinforcement_session / reuse_session，如 S-03, S-06, S-07, S-08 等）】:
      * 此时大记忆点已在 active_memory 中生效；
      * 强烈鼓励用户在第1轮自然使用已沉淀的【小记忆点】（即 aliases.app_aliases 如“阿抖”、“某手”、“企鹅会议”，aliases.service_aliases 如“推流”、“打视讯”、“连麦”，以及“老规矩”、“老时间”等暗号）；
@@ -36,8 +35,8 @@ def build_batch_dialogue_prompt(prompt_items: list[dict], identity: str, speech:
      * 用户单句同时提出手机网络保障需求 (app/service) 和域外诉求（即 ood_goal，如话费充值与账单查询）；user_action_types 为 ["Create_Intent_Request", "Inform_Slot"]。
      * Agent 接受并受理移动网络保障，同时拒绝域外诉求；agent_action_types 必须为 ["Acknowledge", "Reject_Request"]！
    - 特例3【歧义消解 T2-2】(rounds == 2):
-     * 第1轮 User 提出模糊需求（如仅提app未说清具体service）；user_action_types 为 ["Create_Intent_Request", "Inform_Slot"]。
-     * 第1轮 Agent 执行歧义追问确认（如询问进行哪个业务保障）；agent_action_types 必须为 ["Request_Disambiguation"]。
+     * 第1轮 User 提出模糊需求（如仅提app未说清具体service与时长）；user_action_types 为 ["Create_Intent_Request", "Inform_Slot"]。
+     * 第1轮 Agent 执行歧义追问确认（如询问进行哪个业务保障、画质、时延和持续时长）；agent_action_types 必须为 ["Request_Disambiguation"]。
      * 第2轮 User 明确消解歧义并说明参数；user_action_types 为 ["Inform_Slot"]。
      * 第2轮 Agent 答复已开通并收尾；agent_action_types 必须为 ["Acknowledge"]。
    - 特例4【时长变更延长 T2-5】(rounds == 2):
@@ -47,8 +46,8 @@ def build_batch_dialogue_prompt(prompt_items: list[dict], identity: str, speech:
 
 2. 首次建联/证据会话 (evidence_session):
    - 若 declaration_mode == "explicit_declaration" (显式声明):
-     第1轮 User: 明确提出需要保障的标准应用与业务（严禁别名，严禁'老规矩'）；Agent 确认应用/业务并追问画质、时延、时长细节。
-     第2轮 User: 明确说清参数，并【明确显式声明长期偏好与周期触发条件/暗号，并引入别名作为小记忆点】:
+     第1轮 User: 明确提出需要保障的标准应用与业务（可提开始时间，严禁结束时间/时长，严禁别名，严禁'老规矩'）；Agent 确认应用/业务并追问画质、时延、时长细节。
+     第2轮 User: 明确说清画质、时延与持续时长，并【明确显式声明长期偏好与周期触发条件/暗号，并引入别名作为小记忆点】:
        * 若 storyline_trigger_type == "time_periodic" 且 period_type == "daily": 如"以后我只要每天这个时段说'老规矩'（我平时叫它对应代称），就按这个来：对应应用、画质、时延以内，记一下长期偏好，别掉链子"；
        * 若 storyline_trigger_type == "time_periodic" 且 period_type == "weekly": 如"以后我只要在每周例行时段说'老规矩'（我平时叫它对应代称），就按这个来：对应应用、画质、时延以内，记一下长期偏好，别掉链子"；
        * 若 storyline_trigger_type == "time_periodic" 且 period_type == "monthly": 如"以后我只要在每月月初/固定月度对账说'老规矩'（我平时叫它对应代称），就按这个来：对应应用、画质、时延以内，记一下长期偏好，别掉链子"；
@@ -139,21 +138,21 @@ def build_single_dialogue_prompt(s_plan: dict, persona: dict, snapshot_before: d
 【核心会话轮次与动作规则（严格遵守）】:
 0. 用户台词口语别名与大/小记忆点分级规则（强制遵守）:
    - 【大记忆点首次登场（evidence_session）】:
-     * 第1轮 User：必须使用清晰、标准、无歧义的官方应用名与业务名（如“{tp['application_name']}”、“{tp['service_name']}”），【严禁在第1轮使用生僻别名，严禁使用'老规矩'、'老时间'等未生效的暗号】！
-     * 第1轮 Agent：识别并确认应用与业务，仅针对未提及的画质（resolution）、时延（rtt）、时长进行细节追问；
-     * 第2轮 User：补充确认画质与时延（{tp['resolution']}, {tp['rtt']}）。若为显式声明（explicit_declaration），在确认参数的同时【正式引入并登记个性化代称/暗号作为小记忆点】（如：“行，{tp['resolution']}，{tp['rtt']}。我平时习惯叫它代称，以后只要我提到'老规矩/代称'，就按这个来！”）。
+     * 第1轮 User：必须使用清晰、标准、无歧义的官方应用名与业务名（如“{tp['application_name']}”、“{tp['service_name']}”），可提开始时间，【严禁在第1轮提及结束时间或持续时长，严禁在第1轮使用生僻别名，严禁使用'老规矩'、'老时间'等未生效的暗号】！
+     * 第1轮 Agent：识别并确认应用与业务，仅针对未提及的画质（resolution）、时延（rtt）、持续时长（duration）进行细节追问；
+     * 第2轮 User：补充确认画质、时延与预计持续时长（{tp['resolution']}, {tp['rtt']}, {tp['duration']}）。若为显式声明（explicit_declaration），在确认参数的同时【正式引入并登记个性化代称/暗号作为小记忆点】（如：“行，{tp['resolution']}，{tp['rtt']}，持续{tp['duration']}。我平时习惯叫它代称，以后只要我提到'老规矩/代称'，就按这个来！”）。
    - 【后续复用与强化会话（reinforcement_session / reuse_session）】:
      * 此时大记忆点已在历史记忆中生效，强烈鼓励用户在第1轮自然使用已沉淀的【小记忆点】（个性化别名与“老规矩”等暗号），Agent 依据记忆精准承接！
 1. 最后一轮必须由 Agent 的答复结束！
    - 常规会话最后一轮 Agent agent_action_types 必须包含 "Acknowledge"；
    - T1-2 纯域外拒绝会话 (rounds == 1): Agent 必须礼貌拒绝，agent_action_types 必须为 ["Reject_Request"]；
    - X-1 混合诉求会话 (rounds == 1): Agent 办理保障同时拒绝域外诉求，agent_action_types 必须为 ["Acknowledge", "Reject_Request"]；
-   - T2-2 歧义消解会话 (rounds == 2): 第1轮 Agent 反问消解歧义（["Request_Disambiguation"]），第2轮用户说明业务后 Agent 确认开通；
+   - T2-2 歧义消解会话 (rounds == 2): 第1轮 Agent 反问消解歧义（["Request_Disambiguation"]），第2轮用户说明业务与时长后 Agent 确认开通；
    - T2-5 时长延长会话 (rounds == 2): 第1轮 Agent 确认老规矩配置（["Confirm_Slot"]），第2轮用户提出延长时长（user_action_types 包含 ["Confirm_Slot", "Modify_Request"]），Agent 确认延长并生效。
 2. 首次建联/证据会话 (evidence_session):
    - 若 declaration_mode == "explicit_declaration" (显式声明):
-     第1轮 User: 明确提出需要保障的标准应用与业务（严禁别名，严禁'老规矩'）；Agent 确认应用/业务并追问画质、时延、时长细节。
-     第2轮 User: 明确说清参数，并【明确显式声明长期偏好与暗号/触发条件，顺理成章引入个性化代称】:
+     第1轮 User: 明确提出需要保障的标准应用与业务（可提开始时间，严禁结束时间/时长，严禁别名，严禁'老规矩'）；Agent 确认应用/业务并追问画质、时延、时长细节。
+     第2轮 User: 明确说清画质、时延与持续时长参数，并【明确显式声明长期偏好与暗号/触发条件，顺理成章引入个性化代称】:
        * 若 storyline_trigger_type == "time_periodic" 且 period_type == "daily": 如"以后我只要每天这个时段说'老规矩'，就按这个来：{tp['application_name']}、{tp['resolution']}、{tp['rtt']}以内，记一下长期偏好，别掉链子"；
        * 若 storyline_trigger_type == "time_periodic" 且 period_type == "weekly": 如"以后我只要在每周例行时段说'老规矩'，就按这个来：{tp['application_name']}、{tp['resolution']}、{tp['rtt']}以内，记一下长期偏好，别掉链子"；
        * 若 storyline_trigger_type == "time_periodic" 且 period_type == "monthly": 如"以后我只要在每月月初/固定月度对账说'老规矩'，就按这个来：{tp['application_name']}、{tp['resolution']}、{tp['rtt']}以内，记一下长期偏好，别掉链子"；
@@ -161,8 +160,8 @@ def build_single_dialogue_prompt(s_plan: dict, persona: dict, snapshot_before: d
        * 若 storyline_trigger_type == "location_environment": 如"以后只要我身处【{s_plan.get('trigger_condition', env)}】，老规矩就按这个来：{tp['application_name']}、{tp['resolution']}、{tp['rtt']}以内，记一下长期偏好，别掉链子"；
      Agent 必须明确闭环回复：“好的，已为您开通本次保障，并已为您将该配置记录为长期老规矩！”
    - 若 declaration_mode == "implicit_induction" (隐式归纳):
-     第1轮 User: 仅针对本次单次保障需求提出申请，必须使用标准应用与业务，【严禁出现任何‘记一下/以后都按这个/老规矩’等元指令词】（如：“今天执行任务/在该地点，我要用{tp['application_name']}{tp['service_name']}，帮我开个保障...”）；Agent 追问确认细节。
-     第2轮 User: 仅确认本次单次任务参数（如：“好的，今天就按这个配置开通”）；Agent 确认受理单次任务结束，不擅自假设长期偏好。
+     第1轮 User: 仅针对本次单次保障需求提出申请，必须使用标准应用与业务（可提开始时间，严禁结束时间/时长），【严禁出现任何‘记一下/以后都按这个/老规矩’等元指令词】（如：“今天执行任务/在该地点，我要用{tp['application_name']}{tp['service_name']}，帮我开个保障...”）；Agent 追问清晰度、时延与持续时长细节。
+     第2轮 User: 仅确认本次单次任务参数（画质、时延与持续时长，如：“好的，画质{tp['resolution']}、时延{tp['rtt']}，持续{tp['duration']}，今天就按这个配置开通”）；Agent 确认受理单次任务结束，不擅自假设长期偏好。
 3. 记忆强化/复用 (reinforcement / reuse):
    - 若上方记忆快照包含 [provisional] (隐式偏好二次发生，触发固化契机):
      第1轮 User: 再次在相似触发场景下提出需求（如：“今天又来执行XX任务了/又到这个地点了，跟上次一样就行”）。

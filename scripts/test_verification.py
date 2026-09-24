@@ -50,6 +50,9 @@ def test_file(jsonl_path: Path):
             t1_params = events[0]["turn_intents"][0].get("params", {})
             assert "resolution" not in t1_params, f"Session {sid} Turn 1 intent answers leaked resolution!"
             assert "rtt" not in t1_params, f"Session {sid} Turn 1 intent answers leaked rtt!"
+            t1_ts = t1_params.get("timestamp", {})
+            assert "end_timestamp" not in t1_ts, f"Session {sid} Turn 1 intent answers leaked end_timestamp!"
+            assert "duration" not in t1_ts, f"Session {sid} Turn 1 intent answers leaked duration!"
             t1_u_utt = events[0]["user"]["utterance"]
             assert not any(kw in t1_u_utt for kw in ["老规矩", "老时间", "老样子"]), f"Evidence session {sid} Turn 1 user utterance has premature rule codewords: {t1_u_utt}"
             for su in session.get("slot_updates", []):
@@ -57,6 +60,9 @@ def test_file(jsonl_path: Path):
                     if tu.get("turn") == 1:
                         p = tu.get("params", {})
                         assert "resolution" not in p and "rtt" not in p, f"Session {sid} Turn 1 slot_updates leaked resolution/rtt!"
+                        p_ts = p.get("timestamp", {})
+                        assert "end_timestamp" not in p_ts, f"Session {sid} Turn 1 slot_updates leaked end_timestamp!"
+                        assert "duration" not in p_ts, f"Session {sid} Turn 1 slot_updates leaked duration!"
             
         intent = session["intents"][0]
         if intent.get("status") == "rejected":

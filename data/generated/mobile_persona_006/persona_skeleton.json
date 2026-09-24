@@ -4,8 +4,8 @@
   "persona_summary": "移动执勤人员",
   "static_profile": {
     "user_id": "USER_006",
-    "identity": "国际执法背景的公共安全移动执勤人员，长期在夜间值守点、事故现场、应急集结区、道路与巡逻区域之间机动，负责现场取证、即时通信、事件上报、地图导航、位置共享与任务调度，对跨文化沟通与敏感现场处置有经验。",
-    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "identity": "国际执法背景的公共安全移动执勤人员，长期在夜间值守点、事故现场、应急集结区、道路与巡逻区域之间机动，负责现场取证、即时通信、事件上报、地图导航、位置共享与任务调度；对跨文化沟通敏感，习惯用手机移动核心网直接联网，不依赖固网或普通Wi-Fi。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点。",
     "apps": [
       "微信",
       "钉钉",
@@ -14,23 +14,23 @@
     ],
     "speech_archetype": "security_officer_speaker",
     "speech_style": {
-      "tone": "简洁、克制、指令感强，先确认位置与时限，再确认画面和回传状态。",
+      "tone": "简洁、克制、指令感强，先确认位置与时限，再谈画面和回传质量。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
-        "先对齐一下",
+        "先保消息到",
         "画面别糊",
         "位置发我"
       ],
-      "typical_habits": "习惯用短句同步任务，强调消息及时送达、现场图片视频稳定回传和移动过程中的连续覆盖；遇到弱网会先要求降清晰度保连通。"
+      "typical_habits": "习惯用短句同步任务状态，强调消息及时送达、现场图片和视频稳定回传、移动过程中的连续覆盖；遇到弱网会主动降画质保连通。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "巡逻线移动视频调度与现场回传",
+      "name": "巡逻线现场取证与事件上报",
       "storyline_trigger_type": "location_environment",
-      "trigger_condition": "当执勤人员进入道路巡逻区域、夜间值守点或事故现场周边移动弱网区域，且处于09:00-11:00固定时段时，触发通过手机移动核心网进行视频通话与现场回传。",
+      "trigger_condition": "当上午09:00-11:00进入道路巡逻区域、事故现场或应急集结区等移动执勤弱网空间时，使用手机移动核心网进行现场取证、即时通信与事件上报。",
       "period_type": "location_driven",
       "days": [
         "location_specific"
@@ -46,13 +46,13 @@
         "app_aliases": [
           "微信",
           "某信",
-          "绿泡泡"
+          "企微"
         ],
         "service_aliases": [
           "打视讯",
           "连麦",
           "视频对讲",
-          "现场回传"
+          "现场连线"
         ],
         "resolution_aliases": [
           "原画",
@@ -70,14 +70,14 @@
         "duration_aliases": [
           "俩小时",
           "两钟头",
-          "到十一点",
-          "一个半小时"
+          "一个半小时",
+          "大半个上午"
         ],
         "period_aliases": [
           "每天这个时候",
           "老时间",
           "上午例行",
-          "到点就连"
+          "巡逻线老规矩"
         ]
       },
       "declaration_mode": "implicit_induction",
@@ -89,7 +89,7 @@
         "name": "跨区域联合执法演练周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "跨区域联合执法演练期间，巡逻线与临时处置现场人员密集、建筑遮挡和移动干扰增多，需要优先保证指令消息与现场画面稳定回传。",
+        "scene_description": "跨区域联合执法演练期间，巡逻线与临时处置现场人员密集、移动频繁，现场网络拥塞且覆盖波动，需要优先保障指令消息和低码率视频回传。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -99,14 +99,14 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "大巴视频调度与集结沟通",
+        "name": "指挥中心视频调度",
         "application_name": "腾讯会议",
         "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "在应急集结区或临时处置现场，需要与后方指挥、跨区域同事进行短会沟通和任务对齐时触发。",
+        "trigger_condition": "在应急集结区或临时处置现场需要与指挥中心对齐任务、共享位置和调度资源时。",
         "aliases": {
           "app_aliases": [
             "tencentmeeting",
@@ -120,22 +120,22 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "执法记录复盘与证据回看",
+        "name": "执法记录复盘",
         "application_name": "钉钉",
-        "service_name": "会议",
+        "service_name": "视频通话",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "回到值守点或临时办公点后，需要对现场图片、视频和执法记录进行复盘、标注与上报时触发。",
+        "trigger_condition": "回到值守点后，对现场图片、执法记录和事件上报材料进行复盘沟通时。",
         "aliases": {
           "app_aliases": [
             "dingding",
             "钉"
           ],
           "service_aliases": [
-            "开会",
-            "进会议室"
+            "打视频",
+            "连线"
           ]
         }
       }
@@ -143,7 +143,7 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次跨部门临时协调会",
+        "scenario": "单次跨部门临时会议",
         "application_name": "腾讯会议",
         "service_name": "会议",
         "params": {
@@ -153,7 +153,7 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次等待间隙刷短视频放松",
+        "scenario": "单次休息间隙刷短视频",
         "application_name": "抖音",
         "service_name": "短视频",
         "params": {

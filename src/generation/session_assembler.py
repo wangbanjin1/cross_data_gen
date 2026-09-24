@@ -209,9 +209,9 @@ class SessionAssembler:
                     "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U2"}},
                     "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U2"}},
                     "timestamp": {
-                        "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
-                        "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
-                        "duration": {"value": dur, "source_type": "Context", "source_ref": "U1"},
+                        "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U2"},
+                        "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U2"},
+                        "duration": {"value": dur, "source_type": "Turn", "source_ref": "U2"},
                     },
                 },
             }
@@ -224,11 +224,6 @@ class SessionAssembler:
                         "turn": 1,
                         "params": {
                             "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
-                            "timestamp": {
-                                "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
-                                "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
-                                "duration": {"value": dur, "source_type": "Context", "source_ref": "U1"},
-                            },
                         },
                     },
                     {
@@ -237,13 +232,18 @@ class SessionAssembler:
                             "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U2"},
                             "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U2"}},
                             "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U2"}},
+                            "timestamp": {
+                                "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U2"},
+                                "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U2"},
+                                "duration": {"value": dur, "source_type": "Turn", "source_ref": "U2"},
+                            },
                         },
                     },
                 ],
             }
         ]
         if events and len(events) >= 2:
-            events[0]["requested_params"] = ["service_name"]
+            events[0]["requested_params"] = ["service_name", "resolution", "rtt", "duration"]
             events[0]["turn_intents"] = [
                 {
                     "intent_id": "I1",
@@ -253,11 +253,6 @@ class SessionAssembler:
                     "intent": f"{app}保障",
                     "params": {
                         "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
-                        "timestamp": {
-                            "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
-                            "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
-                            "duration": {"value": dur, "source_type": "Context", "source_ref": "U1"},
-                        },
                     },
                 }
             ]
@@ -553,11 +548,17 @@ class SessionAssembler:
                 t_params = {
                     "application_name": {"value": app, "source_type": app_src, "source_ref": app_ref},
                     "service_name": {"value": srv, "source_type": srv_src, "source_ref": srv_ref},
-                    "timestamp": {
+                }
+                if role == "evidence_session":
+                    # 证据会话第 1 轮：用户仅明确开始时间（如“今晚8点”），结束时间与时长待第2轮澄清补充
+                    t_params["timestamp"] = {
+                        "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
+                    }
+                else:
+                    t_params["timestamp"] = {
                         "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
                         "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
-                    },
-                }
+                    }
                 if role not in ["evidence_session", "correction_session"]:
                     t_params["resolution"] = {"min_value": {"value": res, "source_type": res_src, "source_ref": res_ref}}
                     t_params["rtt"] = {"max_value": {"value": rtt, "source_type": rtt_src, "source_ref": rtt_ref}}
@@ -569,9 +570,17 @@ class SessionAssembler:
                         "resolution": {"min_value": {"value": res, "source_type": res_src, "source_ref": res_ref}},
                         "rtt": {"max_value": {"value": rtt, "source_type": rtt_src, "source_ref": rtt_ref}},
                     }
+                    if role == "evidence_session":
+                        # 第 2 轮用户澄清补充结束时间与持续时长
+                        t_params["timestamp"] = {
+                            "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U2"},
+                            "duration": {"value": dur, "source_type": "Turn", "source_ref": "U2"},
+                        }
                 slot_updates_turn.append({"turn": 2, "params": t_params})
 
         sig = f"{tid}|{len(events)}|1|I1:{app}/{srv}/1/{closure_path}/resolved|none"
+        end_src, end_ref = ("Turn", "U2") if role == "evidence_session" else ("Turn", "U1")
+        dur_src, dur_ref = ("Turn", "U2") if role == "evidence_session" else ("Context", "U1")
         intents = [
             {
                 "intent_id": "I1",
@@ -586,8 +595,8 @@ class SessionAssembler:
                     "rtt": {"max_value": {"value": rtt, "source_type": rtt_src, "source_ref": rtt_ref}},
                     "timestamp": {
                         "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
-                        "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
-                        "duration": {"value": dur, "source_type": "Context", "source_ref": "U1"},
+                        "end_timestamp": {"value": end, "source_type": end_src, "source_ref": end_ref},
+                        "duration": {"value": dur, "source_type": dur_src, "source_ref": dur_ref},
                     },
                 },
             }
@@ -598,7 +607,7 @@ class SessionAssembler:
             events[0]["turn_intents"] = intents
         elif events and len(events) >= 2:
             if role == "evidence_session":
-                events[0]["requested_params"] = ["resolution", "rtt"]
+                events[0]["requested_params"] = ["resolution", "rtt", "duration"]
                 events[0]["turn_intents"] = [
                     {
                         "intent_id": "I1",
@@ -611,8 +620,6 @@ class SessionAssembler:
                             "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
                             "timestamp": {
                                 "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
-                                "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
-                                "duration": {"value": dur, "source_type": "Context", "source_ref": "U1"},
                             },
                         },
                     }

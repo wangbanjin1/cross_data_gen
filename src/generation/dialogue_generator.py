@@ -143,9 +143,9 @@ class DialogueGenerator:
 
             req_params = []
             if turn_idx == 1 and role == "evidence_session" and tid != "T2-2":
-                req_params = ["resolution", "rtt"]
+                req_params = ["resolution", "rtt", "duration"]
             elif turn_idx == 1 and tid == "T2-2":
-                req_params = ["service_name"]
+                req_params = ["service_name", "resolution", "rtt", "duration"]
 
             rel_ids = ["I1", "I2"] if tid == "X-1" else ["I1"]
             ev_item = {

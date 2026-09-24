@@ -4,8 +4,8 @@
   "persona_summary": "巡回活动讲者",
   "static_profile": {
     "user_id": "USER_001",
-    "identity": "前残奥高山滑雪运动员，现为巡回励志演讲者与户外公益活动推广大使，常年跨城转场，在露天训练场、赛道、球场及赛事集结区开展公益演讲与运动推广活动，全程依赖手机移动核心网完成直播、调度与内容上传。",
-    "devices": "主力设备为5G智能手机，辅助设备为平板电脑，便携终端确需联网时使用手机热点。",
+    "identity": "前残奥高山滑雪运动员，现为巡回励志演讲者与户外公益活动推广大使；日常跨城转场、在露天训练场与赛事集结区进行公益直播、演讲片段上传与团队调度。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
     "apps": [
       "抖音",
       "微信",
@@ -14,23 +14,23 @@
     ],
     "speech_archetype": "athlete_speaker",
     "speech_style": {
-      "tone": "干脆利落、带运动员的节奏感，习惯用短句和行动指令，偶尔夹杂滑雪圈行话。",
+      "tone": "干脆利落、带运动员式鼓劲口吻，常用短句和行动指令，习惯把网络保障说成比赛保障。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "秒开才行",
-        "顶格清晰度"
+        "顶格清晰度",
+        "秒开才算稳"
       ],
-      "typical_habits": "习惯在固定时段主动口述自己的网络与业务偏好，喜欢用口语别名指代应用和参数，强调移动转场中的连续性与人群密集时的稳定性。"
+      "typical_habits": "开播前先喊团队对齐流程，转场途中反复确认上行和时延，喜欢用比赛术语描述网络质量。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "午间公益直播与团队调度",
+      "name": "午间公益直播与演讲片段回传",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每天午间休息与午间复盘业务，固定12:30-13:30进行公益直播推流与团队调度",
+      "trigger_condition": "每天午间休息与午间复盘业务，固定进行公益直播、演讲片段上传和观众反馈整理",
       "period_type": "daily",
       "days": [
         "daily"
@@ -45,27 +45,32 @@
       "aliases": {
         "app_aliases": [
           "阿抖",
-          "抖家"
+          "抖音号"
         ],
         "service_aliases": [
+          "开播",
           "推流",
-          "开播"
+          "上播"
         ],
         "resolution_aliases": [
           "原画",
-          "顶格清晰度"
+          "顶格清晰度",
+          "千万别糊"
         ],
         "rtt_aliases": [
           "别掉链子",
-          "秒开"
+          "秒开",
+          "零卡顿"
         ],
         "duration_aliases": [
           "俩小时",
-          "两钟头"
+          "一个半小时",
+          "播到一点半"
         ],
         "period_aliases": [
           "每天这个时候",
-          "老时间"
+          "老时间",
+          "午间例行"
         ]
       },
       "declaration_mode": "explicit_declaration",
@@ -74,10 +79,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨城公益演讲赛事周",
+        "name": "跨城公益演讲与赛事集结周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "跨城转场途中与露天赛事集结区，人群密集、移动频繁，网络需在高速移动与高密度用户下保持稳定。",
+        "scene_description": "跨城转场频繁，赛事集结区与露天训练场人群密集，移动网络拥塞明显，需优先保障直播上行连续与低时延互动。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -94,7 +99,7 @@
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "客场转场途中在大巴上进行团队视频调度与即时通信",
+        "trigger_condition": "客场转场途中在大巴或临时休息点进行团队调度与即时通信",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -108,22 +113,22 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "训练录像复盘",
-        "application_name": "哔哩哔哩",
-        "service_name": "看直播",
+        "name": "训练录像复盘与远程对齐",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "晚间在临时休息点观看训练录像回放与赛事直播复盘",
+        "trigger_condition": "晚间或训练结束后与教练团队复盘训练视频、数据记录与回放",
         "aliases": {
           "app_aliases": [
-            "bilibili",
-            "哔站"
+            "tencentmeeting",
+            "会议通"
           ],
           "service_aliases": [
-            "观赛",
-            "刷直播"
+            "开会",
+            "进会议室"
           ]
         }
       }
@@ -131,8 +136,8 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次与赞助方临时会议",
-        "application_name": "腾讯会议",
+        "scenario": "单次与赞助方临时沟通",
+        "application_name": "微信",
         "service_name": "会议",
         "params": {
           "resolution": "720p",
@@ -141,8 +146,8 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次休息时刷短视频",
-        "application_name": "快手",
+        "scenario": "单次休息时刷短视频放松",
+        "application_name": "哔哩哔哩",
         "service_name": "短视频",
         "params": {
           "resolution": "720p",

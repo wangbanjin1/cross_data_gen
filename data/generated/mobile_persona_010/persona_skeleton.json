@@ -4,7 +4,7 @@
   "persona_summary": "外业科研协作人员",
   "static_profile": {
     "user_id": "USER_010",
-    "identity": "一名严谨的实验物理学家，长期从事外业科研调查与跨机构协作，日常在采样点、临时实验现场、博物馆外场或资料采集点之间移动，习惯用手机4G/5G直接联网完成文献查询、数据采集上传、远程讨论与视频会议。",
+    "identity": "一名严谨的实验物理学家，长期从事外业科研调查与跨机构协作，习惯在移动现场完成文献查询、数据采集上传、远程讨论与视频会议，对测量精度与数据可靠性要求极高。",
     "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
     "apps": [
       "腾讯会议",
@@ -12,25 +12,25 @@
       "钉钉",
       "哔哩哔哩"
     ],
-    "speech_archetype": "research_collaborator",
+    "speech_archetype": "meticulous_researcher",
     "speech_style": {
-      "tone": "严谨、克制、偏工程化，说话喜欢先对齐参数再推进任务，遇到网络波动会直接追问时延和画质。",
+      "tone": "冷静、精确、偏学术化，强调数据可靠与流程连续，偶尔带一点现场工作者的干脆。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "先保数据",
-        "这个不能糊"
+        "数据先别丢",
+        "这个必须可复核"
       ],
-      "typical_habits": "习惯在固定时段发起远程协作，先确认上传通道和视频质量，再开始讨论；对丢包、转圈和延迟极其敏感，常把‘能续传吗’挂在嘴边。"
+      "typical_habits": "习惯在固定时段集中处理远程协作与数据复核，先确认网络与参数，再开始上传或开会；遇到弱覆盖会立刻要求续传或恢复。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "晚间跨校科研视频协作与数据复核",
+      "name": "晚间科研数据复核与远程协作",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每天晚间黄金档20:00-22:00，外业调查结束后回到驻地或通勤途中，固定发起跨校科研视频协作与数据复核。",
+      "trigger_condition": "每天晚间黄金档高频业务：结束外业后，在20:00-22:00集中进行科研数据复核、文献查询与远程视频协作。",
       "period_type": "daily",
       "days": [
         "daily"
@@ -51,8 +51,8 @@
         "service_aliases": [
           "对齐开会",
           "连麦复核",
-          "远程碰一下",
-          "开个协作会"
+          "远程对齐",
+          "开个会"
         ],
         "resolution_aliases": [
           "原画",
@@ -70,7 +70,7 @@
         "duration_aliases": [
           "俩小时",
           "两钟头",
-          "晚间这一档",
+          "一个半小时",
           "大半个晚上"
         ],
         "period_aliases": [
@@ -86,10 +86,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨城外业调查与学术活动周",
+        "name": "跨校联合外业调查周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "跨城外业调查与学术活动周期间，频繁在高铁、临时实验现场、博物馆外场和会议场地之间移动，弱覆盖路段增多，视频协作与数据上传需要临时降级保连续。",
+        "scene_description": "跨校联合外业调查周期间，团队在多个临时实验现场与博物馆外场之间移动，弱覆盖路段增多，需优先保障数据续传与视频协作快速恢复。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -99,43 +99,43 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "外业采样数据回传与团队复核",
+        "name": "现场数据回传与团队复核",
         "application_name": "钉钉",
-        "service_name": "会议",
+        "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "白天在采样点或临时实验现场完成观测后，需要把数据文件和研究影像上传给团队复核时触发。",
+        "trigger_condition": "外业采样点完成一批观测后，需要立即向团队回传数据并做简短视频复核。",
         "aliases": {
           "app_aliases": [
             "dingding",
             "钉"
           ],
           "service_aliases": [
-            "开会",
-            "进会议室"
+            "打视频",
+            "连线"
           ]
         }
       },
       {
         "storyline_id": "SUB_02",
-        "name": "跨机构资料采集后的远程讨论",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "name": "移动途中文献与影像资料整理",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "在博物馆外场或资料采集点完成阶段性记录后，与合作方临时发起远程讨论时触发。",
+        "trigger_condition": "跨校通勤或转场途中，利用碎片时间查看科研相关短视频与资料摘要。",
         "aliases": {
           "app_aliases": [
-            "weixin",
-            "wx"
+            "bilibili",
+            "哔站"
           ],
           "service_aliases": [
-            "打视频",
-            "连线"
+            "看短视频",
+            "刷视频"
           ]
         }
       }
@@ -143,9 +143,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "午间休息时在通勤车上单次刷短视频放松",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "scenario": "临时需要与家人简短沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -153,7 +153,7 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "学术活动场地临时单次观看公开讲座直播",
+        "scenario": "晚间休息时偶尔观看学术直播回放",
         "application_name": "哔哩哔哩",
         "service_name": "看直播",
         "params": {

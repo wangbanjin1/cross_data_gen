@@ -86,8 +86,13 @@ class QCValidator:
                 t1_intents = events[0].get("turn_intents", [])
                 if t1_intents:
                     t1_params = t1_intents[0].get("params", {})
+                    t1_ts = t1_params.get("timestamp", {})
                     if "resolution" in t1_params or "rtt" in t1_params:
                         report["issues"].append(f"[{sid}] 证据会话第1轮意图答案泄漏了未提及的参数(resolution/rtt)")
+                        report["rule_checks"]["turn_intent_isolation_check"] = False
+                        s_passed = False
+                    if "end_timestamp" in t1_ts or "duration" in t1_ts:
+                        report["issues"].append(f"[{sid}] 证据会话第1轮意图答案泄漏了未提及的结束时间/时长(end_timestamp/duration)")
                         report["rule_checks"]["turn_intent_isolation_check"] = False
                         s_passed = False
 
@@ -96,8 +101,13 @@ class QCValidator:
                     for tu in su.get("turn_updates", []):
                         if tu.get("turn") == 1:
                             p = tu.get("params", {})
+                            p_ts = p.get("timestamp", {})
                             if "resolution" in p or "rtt" in p:
                                 report["issues"].append(f"[{sid}] 证据会话第1轮 slot_updates 泄漏了未提及的参数(resolution/rtt)")
+                                report["rule_checks"]["turn_intent_isolation_check"] = False
+                                s_passed = False
+                            if "end_timestamp" in p_ts or "duration" in p_ts:
+                                report["issues"].append(f"[{sid}] 证据会话第1轮 slot_updates 泄漏了未提及的结束时间/时长(end_timestamp/duration)")
                                 report["rule_checks"]["turn_intent_isolation_check"] = False
                                 s_passed = False
 
