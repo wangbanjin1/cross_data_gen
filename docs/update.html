@@ -3,23 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>跨会话长期记忆对话数据集生成系统 - 研发成果与架构演进总览</title>
+    <title>跨会话长程记忆对话数据集生成系统 - 架构设计与技术规范</title>
     <style>
         :root {
-            --bg-primary: #0a0f1d;
-            --bg-secondary: #111827;
-            --bg-card: #1f2937;
-            --bg-card-hover: #283548;
-            --border-color: #374151;
-            --text-primary: #f9fafb;
-            --text-secondary: #9ca3af;
-            --text-muted: #6b7280;
-            --accent-cyan: #06b6d4;
-            --accent-emerald: #10b981;
-            --accent-violet: #8b5cf6;
-            --accent-amber: #f59e0b;
-            --accent-rose: #f43f5e;
+            /* 整体暖黄调色板 (Warm Cream, Honey & Amber) */
+            --bg-page: #fbf5e8;            /* 柔和奶油暖黄基底 */
+            --bg-surface: #ffffff;         /* 暖白内容面板 */
+            --bg-subtle: #fcf8f0;          /* 浅黄衬底 */
+            --bg-accent-soft: #fef3c7;     /* 浅蜂蜜黄 */
+            --border-soft: #ebdcc4;        /* 柔和黄褐边框 */
+            --border-focus: #d8c29d;       /* 中度黄褐分割线 */
+
+            --text-heading: #2d1f11;       /* 浓郁暖黑棕标题 */
+            --text-body: #453322;          /* 温暖炭褐正文 */
+            --text-muted: #7a6550;         /* 柔和黄褐次要信息 */
+            --text-light: #9e8770;         /* 弱化备注 */
+
+            --accent-main: #b45309;        /* 核心深琥珀黄 */
+            --accent-warm: #d97706;        /* 亮金琥珀色 */
+            --accent-terracotta: #c2410c;  /* 暖陶土红 */
+            --accent-olive: #3f6212;       /* 沉稳暖橄榄绿 */
+
+            --code-bg: #211912;            /* 深暖黑咖啡代码底色 */
+            --code-text: #fef08a;          /* 麦黄高亮代码字体 */
+
             --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+            --font-code: "Fira Code", SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            --shadow-card: 0 4px 18px -2px rgba(69, 51, 34, 0.05), 0 2px 6px -1px rgba(69, 51, 34, 0.03);
         }
 
         * {
@@ -30,368 +40,435 @@
 
         body {
             font-family: var(--font-family);
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            padding: 30px 20px;
+            background-color: var(--bg-page);
+            color: var(--text-body);
+            line-height: 1.72;
+            padding: 40px 20px;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1180px;
             margin: 0 auto;
         }
 
         header {
-            margin-bottom: 40px;
+            margin-bottom: 35px;
             padding-bottom: 25px;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 2px solid var(--border-soft);
         }
 
-        .header-title-badge {
+        .header-tag {
             display: inline-block;
-            background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(139, 92, 246, 0.2));
-            border: 1px solid var(--accent-cyan);
-            color: var(--accent-cyan);
-            font-size: 0.85rem;
-            font-weight: 600;
-            padding: 4px 12px;
-            border-radius: 9999px;
+            background: var(--bg-accent-soft);
+            border: 1px solid #fde68a;
+            color: var(--accent-main);
+            font-size: 0.82rem;
+            font-weight: 650;
+            padding: 3px 12px;
+            border-radius: 4px;
             margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.04em;
         }
 
         h1 {
-            font-size: 2.2rem;
-            font-weight: 800;
-            background: linear-gradient(to right, #38bdf8, #818cf8, #c084fc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
+            font-size: 2.1rem;
+            font-weight: 750;
+            color: var(--text-heading);
+            margin-bottom: 14px;
+            letter-spacing: -0.015em;
         }
 
         .header-meta {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
+            gap: 12px;
+            font-size: 0.88rem;
+            color: var(--text-muted);
         }
 
         .meta-tag {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--bg-card);
-            padding: 4px 10px;
+            background: var(--bg-surface);
+            padding: 5px 14px;
             border-radius: 6px;
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border-soft);
+            box-shadow: 0 1px 3px rgba(69, 51, 34, 0.04);
         }
 
         .meta-tag span.val {
-            color: var(--accent-cyan);
-            font-weight: 600;
+            color: var(--accent-main);
+            font-weight: 650;
         }
 
-        /* 概览卡片栅格 */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 16px;
-            margin-bottom: 40px;
+            margin-bottom: 35px;
         }
 
         .stat-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            padding: 20px;
-            border-radius: 12px;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.2s, border-color 0.2s;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-soft);
+            padding: 22px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-main);
+            box-shadow: var(--shadow-card);
         }
 
-        .stat-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--accent-cyan);
-        }
+        .stat-card.c2 { border-left-color: var(--accent-olive); }
+        .stat-card.c3 { border-left-color: var(--accent-warm); }
+        .stat-card.c4 { border-left-color: var(--accent-terracotta); }
 
         .stat-card .label {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            font-weight: 550;
         }
 
         .stat-card .value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #fff;
+            font-size: 1.65rem;
+            font-weight: 750;
+            color: var(--text-heading);
         }
 
         .stat-card .sub {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-top: 6px;
+            font-size: 0.78rem;
+            color: var(--text-light);
+            margin-top: 4px;
         }
 
-        .stat-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-        }
-
-        .stat-card.c1::after { background-color: var(--accent-cyan); }
-        .stat-card.c2::after { background-color: var(--accent-emerald); }
-        .stat-card.c3::after { background-color: var(--accent-violet); }
-        .stat-card.c4::after { background-color: var(--accent-amber); }
-
-        /* 章节通用样式 */
         .section {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-soft);
+            border-radius: 10px;
             padding: 30px;
-            margin-bottom: 35px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow-card);
+            min-width: 0;
+            overflow: hidden;
         }
 
         .section-header {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 25px;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            padding-bottom: 15px;
-        }
-
-        .section-icon {
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(6, 182, 212, 0.15);
-            color: var(--accent-cyan);
-            border-radius: 8px;
-            font-size: 1.2rem;
+            gap: 10px;
+            margin-bottom: 22px;
+            border-bottom: 1.5px solid var(--border-soft);
+            padding-bottom: 14px;
         }
 
         h2 {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 700;
-            color: var(--text-primary);
+            color: var(--text-heading);
+            letter-spacing: -0.01em;
         }
 
-        /* 架构流程图容器 */
-        .workflow-box {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 25px;
+        h3 {
+            font-size: 1.05rem;
+            font-weight: 650;
+            color: var(--accent-main);
+            margin: 24px 0 10px 0;
+        }
+
+        p, ul, ol {
+            font-size: 0.92rem;
+            color: var(--text-body);
+            margin-bottom: 14px;
+        }
+
+        ul, ol {
+            padding-left: 22px;
+        }
+
+        li {
+            margin-bottom: 7px;
+        }
+
+        code {
+            font-family: var(--font-code);
+            background: #f7ecdb;
+            border: 1px solid #ebd8bf;
+            color: #8c3b00;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        pre {
+            background: var(--code-bg);
+            border: 1px solid #3c2f24;
+            border-radius: 8px;
+            padding: 16px;
+            color: var(--code-text);
+            font-family: var(--font-code);
+            font-size: 0.83rem;
+            overflow-x: auto;
+            max-width: 100%;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            margin: 14px 0;
+            line-height: 1.55;
+            box-shadow: inset 0 1px 4px rgba(0,0,0,0.25);
         }
 
         .flow-steps {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 12px;
-            align-items: center;
-            justify-content: space-between;
+            margin: 20px 0;
         }
 
         .flow-step {
-            flex: 1;
-            min-width: 160px;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255,255,255,0.08);
+            background: var(--bg-subtle);
+            border: 1px solid var(--border-soft);
             border-radius: 8px;
-            padding: 14px;
-            text-align: center;
-            position: relative;
+            padding: 16px;
+            min-width: 0;
         }
 
         .flow-step .num {
             display: inline-block;
-            width: 22px;
-            height: 22px;
-            line-height: 22px;
-            background: var(--accent-cyan);
-            color: #000;
-            font-weight: 700;
-            border-radius: 50%;
             font-size: 0.75rem;
-            margin-bottom: 6px;
+            font-weight: 700;
+            color: var(--accent-main);
+            background: #fef3c7;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            border: 1px solid #fde68a;
         }
 
         .flow-step .title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-primary);
+            font-size: 0.92rem;
+            font-weight: 650;
+            color: var(--text-heading);
             margin-bottom: 4px;
         }
 
         .flow-step .desc {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.5;
         }
 
-        /* 特性大卡片 */
-        .feature-category {
-            margin-bottom: 30px;
+        /* 框图设计 (代替数学公式) */
+        .diagram-box {
+            background: #fdfaf2;
+            border: 1.5px solid var(--border-soft);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 18px 0;
         }
 
-        .category-title {
-            font-size: 1.15rem;
+        .diagram-title {
+            font-size: 0.92rem;
             font-weight: 700;
-            color: var(--accent-cyan);
-            margin-bottom: 16px;
+            color: var(--accent-main);
+            margin-bottom: 14px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
+        .state-flow {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            margin: 12px 0;
+        }
+
+        .state-node {
+            background: #ffffff;
+            border: 1.5px solid var(--border-focus);
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 0.86rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            text-align: center;
+            min-width: 130px;
+            max-width: 100%;
+            overflow-wrap: anywhere;
+            box-shadow: 0 1px 3px rgba(69, 51, 34, 0.04);
+        }
+
+        .state-node .sub {
+            display: block;
+            font-size: 0.74rem;
+            font-weight: 400;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .state-node.highlight {
+            border-color: var(--accent-main);
+            background: #fffbeb;
+            color: var(--accent-main);
+        }
+
+        .flow-arrow {
+            color: var(--accent-warm);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .diagram-desc {
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            margin-top: 10px;
+            line-height: 1.55;
+            background: #ffffff;
+            padding: 10px 14px;
+            border-radius: 6px;
+            border: 1px dashed var(--border-soft);
+        }
+
+        /* 功能条目网格 */
+        .feature-category {
+            margin-bottom: 28px;
+        }
+
+        .category-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--accent-main);
+            margin-bottom: 14px;
+            padding-bottom: 6px;
+            border-bottom: 1px dashed var(--border-soft);
+        }
+
         .subfeature-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 14px;
         }
 
         .subfeature-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
+            background: var(--bg-subtle);
+            border: 1px solid var(--border-soft);
+            border-radius: 8px;
             padding: 16px;
-            transition: all 0.2s;
-        }
-
-        .subfeature-card:hover {
-            border-color: rgba(6, 182, 212, 0.4);
-            background: var(--bg-card-hover);
-        }
-
-        .subfeature-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(69, 51, 34, 0.02);
+            min-width: 0;
+            overflow-wrap: anywhere;
         }
 
         .subfeature-name {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #fff;
-        }
-
-        .subfeature-badge {
-            font-size: 0.7rem;
-            padding: 2px 8px;
-            border-radius: 4px;
-            background: rgba(16, 185, 129, 0.15);
-            color: var(--accent-emerald);
-            font-weight: 600;
+            font-size: 0.92rem;
+            font-weight: 650;
+            color: var(--text-heading);
+            margin-bottom: 8px;
         }
 
         .subfeature-desc {
             font-size: 0.82rem;
-            color: var(--text-secondary);
-            line-height: 1.5;
+            color: var(--text-muted);
+            line-height: 1.55;
         }
 
-        /* 对比框 */
         .contrast-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
-            margin-top: 15px;
+            margin: 18px 0;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 840px) {
             .contrast-grid {
                 grid-template-columns: 1fr;
             }
         }
 
         .contrast-box {
-            border-radius: 10px;
+            border-radius: 8px;
             padding: 18px;
-            font-size: 0.85rem;
+            font-size: 0.88rem;
+            min-width: 0;
+            overflow-wrap: anywhere;
         }
 
         .contrast-box.bad {
-            background: rgba(244, 63, 94, 0.08);
-            border: 1px solid rgba(244, 63, 94, 0.3);
+            background: #fdf5f3;
+            border: 1px solid #f6cfc7;
         }
 
         .contrast-box.good {
-            background: rgba(16, 185, 129, 0.08);
-            border: 1px solid rgba(16, 185, 129, 0.3);
+            background: #f3f8f4;
+            border: 1px solid #cce5d2;
         }
 
         .contrast-title {
             font-weight: 700;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            margin-bottom: 10px;
+            font-size: 0.92rem;
         }
 
-        .contrast-box.bad .contrast-title { color: var(--accent-rose); }
-        .contrast-box.good .contrast-title { color: var(--accent-emerald); }
+        .contrast-box.bad .contrast-title { color: #b91c1c; }
+        .contrast-box.good .contrast-title { color: #15803d; }
 
-        pre {
-            background: #0f172a;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 12px;
-            color: #e2e8f0;
-            font-family: "Fira Code", monospace;
-            font-size: 0.78rem;
-            overflow-x: auto;
-            margin-top: 8px;
-        }
-
-        /* 表格 */
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.85rem;
-            margin-top: 15px;
+            font-size: 0.88rem;
+            margin: 18px 0;
+            table-layout: fixed;
         }
 
         th, td {
             padding: 12px 14px;
             text-align: left;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-soft);
+            overflow-wrap: anywhere;
+            word-break: break-word;
         }
 
         th {
-            background: rgba(15, 23, 42, 0.8);
-            color: var(--text-secondary);
-            font-weight: 600;
+            background: #f6ecdc;
+            color: var(--text-heading);
+            font-weight: 650;
         }
 
         tr:hover td {
-            background: rgba(255, 255, 255, 0.02);
+            background: #fdf8f0;
         }
 
-        .badge-pass {
-            display: inline-block;
-            background: rgba(16, 185, 129, 0.15);
-            color: var(--accent-emerald);
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-weight: 600;
+        .example-box {
+            background: var(--bg-subtle);
+            border: 1px solid var(--border-soft);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .example-title {
+            font-size: 0.88rem;
+            font-weight: 650;
+            color: var(--text-heading);
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 20px 10px; }
+            .section { padding: 20px 16px; }
+            .stats-grid, .flow-steps, .subfeature-grid { grid-template-columns: 1fr; }
+            th, td { padding: 9px 8px; font-size: 0.8rem; }
+            .state-flow { align-items: stretch; }
+            .state-node { width: 100%; }
+            .flow-arrow { width: 100%; text-align: center; }
         }
 
         footer {
             text-align: center;
-            margin-top: 50px;
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            border-top: 1px solid var(--border-color);
+            margin-top: 45px;
             padding-top: 25px;
+            border-top: 1.5px solid var(--border-soft);
+            font-size: 0.84rem;
+            color: var(--text-muted);
         }
     </style>
 </head>
@@ -400,83 +477,249 @@
 <div class="container">
 
     <header>
-        <div class="header-title-badge">System Milestone & Evolution Report</div>
-        <h1>跨会话长期记忆对话数据集生成系统</h1>
+        <div class="header-tag">技术架构与规范说明书</div>
+        <h1>跨会话长程记忆对话数据集生成系统</h1>
         <div class="header-meta">
-            <div class="meta-tag">版本：<span class="val">v2.2.0 (Production Ready)</span></div>
-            <div class="meta-tag">最近更新：<span class="val">2026年09月23日</span></div>
-            <div class="meta-tag">质检通过率：<span class="val">100.0% (Zero Defect)</span></div>
-            <div class="meta-tag">对话轮次约束：<span class="val">12 ~ 16 轮动态自然浮动</span></div>
-            <div class="meta-tag">单画像渲染成本：<span class="val">约 ¥0.03 RMB / Persona</span></div>
+            <div class="meta-tag">系统版本：<span class="val">v2.3.0</span></div>
+            <div class="meta-tag">更新日期：<span class="val">2026年09月28日</span></div>
+            <div class="meta-tag">质检通过率：<span class="val">100.0%</span></div>
+            <div class="meta-tag">会话轮次约束：<span class="val">12 ~ 16 轮动态浮动</span></div>
+            <div class="meta-tag">平均调用耗时：<span class="val">~16 秒 / Persona</span></div>
         </div>
     </header>
 
-    <!-- 顶栏指标卡片 -->
+    <!-- 顶栏指标概览 -->
     <div class="stats-grid">
-        <div class="stat-card c1">
-            <div class="label">核心大功能架构</div>
-            <div class="value">5 大模块</div>
-            <div class="sub">规划 / 追踪 / 生成 / DST / 验证</div>
+        <div class="stat-card">
+            <div class="label">处理流程架构</div>
+            <div class="value">5 阶段</div>
+            <div class="sub">规划 / 追踪 / 生成 / 装配 / 质检</div>
         </div>
         <div class="stat-card c2">
-            <div class="label">细粒度子功能特性</div>
+            <div class="label">细粒度子特性支持</div>
             <div class="value">18 项落地</div>
-            <div class="sub">包含记忆分级、无歧义冷启动等</div>
+            <div class="sub">涵盖记忆分级、冷启动与槽位省略</div>
         </div>
         <div class="stat-card c3">
-            <div class="label">会话长度自然浮动</div>
-            <div class="value">12 ~ 16 轮</div>
-            <div class="sub">破除单一生硬 15 轮硬性限制</div>
+            <div class="label">自动化质检规则</div>
+            <div class="value">9 项断言</div>
+            <div class="sub">含模版规格强校验与语义一致性</div>
         </div>
         <div class="stat-card c4">
-            <div class="label">Turn 级意图隔离</div>
-            <div class="value">0 泄露</div>
-            <div class="sub">彻底消除 Label Bleeding 时序倒错</div>
+            <div class="label">时序因果要求</div>
+            <div class="value">Turn 级隔离</div>
+            <div class="sub">严格消除未来参数泄露 (Label Bleeding)</div>
         </div>
     </div>
 
-    <!-- 系统全景流水线 -->
+    <!-- v2.3.0 本轮更新摘要 -->
     <div class="section">
         <div class="section-header">
-            <div class="section-icon">⚙️</div>
-            <h2>端到端生成流水线体系 (End-to-End Pipeline)</h2>
+            <h2>v2.3.0 更新：候选记忆、支线小记忆点、首轮最小表达与模板时序治理</h2>
         </div>
-        <div class="workflow-box">
-            <div class="flow-steps">
-                <div class="flow-step">
-                    <div class="num">1</div>
-                    <div class="title">画像骨架扩充</div>
-                    <div class="desc">DeepSeek API 扩展静态偏好、口头禅与业务场景</div>
+
+        <div class="contrast-grid">
+            <div class="contrast-box bad">
+                <div class="contrast-title">本轮修复的问题</div>
+                <p>1. <strong>候选记忆提前生效</strong>：隐式归纳初次出现后仍处于 <code>provisional</code> 状态，但强化会话曾提前标记为 <code>memory_filled</code>。</p>
+                <p>2. <strong>Turn 级时间泄漏</strong>：用户首轮仅说“晚上八点”，结构化结果却提前写入后续轮次才出现的 20:15；复用会话还会把用户未说明的时间错误标注为 <code>Turn/U1</code>。</p>
+                <p>3. <strong>T1-2 对话与标签冲突</strong>：结构签名为域外拒绝，模型台词却生成了保障受理，旧质检无法拦截自然语言与标签的矛盾。</p>
+                <p>4. <strong>小记忆点越权登记</strong>：证据会话固定登记应用别名，并将用户未提及的别名一并写入记忆。</p>
+                <p>5. <strong>模板编号与轮数/意图数错配</strong>：主线证据（2轮1意图）误套用双意图模板 <code>T2-4</code>；支线 1 证据扩展为三轮澄清后，实际交互为 3 轮，但模板 ID 仍保留为 <code>T2-2</code>，导致骨架签名出现 <code>T2-2|3|1|...</code> 冲突。</p>
+            </div>
+
+            <div class="contrast-box good">
+                <div class="contrast-title">v2.3.0 规范与规则</div>
+                <p>1. <strong>按前置快照状态选择闭环路径</strong>：<code>snapshot_before.status == provisional</code> 时采用 <code>history_filled</code> 与 <code>History</code> 来源；用户第 2 轮确认后才升级为 <code>active</code>。已生效记忆才允许使用 <code>memory_filled</code> 与 <code>Memory</code> 来源。</p>
+                <p>2. <strong>历史候选完整求证</strong>：强化会话明确复述“上次记录”，展开应用、业务、画质、时延、起止时间与时长，不声称此前“多次使用”。</p>
+                <p>3. <strong>支线时间纳入条件记忆</strong>：<code>SUB_001/SUB_002</code> 增加 <code>start_time</code> 与 <code>duration</code>；复用时开始时间与时长来源于支线记忆，结束时间由当前日期与时长推导。</p>
+                <p>4. <strong>小记忆点素材化治理</strong>：以 <code>data/whitelist/expression_vault.json</code> 为统一表达库，程序按场景筛选应用昵称、业务默认应用、画质、时延、时长与周期六类候选。业务默认应用仅用于主线，避免干扰同业务的其他支线应用；支线仅筛选昵称与参数暗号。直接可换算的词汇（如“俩小时”对应 120min）仅做归一化，不记入记忆。</p>
+                <p>5. <strong>首轮最小表达三形态体系</strong>：
+                    <br>• <strong>形态一（应用与业务均显式出现）</strong>：常规建联或完整复用。用户完整说出应用与业务（标为 <code>Turn/U1</code>），未说明的画质/时延/时长由记忆补全（标为 <code>Memory</code>）；
+                    <br>• <strong>形态二（有对应记忆点时，按历史检索）</strong>：隐式归纳二次确认。用户首轮仅交代场景并使用指代性表达（如“这次按上次的来”），不主动说明具体槽位，所有参数来源均溯源至 <code>History</code> 或 <code>Memory</code>，由 Agent 检索全量历史配置并反问求证；
+                    <br>• <strong>形态三（至少给出业务，应用由记忆对应映射）</strong>：针对登记了 <code>service_default_app</code> 的场景，用户首轮仅陈述业务（如“做视频通话保障”），应用无需重复提及，由场景记忆自动推导。<code>service_name</code> 标为 <code>Turn/U1</code>，<code>application_name</code> 标为 <code>Memory</code>。
+                </p>
+                <p>6. <strong>三档萃取难度与模板严格对应</strong>：
+                    <br>• 主线证据采用同轮共现（2 轮 1 意图），匹配标准模板 <strong><code>T2-1</code></strong>；
+                    <br>• 支线 1 证据采用跨轮澄清（3 轮 1 意图）：模糊表达在第 2 轮，Agent 开放式追问标准值，第 3 轮用户确认后形成映射，匹配标准模板 <strong><code>T3-1</code></strong>；
+                    <br>• 支线 2 证据采用显式声明（2 轮 1 意图），匹配标准模板 <strong><code>T2-1</code></strong>。
+                </p>
+                <p>7. <strong>流水线同步输出双格式</strong>：批处理流水线同时生成行式 <code>sessions.jsonl</code> 与结构化 <code>sessions.json</code>，便于直接审阅。</p>
+            </div>
+        </div>
+
+        <div class="example-box">
+            <div class="example-title">mobile_persona_002 验证实测</div>
+            <pre style="margin: 0;">S1  主线证据（同轮共现）：T2-1（2轮1意图），首发建立 provisional 候选态 (MF_001)
+S2  支线1证据（三轮澄清）：T3-1（3轮1意图），Turn 2 模糊表达“清晰点就行”，Turn 3 确认 720p 形成小记忆映射
+S3  隐式记忆二次发生：T2-1（2轮1意图），形态二（“这次按上次的来”），history_filled / History(MF_001)，确认后升级为 active
+S4  支线2证据（显式声明）：T2-1（2轮1意图），Turn 1 明确时间 20:15 / Turn(U1)，登记应用别名 douyin → 抖音
+S5  域外拒绝：T1-2 用户明确提出“宽带光纤装维报修”，Agent 明确拒绝，台词与 rejected 标签一致
+S6  支线复用（形态一+暗号）：用户表达“微信视频通话，画质按清晰点就行”；Agent 从支线记忆回显 720p、100ms、18:45–19:45、60min
+S8  主线复用（形态三+默认应用）：用户表达“做视频通话保障，应用按默认的”，service_name 为 Turn(U1)，application_name 为 Memory(MF_001)
+QC  14/14 会话全部通过，9 项质检规则校验全部通过 (pass_rate = 100.0%)</pre>
+        </div>
+    </div>
+
+    <!-- 一、 端到端生成流水线 -->
+    <div class="section">
+        <div class="section-header">
+            <h2>一、 端到端生成流水线体系 (End-to-End Pipeline)</h2>
+        </div>
+        <p>系统面向移动网络与长程服务场景，针对真实交互中用户参数表达不全、习惯随时间演化等特征，构建端到端的跨会话对话与状态追踪数据生成流水线。主调度逻辑位于 <code>src/pipeline/batch_pipeline.py</code>，分为五个处理阶段：</p>
+        <div class="flow-steps">
+            <div class="flow-step">
+                <div class="num">1</div>
+                <div class="title">画像骨架扩充</div>
+                <div class="desc">基于输入的原始职业描述，扩展基础属性、主线业务、环境支线与突发事件，生成标准画像骨架文件。</div>
+            </div>
+            <div class="flow-step">
+                <div class="num">2</div>
+                <div class="title">动态时间线规划</div>
+                <div class="desc">根据画像特征编排 12~16 轮跨时间会话序列，设定各会话的模版类型、时间戳与触发模式。</div>
+            </div>
+            <div class="flow-step">
+                <div class="num">3</div>
+                <div class="title">记忆状态机演进</div>
+                <div class="desc">在生成台词前，独立计算每个会话的前置快照、记忆转移事件及后置真值状态，沉淀评测基准。</div>
+            </div>
+            <div class="flow-step">
+                <div class="num">4</div>
+                <div class="title">批次合并对话渲染</div>
+                <div class="desc">每 5 个会话合并为一个批次向大模型发起请求，注入规范化的参数别名，生成生活化口语对话。</div>
+            </div>
+            <div class="flow-step">
+                <div class="num">5</div>
+                <div class="title">DST 结构装配与质检</div>
+                <div class="desc">依据官方模版标准装配 Turn 级意图与槽位更新，执行 9 项规则检查并输出质检报告。</div>
+            </div>
+        </div>
+        <p>系统产物保存在各画像独立目录中，包含核心产物文件：</p>
+        <ul>
+            <li><code>sessions.jsonl</code>：符合标注格式的逐行对话记录，包含会话元数据、各轮对话与 Turn 级对话状态（DST）。</li>
+            <li><code>sessions.json</code>：格式化缩进的 JSON 会话全量数组，便于本地审阅与调试比对。</li>
+            <li><code>memory_traces.json</code>：长程记忆演进追踪文件，完整记录各会话前后的记忆快照与变更事件，供记忆评测独立调取。</li>
+            <li><code>qc_report.json</code>：自动化质检报告，记录各条规则的校验结果与发现的问题。</li>
+        </ul>
+    </div>
+
+    <!-- 二、 核心机制逻辑与框图解析 (无数学公式，纯框图讲清楚) -->
+    <div class="section">
+        <div class="section-header">
+            <h2>二、 核心机制逻辑与状态流转框图</h2>
+        </div>
+
+        <h3>1. 长期记忆全生命周期状态流转</h3>
+        <p>用户的习惯偏好不是一成不变的，系统通过状态机跟踪记忆从“建立、确认、使用”到“临时修改、恢复”的完整过程：</p>
+
+        <!-- 框图 1: 记忆流转框图 -->
+        <div class="diagram-box">
+            <div class="diagram-title">【框图 1】记忆生命周期状态转移路径</div>
+
+            <p style="font-weight: 600; margin-bottom: 6px; font-size: 0.86rem;">路径 A：显式声明（用户首次直接明确立规矩）</p>
+            <div class="state-flow">
+                <div class="state-node">未记录<span class="sub">None</span></div>
+                <div class="flow-arrow">➔ 用户首次明确声明 ➔</div>
+                <div class="state-node highlight">已激活老规矩<span class="sub">Active (生效中)</span></div>
+                <div class="flow-arrow">➔ 后续跨会话 ➔</div>
+                <div class="state-node">直接调取复用<span class="sub">Reinforce / Reuse</span></div>
+            </div>
+
+            <p style="font-weight: 600; margin: 16px 0 6px 0; font-size: 0.86rem;">路径 B：隐式归纳（用户没提老规矩，通过行为习惯自然沉淀）</p>
+            <div class="state-flow">
+                <div class="state-node">未记录<span class="sub">None</span></div>
+                <div class="flow-arrow">➔ 首次单次行为 ➔</div>
+                <div class="state-node">候选历史日志<span class="sub">Provisional (防单次误判)</span></div>
+                <div class="flow-arrow">➔ 再次发生同一行为 ➔</div>
+                <div class="state-node highlight">固化为老规矩<span class="sub">Active (助手主动建议并生效)</span></div>
+            </div>
+
+            <p style="font-weight: 600; margin: 16px 0 6px 0; font-size: 0.86rem;">路径 C：现场临时覆盖与到期自动恢复（如突发应急调高画质）</p>
+            <div class="state-flow">
+                <div class="state-node highlight">基线老规矩<span class="sub">Active (720p / 50ms)</span></div>
+                <div class="flow-arrow">➔ 遇到突发保障 ➔</div>
+                <div class="state-node" style="border-color: var(--accent-terracotta);">临时覆盖状态<span class="sub">Overridden (临时升至1080p)</span></div>
+                <div class="flow-arrow">➔ 当次会话结束 ➔</div>
+                <div class="state-node highlight">自动恢复老规矩<span class="sub">Active (回到720p / 50ms)</span></div>
+            </div>
+
+            <div class="diagram-desc">
+                <strong>逻辑说明：</strong> 系统区分“用户永久偏好”与“现场临时调整”。当遇到临时场景（如 T2-3 特殊活动保障）调整了画质时延，仅在当次会话生效，会话结束后记忆自动回退到原有基线，不会让一次偶然操作永久篡改老规矩。
+            </div>
+        </div>
+
+        <h3>2. 对话状态追踪（DST）因果隔离：消除未来参数泄露</h3>
+        <p>在多轮对话标注中，模型只能根据“当前和过去已经说过的话”做判断，绝不能把未来轮次才补充的参数提前写进首轮结果：</p>
+
+        <!-- 框图 2: 时序因果隔离框图 -->
+        <div class="diagram-box">
+            <div class="diagram-title">【框图 2】Turn 级意图逐轮演进与防早泄对比</div>
+            <div class="state-flow" style="align-items: stretch;">
+                <div class="state-node" style="flex: 1; text-align: left; background: #ffffff;">
+                    <div style="font-weight: 700; color: var(--accent-main); margin-bottom: 6px;">第 1 轮交互 (Turn 1)</div>
+                    <div>• 用户：“今晚8点帮我开个视频会议”</div>
+                    <div>• 助手：“收到，画质、时延和持续多长时间呢？”</div>
+                    <div style="margin-top: 8px; padding-top: 6px; border-top: 1px dashed var(--border-soft); font-size: 0.78rem;">
+                        <strong>本轮参数标注：</strong> 仅包含应用(腾讯会议)与业务(视频会)<br>
+                        <strong>待追问列表 (requested)：</strong> 画质、时延、时长 (显式记录缺项)
+                    </div>
                 </div>
-                <div class="flow-step">
-                    <div class="num">2</div>
-                    <div class="title">动态时间线规划</div>
-                    <div class="desc">基于画像特征生成 12~16 轮交错时空轨迹</div>
+                <div class="flow-arrow" style="align-self: center;">➔</div>
+                <div class="state-node" style="flex: 1; text-align: left; background: #ffffff;">
+                    <div style="font-weight: 700; color: var(--accent-olive); margin-bottom: 6px;">第 2 轮交互 (Turn 2)</div>
+                    <div>• 用户：“1080p原画，50ms以内，预计开2小时”</div>
+                    <div>• 助手：“已按要求为您开通会议保障”</div>
+                    <div style="margin-top: 8px; padding-top: 6px; border-top: 1px dashed var(--border-soft); font-size: 0.78rem;">
+                        <strong>本轮参数标注：</strong> 完整补充画质、时延、结束时间与时长<br>
+                        <strong>状态转移：</strong> 由进行中(in_progress)转为办结(resolved)
+                    </div>
                 </div>
-                <div class="flow-step">
-                    <div class="num">3</div>
-                    <div class="title">记忆状态机演进</div>
-                    <div class="desc">计算 Snapshot-Before、Events、Gold-State 三元组</div>
+            </div>
+            <div class="diagram-desc">
+                <strong>时序要求：</strong> 杜绝“答案早泄”。第 1 轮标注决不能提前写入 1080p、50ms 以及 2 小时后结束的具体时间戳，所有参数按轮次动态增量补充。
+            </div>
+        </div>
+
+        <h3>3. 画像数字 ID 分层均匀调度机制</h3>
+        <p>为了保证批量生成出来的数据集覆盖广泛、分布均匀，避免所有样本都扎堆在同一种模式下，系统使用用户数字编号进行确定性轮转调度：</p>
+
+        <!-- 框图 3: 均匀调度框图 -->
+        <div class="diagram-box">
+            <div class="diagram-title">【框图 3】画像特征自动分流体系</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: 12px 0;">
+                <div style="background: #fff; padding: 12px; border-radius: 6px; border: 1px solid var(--border-soft);">
+                    <div style="font-weight: 700; color: var(--accent-main); margin-bottom: 4px;">① 记忆声明模式 (50% / 50%)</div>
+                    <div style="font-size: 0.82rem; color: var(--text-muted);">
+                        • 奇数号画像 ➔ 显式声明（直接设立老规矩）<br>
+                        • 偶数号画像 ➔ 隐式归纳（习惯逐步沉淀）
+                    </div>
                 </div>
-                <div class="flow-step">
-                    <div class="num">4</div>
-                    <div class="title">批次合并对话渲染</div>
-                    <div class="desc">5 会话/批次合并推理，极速完成口语台词生成</div>
+                <div style="background: #fff; padding: 12px; border-radius: 6px; border: 1px solid var(--border-soft);">
+                    <div style="font-weight: 700; color: var(--accent-warm); margin-bottom: 4px;">② 触发场景范式 (各占 1/3)</div>
+                    <div style="font-size: 0.82rem; color: var(--text-muted);">
+                        • 周期时间驱动（日/周/月固定时段）<br>
+                        • 专业任务驱动（现场应急、例行巡检）<br>
+                        • 特定地点驱动（弱网盲区、驻地集结）
+                    </div>
                 </div>
-                <div class="flow-step">
-                    <div class="num">5</div>
-                    <div class="title">DST 结构装配与 QC</div>
-                    <div class="desc">组装 Turn 级意图、增量 Slot，严格质检落盘</div>
+                <div style="background: #fff; padding: 12px; border-radius: 6px; border: 1px solid var(--border-soft);">
+                    <div style="font-weight: 700; color: var(--accent-olive); margin-bottom: 4px;">③ 会话总长度浮动 (12~16轮)</div>
+                    <div style="font-size: 0.82rem; color: var(--text-muted);">
+                        • 样本按 12、13、14、15、16 轮离散浮动<br>
+                        • 打破千篇一律的机械模版感
+                    </div>
                 </div>
+            </div>
+            <div class="diagram-desc">
+                <strong>效果说明：</strong> 无需人工随机干预，算法天然保证生成的数据在显式/隐式、场景类型与会话长度上严格保持均匀分布，避免训练过拟合。
             </div>
         </div>
     </div>
 
-    <!-- 五大核心功能与 18 个细粒度子特性 -->
+    <!-- 三、 功能条目 -->
     <div class="section">
         <div class="section-header">
-            <div class="section-icon">📦</div>
-            <h2>功能特性全景矩阵 (5 大核心体系 & 18 个子特性)</h2>
+            <h2>三、 功能条目</h2>
         </div>
 
         <!-- 体系 1 -->
@@ -484,46 +727,28 @@
             <div class="category-title">一、 时间轴与故事线规划引擎 (Timeline & Storyline Planner)</div>
             <div class="subfeature-grid">
                 <div class="subfeature-card">
-                    <div class="subfeature-header">
-                        <div class="subfeature-name">1.1 多故事线交织编排</div>
-                        <div class="subfeature-badge">已交付</div>
-                    </div>
-                    <div class="subfeature-desc">并行编排主线高频业务、双支线（转场弱网、夜间驻地复盘）与突发环境覆盖，构建错落有致的真实交互网络。</div>
+                    <div class="subfeature-name">1.1 多故事线交织编排</div>
+                    <div class="subfeature-desc">并行编排主线高频业务、转场弱网、驻地复盘与突发环境覆盖等多条支线，模拟真实时空交互。</div>
                 </div>
                 <div class="subfeature-card">
-                    <div class="subfeature-header">
-                        <div class="subfeature-name">1.2 动态自然会话浮动 (12~16轮)</div>
-                        <div class="subfeature-badge">新增</div>
-                    </div>
-                    <div class="subfeature-desc">打破单一生硬的固定 15 轮限制，根据画像特征、支线丰富度在 12、13、14、15、16 轮之间动态浮动。</div>
+                    <div class="subfeature-name">1.2 动态会话长度浮动 (12~16轮)</div>
+                    <div class="subfeature-desc">打破固定 15 轮限制，根据画像特征在 12、13、14、15、16 轮之间动态浮动。</div>
                 </div>
                 <div class="subfeature-card">
-                    <div class="subfeature-header">
-                        <div class="subfeature-name">1.3 多粒度周期调度</div>
-                        <div class="subfeature-badge">已交付</div>
-                    </div>
-                    <div class="subfeature-desc">解耦支持日级（早晚高峰/午间复盘）、周级（工作日一五/二四/周末双休组合）、月级（月初/月中/月末封账）周期。</div>
+                    <div class="subfeature-name">1.3 多粒度周期调度</div>
+                    <div class="subfeature-desc">解耦支持日级（早晚高峰/午间复盘）、周级（工作日一五/二四/周末组合）、月级（月初/月中/月末封账）周期。</div>
                 </div>
                 <div class="subfeature-card">
-                    <div class="subfeature-header">
-                        <div class="subfeature-name">1.4 示例引导情境触发 (方案A)</div>
-                        <div class="subfeature-badge">已优化</div>
-                    </div>
-                    <div class="subfeature-desc">将任务活动/地点情境与用户画像身份无缝深度绑定，避免出现职业与预设任务违和的画像冲突问题。</div>
+                    <div class="subfeature-name">1.4 画像情境触发绑定</div>
+                    <div class="subfeature-desc">将任务活动与地点情境同用户画像身份深度绑定，避免出现职业与预设任务违和的画像冲突问题。</div>
                 </div>
                 <div class="subfeature-card">
-                    <div class="subfeature-header">
-                        <div class="subfeature-name">1.5 外置触发池解耦</div>
-                        <div class="subfeature-badge">已解耦</div>
-                    </div>
-                    <div class="subfeature-desc">剥离硬编码，通过 <code>trigger_presets.json</code> 外置配置文件管理时段与任务库，支持非技术人员随时热插拔扩充。</div>
+                    <div class="subfeature-name">1.5 外置触发池解耦</div>
+                    <div class="subfeature-desc">通过 <code>trigger_presets.json</code> 外置配置文件管理时段与任务库，支持免改动代码独立扩展。</div>
                 </div>
                 <div class="subfeature-card">
-                    <div class="subfeature-header">
-                        <div class="subfeature-name">1.6 干扰与域外诉求机制</div>
-                        <div class="subfeature-badge">已交付</div>
-                    </div>
-                    <div class="subfeature-desc">设计纯域外诉求礼貌拒绝（T1-2 宽带光纤报修）与混合诉求一办一拒（X-1 话费账单查询），测试大模型边界能力。</div>
+                    <div class="subfeature-name">1.6 干扰与域外诉求机制</div>
+                    <div class="subfeature-desc">包含纯域外诉求拒绝（T1-2 宽带装维）与混合诉求一办一拒（X-1 话费查询），评测模型的任务范围识别能力。</div>
                 </div>
             </div>
         </div>
@@ -533,25 +758,16 @@
             <div class="category-title">二、 跨会话长期记忆演进追踪系统 (Memory Tracker & State Machine)</div>
             <div class="subfeature-grid">
                 <div class="subfeature-card">
-                    <div class="subfeature-header">
-                        <div class="subfeature-name">2.1 显式与隐式双轨建联</div>
-                        <div class="subfeature-badge">核心机制</div>
-                    </div>
-                    <div class="subfeature-desc">支持显式声明（One-shot 直接生效）与隐式归纳（单次候选 provisional ➔ 再次发生时 Agent 主动建议固化 active）。</div>
+                    <div class="subfeature-name">2.1 显式与隐式双轨建联</div>
+                    <div class="subfeature-desc">支持显式声明（直接生效）与隐式归纳（单次候选 provisional ➔ 再次发生时智能体建议固化 active）。</div>
                 </div>
                 <div class="subfeature-card">
-                    <div class="subfeature-header">
-                        <div class="subfeature-name">2.2 记忆快照因果三元组</div>
-                        <div class="subfeature-badge">数据标准</div>
-                    </div>
-                    <div class="subfeature-desc">严格记录会话前生效记忆（Snapshot-Before）、会话内动作事件（Memory-Events）与会话后标准状态（Gold-State）。</div>
+                    <div class="subfeature-name">2.2 记忆快照因果三元组</div>
+                    <div class="subfeature-desc">记录会话前生效记忆（Snapshot-Before）、会话内动作事件（Memory-Events）与会话后状态（Gold-State）。</div>
                 </div>
                 <div class="subfeature-card">
-                    <div class="subfeature-header">
-                        <div class="subfeature-name">2.3 动态纠正与临时覆盖</div>
-                        <div class="subfeature-badge">已交付</div>
-                    </div>
-                    <div class="subfeature-desc">支持时长单次修改延长（T2-5）与现场特殊保障临时参数切换（T2-3），事件到期后自动恢复全局基线老规矩。</div>
+                    <div class="subfeature-name">2.3 动态纠正与临时覆盖</div>
+                    <div class="subfeature-desc">支持时长单次修改（T2-5）与现场临时参数切换（T2-3），事件到期后自动恢复全局基线配置。</div>
                 </div>
             </div>
         </div>
@@ -561,32 +777,20 @@
             <div class="category-title">三、 对话生成与大/小记忆点分级体系 (Dialogue & Memory Hierarchy)</div>
             <div class="subfeature-grid">
                 <div class="subfeature-card">
-                    <div class="subfeature-header">
-                        <div class="subfeature-name">3.1 首发去别名零歧义冷启动</div>
-                        <div class="subfeature-badge">关键突破</div>
-                    </div>
-                    <div class="subfeature-desc">在证据会话第 1 轮中，强制使用标准官方应用名与业务名，坚决禁止生僻别名，禁止未生效暗号，保障大记忆点无歧义冷启动。</div>
+                    <div class="subfeature-name">3.1 首发去别名无歧义冷启动</div>
+                    <div class="subfeature-desc">在证据会话第 1 轮中，强制使用官方标准应用名与业务名，禁止生僻别名与未生效暗号，保障大记忆点冷启动无歧义。</div>
                 </div>
                 <div class="subfeature-card">
-                    <div class="subfeature-header">
-                        <div class="subfeature-name">3.2 小记忆点引入与登记</div>
-                        <div class="subfeature-badge">关键突破</div>
-                    </div>
-                    <div class="subfeature-desc">首发会话第 2 轮确认画质时延的同时，顺畅引入个性化口语代称，登记写入大记忆点的 <code>alias_mapping</code> 小记忆点子槽位。</div>
+                    <div class="subfeature-name">3.2 小记忆点引入与登记</div>
+                    <div class="subfeature-desc">首发会话第 2 轮确认画质时延的同时登记个性化口语代称，写入大记忆点的 <code>alias_mapping</code> 小记忆点子槽位。</div>
                 </div>
                 <div class="subfeature-card">
-                    <div class="subfeature-header">
-                        <div class="subfeature-name">3.3 后续复用自然唤醒</div>
-                        <div class="subfeature-badge">核心机制</div>
-                    </div>
-                    <div class="subfeature-desc">后续复用会话鼓励用户直接使用小记忆点（代称与暗号），Agent 依据记忆精准归一化解析，测试大模型跨会话归纳能力。</div>
+                    <div class="subfeature-name">3.3 后续复用唤醒</div>
+                    <div class="subfeature-desc">后续复用会话支持用户直接使用小记忆点（代称与暗号），智能体依据记忆解析归一化，评测模型的长程记忆能力。</div>
                 </div>
                 <div class="subfeature-card">
-                    <div class="subfeature-header">
-                        <div class="subfeature-name">3.4 六维口语黑话词典库</div>
-                        <div class="subfeature-badge">已沉淀</div>
-                    </div>
-                    <div class="subfeature-desc">建立应用、业务、画质、时延、时长、周期六大维度黑话别称池，结合用户画像的口头禅与说话语气动态注入台词。</div>
+                    <div class="subfeature-name">3.4 六维口语行话词典库</div>
+                    <div class="subfeature-desc">分别维护应用昵称、业务默认应用、画质、时延、时长和周期记忆；其中业务维度表示“未指定应用时默认使用哪个应用”，不再把普通业务同义词当成记忆。</div>
                 </div>
             </div>
         </div>
@@ -596,73 +800,53 @@
             <div class="category-title">四、 对话状态追踪（DST）与 Turn 级意图隔离 (DST & Turn-Level Isolation)</div>
             <div class="subfeature-grid">
                 <div class="subfeature-card">
-                    <div class="subfeature-header">
-                        <div class="subfeature-name">4.1 Turn 级意图零泄漏</div>
-                        <div class="subfeature-badge">彻底解决</div>
-                    </div>
-                    <div class="subfeature-desc">第 1 轮意图状态为 <code>in_progress</code>，仅包含该轮提及要素，严格杜绝未提及的画质时延未来信息泄漏。</div>
+                    <div class="subfeature-name">4.1 Turn 级意图隔离</div>
+                    <div class="subfeature-desc">第 1 轮意图状态为 <code>in_progress</code>，仅包含该轮提及要素，严格杜绝未提及的画质时延未来信息提前出现。</div>
                 </div>
                 <div class="subfeature-card">
-                    <div class="subfeature-header">
-                        <div class="subfeature-name">4.2 显式待追问参数追踪</div>
-                        <div class="subfeature-badge">DST标准</div>
-                    </div>
-                    <div class="subfeature-desc">第 1 轮显式给出 <code>requested_params: ["resolution", "rtt"]</code>，为下游评测 Agent 澄清反问策略提供黄金标准标注。</div>
+                    <div class="subfeature-name">4.2 待追问参数显式追踪</div>
+                    <div class="subfeature-desc">第 1 轮显式给出 <code>requested_params: ["resolution", "rtt"]</code>，为评测智能体的追问澄清策略提供真值标注。</div>
                 </div>
                 <div class="subfeature-card">
-                    <div class="subfeature-header">
-                        <div class="subfeature-name">4.3 增量槽位追踪 (slot_updates)</div>
-                        <div class="subfeature-badge">DST标准</div>
-                    </div>
-                    <div class="subfeature-desc">按轮次严格记录参数增量：第 1 轮记录应用业务时间，第 2 轮记录追问澄清补充的画质时延，符合状态转移因果链。</div>
+                    <div class="subfeature-name">4.3 增量槽位追踪 (slot_updates)</div>
+                    <div class="subfeature-desc">按轮次记录参数增量：第 1 轮记录应用业务时间，第 2 轮记录澄清补充的画质时延，符合状态转移因果链。</div>
                 </div>
             </div>
         </div>
 
         <!-- 体系 5 -->
         <div class="feature-category">
-            <div class="category-title">五、 批处理流水线与严格质检验证套件 (Batch Pipeline & Verification)</div>
+            <div class="category-title">五、 批处理流水线与质检验证套件 (Batch Pipeline & Verification)</div>
             <div class="subfeature-grid">
                 <div class="subfeature-card">
-                    <div class="subfeature-header">
-                        <div class="subfeature-name">5.1 批次合并极速渲染</div>
-                        <div class="subfeature-badge">高性能</div>
-                    </div>
-                    <div class="subfeature-desc">支持每 5 个会话单次 API 请求合并生成，全画像流水线仅需 4 次网络交互，单个画像生成耗时降至 16 秒左右。</div>
+                    <div class="subfeature-name">5.1 批次合并渲染</div>
+                    <div class="subfeature-desc">支持每 5 个会话单次 API 请求合并生成，全画像流水线仅需 4 次网络交互，单个画像生成耗时约 16 秒。</div>
                 </div>
                 <div class="subfeature-card">
-                    <div class="subfeature-header">
-                        <div class="subfeature-name">5.2 极低成本控制</div>
-                        <div class="subfeature-badge">高性价比</div>
-                    </div>
-                    <div class="subfeature-desc">基于 DeepSeek Flash 模型（不开启思考模式），单画像全套会话生成成本仅约 0.03 元人民币。</div>
+                    <div class="subfeature-name">5.2 成本控制</div>
+                    <div class="subfeature-desc">基于 DeepSeek Flash 模型（不开启思考模式），单画像全套会话生成成本约 0.03 元人民币。</div>
                 </div>
                 <div class="subfeature-card">
-                    <div class="subfeature-header">
-                        <div class="subfeature-name">5.3 自动化质检与断言套件</div>
-                        <div class="subfeature-badge">100% 严苛</div>
-                    </div>
-                    <div class="subfeature-desc">每个画像自动生成 <code>qc_report.json</code>，配备命令行独立运行断言套件（<code>--verify</code>），保证零结构缺陷。</div>
+                    <div class="subfeature-name">5.3 自动化质检断言套件</div>
+                    <div class="subfeature-desc">每个画像自动生成 <code>qc_report.json</code>，配备命令行独立运行断言套件（<code>--verify</code>），保证结构零缺陷。</div>
                 </div>
             </div>
         </div>
-
     </div>
 
-    <!-- 关键攻关深潜对比 -->
+    <!-- 四、 关键技术规范：Turn 级意图隔离与大/小记忆点演进 -->
     <div class="section">
         <div class="section-header">
-            <div class="section-icon">🔬</div>
-            <h2>关键技术攻关：Turn 级意图隔离与大/小记忆点演进深潜</h2>
+            <h2>四、 标注规范与实现对比：Turn 级意图隔离与大/小记忆点演进</h2>
         </div>
 
         <div class="contrast-grid">
             <div class="contrast-box bad">
-                <div class="contrast-title">❌ 改造前缺陷现象 (Label Bleeding & 早熟别名)</div>
-                <p>1. <strong>早熟别名冲突</strong>：首发建联第 1 轮用户即使用“阿抖开播”、“老规矩”，冷启动模型提取不出真实业务标准名。</p>
+                <div class="contrast-title">改造前缺陷示例 (Label Bleeding & 早熟别名)</div>
+                <p>1. <strong>早熟别名冲突</strong>：首发建联第 1 轮用户即使用“阿抖开播”、“老规矩”，冷启动模型无法提取真实业务标准名。</p>
                 <p>2. <strong>时序倒错泄露 (QoS参数)</strong>：第 1 轮用户未提及画质和时延，但意图答案里提前填入了 1080p 和 50ms。</p>
-                <p>3. <strong>时间跨度超前标注 (时间槽位早泄)</strong>：第 1 轮用户仅提出“今晚8点开会”，客服甚至还在反问“会议大概持续多久？”，但第 1 轮意图和槽位更新已将 <code>end_timestamp</code>（22:00）与 <code>duration</code>（120min）强行写死，彻底违反 DST 对话状态追踪因果律。</p>
-                <p>4. <strong>研发术语出戏 (违背口语习惯)</strong>：提示词直接引导用户说出“记一下长期偏好，别掉链子”，普通真实用户根本不会具备“长期偏好/元指令/槽位”等系统研发概念，严重失真。</p>
+                <p>3. <strong>时间跨度超前标注 (时间槽位早泄)</strong>：第 1 轮用户仅提出“今晚8点开会”，第 1 轮意图和槽位更新已将 <code>end_timestamp</code>（22:00）与 <code>duration</code>（120min）强行写死，违反 DST 因果律。</p>
+                <p>4. <strong>研发术语出戏</strong>：提示词引导用户说出“记一下长期偏好，别掉链子”，普通真实用户不会使用“长期偏好/元指令/槽位”等术语。</p>
                 <pre>// 改造前：第 1 轮存在未来参数泄漏 (包含画质、时延、结束时间与时长)
 "event_sequence": [
   {
@@ -672,12 +856,12 @@
       "params": {
         "application_name": "腾讯会议",
         "service_name": "视频会",
-        "resolution": "1080p", // ❌ 此时用户根本未提！
-        "rtt": "50ms",          // ❌ 未来答案泄露！
+        "resolution": "1080p", // 此时用户并未提及
+        "rtt": "50ms",          // 提前填入
         "timestamp": {
           "start_timestamp": "2026年10月10日20时00分",
-          "end_timestamp": "2026年10月10日22时00分", // ❌ 第1轮根本未提！
-          "duration": "120分钟"                     // ❌ 答案早泄！
+          "end_timestamp": "2026年10月10日22时00分", // 第1轮并未提及
+          "duration": "120分钟"                     // 答案提前出现
         }
       }
     }]
@@ -686,24 +870,24 @@
             </div>
 
             <div class="contrast-box good">
-                <div class="contrast-title">✅ 改造后黄金标准规范 (因果闭环与小记忆点登记)</div>
+                <div class="contrast-title">合规设计与标注规范 (因果闭环与小记忆点登记)</div>
                 <p>1. <strong>标准应用冷启动</strong>：第 1 轮强制使用官方标准名“腾讯会议视频会”，去暗号化；第 2 轮确立大规则并登记代称小记忆点。</p>
-                <p>2. <strong>Turn 级意图绝对纯净</strong>：第 1 轮 params 只有提过的参数；时间槽位仅有 <code>start_timestamp</code>，严格隔离 <code>end_timestamp</code> 与 <code>duration</code>。</p>
-                <p>3. <strong>DST 待澄清槽位显式追踪</strong>：第 1 轮 <code>requested_params</code> 明确记录 <code>["resolution", "rtt", "duration"]</code>；第 2 轮用户澄清后，槽位更新精准溯源至 <code>("Turn", "U2")</code>。</p>
-                <p>4. <strong>生活化口语祛除研发术语</strong>：严禁出现“长期偏好”等概念，全面替换为“记住这个习惯哈，别掉链子”、“帮我把这个习惯记好”、“把这个规矩记一下，以后省得每次重新挑”等日常口语，并通过 <code>natural_dialogue_check</code> 硬核拦截。</p>
+                <p>2. <strong>Turn 级意图隔离</strong>：第 1 轮 params 只有提过的参数；时间槽位仅有 <code>start_timestamp</code>，隔离 <code>end_timestamp</code> 与 <code>duration</code>。</p>
+                <p>3. <strong>DST 待澄清槽位显式追踪</strong>：第 1 轮 <code>requested_params</code> 记录 <code>["resolution", "rtt", "duration"]</code>；第 2 轮用户澄清后，槽位更新溯源至 <code>("Turn", "U2")</code>。</p>
+                <p>4. <strong>生活化口语</strong>：替换为“记住这个习惯哈，别掉链子”、“帮我把这个习惯记好”，并通过 <code>natural_dialogue_check</code> 进行规则校验。</p>
                 <pre>// 改造后：严格按轮次演进与因果隔离 (时间与参数逐轮落地)
 "event_sequence": [
   {
     "turn": 1,
     "user": { "utterance": "今晚8点要在腾讯会议上开个科研视频会..." },
     "agent": { "utterance": "收到，画质、时延和持续时长有什么具体要求吗？" },
-    "requested_params": ["resolution", "rtt", "duration"], // ✅ 待澄清槽位
+    "requested_params": ["resolution", "rtt", "duration"],
     "turn_intents": [{
       "status": "in_progress",
       "params": {
         "application_name": "腾讯会议",
         "service_name": "视频会",
-        "timestamp": { "start_timestamp": "2026年10月10日20时00分" } // ✅ 仅当前提及
+        "timestamp": { "start_timestamp": "2026年10月10日20时00分" }
       }
     }]
   },
@@ -711,13 +895,13 @@
     "turn": 2,
     "user": { "utterance": "画质1080p，时延50ms以内，预计持续2小时。我平时习惯叫它'企鹅例会'，帮我把这个习惯记好，别掉链子。" },
     "turn_intents": [{
-      "status": "resolved", // ✅ 第2轮补充完毕
+      "status": "resolved",
       "params": {
         "resolution": "1080p", "rtt": "50ms",
         "timestamp": {
           "start_timestamp": "...20时00分",
-          "end_timestamp": "...22时00分", // ✅ 溯源自 U2
-          "duration": "120分钟"           // ✅ 溯源自 U2
+          "end_timestamp": "...22时00分",
+          "duration": "120分钟"
         }
       }
     }]
@@ -727,37 +911,36 @@
         </div>
     </div>
 
-    <!-- 别名奠基律与纯对话/记忆基准双轨解耦深潜 -->
+    <!-- 五、 别名奠基律与纯对话/记忆基准双轨解耦 -->
     <div class="section">
         <div class="section-header">
-            <div class="section-icon">🧩</div>
-            <h2>最新架构特性：别名奠基律 (Alias Grounding Law) 与双轨彻底解耦</h2>
+            <h2>五、 架构特性：别名奠基律 (Alias Grounding Law) 与双轨解耦</h2>
         </div>
 
         <div class="contrast-grid">
             <div class="contrast-box bad">
-                <div class="contrast-title">❌ 改造前缺陷现象 (凭空冒出别名 & 格式冗余臃肿)</div>
-                <p>1. <strong>别名凭空突现 (Unfounded Alias)</strong>：如在 <code>mobile_persona_008</code> 的 S-02 (歧义消解会话) 中，用户仅说“腾讯会议、会议业务”，从未提过“会议通”；但到了 S-06 复用会话第 1 轮，用户突然没头没脑地说“用会议通，帮我保障一下”，完全不符合真实用户对话认知逻辑。</p>
-                <p>2. <strong>对话文件混杂冗余 (Schema Duplication)</strong>：<code>sessions.jsonl</code> 每条会话中重复内嵌了 <code>memory_snapshot_before</code>、<code>memory_events_after</code>、<code>gold_memory_state_after</code>，导致单个文件膨胀至数百KB，且与专门的 <code>memory_traces.json</code> 完全重复，破坏了纯对话 DST 评测集的整洁标准。</p>
+                <div class="contrast-title">改造前缺陷示例 (凭空出现别名 & 格式冗余)</div>
+                <p>1. <strong>别名凭空突现 (Unfounded Alias)</strong>：如在 S-02 中用户仅说“腾讯会议、会议业务”，从未提过“会议通”；到了 S-06 复用会话第 1 轮，用户突然说“用会议通，帮我保障一下”，不符合真实对话认知逻辑。</p>
+                <p>2. <strong>对话文件混杂冗余 (Schema Duplication)</strong>：<code>sessions.jsonl</code> 每条会话中重复内嵌了 <code>memory_snapshot_before</code>、<code>memory_events_after</code>、<code>gold_memory_state_after</code>，导致单个文件膨胀且与 <code>memory_traces.json</code> 完全重复。</p>
             </div>
 
             <div class="contrast-box good">
-                <div class="contrast-title">✅ 改造后架构标准 (三阶生命周期奠基律 & 双轨清晰解耦)</div>
+                <div class="contrast-title">合规设计规范 (三阶生命周期奠基律 & 双轨解耦)</div>
                 <p>1. <strong>别名奠基三阶法则 (Alias Grounding Law)</strong>：
-                    <br>• <strong>首发建联 (Evidence Turn 1 & 2)</strong>：Turn 1 强制使用官方全称（如“腾讯会议”）；Turn 2 在用户确认参数的同时，正式向助手登记代称（“我平时习惯叫它'会议通'，帮我把这个习惯记好，别掉链子”），Agent 答复明确登记习惯。
-                    <br>• <strong>隐式晶化 (Crystallization Turn 1 & 2)</strong>：Turn 1 仅说“配置跟上次一样”，禁用生僻别名与“老规矩”；Turn 2 在用户明确固化老规矩时，正式登记代称。
+                    <br>• <strong>首发建联 (Evidence Turn 1 & 2)</strong>：Turn 1 强制使用官方全称（如“腾讯会议”）；Turn 2 在用户确认参数的同时正式向助手登记代称（“我平时习惯叫它'会议通'，帮我把这个习惯记好”），Agent 答复明确登记。
+                    <br>• <strong>隐式晶化 (Crystallization Turn 1 & 2)</strong>：Turn 1 仅说“配置跟上次一样”，禁用生僻别名与“老规矩”；Turn 2 在用户确认固化配置时登记代称。
                     <br>• <strong>后续复用 (Reuse / Reinforcement)</strong>：仅在先验会话奠基成功后，后续会话的 Turn 1 才允许口语化调用“老规矩”与代称。
                 </p>
-                <p>2. <strong>纯净对话与记忆追踪双轨解耦</strong>：
-                    <br>• <code>sessions.jsonl</code>：收敛为纯粹的标准 8 大对话与 DST 槽位追踪核心字段，零记忆冗余，体积缩减 60% 以上。
-                    <br>• <code>memory_traces.json</code>：专职负责评测基准，完整闭环记录每个会话的前置快照、状态转移事件与 Gold 记忆状态。
+                <p>2. <strong>纯对话与记忆追踪双轨解耦</strong>：
+                    <br>• <code>sessions.jsonl</code>：收敛为纯粹的标准对话与 DST 槽位追踪核心字段，无冗余记忆快照。
+                    <br>• <code>memory_traces.json</code>：专职负责评测基准，完整记录每个会话的前置快照、状态转移事件与 Gold 状态。
                 </p>
             </div>
         </div>
 
-        <div style="margin-top: 20px; background: rgba(15, 23, 42, 0.6); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color);">
-            <div style="font-weight: 600; color: var(--accent-cyan); margin-bottom: 8px;">实测生成的 S-02 与 S-06 因果对照样例（Persona 008 移动训练与赛事人员）：</div>
-            <pre style="margin: 0; background: #0b1120; padding: 14px; border-radius: 6px; font-size: 0.88rem; overflow-x: auto;">
+        <div class="example-box">
+            <div class="example-title">实测生成的 S-02 与 S-06 因果对照样例（Persona 008）：</div>
+            <pre style="margin: 0;">
 [S-USER_008-02 首发证据会话 Turn 2 登记别名]
 User: "对，会议业务，720p，100ms以内，持续1小时。我平时习惯叫它tencentmeeting，帮我把这个习惯记好，别掉链子。"
 Agent: "好的，已为您开通腾讯会议保障：720p，100ms，持续60分钟。并已记录您的习惯代称“tencentmeeting”。"
@@ -765,69 +948,131 @@ Agent: "好的，已为您开通腾讯会议保障：720p，100ms，持续60分�
 [S-USER_008-06 后续复用会话 Turn 1 自然调用已登记别名]
 User: "老规矩，tencentmeeting开会，720p、100ms以内，今晚6点45开，1小时，帮我把保障开上。"
 Agent: "收到，您是要用腾讯会议开会议对吧？画质720p、时延100ms以内、持续1小时，我按这个给您开通保障。"
-User: "对，就按这个来，别掉链子。"
-            </pre>
+User: "对，就按这个来，别掉链子。"</pre>
         </div>
     </div>
 
-    <!-- 参数别名对齐律与复用槽位省略法则 -->
+    <!-- 六、 参数别名对齐律与复用槽位省略法则 -->
     <div class="section">
         <div class="section-header">
-            <div class="section-icon">🎯</div>
-            <h2>关键质量治理：参数别名对齐律 (Parameter Alias Alignment) 与复用槽位省略</h2>
+            <h2>六、 参数别名对齐律 (Parameter Alias Alignment) 与复用槽位省略</h2>
         </div>
 
         <div class="contrast-grid">
             <div class="contrast-box bad">
-                <div class="contrast-title">❌ 改造前缺陷现象 (参数别名打架 & 记忆复用冗余复读)</div>
-                <p>1. <strong>参数别名层级错位与冲突</strong>：如 1080p（高清/原画）在后续复用会话中被大模型随机生成为“顶格清晰度”，但“顶格清晰度”在实际业务中通常指代 2K 或 4K，造成认知混淆与前后矛盾。</p>
-                <p>2. <strong>生造未奠基的物理失真词汇</strong>：如时延 50ms 在会话中被模型自由发挥写成“零卡顿”，但首发记忆中从未登记过该代称，且“零卡顿”在物理网络中不可能存在，纯属幻觉。</p>
-                <p>3. <strong>复用会话重复复读参数</strong>：在 S-08 等已固化生效的记忆复用会话中，用户本应只说“老时间/老规矩”，却把“顶格清晰度、零卡顿、俩小时”全量参数像背书一样重新念了一遍，完全失去了记忆复用的业务意义。</p>
+                <div class="contrast-title">改造前缺陷示例 (参数别名冲突 & 记忆复用冗余复读)</div>
+                <p>1. <strong>参数别名层级错位与冲突</strong>：如 1080p 在后续复用会话中被生成为“顶格清晰度”，但“顶格清晰度”通常指代 2K/4K，造成认知混淆。</p>
+                <p>2. <strong>生造未奠基的失真词汇</strong>：如时延 50ms 被写成“零卡顿”，但首发记忆中从未登记过该代称，且“零卡顿”在物理网络中不可能存在。</p>
+                <p>3. <strong>复用会话重复复读参数</strong>：在已固化生效的复用会话中，用户本应只说“老时间/老规矩”，却把全量参数重新念了一遍，失去了记忆复用的业务价值。</p>
             </div>
 
             <div class="contrast-box good">
-                <div class="contrast-title">✅ 改造后黄金标准规范 (精准对齐 & 槽位省略)</div>
-                <p>1. <strong>数值档位与别名严格客观对齐</strong>：
-                    <br>• <strong>1080p</strong>：全局统一限定为“1080p”、“1080p原画”或“超清”，坚决取缔易与 2K/4K 混淆的“顶格清晰度”；
+                <div class="contrast-title">合规设计规范 (精准对齐 & 槽位省略)</div>
+                <p>1. <strong>数值档位与别名严格对齐</strong>：
+                    <br>• <strong>1080p</strong>：全局统一限定为“1080p”、“1080p原画”或“超清”，不使用易混淆的“顶格清晰度”；
                     <br>• <strong>720p</strong>：全局统一限定为“720p”或“高清”；
-                    <br>• <strong>50ms</strong>：全局统一限定为“50ms以内”、“50毫秒以内”或“低时延”，严禁使用失真夸大的“零卡顿”；
+                    <br>• <strong>50ms</strong>：全局统一限定为“50ms以内”、“50毫秒以内”或“低时延”，严禁使用夸大的“零卡顿”；
                     <br>• <strong>100ms</strong>：全局统一限定为“100ms以内”或“100毫秒”。
                 </p>
-                <p>2. <strong>复用会话强制省略已记忆槽位 (Slot Omission)</strong>：
-                    <br>• 在常规复用/强化会话中，用户第 1 轮只提供暗号（“老规矩”、“老时间”）与已登记业务代称，<strong>强制省略画质、时延、时长等已记忆参数</strong>！
-                    <br>• 必须由助手根据记忆主动调取参数向用户反问确认（<code>Confirm_Slot</code>），用户第 2 轮只需简短确认（如“对，开通吧”），完美贴合真实人类助手交互。
+                <p>2. <strong>复用会话首轮最小表达与槽位省略 (Minimal Expression & Slot Omission)</strong>：
+                    <br>• <strong>形态一（应用与业务均显式出现）</strong>：在常规复用会话中，用户第 1 轮明确说明应用与业务（如“老规矩，企鹅会议视频通话”），<strong>省略画质、时延、时长等已记忆参数</strong>。应用与业务标为 <code>Turn/U1</code>，画质等槽位由记忆补全标为 <code>Memory</code>；
+                    <br>• <strong>形态二（有对应记忆点时，按历史检索）</strong>：在隐式记忆二次确认等场景下，用户仅表达指代意图（如“这次按上次的来”），首轮不主动报出任何具体槽位，所有参数来源均溯源至 <code>History</code> 或 <code>Memory</code>，由助手调取历史配置向用户完整求证；
+                    <br>• <strong>形态三（至少给出业务，应用由记忆对应映射）</strong>：在登记了“业务默认应用（<code>service_default_app</code>）”的场景下，用户仅表达业务需求（如“做视频通话保障，应用按默认的”），应用无需提及，由场景记忆自动推导。<code>service_name</code> 标为 <code>Turn/U1</code>，<code>application_name</code> 标为 <code>Memory</code>。
                 </p>
             </div>
         </div>
 
-        <div style="margin-top: 20px; background: rgba(15, 23, 42, 0.6); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color);">
-            <div style="font-weight: 600; color: var(--accent-cyan); margin-bottom: 8px;">实测治理后的 S-USER_003-08 记忆复用真实对话：</div>
-            <pre style="margin: 0; background: #0b1120; padding: 14px; border-radius: 6px; font-size: 0.88rem; overflow-x: auto;">
+        <div class="example-box">
+            <div class="example-title">实测治理后的 S-USER_003-08 记忆复用真实对话：</div>
+            <pre style="margin: 0;">
 [S-USER_003-08 复用会话：用户触发暗号，助手调取记忆]
 Turn 1
-User: "老规矩，企鹅会议，老时间，帮我开一下。"  // ✅ 槽位省略：仅凭暗号与已奠基代称发起，绝无多余参数复读与失真词汇
-Agent: "收到，您是要按老规矩开通腾讯会议保障对吧？我这边调取到历史配置：1080p原画、50ms以内、持续120分钟，确认按这个开通吗？"  // ✅ 助手从记忆库自动补全
+User: "老规矩，企鹅会议，老时间，帮我开一下。"  // 槽位省略：仅凭暗号与已奠基代称发起，无多余参数复读
+Agent: "收到，您是要按老规矩开通腾讯会议保障对吧？我这边调取到历史配置：1080p原画、50ms以内、持续120分钟，确认按这个开通吗？"  // 助手从记忆库自动补全
 
 Turn 2
-User: "对，开通吧。"  // ✅ 极简确认
-Agent: "好的，已为您开通腾讯会议保障，1080p原画、50ms以内、持续120分钟。祝会议顺利，别掉链子！"
-            </pre>
+User: "对，开通吧。"  // 简短确认
+Agent: "好的，已为您开通腾讯会议保障，1080p原画、50ms以内、持续120分钟。祝会议顺利，别掉链子！"</pre>
         </div>
     </div>
 
-    <!-- 生产性能与交付标准 -->
+    <!-- 七、 自动化质检规则矩阵 -->
     <div class="section">
         <div class="section-header">
-            <div class="section-icon">📊</div>
-            <h2>流水线性能与成本效益指标</h2>
+            <h2>七、 质量检查与自动化验证 (Quality Assurance)</h2>
+        </div>
+        <p>质检模块（<code>src/core/qc_validator.py</code>）对生成的每组会话执行 9 项确定性检查：</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>检查项名称</th>
+                    <th>对应字段 / 逻辑</th>
+                    <th>规范要求</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>agent_ending_check</code></td>
+                    <td><code>event_sequence[-1].agent</code></td>
+                    <td>会话必须以 Agent 动作结束，动作类型必须为 <code>Acknowledge</code> 或 <code>Reject_Request</code>。</td>
+                </tr>
+                <tr>
+                    <td><code>multi_turn_confirmation_check</code></td>
+                    <td><code>event_sequence</code></td>
+                    <td>强化与复用会话轮数必须 &ge; 2 轮；首轮 Agent 必须包含 <code>Confirm_Slot</code> 或澄清动作。</td>
+                </tr>
+                <tr>
+                    <td><code>source_type_integrity_check</code></td>
+                    <td>顶层必需字段</td>
+                    <td>校验 <code>session_id</code>、<code>user_id</code>、<code>reference_time</code>、<code>session_meta</code>、<code>intents</code>、<code>slot_updates</code> 等字段完整存在。</td>
+                </tr>
+                <tr>
+                    <td><code>whitelist_compliance_check</code></td>
+                    <td><code>intents.params</code></td>
+                    <td>对于有效意图，应用名称与业务名称必须严格符合配置白名单中的标准取值。</td>
+                </tr>
+                <tr>
+                    <td><code>turn_intent_isolation_check</code></td>
+                    <td><code>turn_intents</code>, <code>requested_params</code></td>
+                    <td>每轮必须包含当前轮次意图切片与待追问槽位；证据会话首轮严禁包含未提及的 QoS 与结束时间。</td>
+                </tr>
+                <tr>
+                    <td><code>natural_dialogue_check</code></td>
+                    <td><code>user.utterance</code></td>
+                    <td>检查用户台词，拦截“长期偏好”、“元指令”、“更新槽位”等脱离生活语境的研发术语。</td>
+                </tr>
+                <tr>
+                    <td><code>memory_trace_fields_check</code></td>
+                    <td><code>memory_traces.json</code></td>
+                    <td>检查前置快照（snapshot_before）、事件转移（memory_events）与后置真值（gold_state）的结构完整性。</td>
+                </tr>
+                <tr>
+                    <td><code>template_semantic_alignment_check</code></td>
+                    <td><code>T1-2</code> 用户与 Agent 台词</td>
+                    <td>域外拒绝模板的用户台词必须包含规划的 <code>ood_goal</code>，Agent 自然语言必须包含明确拒绝语义，防止“标签拒绝、台词受理”。</td>
+                </tr>
+                <tr>
+                    <td><code>template_spec_check</code></td>
+                    <td><code>session_meta.template_id</code>, <code>round_count</code>, <code>event_sequence</code>, <code>intents</code></td>
+                    <td>校验模板 ID 轮数前缀（T1/T2/T3）、声明轮数、实际交互轮数、声明意图数、实际意图数与骨架签名六者一致，杜绝模版与轮数/意图数错配。</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 八、 流水线性能与成本效益指标 -->
+    <div class="section">
+        <div class="section-header">
+            <h2>八、 流水线性能与成本效益指标</h2>
         </div>
         <table>
             <thead>
                 <tr>
                     <th>评测维度</th>
                     <th>指标表现</th>
-                    <th>行业传统实现对比</th>
-                    <th>优势说明</th>
+                    <th>调整前实现</th>
+                    <th>机制说明</th>
                 </tr>
             </thead>
             <tbody>
@@ -841,26 +1086,26 @@ Agent: "好的，已为您开通腾讯会议保障，1080p原画、50ms以内、
                     <td><strong>Token 成本</strong></td>
                     <td>约 20,000 Tokens / Persona (约 ¥0.03)</td>
                     <td>单轮单次调用约需 60,000 Tokens</td>
-                    <td>通过画像上下文共享大幅压缩输入 Prompt 重复冗余</td>
+                    <td>通过画像上下文共享压缩输入 Prompt 重复冗余</td>
                 </tr>
                 <tr>
                     <td><strong>会话轮次丰富度</strong></td>
-                    <td>12 ~ 16 轮动态自然浮动</td>
-                    <td>死板固定 15 轮</td>
+                    <td>12 ~ 16 轮动态浮动</td>
+                    <td>固定 15 轮</td>
                     <td>打破模版机械痕迹，更贴合真实用户长短不一的生活节奏</td>
                 </tr>
                 <tr>
                     <td><strong>时序数据质量</strong></td>
-                    <td>100% 隔离未来泄露 (0 Bleeding)</td>
+                    <td>严格隔离未来泄露 (0 Bleeding)</td>
                     <td>普遍存在单会话全量参数向首轮泄露</td>
-                    <td>满足学术界与工业界最严格的对话状态追踪(DST)评测规范</td>
+                    <td>满足对话状态追踪 (DST) 的因果标注规范</td>
                 </tr>
             </tbody>
         </table>
     </div>
 
     <footer>
-        <p>跨会话长期记忆对话数据集生成系统 · 架构与工程落地文档 · 自动生成于 D:/coding/cross_memory_data/docs/update.html</p>
+        <p>跨会话长程记忆数据集生成系统 · 架构与技术规范文档 · 维护于 cross_data_gen/docs/update.html</p>
     </footer>
 
 </div>

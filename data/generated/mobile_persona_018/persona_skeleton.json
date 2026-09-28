@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_018",
+  "category": "体育训练与赛事保障",
+  "persona_summary": "移动训练与参赛人员",
+  "static_profile": {
+    "user_id": "USER_018",
+    "identity": "一名常年在外转场参赛的登山运动员，主攻北美喀斯喀特山脉（North Cascades）攀登与高海拔训练，日常活动半径覆盖露天训练场、赛道、球场及赛事集结区，以及客场转场途中、户外热身区或临时休息点；全程以手机4G/5G直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi，便携终端确需联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备（运动相机/手机云台），必要时以手机热点为便携终端供网。",
+    "apps": [
+      "微信",
+      "抖音",
+      "腾讯会议",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "athlete_speaker",
+    "speech_style": {
+      "tone": "干脆利落、带训练口令感的直给式表达，习惯用短句和倒计时式提醒，强调不掉链子、不断线。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "信号稳住",
+        "到点就开"
+      ],
+      "typical_habits": "在转场和热身间隙用手机快速确认赛程、路线与团队通知，习惯用口语化简称指代应用、业务和画质档位，重要事项必说时间点与时长。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "高山训练与赛事转场直播保障",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处北美喀斯喀特山脉（North Cascades）偏远登山口或高海拔露天训练场，基站覆盖边缘、人群密集且转场移动中，16:00-18:00进入固定训练/赛事保障时段，需要稳定上行推流与团队调度。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "16:00-18:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "某音"
+        ],
+        "service_aliases": [
+          "推流",
+          "开播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到六点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "到点就开"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "喀斯喀特山脉赛事周集结与转场保障",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "赛事周期间在北美喀斯喀特山脉登山口与集结区，人群密集、基站边缘覆盖、转场频繁，需优先保障团队调度与低时延通信，直播画质临时下调以保证上行稳定。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "转场大巴视频调度会",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "客场转场途中在移动大巴或临时休息点，团队临时通知对齐次日赛程与补给安排时。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "训练录像复盘与上传",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "露天训练场或赛道训练结束后，在临时休息点上传训练视频并回放复盘动作细节时。",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次与家人视频通话报平安",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次赛前在集结区刷短视频放松",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

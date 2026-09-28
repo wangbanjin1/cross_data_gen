@@ -1,0 +1,171 @@
+{
+  "persona_id": "mobile_persona_015",
+  "category": "公共安全与移动执勤",
+  "persona_summary": "移动训练与参赛人员",
+  "static_profile": {
+    "user_id": "USER_015",
+    "identity": "志愿加入海岸警卫队搜救游泳员的体能训练者与参赛选手，日常在道路、巡逻区域、临时处置现场及夜间值守点进行高强度户外训练与赛事转场，全程依赖手机移动核心网直连，不依赖固网或普通Wi-Fi。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备（运动相机/手机云台），便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "高德地图",
+      "抖音",
+      "钉钉"
+    ],
+    "speech_archetype": "athlete_speaker",
+    "speech_style": {
+      "tone": "干脆利落、指令式、带训练口令节奏，习惯用短句确认状态",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "稳住，能传"
+      ],
+      "typical_habits": "出发前先报位置和路线，训练中频繁确认信号与回传状态，收队后立刻复盘视频并同步团队"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "户外训练与赛事转场直播回传",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处沿海公路、巡逻岸线或临时集结区等户外移动弱网路段，进入10:00-12:00训练转场时段",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "10:00-12:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "训练转场老规矩"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "海岸警卫队搜救游泳员选拔赛周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "赛事周期间在海岸线、码头与临时集结区高频转场，现场人员密集、基站负载高，部分岸段进入弱覆盖区域，需优先保障低时延指令与稳定回传。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "训练录像复盘与团队沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "训练结束回到夜间值守点或临时处置现场后，与教练和队友复盘动作细节",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "路线导航与位置共享调度",
+        "application_name": "高德地图",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "转场途中在道路或巡逻区域需要同步路线、共享位置并接收团队临时调度",
+        "aliases": {
+          "app_aliases": [
+            "高德地图"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次夜间值守点休息时刷短视频放松",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次临时参加线上体能理论课",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

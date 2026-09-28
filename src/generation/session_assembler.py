@@ -45,11 +45,12 @@ class SessionAssembler:
                 app_name, srv_name, res_val, rtt_val, start_ts, end_ts, dur_val,
                 event_sequence, snapshot_before, memory_events, gold_after
             )
-        elif tid == "T2-2":
+        elif tid in ["T2-2", "T3-1"]:
             return cls._assemble_t2_2(
                 sid, uid, ref_time, tid, role, b_type, env, act,
                 app_name, srv_name, res_val, rtt_val, start_ts, end_ts, dur_val,
-                event_sequence, snapshot_before, memory_events, gold_after
+                event_sequence, snapshot_before, memory_events, gold_after,
+                evidence_mode=s_plan.get("small_memory_evidence_mode", "explicit_declaration"),
             )
         elif tid == "T2-5":
             return cls._assemble_t2_5(
@@ -70,7 +71,8 @@ class SessionAssembler:
                 sid, uid, ref_time, tid, role, b_type, env, act,
                 app_name, srv_name, res_val, rtt_val, start_ts, end_ts, dur_val,
                 event_sequence, snapshot_before, memory_events, gold_after,
-                round_count=s_plan["round_count"]
+                round_count=s_plan["round_count"],
+                small_memory_type=(s_plan.get("small_memory") or {}).get("type"),
             )
 
     @classmethod
@@ -188,22 +190,25 @@ class SessionAssembler:
         }
 
     @classmethod
-    def _assemble_t2_2(cls, sid, uid, ref_time, tid, role, b_type, env, act, app, srv, res, rtt, start, end, dur, events, snap, mems, gold):
-        sig = f"T2-2|2|1|I1:{app}/{srv}/3/clarify/resolved|none"
+    def _assemble_t2_2(cls, sid, uid, ref_time, tid, role, b_type, env, act, app, srv, res, rtt, start, end, dur, events, snap, mems, gold, evidence_mode="explicit_declaration"):
+        cross_turn = evidence_mode == "cross_turn_clarification" or len(events) == 3 or tid == "T3-1"
+        actual_tid = "T3-1" if cross_turn else tid
+        resolution_ref = "U3" if cross_turn else "U2"
+        sig = f"{actual_tid}|{len(events)}|1|I1:{app}/{srv}/1/clarify/resolved|none"
         intents = [
             {
                 "intent_id": "I1",
                 "status": "resolved",
                 "closure_path": "clarify",
-                "expression_level": 3,
+                "expression_level": 1,
                 "intent": f"{app}{srv}保障",
                 "params": {
                     "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
-                    "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U2"},
-                    "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U2"}},
+                    "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
+                    "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": resolution_ref}},
                     "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U2"}},
                     "timestamp": {
-                        "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U2"},
+                        "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
                         "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U2"},
                         "duration": {"value": dur, "source_type": "Turn", "source_ref": "U2"},
                     },
@@ -218,16 +223,18 @@ class SessionAssembler:
                         "turn": 1,
                         "params": {
                             "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
+                            "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
+                            "timestamp": {
+                                "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
+                            },
                         },
                     },
                     {
                         "turn": 2,
                         "params": {
-                            "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U2"},
                             "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U2"}},
                             "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U2"}},
                             "timestamp": {
-                                "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U2"},
                                 "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U2"},
                                 "duration": {"value": dur, "source_type": "Turn", "source_ref": "U2"},
                             },
@@ -236,22 +243,56 @@ class SessionAssembler:
                 ],
             }
         ]
+        if cross_turn:
+            slot_updates[0]["turn_updates"][1]["params"].pop("resolution", None)
+            slot_updates[0]["turn_updates"].append({
+                "turn": 3,
+                "params": {
+                    "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U3"}},
+                },
+            })
         if events and len(events) >= 2:
-            events[0]["requested_params"] = ["service_name", "resolution", "rtt", "duration"]
+            events[0]["requested_params"] = ["resolution", "rtt", "duration"]
             events[0]["turn_intents"] = [
                 {
                     "intent_id": "I1",
                     "status": "in_progress",
                     "closure_path": "clarify",
-                    "expression_level": 3,
-                    "intent": f"{app}保障",
+                    "expression_level": 1,
+                    "intent": f"{app}{srv}保障",
                     "params": {
                         "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
+                        "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
+                        "timestamp": {
+                            "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
+                        },
                     },
                 }
             ]
-            events[1]["requested_params"] = []
-            events[1]["turn_intents"] = intents
+            if cross_turn and len(events) >= 3:
+                events[1]["requested_params"] = ["resolution"]
+                events[1]["turn_intents"] = [{
+                    "intent_id": "I1",
+                    "status": "in_progress",
+                    "closure_path": "clarify",
+                    "expression_level": 1,
+                    "intent": f"{app}{srv}保障",
+                    "params": {
+                        "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
+                        "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
+                        "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U2"}},
+                        "timestamp": {
+                            "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
+                            "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U2"},
+                            "duration": {"value": dur, "source_type": "Turn", "source_ref": "U2"},
+                        },
+                    },
+                }]
+                events[2]["requested_params"] = []
+                events[2]["turn_intents"] = intents
+            else:
+                events[1]["requested_params"] = []
+                events[1]["turn_intents"] = intents
         return {
             "session_id": sid,
             "user_id": uid,
@@ -464,12 +505,15 @@ class SessionAssembler:
         }
 
     @classmethod
-    def _assemble_standard(cls, sid, uid, ref_time, tid, role, b_type, env, act, app, srv, res, rtt, start, end, dur, events, snap, mems, gold, round_count):
+    def _assemble_standard(cls, sid, uid, ref_time, tid, role, b_type, env, act, app, srv, res, rtt, start, end, dur, events, snap, mems, gold, round_count, small_memory_type=None):
         closure_path = "direct"
         app_src, app_ref = "Turn", "U1"
         srv_src, srv_ref = "Turn", "U1"
         res_src, res_ref = "Turn", "U1"
         rtt_src, rtt_ref = "Turn", "U1"
+        start_src, start_ref = "Turn", "U1"
+        end_src, end_ref = "Turn", "U1"
+        dur_src, dur_ref = "Context", "U1"
 
         if b_type == "main":
             if role == "evidence_session":
@@ -479,11 +523,22 @@ class SessionAssembler:
                 res_src, res_ref = "Turn", "U2"
                 rtt_src, rtt_ref = "Turn", "U2"
             elif role in ["reinforcement_session", "reuse_session"]:
-                closure_path = "memory_filled"
-                app_src, app_ref = "Memory", "MF_001"
-                srv_src, srv_ref = "Memory", "MF_001"
-                res_src, res_ref = "Memory", "MF_001"
-                rtt_src, rtt_ref = "Memory", "MF_001"
+                # 会话开始前仍为 provisional 的隐式记忆只能作为历史候选使用。
+                # 本轮确认完成后它才升级为 active，不能把 gold_after 的状态倒灌到 turn 1。
+                mf_status_before = (snap.get("MF_001") or {}).get("status")
+                if mf_status_before == "provisional":
+                    closure_path = "history_filled"
+                    source_type = "History"
+                else:
+                    closure_path = "memory_filled"
+                    source_type = "Memory"
+                app_src, app_ref = source_type, "MF_001"
+                srv_src, srv_ref = source_type, "MF_001"
+                res_src, res_ref = source_type, "MF_001"
+                rtt_src, rtt_ref = source_type, "MF_001"
+                start_src, start_ref = source_type, "MF_001"
+                end_src, end_ref = source_type, "MF_001"
+                dur_src, dur_ref = source_type, "MF_001"
 
         elif b_type == "sub_01":
             if role == "evidence_session":
@@ -498,6 +553,9 @@ class SessionAssembler:
                 srv_src, srv_ref = "Memory", "SUB_001"
                 res_src, res_ref = "Memory", "SUB_001"
                 rtt_src, rtt_ref = "Memory", "SUB_001"
+                start_src, start_ref = "Memory", "SUB_001"
+                end_src, end_ref = "Context", "SUB_001"
+                dur_src, dur_ref = "Memory", "SUB_001"
 
         elif b_type == "sub_02":
             if role == "evidence_session":
@@ -512,6 +570,9 @@ class SessionAssembler:
                 srv_src, srv_ref = "Memory", "SUB_002"
                 res_src, res_ref = "Memory", "SUB_002"
                 rtt_src, rtt_ref = "Memory", "SUB_002"
+                start_src, start_ref = "Memory", "SUB_002"
+                end_src, end_ref = "Context", "SUB_002"
+                dur_src, dur_ref = "Memory", "SUB_002"
 
         elif b_type == "event_reuse":
             closure_path = "memory_filled"
@@ -527,6 +588,19 @@ class SessionAssembler:
             res_src, res_ref = "Memory", "MF_001"
             rtt_src, rtt_ref = "Memory", "MF_001"
 
+        # 复用会话仍需满足“应用＋业务”的最小表达。只有业务默认应用记忆可省略应用；
+        # 应用别名通过记忆解析应用，但业务仍由本轮用户明确表达。
+        if role in ["reinforcement_session", "reuse_session"] and b_type in ["main", "sub_01", "sub_02"]:
+            is_provisional_main = b_type == "main" and (snap.get("MF_001") or {}).get("status") == "provisional"
+            if not is_provisional_main:
+                if small_memory_type == "service_default_app":
+                    srv_src, srv_ref = "Turn", "U1"
+                elif small_memory_type == "application_alias":
+                    srv_src, srv_ref = "Turn", "U1"
+                else:
+                    app_src, app_ref = "Turn", "U1"
+                    srv_src, srv_ref = "Turn", "U1"
+
         slot_updates_turn = []
         for t_idx in range(1, round_count + 1):
             if t_idx == 1:
@@ -541,8 +615,8 @@ class SessionAssembler:
                     }
                 else:
                     t_params["timestamp"] = {
-                        "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
-                        "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
+                        "start_timestamp": {"value": start, "source_type": start_src, "source_ref": start_ref},
+                        "end_timestamp": {"value": end, "source_type": end_src, "source_ref": end_ref},
                     }
                 if role not in ["evidence_session", "correction_session"]:
                     t_params["resolution"] = {"min_value": {"value": res, "source_type": res_src, "source_ref": res_ref}}
@@ -564,8 +638,9 @@ class SessionAssembler:
                 slot_updates_turn.append({"turn": 2, "params": t_params})
 
         sig = f"{tid}|{len(events)}|1|I1:{app}/{srv}/1/{closure_path}/resolved|none"
-        end_src, end_ref = ("Turn", "U2") if role == "evidence_session" else ("Turn", "U1")
-        dur_src, dur_ref = ("Turn", "U2") if role == "evidence_session" else ("Context", "U1")
+        if role == "evidence_session":
+            end_src, end_ref = "Turn", "U2"
+            dur_src, dur_ref = "Turn", "U2"
         intents = [
             {
                 "intent_id": "I1",
@@ -579,7 +654,7 @@ class SessionAssembler:
                     "resolution": {"min_value": {"value": res, "source_type": res_src, "source_ref": res_ref}},
                     "rtt": {"max_value": {"value": rtt, "source_type": rtt_src, "source_ref": rtt_ref}},
                     "timestamp": {
-                        "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
+                        "start_timestamp": {"value": start, "source_type": start_src, "source_ref": start_ref},
                         "end_timestamp": {"value": end, "source_type": end_src, "source_ref": end_ref},
                         "duration": {"value": dur, "source_type": dur_src, "source_ref": dur_ref},
                     },
@@ -626,9 +701,9 @@ class SessionAssembler:
                             "resolution": {"min_value": {"value": res, "source_type": res_src, "source_ref": res_ref}},
                             "rtt": {"max_value": {"value": rtt, "source_type": rtt_src, "source_ref": rtt_ref}},
                             "timestamp": {
-                                "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
-                                "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
-                                "duration": {"value": dur, "source_type": "Context", "source_ref": "U1"},
+                                "start_timestamp": {"value": start, "source_type": start_src, "source_ref": start_ref},
+                                "end_timestamp": {"value": end, "source_type": end_src, "source_ref": end_ref},
+                                "duration": {"value": dur, "source_type": dur_src, "source_ref": dur_ref},
                             },
                         },
                     }

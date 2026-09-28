@@ -9,7 +9,7 @@
       {
         "event_type": "log_task_history",
         "memory_id": "MF_001",
-        "description": "用户在场景（当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。）发生单次保障行为：微信视频通话，未显式声明长期偏好，记录单次历史日志（防单次行为过拟合）。",
+        "description": "用户在场景（当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。）发生单次保障行为：微信视频通话，未显式声明长期偏好，记录单次历史日志（防单次行为过拟合）。",
         "target_slots": [
           "application_name",
           "service_name",
@@ -23,25 +23,16 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。",
+        "trigger_condition": "当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。",
         "declaration_mode": "implicit_induction",
         "application_name": "微信",
         "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "50ms",
-        "alias_mapping": {
-          "app_aliases": [
-            "微信",
-            "企微",
-            "工作微信"
-          ],
-          "service_aliases": [
-            "打视讯",
-            "视频通话",
-            "连麦确认",
-            "现场视频上报"
-          ]
-        },
+        "start_time": "09时00分",
+        "end_time": "11时00分",
+        "duration": "120min",
+        "alias_mapping": {},
         "scope": "location_boundary",
         "status": "provisional",
         "evidence_count": 1,
@@ -60,25 +51,16 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。",
+        "trigger_condition": "当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。",
         "declaration_mode": "implicit_induction",
         "application_name": "微信",
         "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "50ms",
-        "alias_mapping": {
-          "app_aliases": [
-            "微信",
-            "企微",
-            "工作微信"
-          ],
-          "service_aliases": [
-            "打视讯",
-            "视频通话",
-            "连麦确认",
-            "现场视频上报"
-          ]
-        },
+        "start_time": "09时00分",
+        "end_time": "11时00分",
+        "duration": "120min",
+        "alias_mapping": {},
         "scope": "location_boundary",
         "status": "provisional",
         "evidence_count": 1,
@@ -90,7 +72,7 @@
       {
         "event_type": "form_memory",
         "memory_id": "SUB_001",
-        "description": "建立支线1条件记忆：钉钉会议在转场大巴上采用（720p, 100ms），登记代称小记忆点。",
+        "description": "建立支线1条件记忆：腾讯会议会议在转场大巴上采用（720p, 100ms），登记代称小记忆点。",
         "target_slots": [
           "application_name",
           "service_name",
@@ -104,25 +86,16 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。",
+        "trigger_condition": "当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。",
         "declaration_mode": "implicit_induction",
         "application_name": "微信",
         "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "50ms",
-        "alias_mapping": {
-          "app_aliases": [
-            "微信",
-            "企微",
-            "工作微信"
-          ],
-          "service_aliases": [
-            "打视讯",
-            "视频通话",
-            "连麦确认",
-            "现场视频上报"
-          ]
-        },
+        "start_time": "09时00分",
+        "end_time": "11时00分",
+        "duration": "120min",
+        "alias_mapping": {},
         "scope": "location_boundary",
         "status": "provisional",
         "evidence_count": 1,
@@ -132,18 +105,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "钉钉",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "dingding",
-            "钉"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -164,25 +134,16 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。",
+        "trigger_condition": "当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。",
         "declaration_mode": "implicit_induction",
         "application_name": "微信",
         "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "50ms",
-        "alias_mapping": {
-          "app_aliases": [
-            "微信",
-            "企微",
-            "工作微信"
-          ],
-          "service_aliases": [
-            "打视讯",
-            "视频通话",
-            "连麦确认",
-            "现场视频上报"
-          ]
-        },
+        "start_time": "09时00分",
+        "end_time": "11时00分",
+        "duration": "120min",
+        "alias_mapping": {},
         "scope": "location_boundary",
         "status": "provisional",
         "evidence_count": 1,
@@ -192,18 +153,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "钉钉",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "dingding",
-            "钉"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -217,7 +175,7 @@
       {
         "event_type": "crystallize_implicit_memory",
         "memory_id": "MF_001",
-        "description": "用户再次在相似场景（当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。）发起相同配置，满足隐式归纳证据阈值(N>=2)，经Agent反问确认，正式固化为长期老规矩。",
+        "description": "用户再次在相似场景（当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。）发起相同配置，满足隐式归纳证据阈值(N>=2)，经Agent反问确认，正式固化为长期老规矩。",
         "retrieved_slots": [
           "application_name",
           "service_name",
@@ -231,23 +189,18 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。",
+        "trigger_condition": "当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。",
         "declaration_mode": "implicit_induction",
         "application_name": "微信",
         "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "09时00分",
+        "end_time": "11时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "微信",
-            "企微",
-            "工作微信"
-          ],
-          "service_aliases": [
-            "打视讯",
-            "视频通话",
-            "连麦确认",
-            "现场视频上报"
+          "rtt_aliases": [
+            "别卡顿"
           ]
         },
         "scope": "location_boundary",
@@ -259,18 +212,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "钉钉",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "dingding",
-            "钉"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -291,23 +241,18 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。",
+        "trigger_condition": "当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。",
         "declaration_mode": "implicit_induction",
         "application_name": "微信",
         "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "09时00分",
+        "end_time": "11时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "微信",
-            "企微",
-            "工作微信"
-          ],
-          "service_aliases": [
-            "打视讯",
-            "视频通话",
-            "连麦确认",
-            "现场视频上报"
+          "rtt_aliases": [
+            "别卡顿"
           ]
         },
         "scope": "location_boundary",
@@ -319,18 +264,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "钉钉",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "dingding",
-            "钉"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -351,23 +293,18 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。",
+        "trigger_condition": "当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。",
         "declaration_mode": "implicit_induction",
         "application_name": "微信",
         "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "09时00分",
+        "end_time": "11时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "微信",
-            "企微",
-            "工作微信"
-          ],
-          "service_aliases": [
-            "打视讯",
-            "视频通话",
-            "连麦确认",
-            "现场视频上报"
+          "rtt_aliases": [
+            "别卡顿"
           ]
         },
         "scope": "location_boundary",
@@ -379,18 +316,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "钉钉",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "dingding",
-            "钉"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -411,23 +345,18 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。",
+        "trigger_condition": "当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。",
         "declaration_mode": "implicit_induction",
         "application_name": "微信",
         "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "09时00分",
+        "end_time": "11时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "微信",
-            "企微",
-            "工作微信"
-          ],
-          "service_aliases": [
-            "打视讯",
-            "视频通话",
-            "连麦确认",
-            "现场视频上报"
+          "rtt_aliases": [
+            "别卡顿"
           ]
         },
         "scope": "location_boundary",
@@ -439,18 +368,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "钉钉",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "dingding",
-            "钉"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -478,23 +404,18 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。",
+        "trigger_condition": "当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。",
         "declaration_mode": "implicit_induction",
         "application_name": "微信",
         "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "09时00分",
+        "end_time": "11时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "微信",
-            "企微",
-            "工作微信"
-          ],
-          "service_aliases": [
-            "打视讯",
-            "视频通话",
-            "连麦确认",
-            "现场视频上报"
+          "rtt_aliases": [
+            "别卡顿"
           ]
         },
         "scope": "location_boundary",
@@ -506,18 +427,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "钉钉",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "dingding",
-            "钉"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -538,23 +456,18 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。",
+        "trigger_condition": "当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。",
         "declaration_mode": "implicit_induction",
         "application_name": "微信",
         "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "09时00分",
+        "end_time": "11时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "微信",
-            "企微",
-            "工作微信"
-          ],
-          "service_aliases": [
-            "打视讯",
-            "视频通话",
-            "连麦确认",
-            "现场视频上报"
+          "rtt_aliases": [
+            "别卡顿"
           ]
         },
         "scope": "location_boundary",
@@ -566,18 +479,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "钉钉",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "dingding",
-            "钉"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -591,7 +501,7 @@
       {
         "event_type": "reinforce_memory",
         "memory_id": "MF_001",
-        "description": "用户在（当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。）省略参数复用主线记忆，Agent 成功补全并经用户确认，证据强度增至 3 次。",
+        "description": "用户在（当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。）省略参数复用主线记忆，Agent 成功补全并经用户确认，证据强度增至 3 次。",
         "retrieved_slots": [
           "application_name",
           "service_name",
@@ -605,23 +515,18 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。",
+        "trigger_condition": "当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。",
         "declaration_mode": "implicit_induction",
         "application_name": "微信",
         "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "09时00分",
+        "end_time": "11时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "微信",
-            "企微",
-            "工作微信"
-          ],
-          "service_aliases": [
-            "打视讯",
-            "视频通话",
-            "连麦确认",
-            "现场视频上报"
+          "rtt_aliases": [
+            "别卡顿"
           ]
         },
         "scope": "location_boundary",
@@ -633,18 +538,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "钉钉",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "dingding",
-            "钉"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -665,23 +567,18 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。",
+        "trigger_condition": "当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。",
         "declaration_mode": "implicit_induction",
         "application_name": "微信",
         "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "09时00分",
+        "end_time": "11时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "微信",
-            "企微",
-            "工作微信"
-          ],
-          "service_aliases": [
-            "打视讯",
-            "视频通话",
-            "连麦确认",
-            "现场视频上报"
+          "rtt_aliases": [
+            "别卡顿"
           ]
         },
         "scope": "location_boundary",
@@ -693,18 +590,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "钉钉",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "dingding",
-            "钉"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -718,7 +612,7 @@
       {
         "event_type": "reinforce_memory",
         "memory_id": "MF_001",
-        "description": "用户在（当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。）省略参数复用主线记忆，Agent 成功补全并经用户确认，证据强度增至 4 次。",
+        "description": "用户在（当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。）省略参数复用主线记忆，Agent 成功补全并经用户确认，证据强度增至 4 次。",
         "retrieved_slots": [
           "application_name",
           "service_name",
@@ -732,23 +626,18 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。",
+        "trigger_condition": "当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。",
         "declaration_mode": "implicit_induction",
         "application_name": "微信",
         "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "09时00分",
+        "end_time": "11时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "微信",
-            "企微",
-            "工作微信"
-          ],
-          "service_aliases": [
-            "打视讯",
-            "视频通话",
-            "连麦确认",
-            "现场视频上报"
+          "rtt_aliases": [
+            "别卡顿"
           ]
         },
         "scope": "location_boundary",
@@ -760,18 +649,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "钉钉",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "dingding",
-            "钉"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -792,23 +678,18 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。",
+        "trigger_condition": "当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。",
         "declaration_mode": "implicit_induction",
         "application_name": "微信",
         "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "09时00分",
+        "end_time": "11时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "微信",
-            "企微",
-            "工作微信"
-          ],
-          "service_aliases": [
-            "打视讯",
-            "视频通话",
-            "连麦确认",
-            "现场视频上报"
+          "rtt_aliases": [
+            "别卡顿"
           ]
         },
         "scope": "location_boundary",
@@ -820,18 +701,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "钉钉",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "dingding",
-            "钉"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -852,23 +730,18 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。",
+        "trigger_condition": "当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。",
         "declaration_mode": "implicit_induction",
         "application_name": "微信",
         "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "09时00分",
+        "end_time": "11时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "微信",
-            "企微",
-            "工作微信"
-          ],
-          "service_aliases": [
-            "打视讯",
-            "视频通话",
-            "连麦确认",
-            "现场视频上报"
+          "rtt_aliases": [
+            "别卡顿"
           ]
         },
         "scope": "location_boundary",
@@ -880,18 +753,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "钉钉",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "dingding",
-            "钉"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -912,23 +782,18 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。",
+        "trigger_condition": "当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。",
         "declaration_mode": "implicit_induction",
         "application_name": "微信",
         "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "09时00分",
+        "end_time": "11时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "微信",
-            "企微",
-            "工作微信"
-          ],
-          "service_aliases": [
-            "打视讯",
-            "视频通话",
-            "连麦确认",
-            "现场视频上报"
+          "rtt_aliases": [
+            "别卡顿"
           ]
         },
         "scope": "location_boundary",
@@ -940,18 +805,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "钉钉",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "dingding",
-            "钉"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -978,23 +840,18 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。",
+        "trigger_condition": "当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。",
         "declaration_mode": "implicit_induction",
         "application_name": "微信",
         "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "09时00分",
+        "end_time": "11时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "微信",
-            "企微",
-            "工作微信"
-          ],
-          "service_aliases": [
-            "打视讯",
-            "视频通话",
-            "连麦确认",
-            "现场视频上报"
+          "rtt_aliases": [
+            "别卡顿"
           ]
         },
         "scope": "location_boundary",
@@ -1006,18 +863,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "钉钉",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "dingding",
-            "钉"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -1052,23 +906,18 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。",
+        "trigger_condition": "当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。",
         "declaration_mode": "implicit_induction",
         "application_name": "微信",
         "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "09时00分",
+        "end_time": "11时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "微信",
-            "企微",
-            "工作微信"
-          ],
-          "service_aliases": [
-            "打视讯",
-            "视频通话",
-            "连麦确认",
-            "现场视频上报"
+          "rtt_aliases": [
+            "别卡顿"
           ]
         },
         "scope": "location_boundary",
@@ -1080,18 +929,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "钉钉",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "dingding",
-            "钉"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -1131,23 +977,18 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。",
+        "trigger_condition": "当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。",
         "declaration_mode": "implicit_induction",
         "application_name": "微信",
         "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "09时00分",
+        "end_time": "11时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "微信",
-            "企微",
-            "工作微信"
-          ],
-          "service_aliases": [
-            "打视讯",
-            "视频通话",
-            "连麦确认",
-            "现场视频上报"
+          "rtt_aliases": [
+            "别卡顿"
           ]
         },
         "scope": "location_boundary",
@@ -1159,18 +1000,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "钉钉",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "dingding",
-            "钉"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -1205,23 +1043,18 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。",
+        "trigger_condition": "当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。",
         "declaration_mode": "implicit_induction",
         "application_name": "微信",
         "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "09时00分",
+        "end_time": "11时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "微信",
-            "企微",
-            "工作微信"
-          ],
-          "service_aliases": [
-            "打视讯",
-            "视频通话",
-            "连麦确认",
-            "现场视频上报"
+          "rtt_aliases": [
+            "别卡顿"
           ]
         },
         "scope": "location_boundary",
@@ -1233,18 +1066,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "钉钉",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "dingding",
-            "钉"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -1286,23 +1116,18 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。",
+        "trigger_condition": "当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。",
         "declaration_mode": "implicit_induction",
         "application_name": "微信",
         "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "09时00分",
+        "end_time": "11时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "微信",
-            "企微",
-            "工作微信"
-          ],
-          "service_aliases": [
-            "打视讯",
-            "视频通话",
-            "连麦确认",
-            "现场视频上报"
+          "rtt_aliases": [
+            "别卡顿"
           ]
         },
         "scope": "location_boundary",
@@ -1314,18 +1139,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "钉钉",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "dingding",
-            "钉"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -1360,23 +1182,18 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。",
+        "trigger_condition": "当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。",
         "declaration_mode": "implicit_induction",
         "application_name": "微信",
         "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "09时00分",
+        "end_time": "11时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "微信",
-            "企微",
-            "工作微信"
-          ],
-          "service_aliases": [
-            "打视讯",
-            "视频通话",
-            "连麦确认",
-            "现场视频上报"
+          "rtt_aliases": [
+            "别卡顿"
           ]
         },
         "scope": "location_boundary",
@@ -1388,18 +1205,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "钉钉",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "dingding",
-            "钉"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -1434,23 +1248,18 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。",
+        "trigger_condition": "当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。",
         "declaration_mode": "implicit_induction",
         "application_name": "微信",
         "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "09时00分",
+        "end_time": "11时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "微信",
-            "企微",
-            "工作微信"
-          ],
-          "service_aliases": [
-            "打视讯",
-            "视频通话",
-            "连麦确认",
-            "现场视频上报"
+          "rtt_aliases": [
+            "别卡顿"
           ]
         },
         "scope": "location_boundary",
@@ -1462,18 +1271,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "钉钉",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "dingding",
-            "钉"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -1508,23 +1314,18 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。",
+        "trigger_condition": "当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。",
         "declaration_mode": "implicit_induction",
         "application_name": "微信",
         "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "09时00分",
+        "end_time": "11时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "微信",
-            "企微",
-            "工作微信"
-          ],
-          "service_aliases": [
-            "打视讯",
-            "视频通话",
-            "连麦确认",
-            "现场视频上报"
+          "rtt_aliases": [
+            "别卡顿"
           ]
         },
         "scope": "location_boundary",
@@ -1536,18 +1337,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "钉钉",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "dingding",
-            "钉"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -1584,23 +1382,18 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当执勤人员身处城市道路巡逻线、夜间值守点或事故现场周边弱网区域，且时间为09:00-11:00时，触发通过手机移动核心网进行现场取证、即时通信与事件上报。",
+        "trigger_condition": "当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。",
         "declaration_mode": "implicit_induction",
         "application_name": "微信",
         "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "09时00分",
+        "end_time": "11时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "微信",
-            "企微",
-            "工作微信"
-          ],
-          "service_aliases": [
-            "打视讯",
-            "视频通话",
-            "连麦确认",
-            "现场视频上报"
+          "rtt_aliases": [
+            "别卡顿"
           ]
         },
         "scope": "location_boundary",
@@ -1612,18 +1405,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "钉钉",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "dingding",
-            "钉"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+            "会议通"
           ]
         },
         "scope": "transit_evening",

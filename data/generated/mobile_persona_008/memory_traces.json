@@ -9,7 +9,7 @@
       {
         "event_type": "log_task_history",
         "memory_id": "MF_001",
-        "description": "用户在场景（在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。）发生单次保障行为：抖音开直播，未显式声明长期偏好，记录单次历史日志（防单次行为过拟合）。",
+        "description": "用户在场景（在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。）发生单次保障行为：抖音开直播，未显式声明长期偏好，记录单次历史日志（防单次行为过拟合）。",
         "target_slots": [
           "application_name",
           "service_name",
@@ -23,23 +23,16 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
-        "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
-          ]
-        },
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
+        "alias_mapping": {},
         "scope": "task_mission",
         "status": "provisional",
         "evidence_count": 1,
@@ -58,23 +51,16 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
-        "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
-          ]
-        },
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
+        "alias_mapping": {},
         "scope": "task_mission",
         "status": "provisional",
         "evidence_count": 1,
@@ -86,7 +72,7 @@
       {
         "event_type": "form_memory",
         "memory_id": "SUB_001",
-        "description": "建立支线1条件记忆：腾讯会议会议在转场大巴上采用（720p, 100ms），登记代称小记忆点。",
+        "description": "建立支线1条件记忆：微信视频通话在转场大巴上采用（720p, 100ms），登记代称小记忆点。",
         "target_slots": [
           "application_name",
           "service_name",
@@ -100,23 +86,16 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
-        "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
-          ]
-        },
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
+        "alias_mapping": {},
         "scope": "task_mission",
         "status": "provisional",
         "evidence_count": 1,
@@ -126,18 +105,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -158,23 +134,16 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
-        "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
-          ]
-        },
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
+        "alias_mapping": {},
         "scope": "task_mission",
         "status": "provisional",
         "evidence_count": 1,
@@ -184,18 +153,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -209,7 +175,7 @@
       {
         "event_type": "crystallize_implicit_memory",
         "memory_id": "MF_001",
-        "description": "用户再次在相似场景（在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。）发起相同配置，满足隐式归纳证据阈值(N>=2)，经Agent反问确认，正式固化为长期老规矩。",
+        "description": "用户再次在相似场景（在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。）发起相同配置，满足隐式归纳证据阈值(N>=2)，经Agent反问确认，正式固化为长期老规矩。",
         "retrieved_slots": [
           "application_name",
           "service_name",
@@ -223,21 +189,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
+          "service_default_apps": [
+            {
+              "service_name": "开直播",
+              "application_name": "抖音",
+              "scope_condition": "客场转场途中赛事直播与团队调度"
+            }
           ]
         },
         "scope": "task_mission",
@@ -249,18 +216,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -281,21 +245,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
+          "service_default_apps": [
+            {
+              "service_name": "开直播",
+              "application_name": "抖音",
+              "scope_condition": "客场转场途中赛事直播与团队调度"
+            }
           ]
         },
         "scope": "task_mission",
@@ -307,18 +272,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -346,21 +308,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
+          "service_default_apps": [
+            {
+              "service_name": "开直播",
+              "application_name": "抖音",
+              "scope_condition": "客场转场途中赛事直播与团队调度"
+            }
           ]
         },
         "scope": "task_mission",
@@ -372,18 +335,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -395,18 +355,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "bilibili",
-            "哔站"
-          ],
-          "service_aliases": [
-            "看短视频",
-            "刷视频"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -427,21 +384,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
+          "service_default_apps": [
+            {
+              "service_name": "开直播",
+              "application_name": "抖音",
+              "scope_condition": "客场转场途中赛事直播与团队调度"
+            }
           ]
         },
         "scope": "task_mission",
@@ -453,18 +411,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -476,18 +431,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "bilibili",
-            "哔站"
-          ],
-          "service_aliases": [
-            "看短视频",
-            "刷视频"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -508,21 +460,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
+          "service_default_apps": [
+            {
+              "service_name": "开直播",
+              "application_name": "抖音",
+              "scope_condition": "客场转场途中赛事直播与团队调度"
+            }
           ]
         },
         "scope": "task_mission",
@@ -534,18 +487,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -557,18 +507,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "bilibili",
-            "哔站"
-          ],
-          "service_aliases": [
-            "看短视频",
-            "刷视频"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -589,21 +536,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
+          "service_default_apps": [
+            {
+              "service_name": "开直播",
+              "application_name": "抖音",
+              "scope_condition": "客场转场途中赛事直播与团队调度"
+            }
           ]
         },
         "scope": "task_mission",
@@ -615,18 +563,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -638,18 +583,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "bilibili",
-            "哔站"
-          ],
-          "service_aliases": [
-            "看短视频",
-            "刷视频"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -677,21 +619,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
+          "service_default_apps": [
+            {
+              "service_name": "开直播",
+              "application_name": "抖音",
+              "scope_condition": "客场转场途中赛事直播与团队调度"
+            }
           ]
         },
         "scope": "task_mission",
@@ -703,18 +646,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -726,18 +666,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "bilibili",
-            "哔站"
-          ],
-          "service_aliases": [
-            "看短视频",
-            "刷视频"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -758,21 +695,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
+          "service_default_apps": [
+            {
+              "service_name": "开直播",
+              "application_name": "抖音",
+              "scope_condition": "客场转场途中赛事直播与团队调度"
+            }
           ]
         },
         "scope": "task_mission",
@@ -784,18 +722,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -807,18 +742,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "bilibili",
-            "哔站"
-          ],
-          "service_aliases": [
-            "看短视频",
-            "刷视频"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -832,7 +764,7 @@
       {
         "event_type": "reinforce_memory",
         "memory_id": "MF_001",
-        "description": "用户在（在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。）省略参数复用主线记忆，Agent 成功补全并经用户确认，证据强度增至 3 次。",
+        "description": "用户在（在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。）省略参数复用主线记忆，Agent 成功补全并经用户确认，证据强度增至 3 次。",
         "retrieved_slots": [
           "application_name",
           "service_name",
@@ -846,21 +778,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
+          "service_default_apps": [
+            {
+              "service_name": "开直播",
+              "application_name": "抖音",
+              "scope_condition": "客场转场途中赛事直播与团队调度"
+            }
           ]
         },
         "scope": "task_mission",
@@ -872,18 +805,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -895,18 +825,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "bilibili",
-            "哔站"
-          ],
-          "service_aliases": [
-            "看短视频",
-            "刷视频"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -927,21 +854,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
+          "service_default_apps": [
+            {
+              "service_name": "开直播",
+              "application_name": "抖音",
+              "scope_condition": "客场转场途中赛事直播与团队调度"
+            }
           ]
         },
         "scope": "task_mission",
@@ -953,18 +881,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -976,18 +901,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "bilibili",
-            "哔站"
-          ],
-          "service_aliases": [
-            "看短视频",
-            "刷视频"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -1001,7 +923,7 @@
       {
         "event_type": "reinforce_memory",
         "memory_id": "MF_001",
-        "description": "用户在（在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。）省略参数复用主线记忆，Agent 成功补全并经用户确认，证据强度增至 4 次。",
+        "description": "用户在（在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。）省略参数复用主线记忆，Agent 成功补全并经用户确认，证据强度增至 4 次。",
         "retrieved_slots": [
           "application_name",
           "service_name",
@@ -1015,21 +937,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
+          "service_default_apps": [
+            {
+              "service_name": "开直播",
+              "application_name": "抖音",
+              "scope_condition": "客场转场途中赛事直播与团队调度"
+            }
           ]
         },
         "scope": "task_mission",
@@ -1041,18 +964,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -1064,18 +984,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "bilibili",
-            "哔站"
-          ],
-          "service_aliases": [
-            "看短视频",
-            "刷视频"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -1096,21 +1013,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
+          "service_default_apps": [
+            {
+              "service_name": "开直播",
+              "application_name": "抖音",
+              "scope_condition": "客场转场途中赛事直播与团队调度"
+            }
           ]
         },
         "scope": "task_mission",
@@ -1122,18 +1040,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -1145,18 +1060,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "bilibili",
-            "哔站"
-          ],
-          "service_aliases": [
-            "看短视频",
-            "刷视频"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -1184,21 +1096,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
+          "service_default_apps": [
+            {
+              "service_name": "开直播",
+              "application_name": "抖音",
+              "scope_condition": "客场转场途中赛事直播与团队调度"
+            }
           ]
         },
         "scope": "task_mission",
@@ -1210,18 +1123,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -1233,18 +1143,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "bilibili",
-            "哔站"
-          ],
-          "service_aliases": [
-            "看短视频",
-            "刷视频"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -1265,21 +1172,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
+          "service_default_apps": [
+            {
+              "service_name": "开直播",
+              "application_name": "抖音",
+              "scope_condition": "客场转场途中赛事直播与团队调度"
+            }
           ]
         },
         "scope": "task_mission",
@@ -1291,18 +1199,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -1314,18 +1219,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "bilibili",
-            "哔站"
-          ],
-          "service_aliases": [
-            "看短视频",
-            "刷视频"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -1346,21 +1248,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
+          "service_default_apps": [
+            {
+              "service_name": "开直播",
+              "application_name": "抖音",
+              "scope_condition": "客场转场途中赛事直播与团队调度"
+            }
           ]
         },
         "scope": "task_mission",
@@ -1372,18 +1275,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -1395,18 +1295,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "bilibili",
-            "哔站"
-          ],
-          "service_aliases": [
-            "看短视频",
-            "刷视频"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -1427,21 +1324,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
+          "service_default_apps": [
+            {
+              "service_name": "开直播",
+              "application_name": "抖音",
+              "scope_condition": "客场转场途中赛事直播与团队调度"
+            }
           ]
         },
         "scope": "task_mission",
@@ -1453,18 +1351,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -1476,18 +1371,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "bilibili",
-            "哔站"
-          ],
-          "service_aliases": [
-            "看短视频",
-            "刷视频"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -1514,21 +1406,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
+          "service_default_apps": [
+            {
+              "service_name": "开直播",
+              "application_name": "抖音",
+              "scope_condition": "客场转场途中赛事直播与团队调度"
+            }
           ]
         },
         "scope": "task_mission",
@@ -1540,18 +1433,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -1563,18 +1453,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "bilibili",
-            "哔站"
-          ],
-          "service_aliases": [
-            "看短视频",
-            "刷视频"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -1609,21 +1496,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
+          "service_default_apps": [
+            {
+              "service_name": "开直播",
+              "application_name": "抖音",
+              "scope_condition": "客场转场途中赛事直播与团队调度"
+            }
           ]
         },
         "scope": "task_mission",
@@ -1635,18 +1523,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -1658,18 +1543,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "bilibili",
-            "哔站"
-          ],
-          "service_aliases": [
-            "看短视频",
-            "刷视频"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -1709,21 +1591,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
+          "service_default_apps": [
+            {
+              "service_name": "开直播",
+              "application_name": "抖音",
+              "scope_condition": "客场转场途中赛事直播与团队调度"
+            }
           ]
         },
         "scope": "task_mission",
@@ -1735,18 +1618,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -1758,18 +1638,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "bilibili",
-            "哔站"
-          ],
-          "service_aliases": [
-            "看短视频",
-            "刷视频"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -1804,21 +1681,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
+          "service_default_apps": [
+            {
+              "service_name": "开直播",
+              "application_name": "抖音",
+              "scope_condition": "客场转场途中赛事直播与团队调度"
+            }
           ]
         },
         "scope": "task_mission",
@@ -1830,18 +1708,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -1853,18 +1728,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "bilibili",
-            "哔站"
-          ],
-          "service_aliases": [
-            "看短视频",
-            "刷视频"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -1906,21 +1778,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
+          "service_default_apps": [
+            {
+              "service_name": "开直播",
+              "application_name": "抖音",
+              "scope_condition": "客场转场途中赛事直播与团队调度"
+            }
           ]
         },
         "scope": "task_mission",
@@ -1932,18 +1805,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -1955,18 +1825,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "bilibili",
-            "哔站"
-          ],
-          "service_aliases": [
-            "看短视频",
-            "刷视频"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -2001,21 +1868,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
+          "service_default_apps": [
+            {
+              "service_name": "开直播",
+              "application_name": "抖音",
+              "scope_condition": "客场转场途中赛事直播与团队调度"
+            }
           ]
         },
         "scope": "task_mission",
@@ -2027,18 +1895,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -2050,18 +1915,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "bilibili",
-            "哔站"
-          ],
-          "service_aliases": [
-            "看短视频",
-            "刷视频"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -2096,21 +1958,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
+          "service_default_apps": [
+            {
+              "service_name": "开直播",
+              "application_name": "抖音",
+              "scope_condition": "客场转场途中赛事直播与团队调度"
+            }
           ]
         },
         "scope": "task_mission",
@@ -2122,18 +1985,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -2145,18 +2005,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "bilibili",
-            "哔站"
-          ],
-          "service_aliases": [
-            "看短视频",
-            "刷视频"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -2191,21 +2048,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
+          "service_default_apps": [
+            {
+              "service_name": "开直播",
+              "application_name": "抖音",
+              "scope_condition": "客场转场途中赛事直播与团队调度"
+            }
           ]
         },
         "scope": "task_mission",
@@ -2217,18 +2075,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -2240,18 +2095,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "bilibili",
-            "哔站"
-          ],
-          "service_aliases": [
-            "看短视频",
-            "刷视频"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -2288,21 +2140,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "task_activity",
-        "trigger_condition": "在客场转场后抵达露天训练场或赛事集结区，于10:00-12:00进行赛前热身、战术演练并同步向团队和粉丝开直播推流。",
+        "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
         "declaration_mode": "implicit_induction",
         "application_name": "抖音",
         "service_name": "开直播",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "10时00分",
+        "end_time": "12时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖音"
-          ],
-          "service_aliases": [
-            "开播",
-            "推流",
-            "开直播"
+          "service_default_apps": [
+            {
+              "service_name": "开直播",
+              "application_name": "抖音",
+              "scope_condition": "客场转场途中赛事直播与团队调度"
+            }
           ]
         },
         "scope": "task_mission",
@@ -2314,18 +2167,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "resolution_aliases": [
+            "清晰点就行"
           ]
         },
         "scope": "transit_evening",
@@ -2337,18 +2187,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "bilibili",
-            "哔站"
-          ],
-          "service_aliases": [
-            "看短视频",
-            "刷视频"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",

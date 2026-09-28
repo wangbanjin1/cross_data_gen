@@ -95,11 +95,15 @@ class BatchPipeline:
         print(f"    - Batch rendering {len(timeline)} sessions with DeepSeek Flash (thinking disabled)...")
         rendered_sessions = self.dialogue_gen.generate_sessions_batch(planned_items, persona_skeleton, batch_size=self.batch_size)
 
-        # 4. 保存标准对话 sessions.jsonl
+        # 4. 保存标准对话 sessions.jsonl 与 sessions.json
         out_sessions_path = sample_dir / "sessions.jsonl"
         with open(out_sessions_path, "w", encoding="utf-8") as f:
             for s in rendered_sessions:
                 f.write(json.dumps(s, ensure_ascii=False) + "\n")
+
+        out_sessions_json = sample_dir / "sessions.json"
+        with open(out_sessions_json, "w", encoding="utf-8") as f:
+            json.dump(rendered_sessions, f, ensure_ascii=False, indent=2)
 
         # 5. 保存评测记忆萃取能力的 memory_traces.json
         out_traces_path = sample_dir / "memory_traces.json"

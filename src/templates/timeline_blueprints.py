@@ -1,6 +1,6 @@
 """
 动态会话生命周期时间线蓝图配置模块。
-定义了包含 8 种模版（T2-4, T2-2, T2-1, T1-2, T2-5, X-1, T2-3, T1-1）的完整会话序列结构。
+定义了包含 7 种核心模版（T2-1, T2-2, T1-2, T2-5, X-1, T2-3, T1-1）的完整会话序列结构。
 支持 daily / weekly / monthly 等多粒度周期与自定义起止时段的动态时间线计算。
 支持根据画像与情境自然浮动（12 ~ 16 轮）。
 """
@@ -148,10 +148,10 @@ def get_session_blueprints(
 
     # 全量 16 个候选骨架槽位
     candidate_slots = [
-        # 1: Main Evidence (T2-4 首次建联证据) - 核心必须
+        # 1: Main Evidence (T2-1 首次建联证据 / 参数反问补全) - 核心必须
         {
             "tag": "main_evidence",
-            "template_id": "T2-4",
+            "template_id": "T2-1",
             "role": "evidence_session",
             "source": main_mt,
             "type": "main",

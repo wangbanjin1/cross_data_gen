@@ -1,0 +1,176 @@
+{
+  "persona_id": "mobile_persona_017",
+  "category": "移动生活与现场协作",
+  "persona_summary": "移动文化服务人员",
+  "static_profile": {
+    "user_id": "USER_017",
+    "identity": "韩国公共图书馆儿童文学馆员，长期关注李基勋作品，负责社区阅读推广、展品外借与户外文化活动现场的馆藏查询、流转登记和活动图文发布，每周3至5次外出任务，全程依赖手机4G/5G直接联网，不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式，便携终端确需联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑，二者通过手机热点互联。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "抖音",
+      "小红书"
+    ],
+    "speech_archetype": "librarian_outreach_speaker",
+    "speech_style": {
+      "tone": "温和、耐心、带一点书卷气，现场协调时语速偏快，喜欢用比喻和儿童文学梗。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "孩子们等着呢"
+      ],
+      "typical_habits": "出发前在群里发路线和分工，现场用语音消息同步进度，遇到弱覆盖会先截图再补发，习惯把重要节点说成‘翻页’。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "社区儿童阅读推广现场直播与远程协作",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在社区阅读活动、展品外借或户外文化活动现场，需要向馆内同事和线上家长同步绘本讲读、馆藏查询与流转登记时，执行跨地点阅读推广直播与远程协作任务。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "09:30-11:30",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议",
+          "小企鹅开会"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦讲读",
+          "远程协作",
+          "开个会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十一点半"
+        ],
+        "period_aliases": [
+          "老规矩",
+          "每周外出任务的老时间",
+          "上午九点半那场"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "秋季跨区儿童阅读节巡展",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨区巡展期间，现场位于城市街区户外等候区与临时停留点，人流密集、基站切换频繁，部分路段弱覆盖，需要保证音视频稳定和消息及时送达。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "展品外借流转登记短视频回传",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在展品外借点完成登记后，需要快速拍摄并上传流转说明短视频，供馆内同事核对。",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "活动图文发布与家长即时沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "活动现场家长临时询问绘本借阅与活动安排时，通过微信视频通话进行面对面沟通并同步位置。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时馆内线上培训",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "午休时刷儿童文学相关短视频",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

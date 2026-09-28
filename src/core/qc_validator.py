@@ -8,6 +8,13 @@ class QCValidator:
     自动对生成的 Session 序列进行严格的结构与语义检查，输出质检报告。
     """
 
+    TEMPLATE_SPEC = {
+        "T1-1": (1, 1), "T1-2": (1, 1), "T1-3": (1, 2), "T1-4": (1, 1),
+        "T2-1": (2, 1), "T2-2": (2, 1), "T2-3": (2, 1), "T2-4": (2, 2),
+        "T2-5": (2, 1), "T2-6": (2, 2), "T3-1": (3, 1), "T3-2": (3, 1),
+        "T3-3": (3, 1), "T3-4": (3, 1), "X-1": (1, 2), "X-2": (3, 3),
+    }
+
     @classmethod
     def validate_sessions(cls, sessions: list[dict], memory_traces: list[dict] = None) -> dict:
         report = {
@@ -21,7 +28,9 @@ class QCValidator:
                 "memory_trace_fields_check": True,
                 "whitelist_compliance_check": True,
                 "turn_intent_isolation_check": True,
-                "natural_dialogue_check": True
+                "natural_dialogue_check": True,
+                "template_semantic_alignment_check": True,
+                "template_spec_check": True
             },
             "issues": []
         }
@@ -120,6 +129,42 @@ class QCValidator:
                 if any(bad in u_utt for bad in ["长期偏好", "元指令", "意图槽位"]):
                     report["issues"].append(f"[{sid}] Turn {ev_idx+1} 用户台词包含非自然研发术语(长期偏好/元指令/意图槽位): '{u_utt}'")
                     report["rule_checks"]["natural_dialogue_check"] = False
+                    s_passed = False
+
+            # 7. 验证模板与轮数、意图个数强对应 (T1=1轮, T2=2轮, T3=3轮; 单意图/双意图/三意图)
+            meta = s.get("session_meta", {})
+            tid = meta.get("template_id")
+            rc = meta.get("round_count")
+            ic = meta.get("intent_count")
+            if tid in cls.TEMPLATE_SPEC:
+                exp_rc, exp_ic = cls.TEMPLATE_SPEC[tid]
+                if rc != exp_rc or len(events) != exp_rc:
+                    report["issues"].append(f"[{sid}] 模板 {tid} 轮数不匹配: meta.round_count={rc}, 实际轮数={len(events)}, 规范应为={exp_rc}")
+                    report["rule_checks"]["template_spec_check"] = False
+                    s_passed = False
+                if ic != exp_ic or len(s.get("intents", [])) != exp_ic:
+                    report["issues"].append(f"[{sid}] 模板 {tid} 意图个数不匹配: meta.intent_count={ic}, 实际意图数={len(s.get('intents', []))}, 规范应为={exp_ic}")
+                    report["rule_checks"]["template_spec_check"] = False
+                    s_passed = False
+                sig = meta.get("skeleton_signature", "")
+                if not sig.startswith(f"{tid}|{exp_rc}|{exp_ic}|"):
+                    report["issues"].append(f"[{sid}] skeleton_signature 前缀与模板规范不符: '{sig}'")
+                    report["rule_checks"]["template_spec_check"] = False
+                    s_passed = False
+
+            # 8. T1-2 必须在自然语言层面也确实是域外请求与明确拒绝，不能只靠结构标注伪装。
+            if s.get("session_meta", {}).get("template_id") == "T1-2" and events:
+                ood_goal = s.get("intents", [{}])[0].get("intent", "")
+                user_text = events[0].get("user", {}).get("utterance", "")
+                agent_text = events[0].get("agent", {}).get("utterance", "")
+                reject_markers = ["不支持", "无法", "不能", "暂不", "抱歉", "建议联系"]
+                if ood_goal and ood_goal not in user_text:
+                    report["issues"].append(f"[{sid}] T1-2 用户台词未表达规划的域外诉求: {ood_goal}")
+                    report["rule_checks"]["template_semantic_alignment_check"] = False
+                    s_passed = False
+                if not any(marker in agent_text for marker in reject_markers):
+                    report["issues"].append(f"[{sid}] T1-2 Agent 台词缺少明确拒绝语义")
+                    report["rule_checks"]["template_semantic_alignment_check"] = False
                     s_passed = False
 
             if s_passed:

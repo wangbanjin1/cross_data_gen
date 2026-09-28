@@ -4,52 +4,51 @@
   "persona_summary": "户外公益与社群组织者",
   "static_profile": {
     "user_id": "USER_003",
-    "identity": "刑事司法改革倡导者，常驻利兹，长期在户外调研点、临时会议区、群众服务现场及社区走访点组织公益与社群活动，跨区域通勤频繁，全程依赖手机移动核心网（4G/5G）直接联网，不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式。",
+    "identity": "刑事司法改革倡导者，常驻利兹，长期在户外调研点、临时会议区、群众服务现场、社区走访点及公共活动现场之间移动办公，负责发布通知、直播活动、收集电子反馈并协调志愿者位置，全程依赖手机4G/5G直接联网，不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式。",
     "devices": "主力设备为5G智能手机，便携终端确需联网时使用手机热点。",
     "apps": [
       "腾讯会议",
       "微信",
       "钉钉",
-      "飞书"
+      "哔哩哔哩"
     ],
-    "speech_archetype": "outdoor_organizer",
+    "speech_archetype": "outdoor_community_organizer",
     "speech_style": {
-      "tone": "干脆利落、务实直接，带一点社区组织者的号召感，习惯用短句推进事情。",
+      "tone": "干脆利落、带现场指挥感，习惯用短句确认进度，语气务实但有人情味。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
         "现场见"
       ],
-      "typical_habits": "出发前先确认路线和参会人，到了现场先测信号再开会议；喜欢用‘老规矩’指代固定时段和固定参数，用‘别掉链子’提醒网络和材料传输必须稳。"
+      "typical_habits": "出发前先口头确认接入方式和画质档位，遇到弱网会主动降级并提醒同伴；喜欢用固定口语别名指代应用、业务和参数，避免歧义。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "户外公益现场视频会议与材料回传",
+      "name": "社区走访点公益直播与志愿者协调会",
       "storyline_trigger_type": "location_environment",
-      "trigger_condition": "当身处利兹社区走访点、公共活动现场或跨区域通勤途中的临时会议区，且时间为14:00-16:00时，使用腾讯会议发起或加入视频会议，并同步回传政策资料与现场记录。",
+      "trigger_condition": "当身处利兹社区走访点、公共活动现场或临时会议区，且时间为14:00-16:00的固定外勤时段，需要面向志愿者和社区居民开直播、同步政策资料并协调位置时触发。",
       "period_type": "location_driven",
       "days": [
         "location_specific"
       ],
       "time_range": "14:00-16:00",
-      "application_name": "腾讯会议",
-      "service_name": "会议",
+      "application_name": "哔哩哔哩",
+      "service_name": "开直播",
       "preferred_params": {
         "resolution": "1080p",
         "rtt_max": "50ms"
       },
       "aliases": {
         "app_aliases": [
-          "企鹅会议",
-          "腾讯会议"
+          "小破站",
+          "B站"
         ],
         "service_aliases": [
-          "对齐开会",
-          "开个会",
-          "连麦对齐"
+          "开播",
+          "推流"
         ],
         "resolution_aliases": [
           "1080p原画",
@@ -69,7 +68,7 @@
         "period_aliases": [
           "每天这个时候",
           "老时间",
-          "现场老规矩"
+          "下午两点老规矩"
         ]
       },
       "declaration_mode": "explicit_declaration",
@@ -78,10 +77,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨城司法改革巡回调研周",
+        "name": "利兹司法改革社区宣传周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "在利兹周边及跨城通勤沿线开展巡回调研，频繁处于高铁、大巴和临时户外服务点等弱网环境，视频会议与材料回传需要临时提高稳定性。",
+        "scene_description": "宣传周期间在利兹多个社区走访点和公共活动现场连续转场，现场人流密集、无线环境复杂，需要临时提高直播与会议通信稳定性。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -91,14 +90,14 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "志愿者位置协调与即时通信",
+        "name": "跨区通勤途中的志愿者视频调度",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "在社区走访点或公共活动现场，需要快速确认志愿者位置并临时拉起视频通话时。",
+        "trigger_condition": "在利兹跨区域通勤途中，需要临时确认志愿者位置、物资交接和现场安全情况时触发。",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -120,18 +119,18 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "政策资料查询与电子表单回传",
-        "application_name": "钉钉",
+        "name": "临时会议区政策材料回传与复盘",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "在临时会议区或跨区域通勤途中，需要查询政策资料、填写电子表单并回传现场记录时。",
+        "trigger_condition": "在临时会议区或群众服务现场，需要与团队回传政策资料、复盘走访记录并安排下一阶段任务时触发。",
         "aliases": {
           "app_aliases": [
-            "dingding",
-            "钉"
+            "tencentmeeting",
+            "会议通"
           ],
           "service_aliases": [
             "开会",
@@ -151,9 +150,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次夜间社区直播活动",
-        "application_name": "抖音",
-        "service_name": "开直播",
+        "scenario": "单次在社区服务现场用钉钉参加内部培训会议",
+        "application_name": "钉钉",
+        "service_name": "会议",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -161,7 +160,7 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次通勤途中刷短视频放松",
+        "scenario": "单次在跨区域通勤途中用快手刷短视频放松",
         "application_name": "快手",
         "service_name": "短视频",
         "params": {

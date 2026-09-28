@@ -2,6 +2,7 @@ import json
 import re
 from src.generation.llm_client import LLMClient
 from src.generation.session_assembler import SessionAssembler
+from src.templates.prompts.small_memory_prompt import co_occurrence_example, declaration_example
 from src.templates.prompts import (
     build_batch_dialogue_prompt,
     build_single_dialogue_prompt,
@@ -88,24 +89,31 @@ class DialogueGenerator:
                     "period_aliases": p_aliases.get("period_aliases", []),
                 }
 
-            primary_app_alias = p_aliases.get("app_aliases", [""])[0] if p_aliases.get("app_aliases") else ""
-            primary_srv_alias = p_aliases.get("service_aliases", [""])[0] if p_aliases.get("service_aliases") else ""
-            primary_alias = primary_app_alias or primary_srv_alias or tp["application_name"]
+            small_memory = s_plan.get("small_memory", {})
+            primary_alias = small_memory.get("value") or tp["application_name"]
+            small_memory_declaration = declaration_example(small_memory)
+            evidence_mode = s_plan.get("small_memory_evidence_mode", "explicit_declaration")
+            small_memory_co_occurrence = co_occurrence_example(small_memory)
 
             decl_mode = s_plan.get("declaration_mode", "explicit_declaration")
             is_implicit_reinf = (role == "reinforcement_session" and decl_mode == "implicit_induction" and sid.endswith("-03"))
             tid = s_plan.get("template_id", "T2-1")
 
-            if role == "evidence_session":
-                t1_rule = f"【首次建联/证据会话：第1轮必须直述标准应用名({tp['application_name']})与业务名({tp['service_name']})，严禁使用'老规矩'与生僻别名；第2轮在确认参数的同时，正式向助手介绍并登记习惯代称（如：'我平时习惯叫它{primary_alias}，帮我把这个习惯记好'），以便后续会话复用！】"
+            if tid == "T1-2":
+                t1_rule = f"【纯域外拒绝：用户必须明确提出'{s_plan.get('ood_goal') or '宽带光纤装维报修'}'，不得提出任何应用网络保障或老规矩请求；Agent 必须明确说明不支持并拒绝办理。】"
+            elif role == "evidence_session":
+                if b_type == "main" and decl_mode == "implicit_induction":
+                    t1_rule = f"【隐式归纳首次证据：第1轮必须直述标准应用名({tp['application_name']})、业务名({tp['service_name']})和精确开始时刻({tp['start_timestamp']})；第2轮只补充本次参数。严禁出现‘以后’‘记住’‘老规矩’或登记任何小记忆点，本轮结束后只能形成 provisional 历史记录。】"
+                else:
+                    t1_rule = f"【建立小记忆：证据模式={evidence_mode}。第1轮使用标准应用、业务和精确开始时刻。explicit_declaration 使用声明话术：{small_memory_declaration}；co_occurrence 使用同轮共现话术：{small_memory_co_occurrence}；cross_turn_clarification 必须用三轮，由用户先说模糊表达、Agent追问其是否对应标准值、用户最后确认。只登记指定类型={small_memory.get('type')}，不得登记其他别名。】"
             elif is_implicit_reinf:
-                t1_rule = f"【隐式归纳二次发生固化契机：第1轮严禁使用'老规矩'与生僻别名，请说'配置跟上次一样就行'；第1轮客服主动询问是否设为老规矩；第2轮用户确认并正式登记习惯代称'{primary_alias}'】"
+                t1_rule = f"【隐式归纳二次发生固化契机：第1轮用户只表达‘这次按上次的来’，不得主动说出应用、业务、参数、起止时间；第1轮客服完整复述历史候选并要求确认；第2轮确认固化，小记忆证据模式={evidence_mode}，本会话使用同轮共现话术：{small_memory_co_occurrence}，不要改写成‘X就是Y’的显式定义。业务默认应用只对当前主线场景生效。】"
             elif tid == "T2-5":
                 t1_rule = f"【时长延长会话：第1轮用户说'老规矩，{primary_alias}开通保障'（严禁在第1轮提及画质与时延！）；第1轮客服反问确认老规矩配置；第2轮用户确认老规矩但提出将时长延长到{tp['duration']}】"
             elif tid == "T2-3":
                 t1_rule = f"【临时纠正覆盖会话：第1轮用户说'老规矩，{primary_alias}开通保障'；第1轮客服反问确认老规矩；第2轮用户提出因现场特殊临时调整画质为{tp['resolution']}、时延为{tp['rtt']}】"
             else:
-                t1_rule = f"【常规复用/强化会话：大记忆点已在历史记忆中生效！第1轮用户口语化表达需求（使用'老规矩'/'老时间'及已登记的代称'{primary_alias}'），【严禁在第1轮重复提及画质、时延与持续时长，严禁生造'零卡顿'/'顶格清晰度'等与数值冲突的别名】！必须由 Agent 从记忆中调取配置（{tp['resolution']}, {tp['rtt']}, {tp['duration']}）主动向用户反问确认；第2轮用户仅需简短确认（如'对，开通吧'）！】"
+                t1_rule = f"【常规复用/强化会话：大记忆点已生效。应用＋业务是最小表达：若小记忆类型为service_default_app，可只说业务；若为application_alias，必须说应用别名＋业务；若为画质/时延/时长/周期暗号，必须说标准应用＋业务＋该暗号。指定小记忆点='{primary_alias}'。Agent 从记忆中补全其余画质{tp['resolution']}、时延{tp['rtt']}、开始时间{tp['start_timestamp']}、结束时间{tp['end_timestamp']}和时长{tp['duration']}；不得把未说出的槽位标成 Turn 来源。】"
 
             prompt_items.append({
                 "session_id": sid,
@@ -115,6 +123,10 @@ class DialogueGenerator:
                 "template_id": s_plan.get("template_id", "T2-1"),
                 "turn1_requirement": t1_rule,
                 "primary_alias": primary_alias,
+                "small_memory": small_memory,
+                "small_memory_declaration": small_memory_declaration,
+                "small_memory_evidence_mode": evidence_mode,
+                "small_memory_co_occurrence": small_memory_co_occurrence,
                 "ood_goal": s_plan.get("ood_goal", ""),
                 "declaration_mode": decl_mode,
                 "storyline_trigger_type": s_plan.get("storyline_trigger_type", "time_periodic"),
@@ -170,9 +182,9 @@ class DialogueGenerator:
             u_text, u_acts, a_text, a_acts = self._normalize_turn(t_data, turn_idx, role, is_last, s_plan)
 
             req_params = []
-            if turn_idx == 1 and role == "evidence_session" and tid != "T2-2":
+            if turn_idx == 1 and role == "evidence_session" and tid not in ["T2-2", "T3-1"]:
                 req_params = ["resolution", "rtt", "duration"]
-            elif turn_idx == 1 and tid == "T2-2":
+            elif turn_idx == 1 and tid in ["T2-2", "T3-1"]:
                 req_params = ["service_name", "resolution", "rtt", "duration"]
 
             rel_ids = ["I1", "I2"] if tid == "X-1" else ["I1"]
@@ -220,6 +232,18 @@ class DialogueGenerator:
         tp = s_plan.get("target_params", {})
         tid = s_plan.get("template_id", "T2-1")
 
+        # 纯域外拒绝不能接受 LLM 渲染出的域内“老规矩”对话。
+        if tid == "T1-2":
+            u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+
+        # 证据会话首轮必须与规划的精确开始时间一致，避免模糊改写造成 turn-level 泄漏。
+        if turn_idx == 1 and role == "evidence_session":
+            u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+        if tid in ["T2-2", "T3-1"] and s_plan.get("small_memory_evidence_mode") == "cross_turn_clarification":
+            u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+        if turn_idx == 2 and role == "reinforcement_session" and s_plan.get("small_memory_evidence_mode") == "co_occurrence" and s_plan.get("session_id", "").endswith("-03"):
+            u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+
         # 规范化画质别名（严禁使用与数值冲突的'顶格清晰度'等词）
         for bad_word in ["顶格清晰度", "顶格画质", "最高画质", "极限画质", "最高清晰度"]:
             if bad_word in u_text:
@@ -256,6 +280,22 @@ class DialogueGenerator:
             )
         if not a_text:
             a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
+        if tid == "T1-2":
+            a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
+        if tid in ["T2-2", "T3-1"] and s_plan.get("small_memory_evidence_mode") == "cross_turn_clarification":
+            a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
+        if turn_idx == 2 and role == "reinforcement_session" and s_plan.get("small_memory_evidence_mode") == "co_occurrence" and s_plan.get("session_id", "").endswith("-03"):
+            a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
+        if turn_idx == 1 and role in ["reinforcement_session", "reuse_session"] and tid not in ["T2-3", "T2-5"]:
+            u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+            # 执行前必须把记忆补全出的时间与参数完整回显，不能让结构化时间凭空出现。
+            a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
+            for bad_word in ["零卡顿", "秒开", "极速响应"]:
+                if bad_word in u_text:
+                    u_text = u_text.replace(bad_word, f"{tp.get('rtt', '')}以内")
+            for bad_word in ["顶格清晰度", "顶格画质", "最高画质", "极限画质", "最高清晰度"]:
+                if bad_word in u_text:
+                    u_text = u_text.replace(bad_word, "1080p原画" if tp.get("resolution") == "1080p" else tp.get("resolution", ""))
 
         # 同样规范化客服台词中的画质与时延
         for bad_word in ["顶格清晰度", "顶格画质", "最高画质", "极限画质", "最高清晰度"]:

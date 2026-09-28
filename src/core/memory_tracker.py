@@ -1,5 +1,20 @@
 import copy
 
+
+def _small_memory_mapping(small: dict) -> dict:
+    """将规划的小记忆写成可解释的结构；业务维度保存业务到默认应用的映射。"""
+    if small.get("type") == "service_default_app":
+        return {
+            "service_default_apps": [{
+                "service_name": small.get("value"),
+                "application_name": small.get("normalized_value"),
+                "scope_condition": small.get("scope_condition"),
+            }]
+        }
+    if small.get("alias_key") and small.get("value"):
+        return {small["alias_key"]: [small["value"]]}
+    return {}
+
 class MemoryTracker:
     """
     记忆状态演进追踪器 (MemoryTracker)
@@ -31,11 +46,8 @@ class MemoryTracker:
             trig_cond = s_plan.get("trigger_condition", "每周常规周期时段")
             scope_val = "weekly_cycle" if trig_type == "time_periodic" else ("task_mission" if trig_type == "task_activity" else "location_boundary")
 
-            p_aliases = s_plan.get("aliases", {})
-            alias_map = {
-                "app_aliases": p_aliases.get("app_aliases", []),
-                "service_aliases": p_aliases.get("service_aliases", [])
-            }
+            small = s_plan.get("small_memory", {})
+            selected_alias_map = _small_memory_mapping(small)
 
             if role == "evidence_session":
                 if decl_mode == "explicit_declaration":
@@ -50,7 +62,10 @@ class MemoryTracker:
                         "service_name": tp["service_name"],
                         "resolution": tp["resolution"],
                         "rtt_max": tp["rtt"],
-                        "alias_mapping": alias_map,
+                        "start_time": tp["start_timestamp"].split("日")[-1],
+                        "end_time": tp["end_timestamp"].split("日")[-1],
+                        "duration": tp["duration"],
+                        "alias_mapping": selected_alias_map,
                         "scope": scope_val,
                         "status": "active",
                         "evidence_count": 1,
@@ -76,7 +91,10 @@ class MemoryTracker:
                         "service_name": tp["service_name"],
                         "resolution": tp["resolution"],
                         "rtt_max": tp["rtt"],
-                        "alias_mapping": alias_map,
+                        "start_time": tp["start_timestamp"].split("日")[-1],
+                        "end_time": tp["end_timestamp"].split("日")[-1],
+                        "duration": tp["duration"],
+                        "alias_mapping": {},
                         "scope": scope_val,
                         "status": "provisional",  # 候选/待归纳状态
                         "evidence_count": 1,
@@ -100,6 +118,9 @@ class MemoryTracker:
                     if prev_status == "provisional":
                         # 隐式归纳满足证据阈值 (N>=2)，正式固化为 active 长期老规矩
                         self.active_memories["MF_001"]["status"] = "active"
+                        small = s_plan.get("small_memory", {})
+                        if small.get("alias_key") and small.get("value"):
+                            self.active_memories["MF_001"]["alias_mapping"] = _small_memory_mapping(small)
                         memory_events.append({
                             "event_type": "crystallize_implicit_memory",
                             "memory_id": "MF_001",
@@ -116,10 +137,8 @@ class MemoryTracker:
 
         elif b_type == "sub_01":
             p_aliases = s_plan.get("aliases", {})
-            sub1_map = {
-                "app_aliases": p_aliases.get("app_aliases", []),
-                "service_aliases": p_aliases.get("service_aliases", [])
-            }
+            small = s_plan.get("small_memory", {})
+            sub1_map = _small_memory_mapping(small)
             if role == "evidence_session":
                 mem_item = {
                     "memory_id": "SUB_001",
@@ -128,6 +147,8 @@ class MemoryTracker:
                     "service_name": tp["service_name"],
                     "resolution": tp["resolution"],
                     "rtt_max": tp["rtt"],
+                    "start_time": tp["start_timestamp"].split("日")[-1],
+                    "duration": tp["duration"],
                     "alias_mapping": sub1_map,
                     "scope": "transit_evening",
                     "status": "active",
@@ -155,10 +176,8 @@ class MemoryTracker:
 
         elif b_type == "sub_02":
             p_aliases = s_plan.get("aliases", {})
-            sub2_map = {
-                "app_aliases": p_aliases.get("app_aliases", []),
-                "service_aliases": p_aliases.get("service_aliases", [])
-            }
+            small = s_plan.get("small_memory", {})
+            sub2_map = _small_memory_mapping(small)
             if role == "evidence_session":
                 mem_item = {
                     "memory_id": "SUB_002",
@@ -167,6 +186,8 @@ class MemoryTracker:
                     "service_name": tp["service_name"],
                     "resolution": tp["resolution"],
                     "rtt_max": tp["rtt"],
+                    "start_time": tp["start_timestamp"].split("日")[-1],
+                    "duration": tp["duration"],
                     "alias_mapping": sub2_map,
                     "scope": "hotel_evening_review",
                     "status": "active",

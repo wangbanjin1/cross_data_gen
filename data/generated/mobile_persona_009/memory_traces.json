@@ -9,7 +9,7 @@
       {
         "event_type": "form_memory_explicit",
         "memory_id": "MF_001",
-        "description": "用户首次明确显式声明长期偏好（触发条件：身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段）：抖音短视频（1080p, 50ms），设立老规矩指令，登记个性化别名小记忆点。",
+        "description": "用户首次明确显式声明长期偏好（触发条件：身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。）：抖音短视频（1080p, 50ms），设立老规矩指令，登记个性化别名小记忆点。",
         "target_slots": [
           "application_name",
           "service_name",
@@ -23,21 +23,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -58,21 +59,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -86,7 +88,7 @@
       {
         "event_type": "form_memory",
         "memory_id": "SUB_001",
-        "description": "建立支线1条件记忆：微信视频通话在转场大巴上采用（720p, 100ms），登记代称小记忆点。",
+        "description": "建立支线1条件记忆：腾讯会议会议在转场大巴上采用（720p, 100ms），登记代称小记忆点。",
         "target_slots": [
           "application_name",
           "service_name",
@@ -100,21 +102,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -126,18 +129,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -158,21 +158,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -184,18 +185,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -209,7 +207,7 @@
       {
         "event_type": "reinforce_memory",
         "memory_id": "MF_001",
-        "description": "用户在（身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段）省略参数复用主线记忆，Agent 成功补全并经用户确认，证据强度增至 2 次。",
+        "description": "用户在（身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。）省略参数复用主线记忆，Agent 成功补全并经用户确认，证据强度增至 2 次。",
         "retrieved_slots": [
           "application_name",
           "service_name",
@@ -223,21 +221,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -249,18 +248,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -281,21 +277,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -307,18 +304,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -346,21 +340,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -372,18 +367,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -395,18 +387,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -427,21 +416,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -453,18 +443,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -476,18 +463,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -508,21 +492,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -534,18 +519,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -557,18 +539,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -589,21 +568,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -615,18 +595,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -638,18 +615,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -677,21 +651,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -703,18 +678,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -726,18 +698,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -758,21 +727,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -784,18 +754,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -807,18 +774,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -832,7 +796,7 @@
       {
         "event_type": "reinforce_memory",
         "memory_id": "MF_001",
-        "description": "用户在（身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段）省略参数复用主线记忆，Agent 成功补全并经用户确认，证据强度增至 3 次。",
+        "description": "用户在（身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。）省略参数复用主线记忆，Agent 成功补全并经用户确认，证据强度增至 3 次。",
         "retrieved_slots": [
           "application_name",
           "service_name",
@@ -846,21 +810,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -872,18 +837,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -895,18 +857,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -927,21 +886,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -953,18 +913,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -976,18 +933,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -1001,7 +955,7 @@
       {
         "event_type": "reinforce_memory",
         "memory_id": "MF_001",
-        "description": "用户在（身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段）省略参数复用主线记忆，Agent 成功补全并经用户确认，证据强度增至 4 次。",
+        "description": "用户在（身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。）省略参数复用主线记忆，Agent 成功补全并经用户确认，证据强度增至 4 次。",
         "retrieved_slots": [
           "application_name",
           "service_name",
@@ -1015,21 +969,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -1041,18 +996,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -1064,18 +1016,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -1096,21 +1045,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -1122,18 +1072,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -1145,18 +1092,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -1184,21 +1128,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -1210,18 +1155,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -1233,18 +1175,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -1265,21 +1204,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -1291,18 +1231,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -1314,18 +1251,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -1346,21 +1280,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -1372,18 +1307,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -1395,18 +1327,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -1427,21 +1356,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -1453,18 +1383,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -1476,18 +1403,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -1514,21 +1438,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -1540,18 +1465,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -1563,18 +1485,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -1609,21 +1528,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -1635,18 +1555,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -1658,18 +1575,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -1709,21 +1623,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -1735,18 +1650,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -1758,18 +1670,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -1804,21 +1713,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -1830,18 +1740,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -1853,18 +1760,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -1906,21 +1810,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -1932,18 +1837,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -1955,18 +1857,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -2001,21 +1900,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -2027,18 +1927,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -2050,18 +1947,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -2096,21 +1990,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -2122,18 +2017,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -2145,18 +2037,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -2191,21 +2080,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -2217,18 +2107,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -2240,18 +2127,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -2288,21 +2172,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -2314,18 +2199,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -2337,18 +2219,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -2383,21 +2262,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -2409,18 +2289,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -2432,18 +2309,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",
@@ -2471,7 +2345,7 @@
       {
         "event_type": "reinforce_memory",
         "memory_id": "MF_001",
-        "description": "用户在（身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段）省略参数复用主线记忆，Agent 成功补全并经用户确认，证据强度增至 6 次。",
+        "description": "用户在（身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。）省略参数复用主线记忆，Agent 成功补全并经用户确认，证据强度增至 6 次。",
         "retrieved_slots": [
           "application_name",
           "service_name",
@@ -2485,21 +2359,22 @@
         "memory_id": "MF_001",
         "category": "periodic_main_storyline",
         "storyline_trigger_type": "location_environment",
-        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为20:00-22:00的弱网时段",
+        "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，进入20:00-22:00晚间时段后，以手机4G/5G直接联网，需要稳定上传现场短视频并与远程同伴即时协作。",
         "declaration_mode": "explicit_declaration",
         "application_name": "抖音",
         "service_name": "短视频",
         "resolution": "1080p",
         "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
         "alias_mapping": {
-          "app_aliases": [
-            "阿抖",
-            "抖子"
-          ],
-          "service_aliases": [
-            "刷短视频",
-            "传短视频",
-            "推短视频"
+          "service_default_apps": [
+            {
+              "service_name": "短视频",
+              "application_name": "抖音",
+              "scope_condition": "晚间户外现场短视频上传与远程协作"
+            }
           ]
         },
         "scope": "location_boundary",
@@ -2511,18 +2386,15 @@
       "SUB_001": {
         "memory_id": "SUB_001",
         "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "resolution": "720p",
         "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
         "alias_mapping": {
           "app_aliases": [
-            "weixin",
-            "wx"
-          ],
-          "service_aliases": [
-            "打视频",
-            "连线"
+            "会议通"
           ]
         },
         "scope": "transit_evening",
@@ -2534,18 +2406,15 @@
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "resolution": "1080p",
         "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
         "alias_mapping": {
-          "app_aliases": [
-            "tencentmeeting",
-            "会议通"
-          ],
-          "service_aliases": [
-            "开会",
-            "进会议室"
+          "rtt_aliases": [
+            "不卡就行"
           ]
         },
         "scope": "hotel_evening_review",

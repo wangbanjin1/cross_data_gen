@@ -1,0 +1,173 @@
+{
+  "persona_id": "mobile_persona_011",
+  "category": "交通运输与移动出行",
+  "persona_summary": "户外视觉创作者",
+  "static_profile": {
+    "user_id": "USER_011",
+    "identity": "阿曼籍户外视觉创作者与平面设计师，长期跨城采风、拍摄与现场提案，活动范围覆盖高速公路服务区、车站、港区与机场外场，全程依赖手机移动核心网完成创作协作与客户交付。",
+    "devices": "主力设备为5G智能手机，辅助设备包括便携相机与平板；确需联网时以手机热点共享给便携终端。",
+    "apps": [
+      "微信",
+      "钉钉",
+      "腾讯会议",
+      "高德地图"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "干脆利落、带点现场指挥感，喜欢用短句确认关键节点，对画质和时延有职业敏感。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "原画给我稳住"
+      ],
+      "typical_habits": "开工前先确认路线与网络，任务中频繁用语音和位置共享同步进度，交付前反复强调画质和时延。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "跨城采风现场高清作品回传与客户对齐",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在跨城采风、展览或拍摄现场完成一轮素材采集后，于14:00-16:00通过手机移动核心网向客户回传高清设计稿并做实时对齐。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦过稿",
+          "开个短会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到四点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "现场任务时段"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城设计展现场提案周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "展会外场与港区临时停靠点网络拥塞，高速移动与跨区切换频繁，需优先保障提案画面稳定与调度消息及时。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "采风途中位置共享与路线同步",
+        "application_name": "高德地图",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "跨城途中或偏远路段临时停靠，需要与客户或同伴共享位置并同步路线时。",
+        "aliases": {
+          "app_aliases": [
+            "高德地图"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "拍摄现场素材预览与客户沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在街区采风、展览或拍摄现场需要快速预览作品并与客户确认细节时。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "服务区休息时单次刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "临时查看同行直播寻找灵感",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

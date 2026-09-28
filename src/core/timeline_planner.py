@@ -1,5 +1,7 @@
+import hashlib
 import re
 from src.templates.timeline_blueprints import get_15_session_blueprints
+from src.core.small_memory_selector import build_small_memory_candidates
 
 class DynamicTimelinePlanner:
     """
@@ -7,6 +9,19 @@ class DynamicTimelinePlanner:
     负责根据 Persona Skeleton 动态规划 15 会话时间线，
     并绑定记忆触发类型、声明模式与业务参数。
     """
+
+    @classmethod
+    def _select_small_memory(cls, user_id: str, blueprint_type: str, source: dict, target_params: dict) -> dict:
+        """从可用别名维度中做稳定随机选择，确保重跑可复现且后续复用一致。"""
+        candidates = build_small_memory_candidates(
+            source,
+            target_params,
+            allow_service_default=(blueprint_type == "main"),
+        )
+        if not candidates:
+            return {}
+        digest = hashlib.sha256(f"{user_id}:{blueprint_type}".encode("utf-8")).digest()
+        return candidates[int.from_bytes(digest[:4], "big") % len(candidates)]
 
     @classmethod
     def plan(cls, persona: dict) -> list[dict]:
@@ -85,13 +100,29 @@ class DynamicTimelinePlanner:
                 src.get("preferred_params", {}).get("rtt_max") or src.get("params", {}).get("rtt_max", "50ms")
             )
 
+            aliases = src.get("aliases", {})
+            small_memory = cls._select_small_memory(user_id, cfg["type"], src, {
+                "resolution": res,
+                "rtt": rtt,
+                "duration": cfg["dur"],
+            })
+            evidence_mode = {
+                "main": "co_occurrence",
+                "sub_01": "cross_turn_clarification",
+                "sub_02": "explicit_declaration",
+            }.get(cfg["type"], "explicit_declaration") if small_memory else "none"
+            round_count = 1 if (cfg["template_id"].startswith("T1") or cfg["template_id"].startswith("X-1")) else 2
+            template_id = cfg["template_id"]
+            if cfg["role"] == "evidence_session" and evidence_mode == "cross_turn_clarification":
+                round_count = 3
+                template_id = "T3-1"
             s_obj = {
                 "session_id": f"S-{user_id}-{cfg['idx']:02d}",
                 "user_id": user_id,
                 "reference_time": cfg["ref_time"],
-                "template_id": cfg["template_id"],
+                "template_id": template_id,
                 "memory_role": cfg["role"],
-                "round_count": 1 if (cfg["template_id"].startswith("T1") or cfg["template_id"].startswith("X-1")) else 2,
+                "round_count": round_count,
                 "blueprint_type": cfg["type"],
                 "scenario_env": cfg["env"],
                 "memory_action": cfg["action"],
@@ -111,7 +142,9 @@ class DynamicTimelinePlanner:
                 "period_type": main_mt.get("period_type", "weekly"),
                 "base_duration": cfg.get("base_dur", cfg["dur"]),
                 "base_end_timestamp": cfg.get("base_end", cfg["end"]),
-                "aliases": src.get("aliases", {})
+                "aliases": aliases,
+                "small_memory": small_memory,
+                "small_memory_evidence_mode": evidence_mode,
             }
             sessions.append(s_obj)
 

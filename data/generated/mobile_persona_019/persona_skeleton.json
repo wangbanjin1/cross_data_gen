@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_019",
+  "category": "文化创作与移动演出",
+  "persona_summary": "户外视觉创作者",
+  "static_profile": {
+    "user_id": "USER_019",
+    "identity": "脾气火爆但才华横溢的音乐制作人兼户外视觉创作者，日常在户外演出点、展览布置区、城市采风路线及音乐节、街头活动、临时排练现场之间移动，负责现场音视频采集、直播推流、作品上传、云端素材同步与团队沟通，全程依赖手机4G/5G移动核心网直接联网，不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式，便携终端确需联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑，便携终端确需联网时使用手机热点。",
+    "apps": [
+      "抖音",
+      "微信",
+      "腾讯会议",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "语速快、命令式、带压迫感，习惯用行业黑话和倒计时式催促，情绪外放但目标明确。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "这条必须过",
+        "再给我一条"
+      ],
+      "typical_habits": "习惯在固定时段用口语化指令直接宣布直播和上传安排，强调画质、时延和续传，遇到弱覆盖会立刻要求切备用链路或热点。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "午间户外演出直播与作品上传",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每天午间休息与午间复盘业务，固定进行户外演出点或街头活动现场直播、音视频采集与作品上传",
+      "period_type": "daily",
+      "days": [
+        "daily"
+      ],
+      "time_range": "12:30-13:30",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "上播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "一个钟头",
+          "一小时",
+          "播到一点半"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "午间例行"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城音乐节密集演出周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城音乐节期间，密集人群、临时舞台和户外弱覆盖路段交替出现，直播互动和音视频上行压力显著增大，需要临时降低画质并收紧时延以保障连接可用和任务续传。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "团队远程复盘与素材对齐",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "演出结束回到临时排练现场或采风路线途中，需要与团队远程复盘素材、对齐剪辑方向时",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "客户沟通与设计稿预览",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在展览布置区或城市采风路线中，需要向客户快速预览高清设计稿并确认修改意见时",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时与外地乐手进行远程视频沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在通勤途中刷短视频寻找编曲和视觉参考",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

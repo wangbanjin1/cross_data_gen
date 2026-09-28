@@ -1,0 +1,4010 @@
+[
+  {
+    "session_id": "S-USER_014-01",
+    "user_id": "USER_014",
+    "reference_time": "2026年10月07日13时45分",
+    "session_meta": {
+      "template_id": "T2-1",
+      "round_count": 2,
+      "intent_count": 1,
+      "memory_role": "evidence_session",
+      "skeleton_signature": "T2-1|2|1|I1:腾讯会议/会议/1/clarified/resolved|none",
+      "scenario": {
+        "environment": "校园户外教学协作与视频答疑现场",
+        "blueprint_type": "main",
+        "memory_action": "single_task_implicit_behavior"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "你好，需要给腾讯会议会议做一个网络保障，时间是今天14时00分开始。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，您是要在腾讯会议开会议对吧？画质、时延和持续时长您有什么要求吗？",
+          "action_types": [
+            "Request_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [
+          "resolution",
+          "rtt",
+          "duration"
+        ],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "clarify",
+            "expression_level": 1,
+            "intent": "腾讯会议会议保障",
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月07日14时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "画质细节要看得清就行，按1080p开，以后也照这个标准理解。时延控制在50ms以内，先开俩小时。",
+          "action_types": [
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已为您开通本次保障：腾讯会议-会议，1080p画质，50ms以内时延，持续120分钟。祝您教学顺利！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "clarified",
+            "expression_level": 1,
+            "intent": "腾讯会议会议保障",
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月07日14时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月07日16时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "clarified",
+        "expression_level": 1,
+        "intent": "腾讯会议会议保障",
+        "params": {
+          "application_name": {
+            "value": "腾讯会议",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "service_name": {
+            "value": "会议",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "1080p",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "50ms",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年10月07日14时00分",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            },
+            "end_timestamp": {
+              "value": "2026年10月07日16时00分",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            },
+            "duration": {
+              "value": "120min",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月07日14时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "timestamp": {
+                "end_timestamp": {
+                  "value": "2026年10月07日16时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_014-02",
+    "user_id": "USER_014",
+    "reference_time": "2026年10月11日18时30分",
+    "session_meta": {
+      "template_id": "T3-1",
+      "round_count": 3,
+      "intent_count": 1,
+      "memory_role": "evidence_session",
+      "skeleton_signature": "T3-1|3|1|I1:钉钉/会议/1/clarify/resolved|none",
+      "scenario": {
+        "environment": "大巴跨城转场高速公路",
+        "blueprint_type": "sub_01",
+        "memory_action": "disambiguate_sub_storyline_1"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "在大巴跨城转场高速公路网络不太稳，帮我给钉钉会议开个保障，时间从今天18时45分开始。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，已确认是钉钉会议保障。请问画质、时延和持续时长有什么具体要求？",
+          "action_types": [
+            "Request_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [
+          "resolution",
+          "rtt",
+          "duration"
+        ],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "clarify",
+            "expression_level": 1,
+            "intent": "钉钉会议保障",
+            "params": {
+              "application_name": {
+                "value": "钉钉",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月11日18时45分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "画质按‘清晰点就行’来。时延控制在100ms以内，预计持续60min。",
+          "action_types": [
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "确认一下，您说的‘清晰点就行’具体指哪个画质档位？以后也按这个理解吗？",
+          "action_types": [
+            "Request_Disambiguation"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [
+          "resolution"
+        ],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "clarify",
+            "expression_level": 1,
+            "intent": "钉钉会议保障",
+            "params": {
+              "application_name": {
+                "value": "钉钉",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "100ms",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月11日18时45分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月11日19时45分",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                },
+                "duration": {
+                  "value": "60min",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 3,
+        "user": {
+          "utterance": "就是画质档位720p，以后就按这个理解，直接开通吧。",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已按您刚确认的含义记录，并为您开通钉钉会议保障（720p / 时延≤100ms）。祝您使用愉快！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "clarify",
+            "expression_level": 1,
+            "intent": "钉钉会议保障",
+            "params": {
+              "application_name": {
+                "value": "钉钉",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Turn",
+                  "source_ref": "U3"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "100ms",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月11日18时45分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月11日19时45分",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                },
+                "duration": {
+                  "value": "60min",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "clarify",
+        "expression_level": 1,
+        "intent": "钉钉会议保障",
+        "params": {
+          "application_name": {
+            "value": "钉钉",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "service_name": {
+            "value": "会议",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "720p",
+              "source_type": "Turn",
+              "source_ref": "U3"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "100ms",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年10月11日18时45分",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            },
+            "end_timestamp": {
+              "value": "2026年10月11日19时45分",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            },
+            "duration": {
+              "value": "60min",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "钉钉",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月11日18时45分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {
+              "rtt": {
+                "max_value": {
+                  "value": "100ms",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "timestamp": {
+                "end_timestamp": {
+                  "value": "2026年10月11日19时45分",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                },
+                "duration": {
+                  "value": "60min",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              }
+            }
+          },
+          {
+            "turn": 3,
+            "params": {
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Turn",
+                  "source_ref": "U3"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_014-03",
+    "user_id": "USER_014",
+    "reference_time": "2026年10月14日13时45分",
+    "session_meta": {
+      "template_id": "T2-1",
+      "round_count": 2,
+      "intent_count": 1,
+      "memory_role": "reinforcement_session",
+      "skeleton_signature": "T2-1|2|1|I1:腾讯会议/会议/1/history_filled/resolved|none",
+      "scenario": {
+        "environment": "校园户外教学协作与视频答疑现场",
+        "blueprint_type": "main",
+        "memory_action": "crystallize_implicit_memory"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "今天又到校园户外教学协作与视频答疑现场办事了，这次按上次的来。",
+          "action_types": [
+            "Create_Intent_Request"
+          ]
+        },
+        "agent": {
+          "utterance": "我查到您上次在这个场景使用的是腾讯会议会议，配置为1080p、时延50ms以内、持续120min。本次计划14时00分至16时00分，是否按这套配置开通？如果确认，我也可以将它设为以后这个场景的默认配置。",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "history_filled",
+            "expression_level": 1,
+            "intent": "腾讯会议会议保障",
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "History",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "History",
+                "source_ref": "MF_001"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月14日14时00分",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月14日16时00分",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "对，就按这个标准来，以后这个场景也按这套配置。画质细节要看得清就行，按1080p开，以后也照这个标准理解。",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已按您刚才的表达记录这个使用习惯，并为您开通本次保障。祝您使用愉快！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "history_filled",
+            "expression_level": 1,
+            "intent": "腾讯会议会议保障",
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "History",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "History",
+                "source_ref": "MF_001"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月14日14时00分",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月14日16时00分",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "history_filled",
+        "expression_level": 1,
+        "intent": "腾讯会议会议保障",
+        "params": {
+          "application_name": {
+            "value": "腾讯会议",
+            "source_type": "History",
+            "source_ref": "MF_001"
+          },
+          "service_name": {
+            "value": "会议",
+            "source_type": "History",
+            "source_ref": "MF_001"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "1080p",
+              "source_type": "History",
+              "source_ref": "MF_001"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "50ms",
+              "source_type": "History",
+              "source_ref": "MF_001"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年10月14日14时00分",
+              "source_type": "History",
+              "source_ref": "MF_001"
+            },
+            "end_timestamp": {
+              "value": "2026年10月14日16时00分",
+              "source_type": "History",
+              "source_ref": "MF_001"
+            },
+            "duration": {
+              "value": "120min",
+              "source_type": "History",
+              "source_ref": "MF_001"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "History",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "History",
+                "source_ref": "MF_001"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月14日14时00分",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月14日16时00分",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                }
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {}
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_014-04",
+    "user_id": "USER_014",
+    "reference_time": "2026年10月15日20时00分",
+    "session_meta": {
+      "template_id": "T2-1",
+      "round_count": 2,
+      "intent_count": 1,
+      "memory_role": "evidence_session",
+      "skeleton_signature": "T2-1|2|1|I1:微信/视频通话/1/clarified/resolved|none",
+      "scenario": {
+        "environment": "驻地酒店休息区",
+        "blueprint_type": "sub_02",
+        "memory_action": "establish_sub_storyline_2"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "你好，需要给微信视频通话做一个网络保障，时间是今天20时15分开始。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，您是要在微信打视频通话对吧？画质、时延和持续时长您有什么要求吗？",
+          "action_types": [
+            "Request_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [
+          "resolution",
+          "rtt",
+          "duration"
+        ],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "clarify",
+            "expression_level": 1,
+            "intent": "微信视频通话保障",
+            "params": {
+              "application_name": {
+                "value": "微信",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "视频通话",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月15日20时15分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "画质细节要看得清就行，按1080p开，以后也照这个标准理解。时延80ms以内，开一个半小时。以后我说‘细节要看得清’，画质就是1080p。",
+          "action_types": [
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已为您开通本次保障：微信-视频通话，1080p画质，80ms以内时延，持续90分钟。也记下您的习惯：以后说‘细节要看得清’就按1080p来。祝您休息愉快！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "clarified",
+            "expression_level": 1,
+            "intent": "微信视频通话保障",
+            "params": {
+              "application_name": {
+                "value": "微信",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "视频通话",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "80ms",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月15日20时15分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月15日21时45分",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                },
+                "duration": {
+                  "value": "90min",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "clarified",
+        "expression_level": 1,
+        "intent": "微信视频通话保障",
+        "params": {
+          "application_name": {
+            "value": "微信",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "service_name": {
+            "value": "视频通话",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "1080p",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "80ms",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年10月15日20时15分",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            },
+            "end_timestamp": {
+              "value": "2026年10月15日21时45分",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            },
+            "duration": {
+              "value": "90min",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "微信",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "视频通话",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月15日20时15分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "80ms",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "timestamp": {
+                "end_timestamp": {
+                  "value": "2026年10月15日21时45分",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                },
+                "duration": {
+                  "value": "90min",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_014-05",
+    "user_id": "USER_014",
+    "reference_time": "2026年10月18日10时00分",
+    "session_meta": {
+      "template_id": "T1-2",
+      "round_count": 1,
+      "intent_count": 1,
+      "memory_role": "distractor_session",
+      "skeleton_signature": "T1-2|1|1|I1:宽带光纤装维报修/0/rejected/rejected|none|none|out_of_domain",
+      "scenario": {
+        "environment": "酒店临时办公区网络故障",
+        "blueprint_type": "distractor_ood",
+        "memory_action": "reject_out_of_domain",
+        "request_type": "life_service"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "你好，现场这边网络好像有问题，能帮我安排师傅处理一下宽带光纤装维报修吗？",
+          "action_types": [
+            "Create_Intent_Request"
+          ]
+        },
+        "agent": {
+          "utterance": "抱歉，本智能助手仅提供手机移动网络加速与保障服务，暂不支持办理宽带光纤装维报修业务，建议您联系宽带专线处理。",
+          "action_types": [
+            "Reject_Request"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "rejected",
+            "closure_path": "rejected",
+            "expression_level": 0,
+            "intent": "宽带光纤装维报修",
+            "params": {}
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "rejected",
+        "closure_path": "rejected",
+        "expression_level": 0,
+        "intent": "宽带光纤装维报修",
+        "params": {}
+      }
+    ],
+    "relations": [],
+    "slot_updates": []
+  },
+  {
+    "session_id": "S-USER_014-06",
+    "user_id": "USER_014",
+    "reference_time": "2026年10月21日18时30分",
+    "session_meta": {
+      "template_id": "T2-1",
+      "round_count": 2,
+      "intent_count": 1,
+      "memory_role": "reinforcement_session",
+      "skeleton_signature": "T2-1|2|1|I1:钉钉/会议/1/memory_filled/resolved|none",
+      "scenario": {
+        "environment": "大巴转场途中",
+        "blueprint_type": "sub_01",
+        "memory_action": "reinforce_sub_storyline_1"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "老规矩，在大巴转场途中，用钉钉做会议，画质按‘清晰点就行’，帮我把保障开上。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，我调取到之前登记的钉钉会议配置：720p、时延100ms以内，18时45分开始、19时45分结束，持续60min。确认按这套配置开通吗？",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "钉钉会议保障",
+            "params": {
+              "application_name": {
+                "value": "钉钉",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "100ms",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月21日18时45分",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月21日19时45分",
+                  "source_type": "Context",
+                  "source_ref": "SUB_001"
+                },
+                "duration": {
+                  "value": "60min",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "对，就按这个开通，以后我说‘清晰点就行’，画质就是720p，记住这个习惯哈。",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已为您开通本次保障，并已记录‘清晰点就行’对应720p画质，以后照这个标准来。祝您会议顺利！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "钉钉会议保障",
+            "params": {
+              "application_name": {
+                "value": "钉钉",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "100ms",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月21日18时45分",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月21日19时45分",
+                  "source_type": "Context",
+                  "source_ref": "SUB_001"
+                },
+                "duration": {
+                  "value": "60min",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "memory_filled",
+        "expression_level": 1,
+        "intent": "钉钉会议保障",
+        "params": {
+          "application_name": {
+            "value": "钉钉",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "service_name": {
+            "value": "会议",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "720p",
+              "source_type": "Memory",
+              "source_ref": "SUB_001"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "100ms",
+              "source_type": "Memory",
+              "source_ref": "SUB_001"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年10月21日18时45分",
+              "source_type": "Memory",
+              "source_ref": "SUB_001"
+            },
+            "end_timestamp": {
+              "value": "2026年10月21日19时45分",
+              "source_type": "Context",
+              "source_ref": "SUB_001"
+            },
+            "duration": {
+              "value": "60min",
+              "source_type": "Memory",
+              "source_ref": "SUB_001"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "钉钉",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月21日18时45分",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月21日19时45分",
+                  "source_type": "Context",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "100ms",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {}
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_014-07",
+    "user_id": "USER_014",
+    "reference_time": "2026年10月24日13时45分",
+    "session_meta": {
+      "template_id": "T2-5",
+      "round_count": 2,
+      "intent_count": 1,
+      "memory_role": "reuse_session",
+      "skeleton_signature": "T2-5|2|1|I1:腾讯会议/会议/1/amend/resolved|none",
+      "scenario": {
+        "environment": "校园户外教学协作与视频答疑现场",
+        "blueprint_type": "main",
+        "memory_action": "extend_duration_amend"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "老规矩，大半个下午开通保障。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，您说的老规矩是指腾讯会议会议保障，画质1080p、时延50ms以内、时长180分钟，从2026年10月24日14时00分到17时00分，对吗？",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "amend",
+            "expression_level": 1,
+            "intent": "腾讯会议会议保障",
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月24日14时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月24日16时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Context",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "对，老规矩不变，不过今天现场活动多，时长延长到180分钟吧。",
+          "action_types": [
+            "Confirm_Slot",
+            "Modify_Request"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已为您将时长延长至180分钟，保障从2026年10月24日14时00分到17时00分生效。祝您活动顺利！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "amend",
+            "expression_level": 1,
+            "intent": "腾讯会议会议保障",
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月24日14时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月24日17时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                },
+                "duration": {
+                  "value": "180min",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "amend",
+        "expression_level": 1,
+        "intent": "腾讯会议会议保障",
+        "params": {
+          "application_name": {
+            "value": "腾讯会议",
+            "source_type": "Memory",
+            "source_ref": "MF_001"
+          },
+          "service_name": {
+            "value": "会议",
+            "source_type": "Memory",
+            "source_ref": "MF_001"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "1080p",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "50ms",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年10月24日14时00分",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            },
+            "end_timestamp": {
+              "value": "2026年10月24日17时00分",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            },
+            "duration": {
+              "value": "180min",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月24日14时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月24日16时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Context",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {
+              "timestamp": {
+                "end_timestamp": {
+                  "value": "2026年10月24日17时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                },
+                "duration": {
+                  "value": "180min",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_014-08",
+    "user_id": "USER_014",
+    "reference_time": "2026年10月28日13时45分",
+    "session_meta": {
+      "template_id": "T2-1",
+      "round_count": 2,
+      "intent_count": 1,
+      "memory_role": "reinforcement_session",
+      "skeleton_signature": "T2-1|2|1|I1:腾讯会议/会议/1/memory_filled/resolved|none",
+      "scenario": {
+        "environment": "校园户外教学协作与视频答疑现场",
+        "blueprint_type": "main",
+        "memory_action": "reinforce_main_memory"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "老规矩，在校园户外教学协作与视频答疑现场，用腾讯会议做会议，画质按‘细节要看得清’，帮我把保障开上。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，我调取到之前登记的腾讯会议会议配置：1080p、时延50ms以内，14时00分开始、16时00分结束，持续120min。确认按这套配置开通吗？",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "腾讯会议会议保障",
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月28日14时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月28日16时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "对，直接开通。",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已为您开通本次保障，画质1080p、时延50ms以内、时长120分钟。祝您教学顺利！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "腾讯会议会议保障",
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月28日14时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月28日16时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "memory_filled",
+        "expression_level": 1,
+        "intent": "腾讯会议会议保障",
+        "params": {
+          "application_name": {
+            "value": "腾讯会议",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "service_name": {
+            "value": "会议",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "1080p",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "50ms",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年10月28日14时00分",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            },
+            "end_timestamp": {
+              "value": "2026年10月28日16时00分",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            },
+            "duration": {
+              "value": "120min",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月28日14时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月28日16时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {}
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_014-09",
+    "user_id": "USER_014",
+    "reference_time": "2026年10月29日20时00分",
+    "session_meta": {
+      "template_id": "T2-1",
+      "round_count": 2,
+      "intent_count": 1,
+      "memory_role": "reinforcement_session",
+      "skeleton_signature": "T2-1|2|1|I1:微信/视频通话/1/memory_filled/resolved|none",
+      "scenario": {
+        "environment": "驻地复盘业务",
+        "blueprint_type": "sub_02",
+        "memory_action": "reinforce_sub_storyline_2"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "老规矩，在驻地复盘业务，用微信做视频通话，画质按‘细节要看得清’，帮我把保障开上。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，我调取到之前登记的微信视频通话配置：1080p、时延80ms以内，20时15分开始、21时45分结束，持续90min。确认按这套配置开通吗？",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "微信视频通话保障",
+            "params": {
+              "application_name": {
+                "value": "微信",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "视频通话",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_002"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "80ms",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_002"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月29日20时15分",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_002"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月29日21时45分",
+                  "source_type": "Context",
+                  "source_ref": "SUB_002"
+                },
+                "duration": {
+                  "value": "90min",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_002"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "对，直接开通。",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已为您开通本次保障，画质1080p、时延80ms以内、时长90分钟。祝您复盘顺利！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "微信视频通话保障",
+            "params": {
+              "application_name": {
+                "value": "微信",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "视频通话",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_002"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "80ms",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_002"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月29日20时15分",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_002"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月29日21时45分",
+                  "source_type": "Context",
+                  "source_ref": "SUB_002"
+                },
+                "duration": {
+                  "value": "90min",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_002"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "memory_filled",
+        "expression_level": 1,
+        "intent": "微信视频通话保障",
+        "params": {
+          "application_name": {
+            "value": "微信",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "service_name": {
+            "value": "视频通话",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "1080p",
+              "source_type": "Memory",
+              "source_ref": "SUB_002"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "80ms",
+              "source_type": "Memory",
+              "source_ref": "SUB_002"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年10月29日20时15分",
+              "source_type": "Memory",
+              "source_ref": "SUB_002"
+            },
+            "end_timestamp": {
+              "value": "2026年10月29日21时45分",
+              "source_type": "Context",
+              "source_ref": "SUB_002"
+            },
+            "duration": {
+              "value": "90min",
+              "source_type": "Memory",
+              "source_ref": "SUB_002"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "微信",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "视频通话",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月29日20时15分",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_002"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月29日21时45分",
+                  "source_type": "Context",
+                  "source_ref": "SUB_002"
+                }
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_002"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "80ms",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_002"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {}
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_014-10",
+    "user_id": "USER_014",
+    "reference_time": "2026年11月01日12时30分",
+    "session_meta": {
+      "template_id": "X-1",
+      "round_count": 1,
+      "intent_count": 2,
+      "memory_role": "distractor_session",
+      "skeleton_signature": "X-1|1|2|I1:哔哩哔哩/看直播/1/direct/resolved;I2:手机话费充值与账单查询/0/rejected/rejected|none|none|mixed_reject",
+      "scenario": {
+        "environment": "周末午休个人时间",
+        "blueprint_type": "distractor_mixed",
+        "memory_action": "mixed_in_out_domain"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "周末午休想用哔哩哔哩看个直播，画质清晰点就行，帮我开个保障；另外顺便帮我查一下手机话费余额。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，您要在哔哩哔哩看直播，画质按720p、时延80ms以内、时长60分钟，从2026年11月01日12时30分到13时30分，这个保障我帮您开通。话费充值和账单查询属于运营商业务，我这边不支持，建议您拨打运营商客服热线办理。",
+          "action_types": [
+            "Acknowledge",
+            "Reject_Request"
+          ]
+        },
+        "related_intent_ids": [
+          "I1",
+          "I2"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "direct",
+            "expression_level": 1,
+            "intent": "哔哩哔哩看直播保障",
+            "params": {
+              "application_name": {
+                "value": "哔哩哔哩",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "看直播",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "80ms",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月01日12时30分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月01日13时30分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "duration": {
+                  "value": "60min",
+                  "source_type": "Context",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          },
+          {
+            "intent_id": "I2",
+            "status": "rejected",
+            "closure_path": "rejected",
+            "expression_level": 0,
+            "intent": "手机话费充值与账单查询",
+            "params": {}
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "direct",
+        "expression_level": 1,
+        "intent": "哔哩哔哩看直播保障",
+        "params": {
+          "application_name": {
+            "value": "哔哩哔哩",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "service_name": {
+            "value": "看直播",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "720p",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "80ms",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年11月01日12时30分",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            },
+            "end_timestamp": {
+              "value": "2026年11月01日13时30分",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            },
+            "duration": {
+              "value": "60min",
+              "source_type": "Context",
+              "source_ref": "U1"
+            }
+          }
+        }
+      },
+      {
+        "intent_id": "I2",
+        "status": "rejected",
+        "closure_path": "rejected",
+        "expression_level": 0,
+        "intent": "手机话费充值与账单查询",
+        "params": {}
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "哔哩哔哩",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "看直播",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "80ms",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月01日12时30分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月01日13时30分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "duration": {
+                  "value": "60min",
+                  "source_type": "Context",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_014-11",
+    "user_id": "USER_014",
+    "reference_time": "2026年11月04日13时45分",
+    "session_meta": {
+      "template_id": "T2-3",
+      "round_count": 2,
+      "intent_count": 1,
+      "memory_role": "correction_session",
+      "skeleton_signature": "T2-3|2|1|I1:腾讯会议/会议/4/correct/resolved|none",
+      "scenario": {
+        "environment": "校际联合实践周期间，教师需在运动场、社会实践地或临时教学现场频繁进行视频会议与资料上传，现场网络覆盖不稳定，通勤切换频繁。",
+        "blueprint_type": "event_override",
+        "memory_action": "override_temporary_preference"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "老规矩，企鹅会议开通保障。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，您说的‘老规矩’是指腾讯会议-会议保障，画质1080p、时延50ms以内、时长120分钟，对吗？",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "correct",
+            "expression_level": 4,
+            "intent": "腾讯会议会议保障",
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月04日14时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月04日16时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Context",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "对，不过今天现场特殊，画质临时调到720p，时延按30ms来，其他照旧。",
+          "action_types": [
+            "Correct_Previous_Input",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已按现场特殊需求为您开通腾讯会议-会议保障：画质720p、时延30ms以内，时长120分钟，祝您教学协作顺利！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "correct",
+            "expression_level": 4,
+            "intent": "腾讯会议会议保障",
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "30ms",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月04日14时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月04日16时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Context",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "correct",
+        "expression_level": 4,
+        "intent": "腾讯会议会议保障",
+        "params": {
+          "application_name": {
+            "value": "腾讯会议",
+            "source_type": "Memory",
+            "source_ref": "MF_001"
+          },
+          "service_name": {
+            "value": "会议",
+            "source_type": "Memory",
+            "source_ref": "MF_001"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "720p",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "30ms",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年11月04日14时00分",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            },
+            "end_timestamp": {
+              "value": "2026年11月04日16时00分",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            },
+            "duration": {
+              "value": "120min",
+              "source_type": "Context",
+              "source_ref": "U1"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月04日14时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月04日16时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "30ms",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_014-12",
+    "user_id": "USER_014",
+    "reference_time": "2026年11月07日13时45分",
+    "session_meta": {
+      "template_id": "T2-1",
+      "round_count": 2,
+      "intent_count": 1,
+      "memory_role": "reuse_session",
+      "skeleton_signature": "T2-1|2|1|I1:腾讯会议/会议/1/memory_filled/resolved|none",
+      "scenario": {
+        "environment": "特殊事件集结区",
+        "blueprint_type": "event_reuse",
+        "memory_action": "reuse_temporary_preference"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "老规矩，在特殊事件集结区，用腾讯会议做会议，时延按‘超低时延’，帮我把保障开上。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，我调取到之前登记的腾讯会议会议配置：720p、时延30ms以内，14时00分开始、16时00分结束，持续120min。确认按这套配置开通吗？",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "腾讯会议会议保障",
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001_v2"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001_v2"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001_v2"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "30ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001_v2"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月07日14时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月07日16时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Context",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "对，直接开通。",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已为您开通腾讯会议-会议保障：画质720p、时延30ms以内、时长120分钟，祝您使用顺利！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "腾讯会议会议保障",
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001_v2"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001_v2"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001_v2"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "30ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001_v2"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月07日14时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月07日16时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Context",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "memory_filled",
+        "expression_level": 1,
+        "intent": "腾讯会议会议保障",
+        "params": {
+          "application_name": {
+            "value": "腾讯会议",
+            "source_type": "Memory",
+            "source_ref": "MF_001_v2"
+          },
+          "service_name": {
+            "value": "会议",
+            "source_type": "Memory",
+            "source_ref": "MF_001_v2"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "720p",
+              "source_type": "Memory",
+              "source_ref": "MF_001_v2"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "30ms",
+              "source_type": "Memory",
+              "source_ref": "MF_001_v2"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年11月07日14时00分",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            },
+            "end_timestamp": {
+              "value": "2026年11月07日16时00分",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            },
+            "duration": {
+              "value": "120min",
+              "source_type": "Context",
+              "source_ref": "U1"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001_v2"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001_v2"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月07日14时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月07日16时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001_v2"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "30ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001_v2"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {}
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_014-13",
+    "user_id": "USER_014",
+    "reference_time": "2026年11月11日18时30分",
+    "session_meta": {
+      "template_id": "T2-1",
+      "round_count": 2,
+      "intent_count": 1,
+      "memory_role": "reuse_session",
+      "skeleton_signature": "T2-1|2|1|I1:钉钉/会议/1/memory_filled/resolved|none",
+      "scenario": {
+        "environment": "转场大巴途中",
+        "blueprint_type": "sub_01",
+        "memory_action": "sub_memory_unaffected"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "老规矩，在转场大巴途中，用钉钉做会议，画质按‘清晰点就行’，帮我把保障开上。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，我调取到之前登记的钉钉会议配置：720p、时延100ms以内，18时45分开始、19时45分结束，持续60min。确认按这套配置开通吗？",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "钉钉会议保障",
+            "params": {
+              "application_name": {
+                "value": "钉钉",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "100ms",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月11日18时45分",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月11日19时45分",
+                  "source_type": "Context",
+                  "source_ref": "SUB_001"
+                },
+                "duration": {
+                  "value": "60min",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "对，开通吧。",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已为您开通钉钉-会议保障：画质720p、时延100ms以内、时长60分钟，祝您转场途中沟通顺利！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "钉钉会议保障",
+            "params": {
+              "application_name": {
+                "value": "钉钉",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "100ms",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月11日18时45分",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月11日19时45分",
+                  "source_type": "Context",
+                  "source_ref": "SUB_001"
+                },
+                "duration": {
+                  "value": "60min",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "memory_filled",
+        "expression_level": 1,
+        "intent": "钉钉会议保障",
+        "params": {
+          "application_name": {
+            "value": "钉钉",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "service_name": {
+            "value": "会议",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "720p",
+              "source_type": "Memory",
+              "source_ref": "SUB_001"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "100ms",
+              "source_type": "Memory",
+              "source_ref": "SUB_001"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年11月11日18时45分",
+              "source_type": "Memory",
+              "source_ref": "SUB_001"
+            },
+            "end_timestamp": {
+              "value": "2026年11月11日19时45分",
+              "source_type": "Context",
+              "source_ref": "SUB_001"
+            },
+            "duration": {
+              "value": "60min",
+              "source_type": "Memory",
+              "source_ref": "SUB_001"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "钉钉",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月11日18时45分",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月11日19时45分",
+                  "source_type": "Context",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "100ms",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {}
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_014-14",
+    "user_id": "USER_014",
+    "reference_time": "2026年11月15日10时00分",
+    "session_meta": {
+      "template_id": "T1-1",
+      "round_count": 1,
+      "intent_count": 1,
+      "memory_role": "distractor_session",
+      "skeleton_signature": "T1-1|1|1|I1:哔哩哔哩/短视频/1/direct/resolved|none",
+      "scenario": {
+        "environment": "阶段工作总结会",
+        "blueprint_type": "distractor",
+        "memory_action": "distractor_no_memory"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "哔哩哔哩看个短视频，时延不卡就行。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已为您开通哔哩哔哩-短视频保障：画质720p、时延80ms以内、时长30分钟，祝您观看愉快！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "direct",
+            "expression_level": 1,
+            "intent": "哔哩哔哩短视频保障",
+            "params": {
+              "application_name": {
+                "value": "哔哩哔哩",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "短视频",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "80ms",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月15日10时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月15日10时30分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "duration": {
+                  "value": "30min",
+                  "source_type": "Context",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "direct",
+        "expression_level": 1,
+        "intent": "哔哩哔哩短视频保障",
+        "params": {
+          "application_name": {
+            "value": "哔哩哔哩",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "service_name": {
+            "value": "短视频",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "720p",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "80ms",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年11月15日10时00分",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            },
+            "end_timestamp": {
+              "value": "2026年11月15日10时30分",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            },
+            "duration": {
+              "value": "30min",
+              "source_type": "Context",
+              "source_ref": "U1"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "哔哩哔哩",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "短视频",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月15日10时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月15日10时30分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "80ms",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_014-15",
+    "user_id": "USER_014",
+    "reference_time": "2026年11月18日13时45分",
+    "session_meta": {
+      "template_id": "T2-1",
+      "round_count": 2,
+      "intent_count": 1,
+      "memory_role": "reuse_session",
+      "skeleton_signature": "T2-1|2|1|I1:腾讯会议/会议/1/memory_filled/resolved|none",
+      "scenario": {
+        "environment": "校园户外教学协作与视频答疑现场",
+        "blueprint_type": "main_recovery",
+        "memory_action": "recover_long_term_rule"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "老规矩，在校园户外教学协作与视频答疑现场，用腾讯会议做会议，时延按‘别卡顿’，帮我把保障开上。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，我调取到之前登记的腾讯会议会议配置：1080p、时延50ms以内，14时00分开始、16时00分结束，持续120min。确认按这套配置开通吗？",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "腾讯会议会议保障",
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月18日14时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月18日16时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Context",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "对，直接开通。",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已为您开通腾讯会议-会议保障：画质1080p、时延50ms以内、时长120分钟，祝您户外教学与视频答疑顺利！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "腾讯会议会议保障",
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月18日14时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月18日16时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Context",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "memory_filled",
+        "expression_level": 1,
+        "intent": "腾讯会议会议保障",
+        "params": {
+          "application_name": {
+            "value": "腾讯会议",
+            "source_type": "Memory",
+            "source_ref": "MF_001"
+          },
+          "service_name": {
+            "value": "会议",
+            "source_type": "Memory",
+            "source_ref": "MF_001"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "1080p",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "50ms",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年11月18日14时00分",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            },
+            "end_timestamp": {
+              "value": "2026年11月18日16时00分",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            },
+            "duration": {
+              "value": "120min",
+              "source_type": "Context",
+              "source_ref": "U1"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月18日14时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月18日16时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {}
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_014-16",
+    "user_id": "USER_014",
+    "reference_time": "2026年11月20日13时45分",
+    "session_meta": {
+      "template_id": "T2-1",
+      "round_count": 2,
+      "intent_count": 1,
+      "memory_role": "reuse_session",
+      "skeleton_signature": "T2-1|2|1|I1:腾讯会议/会议/1/memory_filled/resolved|none",
+      "scenario": {
+        "environment": "校园户外教学协作与视频答疑现场",
+        "blueprint_type": "main",
+        "memory_action": "continuous_main_reuse"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "老规矩，在校园户外教学协作与视频答疑现场，用腾讯会议做会议，画质按‘细节要看得清’，帮我把保障开上。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，我调取到之前登记的腾讯会议会议配置：1080p、时延50ms以内，14时00分开始、16时00分结束，持续120min。确认按这套配置开通吗？",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "腾讯会议会议保障",
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月20日14时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月20日16时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "对，直接开通，咱们班下午还要对齐一下作业和视频答疑，别掉链子。",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已为您开通本次腾讯会议保障，画质1080p、时延50ms以内、持续120分钟，祝您教学协作顺利！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "腾讯会议会议保障",
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月20日14时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月20日16时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "memory_filled",
+        "expression_level": 1,
+        "intent": "腾讯会议会议保障",
+        "params": {
+          "application_name": {
+            "value": "腾讯会议",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "service_name": {
+            "value": "会议",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "1080p",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "50ms",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年11月20日14时00分",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            },
+            "end_timestamp": {
+              "value": "2026年11月20日16时00分",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            },
+            "duration": {
+              "value": "120min",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月20日14时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月20日16时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {}
+          }
+        ]
+      }
+    ]
+  }
+]
