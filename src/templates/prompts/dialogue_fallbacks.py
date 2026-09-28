@@ -11,6 +11,27 @@ from src.templates.prompts.small_memory_prompt import (
     declaration_example,
 )
 
+def _sanitize_env(env: str) -> str:
+    if not env:
+        return "现场"
+    if len(env) > 10 or any(kw in env for kw in ["当", "进入", "触发", "身处", "。"]):
+        for kw, loc in [
+            ("道路巡逻", "道路巡逻现场"),
+            ("巡逻线", "道路巡逻现场"),
+            ("社区走访", "社区走访现场"),
+            ("走访", "社区走访现场"),
+            ("晚间户外", "晚间户外活动现场"),
+            ("街区采访", "街区采访现场"),
+            ("沿海", "沿海巡逻岸线"),
+            ("高山", "高山露天训练场"),
+            ("大巴", "大巴转场途中"),
+            ("酒店", "驻地酒店休息区"),
+        ]:
+            if kw in env:
+                return loc
+        return "外勤保障现场"
+    return env.strip("，, 。. ")
+
 def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
     tp = s_plan["target_params"]
     aliases = s_plan.get("aliases", {})
@@ -34,7 +55,7 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
     trig_type = s_plan.get("storyline_trigger_type", "time_periodic")
     period_type = s_plan.get("period_type", "weekly")
     trig_cond = s_plan.get("trigger_condition", "")
-    env = s_plan.get("scenario_env", "")
+    env = _sanitize_env(s_plan.get("scenario_env", ""))
     b_type = s_plan.get("blueprint_type", "")
 
     if tid == "T1-2":
@@ -64,7 +85,7 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
             return f"不对，今天现场特殊，画质调到{res_alias}，时延要求{rtt_alias}，临时按这个来。"
     elif turn_idx == 1:
         if role == "reinforcement_session" and decl_mode == "implicit_induction" and s_plan.get("session_id", "").endswith("-03"):
-            return f"今天又到{env}办事了，这次按上次的来。"
+            return f"今天在{env}，这次按上次的来。"
         elif role == "evidence_session":
             return f"你好，需要给{app}{srv}做一个网络保障，时间是今天{tp['start_timestamp'].split('日')[-1]}开始。"
         elif role in ["reinforcement_session", "reuse_session"]:
@@ -84,10 +105,11 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
         if role == "evidence_session" and (decl_mode == "explicit_declaration" or b_type in ["sub_01", "sub_02"]):
             dur_text = f"，预计持续{dur_alias}（到{tp['end_timestamp'].split('日')[-1]}）"
             alias_intro = f"{small_declaration}" if small_declaration else ""
+            trig_desc = env if len(trig_cond) > 10 else (trig_cond or env)
             if trig_type == "task_activity":
-                return f"好的，画质用{res}，时延{rtt}以内{dur_text}。{alias_intro}以后只要我提到执行【{trig_cond or env}】任务，就按老规矩来：{app}{srv}、{res}、{rtt}以内，帮我把这个习惯记好，别掉链子。"
+                return f"好的，画质用{res}，时延{rtt}以内{dur_text}。{alias_intro}以后只要我提到执行【{trig_desc}】任务，就按老规矩来：{app}{srv}、{res}、{rtt}以内，帮我把这个习惯记好，别掉链子。"
             elif trig_type == "location_environment":
-                return f"好的，画质用{res}，时延{rtt}以内{dur_text}。{alias_intro}以后只要我处于【{trig_cond or env}】，就按老规矩来：{app}{srv}、{res}、{rtt}以内，帮我把这个习惯记好，别掉链子。"
+                return f"好的，画质用{res}，时延{rtt}以内{dur_text}。{alias_intro}以后只要我处于【{env}】，就按老规矩来：{app}{srv}、{res}、{rtt}以内，帮我把这个习惯记好，别掉链子。"
             elif period_type == "daily":
                 return f"好的，画质用{res}，时延{rtt}以内{dur_text}。{alias_intro}以后我只要每天这个时段说'老规矩'，就按这个来：{app}{srv}、{res}、{rtt}以内，记住这个习惯哈，别掉链子。"
             elif period_type == "monthly":
@@ -118,7 +140,7 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
     trig_type = s_plan.get("storyline_trigger_type", "time_periodic")
     period_type = s_plan.get("period_type", "weekly")
     trig_cond = s_plan.get("trigger_condition", "")
-    env = s_plan.get("scenario_env", "")
+    env = _sanitize_env(s_plan.get("scenario_env", ""))
     small_memory = s_plan.get("small_memory", {})
     small_declaration = declaration_example(small_memory)
     evidence_mode = s_plan.get("small_memory_evidence_mode", "explicit_declaration")
@@ -160,7 +182,8 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
         elif role == "reinforcement_session" and decl_mode == "implicit_induction" and s_plan.get("session_id", "").endswith("-03"):
             start_text = tp['start_timestamp'].split('日')[-1]
             end_text = tp['end_timestamp'].split('日')[-1]
-            return f"我查到您上次在这个场景使用的是{app}{srv}，配置为{res}、时延{rtt}以内、持续{tp['duration']}。本次计划{start_text}至{end_text}，是否按这套配置开通？如果确认，我也可以将它设为以后这个场景的默认配置。"
+            loc_text = f"在{env}" if env and env != "现场" else "在上次场景"
+            return f"我查到您上次{loc_text}使用的是{app}{srv}，配置为{res}、时延{rtt}以内、持续{tp['duration']}。本次计划{start_text}至{end_text}，是否按这套配置开通？如果确认，我也可以将它设为以后该场景的默认配置。"
         elif role in ["reinforcement_session", "reuse_session"]:
             start_text = tp['start_timestamp'].split('日')[-1]
             end_text = tp['end_timestamp'].split('日')[-1]

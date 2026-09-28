@@ -23,8 +23,71 @@ class DynamicTimelinePlanner:
         digest = hashlib.sha256(f"{user_id}:{blueprint_type}".encode("utf-8")).digest()
         return candidates[int.from_bytes(digest[:4], "big") % len(candidates)]
 
+    @staticmethod
+    def _extract_clean_location(raw_cond: str, task_name: str) -> str:
+        """从 trigger_condition 中提炼简短自然的地点环境名称（4-8字），避免规则长句混入台词。"""
+        if not raw_cond:
+            return "执勤活动现场"
+        
+        patterns = [
+            (r'道路巡逻|巡逻线|事故现场|移动执勤', "道路巡逻现场"),
+            (r'社区走访|走访点|临时会议', "社区走访现场"),
+            (r'户外现场|晚间户外|临时停留点|等候区', "晚间户外活动现场"),
+            (r'街区采访|拍摄地|遮挡区域', "街区采访现场"),
+            (r'沿海公路|巡逻岸线|集结区', "沿海巡逻岸线"),
+            (r'高山|登山口|露天训练|偏远山区', "高山露天训练场"),
+        ]
+        for pat, loc in patterns:
+            if re.search(pat, raw_cond):
+                return loc
+
+        m = re.search(r'(?:身处|在|进入)([^，,。、\s]{2,8}(?:走访点|现场|岸线|训练场|营区|路线|区域|停留点))', raw_cond)
+        if m:
+            clean = m.group(1).replace("等", "")
+            return clean if len(clean) <= 8 else f"{clean[:6]}现场"
+
+        clean_task = re.sub(r'(?:任务|保障|协同|即时调度|回传|上传|与|及)', '', task_name or '')
+        if clean_task and 2 <= len(clean_task) <= 8:
+            return f"{clean_task}现场"
+
+        return "外勤保障现场"
+
     @classmethod
-    def plan(cls, persona: dict) -> list[dict]:
+    def _extract_location_with_llm(cls, llm, raw_trig_cond: str, task_name: str, identity: str = "") -> str:
+        """
+        利用大模型从复杂场景长句中提炼出适合日常口语对话的地点/现场名称（3-7个汉字）。
+        带有格式约束与规则兜底机制。
+        """
+        if not llm:
+            return cls._extract_clean_location(raw_trig_cond, task_name)
+
+        prompt = (
+            f"请从以下人物背景、任务与场景描述中，提炼出 1 个最适合作为日常口语对话中【地点/现场】的简短名词短语。\n\n"
+            f"用户职业身份：{identity}\n"
+            f"任务名称：{task_name}\n"
+            f"触发场景规则：{raw_trig_cond}\n\n"
+            f"【要求】：\n"
+            f"1. 必须是纯地点名词短语，长度在 3 到 7 个汉字之间（如：“道路巡逻现场”、“社区走访现场”、“沿海巡逻岸线”、“高山露天训练场”、“野外地质勘查区”）。\n"
+            f"2. 严禁包含“当...时”、“触发现场...”、“需要...”等任何条件句式或动词引导词。\n"
+            f"3. 仅输出 JSON 格式：{{\"location_name\": \"简短地点名\"}}"
+        )
+        messages = [
+            {"role": "system", "content": "You are a concise location naming assistant. Output valid JSON only."},
+            {"role": "user", "content": prompt}
+        ]
+        try:
+            res = llm.chat_json(messages, enable_thinking=False)
+            if isinstance(res, dict) and res.get("location_name"):
+                loc = str(res["location_name"]).strip()
+                loc = re.sub(r'[，,。、\s]', '', loc)
+                if 2 <= len(loc) <= 10 and not any(k in loc for k in ["当", "进入", "触发", "需要", "时段", "办事"]):
+                    return loc
+        except Exception:
+            pass
+        return cls._extract_clean_location(raw_trig_cond, task_name)
+
+    @classmethod
+    def plan(cls, persona: dict, llm=None) -> list[dict]:
         user_id = persona["static_profile"]["user_id"]
         main_mt = persona["dynamic_profile"]["periodic_main_storyline"]
         scenario_events = persona["dynamic_profile"].get("scenario_events", [])
@@ -62,11 +125,16 @@ class DynamicTimelinePlanner:
         task_name = main_mt.get("name", "业务现场任务")
         raw_trig_cond = main_mt.get("trigger_condition")
         if storyline_trigger_type == "task_activity":
-            main_env_desc = f"{task_name}现场"
+            clean_task = re.sub(r'(?:任务|保障|协同|即时调度|回传|上传)', '', task_name or '')
+            main_env_desc = f"{clean_task}现场" if clean_task else f"{task_name}现场"
             main_trigger_desc = raw_trig_cond if raw_trig_cond else f"执行【{task_name}】任务"
         elif storyline_trigger_type == "location_environment":
-            main_env_desc = raw_trig_cond if raw_trig_cond else "利兹露天集结区"
-            main_trigger_desc = raw_trig_cond if raw_trig_cond else "处于【利兹露天集结区/特定弱网区域】"
+            identity_desc = persona.get("static_profile", {}).get("identity", "")
+            if llm:
+                main_env_desc = cls._extract_location_with_llm(llm, raw_trig_cond, task_name, identity_desc)
+            else:
+                main_env_desc = cls._extract_clean_location(raw_trig_cond, task_name)
+            main_trigger_desc = f"处于【{main_env_desc}】"
         else:
             main_env_desc = "常规周期保障现场"
             main_trigger_desc = raw_trig_cond if raw_trig_cond else "每周常规周期时段"

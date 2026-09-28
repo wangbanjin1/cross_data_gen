@@ -71,7 +71,7 @@ class BatchPipeline:
             print(f"    - Generated Persona Skeleton -> {persona_skeleton_path.name}")
 
         # 2. 动态规划 15 会话时间线
-        timeline = DynamicTimelinePlanner.plan(persona_skeleton)
+        timeline = DynamicTimelinePlanner.plan(persona_skeleton, llm=self.llm)
         print(f"    - Planned {len(timeline)} sessions across timeline.")
 
         # 3. 计算记忆状态演进与批次渲染

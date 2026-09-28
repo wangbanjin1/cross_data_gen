@@ -267,6 +267,10 @@ class DialogueGenerator:
                     u_text = re.sub(pat, '', u_text)
                 u_text = re.sub(r'，\s*，', '，', u_text).strip("，, ")
 
+        # 拦截清理误将后台规划长句拼入台词的异常
+        if any(bad_kw in u_text for bad_kw in ["当上午", "进入道路", "触发现场", "办事了，", "弱网空间时", "固定外勤时段"]):
+            u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+
         a_text = ""
         if isinstance(t_data, dict):
             a_text = (
