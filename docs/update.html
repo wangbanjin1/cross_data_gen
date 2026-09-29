@@ -333,7 +333,7 @@
         <h1>近期生成问题排查、解决办法与实测结果对照</h1>
         <div class="header-meta">
             <div class="meta-tag">记录周期：<span class="val">2026年09月28日 - 09月29日</span></div>
-            <div class="meta-tag">累计解决问题：<span class="val">12 项</span></div>
+            <div class="meta-tag">累计解决问题：<span class="val">14 项</span></div>
             <div class="meta-tag">整改后质检通过率：<span class="val">100.0% (20/20 画像)</span></div>
         </div>
     </header>
@@ -342,7 +342,7 @@
     <div class="date-divider">
         <div class="date-badge">📅 2026年09月29日</div>
         <div class="date-line"></div>
-        <div class="date-summary-text">本日重点：单轮干扰全量参数显式化与暗号彻底隔离、临时纠正最小表达标准规范、临时纠正后基线记忆恢复、口语相对日期真值对齐</div>
+        <div class="date-summary-text">本日重点：时长延长会话（T2-5）首轮最小表达与客服临时参数污染治理、单轮干扰全量参数显式化与暗号彻底隔离、临时纠正最小表达标准规范、临时纠正后基线记忆恢复、口语相对日期真值对齐</div>
     </div>
 
     <!-- 问题 8 (2026-09-29 新增) -->
@@ -556,6 +556,102 @@ User: "你好，今天10时00分到10时30分要在钉钉开会议（开30min）
 Agent: "收到，已为您开通钉钉会议网络保障：画质720p，时延上限80ms，保障时间2026年10月21日10时00分至2026年10月21日10时30分（共30min）。祝您使用顺利！"
 
 // 规范：全量参数一次性交代明确，零暗号零脑补，客服直接受理闭环</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- 问题 13 (2026-09-29 新增) -->
+    <div class="issue-card">
+        <div class="issue-header">
+            <span class="issue-badge">问题 13 (本日解决)</span>
+            <div class="issue-title">时长延长会话（T2-5 / S06）首轮跌破最小表达标准（仅带暗号无应用与业务）</div>
+        </div>
+        <div class="desc-block">
+            <p><span class="desc-label">【问题现象】</span>在会话 S06（如 <code>S-USER_001-06</code>，模板 <code>T2-5</code>，角色 <code>reuse_session</code>）中，第 1 轮用户台词原先仅说“老规矩，别卡顿开通保障。”或“老规矩，大半个下午开通保障。”，既无触发场景，也完全缺失了应用（抖音）与业务（开直播），严重违背了“应用＋业务是发起保障意图的最小表达”的系统铁律。</p>
+            <p><span class="desc-label">【根因排查】</span>
+                1. <strong>提示词构建缺陷</strong>：在 <code>dialogue_generator.py</code> 构建 Prompt 时，针对 T2-5 的规则硬编码为：<code>第1轮用户说'老规矩，{primary_alias}开通保障'</code>，导致大模型直接将时延/时长暗号（如“别卡顿”、“大半个下午”）当成完整台词，粗暴省略了应用和业务；<br>
+                2. <strong>保底与质检拦截遗漏</strong>：原 <code>_normalize_turn</code> 未对 T2-5 校验应用与业务，保底模板也未被强制触发；质检规则中缺少针对 T2-5 首轮最小表达的强行校验。
+            </p>
+            <p><span class="desc-label">【解决办法】</span>
+                1. <strong>重构 T2-5 提示词与保底规则</strong>：在 <code>dialogue_prompts.py</code>、<code>dialogue_generator.py</code> 及 <code>dialogue_fallbacks.py</code> 中重构：第 1 轮强制遵循“场景＋应用＋业务＋老规矩”最小表达（如<code>今天在{env}，老规矩，用{app}做{srv}，帮我把保障开上。</code>），严禁仅凭暗号发起；第 2 轮说明现场活动延长并给出新时长；<br>
+                2. <strong>质检增加 Rule 11 强校验</strong>：在 <code>qc_validator.py</code> 中追加 <code>T2-5</code> 首轮必须具备场景、应用、业务三要素，次轮必须包含时长延长说明；<br>
+                3. <strong>全量 20 个画像统一清洗与验证</strong>：对全量 20 个画像中全部 T2-5 会话同步清洗与标准化，100% 严格质检通过。
+            </p>
+        </div>
+        <div class="contrast-grid">
+            <div class="contrast-box bad">
+                <div class="contrast-title">出现问题时的表现（S-USER_001-06）</div>
+                <pre>// 会话：S-USER_001-06 (模板: T2-5, 时长延长)
+Turn 1:
+User: "老规矩，别卡顿开通保障。"
+Agent: "收到，您说的老规矩是指抖音开直播，画质1080p、时延50ms以内，从12:30开始保障60分钟，对吗？"
+Turn 2:
+User: "对，老规矩不变，但今天午间活动要延长，时长改成120min，按这个节奏来。"
+Agent: "好的，已按老规矩为您开通抖音开直播保障..."
+
+// 缺陷：第 1 轮仅有“别卡顿”暗号，完全无场景、无应用、无业务，违背最小表达标准</pre>
+            </div>
+            <div class="contrast-box good">
+                <div class="contrast-title">解决后的规范表现（修复后实测）</div>
+                <pre>// 会话：S-USER_001-06 (模板: T2-5, 时长延长)
+Turn 1:
+User: "今天在常规周期保障现场，老规矩，用抖音做开直播，帮我把保障开上。"
+Agent: "收到，我调取到之前登记的抖音开直播配置：画质1080p、时延50ms以内，从12时30分开始保障，确认按这套配置开通吗？"
+Turn 2:
+User: "对，老规矩不变，不过今天现场活动延长了，帮我把保障时长延长到120min。"
+Agent: "好的，已按老规矩为您开通抖音开直播保障：画质保持1080p、时延上限50ms，时长已延长至120min。祝您活动顺利！"
+
+// 规范：首轮场景+应用+业务+老规矩四要素齐全，次轮明确延长时长，完全符合最小表达标准</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- 问题 14 (2026-09-29 新增) -->
+    <div class="issue-card">
+        <div class="issue-header">
+            <span class="issue-badge">问题 14 (本日解决)</span>
+            <div class="issue-title">时长延长会话（T2-5）第1轮客服提前泄露次轮修改后时长（临时参数污染）与生造暗号治理</div>
+        </div>
+        <div class="desc-block">
+            <p><span class="desc-label">【问题现象】</span>
+                1. <strong>首轮提前泄露次轮临时参数</strong>：在画像 2、7、14、17、19 等会话 S07 中（模板 <code>T2-5</code>），用户在第 2 轮才因现场突发情况提出“活动延长，帮我把时长延长到180min”。但在第 1 轮客服调取老规矩时，居然提前反问“持续180分钟，对吗？”，导致客服在用户提出修改前就提前被次轮的临时参数所污染；<br>
+                2. <strong>残留后台规则词与生造暗号</strong>：在画像 6 的 S07 等会话中，台词出现了“触发用微信做视频通话，时延按‘别卡顿’”等后台规划残留词汇（“触发用”），以及未在先验记忆中登记过的生造别名（如在未定义“别卡顿”的画像中强行塞入该词）。
+            </p>
+            <p><span class="desc-label">【根因排查】</span>
+                1. <strong>提示词与模板透传未解耦</strong>：Prompt 在组织 T2-5 时，直接将修改后的 <code>duration</code> 传入并用于第 1 轮客服引导；后处理中只对用户台词进行了归一化，未拦截客服第 1 轮提前泄露修改后时长；<br>
+                2. <strong>大模型幻觉生造暗号</strong>：在未分配小记忆点（<code>small_memory</code> 为空）的常规复用会话中，提示词提示“若为暗号则说暗号”，导致大模型自发生成了画像记忆库中并不存在的别名。
+            </p>
+            <p><span class="desc-label">【解决办法】</span>
+                1. <strong>第 1 轮客服隔离修改后时长</strong>：在 <code>dialogue_generator.py</code> 与 <code>dialogue_fallbacks.py</code> 中重构：T2-5 第 1 轮客服调取记忆时，严禁提及次轮修改后的时长（如 180min），只确认原基线配置或保障起始时刻；在后处理中强行扫描并拦截提前泄露行为；<br>
+                2. <strong>清理后台规划词与幻觉暗号</strong>：过滤清理所有台词中的“触发用/触发”等后台规划词汇；对台词中的引号别名进行合法性校验，凡未在先验记忆快照中登记的别名一律予以清除；<br>
+                3. <strong>质检加固 Rule 11 与 Rule 12</strong>：在 <code>qc_validator.py</code> 中升级 Rule 11（严禁 T2-5 第 1 轮客服泄露修改后时长）并增加 Rule 12（台词严禁包含“触发”等后台规划词）；<br>
+                4. <strong>全量 20 个画像统一清洗与校验</strong>：全量 20 个画像数据同步重清洗，100% 通过严格质检。
+            </p>
+        </div>
+        <div class="contrast-grid">
+            <div class="contrast-box bad">
+                <div class="contrast-title">出现问题时的表现（S-USER_002-07 原始数据）</div>
+                <pre>// 会话：S-USER_002-07 (模板: T2-5, 时长延长)
+Turn 1:
+User: "今天在跨境商贸交流会，老规矩，用微信做视频通话，帮我把保障开上。"
+Agent: "收到，您说的老规矩是指微信视频通话...持续180分钟，对吗？"
+Turn 2:
+User: "对，老规矩不变，不过今天现场活动延长了，帮我把保障时长延长到180min。"
+Agent: "好的，已按老规矩为您开通微信视频通话保障..."
+
+// 缺陷：客服在第 1 轮居然提前预知并说出 180min，发生临时参数时序污染！</pre>
+            </div>
+            <div class="contrast-box good">
+                <div class="contrast-title">解决后的规范表现（修复后实测）</div>
+                <pre>// 会话：S-USER_002-07 (模板: T2-5, 时长延长)
+Turn 1:
+User: "今天在跨境商贸交流会，老规矩，用微信做视频通话，帮我把保障开上。"
+Agent: "收到，我调取到之前登记的微信视频通话配置：画质1080p、时延50ms以内，从15时00分开始保障，确认按这套配置开通吗？"
+Turn 2:
+User: "对，老规矩不变，不过今天现场活动延长了，帮我把保障时长延长到180min。"
+Agent: "好的，已按老规矩为您开通微信视频通话保障：画质保持1080p、时延上限50ms，时长已延长至180min。祝您活动顺利！"
+
+// 规范：第 1 轮客服恪守原基线记忆，第 2 轮根据用户临时申请修改时长，因果时序严密合规！</pre>
             </div>
         </div>
     </div>
@@ -868,7 +964,7 @@ Agent: "好的，已为您开通腾讯会议保障：1080p原画、50ms以内、
     <!-- 最终结果汇总 -->
     <div class="summary-card">
         <div class="summary-header">实测修复结果与验证数据</div>
-        <p>针对上述 12 项问题，已全面更新生成代码与质检套件，并对 20 个画像（<code>mobile_persona_001</code> ~ <code>mobile_persona_020</code>）完成数据清洗与质检校验：</p>
+        <p>针对上述 13 项问题，已全面更新生成代码与质检套件，并对 20 个画像（<code>mobile_persona_001</code> ~ <code>mobile_persona_020</code>）完成数据清洗与质检校验：</p>
         <table>
             <thead>
                 <tr>
@@ -882,6 +978,11 @@ Agent: "好的，已为您开通腾讯会议保障：1080p原画、50ms以内、
                     <td><strong>质检通过率</strong></td>
                     <td>约 71.4%（单画像常出现 3~4 个会话未通过）</td>
                     <td><strong>100.0%</strong>（20 个画像全量会话全部一次性通过）</td>
+                </tr>
+                <tr>
+                    <td><strong>时长延长最小表达</strong></td>
+                    <td>S06 首轮仅凭“别卡顿”暗号发起，无场景与应用业务</td>
+                    <td><strong>100% 达标</strong>（场景+应用+业务+老规矩四要素齐全，次轮明确时长延长）</td>
                 </tr>
                 <tr>
                     <td><strong>临时纠正最小表达</strong></td>

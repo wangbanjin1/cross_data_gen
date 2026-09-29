@@ -209,6 +209,45 @@ class QCValidator:
                     report["issues"].append(f"[{sid}] T2-3 次轮台词缺失现场特殊情况说明: '{u2}'")
                     report["rule_checks"]["natural_dialogue_check"] = False
                     s_passed = False
+
+            # 11. T2-5 时长延长会话：首轮必须满足“场景＋应用＋业务”最小表达，次轮包含时长延长说明，首轮Agent禁止提前泄露延长后时长
+            if tid == "T2-5" and len(events) >= 2:
+                u1 = events[0].get("user", {}).get("utterance", "")
+                a1 = events[0].get("agent", {}).get("utterance", "")
+                u2 = events[1].get("user", {}).get("utterance", "")
+                p0 = s.get("intents", [{}])[0].get("params", {})
+                app = p0.get("application_name", {}).get("value", "")
+                srv = p0.get("service_name", {}).get("value", "")
+                valid_apps = [app, "微信", "钉钉", "腾讯会议", "哔哩哔哩", "抖音", "快手", "企鹅会议", "阿抖", "小破站", "企微"]
+                valid_srvs = [srv, "直播", "会议", "通话", "短视频", "开播", "视讯", "对齐开会", "推流", "看直播", "开直播"]
+                has_app = any(a in u1 for a in valid_apps if a)
+                has_srv = any(s in u1 for s in valid_srvs if s)
+                has_scene = any(k in u1 for k in ["现场", "营地", "训练场", "岸线", "途中", "休息区", "通勤", "活动", "研讨会", "交流会", "车间"]) or (s.get("session_meta", {}).get("scenario", {}).get("environment", "") in u1)
+                if not (has_app and has_srv and has_scene):
+                    report["issues"].append(f"[{sid}] T2-5 首轮台词跌破最小表达或缺失场景: '{u1}'")
+                    report["rule_checks"]["natural_dialogue_check"] = False
+                    s_passed = False
+                dur_str = p0.get("timestamp", {}).get("duration", {}).get("value", "")
+                dur_m = re.search(r'(\d+)\s*(?:min|分钟)', dur_str)
+                if dur_m:
+                    num = dur_m.group(1)
+                    if f"{num}min" in a1 or f"{num}分钟" in a1:
+                        report["issues"].append(f"[{sid}] T2-5 第1轮客服台词提前泄露次轮修改后时长({num}): '{a1}'")
+                        report["rule_checks"]["natural_dialogue_check"] = False
+                        s_passed = False
+                if "延长" not in u2 and "时长" not in u2 and "min" not in u2 and "分钟" not in u2 and "小时" not in u2:
+                    report["issues"].append(f"[{sid}] T2-5 次轮台词缺失时长延长说明: '{u2}'")
+                    report["rule_checks"]["natural_dialogue_check"] = False
+                    s_passed = False
+
+            # 12. 全量台词检查：禁止包含后台规划词'触发'
+            for turn in events:
+                u_text = turn.get("user", {}).get("utterance", "")
+                a_text = turn.get("agent", {}).get("utterance", "")
+                if "触发" in u_text or "触发" in a_text:
+                    report["issues"].append(f"[{sid}] 台词违规包含后台规划词'触发'")
+                    report["rule_checks"]["natural_dialogue_check"] = False
+                    s_passed = False
             if s_passed:
                 report["passed_sessions"] += 1
             else:

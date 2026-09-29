@@ -109,9 +109,20 @@ class DialogueGenerator:
             elif is_implicit_reinf:
                 t1_rule = f"【隐式归纳二次发生固化契机：第1轮用户只表达‘这次按上次的来’，不得主动说出应用、业务、参数、起止时间；第1轮客服完整复述历史候选并要求确认；第2轮确认固化，小记忆证据模式={evidence_mode}，本会话使用同轮共现话术：{small_memory_co_occurrence}，不要改写成‘X就是Y’的显式定义。业务默认应用只对当前主线场景生效。】"
             elif tid == "T2-5":
-                t1_rule = f"【时长延长会话：第1轮用户说'老规矩，{primary_alias}开通保障'（严禁在第1轮提及画质与时延！）；第1轮客服反问确认老规矩配置；第2轮用户确认老规矩但提出将时长延长到{tp['duration']}】"
+                base_dur = s_plan.get("base_dur") or "60min"
+                t1_rule = (
+                    f"【时长延长会话：第1轮用户必须满足最小表达，表达'今天在{env}，老规矩，用{tp['application_name']}做{tp['service_name']}，帮我把保障开上'（严禁在第1轮提及画质、时延与修改后的时长！）；"
+                    f"第1轮客服调取原基线老规矩配置向用户确认（基线时长为{base_dur}，严禁在第1轮提前说出修改后的时长{tp['duration']}！）；"
+                    f"第2轮用户确认老规矩不变，但说明因现场活动延长等原因提出将时长延长到{tp['duration']}；"
+                    f"第2轮客服确认按老规矩开通并将时长延长至{tp['duration']}。】"
+                )
             elif tid == "T2-3":
-                t1_rule = f"【临时纠正覆盖会话：第1轮用户说'老规矩，{primary_alias}开通保障'；第1轮客服反问确认老规矩；第2轮用户提出因现场特殊临时调整画质为{tp['resolution']}、时延为{tp['rtt']}】"
+                t1_rule = (
+                    f"【临时纠正覆盖会话：第1轮用户必须满足最小表达，表达'今天在{env}，老规矩，用{tp['application_name']}做{tp['service_name']}，帮我把保障开上'；"
+                    f"第1轮客服反问确认老规矩；"
+                    f"第2轮用户说明因现场特殊临时调整画质为{tp['resolution']}、时延为{tp['rtt']}；"
+                    f"第2轮客服确认本次临时调整。】"
+                )
             elif tid == "X-1":
                 t1_rule = f"【混合诉求（一办一拒）：单轮干扰会话，无先验记忆。用户首次提出业务需求，同时提出域外需求'{s_plan.get('ood_goal') or '手机话费充值与账单查询'}'；严禁使用未建立过的暗号或老规矩；Agent 正常受理域内业务，并明确礼貌拒绝办理域外需求。】"
             else:
@@ -259,6 +270,21 @@ class DialogueGenerator:
                 if tp.get("resolution", "") not in u_text or tp.get("rtt", "") not in u_text or "特殊" not in u_text:
                     u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
 
+        # 时长延长会话(T2-5)：第1轮必须满足场景+应用+业务的最小表达，第2轮必须包含时长延长
+        if tid == "T2-5":
+            app = tp.get("application_name", "")
+            srv = tp.get("service_name", "")
+            env = s_plan.get("scenario_env", "")
+            if turn_idx == 1:
+                has_app = app in u_text or any(a in u_text for a in s_plan.get("aliases", {}).get("app_aliases", []))
+                has_srv = srv in u_text or any(a in u_text for a in s_plan.get("aliases", {}).get("service_aliases", []))
+                has_env = env in u_text or any(k in u_text for k in ["现场", "营地", "训练场", "岸线", "途中", "休息区", "研讨会"])
+                if not (has_app and has_srv and has_env):
+                    u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+            elif turn_idx == 2:
+                if tp.get("duration", "") not in u_text and "延长" not in u_text and "时长" not in u_text:
+                    u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+
         # 证据会话首轮必须与规划的精确开始时间一致，避免模糊改写造成 turn-level 泄漏。
         if turn_idx == 1 and role == "evidence_session":
             u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
@@ -294,6 +320,22 @@ class DialogueGenerator:
         if any(bad_kw in u_text for bad_kw in ["当上午", "进入道路", "触发现场", "办事了，", "弱网空间时", "固定外勤时段"]):
             u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
 
+        # 清除任何残留的后台规则词（如“触发用”、“触发”）
+        u_text = u_text.replace("触发用", "用").replace("触发", "")
+
+        # 检查并清除未经声明的幻觉别名
+        sm_val = s_plan.get("small_memory", {}).get("value")
+        def _clean_hallucinated_alias(match):
+            alias_word = match.group(1)
+            if alias_word in ["每天这个时候", "老规矩", "月初老规矩", "大半个下午"]:
+                return match.group(0)
+            if sm_val and alias_word == sm_val:
+                return match.group(0)
+            return ""
+
+        u_text = re.sub(r'[，、]?(?:画质|时延|时长)?按[‘“\'\"]([^’度”\'\"]+)[’度”\'\"]', _clean_hallucinated_alias, u_text)
+        u_text = re.sub(r'，\s*，', '，', u_text).strip("，, ")
+
         a_text = ""
         if isinstance(t_data, dict):
             a_text = (
@@ -314,6 +356,13 @@ class DialogueGenerator:
                 a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
         if tid in ["T2-2", "T3-1"] and s_plan.get("small_memory_evidence_mode") == "cross_turn_clarification":
             a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
+        if tid == "T2-5" and turn_idx == 1:
+            dur_str = tp.get("duration", "")
+            dur_m = re.search(r'(\d+)\s*(?:min|分钟)', dur_str)
+            if dur_m:
+                num = dur_m.group(1)
+                if f"{num}min" in a_text or f"{num}分钟" in a_text:
+                    a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
         if turn_idx == 2 and role == "reinforcement_session" and s_plan.get("small_memory_evidence_mode") == "co_occurrence" and s_plan.get("session_id", "").endswith("-03"):
             a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
         if turn_idx == 1 and role in ["reinforcement_session", "reuse_session"] and tid not in ["T2-3", "T2-5"]:

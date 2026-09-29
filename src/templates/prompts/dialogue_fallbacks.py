@@ -75,9 +75,9 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
             return f"是{srv}业务，画质要{res}，时延控制在{rtt}以内，从今天{tp['start_timestamp'].split('日')[-1]}开始，预计持续{tp['duration']}。{memory_sentence}"
     elif tid == "T2-5":
         if turn_idx == 1:
-            return f"今天在{env}，按老规矩给我开通{app_alias}{srv_alias}保障。"
+            return f"今天在{env}，老规矩，用{app_alias}做{srv_alias}，帮我把保障开上。"
         else:
-            return f"对，不过今天现场活动延长了，帮我把保障时长延长到{tp['duration']}（持续到{tp['end_timestamp'].split('日')[-1]}）。"
+            return f"对，老规矩不变，不过今天现场活动延长了，帮我把保障时长延长到{tp['duration']}。"
     elif tid == "T2-3":
         if turn_idx == 1:
             return f"今天在{env}，老规矩，用{app}做{srv}，帮我把保障开上。"
@@ -164,10 +164,11 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
             memory_ack = f"并已记录您的习惯：{small_declaration}" if small_declaration else ""
             return f"好的，已为您开通{app}{srv}网络保障（{res} / 时延≤{rtt}），{memory_ack}祝您使用愉快！"
     elif tid == "T2-5":
+        start_t = tp['start_timestamp'].split('日')[-1]
         if turn_idx == 1:
-            return f"收到，请问是否按老规矩（{res} / 时延≤{rtt}）为您开通保障？"
+            return f"收到，我调取到之前登记的{app}{srv}配置：画质{res}、时延{rtt}以内，从{start_t}开始保障，确认按这套配置开通吗？"
         else:
-            return f"好的，已为您将{app}{srv}保障时长延长至{tp['duration']}（至{tp['end_timestamp'].split('日')[-1]}），配置保持{res}/时延≤{rtt}，保障已生效！"
+            return f"好的，已按老规矩为您开通{app}{srv}保障：画质保持{res}、时延上限{rtt}，时长已延长至{tp['duration']}。祝您活动顺利！"
     elif tid == "T2-3":
         start_t = tp['start_timestamp'].split('日')[-1]
         end_t = tp['end_timestamp'].split('日')[-1]

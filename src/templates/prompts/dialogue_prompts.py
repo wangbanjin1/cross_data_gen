@@ -79,7 +79,7 @@ def build_batch_dialogue_prompt(prompt_items: list[dict], identity: str, speech:
      第2轮 User: 明确确认固化，并在此刻按 turn1_requirement 登记指定的一项小记忆；业务类应登记“该业务未指定应用时的默认应用”，不得生造业务别名。（user_action_types包含 "Confirm_Slot"）。
      第2轮 Agent: 答复已开通并收尾祝福，正式记录老规矩与代称（agent_action_types: ["Acknowledge"]）。
    - 若 active_memory 包含 [active] (常规复用已生效记忆):
-     第1轮 User: 口语化提出需求，提及触发场景并【必须省略应用或画质时延等参数】（如使用"老规矩"、"每天照旧"、"照上周的来"等）。
+     第1轮 User: 口语化提出需求，提及触发场景、应用与业务（应用＋业务是发起保障意图的最小表达，严禁只说‘老规矩开保障’），并【必须省略画质与时延等参数】（如使用"老规矩"、"每天照旧"、"照上周的来"等）。
      第1轮 Agent: 必须明确调取上方 active_memory 中的配置，结合触发条件主动反问向用户确认（agent_action_types包含 "Confirm_Slot"）。
      第2轮 User: 明确确认 Agent 提出的配置（user_action_types包含 "Confirm_Slot"，如"对，开通吧"）。
      第2轮 Agent: 明确确认已开通并收尾祝福（agent_action_types: ["Acknowledge"]）。
@@ -94,6 +94,11 @@ def build_batch_dialogue_prompt(prompt_items: list[dict], identity: str, speech:
    - T1-1 单轮单次任务 (rounds == 1): 无任何先验记忆！用户在第 1 轮必须一次性清晰、完整说清全部参数需求（应用、业务、时段、画质、时延，如'画质720p，时延控制在80ms以内'），【严禁使用‘清晰点就行’、‘不卡就行’、‘老规矩’等任何未建立的记忆暗号或模糊词】！Agent 直接受理开通闭环，严禁出现‘按记忆理解’等说辞；
    - T1-2 纯域外拒绝 (rounds == 1): 用户提出域外需求，Agent 礼貌拒绝；
    - X-1 混合诉求一办一拒 (rounds == 1): 用户无先验记忆，首次提出标准保障需求并附带域外需求，严禁使用未建立的暗号或老规矩；Agent 办理保障并明确拒绝域外需求。
+6. 时长延长与修改 (amend / extend_duration, T2-5) (rounds == 2):
+   - 第1轮 User: 必须严格满足“场景＋应用＋业务＋老规矩”的最小表达（如“今天在【现场环境】，老规矩，用【应用】做【业务】，帮我把保障开上”），【严禁只说‘老规矩开保障’或只带暗号而不说应用和业务】！严禁在第1轮提及具体画质与时延；
+   - 第1轮 Agent: 调取原有的长期老规矩基线配置（画质、时延、原时长与起止时段），向用户反问确认；
+   - 第2轮 User: 明确说明老规矩配置不变，但因现场活动拉长等原因，提出将时长延长/修改为指定时长（如“对，老规矩不变，不过今天现场活动延长了，帮我把保障时长延长到【时长】”）；
+   - 第2轮 Agent: 明确确认老规矩配置不变，时长已延长并开通。
 
 【输出严格 JSON 格式】:
 {{
@@ -193,7 +198,7 @@ def build_single_dialogue_prompt(s_plan: dict, persona: dict, snapshot_before: d
      第2轮 User: 明确确认固化，并按 s_plan.small_memory 在此刻登记指定的一项小记忆；service_default_app 应说“以后只说该业务且没指定应用时，默认用当前应用”。（user_action_types包含 "Confirm_Slot"）。
      第2轮 Agent: 答复已开通并收尾祝福，正式记录老规矩与代称（agent_action_types: ["Acknowledge"]）。
    - 若上方记忆快照包含 [active] (常规复用已生效记忆):
-     第1轮 User: 口语化提出需求，提及触发场景并【必须省略应用或画质时延等参数】（如使用"老规矩"、"照上次的来"等）。
+     第1轮 User: 口语化提出需求，提及触发场景、应用与业务（应用＋业务是发起保障意图的最小表达，严禁只说‘老规矩开保障’），并【必须省略画质与时延等参数】（如使用"老规矩"、"照上次的来"等）。
      第1轮 Agent: 必须明确调取上方 active_memory 中的配置，结合触发条件主动反问向用户确认（agent_action_types包含 "Confirm_Slot"）。
      第2轮 User: 明确确认 Agent 提出的配置（user_action_types包含 "Confirm_Slot"，如"对，开通吧"）。
      第2轮 Agent: 明确确认已开通并收尾祝福（agent_action_types: ["Acknowledge"]）。
