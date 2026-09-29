@@ -46,6 +46,61 @@ def _parse_time_range(time_range_str: str) -> tuple[str, str, str, str, str, str
     return s_part, e_part, ref_time_str, base_dur_str, ext_end_time_str, ext_dur_str
 
 
+def _extract_clean_event_env(evt: dict, time_range: str = "") -> str:
+    """结合事件名称与描述提炼 4~8 字短现场名，并严格进行时段一致性校验（防止早晚时段打架）。"""
+    name = evt.get("name", "") if isinstance(evt, dict) else ""
+    desc = evt.get("scene_description", "") if isinstance(evt, dict) else ""
+    text = f"{name} {desc}"
+
+    patterns = [
+        (r'公益赛事|赛事集结|赛事周', "公益赛事活动现场"),
+        (r'棒球|球场|客场赛事', "棒球赛事活动现场"),
+        (r'外业调查|实验现场|数据回传', "外业调查实验现场"),
+        (r'音乐节|演出周|舞台', "城市音乐节现场"),
+        (r'联合执法|巡逻线|检查点', "联合执法执勤现场"),
+        (r'金融展会|展会外摆|商贸展', "跨境商贸展会现场"),
+        (r'社区宣传|社区走访', "社区宣传走访现场"),
+        (r'设计展|现场提案', "设计展提案现场"),
+        (r'街区突发|转场直播|街巷', "城市街区采访现场"),
+        (r'应急集结|夜间事故|处置点', "应急处置现场"),
+        (r'联合实践|实践地|教学现场', "校际实践教学现场"),
+        (r'搜救游泳|海岸线|码头', "搜救选拔赛事现场"),
+        (r'模型交流|展览现场', "模型交流展会现场"),
+        (r'儿童阅读|巡展现场', "儿童阅读巡展现场"),
+        (r'喀斯喀特|登山口|集结区', "山脉赛事集结区"),
+        (r'敬拜现场|录制周', "敬拜现场录制区"),
+        (r'立法调研|草案冲刺', "立法调研办公现场"),
+        (r'地质勘查|地质考察|科考营地', "野外地质勘查区"),
+        (r'露天训练|高山露天', "高山露天训练场"),
+        (r'道路巡逻|移动执勤', "道路巡逻执勤现场"),
+    ]
+    extracted = None
+    for pat, loc in patterns:
+        if re.search(pat, text):
+            extracted = loc
+            break
+
+    if not extracted:
+        clean_name = re.sub(r'(?:周|跨城|跨区域|跨校|联合|现场|冲刺|保障|外业)', '', name)
+        clean_name = re.sub(r'[^\u4e00-\u9fa5]', '', clean_name)
+        extracted = f"{clean_name[:4]}活动现场" if clean_name else "外勤保障现场"
+
+    start_hour = None
+    if time_range and "-" in time_range:
+        try:
+            start_hour = int(time_range.split("-")[0].split(":")[0])
+        except Exception:
+            pass
+
+    if start_hour is not None:
+        if start_hour >= 11 and any(kw in extracted for kw in ["早间", "早高峰", "晨间"]):
+            extracted = extracted.replace("早间", "日间").replace("早高峰", "日常").replace("晨间", "日间")
+        if start_hour < 17 and any(kw in extracted for kw in ["晚间", "夜间"]):
+            extracted = extracted.replace("晚间", "日间").replace("夜间", "日间")
+
+    return extracted
+
+
 def _generate_timeline_dates(storyline_trigger_type: str, period_type: str, days: list, count: int = 16) -> list[str]:
     """
     根据触发类型、周期粒度与设定日子生成严格单调递增的时间线日期列表（最多支持 20 个节点）。
@@ -295,7 +350,7 @@ def get_session_blueprints(
             "source": main_mt,
             "type": "event_override",
             "dur": base_dur,
-            "env": evt_01.get("scene_description", "恶劣环境临时保障"),
+            "env": _extract_clean_event_env(evt_01, time_range),
             "action": "override_temporary_preference",
             "override": evt_01.get("preference_override", {}),
             "time_kind": "main"
@@ -308,7 +363,7 @@ def get_session_blueprints(
             "source": main_mt,
             "type": "event_reuse",
             "dur": base_dur,
-            "env": "特殊事件集结区",
+            "env": _extract_clean_event_env(evt_01, time_range),
             "action": "reuse_long_term_rule_after_correction",
             "time_kind": "main"
         },

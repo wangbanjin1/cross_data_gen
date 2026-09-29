@@ -1,0 +1,177 @@
+{
+  "persona_id": "mobile_persona_048",
+  "category": "公共事务与外勤协作",
+  "persona_summary": "移动公共事务人员",
+  "static_profile": {
+    "user_id": "USER_048",
+    "identity": "年轻政策分析师，负责评估研究拨款对本地经济的影响，日常在城市户外调研点、临时会议区、群众服务现场、社区走访点及跨区域通勤途中移动办公，全程依赖手机4G/5G直接联网，不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式，便携终端确需联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备，便携终端确需联网时使用手机热点。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "飞书"
+    ],
+    "speech_archetype": "policy_analyst_mobile",
+    "speech_style": {
+      "tone": "干练、务实、略带学术腔，习惯用短句推进工作，强调证据和现场感。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "现场情况我回头发群里"
+      ],
+      "typical_habits": "说话动机以推进任务和同步信息为主，习惯先确认网络和材料状态，再进入正式沟通；在移动场景中偏好用语音消息和快速会议对齐，重要结论会要求文字留痕。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "户外调研点视频会议与材料回传",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "当身处城市户外调研点、临时会议区或群众服务现场等移动弱网区域，且时间为工作日上午09:00-11:00时，触发高频视频会议与材料回传主线。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "09:00-11:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议",
+          "鹅会"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦",
+          "开视频会",
+          "线上碰头"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "开到十一点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "上午例行",
+          "调研点老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨区域研究拨款影响联合调研周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨区域联合调研周期间，团队在多个社区走访点和公共活动现场连续转场，现场人流密集、基站切换频繁，网络波动明显，需要优先保障会议连通和材料回传。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "现场照片与短视频材料回传",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在社区走访点或公共活动现场拍摄完现场照片、短视频后，需要快速向团队回传并做简短视频确认时触发。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "政策资料查询与电子表单填报",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在临时会议区或跨区域通勤途中，需要查询政策资料、填报电子表单并与同事快速对齐时触发。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "午间休息时在调研点附近单次刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "晚间回到住处后单次观看公共政策相关直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

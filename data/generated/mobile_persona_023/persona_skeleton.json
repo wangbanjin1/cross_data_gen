@@ -1,0 +1,178 @@
+{
+  "persona_id": "mobile_persona_023",
+  "category": "野外科研与农业作业",
+  "persona_summary": "野外生态调查人员",
+  "static_profile": {
+    "user_id": "USER_023",
+    "identity": "极端微生物方向微生物学家，长期在偏远山区、林区、河岸与农田样地开展野外生态调查与采样，沿样线导航定位、采集带坐标的观测照片与传感数据，并在临时观测点分批回传调查记录，全程依赖手机4G/5G直连，便携终端通过手机热点联网。",
+    "devices": "5G智能手机（主力）＋可穿戴设备（辅助记录与体征监测）＋便携采样终端（经手机热点联网）",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "高德地图"
+    ],
+    "speech_archetype": "field_researcher_speaker",
+    "speech_style": {
+      "tone": "干脆务实、带点野外作业的急脾气，说话直给、少客套，习惯用坐标和样线编号代替寒暄",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "信号还在吗",
+        "按样线走"
+      ],
+      "typical_habits": "出发前先确认设备电量和信号，现场习惯边拍照边口述记录，回传前必说一句'对齐一下'核对数据，遇到弱覆盖会反复确认'信号还在吗'。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "野外样线调查数据回传与远程指导",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在偏远采样路线、山区或临时观测点完成一段样线调查后，于15:00-17:00集中回传带坐标的现场照片、样本记录与传感数据，并与实验室远程专家视频通话核对极端微生物采样信息",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "15:00-17:00",
+      "application_name": "腾讯会议",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议",
+          "小企鹅"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "连麦对齐",
+          "远程指导",
+          "视频对一下"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到五点",
+          "一个半钟头"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "下午三点老规矩",
+          "任务收尾时段"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "极端微生物热泉样地联合采样周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨机构联合采样周，队伍深入高海拔热泉与峡谷弱覆盖区域，多组同时作业，需频繁与实验室和协作方视频核对样本编号与坐标，网络拥塞且电量紧张，临时观测点仅靠手机热点支撑便携终端。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "样线导航与样本记录同步",
+        "application_name": "高德地图",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "沿偏远采样路线行进、需要与后方同步样线位置和样本记录时，边走边用高德地图定位并开视频通话核对坐标",
+        "aliases": {
+          "app_aliases": [
+            "高德地图"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "调查记录分批回传沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在临时观测点分批回传调查记录、与团队成员沟通样本状态和次日路线安排时发起微信视频通话",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时观测点休息时单次刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "与家人单次视频通话报平安",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

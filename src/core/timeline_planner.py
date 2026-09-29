@@ -20,6 +20,11 @@ class DynamicTimelinePlanner:
         )
         if not candidates:
             return {}
+        if blueprint_type == "sub_01":
+            # 支线1为跨轮澄清消歧会话(T3-1)，契约严格消歧画质，必须使用画质别名(resolution_alias)
+            res_candidates = [c for c in candidates if c["type"] == "resolution_alias"]
+            if res_candidates:
+                candidates = res_candidates
         digest = hashlib.sha256(f"{user_id}:{blueprint_type}".encode("utf-8")).digest()
         return candidates[int.from_bytes(digest[:4], "big") % len(candidates)]
 

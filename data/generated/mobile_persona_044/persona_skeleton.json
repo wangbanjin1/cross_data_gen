@@ -1,0 +1,173 @@
+{
+  "persona_id": "mobile_persona_044",
+  "category": "文化创作与移动演出",
+  "persona_summary": "户外创作与演出人员",
+  "static_profile": {
+    "user_id": "USER_044",
+    "identity": "当代极简主义设计师兼户外演出与创作人员，认为流行文化审美不够高级；日常在城市户外演出点、展览布置区、音乐节、街头活动或临时排练现场进行现场音视频采集、直播、作品上传与团队沟通，全程依赖手机4G/5G移动核心网，不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "抖音",
+      "微信",
+      "哔哩哔哩",
+      "小红书"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "简洁、克制、略带审美挑剔，谈工作时直接干脆，不喜欢拖泥带水。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "画面要干净"
+      ],
+      "typical_habits": "习惯在任务开始前快速确认网络与设备状态，用极简口令同步团队；对画质和时延有明确要求，但表达时常用行话和口语别名。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "户外演出与采风现场直播上传",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在城市户外演出点、展览布置区或音乐节现场执行现场音视频采集、直播与作品上传任务，需在密集人群中保持稳定上行并完成云端素材同步。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "15:00-17:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到五点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "下午场老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城音乐节密集人群直播周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城参加户外音乐节，现场人群密集、基站负载高，演出点与临时排练现场之间频繁转场，需要优先保障直播互动低时延与音视频上行稳定。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "团队现场沟通与素材同步",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在展览布置区或临时排练现场需要快速对齐机位、灯光与素材回传时，发起团队视频通话。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "作品发布与社交互动",
+        "application_name": "小红书",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "现场采集结束后，在城市采风路线或回程途中整理并发布短视频作品，维护个人审美品牌。",
+        "aliases": {
+          "app_aliases": [
+            "xiaohongshu",
+            "红薯"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时参加线上策展沟通会",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "休息时刷短视频找灵感",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

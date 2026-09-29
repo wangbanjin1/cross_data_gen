@@ -36,7 +36,7 @@ class LLMClient:
         self.api_key = api_key or DEEPSEEK_API_KEY
         self.base_url = base_url or DEEPSEEK_BASE_URL
         self.model = model
-        self.client = OpenAI(api_key=self.api_key, base_url=self.base_url)
+        self.client = OpenAI(api_key=self.api_key, base_url=self.base_url, timeout=60.0)
 
         # Token 与费用统计
         self.prompt_cache_miss_tokens = 0
@@ -106,6 +106,7 @@ class LLMClient:
 
                 return response.choices[0].message.content
             except Exception as e:
+                print(f"      [LLM Retry] Attempt {attempt + 1}/{max_retries} failed: {e}. Retrying in {2 * (attempt + 1)}s...")
                 time.sleep(2 * (attempt + 1))
                 if attempt == max_retries - 1:
                     raise RuntimeError(f"DeepSeek API call failed after {max_retries} attempts: {e}")

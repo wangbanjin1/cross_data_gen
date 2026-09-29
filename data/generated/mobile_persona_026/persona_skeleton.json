@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_026",
+  "category": "公共事务与外勤协作",
+  "persona_summary": "户外公益与社群组织者",
+  "static_profile": {
+    "user_id": "USER_026",
+    "identity": "年轻工会成员，受布克成就激励，长期从事户外公益与社群组织工作，负责社区走访、公共活动策划、志愿者协调与现场服务，日常在户外调研点、临时会议区、群众服务现场及跨区域通勤途中高频使用移动网络办公。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携工作终端；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "抖音"
+    ],
+    "speech_archetype": "outdoor_community_organizer",
+    "speech_style": {
+      "tone": "干脆利落、带现场动员感，习惯用短句推进协作，强调别掉链子、及时对齐。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "现场优先"
+      ],
+      "typical_habits": "出发前先确认群消息和会议链接，现场习惯边走动边语音沟通，遇到材料回传和志愿者定位问题会反复催促确认。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "社区公益现场晨间协调会与材料回传",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在社区走访点、公共活动现场或群众服务现场执行户外公益组织任务时，需于08:30-10:30通过手机移动核心网召开晨间协调会、同步志愿者位置并回传现场材料。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "08:30-10:30",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦开会",
+          "开个协调会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "开到十点半"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "早上现场老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨区公益巡展与志愿者调度周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨区公益巡展期间，现场人流密集、临时服务点频繁切换，移动网络拥塞风险升高，需优先保障即时通信、位置同步和材料回传稳定。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "志愿者群内视频通话调度",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "社区走访或公共活动现场临时需要确认志愿者位置、分工和物资交接时，发起微信群视频通话快速调度。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "公益活动现场短视频记录与反馈收集",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在公共活动现场需要快速记录服务过程、发布活动片段并收集电子反馈时，使用短视频上传和浏览。",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "跨区域通勤途中临时参加外部公益培训直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "临时在服务现场与外地合作方进行单次视频通话",
+        "application_name": "钉钉",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

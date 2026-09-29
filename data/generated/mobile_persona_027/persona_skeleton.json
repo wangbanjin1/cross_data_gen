@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_027",
+  "category": "移动采编与内容生产",
+  "persona_summary": "户外移动采编者",
+  "static_profile": {
+    "user_id": "USER_027",
+    "identity": "年轻有为的编剧兼户外移动采编者，刚完成首部长篇剧本，日常在城市活动现场、街区采访点、临时拍摄地与转场途中进行短视频拍摄、移动直播、素材回传与云端协作，全程依赖手机4G/5G直接联网，不依赖固网或普通Wi-Fi。",
+    "devices": "主力设备为5G智能手机，辅助设备包括便携拍摄终端与移动热点；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "抖音",
+      "快手",
+      "微信",
+      "腾讯会议"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "干脆利落、带点文艺工作者的随性与现场感，习惯用行话和短句推进任务。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先推流再说",
+        "这条不能断"
+      ],
+      "typical_habits": "出发前先确认网络和电量，转场时反复叮嘱上传别中断；习惯用口语别名指代应用、业务和画质，强调上行稳定与低时延。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "户外活动现场短视频拍摄上传与移动直播",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处城市活动现场、街区采访点或临时拍摄地，且处于09:00-11:00的户外采编时段，需要直接通过手机4G/5G完成短视频拍摄上传与移动直播。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "09:00-11:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖家"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "上直播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十一点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "上午外采老规矩"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城突发新闻现场连续报道周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城转场频繁，部分路段与临时现场处于弱覆盖区域，需要保证素材回传与直播画面稳定，转场切换时上传不中断。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "转场途中素材回传与即时通信",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在转场途中或临时停留点，需要与编辑、摄像或协作方快速对齐素材与位置。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "云端协作与远程复盘会议",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "拍摄结束后或阶段性节点，需要与团队远程复盘素材、对齐脚本与剪辑方向。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时采访中快速查看同行直播信号",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "等待转场时短暂刷短视频找选题灵感",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

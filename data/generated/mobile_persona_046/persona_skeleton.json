@@ -1,0 +1,177 @@
+{
+  "persona_id": "mobile_persona_046",
+  "category": "科研调查与移动协作",
+  "persona_summary": "移动人文调查人员",
+  "static_profile": {
+    "user_id": "USER_046",
+    "identity": "地方历史学者与移动人文调查人员，长期深度关注家乡Pak Phun的地方史，日常在遗址、街区、博物馆外场与跨校通勤路线之间高频移动，从事定位记录、资料检索、影像采集与田野笔记同步，并通过手机移动核心网与团队远程协作。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴设备；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "field_researcher_speaker",
+    "speech_style": {
+      "tone": "沉稳、务实、带学术口吻，习惯用地方史与田野调查的行话，说话节奏偏慢但信息密度高。",
+      "catchphrases": [
+        "老规矩",
+        "对齐一下",
+        "别掉链子",
+        "这段得记进田野笔记"
+      ],
+      "typical_habits": "喜欢在固定时间召集团队远程讨论，先确认视频是否稳定、资料是否同步，再进入史料与调查进度核对；遇到关键口述史材料会反复确认上传是否完整。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "晚间田野复盘与团队远程协作",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每天晚间黄金档高频业务：结束外业调查后，在20:00-22:00固定发起团队远程讨论与视频会议，复盘当日Pak Phun地方史采集资料并同步田野笔记。",
+      "period_type": "daily",
+      "days": [
+        "daily"
+      ],
+      "time_range": "20:00-22:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "鹅厂会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "远程讨论",
+          "连麦复盘",
+          "开视频会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "晚间例行",
+          "每天晚间黄金档"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "Pak Phun地方史特展外场资料采集周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "特展期间在博物馆外场与临时资料采集点连续作业，现场人流密集、移动网络拥塞，需要把采集影像与口述史音频实时回传团队，并临时降低画质以保障上传可靠与会议连续。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "外业调查点影像回传与文献检索",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在遗址、街区或博物馆外场完成阶段性影像采集后，需要与研究助理快速确认资料完整性并检索文献数据库时触发。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨校通勤路线上的协作文档同步",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨校通勤途中或学术活动场地临时需要与协作团队对齐文档、核对田野笔记版本时触发。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "午间在资料采集点短暂休息时，单次打开哔哩哔哩观看地方史纪录片片段。",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "晚间复盘结束后，单次使用微信与外地同行进行非例行的视频通话，沟通某份口述史授权材料。",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

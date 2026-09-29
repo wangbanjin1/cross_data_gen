@@ -11,24 +11,47 @@ from src.templates.prompts.small_memory_prompt import (
     declaration_example,
 )
 
-def _sanitize_env(env: str) -> str:
+import re
+
+def _sanitize_env(env: str, time_str: str = "") -> str:
     if not env:
         return "现场"
+    # 优先匹配特定现场
+    patterns = [
+        ("公益赛事", "公益赛事活动现场"),
+        ("外业调查", "外业调查实验现场"),
+        ("音乐节", "城市音乐节现场"),
+        ("联合执法", "联合执法执勤现场"),
+        ("金融展会", "跨境商贸展会现场"),
+        ("社区宣传", "社区宣传走访现场"),
+        ("设计展", "设计展提案现场"),
+        ("道路巡逻", "道路巡逻现场"),
+        ("巡逻线", "道路巡逻现场"),
+        ("社区走访", "社区走访现场"),
+        ("走访", "社区走访现场"),
+        ("晚间户外", "晚间户外活动现场"),
+        ("街区采访", "街区采访现场"),
+        ("沿海", "沿海巡逻岸线"),
+        ("高山", "高山露天训练场"),
+        ("大巴", "大巴转场途中"),
+        ("酒店", "驻地酒店休息区"),
+    ]
+    for kw, loc in patterns:
+        if kw in env:
+            env = loc
+            break
+
+    # 时段防冲突检查：如果时间是 11:00 以后的午间/下午/晚上，严禁出现“早高峰/早间/晨间”
+    if time_str:
+        m = re.search(r'(\d{1,2})[时:]', time_str)
+        if m:
+            hour = int(m.group(1))
+            if hour >= 11:
+                env = env.replace("早高峰", "外勤").replace("早间", "日间").replace("晨间", "日间")
+            if hour < 17:
+                env = env.replace("晚间", "日间").replace("夜间", "日间")
+
     if len(env) > 10 or any(kw in env for kw in ["当", "进入", "触发", "身处", "。"]):
-        for kw, loc in [
-            ("道路巡逻", "道路巡逻现场"),
-            ("巡逻线", "道路巡逻现场"),
-            ("社区走访", "社区走访现场"),
-            ("走访", "社区走访现场"),
-            ("晚间户外", "晚间户外活动现场"),
-            ("街区采访", "街区采访现场"),
-            ("沿海", "沿海巡逻岸线"),
-            ("高山", "高山露天训练场"),
-            ("大巴", "大巴转场途中"),
-            ("酒店", "驻地酒店休息区"),
-        ]:
-            if kw in env:
-                return loc
         return "外勤保障现场"
     return env.strip("，, 。. ")
 
@@ -44,7 +67,6 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
     small_alias = small_memory.get("value")
     small_declaration = declaration_example(small_memory)
     evidence_mode = s_plan.get("small_memory_evidence_mode", "explicit_declaration")
-
     app = tp["application_name"]
     srv = tp["service_name"]
     res = tp["resolution"]
@@ -55,7 +77,7 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
     trig_type = s_plan.get("storyline_trigger_type", "time_periodic")
     period_type = s_plan.get("period_type", "weekly")
     trig_cond = s_plan.get("trigger_condition", "")
-    env = _sanitize_env(s_plan.get("scenario_env", ""))
+    env = _sanitize_env(s_plan.get("scenario_env", ""), tp.get("start_timestamp", ""))
     b_type = s_plan.get("blueprint_type", "")
 
     if tid == "T1-2":
@@ -67,7 +89,7 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
             return f"在{env}网络不太稳，帮我给{app}{srv}开个保障，时间从今天{tp['start_timestamp'].split('日')[-1]}开始。"
         elif evidence_mode == "cross_turn_clarification" and turn_idx == 2:
             fuzzy = ambiguous_requirement(small_memory)
-            return f"{fuzzy}时延控制在{rtt}以内，预计持续{tp['duration']}。"
+            return f"{fuzzy}，时延控制在{rtt}以内，预计持续{tp['duration']}。"
         elif evidence_mode == "cross_turn_clarification" and turn_idx == 3:
             return clarification_answer(small_memory)
         else:
@@ -139,12 +161,13 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
     res = tp["resolution"]
     rtt = tp["rtt"]
     tid = s_plan.get("template_id", "")
+    b_type = s_plan.get("blueprint_type", "")
     ood_goal = s_plan.get("ood_goal", "")
     decl_mode = s_plan.get("declaration_mode", "explicit_declaration")
     trig_type = s_plan.get("storyline_trigger_type", "time_periodic")
     period_type = s_plan.get("period_type", "weekly")
     trig_cond = s_plan.get("trigger_condition", "")
-    env = _sanitize_env(s_plan.get("scenario_env", ""))
+    env = _sanitize_env(s_plan.get("scenario_env", ""), tp.get("start_timestamp", ""))
     small_memory = s_plan.get("small_memory", {})
     small_declaration = declaration_example(small_memory)
     evidence_mode = s_plan.get("small_memory_evidence_mode", "explicit_declaration")

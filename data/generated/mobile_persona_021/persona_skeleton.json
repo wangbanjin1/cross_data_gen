@@ -1,0 +1,178 @@
+{
+  "persona_id": "mobile_persona_021",
+  "category": "移动生活与现场协作",
+  "persona_summary": "高频移动网络使用者",
+  "static_profile": {
+    "user_id": "USER_021",
+    "identity": "资深立法起草人，常在城市街区、公共活动现场、户外等候区与跨区域出行途中，为草案提案提供指导与反馈；高频移动网络使用者，每周3至6个外出时段，全程以手机4G/5G直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "devices": "5G智能手机＋便携工作终端（便携终端确需联网时使用手机热点）",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "抖音"
+    ],
+    "speech_archetype": "legislative_advisor",
+    "speech_style": {
+      "tone": "沉稳、克制、带一点公文腔，但移动办公时语速偏快，强调节点和口径",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "口径要稳"
+      ],
+      "typical_habits": "习惯先确认对方是否在线，再明确时间节点和交付口径；移动中偏好用语音和位置共享，重要事项要求文字留痕。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "户外现场远程草案评审与即时反馈",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处城市街区公共活动现场、户外等候区或跨区域出行途中的弱网区域，且处于15:00-17:00时段，需要即时审阅草案、共享位置并远程指导团队修改提案",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "15:00-17:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议",
+          "鹅会"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "远程评审",
+          "过草案",
+          "拉会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到五点",
+          "一个半小时"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "下午三点档",
+          "外出现场老规矩"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城立法听证与现场草案答辩周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城出差季，频繁在会场外等候区、城市街区临时停留点和公共交通枢纽使用手机热点联网，现场网络拥塞且移动性强，需要优先保障会议音频与草案批注同步",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "移动途中短视频素材回传与留档",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在公共活动现场或跨区域出行途中，需要快速上传现场短视频作为立法调研留档素材",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "团队即时沟通与位置共享",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在户外等候区或临时停留点，需要与起草团队快速对齐口径、共享位置并确认修改意见",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时参加公开直播活动，在活动现场用手机观看直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在等候区用手机进行短时游戏消遣",
+        "application_name": "快手",
+        "service_name": "游戏",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

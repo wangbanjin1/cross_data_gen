@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_049",
+  "category": "移动生活与现场协作",
+  "persona_summary": "高频移动网络使用者",
+  "static_profile": {
+    "user_id": "USER_049",
+    "identity": "年轻数学领域同行，崇拜 Pham Hoang Hiep，日常在城市街区、公共活动现场及跨区域出行途中活动，习惯用手机移动核心网直接联网，随身携带 5G 智能手机与拍摄设备，高频完成地图导航、信息检索、位置共享、即时通信、短视频浏览上传与远程协作。",
+    "devices": "主力设备为 5G 智能手机，辅助设备为随身拍摄设备；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "抖音",
+      "高德地图"
+    ],
+    "speech_archetype": "mobile_field_collaborator",
+    "speech_style": {
+      "tone": "干脆、直接、带一点学术圈年轻人的认真劲，习惯把安排说成固定口令。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "我这边先推流"
+      ],
+      "typical_habits": "喜欢先确认时间与接入方式，再强调消息及时送达和音视频稳定；遇到弱覆盖会提醒续传或快速恢复。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "每周一与周五数学同行远程对齐与现场共享",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每周一与周五例会与业务对齐，固定 09:30-11:30 进行远程协作与现场信息同步。",
+      "period_type": "weekly",
+      "days": [
+        "Monday",
+        "Friday"
+      ],
+      "time_range": "09:30-11:30",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦对齐",
+          "远程碰一下"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十一点半"
+        ],
+        "period_aliases": [
+          "每周一五老规矩",
+          "周一和周五老时间",
+          "周级例会档期"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城数学研讨会现场协作周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城参加数学研讨会，现场人流密集、室内外切换频繁，移动网络覆盖波动，需要临时降低画质并优先保证低时延互动。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "移动途中短视频素材回传",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在城市街区、公共活动现场或跨区域出行途中拍摄后，需要快速上传现场照片或短视频素材。",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "临时位置共享与即时沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在户外等候区、临时停留点或兴趣活动现场，需要共享位置、处理即时消息并进行短时视频沟通。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次晚间观看数学讲座直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次临时远程答疑会议",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

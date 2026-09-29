@@ -26,24 +26,37 @@ def build_small_memory_candidates(source: dict, target_params: dict, allow_servi
         ))
     resolution = target_params.get("resolution")
     resolution_phrases = vault.get("resolution", {}).get(resolution, {}).get("good_expressions", [])
-    resolution_alias = next((v for v in resolution_phrases if _is_fuzzy_parameter(v)), None)
-    if resolution_alias:
-        candidates.append(_candidate("resolution_alias", resolution_alias, resolution))
+    for v in resolution_phrases:
+        if _is_fuzzy_parameter(v):
+            candidates.append(_candidate("resolution_alias", v, resolution))
+    # 同时也补充骨架自身别名
+    for v in aliases.get("resolution_aliases", []):
+        if _is_fuzzy_parameter(v) and not any(c["value"] == v for c in candidates):
+            candidates.append(_candidate("resolution_alias", v, resolution))
+
     rtt = target_params.get("rtt")
     rtt_phrases = vault.get("rtt", {}).get(rtt, {}).get("good_expressions", [])
-    rtt_alias = next((v for v in rtt_phrases if _is_fuzzy_parameter(v)), None)
-    if rtt_alias:
-        candidates.append(_candidate("rtt_alias", rtt_alias, rtt))
+    for v in rtt_phrases:
+        if _is_fuzzy_parameter(v):
+            candidates.append(_candidate("rtt_alias", v, rtt))
+    for v in aliases.get("rtt_aliases", []):
+        if _is_fuzzy_parameter(v) and not any(c["value"] == v for c in candidates):
+            candidates.append(_candidate("rtt_alias", v, rtt))
+
     duration = target_params.get("duration")
     duration_phrases = vault.get("duration", {}).get(duration, [])
-    duration_alias = next((v for v in duration_phrases if _is_fuzzy_duration(v)), None)
-    if duration_alias:
-        candidates.append(_candidate("duration_alias", duration_alias, duration))
+    for v in duration_phrases:
+        if _is_fuzzy_duration(v):
+            candidates.append(_candidate("duration_alias", v, duration))
+    for v in aliases.get("duration_aliases", []):
+        if _is_fuzzy_duration(v) and not any(c["value"] == v for c in candidates):
+            candidates.append(_candidate("duration_alias", v, duration))
+
     if source.get("period_type") in {"daily", "weekly", "monthly"}:
         period = source.get("time_range") or "当前周期"
-        period_alias = next((v for v in aliases.get("period_aliases", []) if _is_fuzzy_period(v)), None)
-        if period_alias:
-            candidates.append(_candidate("period_alias", period_alias, period))
+        for v in aliases.get("period_aliases", []):
+            if _is_fuzzy_period(v) and not any(c["value"] == v for c in candidates):
+                candidates.append(_candidate("period_alias", v, period))
     return candidates
 
 

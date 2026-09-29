@@ -51,18 +51,50 @@ def co_occurrence_example(item: dict) -> str:
 
 def ambiguous_requirement(item: dict) -> str:
     value = item.get("value", "")
-    templates = {
-        "application_alias": f"应用就用‘{value}’。",
-        "resolution_alias": f"画质按‘{value}’来。",
-        "rtt_alias": f"时延按‘{value}’来。",
-        "duration_alias": f"时长就‘{value}’。",
-        "period_alias": f"时间按‘{value}’安排。",
-    }
-    return templates.get(item.get("type"), f"就按‘{value}’来。")
+    h = abs(hash(value))
+    m_type = item.get("type")
+
+    if m_type == "resolution_alias":
+        variants = [
+            f"画质按‘{value}’来",
+            f"画质只要‘{value}’",
+            f"清晰度按‘{value}’开",
+            f"画质标准按‘{value}’",
+        ]
+        return variants[h % len(variants)]
+    elif m_type == "rtt_alias":
+        variants = [
+            f"时延按‘{value}’来",
+            f"时延控制在‘{value}’",
+            f"延迟按‘{value}’把控",
+        ]
+        return variants[h % len(variants)]
+    elif m_type == "duration_alias":
+        variants = [
+            f"时长就‘{value}’",
+            f"预计持续‘{value}’",
+            f"时间开‘{value}’",
+        ]
+        return variants[h % len(variants)]
+    elif m_type == "application_alias":
+        variants = [
+            f"应用就用‘{value}’",
+            f"用‘{value}’开",
+            f"指定用‘{value}’",
+        ]
+        return variants[h % len(variants)]
+    elif m_type == "period_alias":
+        variants = [
+            f"时间按‘{value}’安排",
+            f"时段照‘{value}’来",
+        ]
+        return variants[h % len(variants)]
+    return f"就按‘{value}’来"
 
 
 def clarification_question(item: dict) -> str:
     value = item.get("value", "")
+    h = abs(hash(value))
     labels = {
         "application_alias": "应用",
         "resolution_alias": "画质档位",
@@ -71,11 +103,17 @@ def clarification_question(item: dict) -> str:
         "period_alias": "时间",
     }
     label = labels.get(item.get("type"), "这个说法")
-    return f"确认一下，您说的‘{value}’具体指哪个{label}？以后也按这个理解吗？"
+    templates = [
+        f"确认一下，您说的‘{value}’具体指哪个{label}？以后也按这个理解吗？",
+        f"请教一下，您提到的‘{value}’具体对应哪档{label}？以后也帮您按这个记吗？",
+        f"问一下，您说的‘{value}’具体是指哪种{label}？往后也按这套标准来吗？",
+    ]
+    return templates[h % len(templates)]
 
 
 def clarification_answer(item: dict) -> str:
     normalized = item.get("normalized_value", "")
+    h = abs(hash(normalized))
     labels = {
         "application_alias": "应用",
         "resolution_alias": "画质档位",
@@ -84,7 +122,12 @@ def clarification_answer(item: dict) -> str:
         "period_alias": "时间",
     }
     label = labels.get(item.get("type"), "标准值")
-    return f"就是{label}{normalized}，以后就按这个理解，直接开通吧。"
+    templates = [
+        f"就是{label}{normalized}，以后就按这个理解，直接开通吧。",
+        f"对，就是{label}{normalized}，往后都照这个标准记，开通吧。",
+        f"指的就是{label}{normalized}，以后默认按这个来，直接保上吧。",
+    ]
+    return templates[h % len(templates)]
 
 
 SMALL_MEMORY_GUIDE = _build_guide()

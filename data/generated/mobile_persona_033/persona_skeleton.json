@@ -1,0 +1,172 @@
+{
+  "persona_id": "mobile_persona_033",
+  "category": "移动生活与现场协作",
+  "persona_summary": "移动家庭沟通用户",
+  "static_profile": {
+    "user_id": "USER_033",
+    "identity": "刚对音乐产生兴趣、开始探索不同曲风的年轻表亲，日常高频穿梭于城市街区、公共活动现场、兴趣活动现场与跨区域出行途中，习惯用5G手机加可穿戴设备随时与家人保持联系、分享沿途见闻，并利用碎片时间浏览和上传音乐相关短视频。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴设备；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "抖音",
+      "哔哩哔哩",
+      "腾讯会议"
+    ],
+    "speech_archetype": "young_music_explorer",
+    "speech_style": {
+      "tone": "轻松活泼、带点年轻人特有的急切和分享欲，聊到音乐和现场时会明显兴奋。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "我这边信号还行"
+      ],
+      "typical_habits": "喜欢在移动途中随手拍、随手传，习惯用口语化简称指代应用和业务；遇到网络波动会先喊一句“别掉链子”，再主动切换热点或调整画质。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "午间音乐现场短视频分享与家庭连线",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "当11:00-13:00身处城市街区、公共活动现场或兴趣活动现场周边，且需要与家人同步位置、分享音乐现场片段时触发；典型弱网空间为大型露天音乐节入口排队区、地下Livehouse负一层通道或商圈下沉广场人流密集区。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "11:00-13:00",
+      "application_name": "抖音",
+      "service_name": "短视频",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖子"
+        ],
+        "service_aliases": [
+          "刷短视频",
+          "传段子"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "午间这一段"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "午间例行"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城音乐节周末出行季",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城参加露天音乐节，现场位于大型公园边缘，人流密集、基站拥塞，午后时段经常出现上行带宽不足和时延抖动。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "家庭位置共享与视频通话",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在接送、出行和户外等候期间，家人发起或自己发起位置共享与视频通话时。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "远程音乐协作与会议沟通",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "与线上音乐兴趣小组或远程协作伙伴对齐编曲、活动安排时。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时被拉进家庭群语音，顺手开了一次直播给亲戚看现场。",
+        "application_name": "微信",
+        "service_name": "开直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "在等候区无聊时点开音乐现场回放，看了一会儿直播。",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

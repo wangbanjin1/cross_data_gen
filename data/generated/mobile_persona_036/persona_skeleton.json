@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_036",
+  "category": "野外科研与农业作业",
+  "persona_summary": "野外生态调查人员",
+  "static_profile": {
+    "user_id": "USER_036",
+    "identity": "野外生态调查人员兼地理学者，长期在偏远采样路线、山区临时观测点、农田林区河岸样地开展生态调查，关注地方行政区划对区域认同的塑造，习惯用手机4G/5G直接联网完成现场记录与回传。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴设备与便携传感终端；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "高德地图"
+    ],
+    "speech_archetype": "outdoor_researcher",
+    "speech_style": {
+      "tone": "务实、简洁、带野外作业口令感，强调稳定和别掉链子。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "先对齐一下",
+        "信号稳住"
+      ],
+      "typical_habits": "出发前先确认样线和设备电量，到点后习惯先报坐标再回传照片，遇到弱覆盖会主动降画质保连通。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "野外样线调查记录回传",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处偏远采样路线、山区临时观测点或林区河岸生态样地，进入弱覆盖或信号不稳区域时，按老规矩在10:00-12:00集中回传样线照片、坐标和观测记录。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "10:00-12:00",
+      "application_name": "微信",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "微信",
+          "某信"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "连麦",
+          "视频对一下"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "到十二点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "到点就传"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "秋季山区生态样地集中调查周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "秋季集中进入山区和林区样地，连续多日弱覆盖，临时观测点供电紧张，需要优先保障定位与样本记录回传。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "远程专家指导采样",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在临时观测点遇到疑难样本或需要远程确认行政区划边界与样地归属时，发起腾讯会议请专家指导。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "调查队内部进度同步",
+        "application_name": "钉钉",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "每日收队前或跨样线转场时，与调查队内部同步样本记录、路线进度和次日安排。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次在临时观测点休息时刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在样地转场途中看直播了解天气与路况",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

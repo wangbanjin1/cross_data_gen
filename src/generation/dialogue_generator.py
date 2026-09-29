@@ -333,7 +333,7 @@ class DialogueGenerator:
                 return match.group(0)
             return ""
 
-        u_text = re.sub(r'[，、]?(?:画质|时延|时长)?按[‘“\'\"]([^’度”\'\"]+)[’度”\'\"]', _clean_hallucinated_alias, u_text)
+        u_text = re.sub(r'[，、]?(?:画质|时延|时长)?按[‘“\'\"]([^’度”\'\"]+)[’度”\'\"](?:来|开|算|处理)?', _clean_hallucinated_alias, u_text)
         u_text = re.sub(r'，\s*，', '，', u_text).strip("，, ")
 
         a_text = ""

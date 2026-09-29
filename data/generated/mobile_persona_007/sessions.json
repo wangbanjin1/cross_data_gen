@@ -71,13 +71,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "画质1080p，时延50ms以内，持续120分钟，以后在月度移动棒球资讯直播与梦幻联盟沟通这个场景，我只说‘看直播’、没指定应用时，就默认用抖音，这次看直播还是用抖音，以后在月度移动棒球资讯直播与梦幻联盟沟通也照这个搭配来。",
+          "utterance": "画质超清就行，按1080p开，时延50ms以内，持续俩小时。以后我说‘超清’，画质就是1080p。",
           "action_types": [
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次保障，并已为您将该配置记录为长期老规矩！",
+          "utterance": "好的，已为您开通本次保障：抖音看直播，画质1080p，时延50ms以内，持续120分钟。并已记录：以后您说‘超清’，画质就是1080p。",
           "action_types": [
             "Acknowledge"
           ]
@@ -274,7 +274,7 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "在大巴跨城转场高速公路网络不太稳，帮我给微信视频通话开个保障，时间从今天18时45分开始。",
+          "utterance": "在大巴转场途中网络不太稳，帮我给微信视频通话开个保障，时间从今天18时45分开始。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
@@ -326,13 +326,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "来，时延控制在100ms以内，预计持续60min。",
+          "utterance": "画质只要‘差不多清晰就行’，时延控制在100ms以内，预计持续60min。",
           "action_types": [
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "确认一下，您说的‘能正常说话就行’具体指哪个时延上限？以后也按这个理解吗？",
+          "utterance": "确认一下，您说的‘差不多清晰就行’具体指哪个画质档位？以后也按这个理解吗？",
           "action_types": [
             "Request_Disambiguation"
           ]
@@ -392,7 +392,7 @@
       {
         "turn": 3,
         "user": {
-          "utterance": "就是时延上限100ms，以后就按这个理解，直接开通吧。",
+          "utterance": "指的就是画质档位720p，以后默认按这个来，直接保上吧。",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -600,9 +600,10 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "老规矩，在常规周期保障现场，做看直播，应用按默认的，帮我把保障开上。",
+          "utterance": "老规矩，在常规周期保障现场，用抖音做看直播，画质按‘超清’，帮我把保障开上。",
           "action_types": [
-            "Create_Intent_Request"
+            "Create_Intent_Request",
+            "Inform_Slot"
           ]
         },
         "agent": {
@@ -625,8 +626,8 @@
             "params": {
               "application_name": {
                 "value": "抖音",
-                "source_type": "Memory",
-                "source_ref": "MF_001"
+                "source_type": "Turn",
+                "source_ref": "U1"
               },
               "service_name": {
                 "value": "看直播",
@@ -696,8 +697,8 @@
             "params": {
               "application_name": {
                 "value": "抖音",
-                "source_type": "Memory",
-                "source_ref": "MF_001"
+                "source_type": "Turn",
+                "source_ref": "U1"
               },
               "service_name": {
                 "value": "看直播",
@@ -750,8 +751,8 @@
         "params": {
           "application_name": {
             "value": "抖音",
-            "source_type": "Memory",
-            "source_ref": "MF_001"
+            "source_type": "Turn",
+            "source_ref": "U1"
           },
           "service_name": {
             "value": "看直播",
@@ -802,8 +803,8 @@
             "params": {
               "application_name": {
                 "value": "抖音",
-                "source_type": "Memory",
-                "source_ref": "MF_001"
+                "source_type": "Turn",
+                "source_ref": "U1"
               },
               "service_name": {
                 "value": "看直播",
@@ -918,13 +919,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "画质细节要看得清就行，时延80ms以内，持续90分钟，以后我说‘细节要看得清’，画质就是1080p。",
+          "utterance": "画质细节要看得清就行，按1080p开，时延80ms以内，持续90分钟。以后我说‘细节要看得清’，画质就是1080p。",
           "action_types": [
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次保障，并已记录该画质代称习惯。",
+          "utterance": "好的，已为您开通本次保障：小红书短视频，画质1080p，时延80ms以内，持续90分钟。并已记录：以后您说‘细节要看得清’，画质就是1080p。",
           "action_types": [
             "Acknowledge"
           ]
@@ -1122,7 +1123,7 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "你好，现场这边网络好像有问题，能帮我安排师傅处理一下宽带光纤装维报修吗？。",
+          "utterance": "你好，现场这边网络好像有问题，能帮我安排师傅处理一下宽带光纤装维报修吗？",
           "action_types": [
             "Create_Intent_Request"
           ]
@@ -1182,7 +1183,7 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "老规矩，在大巴转场途中，用微信做视频通话，时延按‘能正常说话就行’，帮我把保障开上。",
+          "utterance": "老规矩，在大巴转场途中，用微信做视频通话，画质按‘差不多清晰就行’，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
@@ -1254,13 +1255,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "对，直接开通，我说‘能正常说话就行’，就是时延控制在100ms以内，以后也照这个标准理解。",
+          "utterance": "对，就按这个开。以后我说‘差不多清晰就行’，画质就是720p，记住这个习惯哈。",
           "action_types": [
             "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次保障，并已记录‘能正常说话就行’对应时延100ms以内。祝您通话顺畅！",
+          "utterance": "好的，已为您开通本次微信视频通话保障，并已为您将该画质习惯记录为长期老规矩！",
           "action_types": [
             "Acknowledge"
           ]
@@ -1456,7 +1457,7 @@
           ]
         },
         "agent": {
-          "utterance": "收到，我调取到之前登记的抖音看直播配置：画质1080p、时延50ms以内，从15时00分开始保障，确认按这套配置开通吗？",
+          "utterance": "收到，您是要用抖音看直播，按老规矩来对吧？我这边调取一下原基线配置：画质1080p原画、时延50ms以内，开始时间2026年11月01日15时00分，结束时间18时00分，时长60分钟，按这个给您开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -1528,7 +1529,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已按老规矩为您开通抖音看直播保障：画质保持1080p、时延上限50ms，时长已延长至180min。祝您活动顺利！",
+          "utterance": "好的，已按老规矩为您开通抖音看直播保障，画质1080p原画、时延50ms以内，时长已延长至180min，保障生效！",
           "action_types": [
             "Acknowledge"
           ]
@@ -1735,9 +1736,10 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "老规矩，在常规周期保障现场，做看直播，应用按默认的，帮我把保障开上。",
+          "utterance": "老规矩，在常规周期保障现场，用抖音做看直播，画质按‘超清’，帮我把保障开上。",
           "action_types": [
-            "Create_Intent_Request"
+            "Create_Intent_Request",
+            "Inform_Slot"
           ]
         },
         "agent": {
@@ -1760,8 +1762,8 @@
             "params": {
               "application_name": {
                 "value": "抖音",
-                "source_type": "Memory",
-                "source_ref": "MF_001"
+                "source_type": "Turn",
+                "source_ref": "U1"
               },
               "service_name": {
                 "value": "看直播",
@@ -1806,13 +1808,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "对，直接开通。",
+          "utterance": "对，直接开通。以后我说‘超清’，画质就是1080p，记住这个习惯哈。",
           "action_types": [
             "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次保障，祝您看直播愉快！",
+          "utterance": "好的，已为您开通本次抖音看直播保障，并已为您将该画质习惯记录为长期老规矩！",
           "action_types": [
             "Acknowledge"
           ]
@@ -1831,8 +1833,8 @@
             "params": {
               "application_name": {
                 "value": "抖音",
-                "source_type": "Memory",
-                "source_ref": "MF_001"
+                "source_type": "Turn",
+                "source_ref": "U1"
               },
               "service_name": {
                 "value": "看直播",
@@ -1885,8 +1887,8 @@
         "params": {
           "application_name": {
             "value": "抖音",
-            "source_type": "Memory",
-            "source_ref": "MF_001"
+            "source_type": "Turn",
+            "source_ref": "U1"
           },
           "service_name": {
             "value": "看直播",
@@ -1937,8 +1939,8 @@
             "params": {
               "application_name": {
                 "value": "抖音",
-                "source_type": "Memory",
-                "source_ref": "MF_001"
+                "source_type": "Turn",
+                "source_ref": "U1"
               },
               "service_name": {
                 "value": "看直播",
@@ -2073,13 +2075,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "对，直接开通，以后我说‘细节要看得清’，画质就是1080p。",
+          "utterance": "对，直接开通。以后我说‘细节要看得清’，画质就是1080p，记住这个习惯哈。",
           "action_types": [
             "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次保障，并已记录‘细节要看得清’对应画质1080p。祝您刷视频愉快！",
+          "utterance": "好的，已为您开通本次小红书短视频保障，并已为您将该画质习惯记录为长期老规矩！",
           "action_types": [
             "Acknowledge"
           ]
@@ -2268,14 +2270,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "你好，我想办个网络保障，主要是用哔哩哔哩看短视频，画质要720p，时延最好控制在80毫秒以内，时间是今天中午12点半到1点半，一共一个小时。另外顺便问一下，能不能帮我把手机话费充一下，再查下账单？",
+          "utterance": "周末午休刷会儿哔哩哔哩短视频，画质720p，时延控制在80ms以内，时长60分钟，帮我开个保障；顺便帮我把手机话费充一下，再查查账单。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "您好，已为您受理哔哩哔哩短视频的网络保障需求：画质720p、时延上限80ms以内、保障时段为12:30至13:30，时长60分钟。关于手机话费充值和账单查询，这两项不在我们的服务范围内，无法为您办理，建议您通过运营商官方渠道或官方App进行充值和查询，感谢您的理解。",
+          "utterance": "收到，您要用哔哩哔哩刷短视频，画质720p、时延80ms以内、时长60分钟，这个保障我这边正常受理并为您开通。不过话费充值和账单查询不在本助手支持范围内，建议您拨打运营商专线或通过官方App办理。",
           "action_types": [
             "Acknowledge",
             "Reject_Request"
@@ -2474,7 +2476,7 @@
       "memory_role": "correction_session",
       "skeleton_signature": "T2-3|2|1|I1:抖音/看直播/4/correct/resolved|none",
       "scenario": {
-        "environment": "野外地质勘查区",
+        "environment": "棒球赛事活动现场",
         "blueprint_type": "event_override",
         "memory_action": "override_temporary_preference"
       }
@@ -2483,14 +2485,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "今天在野外地质勘查区，老规矩，用抖音做看直播，帮我把保障开上。",
+          "utterance": "今天在棒球赛事活动现场，老规矩，用抖音做看直播，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，我调取到之前登记的抖音看直播配置：画质1080p、时延50ms以内，15时00分至17时00分（持续120min），确认按这套配置开通吗？",
+          "utterance": "收到，您是要在抖音看直播对吧？按您之前的老规矩，画质1080p、时延50ms以内，保障时段是今天15:00到17:00，确认一下？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -2562,7 +2564,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已按现场特殊情况为您临时调整开通抖音看直播保障：画质720p、时延上限30ms，时段15时00分至17时00分。祝您现场顺利！",
+          "utterance": "明白，今天现场特殊，本次临时调整为720p画质、30ms时延，保障时段15:00到17:00，已按这个开通，祝您观赛愉快！",
           "action_types": [
             "Acknowledge"
           ]
@@ -2757,7 +2759,7 @@
       "memory_role": "reuse_session",
       "skeleton_signature": "T2-1|2|1|I1:抖音/看直播/1/memory_filled/resolved|none",
       "scenario": {
-        "environment": "特殊事件集结区",
+        "environment": "棒球赛事活动现场",
         "blueprint_type": "event_reuse",
         "memory_action": "reuse_long_term_rule_after_correction"
       }
@@ -2766,7 +2768,7 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "老规矩，在特殊事件集结区的时间，用抖音做看直播，帮我把保障开上。",
+          "utterance": "老规矩，在棒球赛事活动现场，用抖音做看直播，画质按‘超清’，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
@@ -2817,18 +2819,18 @@
               "timestamp": {
                 "start_timestamp": {
                   "value": "2026年11月18日15时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
                 },
                 "end_timestamp": {
                   "value": "2026年11月18日17时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
                 },
                 "duration": {
                   "value": "120min",
-                  "source_type": "Context",
-                  "source_ref": "U1"
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
                 }
               }
             }
@@ -2844,7 +2846,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次保障，抖音看直播，画质1080p、时延50ms以内，时长120分钟，从15:00到17:00。祝您观赛愉快！",
+          "utterance": "好的，已为您开通抖音看直播保障，1080p画质、50ms以内时延，时段15:00到17:00，祝您观赛愉快！",
           "action_types": [
             "Acknowledge"
           ]
@@ -2888,18 +2890,18 @@
               "timestamp": {
                 "start_timestamp": {
                   "value": "2026年11月18日15时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
                 },
                 "end_timestamp": {
                   "value": "2026年11月18日17时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
                 },
                 "duration": {
                   "value": "120min",
-                  "source_type": "Context",
-                  "source_ref": "U1"
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
                 }
               }
             }
@@ -2942,18 +2944,18 @@
           "timestamp": {
             "start_timestamp": {
               "value": "2026年11月18日15时00分",
-              "source_type": "Turn",
-              "source_ref": "U1"
+              "source_type": "Memory",
+              "source_ref": "MF_001"
             },
             "end_timestamp": {
               "value": "2026年11月18日17时00分",
-              "source_type": "Turn",
-              "source_ref": "U1"
+              "source_type": "Memory",
+              "source_ref": "MF_001"
             },
             "duration": {
               "value": "120min",
-              "source_type": "Context",
-              "source_ref": "U1"
+              "source_type": "Memory",
+              "source_ref": "MF_001"
             }
           }
         }
@@ -2980,13 +2982,13 @@
               "timestamp": {
                 "start_timestamp": {
                   "value": "2026年11月18日15时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
                 },
                 "end_timestamp": {
                   "value": "2026年11月18日17时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
                 }
               },
               "resolution": {
@@ -3033,7 +3035,7 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "老规矩，在转场大巴途中，用微信做视频通话，时延按‘能正常说话就行’，帮我把保障开上。",
+          "utterance": "老规矩，在大巴转场途中，用微信做视频通话，画质按‘差不多清晰就行’，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
@@ -3111,7 +3113,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通微信视频通话保障，画质720p、时延100ms以内，时长60分钟，从18:45到19:45。祝您通话顺畅！",
+          "utterance": "好的，已为您开通微信视频通话保障，720p画质、100ms以内时延，时段18:45到19:45，祝您一路顺风！",
           "action_types": [
             "Acknowledge"
           ]
@@ -3300,7 +3302,7 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "老规矩，在常规周期保障现场，用抖音做看直播，帮我把保障开上。",
+          "utterance": "老规矩，在常规周期保障现场，用抖音做看直播，时延按‘丝滑一点’，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
@@ -3351,18 +3353,18 @@
               "timestamp": {
                 "start_timestamp": {
                   "value": "2026年11月26日15时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
                 },
                 "end_timestamp": {
                   "value": "2026年11月26日17时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
                 },
                 "duration": {
                   "value": "120min",
-                  "source_type": "Context",
-                  "source_ref": "U1"
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
                 }
               }
             }
@@ -3378,7 +3380,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通抖音看直播保障，画质1080p、时延50ms以内，时长120分钟，从15:00到17:00。祝您观赛愉快！",
+          "utterance": "好的，已为您开通抖音看直播保障，1080p画质、50ms以内时延，时段15:00到17:00，祝您观赛愉快！",
           "action_types": [
             "Acknowledge"
           ]
@@ -3422,18 +3424,18 @@
               "timestamp": {
                 "start_timestamp": {
                   "value": "2026年11月26日15时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
                 },
                 "end_timestamp": {
                   "value": "2026年11月26日17时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
                 },
                 "duration": {
                   "value": "120min",
-                  "source_type": "Context",
-                  "source_ref": "U1"
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
                 }
               }
             }
@@ -3476,18 +3478,18 @@
           "timestamp": {
             "start_timestamp": {
               "value": "2026年11月26日15时00分",
-              "source_type": "Turn",
-              "source_ref": "U1"
+              "source_type": "Memory",
+              "source_ref": "MF_001"
             },
             "end_timestamp": {
               "value": "2026年11月26日17时00分",
-              "source_type": "Turn",
-              "source_ref": "U1"
+              "source_type": "Memory",
+              "source_ref": "MF_001"
             },
             "duration": {
               "value": "120min",
-              "source_type": "Context",
-              "source_ref": "U1"
+              "source_type": "Memory",
+              "source_ref": "MF_001"
             }
           }
         }
@@ -3514,13 +3516,13 @@
               "timestamp": {
                 "start_timestamp": {
                   "value": "2026年11月26日15时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
                 },
                 "end_timestamp": {
                   "value": "2026年11月26日17时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
                 }
               },
               "resolution": {

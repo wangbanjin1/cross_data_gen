@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_025",
+  "category": "体育训练与赛事保障",
+  "persona_summary": "移动训练与参赛人员",
+  "static_profile": {
+    "user_id": "USER_025",
+    "identity": "U23皮划艇运动员，视Ellis Miller为偶像并长期追随其训练理念，日常在露天训练场、赛道、球场及赛事集结区进行高频训练与参赛，客场转场频繁，全程依赖手机移动核心网（4G/5G）直接联网，不依赖家庭宽带或固定Wi-Fi，重点完成训练视频上传、运动数据记录与回放、赛事直播、即时通信与团队调度。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴运动手表与便携运动相机；确需联网时使用手机热点为便携终端提供接入。",
+    "apps": [
+      "抖音",
+      "微信",
+      "腾讯会议",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "athlete_speaker",
+    "speech_style": {
+      "tone": "干脆利落、带训练口令感，习惯用短句和运动行话，对网络质量要求直白明确。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "稳住上行",
+        "按老时间走"
+      ],
+      "typical_habits": "训练和转场中习惯用口语化简称指代应用、业务和参数，喜欢提前确认网络状态，遇到弱覆盖会立刻要求续传或切换方案。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "月度训练视频上传与团队调度直播",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每月月中15-16号例行综合对账与业务巡检，14:00-16:00在露天训练场或赛事集结区进行训练视频上传、数据回放与团队调度直播。",
+      "period_type": "monthly",
+      "days": [
+        "15th",
+        "16th"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖子"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到四点"
+        ],
+        "period_aliases": [
+          "每月月中15-16号老规矩",
+          "月中例行对账巡检",
+          "老时间"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城赛事周与客场转场保障",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城参赛周期间，赛道与转场路段人群密集、弱覆盖路段增多，需保证训练视频续传、赛事直播与团队调度通信连续。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "大巴转场视频调度",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "客场转场途中在大巴或临时休息点进行团队视频调度与路线确认。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "训练录像复盘与即时沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "训练结束后与教练或队友进行录像复盘、动作纠正和临时通知确认。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "赛前临时观看对手赛事直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "休息间隙刷训练短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

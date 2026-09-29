@@ -1,0 +1,177 @@
+{
+  "persona_id": "mobile_persona_050",
+  "category": "移动经营与客户服务",
+  "persona_summary": "移动看房与物业人员",
+  "static_profile": {
+    "user_id": "USER_050",
+    "identity": "英国房东兼移动看房与物业人员，高频在楼盘现场、市集、门店外摆区、客户拜访点及配送路线之间移动办公，全程依赖手机4G/5G直接联网，不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式，重点完成移动支付、订单处理与库存查询、客户沟通、短视频营销与远程协作，便携终端确需联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携平板与移动热点，均以手机移动核心网（4G/5G）作为唯一可用接入方式。",
+    "apps": [
+      "微信",
+      "抖音",
+      "腾讯会议",
+      "钉钉"
+    ],
+    "speech_archetype": "business_advisor",
+    "speech_style": {
+      "tone": "务实直接、带点英式房东的克制与挑剔，谈业务时习惯先确认网络和时延，再谈价格与安排。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "先对齐一下",
+        "信号稳不稳"
+      ],
+      "typical_habits": "习惯在移动现场先口头确认画质、时延和时长，再开始视频看房或客户沟通；遇到弱覆盖路段会反复强调续传和快速恢复。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "移动视频看房与房源实拍推流",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在10:00-12:00带客户远程视频看房或向潜在租客直播展示房源时，需用手机4G/5G直接联网完成视频通话与房源实拍推流，并同步上传房源照片、查询合同资料、确认预约安排。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "10:00-12:00",
+      "application_name": "微信",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "微信",
+          "某信",
+          "绿泡泡"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "视频看房",
+          "连麦看房",
+          "推流看房"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十二点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "上午看房档",
+          "十点到十二点老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "商圈秋季促销展会临时看房点",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "商圈户外临时经营点与展会现场人群密集，移动网络拥塞明显，需在弱覆盖与高干扰环境下保障视频看房、移动支付和订单消息及时。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "房源短视频营销素材回传",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "看房结束后在门店外摆区或配送路线间隙，快速拍摄并上传房源短视频用于营销获客。",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "物业远程协作与合同资料对齐",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "与物业同事、租客或合作方远程核对合同资料、预约安排和订单处理进度时发起。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时参加行业线上分享会",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次午休时刷房源相关直播",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}
