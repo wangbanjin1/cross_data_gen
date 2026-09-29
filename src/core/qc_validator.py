@@ -173,6 +173,42 @@ class QCValidator:
                     report["rule_checks"]["template_semantic_alignment_check"] = False
                     s_passed = False
 
+            # 9. T1-1 干扰会话必须明确表达全量参数，严禁调用未建立的记忆暗号或模糊词
+            b_type = s.get("session_meta", {}).get("scenario", {}).get("blueprint_type", "")
+            if (tid == "T1-1" or b_type == "distractor") and events:
+                u_text = events[0].get("user", {}).get("utterance", "")
+                a_text = events[0].get("agent", {}).get("utterance", "")
+                bad_alias = ["清晰点就行", "不卡就行", "一会儿", "老规矩", "老时间", "照旧", "按习惯"]
+                for ba in bad_alias:
+                    if ba in u_text:
+                        report["issues"].append(f"[{sid}] T1-1 干扰会话用户台词违规出现记忆暗号: '{ba}'")
+                        report["rule_checks"]["natural_dialogue_check"] = False
+                        s_passed = False
+                if "记忆理解" in a_text or "按‘" in a_text or "按\"" in a_text:
+                    report["issues"].append(f"[{sid}] T1-1 干扰会话 Agent 台词违规出现记忆调取话术")
+                    report["rule_checks"]["natural_dialogue_check"] = False
+                    s_passed = False
+
+            # 10. T2-3 临时纠正覆盖会话：首轮必须满足“场景＋应用＋业务”最小表达，次轮包含特殊现场与调整
+            if (tid == "T2-3" or b_type == "event_override") and len(events) >= 2:
+                u1 = events[0].get("user", {}).get("utterance", "")
+                u2 = events[1].get("user", {}).get("utterance", "")
+                p0 = s.get("intents", [{}])[0].get("params", {})
+                app = p0.get("application_name", {}).get("value", "")
+                srv = p0.get("service_name", {}).get("value", "")
+                valid_apps = [app, "微信", "钉钉", "腾讯会议", "哔哩哔哩", "抖音", "快手", "企鹅会议", "阿抖", "小破站"]
+                valid_srvs = [srv, "直播", "会议", "通话", "短视频", "开播", "视讯", "对齐开会", "推流"]
+                has_app = any(a in u1 for a in valid_apps if a)
+                has_srv = any(s in u1 for s in valid_srvs if s)
+                has_scene = any(k in u1 for k in ["现场", "营地", "训练场", "岸线", "途中", "休息区", "通勤", "活动"]) or (s.get("session_meta", {}).get("scenario", {}).get("environment", "") in u1)
+                if not (has_app and has_srv and has_scene):
+                    report["issues"].append(f"[{sid}] T2-3 首轮台词跌破最小表达或缺失场景: '{u1}'")
+                    report["rule_checks"]["natural_dialogue_check"] = False
+                    s_passed = False
+                if "特殊" not in u2 and "人流" not in u2 and "拥塞" not in u2 and "网络" not in u2:
+                    report["issues"].append(f"[{sid}] T2-3 次轮台词缺失现场特殊情况说明: '{u2}'")
+                    report["rule_checks"]["natural_dialogue_check"] = False
+                    s_passed = False
             if s_passed:
                 report["passed_sessions"] += 1
             else:

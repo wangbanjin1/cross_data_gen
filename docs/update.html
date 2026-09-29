@@ -333,7 +333,7 @@
         <h1>近期生成问题排查、解决办法与实测结果对照</h1>
         <div class="header-meta">
             <div class="meta-tag">记录周期：<span class="val">2026年09月28日 - 09月29日</span></div>
-            <div class="meta-tag">累计解决问题：<span class="val">10 项</span></div>
+            <div class="meta-tag">累计解决问题：<span class="val">12 项</span></div>
             <div class="meta-tag">整改后质检通过率：<span class="val">100.0% (20/20 画像)</span></div>
         </div>
     </header>
@@ -342,7 +342,7 @@
     <div class="date-divider">
         <div class="date-badge">📅 2026年09月29日</div>
         <div class="date-line"></div>
-        <div class="date-summary-text">本日重点：单轮干扰免暗号注入、临时纠正后基线记忆恢复、口语相对日期（明天/今天）真值对齐</div>
+        <div class="date-summary-text">本日重点：单轮干扰全量参数显式化与暗号彻底隔离、临时纠正最小表达标准规范、临时纠正后基线记忆恢复、口语相对日期真值对齐</div>
     </div>
 
     <!-- 问题 8 (2026-09-29 新增) -->
@@ -468,6 +468,94 @@ User: "钉钉会议，清晰点就行，明天上午10点开始，开半小时�
 User: "钉钉会议，清晰点就行，今天上午10点开始，开半小时。"
 // 真值 start_timestamp 同步对齐当天：
 "start_timestamp": "2026年10月21日10时00分"  // 严格吻合！</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- 问题 11 (2026-09-29 新增) -->
+    <div class="issue-card">
+        <div class="issue-header">
+            <span class="issue-badge">问题 11 (本日解决)</span>
+            <div class="issue-title">临时纠正会话（T2-3）首轮违背“场景+应用+业务”最小表达标准与次轮现场原因缺失</div>
+        </div>
+        <div class="desc-block">
+            <p><span class="desc-label">【问题现象】</span>在会话 S09（如 <code>S-USER_001-09</code>，模板 <code>T2-3</code>，角色 <code>event_override</code>）中，第 1 轮用户台词原先仅说“老规矩，每天这个时候开通保障。”，既未交代触发场景（早高峰通勤现场），也未指明应用（抖音）与业务（开直播），严重违背了“应用＋业务是发起保障意图的最小表达”原则；且第 2 轮直接粗暴抛出新参数，未说明现场为何临时调整。</p>
+            <p><span class="desc-label">【根因排查】</span>
+                1. <strong>最小表达标准理解偏差</strong>：时段暗号（“每天这个时候”）属于槽位代称，只能填充时间槽，不能替代意图发起的最小表达（应用+业务）；<br>
+                2. <strong>保底与提示词设计粗疏</strong>：原 <code>dialogue_prompts.py</code> 与 <code>dialogue_fallbacks.py</code> 对 T2-3 第 1 轮保底模板缺少场景和应用业务槽位拼接，导致台词只有暗号；第 2 轮缺少“现场特殊情况”的口语转折说明。
+            </p>
+            <p><span class="desc-label">【解决办法】</span>
+                1. <strong>重构 T2-3 提示词与保底规则</strong>：第 1 轮强制注入：<code>今天在{env}，老规矩，用{app}做{srv}，帮我把保障开上。</code> 确保严格包含“场景＋应用＋业务＋习惯暗号”最小表达；第 2 轮强制注入现场突发背景转折：<code>对，不过今天现场特殊，画质临时调到{res}，时延压到{rtt}以内，今天临时按这个来。</code><br>
+                2. <strong>质检强规则拦截</strong>：在 <code>qc_validator.py</code> 中追加 <code>event_override_spec_check</code>，对全量 T2-3 会话强制校验首轮场景/应用/业务最小表达，次轮校验现场特殊原因；<br>
+                3. <strong>全量 20 个画像统一清洗与验证</strong>：对全部画像重新归一化生成并质检，100% 通过。
+            </p>
+        </div>
+        <div class="contrast-grid">
+            <div class="contrast-box bad">
+                <div class="contrast-title">出现问题时的表现（S-USER_001-09）</div>
+                <pre>// 会话：S-USER_001-09 (模板: T2-3, 临时纠正)
+Turn 1:
+User: "老规矩，每天这个时候开通保障。"
+Agent: "收到，按抖音直播配置（1080p，50ms）为您确认..."
+Turn 2:
+User: "画质调到720p，时延30ms。"
+Agent: "好的，为您调整为720p/30ms。"
+
+// 缺陷 1：首轮无场景、无应用、无业务，严重违背最小表达标准
+// 缺陷 2：次轮无现场特殊情况说明，生硬突兀</pre>
+            </div>
+            <div class="contrast-box good">
+                <div class="contrast-title">解决后的规范表现（修复后实测）</div>
+                <pre>// 会话：S-USER_001-09 (模板: T2-3, 临时纠正)
+Turn 1:
+User: "今天在早高峰通勤现场，老规矩，用抖音做开直播，帮我把保障开上。"
+Agent: "收到，我调取到之前登记的抖音开直播配置：画质1080p、时延50ms以内，12时30分至13时30分（持续60min），确认按这套配置开通吗？"
+Turn 2:
+User: "对，不过今天现场特殊，画质临时调到720p，时延压到30ms以内，今天临时按这个来。"
+Agent: "好的，已按现场特殊情况为您临时调整开通抖音开直播保障：画质720p、时延上限30ms，时段12时30分至13时30分。祝您现场顺利！"
+
+// 规范：首轮四要素齐全，次轮因果关系清晰，符合真人工作现场表达</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- 问题 12 (2026-09-29 新增) -->
+    <div class="issue-card">
+        <div class="issue-header">
+            <span class="issue-badge">问题 12 (本日解决)</span>
+            <div class="issue-title">单轮干扰会话（T1-1）未隔离记忆暗号且参数不全，导致客服出现脑补反问</div>
+        </div>
+        <div class="desc-block">
+            <p><span class="desc-label">【问题现象】</span>在会话 S12（如 <code>S-USER_001-12</code>，模板 <code>T1-1</code>，角色 <code>distractor_session</code>）中，该会话为全新应用（钉钉会议）的单轮独立干扰保障，前置没有任何相关记忆。但用户台词却包含“清晰点就行”等模糊暗号，客服台词甚至回复“按记忆理解为720p”，将本应完全自包含、即用即走的干扰会话误当成了记忆调取会话。</p>
+            <p><span class="desc-label">【根因排查】</span>
+                1. <strong>骨架暗号泄露</strong>：<code>timeline_planner.py</code> 在为 T1-1 生成骨架时，仍带入了画像骨架中的 <code>aliases</code>（如 720p 对应“清晰点就行”）；<br>
+                2. <strong>单轮自包含属性未落实</strong>：干扰会话要求在单轮内一次性交代齐全部参数（应用、业务、时段、画质、时延），但大模型生成时容易遗漏参数，导致客服被迫猜测或调取记忆。
+            </p>
+            <p><span class="desc-label">【解决办法】</span>
+                1. <strong>规划层彻底清空 aliases</strong>：在 <code>timeline_planner.py</code> 中判断若为 <code>distractor</code> 会话，不仅清空 <code>small_memory</code>，更强制 <code>aliases = {}</code>；<br>
+                2. <strong>提示词与保底模板全参数显式化</strong>：约束 T1-1 严禁任何暗号词汇，必须一次性说清全部 6 大要素（应用、业务、起始时间、结束时间/时长、明确分辨率、明确时延上限）；客服直接一次性受理，绝不出现“按记忆理解”；<br>
+                3. <strong>质检增加 Rule 9 强校验</strong>：<code>qc_validator.py</code> 中加入 <code>distractor_spec_check</code>，严格扫描 T1-1 中不得存在记忆暗号，且客服台词严禁含有“按记忆理解”字样。
+            </p>
+        </div>
+        <div class="contrast-grid">
+            <div class="contrast-box bad">
+                <div class="contrast-title">出现问题时的表现（S-USER_001-12）</div>
+                <pre>// 会话：S-USER_001-12 (模板: T1-1, 单轮干扰)
+Turn 1:
+User: "钉钉会议，清晰点就行，今天上午10点开始，开半小时。"
+Agent: "好的，为您开通钉钉会议保障，按记忆理解为画质720p，时延80ms以内..."
+
+// 缺陷 1：前置从未用过钉钉，用户却使用“清晰点就行”暗号
+// 缺陷 2：客服无依据脑补“按记忆理解为720p”，破坏单轮干扰的独立性</pre>
+            </div>
+            <div class="contrast-box good">
+                <div class="contrast-title">解决后的规范表现（修复后实测）</div>
+                <pre>// 会话：S-USER_001-12 (模板: T1-1, 单轮干扰)
+Turn 1:
+User: "你好，今天10时00分到10时30分要在钉钉开会议（开30min），画质要720p，时延控制在80ms以内，帮我开个保障。"
+Agent: "收到，已为您开通钉钉会议网络保障：画质720p，时延上限80ms，保障时间2026年10月21日10时00分至2026年10月21日10时30分（共30min）。祝您使用顺利！"
+
+// 规范：全量参数一次性交代明确，零暗号零脑补，客服直接受理闭环</pre>
             </div>
         </div>
     </div>
@@ -780,7 +868,7 @@ Agent: "好的，已为您开通腾讯会议保障：1080p原画、50ms以内、
     <!-- 最终结果汇总 -->
     <div class="summary-card">
         <div class="summary-header">实测修复结果与验证数据</div>
-        <p>针对上述 10 项问题，已全面更新生成代码与质检套件，并对 20 个画像（<code>mobile_persona_001</code> ~ <code>mobile_persona_020</code>）完成数据清洗与质检校验：</p>
+        <p>针对上述 12 项问题，已全面更新生成代码与质检套件，并对 20 个画像（<code>mobile_persona_001</code> ~ <code>mobile_persona_020</code>）完成数据清洗与质检校验：</p>
         <table>
             <thead>
                 <tr>
@@ -794,6 +882,16 @@ Agent: "好的，已为您开通腾讯会议保障：1080p原画、50ms以内、
                     <td><strong>质检通过率</strong></td>
                     <td>约 71.4%（单画像常出现 3~4 个会话未通过）</td>
                     <td><strong>100.0%</strong>（20 个画像全量会话全部一次性通过）</td>
+                </tr>
+                <tr>
+                    <td><strong>临时纠正最小表达</strong></td>
+                    <td>S09 首轮只有暗号，无场景、无应用业务</td>
+                    <td><strong>100% 达标</strong>（场景+应用+业务+暗号齐备，次轮交代特殊原因）</td>
+                </tr>
+                <tr>
+                    <td><strong>单轮干扰全显式表达</strong></td>
+                    <td>S12 漏传参数、引入模糊暗号且客服脑补</td>
+                    <td><strong>彻底隔离暗号</strong>（6大参数全量显式交代，客服直接闭环受理）</td>
                 </tr>
                 <tr>
                     <td><strong>干扰会话暗号隔离</strong></td>

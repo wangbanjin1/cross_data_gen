@@ -80,9 +80,13 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
             return f"对，不过今天现场活动延长了，帮我把保障时长延长到{tp['duration']}（持续到{tp['end_timestamp'].split('日')[-1]}）。"
     elif tid == "T2-3":
         if turn_idx == 1:
-            return f"今天在{env}，帮我开通{app_alias}{srv_alias}保障。"
+            return f"今天在{env}，老规矩，用{app}做{srv}，帮我把保障开上。"
         else:
-            return f"不对，今天现场特殊，画质调到{res_alias}，时延要求{rtt_alias}，临时按这个来。"
+            return f"对，不过今天现场特殊，画质临时调到{res}，时延压到{rtt}以内，今天临时按这个来。"
+    elif tid == "T1-1" or b_type == "distractor":
+        start_t = tp['start_timestamp'].split('日')[-1]
+        end_t = tp['end_timestamp'].split('日')[-1]
+        return f"你好，今天{start_t}到{end_t}要在{app}开{srv}（开{tp['duration']}），画质要{res}，时延控制在{rtt}以内，帮我开个保障。"
     elif turn_idx == 1:
         if role == "reinforcement_session" and decl_mode == "implicit_induction" and s_plan.get("session_id", "").endswith("-03"):
             return f"今天在{env}，这次按上次的来。"
@@ -165,10 +169,14 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
         else:
             return f"好的，已为您将{app}{srv}保障时长延长至{tp['duration']}（至{tp['end_timestamp'].split('日')[-1]}），配置保持{res}/时延≤{rtt}，保障已生效！"
     elif tid == "T2-3":
+        start_t = tp['start_timestamp'].split('日')[-1]
+        end_t = tp['end_timestamp'].split('日')[-1]
         if turn_idx == 1:
-            return f"收到，请问是否按老规矩标准（1080p / 时延≤50ms）为您开通？"
+            return f"收到，我调取到之前登记的{app}{srv}配置：画质1080p、时延50ms以内，{start_t}至{end_t}（持续{tp['duration']}），确认按这套配置开通吗？"
         else:
-            return f"收到，已临时为您调整为画质{res}、时延上限{rtt}，保障已为您生效！"
+            return f"好的，已按现场特殊情况为您临时调整开通{app}{srv}保障：画质{res}、时延上限{rtt}，时段{start_t}至{end_t}。祝您现场顺利！"
+    elif tid == "T1-1" or b_type == "distractor":
+        return f"收到，已为您开通{app}{srv}网络保障：画质{res}，时延上限{rtt}，保障时间{tp['start_timestamp']}至{tp['end_timestamp']}（共{tp['duration']}）。祝您使用顺利！"
     elif is_last:
         if role == "evidence_session" and decl_mode == "explicit_declaration":
             return f"好的，已为您成功受理本次保障，并已为您将该配置记录为长期老规矩，祝您使用愉快！"

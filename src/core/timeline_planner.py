@@ -168,10 +168,11 @@ class DynamicTimelinePlanner:
                 src.get("preferred_params", {}).get("rtt_max") or src.get("params", {}).get("rtt_max", "50ms")
             )
 
-            aliases = src.get("aliases", {})
             if cfg["type"].startswith("distractor"):
+                aliases = {}
                 small_memory = {}
             else:
+                aliases = src.get("aliases", {})
                 small_memory = cls._select_small_memory(user_id, cfg["type"], src, {
                     "resolution": res,
                     "rtt": rtt,

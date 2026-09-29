@@ -238,6 +238,27 @@ class DialogueGenerator:
         if tid == "T1-2":
             u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
 
+        # 单轮干扰任务：必须清晰说全参数，严禁携带任何记忆暗号/模糊词
+        if tid == "T1-1" or s_plan.get("blueprint_type") == "distractor":
+            bad_dist_kws = ["清晰点就行", "不卡就行", "一会儿", "老规矩", "老时间", "照旧", "按习惯"]
+            if any(kw in u_text for kw in bad_dist_kws) or tp.get("resolution", "") not in u_text or tp.get("rtt", "") not in u_text:
+                u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+
+        # 临时纠正覆盖：第1轮必须满足场景+应用+业务的最小表达，第2轮必须包含特殊现场与调整参数
+        if tid == "T2-3" or s_plan.get("blueprint_type") == "event_override":
+            app = tp.get("application_name", "")
+            srv = tp.get("service_name", "")
+            env = s_plan.get("scenario_env", "")
+            if turn_idx == 1:
+                has_app = app in u_text or any(a in u_text for a in s_plan.get("aliases", {}).get("app_aliases", []))
+                has_srv = srv in u_text or any(a in u_text for a in s_plan.get("aliases", {}).get("service_aliases", []))
+                has_env = env in u_text or "现场" in u_text
+                if not (has_app and has_srv and has_env):
+                    u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+            elif turn_idx == 2:
+                if tp.get("resolution", "") not in u_text or tp.get("rtt", "") not in u_text or "特殊" not in u_text:
+                    u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+
         # 证据会话首轮必须与规划的精确开始时间一致，避免模糊改写造成 turn-level 泄漏。
         if turn_idx == 1 and role == "evidence_session":
             u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
@@ -288,6 +309,9 @@ class DialogueGenerator:
             a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
         if tid == "T1-2":
             a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
+        if tid == "T1-1" or s_plan.get("blueprint_type") == "distractor":
+            if any(kw in a_text for kw in ["记忆理解", "理解为", "按‘", "按\""]):
+                a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
         if tid in ["T2-2", "T3-1"] and s_plan.get("small_memory_evidence_mode") == "cross_turn_clarification":
             a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
         if turn_idx == 2 and role == "reinforcement_session" and s_plan.get("small_memory_evidence_mode") == "co_occurrence" and s_plan.get("session_id", "").endswith("-03"):
