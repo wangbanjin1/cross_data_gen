@@ -574,19 +574,15 @@ class SessionAssembler:
                 end_src, end_ref = "Context", "SUB_002"
                 dur_src, dur_ref = "Memory", "SUB_002"
 
-        elif b_type == "event_reuse":
-            closure_path = "memory_filled"
-            app_src, app_ref = "Memory", "MF_001_v2"
-            srv_src, srv_ref = "Memory", "MF_001_v2"
-            res_src, res_ref = "Memory", "MF_001_v2"
-            rtt_src, rtt_ref = "Memory", "MF_001_v2"
-
-        elif b_type == "main_recovery":
+        elif b_type in ["event_reuse", "main_recovery"]:
             closure_path = "memory_filled"
             app_src, app_ref = "Memory", "MF_001"
             srv_src, srv_ref = "Memory", "MF_001"
             res_src, res_ref = "Memory", "MF_001"
             rtt_src, rtt_ref = "Memory", "MF_001"
+            start_src, start_ref = "Memory", "MF_001"
+            end_src, end_ref = "Memory", "MF_001"
+            dur_src, dur_ref = "Memory", "MF_001"
 
         # 复用会话仍需满足“应用＋业务”的最小表达。只有业务默认应用记忆可省略应用；
         # 应用别名通过记忆解析应用，但业务仍由本轮用户明确表达。

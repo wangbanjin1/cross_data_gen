@@ -160,7 +160,7 @@ class DynamicTimelinePlanner:
         sessions = []
         for cfg in blueprint_configs:
             src = cfg["source"]
-            is_override = "override" in cfg
+            is_override = "override" in cfg and cfg["type"] == "event_override"
             res = cfg["override"].get("resolution", "720p") if is_override else (
                 src.get("preferred_params", {}).get("resolution") or src.get("params", {}).get("resolution", "1080p")
             )
@@ -169,11 +169,14 @@ class DynamicTimelinePlanner:
             )
 
             aliases = src.get("aliases", {})
-            small_memory = cls._select_small_memory(user_id, cfg["type"], src, {
-                "resolution": res,
-                "rtt": rtt,
-                "duration": cfg["dur"],
-            })
+            if cfg["type"].startswith("distractor"):
+                small_memory = {}
+            else:
+                small_memory = cls._select_small_memory(user_id, cfg["type"], src, {
+                    "resolution": res,
+                    "rtt": rtt,
+                    "duration": cfg["dur"],
+                })
             evidence_mode = {
                 "main": "co_occurrence",
                 "sub_01": "cross_turn_clarification",

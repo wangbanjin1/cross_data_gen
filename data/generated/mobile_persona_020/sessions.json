@@ -1746,14 +1746,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "哔哩哔哩看直播，时延不卡就行，帮我开个保障。",
+          "utterance": "你好，我想办个网络保障，主要是中午12点半到1点半用哔哩哔哩看直播，画质720p，时延最好控制在80毫秒以内。另外顺便帮我查一下手机话费余额和这个月账单，再充点话费。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，您要在哔哩哔哩看直播，时延按‘不卡就行’也就是80ms以内来保障，画质720p，时长60分钟，从12:30到13:30，这就为您开通。另外您提到的话费充值和账单查询不在本助手服务范围内，建议您通过运营商官方渠道办理。",
+          "utterance": "您好，我先为您受理网络保障需求：您需要保障的应用是哔哩哔哩，业务是看直播，画质为720p，时延要求在80ms以内，保障时段为12时30分至13时30分，时长60分钟，对吗？关于您同时提出的手机话费充值和账单查询，这两项不在我当前可办理的服务范围内，建议您通过运营商官方App、官方网站或官方客服渠道办理，感谢您的理解。",
           "action_types": [
             "Acknowledge",
             "Reject_Request"
@@ -2237,7 +2237,7 @@
       "scenario": {
         "environment": "特殊事件集结区",
         "blueprint_type": "event_reuse",
-        "memory_action": "reuse_temporary_preference"
+        "memory_action": "reuse_long_term_rule_after_correction"
       }
     },
     "event_sequence": [
@@ -2250,7 +2250,7 @@
           ]
         },
         "agent": {
-          "utterance": "收到，我调取到之前登记的腾讯会议会议配置：720p、时延30ms以内，07时30分开始、10时30分结束，持续180min。确认按这套配置开通吗？",
+          "utterance": "收到，我调取到之前登记的腾讯会议会议配置：1080p、时延50ms以内，07时30分开始、10时30分结束，持续180min。确认按这套配置开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -2270,25 +2270,25 @@
               "application_name": {
                 "value": "腾讯会议",
                 "source_type": "Memory",
-                "source_ref": "MF_001_v2"
+                "source_ref": "MF_001"
               },
               "service_name": {
                 "value": "会议",
                 "source_type": "Memory",
-                "source_ref": "MF_001_v2"
+                "source_ref": "MF_001"
               },
               "resolution": {
                 "min_value": {
-                  "value": "720p",
+                  "value": "1080p",
                   "source_type": "Memory",
-                  "source_ref": "MF_001_v2"
+                  "source_ref": "MF_001"
                 }
               },
               "rtt": {
                 "max_value": {
-                  "value": "30ms",
+                  "value": "50ms",
                   "source_type": "Memory",
-                  "source_ref": "MF_001_v2"
+                  "source_ref": "MF_001"
                 }
               },
               "timestamp": {
@@ -2321,7 +2321,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通腾讯会议-会议保障，画质720p、时延30ms以内，时长180分钟，07:30到10:30，信号稳住，顺利录制。",
+          "utterance": "好的，已为您开通腾讯会议-会议保障，画质1080p、时延50ms以内，时长180分钟，07:30到10:30，信号稳住，顺利录制。",
           "action_types": [
             "Acknowledge"
           ]
@@ -2341,25 +2341,25 @@
               "application_name": {
                 "value": "腾讯会议",
                 "source_type": "Memory",
-                "source_ref": "MF_001_v2"
+                "source_ref": "MF_001"
               },
               "service_name": {
                 "value": "会议",
                 "source_type": "Memory",
-                "source_ref": "MF_001_v2"
+                "source_ref": "MF_001"
               },
               "resolution": {
                 "min_value": {
-                  "value": "720p",
+                  "value": "1080p",
                   "source_type": "Memory",
-                  "source_ref": "MF_001_v2"
+                  "source_ref": "MF_001"
                 }
               },
               "rtt": {
                 "max_value": {
-                  "value": "30ms",
+                  "value": "50ms",
                   "source_type": "Memory",
-                  "source_ref": "MF_001_v2"
+                  "source_ref": "MF_001"
                 }
               },
               "timestamp": {
@@ -2395,25 +2395,25 @@
           "application_name": {
             "value": "腾讯会议",
             "source_type": "Memory",
-            "source_ref": "MF_001_v2"
+            "source_ref": "MF_001"
           },
           "service_name": {
             "value": "会议",
             "source_type": "Memory",
-            "source_ref": "MF_001_v2"
+            "source_ref": "MF_001"
           },
           "resolution": {
             "min_value": {
-              "value": "720p",
+              "value": "1080p",
               "source_type": "Memory",
-              "source_ref": "MF_001_v2"
+              "source_ref": "MF_001"
             }
           },
           "rtt": {
             "max_value": {
-              "value": "30ms",
+              "value": "50ms",
               "source_type": "Memory",
-              "source_ref": "MF_001_v2"
+              "source_ref": "MF_001"
             }
           },
           "timestamp": {
@@ -2447,12 +2447,12 @@
               "application_name": {
                 "value": "腾讯会议",
                 "source_type": "Memory",
-                "source_ref": "MF_001_v2"
+                "source_ref": "MF_001"
               },
               "service_name": {
                 "value": "会议",
                 "source_type": "Memory",
-                "source_ref": "MF_001_v2"
+                "source_ref": "MF_001"
               },
               "timestamp": {
                 "start_timestamp": {
@@ -2468,16 +2468,16 @@
               },
               "resolution": {
                 "min_value": {
-                  "value": "720p",
+                  "value": "1080p",
                   "source_type": "Memory",
-                  "source_ref": "MF_001_v2"
+                  "source_ref": "MF_001"
                 }
               },
               "rtt": {
                 "max_value": {
-                  "value": "30ms",
+                  "value": "50ms",
                   "source_type": "Memory",
-                  "source_ref": "MF_001_v2"
+                  "source_ref": "MF_001"
                 }
               }
             }

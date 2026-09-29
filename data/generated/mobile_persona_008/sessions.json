@@ -2269,14 +2269,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "抖音看直播，不卡就行，帮我开个保障；另外顺便帮我查下话费余额。",
+          "utterance": "你好，我想办个网络保障，抖音看直播，画质720p，时延要控制在80ms以内，时间是今天12点30到13点30，一共60分钟。另外顺便帮我把手机话费充一下，再查下账单。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，已为您开通抖音看直播保障，画质720p，时延80ms以内，从2026年11月01日12时30分到13时30分，持续60分钟。话费充值与账单查询不在本助手服务范围内，建议您通过运营商官方渠道办理。",
+          "utterance": "好的，我先为您受理网络保障需求：抖音看直播，画质720p，时延上限80ms以内，时段为今天12点30至13点30，时长60分钟。关于话费充值和账单查询，这两项不在我的服务范围内，建议您通过运营商官方渠道办理。",
           "action_types": [
             "Acknowledge",
             "Reject_Request"
@@ -2760,7 +2760,7 @@
       "scenario": {
         "environment": "特殊事件集结区",
         "blueprint_type": "event_reuse",
-        "memory_action": "reuse_temporary_preference"
+        "memory_action": "reuse_long_term_rule_after_correction"
       }
     },
     "event_sequence": [
@@ -2774,7 +2774,7 @@
           ]
         },
         "agent": {
-          "utterance": "收到，我调取到之前登记的抖音开直播配置：720p、时延30ms以内，10时00分开始、12时00分结束，持续120min。确认按这套配置开通吗？",
+          "utterance": "收到，我调取到之前登记的抖音开直播配置：1080p、时延50ms以内，10时00分开始、12时00分结束，持续120min。确认按这套配置开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -2794,25 +2794,25 @@
               "application_name": {
                 "value": "抖音",
                 "source_type": "Memory",
-                "source_ref": "MF_001_v2"
+                "source_ref": "MF_001"
               },
               "service_name": {
                 "value": "开直播",
                 "source_type": "Memory",
-                "source_ref": "MF_001_v2"
+                "source_ref": "MF_001"
               },
               "resolution": {
                 "min_value": {
-                  "value": "720p",
+                  "value": "1080p",
                   "source_type": "Memory",
-                  "source_ref": "MF_001_v2"
+                  "source_ref": "MF_001"
                 }
               },
               "rtt": {
                 "max_value": {
-                  "value": "30ms",
+                  "value": "50ms",
                   "source_type": "Memory",
-                  "source_ref": "MF_001_v2"
+                  "source_ref": "MF_001"
                 }
               },
               "timestamp": {
@@ -2845,7 +2845,7 @@
           ]
         },
         "agent": {
-          "utterance": "已为您开通抖音开直播保障，720p、30ms，祝您直播顺利！",
+          "utterance": "已为您开通抖音开直播保障，1080p、50ms，祝您直播顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -2865,25 +2865,25 @@
               "application_name": {
                 "value": "抖音",
                 "source_type": "Memory",
-                "source_ref": "MF_001_v2"
+                "source_ref": "MF_001"
               },
               "service_name": {
                 "value": "开直播",
                 "source_type": "Memory",
-                "source_ref": "MF_001_v2"
+                "source_ref": "MF_001"
               },
               "resolution": {
                 "min_value": {
-                  "value": "720p",
+                  "value": "1080p",
                   "source_type": "Memory",
-                  "source_ref": "MF_001_v2"
+                  "source_ref": "MF_001"
                 }
               },
               "rtt": {
                 "max_value": {
-                  "value": "30ms",
+                  "value": "50ms",
                   "source_type": "Memory",
-                  "source_ref": "MF_001_v2"
+                  "source_ref": "MF_001"
                 }
               },
               "timestamp": {
@@ -2919,25 +2919,25 @@
           "application_name": {
             "value": "抖音",
             "source_type": "Memory",
-            "source_ref": "MF_001_v2"
+            "source_ref": "MF_001"
           },
           "service_name": {
             "value": "开直播",
             "source_type": "Memory",
-            "source_ref": "MF_001_v2"
+            "source_ref": "MF_001"
           },
           "resolution": {
             "min_value": {
-              "value": "720p",
+              "value": "1080p",
               "source_type": "Memory",
-              "source_ref": "MF_001_v2"
+              "source_ref": "MF_001"
             }
           },
           "rtt": {
             "max_value": {
-              "value": "30ms",
+              "value": "50ms",
               "source_type": "Memory",
-              "source_ref": "MF_001_v2"
+              "source_ref": "MF_001"
             }
           },
           "timestamp": {
@@ -2971,12 +2971,12 @@
               "application_name": {
                 "value": "抖音",
                 "source_type": "Memory",
-                "source_ref": "MF_001_v2"
+                "source_ref": "MF_001"
               },
               "service_name": {
                 "value": "开直播",
                 "source_type": "Memory",
-                "source_ref": "MF_001_v2"
+                "source_ref": "MF_001"
               },
               "timestamp": {
                 "start_timestamp": {
@@ -2992,16 +2992,16 @@
               },
               "resolution": {
                 "min_value": {
-                  "value": "720p",
+                  "value": "1080p",
                   "source_type": "Memory",
-                  "source_ref": "MF_001_v2"
+                  "source_ref": "MF_001"
                 }
               },
               "rtt": {
                 "max_value": {
-                  "value": "30ms",
+                  "value": "50ms",
                   "source_type": "Memory",
-                  "source_ref": "MF_001_v2"
+                  "source_ref": "MF_001"
                 }
               }
             }

@@ -332,17 +332,151 @@
         <div class="header-tag">问题记录与解决总结</div>
         <h1>近期生成问题排查、解决办法与实测结果对照</h1>
         <div class="header-meta">
-            <div class="meta-tag">记录周期：<span class="val">2026年09月28日</span></div>
-            <div class="meta-tag">累计解决问题：<span class="val">7 项</span></div>
+            <div class="meta-tag">记录周期：<span class="val">2026年09月28日 - 09月29日</span></div>
+            <div class="meta-tag">累计解决问题：<span class="val">10 项</span></div>
             <div class="meta-tag">整改后质检通过率：<span class="val">100.0% (20/20 画像)</span></div>
         </div>
     </header>
+
+    <!-- 2026年09月29日 解决的问题 -->
+    <div class="date-divider">
+        <div class="date-badge">📅 2026年09月29日</div>
+        <div class="date-line"></div>
+        <div class="date-summary-text">本日重点：单轮干扰免暗号注入、临时纠正后基线记忆恢复、口语相对日期（明天/今天）真值对齐</div>
+    </div>
+
+    <!-- 问题 8 (2026-09-29 新增) -->
+    <div class="issue-card">
+        <div class="issue-header">
+            <span class="issue-badge">问题 8 (本日解决)</span>
+            <div class="issue-title">干扰会话（X-1）未建记忆却直呼暗号（如“不卡就行”）与误跌入记忆复用规则</div>
+        </div>
+        <div class="desc-block">
+            <p><span class="desc-label">【问题现象】</span>在画像 001 会话 8（<code>S-USER_001-08</code>，模板 <code>X-1</code>，角色 <code>distractor_session</code>）中，该会话为单轮混合干扰会话（一办一拒），前置并无任何证据会话沉淀过快手应用或 80ms 时延的记忆点，但用户台词却直接说出：“快手看直播，<strong>不卡就行</strong>，顺便帮我查一下手机话费账单”，客服也答复“时延按‘不卡就行’即80ms以内”。</p>
+            <p><span class="desc-label">【根因排查】</span>
+                1. <strong>时间线规划层透传漏洞</strong>：<code>DynamicTimelinePlanner</code> 在为各会话分配 <code>small_memory</code> 时无差别全量匹配，为干扰会话也分配了暗号（如 80ms 匹配到了“不卡就行”）；<br>
+                2. <strong>提示词构建分支缺失</strong>：在 <code>dialogue_generator.py</code> 构建 Prompt 时，判断逻辑涵盖了 <code>T1-2</code>、<code>evidence_session</code>、<code>T2-5</code>、<code>T2-3</code>，唯独缺少了 <code>X-1</code> 分支，导致 <code>X-1</code> 误跌入了 <code>else:</code>（常规复用/强化会话分支），明确指示大模型：“大记忆点已生效……指定小记忆点='不卡就行'，Agent从记忆中补全”。
+            </p>
+            <p><span class="desc-label">【解决办法】</span>
+                1. <code>timeline_planner.py</code> 中判断若为 <code>distractor</code> 类型会话，强制 <code>small_memory = {}</code>；<br>
+                2. <code>dialogue_generator.py</code> 中新增 <code>elif tid == "X-1"</code> 专用分支，明确指示：混合诉求单轮干扰无先验记忆，首次提出需求，严禁使用任何未建立的暗号或老规矩；Agent 办理保障并礼貌拒绝域外诉求；<br>
+                3. 对已生成的 20 个画像中全部 X-1 干扰会话进行 LLM 重新润色并清洗，全量通过质检。
+            </p>
+        </div>
+        <div class="contrast-grid">
+            <div class="contrast-box bad">
+                <div class="contrast-title">出现问题时的错误表现（以 S-USER_001-08 为例）</div>
+                <pre>// 会话：S-USER_001-08 (模板: X-1, 角色: distractor_session)
+"session_meta": {
+  "template_id": "X-1",
+  "small_memory": { "type": "rtt_alias", "value": "不卡就行" } // 错误分配暗号
+}
+// 用户台词：未建立暗号却直呼暗号
+User: "快手看直播，不卡就行，顺便帮我查一下手机话费账单。"
+// 客服台词：当成老暗号直接复用补全
+Agent: "收到，我先为您受理快手看直播保障，时延按‘不卡就行’即80ms以内..."</pre>
+            </div>
+            <div class="contrast-box good">
+                <div class="contrast-title">解决后的规范表现（修复后实测）</div>
+                <pre>// 会话：S-USER_001-08 (模板: X-1, 角色: distractor_session)
+"session_meta": {
+  "template_id": "X-1" // small_memory 为空，无记忆注入
+}
+// 用户台词：首次提出业务与域外需求，自然规范不带暗号
+User: "你好，我想办个网络保障，快手看直播，画质720p，时延要控制在80ms以内，时间是今天12点30到13点30，一共60分钟。另外顺便帮我把手机话费充一下，再查下账单。"
+// 客服台词：正常受理域内业务，明确礼貌拒绝域外诉求
+Agent: "您好，我先为您受理网络保障需求：快手看直播，画质720p，时延上限80ms以内，保障时段为12点30分至13点30分，共60分钟。关于手机话费充值和账单查询，这两项不在我的服务范围内，无法为您办理，建议您通过运营商官方渠道或官方App进行充值及账单查询。网络保障需求我这边继续为您处理。"</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- 问题 9 (2026-09-29 新增) -->
+    <div class="issue-card">
+        <div class="issue-header">
+            <span class="issue-badge">问题 9 (本日解决)</span>
+            <div class="issue-title">临时特殊事件纠正（event_override）误持久化，次日复用（event_reuse）未恢复基线记忆</div>
+        </div>
+        <div class="desc-block">
+            <p><span class="desc-label">【问题现象】</span>在会话 S09 中，用户因现场特殊情况，主动临时将直播画质调整为 <code>720p</code>、时延压缩至 <code>30ms</code>。然而在次日的复用会话 S10（<code>event_reuse</code>）中，系统未恢复该用户长期基线偏好（<code>1080p, 50ms</code>），而是将昨天的临时改动视为新长期规则（<code>MF_001_v2</code>）持续套用，违背了“单次/临时纠正次日失效并回归老规矩”的常识设定。</p>
+            <p><span class="desc-label">【根因排查】</span>
+                1. <strong>记忆追踪状态机逻辑</strong>：原 <code>MemoryTracker</code> 在处理 <code>event_override</code> 时，直接生成了版本分支 <code>MF_001_v2</code> 并覆盖了活跃记忆状态，并在 <code>event_reuse</code> 时继续强化 <code>MF_001_v2</code>；<br>
+                2. <strong>组装与时间线规划联动</strong>：<code>session_assembler.py</code> 和 <code>timeline_planner.py</code> 在 <code>event_reuse</code> 阶段继续提取了 <code>override</code> 里的临时 QoS 属性，导致 Ground Truth 与生成的自然对话文本均固定为了 720p/30ms。
+            </p>
+            <p><span class="desc-label">【解决办法】</span>
+                1. <strong>采纳方案 A 明确生命周期</strong>：<code>event_override</code> 严格定义为单次当天临时调整（<code>temporary_correction</code>），不破坏全局长期记忆 <code>MF_001</code>，不产生衍生版本；<br>
+                2. <strong>次日复用自动回归老规矩</strong>：<code>event_reuse</code> 会话（及后续会话）强制恢复按 <code>MF_001</code> 原始基线（<code>1080p, 50ms</code>）提取与确认，动作标识调整为 <code>reuse_long_term_rule_after_correction</code>；<br>
+                3. <strong>全量数据同步与质检</strong>：全量 20 个画像的 <code>sessions.json</code>、<code>sessions.jsonl</code>、<code>memory_traces.json</code> 及 <code>qc_report.json</code> 同步更新，100% 通过质检。
+            </p>
+        </div>
+        <div class="contrast-grid">
+            <div class="contrast-box bad">
+                <div class="contrast-title">出现问题时的表现（以 S-USER_001-10 为例）</div>
+                <pre>// 会话：S-USER_001-10 (模板: T2-1, 角色: reuse_session)
+// 槽位来源错误溯源至临时分支，QoS 沿用临时参数
+"intents": [{
+  "params": {
+    "resolution": { "value": "720p", "source_ref": "MF_001_v2" },
+    "rtt": { "value": "30ms", "source_ref": "MF_001_v2" }
+  }
+}]
+// 客服台词：继续使用昨天的临时降级参数
+Agent: "收到，已按老规矩提取：快手直播保障（720p，时延30ms内），请确认是否立即开通？"</pre>
+            </div>
+            <div class="contrast-box good">
+                <div class="contrast-title">解决后的规范表现（修复后实测）</div>
+                <pre>// 会话：S-USER_001-10 (模板: T2-1, 角色: reuse_session)
+// 槽位来源正确溯源至原长期基线 MF_001
+"intents": [{
+  "params": {
+    "resolution": { "value": "1080p", "source_ref": "MF_001" },
+    "rtt": { "value": "50ms", "source_ref": "MF_001" }
+  }
+}]
+// 客服台词：自动回归原长期基线配置（老规矩）
+Agent: "收到，我调取到之前登记的快手开直播配置：1080p、时延50ms以内，12时30分开始、13时30分结束，持续60min。确认按这套配置开通吗？"</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- 问题 10 (2026-09-29 新增) -->
+    <div class="issue-card">
+        <div class="issue-header">
+            <span class="issue-badge">问题 10 (本日解决)</span>
+            <div class="issue-title">口语相对日期（“明天”/“后天”）与真值当天时间戳错配</div>
+        </div>
+        <div class="desc-block">
+            <p><span class="desc-label">【问题现象】</span>在会话 S12（如 <code>S-USER_001-12</code>）中，用户口语台词明确提到“<strong>明天</strong>上午10点开始”，但在结构化 Ground Truth 标注中，基准时间 <code>reference_time</code> 为 <code>2026年10月21日10时00分</code>，开通的 <code>start_timestamp</code> 却同样是 <code>2026年10月21日10时00分</code>（未加 1 天），出现了台词表达“明天”但标注落在“今天”的时间矛盾。</p>
+            <p><span class="desc-label">根因排查与解决办法</span>：
+                1. <strong>台词生成端归一化拦截</strong>：在 <code>dialogue_generator.py</code> 的规范化处理中，校验 <code>ref_day == start_day</code> 场景。当判定为同日即时/预约保障时，自动纠正替换用户与客服台词中的“明天/后天”为“今天”；<br>
+                2. <strong>自动化质检约束</strong>：在 <code>qc_validator.py</code> 中追加同日时间表达检查，凡 <code>ref_day == start_day</code> 且台词含有跨日词汇时，直接告警拦截；<br>
+                3. <strong>全量清洗</strong>：将 20 个画像中受影响的口语台词统一清洗为“今天上午10点开始”，彻底消除自然语言与时间真值的不一致。
+            </p>
+        </div>
+        <div class="contrast-grid">
+            <div class="contrast-box bad">
+                <div class="contrast-title">出现问题时的表现（以 S-USER_001-12 为例）</div>
+                <pre>// 会话：S-USER_001-12 (reference_time: 2026年10月21日10时00分)
+// 用户台词口语表达包含“明天”
+User: "钉钉会议，清晰点就行，明天上午10点开始，开半小时。"
+// 真值 start_timestamp 却为当天，未加一天：
+"start_timestamp": "2026年10月21日10时00分"  // 矛盾！</pre>
+            </div>
+            <div class="contrast-box good">
+                <div class="contrast-title">解决后的规范表现（修复后实测）</div>
+                <pre>// 会话：S-USER_001-12 (reference_time: 2026年10月21日10时00分)
+// 用户台词口语表达与当天基准时间严格对齐
+User: "钉钉会议，清晰点就行，今天上午10点开始，开半小时。"
+// 真值 start_timestamp 同步对齐当天：
+"start_timestamp": "2026年10月21日10时00分"  // 严格吻合！</pre>
+            </div>
+        </div>
+    </div>
 
     <!-- 2026年09月28日 解决的问题 -->
     <div class="date-divider">
         <div class="date-badge">📅 2026年09月28日</div>
         <div class="date-line"></div>
-        <div class="date-summary-text">本日重点：台词长句清洗与LLM地点提炼、时序因果隔离、记忆生命周期分流、模版规格对齐</div>
+        <div class="date-summary-text">历史记录：台词长句清洗与LLM地点提炼、时序因果隔离、记忆生命周期分流、模版规格对齐</div>
     </div>
 
     <!-- 问题 1 (本日新修) -->
@@ -646,7 +780,7 @@ Agent: "好的，已为您开通腾讯会议保障：1080p原画、50ms以内、
     <!-- 最终结果汇总 -->
     <div class="summary-card">
         <div class="summary-header">实测修复结果与验证数据</div>
-        <p>针对上述 7 项问题，已全面更新生成代码与质检套件，并对 20 个画像（<code>mobile_persona_001</code> ~ <code>mobile_persona_020</code>）完成数据清洗与质检校验：</p>
+        <p>针对上述 10 项问题，已全面更新生成代码与质检套件，并对 20 个画像（<code>mobile_persona_001</code> ~ <code>mobile_persona_020</code>）完成数据清洗与质检校验：</p>
         <table>
             <thead>
                 <tr>
@@ -660,6 +794,21 @@ Agent: "好的，已为您开通腾讯会议保障：1080p原画、50ms以内、
                     <td><strong>质检通过率</strong></td>
                     <td>约 71.4%（单画像常出现 3~4 个会话未通过）</td>
                     <td><strong>100.0%</strong>（20 个画像全量会话全部一次性通过）</td>
+                </tr>
+                <tr>
+                    <td><strong>干扰会话暗号隔离</strong></td>
+                    <td>X-1 单轮干扰未建记忆却凭空直呼暗号并补全</td>
+                    <td><strong>100% 隔离</strong>（无先验记忆注入，正常表达需求）</td>
+                </tr>
+                <tr>
+                    <td><strong>临时纠正记忆恢复</strong></td>
+                    <td>S09 临时降级后 S10 继续沿用 720p/30ms</td>
+                    <td><strong>规范回归</strong>（S10 自动恢复并复用 1080p/50ms 基线）</td>
+                </tr>
+                <tr>
+                    <td><strong>口语日期与真值对齐</strong></td>
+                    <td>台词说“明天”但标注落在“今天”（S12）</td>
+                    <td><strong>严格吻合</strong>（同日即时预约统一规范为“今天”）</td>
                 </tr>
                 <tr>
                     <td><strong>台词口语真实度</strong></td>

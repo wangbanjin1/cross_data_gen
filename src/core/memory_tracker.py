@@ -214,57 +214,36 @@ class MemoryTracker:
                     })
 
         elif b_type == "event_override":
-            # 场景化临时事件纠正覆盖
-            mem_item = {
-                "memory_id": "MF_001_v2",
-                "category": "scenario_event_temporary",
-                "parent_memory_id": "MF_001",
-                "application_name": tp["application_name"],
-                "service_name": tp["service_name"],
-                "resolution": tp["resolution"],
-                "rtt_max": tp["rtt"],
-                "scope": "temporary_event_window",
-                "valid_until": "2026-11-15",
-                "status": "active_override",
-                "evidence_count": 1,
-                "created_at": ref_time
-            }
-            self.active_memories["MF_001_v2"] = mem_item
-            if "MF_001" in self.active_memories:
-                self.active_memories["MF_001"]["status"] = "temporarily_overridden"
-
+            # 场景化临时事件纠正覆盖：属于单次/当天纠正，不破坏全局长期记忆 MF_001
             memory_events.append({
-                "event_type": "correct_override_memory",
-                "memory_id": "MF_001_v2",
-                "overrides_id": "MF_001",
-                "description": f"用户因恶劣环境主动纠正主线参数为（{tp['resolution']}, {tp['rtt']}），设定临时有效期至2026-11-15。",
+                "event_type": "temporary_correction",
+                "description": f"用户因现场特殊临时主动调整本次参数为（{tp['resolution']}, {tp['rtt']}），仅本次生效，原长期记忆保持有效。",
                 "modified_slots": {"resolution": tp["resolution"], "rtt_max": tp["rtt"]}
             })
 
         elif b_type == "event_reuse":
-            if "MF_001_v2" in self.active_memories:
-                self.active_memories["MF_001_v2"]["evidence_count"] += 1
+            # 临时事件次日复用：已结束单次临时纠正，恢复按原长期主线记忆 MF_001 执行
+            if "MF_001" in self.active_memories:
+                self.active_memories["MF_001"]["evidence_count"] += 1
+                self.active_memories["MF_001"]["last_reinforced_at"] = ref_time
                 memory_events.append({
-                    "event_type": "reinforce_temporary_memory",
-                    "memory_id": "MF_001_v2",
-                    "description": "赛事期内成功复用临时纠正参数。",
-                    "retrieved_slots": ["resolution", "rtt_max"]
+                    "event_type": "reinforce_memory",
+                    "memory_id": "MF_001",
+                    "description": f"单次纠正结束后，会话正常复用原长期主线记忆 MF_001（{self.active_memories['MF_001']['resolution']}, {self.active_memories['MF_001']['rtt_max']}）。",
+                    "retrieved_slots": ["application_name", "service_name", "resolution", "rtt_max"]
                 })
 
         elif b_type == "main_recovery":
-            # 临时规则过期，恢复原主线规则
-            if "MF_001_v2" in self.active_memories:
-                self.active_memories["MF_001_v2"]["status"] = "expired"
+            # 主线记忆常规复用
             if "MF_001" in self.active_memories:
                 self.active_memories["MF_001"]["status"] = "active"
                 self.active_memories["MF_001"]["evidence_count"] += 1
                 self.active_memories["MF_001"]["last_reinforced_at"] = ref_time
 
             memory_events.append({
-                "event_type": "expire_and_recover_memory",
-                "expired_memory_id": "MF_001_v2",
-                "recovered_memory_id": "MF_001",
-                "description": "临时赛事保障窗口已到期，Agent 提示恢复并成功激活原长期主线偏好（1080p, 50ms）。"
+                "event_type": "reinforce_memory",
+                "memory_id": "MF_001",
+                "description": "成功复用原长期主线偏好配置。"
             })
 
         elif b_type in ["distractor", "distractor_ood", "distractor_mixed"]:

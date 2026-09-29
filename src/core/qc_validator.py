@@ -123,11 +123,17 @@ class QCValidator:
                                 report["rule_checks"]["turn_intent_isolation_check"] = False
                                 s_passed = False
 
-            # 6. 验证用户台词自然口语化（严禁系统/学术术语出戏，如“长期偏好”、“元指令”等）
+            # 6. 验证用户台词自然口语化（严禁系统/学术术语出戏，如“长期偏好”、“元指令”等），验证相对时间一致性
+            ref_day = s.get("reference_time", "").split("日")[0]
             for ev_idx, ev in enumerate(events):
                 u_utt = ev.get("user", {}).get("utterance", "")
                 if any(bad in u_utt for bad in ["长期偏好", "元指令", "意图槽位"]):
                     report["issues"].append(f"[{sid}] Turn {ev_idx+1} 用户台词包含非自然研发术语(长期偏好/元指令/意图槽位): '{u_utt}'")
+                    report["rule_checks"]["natural_dialogue_check"] = False
+                    s_passed = False
+                # 检查若规划为当天保障，台词中严禁出现“明天/后天”导致日期与标注矛盾
+                if ref_day and ("明天" in u_utt or "后天" in u_utt):
+                    report["issues"].append(f"[{sid}] Turn {ev_idx+1} 当天会话台词出现'明天/后天'与真实日期矛盾: '{u_utt}'")
                     report["rule_checks"]["natural_dialogue_check"] = False
                     s_passed = False
 

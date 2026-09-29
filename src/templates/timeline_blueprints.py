@@ -300,7 +300,7 @@ def get_session_blueprints(
             "override": evt_01.get("preference_override", {}),
             "time_kind": "main"
         },
-        # 12: Event Reuse (T2-1 临时高规格复用) - 核心必须
+        # 12: Event Reuse (T2-1 临时纠正后恢复主线复用) - 核心必须
         {
             "tag": "evt_reuse",
             "template_id": "T2-1",
@@ -309,8 +309,7 @@ def get_session_blueprints(
             "type": "event_reuse",
             "dur": base_dur,
             "env": "特殊事件集结区",
-            "action": "reuse_temporary_preference",
-            "override": evt_01.get("preference_override", {}),
+            "action": "reuse_long_term_rule_after_correction",
             "time_kind": "main"
         },
         # 13: Sub 1 Reuse (T2-1 支线隔离验证) - 核心必须

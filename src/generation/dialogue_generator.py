@@ -112,6 +112,8 @@ class DialogueGenerator:
                 t1_rule = f"【时长延长会话：第1轮用户说'老规矩，{primary_alias}开通保障'（严禁在第1轮提及画质与时延！）；第1轮客服反问确认老规矩配置；第2轮用户确认老规矩但提出将时长延长到{tp['duration']}】"
             elif tid == "T2-3":
                 t1_rule = f"【临时纠正覆盖会话：第1轮用户说'老规矩，{primary_alias}开通保障'；第1轮客服反问确认老规矩；第2轮用户提出因现场特殊临时调整画质为{tp['resolution']}、时延为{tp['rtt']}】"
+            elif tid == "X-1":
+                t1_rule = f"【混合诉求（一办一拒）：单轮干扰会话，无先验记忆。用户首次提出业务需求，同时提出域外需求'{s_plan.get('ood_goal') or '手机话费充值与账单查询'}'；严禁使用未建立过的暗号或老规矩；Agent 正常受理域内业务，并明确礼貌拒绝办理域外需求。】"
             else:
                 t1_rule = f"【常规复用/强化会话：大记忆点已生效。应用＋业务是最小表达：若小记忆类型为service_default_app，可只说业务；若为application_alias，必须说应用别名＋业务；若为画质/时延/时长/周期暗号，必须说标准应用＋业务＋该暗号。指定小记忆点='{primary_alias}'。Agent 从记忆中补全其余画质{tp['resolution']}、时延{tp['rtt']}、开始时间{tp['start_timestamp']}、结束时间{tp['end_timestamp']}和时长{tp['duration']}；不得把未说出的槽位标成 Turn 来源。】"
 
@@ -308,6 +310,16 @@ class DialogueGenerator:
         for bad_word in ["零卡顿", "秒开", "极速响应"]:
             if bad_word in a_text:
                 a_text = a_text.replace(bad_word, f"{tp.get('rtt', '')}以内")
+
+        # 拦截当天生效会话中错误出现的“明天/后天”口语词，防止与真实标注日期产生矛盾
+        ref_day = s_plan.get("reference_time", "").split("日")[0]
+        start_day = tp.get("start_timestamp", "").split("日")[0]
+        if ref_day and start_day and ref_day == start_day:
+            for w in ["明天", "后天"]:
+                if w in u_text:
+                    u_text = u_text.replace(w, "今天")
+                if w in a_text:
+                    a_text = a_text.replace(w, "今天")
 
         raw_u_acts = t_data.get("user_action_types") if isinstance(t_data, dict) else None
         raw_a_acts = t_data.get("agent_action_types") if isinstance(t_data, dict) else None

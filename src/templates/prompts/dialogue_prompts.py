@@ -195,7 +195,8 @@ def build_single_dialogue_prompt(s_plan: dict, persona: dict, snapshot_before: d
 4. 纠正覆盖 (correction / event_override):
    - 用户明确因当前特定事件/临时环境纠正旧参数，切换为新标准。
 5. 单轮干扰项 (distractor):
-   - 单轮内用户全部说清，Agent 正常受理直接结束。
+   - T1-2 纯域外拒绝：用户提出域外需求，Agent 礼貌拒绝；
+   - X-1 混合诉求（一办一拒）：用户无先验记忆，首次提出标准保障需求并附带域外需求，严禁使用未建立的暗号或老规矩；Agent 办理保障并明确拒绝域外需求。
 
 【输出 JSON 格式（必须包含 {round_count} 轮）】:
 {{
