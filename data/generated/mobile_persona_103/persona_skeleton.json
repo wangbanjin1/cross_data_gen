@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_103",
+  "category": "移动采编与内容生产",
+  "persona_summary": "户外内容创作者",
+  "static_profile": {
+    "user_id": "USER_103",
+    "identity": "时尚博主兼户外内容创作者，专注分享时尚医护服与配饰穿搭建议，日常在城市街区、活动现场与户外直播点进行短视频拍摄、移动直播与素材回传，全程依赖手机4G/5G移动核心网，不依赖家庭宽带或公司固网。",
+    "devices": "主力设备为5G智能手机，辅助设备包括便携补光灯、无线麦克风与手机云台；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "抖音",
+      "小红书",
+      "微信",
+      "腾讯会议"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "轻快直接、带点时尚博主特有的种草感，讲效率也讲画面质感，习惯用行话催进度。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "这条必须出片"
+      ],
+      "typical_habits": "开播前先确认上行和时延，转场时反复叮嘱素材别断传，喜欢用固定周期口头约定来安排直播与拍摄。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "工作日一三五时尚穿搭直播与素材回传",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "工作日一三五常规业务例会式直播档期，每周一、周三、周五上午10:00-12:00固定开播并同步回传素材",
+      "period_type": "weekly",
+      "days": [
+        "Monday",
+        "Wednesday",
+        "Friday"
+      ],
+      "time_range": "10:00-12:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十二点"
+        ],
+        "period_aliases": [
+          "工作日一三五老规矩",
+          "每周一三五这个时候",
+          "老时间"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "秋冬时尚医护服快闪展会直播周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "展会现场人流密集、无线环境复杂，转场频繁且临时拍摄点信号波动大，需要优先保证直播画面稳定与素材连续回传。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "转场途中素材回传与云端协作",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "城市采风转场途中，需要与剪辑师或品牌方快速对齐素材与脚本时",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "晚间粉丝互动与直播复盘",
+        "application_name": "小红书",
+        "service_name": "看直播",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "晚间收工后查看同类博主直播、复盘互动数据并记录次日选题时",
+        "aliases": {
+          "app_aliases": [
+            "xiaohongshu",
+            "红薯"
+          ],
+          "service_aliases": [
+            "观赛",
+            "刷直播"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时与品牌方开短会确认合作细节",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "拍摄间隙刷短视频找穿搭灵感",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

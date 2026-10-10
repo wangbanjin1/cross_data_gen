@@ -206,7 +206,7 @@ class QCValidator:
                     report["rule_checks"]["template_semantic_alignment_check"] = False
                     s_passed = False
 
-            # 9. T1-1 干扰会话必须明确表达全量参数，严禁调用未建立的记忆暗号或模糊词
+            # 9. T1-1 干扰会话必须明确表达全量参数，严禁调用未建立的个性化表达或模糊词
             b_type = s.get("session_meta", {}).get("scenario", {}).get("blueprint_type", "")
             if (tid == "T1-1" or b_type == "distractor") and events:
                 u_text = events[0].get("user", {}).get("utterance", "")
@@ -214,7 +214,7 @@ class QCValidator:
                 bad_alias = ["清晰点就行", "不卡就行", "一会儿", "老规矩", "老时间", "照旧", "按习惯"]
                 for ba in bad_alias:
                     if ba in u_text:
-                        report["issues"].append(f"[{sid}] T1-1 干扰会话用户台词违规出现记忆暗号: '{ba}'")
+                        report["issues"].append(f"[{sid}] T1-1 干扰会话用户台词违规出现未建立的个性化表达: '{ba}'")
                         report["rule_checks"]["natural_dialogue_check"] = False
                         s_passed = False
                 if "记忆理解" in a_text or "按‘" in a_text or "按\"" in a_text:

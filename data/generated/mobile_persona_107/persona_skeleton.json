@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_107",
+  "category": "移动生活与现场协作",
+  "persona_summary": "移动餐饮从业者",
+  "static_profile": {
+    "user_id": "USER_107",
+    "identity": "非英语母语的米其林星级意大利主厨，对英国饮食文化了解有限，长期在城市街区、公共活动现场及跨区域出行途中开展移动餐饮工作，包括市集快闪、餐饮活动、供应商拜访与临时现场服务。",
+    "devices": "5G智能手机＋便携工作终端（便携终端确需联网时使用手机热点）",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "抖音",
+      "高德地图"
+    ],
+    "speech_archetype": "mobile_culinary_operator",
+    "speech_style": {
+      "tone": "直接、务实、带一点意大利口音的英语或意大利语混用，强调现场执行和团队配合",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "按这个档来"
+      ],
+      "typical_habits": "习惯在出发前和现场任务开始前明确网络与业务参数，偏好用口语化别名确认画质、时延和时长，避免临时切换设置。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "市集与餐饮活动现场远程协作",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在米其林星级意大利主厨执行市集快闪、餐饮活动或供应商现场对接任务时，于15:00-17:00通过手机移动核心网进行远程协作、订单确认与现场内容发布。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "15:00-17:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议",
+          "开会那个"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦对齐",
+          "远程碰一下"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到五点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "下午三点老规矩"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城餐饮展会周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城参加餐饮展会与供应商对接，现场人流密集、移动网络波动较大，需要临时提高音视频稳定性并降低时延。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "供应商拜访途中订单确认",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在前往供应商或市集途中，需要与团队确认食材到货、备货数量和服务安排时触发。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "现场短视频发布与复盘",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在餐饮活动现场或活动结束后，需要发布现场内容、浏览同行动态并进行简短复盘时触发。",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时查看餐饮活动直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次与英国本地合作方远程会议",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

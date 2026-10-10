@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_146",
+  "category": "医疗健康与移动服务",
+  "persona_summary": "外出医疗服务人员",
+  "static_profile": {
+    "user_id": "USER_146",
+    "identity": "荷兰医疗健康领域的外出医疗服务人员，熟悉荷兰本地医疗体系与转诊流程，日常在患者转运途中、院前处置点、社区随访路线及临时医疗站之间移动办公，全程依赖手机4G/5G移动核心网直连，不依赖家庭宽带或固定Wi-Fi，便携工作终端确需联网时以手机热点共享。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携工作终端（平板/笔记本形态），二者通过手机热点协同联网。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "飞书"
+    ],
+    "speech_archetype": "healthcare_mobile_professional",
+    "speech_style": {
+      "tone": "干练、务实、略带紧迫感，习惯用医疗行话与团队快速对齐，语气中带有对患者安全与数据可靠性的高度关注。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先把画面传回来",
+        "路上保持在线"
+      ],
+      "typical_habits": "出发前先确认网络与设备状态，途中用语音或短消息同步位置与任务进展，遇到关键节点主动发起视频通话或会议，习惯用'老规矩'指代固定流程与参数档位。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "晨间患者转运与院前远程会诊协同",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在07:30-10:30的晨间外出医疗服务时段，执行患者转运、院前处置或社区随访任务，需在移动过程中发起远程会诊并实时上传现场影像与患者信息。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "07:30-10:30",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "连麦会诊",
+          "对齐开会",
+          "远程会诊"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点半"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "晨间例行"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨区域流感季社区随访高峰",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "流感季期间社区随访与院前处置需求激增，外出路线覆盖多个临时医疗站与转运节点，移动网络拥塞风险上升，需优先保障关键消息与患者数据上传的稳定性。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "转运途中现场影像回传与任务协同",
+        "application_name": "钉钉",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "患者转运途中或户外健康服务现场，需要向团队回传现场照片、短视频并同步任务进展时触发。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "社区随访记录与患者信息查询",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在社区随访路线或临时医疗站停留期间，需要查询患者信息、核对随访记录并与同事快速沟通时触发。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时医疗站晨会",
+        "application_name": "飞书",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次等待转运间隙刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

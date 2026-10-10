@@ -1,0 +1,178 @@
+{
+  "persona_id": "mobile_persona_123",
+  "category": "野外科研与农业作业",
+  "persona_summary": "野外移动作业人员",
+  "static_profile": {
+    "user_id": "USER_123",
+    "identity": "一位充满热情的环境保护主义者，正在筹备自己的生物动力农场。日常活动包括在偏远采样路线、山区、临时观测点、农田、林区、河岸或生态调查样地开展野外科研与农业作业，全程依赖手机移动核心网（4G/5G）直接联网，不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "钉钉",
+      "腾讯会议",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "务实、干练、带点野外工作者的直爽与环保主义者的热情",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "信号稳住"
+      ],
+      "typical_habits": "习惯在出发前和队友对齐当天任务，遇到弱网时反复确认连接状态，喜欢用简短口语描述技术参数，常把固定时段的活动称为“老时间”。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "野外样地现场视频回传与远程指导",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处偏远采样路线、山区临时观测点或农田林区河岸等弱覆盖区域，需要向后方专家实时回传现场画面并接受远程指导",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "16:00-18:00",
+      "application_name": "微信",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "微信",
+          "某信",
+          "企微"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "连麦",
+          "视频通话",
+          "开视频"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到六点",
+          "一个半小时"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "下午例行",
+          "老规矩"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "秋季生态调查集中采样期",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "在偏远山区和河岸样地开展集中生态调查，弱覆盖区域信号波动大，需要优先保障定位与数据上报稳定，临时降低视频画质以维持连接。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "田间作业远程协作",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在农田或林区进行生物动力农场筹备作业时，与农技专家远程对齐种植方案",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "观测点数据复盘",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "回到临时观测点后，与团队复盘当天样本记录与传感数据",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次跨区域出行途中查看生态调查直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次休息时刷生态农业短视频",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

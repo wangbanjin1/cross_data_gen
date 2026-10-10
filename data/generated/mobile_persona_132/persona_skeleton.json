@@ -1,0 +1,177 @@
+{
+  "persona_id": "mobile_persona_132",
+  "category": "移动采编与内容生产",
+  "persona_summary": "户外内容创作者",
+  "static_profile": {
+    "user_id": "USER_132",
+    "identity": "升学申请类内容博主，日常在城市街区采访点、活动现场、临时拍摄地与转场途中完成短视频拍摄、移动直播与素材回传，全程依赖手机4G/5G移动核心网，不依赖家庭宽带或公司固网。",
+    "devices": "主力设备为5G智能手机，辅助设备包括便携麦克风、手机稳定器与备用充电宝；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "抖音",
+      "快手",
+      "微信",
+      "腾讯会议",
+      "小红书"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "干脆利落、带点现场指挥感，习惯用短句催进度，也爱用行话把复杂参数说得很随意。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先保推流",
+        "这段别断"
+      ],
+      "typical_habits": "出发前先确认路线和信号盲区，开播前反复叮嘱上行稳定，转场时最怕上传中断，习惯用口语化别名指代画质、时延和周期。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "街区采访点移动直播与素材回传",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处城市街区采访点、活动现场或临时拍摄地，进入09:00-11:00上午采编窗口且周边为4G/5G移动核心网弱覆盖或转场切换区域时，启动抖音移动直播并同步分段回传素材。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "09:00-11:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "开直播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十一点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "上午采编档",
+          "九点到十一点老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城高校招生宣讲季外采",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城转场频繁，活动现场与街区采访点之间移动，弱覆盖路段增多，直播与素材回传需要临时降低画质并压低时延以保连续。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "转场途中素材回传与云端协作",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "转场途中需要与剪辑或同事快速对齐素材分段、确认回传顺序时，用微信视频通话做短时沟通。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "晚间选题复盘与远程对齐",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "当天采编结束后，与团队远程复盘选题、确认次日拍摄路线和直播脚本时使用腾讯会议。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时查看同行直播并记录互动节奏，属于单次观察任务。",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "等待转场时刷短视频找选题灵感，属于单次碎片化浏览。",
+        "application_name": "小红书",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

@@ -72,7 +72,7 @@ class DialogueGenerator:
                 snap_str = "无"
 
             p_aliases = s_plan.get("aliases", {})
-            # 在常规复用/强化会话中，大记忆点已生效，用户只需使用应用/业务代称与暗号，必须省略画质/时延/时长参数
+            # 在常规复用/强化会话中，大记忆点已生效，用户只需使用应用/业务代称与个性化表达，必须省略画质/时延/时长参数
             if role in ["reinforcement_session", "reuse_session"] and s_plan.get("template_id") not in ["T2-3", "T2-5"]:
                 aliases_info = {
                     "app_aliases": p_aliases.get("app_aliases", []),
@@ -124,9 +124,9 @@ class DialogueGenerator:
                     f"第2轮客服确认本次临时调整。】"
                 )
             elif tid == "X-1":
-                t1_rule = f"【混合诉求（一办一拒）：单轮干扰会话，无先验记忆。用户首次提出业务需求，同时提出域外需求'{s_plan.get('ood_goal') or '手机话费充值与账单查询'}'；严禁使用未建立过的暗号或老规矩；Agent 正常受理域内业务，并明确礼貌拒绝办理域外需求。】"
+                t1_rule = f"【混合诉求（一办一拒）：单轮干扰会话，无先验记忆。用户首次提出业务需求，同时提出域外需求'{s_plan.get('ood_goal') or '手机话费充值与账单查询'}'；严禁使用未建立过的个性化表达或老规矩；Agent 正常受理域内业务，并明确礼貌拒绝办理域外需求。】"
             else:
-                t1_rule = f"【常规复用/强化会话：大记忆点已生效。应用＋业务是最小表达：若小记忆类型为service_default_app，可只说业务；若为application_alias，必须说应用别名＋业务；若为画质/时延/时长/周期暗号，必须说标准应用＋业务＋该暗号。指定小记忆点='{primary_alias}'。Agent 从记忆中补全其余画质{tp['resolution']}、时延{tp['rtt']}、开始时间{tp['start_timestamp']}、结束时间{tp['end_timestamp']}和时长{tp['duration']}；不得把未说出的槽位标成 Turn 来源。】"
+                t1_rule = f"【常规复用/强化会话：大记忆点已生效。应用＋业务是最小表达：若小记忆类型为service_default_app，可只说业务；若为application_alias，必须说应用别名＋业务；若为画质/时延/时长/个性化周期表达，必须说标准应用＋业务＋该个性化表达。指定小记忆点='{primary_alias}'。Agent 从记忆中补全其余画质{tp['resolution']}、时延{tp['rtt']}、开始时间{tp['start_timestamp']}、结束时间{tp['end_timestamp']}和时长{tp['duration']}；不得把未说出的槽位标成 Turn 来源。】"
 
             prompt_items.append({
                 "session_id": sid,
@@ -249,7 +249,7 @@ class DialogueGenerator:
         if tid == "T1-2":
             u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
 
-        # 单轮干扰任务：必须清晰说全参数，严禁携带任何记忆暗号/模糊词
+        # 单轮干扰任务：必须清晰说全参数，严禁携带任何个性化表达/模糊词
         if tid == "T1-1" or s_plan.get("blueprint_type") == "distractor":
             bad_dist_kws = ["清晰点就行", "不卡就行", "一会儿", "老规矩", "老时间", "照旧", "按习惯"]
             if any(kw in u_text for kw in bad_dist_kws) or tp.get("resolution", "") not in u_text or tp.get("rtt", "") not in u_text:

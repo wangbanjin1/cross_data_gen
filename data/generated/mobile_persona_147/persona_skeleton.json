@@ -1,0 +1,173 @@
+{
+  "persona_id": "mobile_persona_147",
+  "category": "文化创作与移动演出",
+  "persona_summary": "户外观赛与兴趣社群用户",
+  "static_profile": {
+    "user_id": "USER_147",
+    "identity": "来自圣迭戈、具有秘鲁文化背景的本地剧场爱好者与移动演出内容创作者，长期关注表演艺术中的族裔代表性议题，日常活跃于户外演出点、展览布置区、城市采风路线、音乐节、街头活动与临时排练现场，以手机为核心生产工具完成现场音视频采集、直播、云端素材同步与社群发布。",
+    "devices": "主力设备为5G智能手机，辅助设备包括便携麦克风、手机稳定器与移动电源；确需联网的便携终端通过手机热点接入。",
+    "apps": [
+      "抖音",
+      "哔哩哔哩",
+      "微信",
+      "小红书"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "热情直接、带街头演出圈的爽利感，聊到代表性和演出内容时会认真起来，习惯用短句推进事情。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先把画面稳住"
+      ],
+      "typical_habits": "出发前先确认电量、信号和推流参数；到现场先试一段上行；遇到人群密集或弱覆盖会立刻提醒团队切换方案。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "户外演出点与街头活动直播推流",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处圣迭戈户外演出点、展览布置区或街头临时排练现场，进入15:00-17:00的固定演出与采风时段，现场人群密集且周边存在弱覆盖路段，需要以手机4G/5G直接联网完成现场直播与作品上传。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "15:00-17:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到五点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "下午三点老规矩"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "圣迭戈拉丁裔表演艺术周户外展演",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "展演周期间户外舞台与街区巡游叠加，观众密度显著升高，临时搭建区与城市采风路线出现弱覆盖和上行拥塞，直播互动与素材回传压力增大。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "排练后录像复盘与团队沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "临时排练结束回到车上或路边，团队需要快速回看录像片段并讨论走位、灯光与代表性问题。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "演出素材云端同步与社交发布",
+        "application_name": "小红书",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "现场采集结束后，在移动途中或演出点周边将剪辑好的短视频与图文发布到社群，并同步云端素材。",
+        "aliases": {
+          "app_aliases": [
+            "xiaohongshu",
+            "红薯"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时被拉进线上策划会，讨论下一场街头演出安排",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "休息时在手机上刷同行演出片段找灵感",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

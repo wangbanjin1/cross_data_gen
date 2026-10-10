@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_134",
+  "category": "移动生活与现场协作",
+  "persona_summary": "高频移动网络使用者",
+  "static_profile": {
+    "user_id": "USER_134",
+    "identity": "曾误入歧途、后通过信仰完成自我救赎的中年公益现场协调员，日常在城市街区、公共活动现场与跨区域出行途中高频移动，负责现场拍摄、位置共享、即时通信与远程协作，全程仅依赖手机4G/5G直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "devices": "5G智能手机＋随身拍摄设备（手机热点作为便携终端备用联网方式）",
+    "apps": [
+      "微信",
+      "抖音",
+      "腾讯会议",
+      "高德地图"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "沉稳、克制、带一点过来人的劝诫感，说话直接但不失温和，常用信仰与救赎相关的话术提醒自己和同伴。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "心里有数",
+        "稳住，能续上"
+      ],
+      "typical_habits": "习惯在任务开始前先确认位置与网络状态，遇到弱覆盖路段会提前告知同伴并强调续传与恢复，常用'老规矩'来指代固定时段的现场协作流程。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "公益活动现场拍摄与远程协作推流",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在10:00-12:00的公益活动现场任务时段，作为现场协调员执行跟拍记录、位置共享与远程协作推流，需通过手机4G/5G直接联网完成即时通信、短视频上传与远程会议对齐。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "10:00-12:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十二点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "上午例行",
+          "老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城公益巡展周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城公益巡展期间，现场位于城市街区、公共活动现场及跨区域出行途中，弱覆盖路段增多，需临时降低画质并收紧时延以保障推流连续性与任务续传。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "现场录像复盘与同伴沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "活动结束后在临时停留点或户外等候区，与同伴复盘现场录像、沟通次日安排。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "远程协作对齐会议",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨区域出行途中或现场任务间隙，与团队远程对齐活动流程与人员分工。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时查看活动直播回放",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次休息时刷短视频放松",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

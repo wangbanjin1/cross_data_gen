@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_102",
+  "category": "移动采编与内容生产",
+  "persona_summary": "户外内容创作者",
+  "static_profile": {
+    "user_id": "USER_102",
+    "identity": "加拿大桑德贝出生的终身冰球爱好者与兼职博主，偏好本土新秀，日常以户外内容创作为主，频繁在城市活动现场、街区采访点、临时拍摄地与转场途中进行短视频拍摄、移动直播与素材回传。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴设备；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "抖音",
+      "快手",
+      "微信",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "干脆利落、带点冰球圈行话，习惯用短句催促和确认进度。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "这条得稳"
+      ],
+      "typical_habits": "出发前先确认设备和网络，转场时反复叮嘱上传别断，直播前习惯说一句老规矩。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "傍晚街区采访点移动直播与素材回传",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "当身处城市活动现场、街区采访点或临时拍摄地，且时间进入16:00-18:00傍晚采编窗口时，触发抖音移动直播与素材分段回传。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "16:00-18:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到六点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "傍晚采编窗口",
+          "老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "冰球新秀街区巡访周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "冰球新秀街区巡访周期间，采访点密集、转场频繁，部分街区临时拍摄地处于弱覆盖路段，需优先保障直播画面稳定与素材续传。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "转场途中素材回传与云端协作",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "转场途中或临时拍摄地需要与编辑远程确认素材分段与回传进度时触发。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "赛后录像复盘与本土新秀片段整理",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "冰球比赛结束后，需要整理本土新秀片段并上传复盘短视频时触发。",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时接到编辑短会，在街区采访点用手机快速入会。",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "午间休息时刷冰球相关直播，非采编任务。",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_144",
+  "category": "移动生活与现场协作",
+  "persona_summary": "移动公共事务人员",
+  "static_profile": {
+    "user_id": "USER_144",
+    "identity": "地方议会成员，在Nunawading长大，日常频繁在社区街区、公共活动现场及跨区域出行途中开展走访、政策宣讲与群众诉求收集，全程依赖手机4G/5G移动核心网，不依赖家庭宽带或固定Wi-Fi，常携带5G智能手机与随身拍摄设备，通过手机热点为便携终端提供联网。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备与便携终端（通过手机热点联网）",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "抖音",
+      "高德地图"
+    ],
+    "speech_archetype": "community_coordinator",
+    "speech_style": {
+      "tone": "务实、亲切、带社区工作者特有的现场协调口吻，语速偏快但条理清晰",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "现场情况我回传"
+      ],
+      "typical_habits": "习惯在移动途中用语音消息快速同步信息，遇到弱网时反复确认消息是否送达，常用'老时间''老地方'指代固定行程"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "社区走访现场回传与远程协作",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "在Nunawading及周边城市街区、公共活动现场进行社区走访时，进入16:00-18:00傍晚外勤时段，处于户外等候区、临时停留点或跨区域出行途中，移动核心网信号出现波动或弱覆盖，需要将现场图片、表单和会议纪要稳定回传团队并保持远程协作。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "16:00-18:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦对齐",
+          "远程碰头"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到六点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "傍晚外勤例行"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "Nunawading社区秋季公共事务巡访周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "巡访周期间议会成员连续多日在Nunawading街区、社区中心与户外活动现场之间移动，傍晚时段常处于临时搭建的活动棚区或移动途中，移动核心网覆盖不稳定，需临时降低画质并收紧时延以保障会议与回传不中断。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "现场短视频素材回传",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在社区活动现场用随身拍摄设备记录群众诉求与活动片段后，通过手机移动网络快速上传短视频素材供团队剪辑使用。",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨区域出行途中位置共享与即时通信",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨区域出行途中或临时停留点，需要与团队成员快速共享位置、确认行程并同步现场情况时发起视频通话。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次在社区中心临时参加线上政策说明会",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在户外等候区休息时浏览短视频",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

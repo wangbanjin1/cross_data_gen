@@ -1,0 +1,178 @@
+{
+  "persona_id": "mobile_persona_141",
+  "category": "移动学习与教育协作",
+  "persona_summary": "外场工程技术人员",
+  "static_profile": {
+    "user_id": "USER_141",
+    "identity": "外场工程技术人员，长期在运动场、社会实践地、临时教学现场、校园户外区域、校际通勤途中及实习点之间移动，负责设备测试、客户现场图纸参数查看、视频连线专家、测试数据记录、故障照片与检测报告上传，同时兼顾在线课程学习与作业提交。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴设备；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "field_engineer_speaker",
+    "speech_style": {
+      "tone": "干脆利落、工程化表达，强调现场可执行性与网络稳定性，习惯用短句确认任务。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "现场信号怎么样",
+        "先保上传"
+      ],
+      "typical_habits": "在出发前先确认接入方式与电量，到达现场后先测信号再开工；遇到复杂概念会主动连线专家或同学，边看图纸边记录，强调大文件上传可靠、通勤切换会话连续、视频课程播放稳定。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "外场测试现场专家视频连线与数据回传",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处校园户外实践点或临时教学现场，且处于10:00-12:00外场测试时段，需要边查看图纸参数边视频连线专家并上传检测报告",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "10:00-12:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议",
+          "鹅会"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦对齐",
+          "视频连线专家",
+          "开个会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "开到中午"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "外场测试点一到位就开",
+          "上午现场时段"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨校实习点设备联调周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨校通勤与实习点临时教学现场叠加，户外移动网络波动明显，需要优先保障专家连线与检测报告上传稳定。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "通勤途中作业提交与资料检索",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "校际通勤途中需要快速参加短会、提交作业或检索资料，网络在基站间切换频繁",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "现场故障照片与检测报告回传",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "设备测试或客户现场发现故障后，需要即时拍摄照片、录制短视频并上传检测报告，同时与后方专家视频通话确认",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "午休时在实习点临时休息区单次刷短视频放松",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "晚间回宿舍后单次观看在线课程回放",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

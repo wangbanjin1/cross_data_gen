@@ -1,0 +1,180 @@
+{
+  "persona_id": "mobile_persona_106",
+  "category": "移动生活与现场协作",
+  "persona_summary": "上门移动技术工",
+  "static_profile": {
+    "user_id": "USER_106",
+    "identity": "年轻的水暖工（journeyperson plumber），美国联合水管工协会（United Association）活跃成员，日常跨客户现场上门维修与安装，高频使用手机移动核心网完成图纸查看、配件检索、远程视频咨询与完工回传。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备（运动相机/手机云台），便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "抖音",
+      "高德地图"
+    ],
+    "speech_archetype": "mobile_field_technician",
+    "speech_style": {
+      "tone": "干脆利落、带工地行话，喜欢用短句确认节点，遇到网络问题会直接抱怨但迅速转入解决方案。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "我这边信号满格",
+        "先连上再说"
+      ],
+      "typical_habits": "习惯在出发前和收工后各做一次快速同步，遇到复杂故障会直接发起视频通话让老师傅远程看现场，月末喜欢把整月工单和协会事务集中复盘。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "月末工单封账与协会月度复盘视频会",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每月月末28-29号例行封账冲刺与月度大复盘，晚上20:00-22:00集中处理整月工单归档、配件结算和协会小组远程对齐。",
+      "period_type": "monthly",
+      "days": [
+        "28th",
+        "29th"
+      ],
+      "time_range": "20:00-22:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议",
+          "小企鹅开会"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "月度复盘会",
+          "连麦对账",
+          "开个视频会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点",
+          "一个半钟头到两个钟头"
+        ],
+        "period_aliases": [
+          "每月28-29号老规矩",
+          "月末封账那两天",
+          "月底晚间例行",
+          "老时间晚上八点到十点"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城协会技能比武与展会支援周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城参加联合协会技能比武并支援展会摊位，现场人多、基站拥塞、临时展棚信号遮挡严重，需要频繁视频通话和直播回传。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "现场故障远程视频咨询",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在客户现场遇到复杂管路或配件不匹配时，直接发起微信视频通话让老师傅或供应商远程看现场。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "完工短视频记录与工单回传",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "每天完工后拍摄现场短视频并上传，用于协会技能展示、客户回访素材和个人工单归档。",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "午休时在户外等候区单次刷短视频放松",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "周末在家单次看协会技能直播公开课",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

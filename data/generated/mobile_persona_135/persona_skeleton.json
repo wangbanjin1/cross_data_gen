@@ -1,0 +1,176 @@
+{
+  "persona_id": "mobile_persona_135",
+  "category": "技术研发与现场支持",
+  "persona_summary": "外场工程技术人员",
+  "static_profile": {
+    "user_id": "USER_135",
+    "identity": "波音公司工程师，负责737机型安全功能的设计与改进，日常需频繁前往客户现场、设备机房外围、外场测试点及故障处置现场，进行设备测试、图纸参数查看、视频连线专家、测试数据记录与故障照片/检测报告上传，全程依赖手机4G/5G移动核心网直接联网，便携终端确需联网时使用手机热点。",
+    "devices": "主力设备：5G智能手机；辅助设备：随身拍摄设备、便携终端（通过手机热点联网）",
+    "apps": [
+      "腾讯会议",
+      "钉钉",
+      "微信",
+      "飞书"
+    ],
+    "speech_archetype": "field_engineer_speaker",
+    "speech_style": {
+      "tone": "务实、直接、带技术术语，习惯用工程行话沟通，强调稳定与效率",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "信号怎么样",
+        "续上没"
+      ],
+      "typical_habits": "在弱网或外场环境下习惯先确认连接状态再开展远程操作，喜欢用简短口令同步进度，遇到卡顿会立即要求切换参数或重连"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "外场夜间远程专家视频协作与日志回传",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处客户现场外围或设备机房外围弱覆盖区域，结束白天外场测试后，于20:00-22:00在临时工位或故障处置现场通过手机5G移动核心网发起远程专家视频协作，同步上传测试日志与故障照片",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "20:00-22:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦对齐",
+          "远程会诊"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "晚间例行",
+          "外场夜会老规矩"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "737安全功能外场专项测试周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "专项测试周期间，团队在跨园区通勤路线沿途及多个外场测试点连续作业，夜间临时工位位于机房外围弱覆盖路段，网络波动频繁，需临时降低画质并收紧时延以保障远程终端与日志上传不中断",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "外场故障照片与检测报告回传",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在故障处置现场完成检测后，需通过钉钉工单系统上传故障照片与检测报告，并偶尔发起短时视频通话与后方确认",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨园区通勤途中远程终端与日志查询",
+        "application_name": "飞书",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨园区通勤路线上通过手机热点连接便携终端，使用飞书远程终端查询代码与日志，必要时发起视频通话与同事对齐",
+        "aliases": {
+          "app_aliases": [
+            "feishu",
+            "lark"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次任务：在临时工位休息时刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次任务：晚间在故障处置现场外围观看技术直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

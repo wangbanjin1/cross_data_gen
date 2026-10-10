@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_101",
+  "category": "移动采编与内容生产",
+  "persona_summary": "户外移动采编者",
+  "static_profile": {
+    "user_id": "USER_101",
+    "identity": "户外移动采编者，长期在城市户外活动、跨区域出行和临时停留期间进行现场素材采集、短视频拍摄上传与移动直播，同时是线上音乐制作论坛的活跃成员，会为他人作品提供建设性批评与支持。",
+    "devices": "主力设备为5G智能手机，辅助设备包括可穿戴设备；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "抖音",
+      "微信",
+      "腾讯会议",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "干脆利落、现场感强，带一点行业行话和催促感，但给同行反馈时语气会变得认真、建设性。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "这条得重来",
+        "推流稳住"
+      ],
+      "typical_habits": "习惯在转场途中快速确认任务、用口语化指令协调同伴，遇到网络波动会立刻强调上行和时延；在音乐论坛回帖时则更耐心，先肯定再给修改建议。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "户外现场移动直播与素材回传",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在户外直播点、突发事件现场或街区采访点执行现场采编任务时，需要开启移动直播并同步回传素材，确保转场切换时上传不中断。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "09:30-11:30",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖子"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "上直播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十一点半"
+        ],
+        "period_aliases": [
+          "老规矩这个点",
+          "上午任务档",
+          "现场任务一开就播"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城突发事件连续报道周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城转场频繁，现场人流密集、基站切换频繁，需要优先保障直播画面稳定和素材回传不中断。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "采编小组云端协作沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "转场途中或临时拍摄地需要快速对齐机位、素材分工和回传安排时。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "音乐制作论坛作品复盘与反馈",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "晚间或任务间隙观看论坛同行的音乐制作直播，并准备给出建设性批评与支持时。",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "观赛",
+            "刷直播"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时参加线上协调会，仅单次发生",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "任务结束后随手刷短视频放松，单次非固定行为",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

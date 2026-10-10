@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_127",
+  "category": "科研调查与移动协作",
+  "persona_summary": "外业科研协作人员",
+  "static_profile": {
+    "user_id": "USER_127",
+    "identity": "神经科学研究员，专注研究感觉统合治疗对ADHD干预效果，长期在多个外业调查点、学术活动场地、临时实验现场、博物馆外场及跨校通勤路线之间移动，依靠手机移动核心网完成文献与数据库查询、数据采集上传、远程讨论、视频会议与协作文档等科研协作任务。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携工作终端；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "research_collaborator",
+    "speech_style": {
+      "tone": "理性、简洁、注重协作与数据可靠性，带有科研人员的谨慎和现场工作者的直接。",
+      "catchphrases": [
+        "老规矩",
+        "对齐一下",
+        "别掉链子",
+        "数据先传稳"
+      ],
+      "typical_habits": "习惯在固定时段发起远程复盘，强调跨地点工作会话连续、研究数据上传可靠和视频协作稳定；进入弱覆盖路段前会提前确认续传与恢复安排。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "午间科研协作复盘",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每天午间休息与午间复盘业务，固定发起跨地点科研协作会议并同步上午采集数据",
+      "period_type": "daily",
+      "days": [
+        "daily"
+      ],
+      "time_range": "12:30-13:30",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦复盘",
+          "开个短会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "一个钟头",
+          "一小时左右",
+          "午间这一段"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "午间例行",
+          "每天午间休息与午间复盘业务"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨校ADHD干预数据采集周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨校联合采集阶段，团队在多所学校和博物馆外场之间移动，现场网络覆盖波动较大，需要优先保障数据上传与远程讨论稳定。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "外业数据回传与文献查询",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在采样点或跨机构活动现场完成观测后，需要上传数据文件、研究影像并查询文献数据库时",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "团队影像资料复核",
+        "application_name": "哔哩哔哩",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "临时实验现场或博物馆外场采集到研究影像后，与团队远程复核关键片段时",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次跨校通勤途中与同事临时沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次午休时观看学术讲座短视频",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,179 @@
+{
+  "persona_id": "mobile_persona_124",
+  "category": "技术研发与现场支持",
+  "persona_summary": "移动数据研究人员",
+  "static_profile": {
+    "user_id": "USER_124",
+    "identity": "一名精打细算的数据科学家，长期在外勤、通勤与客户现场之间移动办公，习惯用手机移动核心网（4G/5G）直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi；日常围绕远程终端、代码与日志查询、模型报告审阅、视频协作、工单处理与小型数据文件同步展开工作，对预算敏感，偏好高性价比的AI资源与工具。",
+    "devices": "5G智能手机＋随身拍摄设备；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "腾讯会议",
+      "钉钉",
+      "微信",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "tech_field_operator",
+    "speech_style": {
+      "tone": "务实、克制、偏技术口吻，讲效率也讲成本，常用工程化表达。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先保连接",
+        "能省就省"
+      ],
+      "typical_habits": "习惯先确认网络与日志状态，再推进远程操作；在月初例会上倾向用最短时间对齐模型结果和预算方案，强调稳定续传与低时延。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "月初移动数据研究例会与远程模型对齐",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每月月初1-2号例行开门红与月度动员会，09:00-11:00进行移动数据研究例会、远程模型对齐与预算复盘。",
+      "period_type": "monthly",
+      "days": [
+        "1st",
+        "2nd"
+      ],
+      "time_range": "09:00-11:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "鹅会",
+          "腾讯会"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦过方案",
+          "开例会",
+          "远程对齐"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十一点"
+        ],
+        "period_aliases": [
+          "月初例会",
+          "老时间",
+          "每月1-2号这个时候",
+          "月初开门红"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨园区外场测试与故障处置周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨园区通勤、客户现场与设备机房外围连续外场测试，弱覆盖路段增多，需优先保障远程终端、日志上传与视频协作的稳定续传。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "外场日志与代码片段回传",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "外场测试点或临时工位需要快速同步日志、代码片段与工单时触发。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "客户现场视频协作与模型报告审阅",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "客户现场或设备机房外围需要临时视频沟通、审阅模型报告与确认交付细节时触发。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "通勤路上临时刷技术分享短视频，属于单次非固定行为。",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "外场等待间隙单次观看AI发布会直播，属于临时性内容消费。",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

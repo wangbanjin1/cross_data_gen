@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_121",
+  "category": "交通运输与移动出行",
+  "persona_summary": "跨区域移动旅行从业者",
+  "static_profile": {
+    "user_id": "USER_121",
+    "identity": "西班牙籍旅行代理，常年跨城带团与远程调度，从未到访非洲；日常在高速公路服务区、车站、港区与机场外场之间移动，依赖手机移动核心网完成语音调度、电子单据上传、实时导航与位置共享。",
+    "devices": "主力设备为5G智能手机，便携终端确需联网时使用手机热点；不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式。",
+    "apps": [
+      "微信",
+      "抖音",
+      "腾讯会议",
+      "高德地图"
+    ],
+    "speech_archetype": "business_advisor",
+    "speech_style": {
+      "tone": "干练、务实、带点催促感，习惯用短句确认安排，常把行程与网络状态挂在嘴边。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "路上说"
+      ],
+      "typical_habits": "出发前先确认路线与集合点，途中用语音消息和位置共享同步进度，遇到信号切换会立刻提醒对方重连。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "周末跨城带团直播调度",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每周六与周日周末赛事专场/排位，15:00-17:00固定开播，用于跨城带团途中向客户与地接同步路线、集合点和实时位置。",
+      "period_type": "weekly",
+      "days": [
+        "Saturday",
+        "Sunday"
+      ],
+      "time_range": "15:00-17:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到五点"
+        ],
+        "period_aliases": [
+          "每周六周日老规矩",
+          "周末这个时候",
+          "周末赛事专场"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城旅游展会与临时交通管制周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "展会期间跨城道路临时管制，港区与机场外场人流密集，移动网络切换频繁，需要临时降低画质并收紧时延以保障调度消息及时。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "大巴视频调度会",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "每周一至周五早间出车前，与地接和司机在大巴或服务区进行短会，确认当日路线与任务分派。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "行程录像复盘与客户沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "带团结束后或客户临时询问时，用微信视频通话回放沿途图文、核对电子单据并确认次日安排。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时参加总部线上培训",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "候车时刷同行发布的路线短视频",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

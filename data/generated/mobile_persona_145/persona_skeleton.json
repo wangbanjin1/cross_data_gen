@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_145",
+  "category": "野外科研与农业作业",
+  "persona_summary": "野外生态调查人员",
+  "static_profile": {
+    "user_id": "USER_145",
+    "identity": "一位长期在农田、林区、河岸与生态调查样地开展野外生态调查的科研人员，主要研究松鼠等野生动物在自然栖息地中的行为。日常沿野外样线导航定位、采集带坐标的照片与观测数据，并在临时观测点分批回传调查记录；全程以手机4G/5G直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi，便携终端确需联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携工作终端（通过手机热点联网）",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "outdoor_researcher",
+    "speech_style": {
+      "tone": "务实、简洁、带野外作业的干练感，习惯用短句确认任务与网络状态",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先把数据回传了再说"
+      ],
+      "typical_habits": "出发前先确认信号与电量，午间休整时集中回传数据并远程对齐进度；遇到弱覆盖路段会提前说明并约定续传节点"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "午间休整与调查数据远程对齐",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每天午间休息与午间复盘业务，固定时段集中回传上午样线调查记录并与团队远程对齐",
+      "period_type": "daily",
+      "days": [
+        "daily"
+      ],
+      "time_range": "12:30-13:30",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "远程对齐",
+          "碰一下进度"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "一个钟头",
+          "一小时左右",
+          "午休这一会儿"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "午间例行",
+          "每天午间休息与午间复盘业务"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "秋季松鼠行为集中观测周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "秋季松鼠储食行为集中观测周，调查队深入林区与河岸样地，弱覆盖路段增多，午间远程对齐需优先保证连接稳定与低时延，画质临时下调以换取更稳的续传与恢复能力",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "样线照片与观测数据即时回传",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "沿野外样线采集到带坐标照片和观测数据后，在临时观测点与后方同事快速确认样本信息",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "野外调查方法短视频复盘",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "晚间回到驻地后，观看并复盘松鼠行为记录与野外调查方法相关短视频",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次与保护区管理人员临时沟通",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次观看生态调查直播培训",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,178 @@
+{
+  "persona_id": "mobile_persona_140",
+  "category": "野外科研与农业作业",
+  "persona_summary": "移动人文调查人员",
+  "static_profile": {
+    "user_id": "USER_140",
+    "identity": "跨国古生物学家，专攻某类特定远古化石物种，长期在偏远遗址、林区与河岸样地开展野外发掘、地层采样与化石记录工作，需将田野笔记、影像与传感数据实时同步给跨国研究团队。",
+    "devices": "主力为5G智能手机，辅以可穿戴设备（智能手表/AR记录眼镜），便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "field_researcher",
+    "speech_style": {
+      "tone": "沉稳、务实、带学术严谨感，习惯用短句确认现场状态",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "数据先续上"
+      ],
+      "typical_habits": "出发前先确认信号与电量，现场边记录边口头同步给团队，遇到弱覆盖会主动提醒队友保存进度。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "化石遗址现场记录与团队远程同步",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在化石遗址、林区或河岸样地执行发掘记录任务时，需将地层剖面影像、样本编号与传感数据实时回传给跨国研究团队并接受远程指导",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "鹅厂会议",
+          "腾讯会"
+        ],
+        "service_aliases": [
+          "对齐一下",
+          "连麦过一遍",
+          "远程碰头",
+          "开个现场会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到四点",
+          "一个半小时"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "下午例行",
+          "现场任务时段"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨国联合化石发掘季",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "多国团队在偏远山区遗址联合发掘，现场仅靠4G/5G直连，弱覆盖路段频繁，需优先保障定位与样本数据续传",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "田野笔记与样本照片即时回传",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在采样点发现关键化石碎片，需立即向团队展示并确认编号与层位",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "化石鉴定过程录像复盘",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "收工后整理当日影像资料，上传短视频供团队复盘与公众科普",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次与博物馆策展人临时沟通展陈方案",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次休息时观看同行野外直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

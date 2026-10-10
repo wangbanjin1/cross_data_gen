@@ -1,0 +1,178 @@
+{
+  "persona_id": "mobile_persona_128",
+  "category": "医疗健康与移动服务",
+  "persona_summary": "移动随访与康复人员",
+  "static_profile": {
+    "user_id": "USER_128",
+    "identity": "呼吸治疗师，长期面向吸烟相关呼吸系统疾病患者提供临床评估、康复指导与随访服务；日常在患者转运途中、院前处置点、社区随访路线及临时医疗站之间移动，通过手机移动核心网完成即时通信、现场影像上传、任务协同、远程会诊、患者信息查询与随访记录。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "飞书"
+    ],
+    "speech_archetype": "clinical_mobile_responder",
+    "speech_style": {
+      "tone": "专业、简洁、偏临床沟通口吻，强调及时、稳定、别漏项",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "先对齐一下",
+        "这条得留痕",
+        "路上也要稳"
+      ],
+      "typical_habits": "习惯先确认患者状态和网络连接，再发起视频沟通或上传现场影像；任务前会说老规矩，任务中反复确认关键消息是否送达。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "社区呼吸康复随访与远程会诊协同",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在15:00-17:00执行社区呼吸康复随访任务时，面向吸烟相关呼吸系统疾病患者进行现场评估、治疗计划核对、影像上传，并与医疗团队远程会诊协同",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "15:00-17:00",
+      "application_name": "腾讯会议",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议",
+          "小企鹅开会"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "连麦会诊",
+          "视频对一下",
+          "远程看一下"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到五点",
+          "一个半小时"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "下午随访点",
+          "三点到五点老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨社区呼吸康复集中随访周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨社区集中随访周期间，临时医疗站和转运车辆内人员密集、无线环境复杂，需优先保障患者信息查询、现场影像上传和远程会诊稳定。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "随访路线即时通信与任务协同",
+        "application_name": "微信",
+        "service_name": "即时通信",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在社区随访路线移动途中，需要向医疗团队发送患者状态、定位和任务协同消息时",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "即时通信"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "现场影像上传与随访记录同步",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在院前处置点或临时医疗站完成现场拍摄后，需要上传影像并同步随访记录时",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时参加院内病例讨论会",
+        "application_name": "飞书",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次休息时刷呼吸康复科普短视频",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

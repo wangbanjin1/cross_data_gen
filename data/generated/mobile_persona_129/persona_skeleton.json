@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_129",
+  "category": "体育训练与赛事保障",
+  "persona_summary": "移动家庭沟通用户",
+  "static_profile": {
+    "user_id": "USER_129",
+    "identity": "职业击剑运动员/教练的旧友兼前击剑对手，常年跟随击剑赛事与训练节奏，活动半径覆盖露天训练场、赛道、球场、赛事集结区、客场转场途中、户外热身区与临时休息点，以手机移动核心网为主要联网方式，兼顾家庭沟通与训练赛事保障。",
+    "devices": "5G智能手机为主力终端，辅以可穿戴设备；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "抖音",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "athlete_speaker",
+    "speech_style": {
+      "tone": "干脆利落、带训练场口令感，习惯用短句确认状态，强调别掉链子和老规矩。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "我这边信号还行"
+      ],
+      "typical_habits": "在转场、热身和等候间隙先看家庭消息，再处理训练视频与赛事调度；遇到弱网会主动说明当前环境并切换续传策略。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "露天训练场与赛事集结区视频通话与训练回传",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处露天训练场、赛道、球场及赛事集结区或客场转场途中、户外热身区、临时休息点，且进入14:00-16:00固定时段，需要与家人视频通话并同步上传训练视频、数据记录与回放。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "微信",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "微信",
+          "某信",
+          "小绿"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "视频通话",
+          "连个视频"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到四点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "下午两点到四点老规矩"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨省击剑赛事周转场保障",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨省赛事周期间，频繁在客场转场途中、赛事集结区与户外热身区移动，人群密集且部分路段弱覆盖，需要临时降低画质并收紧时延以保障训练视频上传、赛事直播和团队调度连续。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "训练录像复盘与数据回放",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在临时休息点或户外热身区，需要回看训练录像、赛事直播片段并进行数据记录与复盘。",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "观赛",
+            "刷直播"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "团队调度与即时通信",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在赛事集结区或客场转场途中，需要与团队对齐训练安排、上传数据并完成即时调度。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次在临时休息点刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在赛事集结区开直播分享现场",
+        "application_name": "抖音",
+        "service_name": "开直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

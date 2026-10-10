@@ -1,0 +1,176 @@
+{
+  "persona_id": "mobile_persona_139",
+  "category": "公共事务与外勤协作",
+  "persona_summary": "移动公共事务人员",
+  "static_profile": {
+    "user_id": "USER_139",
+    "identity": "政府下属基因研究资助机构的公共事务外勤人员，长期在社区走访点、公共活动现场、户外调研点与临时会议区之间移动办公，负责政策资料查询、电子表单与现场记录、视频会议、即时通信与材料回传，全程依赖手机4G/5G移动核心网直接联网，便携终端确需联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑，二者通过手机热点共享移动网络。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "飞书"
+    ],
+    "speech_archetype": "public_affairs_field_coordinator",
+    "speech_style": {
+      "tone": "干练务实、节奏偏快，习惯用短句确认任务与时间节点，对网络稳定性与材料回传结果格外在意。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "材料先回传",
+        "按周节奏走"
+      ],
+      "typical_habits": "在移动途中先发语音说明位置与任务，再发起会议或回传材料；习惯用固定周周期口头确认晚间复盘与专场互动安排，遇到弱覆盖会主动要求续传或快速恢复。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "周四与周日夜间资助政策复盘及线上专场互动",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每周四与周日19:30-21:30固定进行资助政策复盘与线上专场互动，需稳定会议通信并回传现场材料。",
+      "period_type": "weekly",
+      "days": [
+        "Thursday",
+        "Sunday"
+      ],
+      "time_range": "19:30-21:30",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦复盘",
+          "开专场会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到九点半"
+        ],
+        "period_aliases": [
+          "每周四与周日老规矩",
+          "周四周日晚间例行",
+          "老时间"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨区域基因研究资助政策宣讲与现场材料集中回传周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨区域社区走访与户外调研点密集，现场网络覆盖波动较大，需优先保障材料回传与会议通信稳定，弱覆盖路段要求续传或快速恢复。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "外勤途中即时通信与位置共享",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "社区走访点转场、跨区域通勤或临时停留期间，需要快速共享位置、处理即时消息并进行短时视频通话。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "现场记录与材料回传后的短视频复盘",
+        "application_name": "钉钉",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "户外调研点或临时会议区完成现场记录后，需要上传现场照片或短视频并进行材料回传与复盘。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时群众服务现场需要快速查看直播培训",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次跨城出差途中短暂观看短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

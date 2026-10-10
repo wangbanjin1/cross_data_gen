@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_117",
+  "category": "移动学习与教育协作",
+  "persona_summary": "移动教学人员",
+  "static_profile": {
+    "user_id": "USER_117",
+    "identity": "阿肯色州小石城一所高中的历史教师，重视本州地方史教学，经常带学生在校园户外、运动场、社会实践地或临时教学现场开展移动教学，并在校际通勤途中处理课程事务。",
+    "devices": "5G智能手机为主力终端，辅以可穿戴设备；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "educator_speaker",
+    "speech_style": {
+      "tone": "温和但干练，带点南方口音的教师腔，讲课时喜欢穿插本地历史典故，处理技术问题时直接务实。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "咱们接着来"
+      ],
+      "typical_habits": "习惯在固定时段用手机开视频答疑或发布课程通知，遇到网络波动会先确认学生是否还在线，再决定续传或重连。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "午间移动视频答疑与课程资料上传",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处校园户外区域、运动场或社会实践地等弱覆盖路段，且正值午间教学间隙，需要即时发起视频答疑并上传教学资料",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "11:00-13:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦答疑",
+          "开个视频会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到一点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "午间例行"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "州历史周校际联合户外教学",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "州历史周期间，带学生到小石城中央高中旧址及周边历史街区进行户外教学，现场人员密集、建筑遮挡多，移动网络信号波动明显。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "校际通勤途中的课程通知与作业提交",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在校际通勤途中或实习点转场时，需要快速发布课程通知、查看学生提交并做简短视频沟通",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "教学资料检索与协作文档同步",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在临时教学现场需要与同事协作编辑教案或同步教学资料，并召开短会确认分工",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "午休时在运动场边用手机看历史纪录片短视频",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "放学后临时用手机开直播向家长说明历史周活动安排",
+        "application_name": "微信",
+        "service_name": "开直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

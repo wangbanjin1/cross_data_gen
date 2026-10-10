@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_113",
+  "category": "移动生活与现场协作",
+  "persona_summary": "高频移动网络使用者",
+  "static_profile": {
+    "user_id": "USER_113",
+    "identity": "在主题乐园/漫展场馆外经营零食摊位的摊主，同时是资深哈利波特粉丝，常在工作间隙与顾客、同好争论哪个学院最强；日常高频使用手机移动网络完成收款、直播、短视频上传与同好群聊，活动范围覆盖城市街区、公共活动现场及跨区域出行途中。",
+    "devices": "主力设备为5G智能手机，辅助设备为智能手表/可穿戴设备，便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "抖音",
+      "快手",
+      "腾讯会议",
+      "小红书"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "热情外放、爱开玩笑、带点辩论腔，聊到学院话题立刻来劲",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "我跟你说，格兰芬多才是王道",
+        "对齐一下"
+      ],
+      "typical_habits": "喜欢边摆摊边开直播和同好唠嗑，遇到网络卡顿会直接吐槽，习惯用口语化指令确认画质和延迟"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "摊位现场直播与同好互动",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在主题乐园/漫展场馆外摆摊营业期间，执行现场直播与同好互动任务，向线上观众展示摊位、现场氛围并讨论霍格沃茨学院话题",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "10:00-12:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十二点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "上午出摊老规矩"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "漫展同好周现场直播保障",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "漫展同好周期间场馆外人流密集、基站负载高，摊位直播需临时降低画质并收紧时延以保障连续推流",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "同好群视频通话讨论学院",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "收摊后或空闲时与同好群视频通话，争论哪个学院最强",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "现场短视频上传与浏览",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "摆摊间隙拍摄摊位现场与同好互动短视频并上传分享",
+        "aliases": {
+          "app_aliases": [
+            "kuaishou",
+            "快手视频"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次与供应商远程会议确认零食补货",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次观看漫展官方直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

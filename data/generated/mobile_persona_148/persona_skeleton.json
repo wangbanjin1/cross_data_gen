@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_148",
+  "category": "科研调查与移动协作",
+  "persona_summary": "移动人文调查人员",
+  "static_profile": {
+    "user_id": "USER_148",
+    "identity": "女性主义历史学者，聚焦北非女性经验研究；长期在遗址、街区、博物馆外场与跨校通勤路线之间移动，进行定位记录、资料检索、影像采集与田野笔记同步，依赖手机移动核心网完成远程讨论、视频会议、协作文档与数据库查询。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴设备；便携终端确需联网时使用手机热点，不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "飞书",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "humanities_field_researcher",
+    "speech_style": {
+      "tone": "学术化、克制但直接，习惯把现场观察和研究协作混在一起说，强调资料别丢、会话别断。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "资料先传上去"
+      ],
+      "typical_habits": "先确认网络和上传状态，再进入讨论；常用‘老时间’指代固定周会，用‘对齐一下’发起协作确认。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "每周二与周四北非女性史研究远程研讨与田野资料同步",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每周二与周四14:00-16:00常规专业培训/研讨，移动人文调查人员在外场或跨校通勤中接入腾讯会议，进行远程讨论、视频会议与协作文档同步。",
+      "period_type": "weekly",
+      "days": [
+        "Tuesday",
+        "Thursday"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦研讨",
+          "开视频会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到四点"
+        ],
+        "period_aliases": [
+          "每周二周四老时间",
+          "老规矩",
+          "周二周四下午两点到四点"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "北非女性口述史外场采集周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "在遗址、街区与博物馆外场连续采集口述史与影像资料，现场移动网络波动较大，需要优先保障资料上传与远程协作稳定。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "田野影像与文献资料回传",
+        "application_name": "飞书",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "外业调查点采集结束后，需要把影像、田野笔记和数据库查询结果同步给研究团队时触发。",
+        "aliases": {
+          "app_aliases": [
+            "feishu",
+            "lark"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨校通勤中的语音讨论与文档协作",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨校通勤路线中临时需要与合作者确认访谈提纲、协作文档或会议安排时触发。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "学术活动场地临时观看公开讲座直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "博物馆外场休息时刷短视频放松",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

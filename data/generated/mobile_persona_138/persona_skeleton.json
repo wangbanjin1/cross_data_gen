@@ -1,0 +1,179 @@
+{
+  "persona_id": "mobile_persona_138",
+  "category": "野外科研与农业作业",
+  "persona_summary": "移动家庭沟通用户",
+  "static_profile": {
+    "user_id": "USER_138",
+    "identity": "千禧一代野外科研与农业作业人员，长期在偏远采样路线、山区临时观测点、农田林区河岸等生态调查样地开展野外工作，同时兼顾家庭沟通与远程协作；全程依赖手机4G/5G移动核心网直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi，便携终端确需联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备与便携传感终端。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "高德地图"
+    ],
+    "speech_archetype": "outdoor_researcher",
+    "speech_style": {
+      "tone": "务实、简洁、带一点野外作业的干练和家庭沟通的温和，强调稳定、别掉线、别耽误事。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "先保稳定",
+        "我这边信号一般",
+        "对齐一下"
+      ],
+      "typical_habits": "习惯在出发前和午间窗口快速确认设备、网络和任务安排；遇到弱覆盖会先降画质保连通，再补传文件；常用口语化简称指代应用、业务和参数。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "午间野外样本回传与家庭远程沟通",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处偏远采样路线、山区临时观测点、农田林区河岸或生态调查样地等弱覆盖区域，且时间为11:00-13:00午间窗口时，触发高频视频通话、现场图片回传、定位共享与样本记录上传。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "11:00-13:00",
+      "application_name": "微信",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "微信",
+          "某信",
+          "小绿"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "视频通话",
+          "连个视频",
+          "报个平安"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "午间这一会儿",
+          "播到一点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "午间例行",
+          "到点就联"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "秋季生态调查集中采样周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "秋季生态调查集中采样周期间，团队进入山区林区与河岸样地连续作业，弱覆盖更明显、样本回传和远程指导需求集中爆发，需临时降低画质并优先保障低时延连通。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "田间远程指导与样本记录同步",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在农田、林区或河岸样地遇到样本识别、设备操作或记录规范问题时，临时发起远程指导会议。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "沿途影像与传感数据回传",
+        "application_name": "钉钉",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "完成一段采样路线后，需要向团队回传现场图片、样本记录和传感数据，并与后方同事快速对齐。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时参加项目组线上例会",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "休息时单次刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

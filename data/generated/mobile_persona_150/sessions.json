@@ -1,0 +1,3064 @@
+[
+  {
+    "session_id": "S-USER_150-01",
+    "user_id": "USER_150",
+    "reference_time": "2026年10月07日13时45分",
+    "session_meta": {
+      "template_id": "T2-1",
+      "round_count": 2,
+      "intent_count": 1,
+      "memory_role": "evidence_session",
+      "skeleton_signature": "T2-1|2|1|I1:抖音/开直播/1/clarified/resolved|none",
+      "scenario": {
+        "environment": "户外演出现场",
+        "blueprint_type": "main",
+        "memory_action": "single_task_implicit_behavior"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "你好，需要给抖音开直播做一个网络保障，时间是今天14时00分开始。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，您是要在抖音开直播对吧？请问画质、时延和持续时长有什么要求？",
+          "action_types": [
+            "Request_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [
+          "resolution",
+          "rtt",
+          "duration"
+        ],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "clarify",
+            "expression_level": 1,
+            "intent": "抖音开直播保障",
+            "params": {
+              "application_name": {
+                "value": "抖音",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "开直播",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月07日14时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "画质1080p，时延要千万别转圈圈，上限按50ms控制，以后也照这个标准理解。播俩小时，到四点结束。",
+          "action_types": [
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已为您开通本次保障：抖音开直播，1080p画质，时延50ms以内，从14:00到16:00，持续120分钟。",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "clarified",
+            "expression_level": 1,
+            "intent": "抖音开直播保障",
+            "params": {
+              "application_name": {
+                "value": "抖音",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "开直播",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月07日14时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月07日16时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "clarified",
+        "expression_level": 1,
+        "intent": "抖音开直播保障",
+        "params": {
+          "application_name": {
+            "value": "抖音",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "service_name": {
+            "value": "开直播",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "1080p",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "50ms",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年10月07日14时00分",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            },
+            "end_timestamp": {
+              "value": "2026年10月07日16时00分",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            },
+            "duration": {
+              "value": "120min",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "抖音",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "开直播",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月07日14时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "timestamp": {
+                "end_timestamp": {
+                  "value": "2026年10月07日16时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_150-02",
+    "user_id": "USER_150",
+    "reference_time": "2026年10月11日18时30分",
+    "session_meta": {
+      "template_id": "T3-1",
+      "round_count": 3,
+      "intent_count": 1,
+      "memory_role": "evidence_session",
+      "skeleton_signature": "T3-1|3|1|I1:微信/视频通话/1/clarified/resolved|none",
+      "scenario": {
+        "environment": "大巴跨城转场高速公路",
+        "blueprint_type": "sub_01",
+        "memory_action": "disambiguate_sub_storyline_1"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "在大巴转场途中网络不太稳，帮我给微信视频通话开个保障，时间从今天18时45分开始。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，已确认是微信视频通话保障。请问画质、时延和持续时长有什么具体要求？",
+          "action_types": [
+            "Request_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [
+          "resolution",
+          "rtt",
+          "duration"
+        ],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "clarify",
+            "expression_level": 1,
+            "intent": "微信视频通话保障",
+            "params": {
+              "application_name": {
+                "value": "微信",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "视频通话",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月11日18时45分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "画质按‘清晰点就行’来，时延控制在100ms以内，预计持续60min。",
+          "action_types": [
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "请教一下，您提到的‘清晰点就行’具体对应哪档画质档位？以后也帮您按这个记吗？",
+          "action_types": [
+            "Request_Disambiguation"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [
+          "resolution"
+        ],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "clarify",
+            "expression_level": 1,
+            "intent": "微信视频通话保障",
+            "params": {
+              "application_name": {
+                "value": "微信",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "视频通话",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "100ms",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月11日18时45分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月11日19时45分",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                },
+                "duration": {
+                  "value": "60min",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 3,
+        "user": {
+          "utterance": "对，就是画质档位720p，往后都照这个标准记，开通吧。",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已按您刚确认的含义记录，并为您开通微信视频通话保障（720p / 时延≤100ms）。祝您使用愉快！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "clarified",
+            "expression_level": 1,
+            "intent": "微信视频通话保障",
+            "params": {
+              "application_name": {
+                "value": "微信",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "视频通话",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Turn",
+                  "source_ref": "U3"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "100ms",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月11日18时45分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月11日19时45分",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                },
+                "duration": {
+                  "value": "60min",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "clarified",
+        "expression_level": 1,
+        "intent": "微信视频通话保障",
+        "params": {
+          "application_name": {
+            "value": "微信",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "service_name": {
+            "value": "视频通话",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "720p",
+              "source_type": "Turn",
+              "source_ref": "U3"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "100ms",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年10月11日18时45分",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            },
+            "end_timestamp": {
+              "value": "2026年10月11日19时45分",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            },
+            "duration": {
+              "value": "60min",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "微信",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "视频通话",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月11日18时45分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {
+              "rtt": {
+                "max_value": {
+                  "value": "100ms",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "timestamp": {
+                "end_timestamp": {
+                  "value": "2026年10月11日19时45分",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                },
+                "duration": {
+                  "value": "60min",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              }
+            }
+          },
+          {
+            "turn": 3,
+            "params": {
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Turn",
+                  "source_ref": "U3"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_150-03",
+    "user_id": "USER_150",
+    "reference_time": "2026年10月14日13时45分",
+    "session_meta": {
+      "template_id": "T2-1",
+      "round_count": 2,
+      "intent_count": 1,
+      "memory_role": "reinforcement_session",
+      "skeleton_signature": "T2-1|2|1|I1:抖音/开直播/1/history_filled/resolved|none",
+      "scenario": {
+        "environment": "户外演出现场",
+        "blueprint_type": "main",
+        "memory_action": "crystallize_implicit_memory"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "今天在户外演出现场，这次按上次的来。",
+          "action_types": [
+            "Create_Intent_Request"
+          ]
+        },
+        "agent": {
+          "utterance": "我查到您上次在户外演出现场使用的是抖音开直播，配置为1080p、时延50ms以内、持续120min。本次计划14时00分至16时00分，是否按这套配置开通？如果确认，我也可以将它设为以后该场景的默认配置。",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "history_filled",
+            "expression_level": 1,
+            "intent": "抖音开直播保障",
+            "params": {
+              "application_name": {
+                "value": "抖音",
+                "source_type": "History",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "开直播",
+                "source_type": "History",
+                "source_ref": "MF_001"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月14日14时00分",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月14日16时00分",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "对，就按这个标准来，以后这个场景也按这套配置。时延要千万别转圈圈，上限按50ms控制，以后也照这个标准理解。",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已按您刚才的表达记录这个使用习惯，并为您开通本次保障。祝您使用愉快！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "history_filled",
+            "expression_level": 1,
+            "intent": "抖音开直播保障",
+            "params": {
+              "application_name": {
+                "value": "抖音",
+                "source_type": "History",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "开直播",
+                "source_type": "History",
+                "source_ref": "MF_001"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月14日14时00分",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月14日16时00分",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "history_filled",
+        "expression_level": 1,
+        "intent": "抖音开直播保障",
+        "params": {
+          "application_name": {
+            "value": "抖音",
+            "source_type": "History",
+            "source_ref": "MF_001"
+          },
+          "service_name": {
+            "value": "开直播",
+            "source_type": "History",
+            "source_ref": "MF_001"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "1080p",
+              "source_type": "History",
+              "source_ref": "MF_001"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "50ms",
+              "source_type": "History",
+              "source_ref": "MF_001"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年10月14日14时00分",
+              "source_type": "History",
+              "source_ref": "MF_001"
+            },
+            "end_timestamp": {
+              "value": "2026年10月14日16时00分",
+              "source_type": "History",
+              "source_ref": "MF_001"
+            },
+            "duration": {
+              "value": "120min",
+              "source_type": "History",
+              "source_ref": "MF_001"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "抖音",
+                "source_type": "History",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "开直播",
+                "source_type": "History",
+                "source_ref": "MF_001"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月14日14时00分",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月14日16时00分",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                }
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "History",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {}
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_150-04",
+    "user_id": "USER_150",
+    "reference_time": "2026年10月15日10时00分",
+    "session_meta": {
+      "template_id": "T1-2",
+      "round_count": 1,
+      "intent_count": 1,
+      "memory_role": "distractor_session",
+      "skeleton_signature": "T1-2|1|1|I1:宽带光纤装维报修/0/rejected/rejected|none|none|out_of_domain",
+      "scenario": {
+        "environment": "酒店临时办公区网络故障",
+        "blueprint_type": "distractor_ood",
+        "memory_action": "reject_out_of_domain",
+        "request_type": "life_service"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "你好，现场这边网络好像有问题，能帮我安排师傅处理一下宽带光纤装维报修吗？",
+          "action_types": [
+            "Create_Intent_Request"
+          ]
+        },
+        "agent": {
+          "utterance": "抱歉，本智能助手仅提供手机移动网络加速与保障服务，暂不支持办理宽带光纤装维报修业务，建议您联系宽带专线处理。",
+          "action_types": [
+            "Reject_Request"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "rejected",
+            "closure_path": "rejected",
+            "expression_level": 0,
+            "intent": "宽带光纤装维报修",
+            "params": {}
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "rejected",
+        "closure_path": "rejected",
+        "expression_level": 0,
+        "intent": "宽带光纤装维报修",
+        "params": {}
+      }
+    ],
+    "relations": [],
+    "slot_updates": []
+  },
+  {
+    "session_id": "S-USER_150-05",
+    "user_id": "USER_150",
+    "reference_time": "2026年10月18日18时30分",
+    "session_meta": {
+      "template_id": "T2-1",
+      "round_count": 2,
+      "intent_count": 1,
+      "memory_role": "reinforcement_session",
+      "skeleton_signature": "T2-1|2|1|I1:微信/视频通话/1/memory_filled/resolved|none",
+      "scenario": {
+        "environment": "大巴转场途中",
+        "blueprint_type": "sub_01",
+        "memory_action": "reinforce_sub_storyline_1"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "老规矩，在大巴转场途中，用微信做视频通话，画质按‘清晰点就行’，帮我把保障开上。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，我调取到之前登记的微信视频通话配置：720p、时延100ms以内，18时45分开始、19时45分结束，持续60min。确认按这套配置开通吗？",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "微信视频通话保障",
+            "params": {
+              "application_name": {
+                "value": "微信",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "视频通话",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "100ms",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月18日18时45分",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月18日19时45分",
+                  "source_type": "Context",
+                  "source_ref": "SUB_001"
+                },
+                "duration": {
+                  "value": "60min",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "对，直接开通。",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已为您开通本次保障：微信视频通话，720p画质，时延100ms以内，从18:45到19:45，持续60分钟。祝您连线顺利！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "微信视频通话保障",
+            "params": {
+              "application_name": {
+                "value": "微信",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "视频通话",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "100ms",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月18日18时45分",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月18日19时45分",
+                  "source_type": "Context",
+                  "source_ref": "SUB_001"
+                },
+                "duration": {
+                  "value": "60min",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "memory_filled",
+        "expression_level": 1,
+        "intent": "微信视频通话保障",
+        "params": {
+          "application_name": {
+            "value": "微信",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "service_name": {
+            "value": "视频通话",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "720p",
+              "source_type": "Memory",
+              "source_ref": "SUB_001"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "100ms",
+              "source_type": "Memory",
+              "source_ref": "SUB_001"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年10月18日18时45分",
+              "source_type": "Memory",
+              "source_ref": "SUB_001"
+            },
+            "end_timestamp": {
+              "value": "2026年10月18日19时45分",
+              "source_type": "Context",
+              "source_ref": "SUB_001"
+            },
+            "duration": {
+              "value": "60min",
+              "source_type": "Memory",
+              "source_ref": "SUB_001"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "微信",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "视频通话",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月18日18时45分",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月18日19时45分",
+                  "source_type": "Context",
+                  "source_ref": "SUB_001"
+                },
+                "duration": {
+                  "value": "60min",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "100ms",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {}
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_150-06",
+    "user_id": "USER_150",
+    "reference_time": "2026年10月21日13时45分",
+    "session_meta": {
+      "template_id": "T2-5",
+      "round_count": 2,
+      "intent_count": 1,
+      "memory_role": "reuse_session",
+      "skeleton_signature": "T2-5|2|1|I1:抖音/开直播/1/amend/resolved|none",
+      "scenario": {
+        "environment": "户外演出现场",
+        "blueprint_type": "main",
+        "memory_action": "extend_duration_amend"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "今天在户外演出现场，老规矩，用抖音做开直播，帮我把保障开上。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，您是要在抖音开直播对吧？我这边调取到您的长期老规矩配置：画质1080p、时延50ms以内、保障时长60分钟，今天14:00到15:00。确认按这个开通吗？",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "amend",
+            "expression_level": 1,
+            "intent": "抖音开直播保障",
+            "params": {
+              "application_name": {
+                "value": "抖音",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "开直播",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月21日14时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月21日16时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Context",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "对，老规矩不变，不过今天现场活动延长了，帮我把保障时长延长到180分钟。",
+          "action_types": [
+            "Confirm_Slot",
+            "Modify_Request"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已按老规矩为您开通抖音开直播保障，画质1080p、时延50ms以内，保障时长已延长至180分钟，今天14:00到17:00生效。祝您直播顺利！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "amend",
+            "expression_level": 1,
+            "intent": "抖音开直播保障",
+            "params": {
+              "application_name": {
+                "value": "抖音",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "开直播",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月21日14时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月21日17时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                },
+                "duration": {
+                  "value": "180min",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "amend",
+        "expression_level": 1,
+        "intent": "抖音开直播保障",
+        "params": {
+          "application_name": {
+            "value": "抖音",
+            "source_type": "Memory",
+            "source_ref": "MF_001"
+          },
+          "service_name": {
+            "value": "开直播",
+            "source_type": "Memory",
+            "source_ref": "MF_001"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "1080p",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "50ms",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年10月21日14时00分",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            },
+            "end_timestamp": {
+              "value": "2026年10月21日17时00分",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            },
+            "duration": {
+              "value": "180min",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "抖音",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "开直播",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月21日14时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月21日16时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Context",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {
+              "timestamp": {
+                "end_timestamp": {
+                  "value": "2026年10月21日17时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                },
+                "duration": {
+                  "value": "180min",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_150-07",
+    "user_id": "USER_150",
+    "reference_time": "2026年10月24日13时45分",
+    "session_meta": {
+      "template_id": "T2-1",
+      "round_count": 2,
+      "intent_count": 1,
+      "memory_role": "reinforcement_session",
+      "skeleton_signature": "T2-1|2|1|I1:抖音/开直播/1/memory_filled/resolved|none",
+      "scenario": {
+        "environment": "户外演出现场",
+        "blueprint_type": "main",
+        "memory_action": "reinforce_main_memory"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "老规矩，在户外演出现场，用抖音做开直播，时延按‘千万别转圈圈’，帮我把保障开上。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，我调取到之前登记的抖音开直播配置：1080p、时延50ms以内，14时00分开始、16时00分结束，持续120min。确认按这套配置开通吗？",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "抖音开直播保障",
+            "params": {
+              "application_name": {
+                "value": "抖音",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "开直播",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月24日14时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月24日16时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "对，直接开通。",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已为您开通抖音开直播保障，画质1080p、时延50ms以内，保障时段2026年10月24日14:00到16:00，共120分钟。祝您直播顺利！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "抖音开直播保障",
+            "params": {
+              "application_name": {
+                "value": "抖音",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "开直播",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月24日14时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月24日16时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "memory_filled",
+        "expression_level": 1,
+        "intent": "抖音开直播保障",
+        "params": {
+          "application_name": {
+            "value": "抖音",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "service_name": {
+            "value": "开直播",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "1080p",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "50ms",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年10月24日14时00分",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            },
+            "end_timestamp": {
+              "value": "2026年10月24日16时00分",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            },
+            "duration": {
+              "value": "120min",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "抖音",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "开直播",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月24日14时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月24日16时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {}
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_150-08",
+    "user_id": "USER_150",
+    "reference_time": "2026年10月28日12时30分",
+    "session_meta": {
+      "template_id": "X-1",
+      "round_count": 1,
+      "intent_count": 2,
+      "memory_role": "distractor_session",
+      "skeleton_signature": "X-1|1|2|I1:哔哩哔哩/短视频/1/direct/resolved;I2:手机话费充值与账单查询/0/rejected/rejected|none|none|mixed_reject",
+      "scenario": {
+        "environment": "周末午休个人时间",
+        "blueprint_type": "distractor_mixed",
+        "memory_action": "mixed_in_out_domain"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "周末午休刷会儿哔哩哔哩短视频，帮我开个保障，画质720p，时延控制在80ms以内，时长60分钟。另外顺便帮我把手机话费充值和账单也查一下。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，您是要在哔哩哔哩刷短视频，画质720p、时延80ms以内、时长60分钟，这个移动网络保障我这边正常受理并开通。不过手机话费充值和账单查询不在本助手服务范围内，建议您通过运营商官方渠道办理。",
+          "action_types": [
+            "Acknowledge",
+            "Reject_Request"
+          ]
+        },
+        "related_intent_ids": [
+          "I1",
+          "I2"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "direct",
+            "expression_level": 1,
+            "intent": "哔哩哔哩短视频保障",
+            "params": {
+              "application_name": {
+                "value": "哔哩哔哩",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "短视频",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "80ms",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月28日12时30分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月28日13时30分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "duration": {
+                  "value": "60min",
+                  "source_type": "Context",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          },
+          {
+            "intent_id": "I2",
+            "status": "rejected",
+            "closure_path": "rejected",
+            "expression_level": 0,
+            "intent": "手机话费充值与账单查询",
+            "params": {}
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "direct",
+        "expression_level": 1,
+        "intent": "哔哩哔哩短视频保障",
+        "params": {
+          "application_name": {
+            "value": "哔哩哔哩",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "service_name": {
+            "value": "短视频",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "720p",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "80ms",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年10月28日12时30分",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            },
+            "end_timestamp": {
+              "value": "2026年10月28日13时30分",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            },
+            "duration": {
+              "value": "60min",
+              "source_type": "Context",
+              "source_ref": "U1"
+            }
+          }
+        }
+      },
+      {
+        "intent_id": "I2",
+        "status": "rejected",
+        "closure_path": "rejected",
+        "expression_level": 0,
+        "intent": "手机话费充值与账单查询",
+        "params": {}
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "哔哩哔哩",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "短视频",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "80ms",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月28日12时30分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月28日13时30分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "duration": {
+                  "value": "60min",
+                  "source_type": "Context",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_150-09",
+    "user_id": "USER_150",
+    "reference_time": "2026年10月29日13时45分",
+    "session_meta": {
+      "template_id": "T2-3",
+      "round_count": 2,
+      "intent_count": 1,
+      "memory_role": "correction_session",
+      "skeleton_signature": "T2-3|2|1|I1:抖音/开直播/4/correct/resolved|none",
+      "scenario": {
+        "environment": "城市音乐节现场",
+        "blueprint_type": "event_override",
+        "memory_action": "override_temporary_preference"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "今天在城市音乐节现场，老规矩，用抖音做开直播，帮我把保障开上。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，您是要在抖音开直播对吧？我这边调取到您的长期老规矩配置：画质1080p、时延50ms以内，今天14:00到16:00，共120分钟。确认按这个开通吗？",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "correct",
+            "expression_level": 4,
+            "intent": "抖音开直播保障",
+            "params": {
+              "application_name": {
+                "value": "抖音",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "开直播",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月29日14时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月29日16时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Context",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "今天现场特殊，人流太密，画质临时调到720p，时延压到30ms，就按这个来。",
+          "action_types": [
+            "Correct_Previous_Input",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已确认本次临时调整：抖音开直播保障，画质720p、时延30ms以内，今天14:00到16:00生效。本次按临时配置开通，祝您直播顺利！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "correct",
+            "expression_level": 4,
+            "intent": "抖音开直播保障",
+            "params": {
+              "application_name": {
+                "value": "抖音",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "开直播",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "30ms",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月29日14时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月29日16时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Context",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "correct",
+        "expression_level": 4,
+        "intent": "抖音开直播保障",
+        "params": {
+          "application_name": {
+            "value": "抖音",
+            "source_type": "Memory",
+            "source_ref": "MF_001"
+          },
+          "service_name": {
+            "value": "开直播",
+            "source_type": "Memory",
+            "source_ref": "MF_001"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "720p",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "30ms",
+              "source_type": "Turn",
+              "source_ref": "U2"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年10月29日14时00分",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            },
+            "end_timestamp": {
+              "value": "2026年10月29日16时00分",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            },
+            "duration": {
+              "value": "120min",
+              "source_type": "Context",
+              "source_ref": "U1"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "抖音",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "开直播",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月29日14时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月29日16时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Context",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "30ms",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_150-10",
+    "user_id": "USER_150",
+    "reference_time": "2026年11月01日13时45分",
+    "session_meta": {
+      "template_id": "T2-1",
+      "round_count": 2,
+      "intent_count": 1,
+      "memory_role": "reuse_session",
+      "skeleton_signature": "T2-1|2|1|I1:抖音/开直播/1/memory_filled/resolved|none",
+      "scenario": {
+        "environment": "城市音乐节现场",
+        "blueprint_type": "event_reuse",
+        "memory_action": "reuse_long_term_rule_after_correction"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "老规矩，在城市音乐节现场，用抖音做开直播，时延按‘网络一定要稳’，帮我把保障开上。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，我调取到之前登记的抖音开直播配置：1080p、时延50ms以内，14时00分开始、16时00分结束，持续120min。确认按这套配置开通吗？",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "抖音开直播保障",
+            "params": {
+              "application_name": {
+                "value": "抖音",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "开直播",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月01日14时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月01日16时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "对，直接开通。",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已为您开通抖音开直播保障，画质1080p、时延50ms以内，保障时段2026年11月01日14:00到16:00，共120分钟。祝您直播顺利！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "抖音开直播保障",
+            "params": {
+              "application_name": {
+                "value": "抖音",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "开直播",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月01日14时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月01日16时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "memory_filled",
+        "expression_level": 1,
+        "intent": "抖音开直播保障",
+        "params": {
+          "application_name": {
+            "value": "抖音",
+            "source_type": "Memory",
+            "source_ref": "MF_001"
+          },
+          "service_name": {
+            "value": "开直播",
+            "source_type": "Memory",
+            "source_ref": "MF_001"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "1080p",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "50ms",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年11月01日14时00分",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            },
+            "end_timestamp": {
+              "value": "2026年11月01日16时00分",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            },
+            "duration": {
+              "value": "120min",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "抖音",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "开直播",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月01日14时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月01日16时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {}
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_150-11",
+    "user_id": "USER_150",
+    "reference_time": "2026年11月04日18时30分",
+    "session_meta": {
+      "template_id": "T2-1",
+      "round_count": 2,
+      "intent_count": 1,
+      "memory_role": "reuse_session",
+      "skeleton_signature": "T2-1|2|1|I1:微信/视频通话/1/memory_filled/resolved|none",
+      "scenario": {
+        "environment": "转场大巴途中",
+        "blueprint_type": "sub_01",
+        "memory_action": "sub_memory_unaffected"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "老规矩，在大巴转场途中，用微信做视频通话，画质按‘清晰点就行’，帮我把保障开上。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，我调取到之前登记的微信视频通话配置：720p、时延100ms以内，18时45分开始、19时45分结束，持续60min。确认按这套配置开通吗？",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "微信视频通话保障",
+            "params": {
+              "application_name": {
+                "value": "微信",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "视频通话",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "100ms",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月04日18时45分",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月04日19时45分",
+                  "source_type": "Context",
+                  "source_ref": "SUB_001"
+                },
+                "duration": {
+                  "value": "60min",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "对，直接开通。",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已为您开通微信视频通话保障，画质720p、时延100ms以内，时长60分钟，祝您通话顺利！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "微信视频通话保障",
+            "params": {
+              "application_name": {
+                "value": "微信",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "视频通话",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "100ms",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月04日18时45分",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月04日19时45分",
+                  "source_type": "Context",
+                  "source_ref": "SUB_001"
+                },
+                "duration": {
+                  "value": "60min",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "memory_filled",
+        "expression_level": 1,
+        "intent": "微信视频通话保障",
+        "params": {
+          "application_name": {
+            "value": "微信",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "service_name": {
+            "value": "视频通话",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "720p",
+              "source_type": "Memory",
+              "source_ref": "SUB_001"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "100ms",
+              "source_type": "Memory",
+              "source_ref": "SUB_001"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年11月04日18时45分",
+              "source_type": "Memory",
+              "source_ref": "SUB_001"
+            },
+            "end_timestamp": {
+              "value": "2026年11月04日19时45分",
+              "source_type": "Context",
+              "source_ref": "SUB_001"
+            },
+            "duration": {
+              "value": "60min",
+              "source_type": "Memory",
+              "source_ref": "SUB_001"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "微信",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "视频通话",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月04日18时45分",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月04日19时45分",
+                  "source_type": "Context",
+                  "source_ref": "SUB_001"
+                },
+                "duration": {
+                  "value": "60min",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "100ms",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {}
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_150-12",
+    "user_id": "USER_150",
+    "reference_time": "2026年11月07日13时45分",
+    "session_meta": {
+      "template_id": "T2-1",
+      "round_count": 2,
+      "intent_count": 1,
+      "memory_role": "reuse_session",
+      "skeleton_signature": "T2-1|2|1|I1:抖音/开直播/1/memory_filled/resolved|none",
+      "scenario": {
+        "environment": "户外演出现场",
+        "blueprint_type": "main_recovery",
+        "memory_action": "recover_long_term_rule"
+      }
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "老规矩，在户外演出现场，用抖音做开直播，画质按‘特写不糊’，帮我把保障开上。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，我调取到之前登记的抖音开直播配置：1080p、时延50ms以内，14时00分开始、16时00分结束，持续120min。确认按这套配置开通吗？",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "抖音开直播保障",
+            "params": {
+              "application_name": {
+                "value": "抖音",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "开直播",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月07日14时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月07日16时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "对，直接开通。",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已为您开通抖音直播保障，画质1080p、时延50ms以内，时长120分钟，祝您直播顺利！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "抖音开直播保障",
+            "params": {
+              "application_name": {
+                "value": "抖音",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "开直播",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月07日14时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月07日16时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "memory_filled",
+        "expression_level": 1,
+        "intent": "抖音开直播保障",
+        "params": {
+          "application_name": {
+            "value": "抖音",
+            "source_type": "Memory",
+            "source_ref": "MF_001"
+          },
+          "service_name": {
+            "value": "开直播",
+            "source_type": "Memory",
+            "source_ref": "MF_001"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "1080p",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "50ms",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年11月07日14时00分",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            },
+            "end_timestamp": {
+              "value": "2026年11月07日16时00分",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            },
+            "duration": {
+              "value": "120min",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "抖音",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "开直播",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月07日14时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月07日16时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {}
+          }
+        ]
+      }
+    ]
+  }
+]

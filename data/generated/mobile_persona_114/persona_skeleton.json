@@ -1,0 +1,178 @@
+{
+  "persona_id": "mobile_persona_114",
+  "category": "公共安全与移动执勤",
+  "persona_summary": "外访型金融顾问",
+  "static_profile": {
+    "user_id": "USER_114",
+    "identity": "外访型金融顾问，日常在道路、巡逻区域、临时处置现场及夜间值守点之间移动，为高净值客户处理账户核对、跨境转账确认与电子签署，依赖加密通信与便携工作终端完成外勤任务。",
+    "devices": "5G智能手机为主力联网设备，便携工作终端为辅助设备，便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "高德地图"
+    ],
+    "speech_archetype": "business_advisor",
+    "speech_style": {
+      "tone": "干练、克制、带一点金融行业特有的谨慎与催促感，习惯用短句确认关键信息。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先保消息送达"
+      ],
+      "typical_habits": "说话前先确认对方是否在线，重要事项会重复一遍并强调时间点，习惯用“老时间”“老地方”指代固定安排。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "夜间外勤客户账户核对与加密视频确认",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处夜间值守点、事故现场或应急集结区等移动执勤弱网空间，20:00-22:00期间需要与客户或团队进行加密视频确认与账户资料核对。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "20:00-22:00",
+      "application_name": "腾讯会议",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议",
+          "会议App"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "连麦确认",
+          "视频对一下",
+          "开视频"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点",
+          "一个半小时"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "晚间例行",
+          "夜里这个点"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨境客户集中签约与合规核查周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨境客户集中签约期间，金融顾问频繁在夜间值守点、事故现场或应急集结区之间移动，弱网路段增多，需要临时降低画质以保证视频通话连续与消息及时送达。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "外勤途中即时通信与位置共享",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在客户拜访途中或巡逻区域移动时，需要快速共享位置、发送现场照片并确认账户资料。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "临时任务调度与事件上报",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "夜间值守点或应急集结区接到临时任务调度，需要快速开会对齐并上传电子签署文件。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次在事故现场等待间隙刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在夜间值守点观看金融合规直播培训",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

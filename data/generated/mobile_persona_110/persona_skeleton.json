@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_110",
+  "category": "文化创作与移动演出",
+  "persona_summary": "移动演出与音乐创作者",
+  "static_profile": {
+    "user_id": "USER_110",
+    "identity": "街头音乐人兼移动演出创作者，以吉他弹唱在地铁车厢、站台通道、户外演出点及音乐节现场进行表演，同时通过手机4G/5G完成现场音视频采集、直播推流、云端素材同步与乐队远程沟通，不依赖家庭宽带或固定Wi-Fi，便携终端联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑，便携终端确需联网时使用手机热点。",
+    "apps": [
+      "抖音",
+      "快手",
+      "哔哩哔哩",
+      "微信"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "随性、热络、带点江湖气的乐手口吻，说话节奏快，喜欢用演出和直播行话。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "开整",
+        "稳住上行"
+      ],
+      "typical_habits": "习惯在演出前快速确认设备和网络状态，用简短口令招呼队友，遇到弱覆盖路段会反复强调续传和恢复。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "早间地铁车厢移动弹唱直播",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在早高峰地铁车厢与站台通道执行移动弹唱演出任务时，使用抖音开直播进行现场音视频推流，并同步云端素材与乐队沟通。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "08:30-10:30",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "开整直播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点半"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "早高峰老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "城市音乐节地铁快闪演出周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "音乐节期间地铁客流密集，站台与车厢内无线环境复杂，直播互动与音视频上行需要更稳更快的临时保障。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "演出后素材回传与云端同步",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "演出结束转场或回到临时排练现场后，与乐队成员视频通话核对音频工程和云端素材同步进度。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "排练现场录像复盘",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "临时排练或街头活动结束后，上传演出片段并观看复盘，用于调整下一场曲目和镜头。",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时与场地主办方开短会确认演出流程",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "休息时刷同行演出短视频放松",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

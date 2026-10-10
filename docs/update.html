@@ -1,154 +1,514 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="parchment">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>近期问题排查、解决办法与结果对照（每日记录）</title>
+    <title>跨会话长程记忆数据集：生成问题排查、架构拓扑与多样性规范手册</title>
     <style>
-        :root {
-            /* 整体暖黄调色板 (Warm Cream, Honey & Amber) */
-            --bg-page: #fbf5e8;            /* 柔和奶油暖黄基底 */
-            --bg-surface: #ffffff;         /* 暖白内容面板 */
-            --bg-subtle: #fcf8f0;          /* 浅黄衬底 */
-            --bg-accent-soft: #fef3c7;     /* 浅蜂蜜黄 */
-            --border-soft: #ebdcc4;        /* 柔和黄褐边框 */
-            --border-focus: #d8c29d;       /* 中度黄褐分割线 */
+        :root[data-theme="parchment"] {
+            --bg-color: #f7f4ec;
+            --surface-color: #eee9dc;
+            --surface-elevated: #e6dfcf;
+            --border-color: #dcd4c0;
+            --border-subtle: #e6dfd1;
+            --text-primary: #2d3748;
+            --text-secondary: #5c687a;
+            --text-muted: #798696;
+            --accent-primary: #a35d28;
+            --accent-glow: rgba(163, 93, 40, 0.08);
+            --code-bg: #eae3d2;
+            --code-text: #8d3a2b;
+            --pre-bg: #ece5d6;
+            --pre-text: #2d3748;
+            --callout-note-bg: #e5ede3;
+            --callout-note-border: #709775;
+            --callout-note-text: #2b5133;
+            --callout-warn-bg: #f5eedb;
+            --callout-warn-border: #c48a37;
+            --callout-warn-text: #704b12;
+            --callout-imp-bg: #e5eaf5;
+            --callout-imp-border: #5c7cb6;
+            --callout-imp-text: #1e3863;
+            --contrast-bad-bg: #fae8e5;
+            --contrast-bad-border: #e8b0a5;
+            --contrast-bad-text: #a83220;
+            --contrast-good-bg: #eaf3e9;
+            --contrast-good-border: #a8d3a6;
+            --contrast-good-text: #2b6e36;
+            --table-header: #e4dccb;
+            --table-alt: #f1ecdf;
+            --tag-bg: #dfd5be;
+            --tag-text: #59472d;
+            --toggle-bg: #dfd6c2;
+            --card-shadow: 0 4px 18px rgba(45, 55, 72, 0.04);
+            --card-hover-shadow: 0 8px 24px rgba(163, 93, 40, 0.1);
+        }
 
-            --text-heading: #2d1f11;       /* 浓郁暖黑棕标题 */
-            --text-body: #453322;          /* 温暖炭褐正文 */
-            --text-muted: #7a6550;         /* 柔和黄褐次要信息 */
-            --text-light: #9e8770;         /* 弱化备注 */
-
-            --accent-main: #b45309;        /* 核心深琥珀黄 */
-            --accent-warm: #d97706;        /* 亮金琥珀色 */
-            --accent-terracotta: #c2410c;  /* 暖陶土红 */
-            --accent-olive: #3f6212;       /* 沉稳暖橄榄绿 */
-
-            --code-bg: #211912;            /* 深暖黑咖啡代码底色 */
-            --code-text: #fef08a;          /* 麦黄高亮代码字体 */
-
-            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
-            --font-code: "Fira Code", SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-            --shadow-card: 0 4px 18px -2px rgba(69, 51, 34, 0.05), 0 2px 6px -1px rgba(69, 51, 34, 0.03);
+        :root[data-theme="twilight"] {
+            --bg-color: #1a1e24;
+            --surface-color: #232931;
+            --surface-elevated: #2c343f;
+            --border-color: #39424e;
+            --border-subtle: #2d3642;
+            --text-primary: #dce1e8;
+            --text-secondary: #9da7b3;
+            --text-muted: #707b88;
+            --accent-primary: #e09f67;
+            --accent-glow: rgba(224, 159, 103, 0.1);
+            --code-bg: #15181d;
+            --code-text: #f08d70;
+            --pre-bg: #171b21;
+            --pre-text: #cdd3dc;
+            --callout-note-bg: #202b28;
+            --callout-note-border: #4d7a68;
+            --callout-note-text: #8bbfa8;
+            --callout-warn-bg: #2b251d;
+            --callout-warn-border: #8a6c38;
+            --callout-warn-text: #d9b168;
+            --callout-imp-bg: #1d2533;
+            --callout-imp-border: #4a638c;
+            --callout-imp-text: #96b5e3;
+            --contrast-bad-bg: #2d1e20;
+            --contrast-bad-border: #5c3035;
+            --contrast-bad-text: #f07167;
+            --contrast-good-bg: #1c2b22;
+            --contrast-good-border: #355e42;
+            --contrast-good-text: #70c48a;
+            --table-header: #262e38;
+            --table-alt: #1f242c;
+            --tag-bg: #323c48;
+            --tag-text: #d2a679;
+            --toggle-bg: #323b47;
+            --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
+            --card-hover-shadow: 0 8px 24px rgba(224, 159, 103, 0.12);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: var(--font-family);
-            background-color: var(--bg-page);
-            color: var(--text-body);
-            line-height: 1.72;
-            padding: 40px 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.85;
+            padding: 24px 16px;
+            font-size: 15.5px;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .container {
-            max-width: 1120px;
+        .layout-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            max-width: 1400px;
             margin: 0 auto;
+            gap: 32px;
+            position: relative;
         }
 
-        header {
-            margin-bottom: 25px;
-            padding-bottom: 18px;
-            border-bottom: 2px solid var(--border-soft);
+        /* 左侧固定侧边栏大纲 */
+        .sidebar-toc {
+            width: 300px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 24px;
+            max-height: calc(100vh - 48px);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.25s ease;
+            z-index: 90;
+        }
+
+        .toc-card {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 18px 14px;
+            display: flex;
+            flex-direction: column;
+            max-height: calc(100vh - 48px);
+            box-shadow: var(--card-shadow);
+        }
+
+        .toc-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 12px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .toc-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .toc-title svg {
+            color: var(--accent-primary);
+        }
+
+        .toc-action-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .toc-action-btn:hover {
+            background: var(--surface-elevated);
+            color: var(--accent-primary);
+            border-color: var(--border-color);
+        }
+
+        /* 搜索框 */
+        .search-box {
+            position: relative;
+            margin-bottom: 12px;
+            flex-shrink: 0;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 7px 12px 7px 32px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-color);
+            font-size: 0.84rem;
+            color: var(--text-primary);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-primary);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            color: var(--text-muted);
+        }
+
+        /* 栏目分类 Pills */
+        .category-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .cat-pill {
+            background: var(--tag-bg);
+            color: var(--tag-text);
+            border: 1px solid transparent;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 0.74rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .cat-pill:hover {
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .cat-pill.active {
+            background: var(--accent-primary);
+            color: #ffffff;
+            border-color: var(--accent-primary);
+        }
+
+        .toc-body {
+            overflow-y: auto;
+            flex: 1;
+            padding-right: 4px;
+        }
+
+        .toc-body::-webkit-scrollbar {
+            width: 5px;
+        }
+        .toc-body::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        .toc-group-title {
+            font-size: 0.76rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            letter-spacing: 0.04em;
+            margin: 10px 0 4px 6px;
+        }
+
+        .toc-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .toc-item {
+            margin: 2px 0;
+            line-height: 1.4;
+        }
+
+        .toc-link {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 4px 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.83rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            border-left: 2px solid transparent;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .toc-link:hover {
+            color: var(--accent-primary);
+            background: var(--accent-glow);
+        }
+
+        .toc-link.active {
+            color: var(--accent-primary);
+            background: var(--accent-glow);
+            border-left-color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        .toc-badge {
+            flex-shrink: 0;
+            font-size: 0.72rem;
+            background: var(--tag-bg);
+            color: var(--tag-text);
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        .toc-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* 侧边栏折叠支持 */
+        body.toc-collapsed .sidebar-toc {
+            display: none;
+        }
+
+        body.toc-collapsed #expandTocBtn {
+            display: inline-flex !important;
+        }
+
+        /* 右侧主内容区 */
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            max-width: 1020px;
+        }
+
+        /* 顶栏控制条 */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background-color: var(--surface-color);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.84rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .nav-btn.active {
+            background: var(--accent-primary);
+            color: #ffffff;
+            border-color: var(--accent-primary);
+        }
+
+        .theme-switch-btn {
+            background-color: var(--toggle-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.84rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .theme-switch-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* 文档头部 Header */
+        header.doc-header {
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 24px;
+            margin-bottom: 32px;
         }
 
         .header-tag {
             display: inline-block;
-            background: var(--bg-accent-soft);
-            border: 1px solid #fde68a;
-            color: var(--accent-main);
-            font-size: 0.82rem;
+            background: var(--tag-bg);
+            color: var(--tag-text);
+            font-size: 0.8rem;
             font-weight: 650;
-            padding: 3px 12px;
+            padding: 3px 10px;
             border-radius: 4px;
-            margin-bottom: 10px;
-            letter-spacing: 0.04em;
-        }
-
-        h1 {
-            font-size: 1.95rem;
-            font-weight: 750;
-            color: var(--text-heading);
             margin-bottom: 12px;
-            letter-spacing: -0.015em;
         }
 
-        .header-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            font-size: 0.88rem;
-            color: var(--text-muted);
-        }
-
-        .meta-tag {
-            background: var(--bg-surface);
-            padding: 5px 14px;
-            border-radius: 6px;
-            border: 1px solid var(--border-soft);
-            box-shadow: 0 1px 3px rgba(69, 51, 34, 0.04);
-        }
-
-        .meta-tag span.val {
-            color: var(--accent-main);
-            font-weight: 650;
-        }
-
-        /* 日期分段徽章 */
-        .date-divider {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 30px 0 20px 0;
-        }
-
-        .date-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--accent-main);
-            color: #ffffff;
-            font-size: 0.92rem;
+        h1.doc-title {
+            font-size: 2.05rem;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            line-height: 1.35;
             font-weight: 700;
-            padding: 6px 16px;
-            border-radius: 20px;
-            letter-spacing: 0.03em;
-            box-shadow: 0 2px 8px rgba(180, 83, 9, 0.2);
+            letter-spacing: -0.3px;
         }
 
-        .date-line {
-            flex: 1;
-            height: 1.5px;
-            background: var(--border-focus);
+        .doc-lead {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 18px;
         }
 
-        .date-summary-text {
+        .header-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .meta-stat-card {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 14px;
+        }
+
+        .meta-stat-label {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+
+        .meta-stat-val {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        /* 栏目区块标题 */
+        .column-section-header {
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .column-section-header h2 {
+            font-size: 1.42rem;
+            color: var(--text-primary);
+            border-left: 4px solid var(--accent-primary);
+            padding-left: 12px;
+            font-weight: 650;
+            margin: 0;
+        }
+
+        .column-section-desc {
             font-size: 0.84rem;
             color: var(--text-muted);
         }
 
+        /* 问题卡片 */
         .issue-card {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-soft);
-            border-radius: 10px;
-            padding: 24px;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 22px 24px;
             margin-bottom: 24px;
-            box-shadow: var(--shadow-card);
-            min-width: 0;
-            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.25s ease;
+        }
+
+        .issue-card:hover {
+            box-shadow: var(--card-hover-shadow);
         }
 
         .issue-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 16px;
-            border-bottom: 1.5px solid var(--border-soft);
+            margin-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
             padding-bottom: 12px;
             flex-wrap: wrap;
             gap: 8px;
@@ -164,44 +524,89 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 26px;
-            height: 26px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
-            background: var(--bg-accent-soft);
-            border: 1px solid #fde68a;
-            color: var(--accent-main);
-            font-size: 0.85rem;
-            font-weight: 700;
+            background-color: var(--surface-elevated);
+            border: 1px solid var(--border-color);
+            color: var(--accent-primary);
+            font-size: 0.88rem;
+            font-weight: 750;
+            flex-shrink: 0;
         }
 
+        .issue-header h2 {
+            font-size: 1.12rem;
+            font-weight: 650;
+            color: var(--text-primary);
+            margin: 0;
+            border-left: none;
+            padding-left: 0;
+        }
+
+        .issue-tag-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .issue-cat-badge {
+            font-size: 0.72rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 650;
+        }
+
+        .badge-arch { background: var(--callout-imp-bg); color: var(--callout-imp-text); border: 1px solid var(--callout-imp-border); }
+        .badge-gov { background: var(--callout-warn-bg); color: var(--callout-warn-text); border: 1px solid var(--callout-warn-border); }
+        .badge-bug { background: var(--callout-note-bg); color: var(--callout-note-text); border: 1px solid var(--callout-note-border); }
+
         .issue-date-tag {
-            font-size: 0.78rem;
+            font-size: 0.76rem;
             color: var(--text-muted);
-            background: var(--bg-subtle);
-            border: 1px solid var(--border-soft);
-            padding: 2px 10px;
+            background: var(--surface-elevated);
+            border: 1px solid var(--border-color);
+            padding: 2px 8px;
             border-radius: 4px;
         }
 
-        h2 {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--text-heading);
-            letter-spacing: -0.01em;
-        }
-
         .desc-block {
-            margin-bottom: 14px;
-            font-size: 0.91rem;
+            margin-bottom: 16px;
+            font-size: 0.92rem;
         }
 
-        .desc-block p {
-            margin-bottom: 8px;
-        }
-
-        .desc-label {
+        .section-sublabel {
             font-weight: 700;
-            color: var(--accent-main);
+            color: var(--accent-primary);
+            margin-top: 14px;
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+        }
+
+        .bullet-item {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 6px;
+            line-height: 1.7;
+        }
+
+        .bullet-prefix {
+            color: var(--accent-primary);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .bullet-content {
+            flex: 1;
+        }
+
+        code {
+            font-family: "JetBrains Mono", Consolas, Menlo, Monaco, monospace;
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.88em;
         }
 
         /* 核心对比网格 */
@@ -209,846 +614,2943 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
-            margin-top: 12px;
+            margin-top: 14px;
         }
 
-        @media (max-width: 820px) {
+        @media (max-width: 960px) {
             .contrast-grid {
                 grid-template-columns: 1fr;
+            }
+            .sidebar-toc {
+                display: none;
             }
         }
 
         .contrast-box {
             border-radius: 8px;
-            padding: 16px;
+            padding: 14px 16px;
             font-size: 0.85rem;
             min-width: 0;
             overflow-wrap: anywhere;
         }
 
         .contrast-box.bad {
-            background: #fdf5f3;
-            border: 1.5px solid #f6cfc7;
+            background: var(--contrast-bad-bg);
+            border: 1px solid var(--contrast-bad-border);
         }
 
         .contrast-box.good {
-            background: #f3f8f4;
-            border: 1.5px solid #cce5d2;
+            background: var(--contrast-good-bg);
+            border: 1px solid var(--contrast-good-border);
         }
 
-        .contrast-title {
-            font-weight: 700;
-            margin-bottom: 10px;
-            font-size: 0.88rem;
+        .contrast-header {
             display: flex;
             align-items: center;
-            gap: 6px;
+            justify-content: space-between;
+            margin-bottom: 8px;
         }
 
-        .contrast-box.bad .contrast-title { color: #b91c1c; }
-        .contrast-box.good .contrast-title { color: #15803d; }
-
-        code {
-            font-family: var(--font-code);
-            background: #f7ecdb;
-            border: 1px solid #ebd8bf;
-            color: #8c3b00;
-            padding: 2px 5px;
+        .contrast-pill-bad {
+            display: inline-block;
+            background-color: var(--contrast-bad-border);
+            color: var(--contrast-bad-text);
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 1px 6px;
             border-radius: 4px;
-            font-size: 0.84rem;
+            margin-right: 6px;
+        }
+
+        .contrast-pill-good {
+            display: inline-block;
+            background-color: var(--contrast-good-border);
+            color: var(--contrast-good-text);
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 4px;
+            margin-right: 6px;
+        }
+
+        .contrast-box.bad .contrast-title {
+            font-weight: 700;
+            font-size: 0.86rem;
+            color: var(--contrast-bad-text);
+        }
+
+        .contrast-box.good .contrast-title {
+            font-weight: 700;
+            font-size: 0.86rem;
+            color: var(--contrast-good-text);
+        }
+
+        .code-lang-tag {
+            font-family: "JetBrains Mono", Consolas, monospace;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* 代码块组件 */
+        .code-block {
+            background-color: var(--pre-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            margin-top: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 10px;
+            background-color: var(--surface-color);
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.74rem;
+            user-select: none;
+        }
+
+        .code-lang {
+            font-family: "JetBrains Mono", Consolas, monospace;
+            font-weight: 700;
+            color: var(--accent-primary);
+            letter-spacing: 0.5px;
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            color: var(--text-muted);
+            padding: 2px 8px;
+            font-size: 0.74rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+            background: var(--surface-elevated);
+        }
+
+        .copy-btn.copied {
+            color: #2b5133;
+            border-color: #709775;
+            background: #e5ede3;
         }
 
         pre {
-            background: var(--code-bg);
-            border: 1px solid #3c2f24;
-            border-radius: 6px;
-            padding: 13px;
-            color: var(--code-text);
-            font-family: var(--font-code);
-            font-size: 0.81rem;
+            background-color: transparent;
+            border: none;
+            padding: 12px 14px;
             overflow-x: auto;
-            max-width: 100%;
-            white-space: pre-wrap;
-            overflow-wrap: anywhere;
             margin: 0;
             line-height: 1.55;
-            box-shadow: inset 0 1px 4px rgba(0,0,0,0.25);
         }
 
-        /* 最终结果总结卡片 */
-        .summary-card {
-            background: #f4fbf5;
-            border: 1.5px solid #bbf7d0;
-            border-radius: 10px;
-            padding: 24px;
-            margin-top: 30px;
-            box-shadow: var(--shadow-card);
+        pre code {
+            background-color: transparent;
+            color: var(--pre-text);
+            padding: 0;
+            border-radius: 0;
+            font-size: 0.83rem;
+            font-family: "JetBrains Mono", Consolas, Menlo, Monaco, monospace;
+            display: block;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
         }
 
-        .summary-header {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: #15803d;
-            margin-bottom: 12px;
+        /* 表格样式 */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             font-size: 0.88rem;
-            margin: 14px 0 6px 0;
-            table-layout: fixed;
+            margin: 0;
         }
 
         th, td {
-            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            padding: 10px 14px;
             text-align: left;
-            border-bottom: 1px solid #dcfce7;
-            overflow-wrap: anywhere;
-            word-break: break-word;
         }
 
         th {
-            background: #eaf8ee;
-            color: #166534;
+            background-color: var(--table-header);
+            color: var(--text-primary);
             font-weight: 650;
         }
 
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1.5px solid var(--border-soft);
+        tr:nth-child(even) {
+            background-color: var(--table-alt);
+        }
+
+        .summary-card {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .summary-header {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        /* 原生 Markdown 视图 */
+        #markdown-view-container {
+            display: none;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .md-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .btn-copy-md {
+            background: var(--accent-primary);
+            color: #ffffff;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
             font-size: 0.84rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn-copy-md:hover {
+            opacity: 0.9;
+        }
+
+        .raw-md-textarea {
+            width: 100%;
+            height: 75vh;
+            font-family: "JetBrains Mono", Consolas, monospace;
+            font-size: 0.85rem;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            line-height: 1.6;
+            resize: vertical;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        footer {
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
             color: var(--text-muted);
+            font-size: 0.86rem;
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
+    <div class="layout-wrapper">
+        <!-- 左侧大纲导航栏 -->
+        <aside class="sidebar-toc" id="sidebarToc">
+            <div class="toc-card">
+                <div class="toc-header">
+                    <div class="toc-title">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="8" y1="6" x2="21" y2="6"></line>
+                            <line x1="8" y1="12" x2="21" y2="12"></line>
+                            <line x1="8" y1="18" x2="21" y2="18"></line>
+                            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                        </svg>
+                        <span>大纲导航</span>
+                    </div>
+                    <button class="toc-action-btn" onclick="toggleDesktopToc()" title="收起大纲">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
 
-    <header>
-        <div class="header-tag">问题记录与解决总结</div>
-        <h1>近期生成问题排查、解决办法与实测结果对照</h1>
-        <div class="header-meta">
-            <div class="meta-tag">记录周期：<span class="val">2026年09月28日 - 09月29日</span></div>
-            <div class="meta-tag">累计解决问题：<span class="val">14 项</span></div>
-            <div class="meta-tag">整改后质检通过率：<span class="val">100.0% (20/20 画像)</span></div>
-        </div>
-    </header>
+                <!-- 搜索框 -->
+                <div class="search-box">
+                    <span class="search-icon">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </span>
+                    <input type="text" class="search-input" id="searchInput" placeholder="搜索问题或关键词..." oninput="filterIssues()">
+                </div>
 
-    <!-- 2026年09月29日 解决的问题 -->
-    <div class="date-divider">
-        <div class="date-badge">📅 2026年09月29日</div>
-        <div class="date-line"></div>
-        <div class="date-summary-text">本日重点：时长延长会话（T2-5）首轮最小表达与客服临时参数污染治理、单轮干扰全量参数显式化与暗号彻底隔离、临时纠正最小表达标准规范、临时纠正后基线记忆恢复、口语相对日期真值对齐</div>
-    </div>
+                <!-- 栏目分类筛选 Pills -->
+                <div class="category-pills">
+                    <button class="cat-pill active" data-cat="all" onclick="selectCategory('all')">全部 (17)</button>
+                    <button class="cat-pill" data-cat="arch" onclick="selectCategory('arch')">拓扑规范 (1)</button>
+                    <button class="cat-pill" data-cat="gov" onclick="selectCategory('gov')">多样性规范 (1)</button>
+                    <button class="cat-pill" data-cat="bug" onclick="selectCategory('bug')">缺陷排查 (15)</button>
+                    <button class="cat-pill" data-cat="summary" onclick="selectCategory('summary')">实测汇总</button>
+                </div>
 
-    <!-- 问题 8 (2026-09-29 新增) -->
-    <div class="issue-card">
-        <div class="issue-header">
-            <span class="issue-badge">问题 8 (本日解决)</span>
-            <div class="issue-title">干扰会话（X-1）未建记忆却直呼暗号（如“不卡就行”）与误跌入记忆复用规则</div>
-        </div>
-        <div class="desc-block">
-            <p><span class="desc-label">【问题现象】</span>在画像 001 会话 8（<code>S-USER_001-08</code>，模板 <code>X-1</code>，角色 <code>distractor_session</code>）中，该会话为单轮混合干扰会话（一办一拒），前置并无任何证据会话沉淀过快手应用或 80ms 时延的记忆点，但用户台词却直接说出：“快手看直播，<strong>不卡就行</strong>，顺便帮我查一下手机话费账单”，客服也答复“时延按‘不卡就行’即80ms以内”。</p>
-            <p><span class="desc-label">【根因排查】</span>
-                1. <strong>时间线规划层透传漏洞</strong>：<code>DynamicTimelinePlanner</code> 在为各会话分配 <code>small_memory</code> 时无差别全量匹配，为干扰会话也分配了暗号（如 80ms 匹配到了“不卡就行”）；<br>
-                2. <strong>提示词构建分支缺失</strong>：在 <code>dialogue_generator.py</code> 构建 Prompt 时，判断逻辑涵盖了 <code>T1-2</code>、<code>evidence_session</code>、<code>T2-5</code>、<code>T2-3</code>，唯独缺少了 <code>X-1</code> 分支，导致 <code>X-1</code> 误跌入了 <code>else:</code>（常规复用/强化会话分支），明确指示大模型：“大记忆点已生效……指定小记忆点='不卡就行'，Agent从记忆中补全”。
-            </p>
-            <p><span class="desc-label">【解决办法】</span>
-                1. <code>timeline_planner.py</code> 中判断若为 <code>distractor</code> 类型会话，强制 <code>small_memory = {}</code>；<br>
-                2. <code>dialogue_generator.py</code> 中新增 <code>elif tid == "X-1"</code> 专用分支，明确指示：混合诉求单轮干扰无先验记忆，首次提出需求，严禁使用任何未建立的暗号或老规矩；Agent 办理保障并礼貌拒绝域外诉求；<br>
-                3. 对已生成的 20 个画像中全部 X-1 干扰会话进行 LLM 重新润色并清洗，全量通过质检。
-            </p>
-        </div>
-        <div class="contrast-grid">
-            <div class="contrast-box bad">
-                <div class="contrast-title">出现问题时的错误表现（以 S-USER_001-08 为例）</div>
-                <pre>// 会话：S-USER_001-08 (模板: X-1, 角色: distractor_session)
-"session_meta": {
-  "template_id": "X-1",
-  "small_memory": { "type": "rtt_alias", "value": "不卡就行" } // 错误分配暗号
-}
-// 用户台词：未建立暗号却直呼暗号
-User: "快手看直播，不卡就行，顺便帮我查一下手机话费账单。"
-// 客服台词：当成老暗号直接复用补全
-Agent: "收到，我先为您受理快手看直播保障，时延按‘不卡就行’即80ms以内..."</pre>
+                <!-- TOC 树状列表 -->
+                <nav class="toc-body" id="tocBody">
+                    <div class="toc-group-title">架构设计与模板拓扑</div><ul class="toc-list">
+
+        <li class="toc-item">
+            <a href="#entry-1" class="toc-link" data-target="entry-1" title="会话总长度规划机制（12~16 轮动态浮动）与 16 槽位模板分布拓扑规范详解">
+                <span class="toc-text">会话总长度规划机制（12~16 轮动态浮动）与 16...</span>
+            </a>
+        </li>
+</ul>
+<div class="toc-group-title">数据多样性与提示词规则</div><ul class="toc-list">
+
+        <li class="toc-item">
+            <a href="#entry-2" class="toc-link" data-target="entry-2" title="全流水线“多样性离散处理”与“提示词约束规则”规范解耦">
+                <span class="toc-text">全流水线“多样性离散处理”与“提示词约束规则”规范解...</span>
+            </a>
+        </li>
+</ul>
+<div class="toc-group-title">核心缺陷排查 (2026-09-28)</div><ul class="toc-list">
+
+        <li class="toc-item">
+            <a href="#entry-3" class="toc-link" data-target="entry-3" title="后台规则长句直接拼接进台词（006 号样本等生硬台词治理）">
+                <span class="toc-text">后台规则长句直接拼接进台词（006 号样本等生硬台词...</span>
+            </a>
+        </li>
+
+        <li class="toc-item">
+            <a href="#entry-4" class="toc-link" data-target="entry-4" title="候选记忆未确认即标记为生效（provisional 提前标记 memory_filled）">
+                <span class="toc-text">候选记忆未确认即标记为生效（provisional ...</span>
+            </a>
+        </li>
+
+        <li class="toc-item">
+            <a href="#entry-5" class="toc-link" data-target="entry-5" title="对话时间标注向首轮提前写入（时序跨轮早泄）">
+                <span class="toc-text">对话时间标注向首轮提前写入（时序跨轮早泄）</span>
+            </a>
+        </li>
+
+        <li class="toc-item">
+            <a href="#entry-6" class="toc-link" data-target="entry-6" title="域外拒绝会话中动作标签与台词语义矛盾">
+                <span class="toc-text">域外拒绝会话中动作标签与台词语义矛盾</span>
+            </a>
+        </li>
+
+        <li class="toc-item">
+            <a href="#entry-7" class="toc-link" data-target="entry-7" title="口语代称无来源凭空出现">
+                <span class="toc-text">口语代称无来源凭空出现</span>
+            </a>
+        </li>
+
+        <li class="toc-item">
+            <a href="#entry-8" class="toc-link" data-target="entry-8" title="复用已知参数时机械复读与口语词汇失真">
+                <span class="toc-text">复用已知参数时机械复读与口语词汇失真</span>
+            </a>
+        </li>
+
+        <li class="toc-item">
+            <a href="#entry-9" class="toc-link" data-target="entry-9" title="模板编号与实际交互轮数/意图数错配">
+                <span class="toc-text">模板编号与实际交互轮数/意图数错配</span>
+            </a>
+        </li>
+</ul>
+<div class="toc-group-title">核心缺陷排查 (2026-09-29)</div><ul class="toc-list">
+
+        <li class="toc-item">
+            <a href="#entry-10" class="toc-link" data-target="entry-10" title="干扰会话（X-1）未建记忆却直呼个性化表达（如“不卡就行”）与误跌入记忆复用规则">
+                <span class="toc-text">干扰会话（X-1）未建记忆却直呼个性化表达（如“不卡...</span>
+            </a>
+        </li>
+
+        <li class="toc-item">
+            <a href="#entry-11" class="toc-link" data-target="entry-11" title="临时特殊事件纠正（event_override）误持久化，次日复用（event_reuse）未恢复基线记忆">
+                <span class="toc-text">临时特殊事件纠正（event_override）误持...</span>
+            </a>
+        </li>
+
+        <li class="toc-item">
+            <a href="#entry-12" class="toc-link" data-target="entry-12" title="口语相对日期（“明天”/“后天”）与真值当天时间戳错配">
+                <span class="toc-text">口语相对日期（“明天”/“后天”）与真值当天时间戳错...</span>
+            </a>
+        </li>
+
+        <li class="toc-item">
+            <a href="#entry-13" class="toc-link" data-target="entry-13" title="临时纠正会话（T2-3）首轮违背“场景+应用+业务”最小表达标准与次轮现场原因缺失">
+                <span class="toc-text">临时纠正会话（T2-3）首轮违背“场景+应用+业务”...</span>
+            </a>
+        </li>
+
+        <li class="toc-item">
+            <a href="#entry-14" class="toc-link" data-target="entry-14" title="单轮干扰会话（T1-1）未隔离个性化表达且参数不全，导致客服出现脑补反问">
+                <span class="toc-text">单轮干扰会话（T1-1）未隔离个性化表达且参数不全，...</span>
+            </a>
+        </li>
+
+        <li class="toc-item">
+            <a href="#entry-15" class="toc-link" data-target="entry-15" title="时长延长会话（T2-5 / S06）首轮跌破最小表达标准（仅带个性化表达无应用与业务）">
+                <span class="toc-text">时长延长会话（T2-5 / S06）首轮跌破最小表达...</span>
+            </a>
+        </li>
+
+        <li class="toc-item">
+            <a href="#entry-16" class="toc-link" data-target="entry-16" title="时长延长会话（T2-5）第1轮客服提前泄露次轮修改后时长（临时参数污染）与生造个性化表达治理">
+                <span class="toc-text">时长延长会话（T2-5）第1轮客服提前泄露次轮修改后...</span>
+            </a>
+        </li>
+</ul>
+<div class="toc-group-title">核心缺陷排查 (2026-10-10)</div><ul class="toc-list">
+
+        <li class="toc-item">
+            <a href="#entry-17" class="toc-link" data-target="entry-17" title="slot_updates 与 turn_intent 不一致及 duration 持续时长槽位遗漏修复">
+                <span class="toc-text">slot_updates 与 turn_intent...</span>
+            </a>
+        </li>
+</ul>
+
+        <div class="toc-group-title">实测验证与数据对比</div>
+        <ul class="toc-list">
+            <li class="toc-item">
+                <a href="#summary-section" class="toc-link" data-target="summary-section">
+                    <span class="toc-text">100画像全量质检对照表</span>
+                </a>
+            </li>
+        </ul>
+    
+                </nav>
             </div>
-            <div class="contrast-box good">
-                <div class="contrast-title">解决后的规范表现（修复后实测）</div>
-                <pre>// 会话：S-USER_001-08 (模板: X-1, 角色: distractor_session)
-"session_meta": {
-  "template_id": "X-1" // small_memory 为空，无记忆注入
-}
-// 用户台词：首次提出业务与域外需求，自然规范不带暗号
-User: "你好，我想办个网络保障，快手看直播，画质720p，时延要控制在80ms以内，时间是今天12点30到13点30，一共60分钟。另外顺便帮我把手机话费充一下，再查下账单。"
-// 客服台词：正常受理域内业务，明确礼貌拒绝域外诉求
-Agent: "您好，我先为您受理网络保障需求：快手看直播，画质720p，时延上限80ms以内，保障时段为12点30分至13点30分，共60分钟。关于手机话费充值和账单查询，这两项不在我的服务范围内，无法为您办理，建议您通过运营商官方渠道或官方App进行充值及账单查询。网络保障需求我这边继续为您处理。"</pre>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <div class="top-bar">
+                <div class="nav-links">
+                    <button class="nav-btn" id="expandTocBtn" onclick="toggleDesktopToc()" style="display: none;" title="展开大纲">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                        <span>显示大纲</span>
+                    </button>
+                    <button class="nav-btn active" id="btnCardView" onclick="switchView('card')">分栏卡片</button>
+                    <button class="nav-btn" id="btnMdView" onclick="switchView('markdown')">Markdown 源码</button>
+                    <span style="color: var(--border-color)">|</span>
+                    <span style="font-size: 0.85rem; color: var(--text-muted);">docs/update.md</span>
+                </div>
+                
+                <button class="theme-switch-btn" onclick="toggleTheme()" id="themeBtn">
+                    切换暮色
+                </button>
             </div>
-        </div>
-    </div>
 
-    <!-- 问题 9 (2026-09-29 新增) -->
-    <div class="issue-card">
-        <div class="issue-header">
-            <span class="issue-badge">问题 9 (本日解决)</span>
-            <div class="issue-title">临时特殊事件纠正（event_override）误持久化，次日复用（event_reuse）未恢复基线记忆</div>
-        </div>
-        <div class="desc-block">
-            <p><span class="desc-label">【问题现象】</span>在会话 S09 中，用户因现场特殊情况，主动临时将直播画质调整为 <code>720p</code>、时延压缩至 <code>30ms</code>。然而在次日的复用会话 S10（<code>event_reuse</code>）中，系统未恢复该用户长期基线偏好（<code>1080p, 50ms</code>），而是将昨天的临时改动视为新长期规则（<code>MF_001_v2</code>）持续套用，违背了“单次/临时纠正次日失效并回归老规矩”的常识设定。</p>
-            <p><span class="desc-label">【根因排查】</span>
-                1. <strong>记忆追踪状态机逻辑</strong>：原 <code>MemoryTracker</code> 在处理 <code>event_override</code> 时，直接生成了版本分支 <code>MF_001_v2</code> 并覆盖了活跃记忆状态，并在 <code>event_reuse</code> 时继续强化 <code>MF_001_v2</code>；<br>
-                2. <strong>组装与时间线规划联动</strong>：<code>session_assembler.py</code> 和 <code>timeline_planner.py</code> 在 <code>event_reuse</code> 阶段继续提取了 <code>override</code> 里的临时 QoS 属性，导致 Ground Truth 与生成的自然对话文本均固定为了 720p/30ms。
-            </p>
-            <p><span class="desc-label">【解决办法】</span>
-                1. <strong>采纳方案 A 明确生命周期</strong>：<code>event_override</code> 严格定义为单次当天临时调整（<code>temporary_correction</code>），不破坏全局长期记忆 <code>MF_001</code>，不产生衍生版本；<br>
-                2. <strong>次日复用自动回归老规矩</strong>：<code>event_reuse</code> 会话（及后续会话）强制恢复按 <code>MF_001</code> 原始基线（<code>1080p, 50ms</code>）提取与确认，动作标识调整为 <code>reuse_long_term_rule_after_correction</code>；<br>
-                3. <strong>全量数据同步与质检</strong>：全量 20 个画像的 <code>sessions.json</code>、<code>sessions.jsonl</code>、<code>memory_traces.json</code> 及 <code>qc_report.json</code> 同步更新，100% 通过质检。
-            </p>
-        </div>
-        <div class="contrast-grid">
-            <div class="contrast-box bad">
-                <div class="contrast-title">出现问题时的表现（以 S-USER_001-10 为例）</div>
-                <pre>// 会话：S-USER_001-10 (模板: T2-1, 角色: reuse_session)
-// 槽位来源错误溯源至临时分支，QoS 沿用临时参数
-"intents": [{
-  "params": {
-    "resolution": { "value": "720p", "source_ref": "MF_001_v2" },
-    "rtt": { "value": "30ms", "source_ref": "MF_001_v2" }
-  }
-}]
-// 客服台词：继续使用昨天的临时降级参数
-Agent: "收到，已按老规矩提取：快手直播保障（720p，时延30ms内），请确认是否立即开通？"</pre>
+            <!-- 卡片视图容器 -->
+            <div id="card-view-container">
+                <!-- 文档主头部 -->
+                <header class="doc-header">
+                    <span class="header-tag">跨会话记忆数据集研发体系</span>
+                    <h1 class="doc-title">生成问题排查、架构拓扑与多样性规范手册</h1>
+                    <p class="doc-lead">系统归档 001~100 号画像跨会话长程记忆数据集在流水线生成、质量检验、生命周期因果演进与业务对齐过程中的问题排查、解决方案与技术规范。</p>
+                    
+                    <div class="header-meta-grid">
+                        <div class="meta-stat-card">
+                            <div class="meta-stat-label">记录周期</div>
+                            <div class="meta-stat-val">09.28 - 10.10</div>
+                        </div>
+                        <div class="meta-stat-card">
+                            <div class="meta-stat-label">排查与规范总项</div>
+                            <div class="meta-stat-val">17 项</div>
+                        </div>
+                        <div class="meta-stat-card">
+                            <div class="meta-stat-label">覆盖画像样本</div>
+                            <div class="meta-stat-val">100 个画像</div>
+                        </div>
+                        <div class="meta-stat-card">
+                            <div class="meta-stat-label">累计会话总数</div>
+                            <div class="meta-stat-val">1410 个会话</div>
+                        </div>
+                        <div class="meta-stat-card">
+                            <div class="meta-stat-label">全量质检通过率</div>
+                            <div class="meta-stat-val" style="color: var(--contrast-good-text);">100.0% 一次通过</div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- 架构设计与模板拓扑规范 -->
+                <section class="column-section" data-cat="arch">
+                    <div class="column-section-header">
+                        <h2>架构设计与模板拓扑规范</h2>
+                        <span class="column-section-desc">解析 12~16 轮动态规划、16 槽位模板全景因果拓扑（Causal DAG）与安全裁剪机制</span>
+                    </div>
+                    
+        <article class="issue-card" id="entry-1" data-cat="arch">
+            <div class="issue-header">
+                <div class="issue-title-group">
+                    <h2>会话总长度规划机制（12~16 轮动态浮动）与 16 槽位模板分布拓扑规范详解</h2>
+                </div>
+                <div class="issue-tag-group">
+                    <span class="issue-cat-badge badge-arch">架构拓扑</span>
+                    <span class="issue-date-tag">2026-10-10 架构解析</span>
+                </div>
             </div>
-            <div class="contrast-box good">
-                <div class="contrast-title">解决后的规范表现（修复后实测）</div>
-                <pre>// 会话：S-USER_001-10 (模板: T2-1, 角色: reuse_session)
-// 槽位来源正确溯源至原长期基线 MF_001
-"intents": [{
-  "params": {
-    "resolution": { "value": "1080p", "source_ref": "MF_001" },
-    "rtt": { "value": "50ms", "source_ref": "MF_001" }
-  }
-}]
-// 客服台词：自动回归原长期基线配置（老规矩）
-Agent: "收到，我调取到之前登记的快手开直播配置：1080p、时延50ms以内，12时30分开始、13时30分结束，持续60min。确认按这套配置开通吗？"</pre>
+            
+            <div class="desc-block">
+                <div class="section-sublabel">背景与问题</div>
+<p>在审查生成的样本数据时发现，各画像的会话总长度均在 14 轮左右浮动（集中在 12~16 轮之间）。需要透彻明确：会话数量是如何确定的？是否存在写死的流程？模版在时间轴上的分布规律（拓扑结构）背后的因果逻辑是什么？</p>
+<div class="section-sublabel">原理与机制</div>
+<div class="bullet-item"><span class="bullet-prefix">1.</span><div class="bullet-content"><strong>会话总长度动态规划公式</strong>：在 <code>src/core/timeline_planner.py</code> 中，采用公式 <code>target_count = 12 + (uid_num % 5)</code>。由于 <code>uid_num % 5</code> 在 0~4 均匀分布，目标轮数均匀离散为 <code>12, 13, 14, 15, 16</code> 轮，<strong>算术均值恰好为 14 轮</strong>，避免固定单一的会话轮数；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">2.</span><div class="bullet-content"><strong>16 候选槽位全景拓扑（Causal DAG）</strong>：系统在 <code>src/templates/timeline_blueprints.py</code> 中定义了严格满足长程记忆因果律的 16 槽位候选矩阵，覆盖四大演进阶段：</div></div>
+<div class="bullet-item"><span class="bullet-prefix">•</span><div class="bullet-content"><strong>阶段一（记忆建立与歧义消解）</strong>：S1 主线首次建联 (T2-1) → S2 支线1弱网别名消歧 (T2-2/T3-1)；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">•</span><div class="bullet-content"><strong>阶段二（多线交织与记忆固化）</strong>：S3 主线首次强化 (T2-1) → S4 支线2建联 → S5 域外干扰拒识 (T1-2) → S6 支线1复用强化；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">•</span><div class="bullet-content"><strong>阶段三（记忆复用与时长变更）</strong>：S7 主线复用并延长时间 (T2-5) → S8 主线常规强化 → S9 支线2强化 → S10 混合诉求一办一拒 (X-1)；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">•</span><div class="bullet-content"><strong>阶段四（突发事件纠偏与恢复闭环）</strong>：S11 恶劣天气临时纠错 (T2-3) → S12 纠偏中主线复用 → S13 支线1复用（隔离验证：确保不被主线纠偏污染） → S14 单轮干扰 (T1-1) → S15 事件失效主线基线恢复 (T2-1) → S16 终态持续复用；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">3.</span><div class="bullet-content"><strong>因果闭环安全裁剪机制</strong>：当 <code>target_count</code> 小于 16 时，系统优先安全剥离非核心节点（如 <code>extra_reuse</code> S16、<code>dist_normal</code> S14、<code>sub2</code> S4/S9），<strong>核心闭环 8 大节点（S1, S2, S3, S5, S7, S10, S11, S15）全部保留</strong>，保证因果逻辑链条完整闭环。</div></div>
             </div>
-        </div>
-    </div>
-
-    <!-- 问题 10 (2026-09-29 新增) -->
-    <div class="issue-card">
-        <div class="issue-header">
-            <span class="issue-badge">问题 10 (本日解决)</span>
-            <div class="issue-title">口语相对日期（“明天”/“后天”）与真值当天时间戳错配</div>
-        </div>
-        <div class="desc-block">
-            <p><span class="desc-label">【问题现象】</span>在会话 S12（如 <code>S-USER_001-12</code>）中，用户口语台词明确提到“<strong>明天</strong>上午10点开始”，但在结构化 Ground Truth 标注中，基准时间 <code>reference_time</code> 为 <code>2026年10月21日10时00分</code>，开通的 <code>start_timestamp</code> 却同样是 <code>2026年10月21日10时00分</code>（未加 1 天），出现了台词表达“明天”但标注落在“今天”的时间矛盾。</p>
-            <p><span class="desc-label">根因排查与解决办法</span>：
-                1. <strong>台词生成端归一化拦截</strong>：在 <code>dialogue_generator.py</code> 的规范化处理中，校验 <code>ref_day == start_day</code> 场景。当判定为同日即时/预约保障时，自动纠正替换用户与客服台词中的“明天/后天”为“今天”；<br>
-                2. <strong>自动化质检约束</strong>：在 <code>qc_validator.py</code> 中追加同日时间表达检查，凡 <code>ref_day == start_day</code> 且台词含有跨日词汇时，直接告警拦截；<br>
-                3. <strong>全量清洗</strong>：将 20 个画像中受影响的口语台词统一清洗为“今天上午10点开始”，彻底消除自然语言与时间真值的不一致。
-            </p>
-        </div>
-        <div class="contrast-grid">
-            <div class="contrast-box bad">
-                <div class="contrast-title">出现问题时的表现（以 S-USER_001-12 为例）</div>
-                <pre>// 会话：S-USER_001-12 (reference_time: 2026年10月21日10时00分)
-// 用户台词口语表达包含“明天”
-User: "钉钉会议，清晰点就行，明天上午10点开始，开半小时。"
-// 真值 start_timestamp 却为当天，未加一天：
-"start_timestamp": "2026年10月21日10时00分"  // 矛盾！</pre>
+            
+            <div class="contrast-grid">
+                <div class="contrast-box bad">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-bad">修复前</span> 缺陷表现</div>
+                        <span class="code-lang-tag">TEXT</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复前</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>传统做法（固定长度与随机时序）
+// 传统固定长度与随机时序的致命缺陷：
+1. 固定 15 轮机械死板，缺乏真实用户跨度差异；
+2. 随机打乱模板导致“因果倒置”：在 S1 之前就复用记忆（无源之水）；
+3. 临时纠偏未设置“失效期后基线恢复”节点，无法检验记忆状态机闭环；
+4. 缺乏多故事线穿插隔离验证，容易导致主线临时纠错污染支线业务。</code></pre>
+                    </div>
+                </div>
+                
+                <div class="contrast-box good">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-good">修复后</span> 规范表现</div>
+                        <span class="code-lang-tag">TEXT</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复后</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>现行 16 槽位拓扑因果设计
+// 16 候选槽位安全裁剪与多故事线交替穿插拓扑：
+1. 长度浮动：target_count = 12 + (uid_num % 5)，支持 12~16 轮动态浮动；
+2. 因果严密：建联(Evidence) &amp;rarr; 固化(Reinf) &amp;rarr; 复用(Reuse) 拓扑单调不可逆；
+3. 多线隔离：主线与支线在时间轴上交错穿插（S1主-S2支-S3主-S5扰-S6支-S7主...）；
+4. 状态机闭环：S11(暴雨纠错) &amp;rarr; S12(纠错生效) &amp;rarr; S13(支线隔离验证) &amp;rarr; S15(事件到期自动恢复 1080p 基线)。</code></pre>
+                    </div>
+                </div>
             </div>
-            <div class="contrast-box good">
-                <div class="contrast-title">解决后的规范表现（修复后实测）</div>
-                <pre>// 会话：S-USER_001-12 (reference_time: 2026年10月21日10时00分)
-// 用户台词口语表达与当天基准时间严格对齐
-User: "钉钉会议，清晰点就行，今天上午10点开始，开半小时。"
-// 真值 start_timestamp 同步对齐当天：
-"start_timestamp": "2026年10月21日10时00分"  // 严格吻合！</pre>
+        </article>
+                </section>
+
+                <!-- 数据多样性机制与提示词规则 -->
+                <section class="column-section" data-cat="gov">
+                    <div class="column-section-header">
+                        <h2>数据多样性机制与提示词规则</h2>
+                        <span class="column-section-desc">双层解耦：基于数学取模/哈希的多样性发散机制 与 提示词/代码约束规则对照</span>
+                    </div>
+                    
+        <article class="issue-card" id="entry-2" data-cat="gov">
+            <div class="issue-header">
+                <div class="issue-title-group">
+                    <h2>全流水线“多样性离散处理”与“提示词约束规则”规范解耦</h2>
+                </div>
+                <div class="issue-tag-group">
+                    <span class="issue-cat-badge badge-gov">多样性规范</span>
+                    <span class="issue-date-tag">2026-10-10 架构解析</span>
+                </div>
             </div>
-        </div>
-    </div>
-
-    <!-- 问题 11 (2026-09-29 新增) -->
-    <div class="issue-card">
-        <div class="issue-header">
-            <span class="issue-badge">问题 11 (本日解决)</span>
-            <div class="issue-title">临时纠正会话（T2-3）首轮违背“场景+应用+业务”最小表达标准与次轮现场原因缺失</div>
-        </div>
-        <div class="desc-block">
-            <p><span class="desc-label">【问题现象】</span>在会话 S09（如 <code>S-USER_001-09</code>，模板 <code>T2-3</code>，角色 <code>event_override</code>）中，第 1 轮用户台词原先仅说“老规矩，每天这个时候开通保障。”，既未交代触发场景（早高峰通勤现场），也未指明应用（抖音）与业务（开直播），严重违背了“应用＋业务是发起保障意图的最小表达”原则；且第 2 轮直接粗暴抛出新参数，未说明现场为何临时调整。</p>
-            <p><span class="desc-label">【根因排查】</span>
-                1. <strong>最小表达标准理解偏差</strong>：时段暗号（“每天这个时候”）属于槽位代称，只能填充时间槽，不能替代意图发起的最小表达（应用+业务）；<br>
-                2. <strong>保底与提示词设计粗疏</strong>：原 <code>dialogue_prompts.py</code> 与 <code>dialogue_fallbacks.py</code> 对 T2-3 第 1 轮保底模板缺少场景和应用业务槽位拼接，导致台词只有暗号；第 2 轮缺少“现场特殊情况”的口语转折说明。
-            </p>
-            <p><span class="desc-label">【解决办法】</span>
-                1. <strong>重构 T2-3 提示词与保底规则</strong>：第 1 轮强制注入：<code>今天在{env}，老规矩，用{app}做{srv}，帮我把保障开上。</code> 确保严格包含“场景＋应用＋业务＋习惯暗号”最小表达；第 2 轮强制注入现场突发背景转折：<code>对，不过今天现场特殊，画质临时调到{res}，时延压到{rtt}以内，今天临时按这个来。</code><br>
-                2. <strong>质检强规则拦截</strong>：在 <code>qc_validator.py</code> 中追加 <code>event_override_spec_check</code>，对全量 T2-3 会话强制校验首轮场景/应用/业务最小表达，次轮校验现场特殊原因；<br>
-                3. <strong>全量 20 个画像统一清洗与验证</strong>：对全部画像重新归一化生成并质检，100% 通过。
-            </p>
-        </div>
-        <div class="contrast-grid">
-            <div class="contrast-box bad">
-                <div class="contrast-title">出现问题时的表现（S-USER_001-09）</div>
-                <pre>// 会话：S-USER_001-09 (模板: T2-3, 临时纠正)
-Turn 1:
-User: "老规矩，每天这个时候开通保障。"
-Agent: "收到，按抖音直播配置（1080p，50ms）为您确认..."
-Turn 2:
-User: "画质调到720p，时延30ms。"
-Agent: "好的，为您调整为720p/30ms。"
-
-// 缺陷 1：首轮无场景、无应用、无业务，严重违背最小表达标准
-// 缺陷 2：次轮无现场特殊情况说明，生硬突兀</pre>
+            
+            <div class="desc-block">
+                <div class="section-sublabel">背景与问题</div>
+<p>整个数据生成流水线中，哪些维度做了随机/多样性处理以保证百人百面？哪些逻辑是在 Prompt 或代码中严格写死的？二者的边界与设计原则是什么？</p>
+<div class="section-sublabel">原理与机制</div>
+<p>                为同时保证“评测金标准确无幻觉、因果可复现”与“自然语言多样性、情境丰富”，流水线采用了<strong>双层解耦架构</strong>：</p>
+<p><strong>多样性处理层（通过取模/哈希与LLM生成，保障分布均衡与情境丰富）</strong>：</p>
+<div class="bullet-item"><span class="bullet-prefix">1.</span><div class="bullet-content"><strong>声明模式 50/50 划分</strong>：<code>uid_num % 2 == 1</code>，奇数显式声明，偶数隐式归纳；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">2.</span><div class="bullet-content"><strong>触发类型 1:1:1 轮转</strong>：<code>uid_num % 3</code>，周期时间驱动 / 现场任务驱动 / 物理地点驱动均衡分布；时间驱动下再下钻为 daily(3个时段)、weekly(8类周组合)、monthly(月度节点)；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">3.</span><div class="bullet-content"><strong>小记忆点 6 维哈希抽样</strong>：利用 <code>hashlib.sha256(uid:type)</code>，从应用昵称、业务默认应用、画质别名、时延别名、时长别名、个性化周期表达 6 大维度中动态选择，保证每个人物的小记忆类型各不相同；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">4.</span><div class="bullet-content"><strong>会话总轮数浮动</strong>：<code>12 + (uid_num % 5)</code> 产生 12~16 轮动态浮动；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">5.</span><div class="bullet-content"><strong>现场地点提炼与台词发散</strong>：LLM 动态提取 3~7 字自然地点名词（如“沿海巡逻岸线”），并根据各角色 <code>speech_style</code> 发散多轮口语化台词。</div></div>
+<p><strong>二、提示词约束规则（严格约束，确保合规与基准严谨）</strong>：</p>
+<div class="bullet-item"><span class="bullet-prefix">1.</span><div class="bullet-content"><strong>业务与 App 白名单写死</strong>：仅限 7 项标准通信业务（开直播、看直播、视频通话等），严禁大模型捏造不支持的业务；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">2.</span><div class="bullet-content"><strong>参数别名对齐律写死</strong>：1080p 只能叫“1080p原画/超清”，严禁夸大为“顶格画质”；50ms 严禁夸大为“零卡顿”；整条时间线必须全局一致，严禁同一主线在不同会话中跳变称谓；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">3.</span><div class="bullet-content"><strong>去系统术语写死</strong>：严禁台词中出现“长期偏好”、“元指令”、“触发槽位”等程序员词汇，强制使用“记住这个习惯哈”等真实口语；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">4.</span><div class="bullet-content"><strong>冷启动与最小表达律写死</strong>：S1 首次建联严禁提生僻别名或未生效的个性化表达；复用会话严禁只说“老规矩开保障”，必须说出应用+业务并省略已知参数。</div></div>
             </div>
-            <div class="contrast-box good">
-                <div class="contrast-title">解决后的规范表现（修复后实测）</div>
-                <pre>// 会话：S-USER_001-09 (模板: T2-3, 临时纠正)
-Turn 1:
-User: "今天在早高峰通勤现场，老规矩，用抖音做开直播，帮我把保障开上。"
-Agent: "收到，我调取到之前登记的抖音开直播配置：画质1080p、时延50ms以内，12时30分至13时30分（持续60min），确认按这套配置开通吗？"
-Turn 2:
-User: "对，不过今天现场特殊，画质临时调到720p，时延压到30ms以内，今天临时按这个来。"
-Agent: "好的，已按现场特殊情况为您临时调整开通抖音开直播保障：画质720p、时延上限30ms，时段12时30分至13时30分。祝您现场顺利！"
-
-// 规范：首轮四要素齐全，次轮因果关系清晰，符合真人工作现场表达</pre>
+            
+            <div class="contrast-grid">
+                <div class="contrast-box bad">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-bad">修复前</span> 缺陷表现</div>
+                        <span class="code-lang-tag">TEXT</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复前</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>无规范约束时的潜在隐患
+// 缺乏 提示词强约束与白名单时：
+1. LLM 自由发挥捏造“帮忙充话费”、“调试交换机”等域外业务；
+2. 出现“零卡顿”、“秒开”、“极致顶格清晰度”等物理失真词汇；
+3. 用户台词出现“系统请记录我的元指令长期偏好”等浓重 AI 味；
+4. 用户首轮就直呼“老规矩”，导致冷启动阶段记忆无源产生幻觉。</code></pre>
+                    </div>
+                </div>
+                
+                <div class="contrast-box good">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-good">修复后</span> 规范表现</div>
+                        <span class="code-lang-tag">TEXT</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复后</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>双层解耦后的规范化收益
+// 多样性处理 + 提示词强约束双层保障：
+1. 结构层面：显式/隐式、周期粒度、小记忆类型均严格均衡离散分布；
+2. 质量层面：业务全在 7 大白名单内，别名与数值档位 100% 精确映射；
+3. 语言层面：口语表达极其生活化，彻底杜绝系统研发行话；
+4. 评测层面：Ground Truth 具有严密的因果逻辑，全量 100 画像质检 100% 通过。</code></pre>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        </article>
+                </section>
 
-    <!-- 问题 12 (2026-09-29 新增) -->
-    <div class="issue-card">
-        <div class="issue-header">
-            <span class="issue-badge">问题 12 (本日解决)</span>
-            <div class="issue-title">单轮干扰会话（T1-1）未隔离记忆暗号且参数不全，导致客服出现脑补反问</div>
-        </div>
-        <div class="desc-block">
-            <p><span class="desc-label">【问题现象】</span>在会话 S12（如 <code>S-USER_001-12</code>，模板 <code>T1-1</code>，角色 <code>distractor_session</code>）中，该会话为全新应用（钉钉会议）的单轮独立干扰保障，前置没有任何相关记忆。但用户台词却包含“清晰点就行”等模糊暗号，客服台词甚至回复“按记忆理解为720p”，将本应完全自包含、即用即走的干扰会话误当成了记忆调取会话。</p>
-            <p><span class="desc-label">【根因排查】</span>
-                1. <strong>骨架暗号泄露</strong>：<code>timeline_planner.py</code> 在为 T1-1 生成骨架时，仍带入了画像骨架中的 <code>aliases</code>（如 720p 对应“清晰点就行”）；<br>
-                2. <strong>单轮自包含属性未落实</strong>：干扰会话要求在单轮内一次性交代齐全部参数（应用、业务、时段、画质、时延），但大模型生成时容易遗漏参数，导致客服被迫猜测或调取记忆。
-            </p>
-            <p><span class="desc-label">【解决办法】</span>
-                1. <strong>规划层彻底清空 aliases</strong>：在 <code>timeline_planner.py</code> 中判断若为 <code>distractor</code> 会话，不仅清空 <code>small_memory</code>，更强制 <code>aliases = {}</code>；<br>
-                2. <strong>提示词与保底模板全参数显式化</strong>：约束 T1-1 严禁任何暗号词汇，必须一次性说清全部 6 大要素（应用、业务、起始时间、结束时间/时长、明确分辨率、明确时延上限）；客服直接一次性受理，绝不出现“按记忆理解”；<br>
-                3. <strong>质检增加 Rule 9 强校验</strong>：<code>qc_validator.py</code> 中加入 <code>distractor_spec_check</code>，严格扫描 T1-1 中不得存在记忆暗号，且客服台词严禁含有“按记忆理解”字样。
-            </p>
-        </div>
-        <div class="contrast-grid">
-            <div class="contrast-box bad">
-                <div class="contrast-title">出现问题时的表现（S-USER_001-12）</div>
-                <pre>// 会话：S-USER_001-12 (模板: T1-1, 单轮干扰)
-Turn 1:
-User: "钉钉会议，清晰点就行，今天上午10点开始，开半小时。"
-Agent: "好的，为您开通钉钉会议保障，按记忆理解为画质720p，时延80ms以内..."
-
-// 缺陷 1：前置从未用过钉钉，用户却使用“清晰点就行”暗号
-// 缺陷 2：客服无依据脑补“按记忆理解为720p”，破坏单轮干扰的独立性</pre>
+                <!-- 核心缺陷排查与数据治理实录 -->
+                <section class="column-section" data-cat="bug">
+                    <div class="column-section-header">
+                        <h2>核心缺陷排查与数据治理实录</h2>
+                        <span class="column-section-desc">收录 15 项真实数据缺陷、根因推演、代码级修复方案与实测对比</span>
+                    </div>
+                    
+        <article class="issue-card" id="entry-3" data-cat="bug">
+            <div class="issue-header">
+                <div class="issue-title-group">
+                    <h2>后台规则长句直接拼接进台词（006 号样本等生硬台词治理）</h2>
+                </div>
+                <div class="issue-tag-group">
+                    <span class="issue-cat-badge badge-bug">缺陷修复</span>
+                    <span class="issue-date-tag">2026-09-28 修复</span>
+                </div>
             </div>
-            <div class="contrast-box good">
-                <div class="contrast-title">解决后的规范表现（修复后实测）</div>
-                <pre>// 会话：S-USER_001-12 (模板: T1-1, 单轮干扰)
-Turn 1:
-User: "你好，今天10时00分到10时30分要在钉钉开会议（开30min），画质要720p，时延控制在80ms以内，帮我开个保障。"
-Agent: "收到，已为您开通钉钉会议网络保障：画质720p，时延上限80ms，保障时间2026年10月21日10时00分至2026年10月21日10时30分（共30min）。祝您使用顺利！"
-
-// 规范：全量参数一次性交代明确，零暗号零脑补，客服直接受理闭环</pre>
+            
+            <div class="desc-block">
+                <div class="section-sublabel">问题现象</div>
+<p>在 006、003、009 等地点驱动型画像中，用户台词中直接塞入了后台规划的条件规则长句（如“当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。”），拼出诸如“今天又到[长句]办事了，这次按上次的来”的极度生硬、违背日常口语的句子。</p>
+<div class="section-sublabel">根因排查</div>
+<p>画像骨架中的 <code>trigger_condition</code> 是一整段业务规划描述，时间线规划器将其直接透传为了场景地点 <code>scenario_env</code>，而保底模板直接对其进行了机械字符串拼接。</p>
+<div class="section-sublabel">解决办法</div>
+<div class="bullet-item"><span class="bullet-prefix">1.</span><div class="bullet-content"><strong>LLM 语义提炼为主</strong>：针对多样化未知的职业背景，调用大模型从任务名与场景长句中提炼出 1 个 3~7 字纯名词短语（如“道路巡逻现场”、“社区走访现场”），严禁生成包含从句的非地名文本；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">2.</span><div class="bullet-content"><strong>规则安全兜底</strong>：若 LLM 响应异常或无网络，自动走正则与关键词兜底，确保流水线不中断；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">3.</span><div class="bullet-content"><strong>模板重构与台词拦截</strong>：保底模板重构为“今天在{env}，这次按上次的来”，彻底移除“办事了”等生硬词汇；并在后处理中增加对后台规则词的过滤拦截；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">4.</span><div class="bullet-content"><strong>全量数据清洗</strong>：对当前生成的 20 个画像中受影响的 51 处场景与 147 处台词进行了全面清洗修复。</div></div>
             </div>
-        </div>
-    </div>
+            
+            <div class="contrast-grid">
+                <div class="contrast-box bad">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-bad">修复前</span> 缺陷表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复前</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 会话：S-USER_006-03（Turn 1）
+User: &quot;今天又到当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。办事了，这次按上次的来。&quot;
 
-    <!-- 问题 13 (2026-09-29 新增) -->
-    <div class="issue-card">
-        <div class="issue-header">
-            <span class="issue-badge">问题 13 (本日解决)</span>
-            <div class="issue-title">时长延长会话（T2-5 / S06）首轮跌破最小表达标准（仅带暗号无应用与业务）</div>
-        </div>
-        <div class="desc-block">
-            <p><span class="desc-label">【问题现象】</span>在会话 S06（如 <code>S-USER_001-06</code>，模板 <code>T2-5</code>，角色 <code>reuse_session</code>）中，第 1 轮用户台词原先仅说“老规矩，别卡顿开通保障。”或“老规矩，大半个下午开通保障。”，既无触发场景，也完全缺失了应用（抖音）与业务（开直播），严重违背了“应用＋业务是发起保障意图的最小表达”的系统铁律。</p>
-            <p><span class="desc-label">【根因排查】</span>
-                1. <strong>提示词构建缺陷</strong>：在 <code>dialogue_generator.py</code> 构建 Prompt 时，针对 T2-5 的规则硬编码为：<code>第1轮用户说'老规矩，{primary_alias}开通保障'</code>，导致大模型直接将时延/时长暗号（如“别卡顿”、“大半个下午”）当成完整台词，粗暴省略了应用和业务；<br>
-                2. <strong>保底与质检拦截遗漏</strong>：原 <code>_normalize_turn</code> 未对 T2-5 校验应用与业务，保底模板也未被强制触发；质检规则中缺少针对 T2-5 首轮最小表达的强行校验。
-            </p>
-            <p><span class="desc-label">【解决办法】</span>
-                1. <strong>重构 T2-5 提示词与保底规则</strong>：在 <code>dialogue_prompts.py</code>、<code>dialogue_generator.py</code> 及 <code>dialogue_fallbacks.py</code> 中重构：第 1 轮强制遵循“场景＋应用＋业务＋老规矩”最小表达（如<code>今天在{env}，老规矩，用{app}做{srv}，帮我把保障开上。</code>），严禁仅凭暗号发起；第 2 轮说明现场活动延长并给出新时长；<br>
-                2. <strong>质检增加 Rule 11 强校验</strong>：在 <code>qc_validator.py</code> 中追加 <code>T2-5</code> 首轮必须具备场景、应用、业务三要素，次轮必须包含时长延长说明；<br>
-                3. <strong>全量 20 个画像统一清洗与验证</strong>：对全量 20 个画像中全部 T2-5 会话同步清洗与标准化，100% 严格质检通过。
-            </p>
-        </div>
-        <div class="contrast-grid">
-            <div class="contrast-box bad">
-                <div class="contrast-title">出现问题时的表现（S-USER_001-06）</div>
-                <pre>// 会话：S-USER_001-06 (模板: T2-5, 时长延长)
-Turn 1:
-User: "老规矩，别卡顿开通保障。"
-Agent: "收到，您说的老规矩是指抖音开直播，画质1080p、时延50ms以内，从12:30开始保障60分钟，对吗？"
-Turn 2:
-User: "对，老规矩不变，但今天午间活动要延长，时长改成120min，按这个节奏来。"
-Agent: "好的，已按老规矩为您开通抖音开直播保障..."
+Agent: &quot;我查到您上次在这个场景使用的是微信视频通话，配置为1080p、时延50ms以内、持续120min...&quot;
 
-// 缺陷：第 1 轮仅有“别卡顿”暗号，完全无场景、无应用、无业务，违背最小表达标准</pre>
+// 缺陷：整段后台触发规则被生硬拼入台词，包含“当...进入...任务。办事了”等生硬的模板化表述</code></pre>
+                    </div>
+                </div>
+                
+                <div class="contrast-box good">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-good">修复后</span> 规范表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复后</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 会话：S-USER_006-03（Turn 1）
+User: &quot;今天在道路巡逻现场，这次按上次的来。&quot;
+
+Agent: &quot;我查到您上次在道路巡逻现场使用的是微信视频通话，配置为1080p、时延50ms以内、持续120min。本次计划09时00分至11时00分，是否按这套配置开通？如果确认，我也可以将它设为以后该场景的默认配置。&quot;
+
+// 规范：提炼出简短规范地点“道路巡逻现场”，台词地道自然，符合真实人类口语习惯</code></pre>
+                    </div>
+                </div>
             </div>
-            <div class="contrast-box good">
-                <div class="contrast-title">解决后的规范表现（修复后实测）</div>
-                <pre>// 会话：S-USER_001-06 (模板: T2-5, 时长延长)
-Turn 1:
-User: "今天在常规周期保障现场，老规矩，用抖音做开直播，帮我把保障开上。"
-Agent: "收到，我调取到之前登记的抖音开直播配置：画质1080p、时延50ms以内，从12时30分开始保障，确认按这套配置开通吗？"
-Turn 2:
-User: "对，老规矩不变，不过今天现场活动延长了，帮我把保障时长延长到120min。"
-Agent: "好的，已按老规矩为您开通抖音开直播保障：画质保持1080p、时延上限50ms，时长已延长至120min。祝您活动顺利！"
+        </article>
 
-// 规范：首轮场景+应用+业务+老规矩四要素齐全，次轮明确延长时长，完全符合最小表达标准</pre>
+        <article class="issue-card" id="entry-4" data-cat="bug">
+            <div class="issue-header">
+                <div class="issue-title-group">
+                    <h2>候选记忆未确认即标记为生效（provisional 提前标记 memory_filled）</h2>
+                </div>
+                <div class="issue-tag-group">
+                    <span class="issue-cat-badge badge-bug">缺陷修复</span>
+                    <span class="issue-date-tag">2026-09-28 修复</span>
+                </div>
             </div>
-        </div>
-    </div>
-
-    <!-- 问题 14 (2026-09-29 新增) -->
-    <div class="issue-card">
-        <div class="issue-header">
-            <span class="issue-badge">问题 14 (本日解决)</span>
-            <div class="issue-title">时长延长会话（T2-5）第1轮客服提前泄露次轮修改后时长（临时参数污染）与生造暗号治理</div>
-        </div>
-        <div class="desc-block">
-            <p><span class="desc-label">【问题现象】</span>
-                1. <strong>首轮提前泄露次轮临时参数</strong>：在画像 2、7、14、17、19 等会话 S07 中（模板 <code>T2-5</code>），用户在第 2 轮才因现场突发情况提出“活动延长，帮我把时长延长到180min”。但在第 1 轮客服调取老规矩时，居然提前反问“持续180分钟，对吗？”，导致客服在用户提出修改前就提前被次轮的临时参数所污染；<br>
-                2. <strong>残留后台规则词与生造暗号</strong>：在画像 6 的 S07 等会话中，台词出现了“触发用微信做视频通话，时延按‘别卡顿’”等后台规划残留词汇（“触发用”），以及未在先验记忆中登记过的生造别名（如在未定义“别卡顿”的画像中强行塞入该词）。
-            </p>
-            <p><span class="desc-label">【根因排查】</span>
-                1. <strong>提示词与模板透传未解耦</strong>：Prompt 在组织 T2-5 时，直接将修改后的 <code>duration</code> 传入并用于第 1 轮客服引导；后处理中只对用户台词进行了归一化，未拦截客服第 1 轮提前泄露修改后时长；<br>
-                2. <strong>大模型幻觉生造暗号</strong>：在未分配小记忆点（<code>small_memory</code> 为空）的常规复用会话中，提示词提示“若为暗号则说暗号”，导致大模型自发生成了画像记忆库中并不存在的别名。
-            </p>
-            <p><span class="desc-label">【解决办法】</span>
-                1. <strong>第 1 轮客服隔离修改后时长</strong>：在 <code>dialogue_generator.py</code> 与 <code>dialogue_fallbacks.py</code> 中重构：T2-5 第 1 轮客服调取记忆时，严禁提及次轮修改后的时长（如 180min），只确认原基线配置或保障起始时刻；在后处理中强行扫描并拦截提前泄露行为；<br>
-                2. <strong>清理后台规划词与幻觉暗号</strong>：过滤清理所有台词中的“触发用/触发”等后台规划词汇；对台词中的引号别名进行合法性校验，凡未在先验记忆快照中登记的别名一律予以清除；<br>
-                3. <strong>质检加固 Rule 11 与 Rule 12</strong>：在 <code>qc_validator.py</code> 中升级 Rule 11（严禁 T2-5 第 1 轮客服泄露修改后时长）并增加 Rule 12（台词严禁包含“触发”等后台规划词）；<br>
-                4. <strong>全量 20 个画像统一清洗与校验</strong>：全量 20 个画像数据同步重清洗，100% 通过严格质检。
-            </p>
-        </div>
-        <div class="contrast-grid">
-            <div class="contrast-box bad">
-                <div class="contrast-title">出现问题时的表现（S-USER_002-07 原始数据）</div>
-                <pre>// 会话：S-USER_002-07 (模板: T2-5, 时长延长)
-Turn 1:
-User: "今天在跨境商贸交流会，老规矩，用微信做视频通话，帮我把保障开上。"
-Agent: "收到，您说的老规矩是指微信视频通话...持续180分钟，对吗？"
-Turn 2:
-User: "对，老规矩不变，不过今天现场活动延长了，帮我把保障时长延长到180min。"
-Agent: "好的，已按老规矩为您开通微信视频通话保障..."
-
-// 缺陷：客服在第 1 轮居然提前预知并说出 180min，发生临时参数时序污染！</pre>
+            
+            <div class="desc-block">
+                <div class="section-sublabel">问题现象</div>
+<p>隐式归纳首次出现后，记忆状态应为 <code>provisional</code>（候选状态），代表单次习惯观察；但在随后的复用会话中，程序提前将其标注为 <code>memory_filled</code>（已生效记忆），跳过了用户确认过程。</p>
+<div class="section-sublabel">解决办法</div>
+<p>依据会话前置快照 <code>snapshot_before.status</code> 进行状态分流：当状态为 <code>provisional</code> 时，标注来源必须为 <code>History</code>（历史推导），待用户第 2 轮确认后才升级为 <code>active</code>；只有此前已经是 <code>active</code> 状态的记忆，才允许使用 <code>Memory</code> 来源。</p>
             </div>
-            <div class="contrast-box good">
-                <div class="contrast-title">解决后的规范表现（修复后实测）</div>
-                <pre>// 会话：S-USER_002-07 (模板: T2-5, 时长延长)
-Turn 1:
-User: "今天在跨境商贸交流会，老规矩，用微信做视频通话，帮我把保障开上。"
-Agent: "收到，我调取到之前登记的微信视频通话配置：画质1080p、时延50ms以内，从15时00分开始保障，确认按这套配置开通吗？"
-Turn 2:
-User: "对，老规矩不变，不过今天现场活动延长了，帮我把保障时长延长到180min。"
-Agent: "好的，已按老规矩为您开通微信视频通话保障：画质保持1080p、时延上限50ms，时长已延长至180min。祝您活动顺利！"
-
-// 规范：第 1 轮客服恪守原基线记忆，第 2 轮根据用户临时申请修改时长，因果时序严密合规！</pre>
-            </div>
-        </div>
-    </div>
-
-    <!-- 2026年09月28日 解决的问题 -->
-    <div class="date-divider">
-        <div class="date-badge">📅 2026年09月28日</div>
-        <div class="date-line"></div>
-        <div class="date-summary-text">历史记录：台词长句清洗与LLM地点提炼、时序因果隔离、记忆生命周期分流、模版规格对齐</div>
-    </div>
-
-    <!-- 问题 1 (本日新修) -->
-    <div class="issue-card">
-        <div class="issue-header">
-            <div class="issue-title-group">
-                <div class="issue-num">1</div>
-                <h2>后台规则长句直接拼接进台词（006 号样本等生硬台词治理）</h2>
-            </div>
-            <div class="issue-date-tag">2026-09-28 修复</div>
-        </div>
-        <div class="desc-block">
-            <p><span class="desc-label">现象：</span>在 006、003、009 等地点驱动型画像中，用户台词中直接塞入了后台规划的条件规则长句（如“当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。”），拼出诸如“今天又到[长句]办事了，这次按上次的来”的极度生硬、违背日常口语的句子。</p>
-            <p><span class="desc-label">产生原因：</span>画像骨架中的 <code>trigger_condition</code> 是一整段业务规划描述，时间线规划器将其直接透传为了场景地点 <code>scenario_env</code>，而保底模板直接对其进行了机械字符串拼接。</p>
-            <p><span class="desc-label">解决办法：</span>
-                <br>1. <strong>LLM 语义提炼为主</strong>：针对多样化未知的职业背景，调用大模型从任务名与场景长句中提炼出 1 个 3~7 字纯名词短语（如“道路巡逻现场”、“社区走访现场”），严禁生成包含从句的非地名文本；
-                <br>2. <strong>规则安全兜底</strong>：若 LLM 响应异常或无网络，自动走正则与关键词兜底，确保流水线不中断；
-                <br>3. <strong>模板重构与台词拦截</strong>：保底模板重构为“今天在{env}，这次按上次的来”，彻底移除“办事了”等生硬词汇；并在后处理中增加对后台规则词的过滤拦截；
-                <br>4. <strong>全量数据清洗</strong>：对当前生成的 20 个画像中受影响的 51 处场景与 147 处台词进行了全面清洗修复。
-            </p>
-        </div>
-        <div class="contrast-grid">
-            <div class="contrast-box bad">
-                <div class="contrast-title">出现问题时的表现（006 号样本原始数据）</div>
-                <pre>// 会话：S-USER_006-03（Turn 1）
-User: "今天又到当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。办事了，这次按上次的来。"
-
-Agent: "我查到您上次在这个场景使用的是微信视频通话，配置为1080p、时延50ms以内、持续120min..."
-
-// 缺陷：整段后台触发规则被生硬拼入台词，包含“当...进入...任务。办事了”等非人话句式</pre>
-            </div>
-            <div class="contrast-box good">
-                <div class="contrast-title">解决后的规范表现（修复后实际数据）</div>
-                <pre>// 会话：S-USER_006-03（Turn 1）
-User: "今天在道路巡逻现场，这次按上次的来。"
-
-Agent: "我查到您上次在道路巡逻现场使用的是微信视频通话，配置为1080p、时延50ms以内、持续120min。本次计划09时00分至11时00分，是否按这套配置开通？如果确认，我也可以将它设为以后该场景的默认配置。"
-
-// 规范：提炼出简短规范地点“道路巡逻现场”，台词地道自然，符合真实人类口语习惯</pre>
-            </div>
-        </div>
-    </div>
-
-    <!-- 问题 2 -->
-    <div class="issue-card">
-        <div class="issue-header">
-            <div class="issue-title-group">
-                <div class="issue-num">2</div>
-                <h2>候选记忆未确认即标记为生效（provisional 提前标记 memory_filled）</h2>
-            </div>
-            <div class="issue-date-tag">2026-09-28 修复</div>
-        </div>
-        <div class="desc-block">
-            <p><span class="desc-label">现象：</span>隐式归纳首次出现后，记忆状态应为 <code>provisional</code>（候选状态），代表单次习惯观察；但在随后的复用会话中，程序提前将其标注为 <code>memory_filled</code>（已生效记忆），跳过了用户确认过程。</p>
-            <p><span class="desc-label">解决办法：</span>依据会话前置快照 <code>snapshot_before.status</code> 进行状态分流：当状态为 <code>provisional</code> 时，标注来源必须为 <code>History</code>（历史推导），待用户第 2 轮确认后才升级为 <code>active</code>；只有此前已经是 <code>active</code> 状态的记忆，才允许使用 <code>Memory</code> 来源。</p>
-        </div>
-        <div class="contrast-grid">
-            <div class="contrast-box bad">
-                <div class="contrast-title">出现问题时的表现</div>
-                <pre>// 会话前置快照：status = "provisional"
+            
+            <div class="contrast-grid">
+                <div class="contrast-box bad">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-bad">修复前</span> 缺陷表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复前</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 会话前置快照：status = &quot;provisional&quot;
 // 问题：第 1 轮直接当作已固化生效记忆处理
-"turn_intents": [{
-  "params": {
-    "application_name": "腾讯会议",
-    "resolution": "1080p",
-    "source": "Memory" // 错误：候选状态未确认，提前标为 Memory
+&quot;turn_intents&quot;: [{
+  &quot;params&quot;: {
+    &quot;application_name&quot;: &quot;腾讯会议&quot;,
+    &quot;resolution&quot;: &quot;1080p&quot;,
+    &quot;source&quot;: &quot;Memory&quot; // 错误：候选状态未确认，提前标为 Memory
   }
 }]
-// 质检报错：provisional 状态不允许直接标记为 memory_filled</pre>
-            </div>
-            <div class="contrast-box good">
-                <div class="contrast-title">解决后的规范表现</div>
-                <pre>// 会话前置快照：status = "provisional"
+// 质检报错：provisional 状态不允许直接标记为 memory_filled</code></pre>
+                    </div>
+                </div>
+                
+                <div class="contrast-box good">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-good">修复后</span> 规范表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复后</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 会话前置快照：status = &quot;provisional&quot;
 // 规范：来源溯源至历史记录，待用户确认后才生效
 Turn 1
-User: "这次按上次的来。"
-Agent: "调取到上次记录：1080p原画、50ms以内，按这个开通吗？"
+User: &quot;这次按上次的来。&quot;
+Agent: &quot;调取到上次记录：1080p原画、50ms以内，按这个开通吗？&quot;
 // 标注来源标记为 History，状态为 in_progress
 
 Turn 2
-User: "对，开通吧。" // 用户确认
-// 后置记忆状态正式由 provisional 升级为 active</pre>
+User: &quot;对，开通吧。&quot; // 用户确认
+// 后置记忆状态正式由 provisional 升级为 active</code></pre>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        </article>
 
-    <!-- 问题 3 -->
-    <div class="issue-card">
-        <div class="issue-header">
-            <div class="issue-title-group">
-                <div class="issue-num">3</div>
-                <h2>对话时间标注向首轮提前写入（时序跨轮早泄）</h2>
+        <article class="issue-card" id="entry-5" data-cat="bug">
+            <div class="issue-header">
+                <div class="issue-title-group">
+                    <h2>对话时间标注向首轮提前写入（时序跨轮早泄）</h2>
+                </div>
+                <div class="issue-tag-group">
+                    <span class="issue-cat-badge badge-bug">缺陷修复</span>
+                    <span class="issue-date-tag">2026-09-28 修复</span>
+                </div>
             </div>
-            <div class="issue-date-tag">2026-09-28 修复</div>
-        </div>
-        <div class="desc-block">
-            <p><span class="desc-label">现象：</span>用户在第 1 轮只说了“今晚8点要在腾讯会议上开个视频会”，并未说明持续多长时间；但首轮的结构化标注中却提前写入了后续轮次才讨论确定的结束时间（22:00）和持续时长（120分钟），破坏了对话状态追踪（DST）的时序因果。</p>
-            <p><span class="desc-label">解决办法：</span>严格实施逐轮隔离。第 1 轮仅标注已明确说出的 <code>start_timestamp</code>，未提及的画质、时延与时长记入 <code>requested_params</code> 待追问列表；等到第 2 轮用户澄清并明确时长后，再行计算并写入结束时间与时长。</p>
-        </div>
-        <div class="contrast-grid">
-            <div class="contrast-box bad">
-                <div class="contrast-title">出现问题时的标注数据</div>
-                <pre>// 缺陷：第 1 轮用户未提及画质、时延与时长，标注却提前填入
-"turn": 1,
-"user": { "utterance": "今晚8点要在腾讯会议上开个视频会..." },
-"turn_intents": [{
-  "params": {
-    "application_name": "腾讯会议",
-    "service_name": "视频会",
-    "resolution": "1080p", // 错误：第 1 轮未提及，提前填入
-    "rtt": "50ms",          // 错误：第 1 轮未提及，提前填入
-    "timestamp": {
-      "start_timestamp": "2026年10月10日20时00分",
-      "end_timestamp": "2026年10月10日22时00分", // 错误：提前写入
-      "duration": "120分钟"                     // 错误：提前写入
+            
+            <div class="desc-block">
+                <div class="section-sublabel">问题现象</div>
+<p>用户在第 1 轮只说了“今晚8点要在腾讯会议上开个视频会”，并未说明持续多长时间；但首轮的结构化标注中却提前写入了后续轮次才讨论确定的结束时间（22:00）和持续时长（120分钟），破坏了对话状态追踪（DST）的时序因果。</p>
+<div class="section-sublabel">解决办法</div>
+<p>严格实施逐轮隔离。第 1 轮仅标注已明确说出的 <code>start_timestamp</code>，未提及的画质、时延与时长记入 <code>requested_params</code> 待追问列表；等到第 2 轮用户澄清并明确时长后，再行计算并写入结束时间与时长。</p>
+            </div>
+            
+            <div class="contrast-grid">
+                <div class="contrast-box bad">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-bad">修复前</span> 缺陷表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复前</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 缺陷：第 1 轮用户未提及画质、时延与时长，标注却提前填入
+&quot;turn&quot;: 1,
+&quot;user&quot;: { &quot;utterance&quot;: &quot;今晚8点要在腾讯会议上开个视频会...&quot; },
+&quot;turn_intents&quot;: [{
+  &quot;params&quot;: {
+    &quot;application_name&quot;: &quot;腾讯会议&quot;,
+    &quot;service_name&quot;: &quot;视频会&quot;,
+    &quot;resolution&quot;: &quot;1080p&quot;, // 错误：第 1 轮未提及，提前填入
+    &quot;rtt&quot;: &quot;50ms&quot;,          // 错误：第 1 轮未提及，提前填入
+    &quot;timestamp&quot;: {
+      &quot;start_timestamp&quot;: &quot;2026年10月10日20时00分&quot;,
+      &quot;end_timestamp&quot;: &quot;2026年10月10日22时00分&quot;, // 错误：提前写入
+      &quot;duration&quot;: &quot;120分钟&quot;                     // 错误：提前写入
     }
   }
-}]</pre>
-            </div>
-            <div class="contrast-box good">
-                <div class="contrast-title">解决后的规范标注数据</div>
-                <pre>// 规范：第 1 轮仅记录已说明信息，未提及项进入 requested 待追问
-"turn": 1,
-"user": { "utterance": "今晚8点要在腾讯会议上开个视频会..." },
-"agent": { "utterance": "收到，画质、时延和持续时长有什么要求吗？" },
-"requested_params": ["resolution", "rtt", "duration"],
-"turn_intents": [{
-  "status": "in_progress",
-  "params": {
-    "application_name": "腾讯会议",
-    "service_name": "视频会",
-    "timestamp": { "start_timestamp": "2026年10月10日20时00分" }
+}]</code></pre>
+                    </div>
+                </div>
+                
+                <div class="contrast-box good">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-good">修复后</span> 规范表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复后</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 规范：第 1 轮仅记录已说明信息，未提及项进入 requested 待追问
+&quot;turn&quot;: 1,
+&quot;user&quot;: { &quot;utterance&quot;: &quot;今晚8点要在腾讯会议上开个视频会...&quot; },
+&quot;agent&quot;: { &quot;utterance&quot;: &quot;收到，画质、时延和持续时长有什么要求吗？&quot; },
+&quot;requested_params&quot;: [&quot;resolution&quot;, &quot;rtt&quot;, &quot;duration&quot;],
+&quot;turn_intents&quot;: [{
+  &quot;status&quot;: &quot;in_progress&quot;,
+  &quot;params&quot;: {
+    &quot;application_name&quot;: &quot;腾讯会议&quot;,
+    &quot;service_name&quot;: &quot;视频会&quot;,
+    &quot;timestamp&quot;: { &quot;start_timestamp&quot;: &quot;2026年10月10日20时00分&quot; }
   }
 }]
-// 第 2 轮用户补充“画质1080p，50ms以内，开2小时”后再补全其余参数</pre>
+// 第 2 轮用户补充“画质1080p，50ms以内，开2小时”后再补全其余参数</code></pre>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        </article>
 
-    <!-- 问题 4 -->
-    <div class="issue-card">
-        <div class="issue-header">
-            <div class="issue-title-group">
-                <div class="issue-num">4</div>
-                <h2>域外拒绝会话中动作标签与台词语义矛盾</h2>
+        <article class="issue-card" id="entry-6" data-cat="bug">
+            <div class="issue-header">
+                <div class="issue-title-group">
+                    <h2>域外拒绝会话中动作标签与台词语义矛盾</h2>
+                </div>
+                <div class="issue-tag-group">
+                    <span class="issue-cat-badge badge-bug">缺陷修复</span>
+                    <span class="issue-date-tag">2026-09-28 修复</span>
+                </div>
             </div>
-            <div class="issue-date-tag">2026-09-28 修复</div>
-        </div>
-        <div class="desc-block">
-            <p><span class="desc-label">现象：</span>模板规划为域外诉求拒绝（<code>T1-2</code>），数据动作标签标记为 <code>Reject_Request</code>，但大模型生成的自然语言台词却是正常答应并受理（如“好的，这就为您派师傅修宽带”），导致标签与对话台词严重矛盾。</p>
-            <p><span class="desc-label">解决办法：</span>在提示词中强制注入域外目标拒识约束（<code>ood_goal</code>），并在质检流程中增加 <code>template_semantic_alignment_check</code> 自动化规则，凡动作标记为 <code>Reject_Request</code> 时，Agent 台词必须包含明确的不可受理说辞。</p>
-        </div>
-        <div class="contrast-grid">
-            <div class="contrast-box bad">
-                <div class="contrast-title">出现问题时的台词表现</div>
-                <pre>// 会话模板：T1-2（域外拒绝）
+            
+            <div class="desc-block">
+                <div class="section-sublabel">问题现象</div>
+<p>模板规划为域外诉求拒绝（<code>T1-2</code>），数据动作标签标记为 <code>Reject_Request</code>，但大模型生成的自然语言台词却是正常答应并受理（如“好的，这就为您派师傅修宽带”），导致标签与对话台词严重矛盾。</p>
+<div class="section-sublabel">解决办法</div>
+<p>在提示词中强制注入域外目标拒识约束（<code>ood_goal</code>），并在质检流程中增加 <code>template_semantic_alignment_check</code> 自动化规则，凡动作标记为 <code>Reject_Request</code> 时，Agent 台词必须包含明确的不可受理说辞。</p>
+            </div>
+            
+            <div class="contrast-grid">
+                <div class="contrast-box bad">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-bad">修复前</span> 缺陷表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复前</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 会话模板：T1-2（域外拒绝）
 // 动作标签：Reject_Request
-User: "我家宽带光纤断了，上不了网，帮我找个师傅上门维修。"
-Agent: "好的，已为您登记家庭宽带上门检修工单，维修师傅将在2小时内联系您，请保持手机畅通。"
+User: &quot;我家宽带光纤断了，上不了网，帮我找个师傅上门维修。&quot;
+Agent: &quot;好的，已为您登记家庭宽带上门检修工单，维修师傅将在2小时内联系您，请保持手机畅通。&quot;
 
-// 缺陷：标签判定为无法受理并拒绝，但台词却在满口承诺受理，标签与台词矛盾</pre>
-            </div>
-            <div class="contrast-box good">
-                <div class="contrast-title">解决后的规范台词表现</div>
-                <pre>// 会话模板：T1-2（域外拒绝）
+// 缺陷：标签判定为无法受理并拒绝，但台词却在满口承诺受理，标签与台词矛盾</code></pre>
+                    </div>
+                </div>
+                
+                <div class="contrast-box good">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-good">修复后</span> 规范表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复后</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 会话模板：T1-2（域外拒绝）
 // 动作标签：Reject_Request
-User: "我家宽带光纤断了，上不了网，帮我找个师傅上门维修。"
-Agent: "抱歉，我这边主要负责移动网络通信保障，无法直接受理家庭宽带的光纤装维报修。建议您拨打10086宽带专线处理。"
+User: &quot;我家宽带光纤断了，上不了网，帮我找个师傅上门维修。&quot;
+Agent: &quot;抱歉，我这边主要负责移动网络通信保障，无法直接受理家庭宽带的光纤装维报修。建议您拨打10086宽带专线处理。&quot;
 
-// 规范：台词明确表达拒绝受理并说明范围，与 Reject_Request 动作严格一致</pre>
+// 规范：台词明确表达拒绝受理并说明范围，与 Reject_Request 动作严格一致</code></pre>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        </article>
 
-    <!-- 问题 5 -->
-    <div class="issue-card">
-        <div class="issue-header">
-            <div class="issue-title-group">
-                <div class="issue-num">5</div>
-                <h2>口语代称无来源凭空出现</h2>
+        <article class="issue-card" id="entry-7" data-cat="bug">
+            <div class="issue-header">
+                <div class="issue-title-group">
+                    <h2>口语代称无来源凭空出现</h2>
+                </div>
+                <div class="issue-tag-group">
+                    <span class="issue-cat-badge badge-bug">缺陷修复</span>
+                    <span class="issue-date-tag">2026-09-28 修复</span>
+                </div>
             </div>
-            <div class="issue-date-tag">2026-09-28 修复</div>
-        </div>
-        <div class="desc-block">
-            <p><span class="desc-label">现象：</span>在早期的建联会话中，用户自始至终只提过官方标准名“腾讯会议”；但到了后续的复用会话首轮，用户台词却突然冒出“用tencentmeeting开会”或“用企鹅例会保障”，缺乏任何前置交互与登记依据。</p>
-            <p><span class="desc-label">解决办法：</span>建立前置登记逻辑。在证据会话中，第 1 轮强制使用官方标准名称；第 2 轮用户明确说明习惯代称后，助手答复中必须显式确认记录；只有在此前已完成登记的画像，后续复用会话的首轮才允许直接调用该代称。</p>
-        </div>
-        <div class="contrast-grid">
-            <div class="contrast-box bad">
-                <div class="contrast-title">出现问题时的跨会话表现</div>
-                <pre>[前期会话 S-02]
+            
+            <div class="desc-block">
+                <div class="section-sublabel">问题现象</div>
+<p>在早期的建联会话中，用户自始至终只提过官方标准名“腾讯会议”；但到了后续的复用会话首轮，用户台词却突然冒出“用tencentmeeting开会”或“用企鹅例会保障”，缺乏任何前置交互与登记依据。</p>
+<div class="section-sublabel">解决办法</div>
+<p>建立前置登记逻辑。在证据会话中，第 1 轮强制使用官方标准名称；第 2 轮用户明确说明习惯代称后，助手答复中必须显式确认记录；只有在此前已完成登记的画像，后续复用会话的首轮才允许直接调用该代称。</p>
+            </div>
+            
+            <div class="contrast-grid">
+                <div class="contrast-box bad">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-bad">修复前</span> 缺陷表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复前</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>[前期会话 S-02]
 Turn 1
-User: "帮我开个腾讯会议的会议保障，720p，100ms以内。"
-Agent: "好的，已为您开通腾讯会议保障。"
+User: &quot;帮我开个腾讯会议的会议保障，720p，100ms以内。&quot;
+Agent: &quot;好的，已为您开通腾讯会议保障。&quot;
 // 注意：用户全篇未提及“tencentmeeting”
 
 [后续会话 S-06]
 Turn 1
-User: "老规矩，用tencentmeeting开会，帮我把保障开上。"
-Agent: "收到，为您开通保障。"
-// 缺陷：S-02 没登记过该代称，S-06 凭空突现，违背生活常理</pre>
-            </div>
-            <div class="contrast-box good">
-                <div class="contrast-title">解决后的规范跨会话表现</div>
-                <pre>[前期会话 S-USER_008-02：规范登记代称]
+User: &quot;老规矩，用tencentmeeting开会，帮我把保障开上。&quot;
+Agent: &quot;收到，为您开通保障。&quot;
+// 缺陷：S-02 没登记过该代称，S-06 凭空突现，违背生活常理</code></pre>
+                    </div>
+                </div>
+                
+                <div class="contrast-box good">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-good">修复后</span> 规范表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复后</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>[前期会话 S-USER_008-02：规范登记代称]
 Turn 1
-User: "今晚帮我开个腾讯会议保障。" // 首轮使用官方标准名
-Agent: "收到，请问画质、时延和持续时长需要怎么设置？"
+User: &quot;今晚帮我开个腾讯会议保障。&quot; // 首轮使用官方标准名
+Agent: &quot;收到，请问画质、时延和持续时长需要怎么设置？&quot;
 Turn 2
-User: "720p，100ms以内，开1小时。我平时习惯叫它tencentmeeting，帮我记好。"
-Agent: "好的，已为您开通保障，并已记录您的习惯代称tencentmeeting。" // 显式确认记录
+User: &quot;720p，100ms以内，开1小时。我平时习惯叫它tencentmeeting，帮我记好。&quot;
+Agent: &quot;好的，已为您开通保障，并已记录您的习惯代称tencentmeeting。&quot; // 显式确认记录
 
 [后续会话 S-USER_008-06：自然调用已登记代称]
 Turn 1
-User: "老规矩，tencentmeeting开会，今晚6点45开，1小时，帮我把保障开上。"
-// 规范：前置已有登记记录，调用自然且符合逻辑</pre>
+User: &quot;老规矩，tencentmeeting开会，今晚6点45开，1小时，帮我把保障开上。&quot;
+// 规范：前置已有登记记录，调用自然且符合逻辑</code></pre>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        </article>
 
-    <!-- 问题 6 -->
-    <div class="issue-card">
-        <div class="issue-header">
-            <div class="issue-title-group">
-                <div class="issue-num">6</div>
-                <h2>复用已知参数时机械复读与口语词汇失真</h2>
+        <article class="issue-card" id="entry-8" data-cat="bug">
+            <div class="issue-header">
+                <div class="issue-title-group">
+                    <h2>复用已知参数时机械复读与口语词汇失真</h2>
+                </div>
+                <div class="issue-tag-group">
+                    <span class="issue-cat-badge badge-bug">缺陷修复</span>
+                    <span class="issue-date-tag">2026-09-28 修复</span>
+                </div>
             </div>
-            <div class="issue-date-tag">2026-09-28 修复</div>
-        </div>
-        <div class="desc-block">
-            <p><span class="desc-label">现象：</span>在已经记录了习惯配置的复用会话中，用户本应只说“老规矩”，却把 1080p、50ms、120分钟等全量参数又逐字复读了一遍，失去了记忆调取的实际意义；同时生成了“顶格清晰度”（易与2K/4K混淆）、“零卡顿”（物理不可能）等失真词汇。</p>
-            <p><span class="desc-label">解决办法：</span>通过 <code>expression_vault.json</code> 规范口语映射范围；在复用会话中强制省略已知槽位，用户第 1 轮仅凭暗号（“老规矩”）和代称发起，由助手主动从历史记忆中调取配置向用户反问确认，用户第 2 轮只需简要确认。</p>
-        </div>
-        <div class="contrast-grid">
-            <div class="contrast-box bad">
-                <div class="contrast-title">出现问题时的交互表现</div>
-                <pre>[复用会话 S-USER_003-08]
+            
+            <div class="desc-block">
+                <div class="section-sublabel">问题现象</div>
+<p>在已经记录了习惯配置的复用会话中，用户本应只说“老规矩”，却把 1080p、50ms、120分钟等全量参数又逐字复读了一遍，失去了记忆调取的实际意义；同时生成了“顶格清晰度”（易与2K/4K混淆）、“零卡顿”（物理不可能）等失真词汇。</p>
+<div class="section-sublabel">解决办法</div>
+<p>通过 <code>expression_vault.json</code> 规范口语映射范围；在复用会话中强制省略已知槽位，用户第 1 轮仅凭个性化表达（如“老规矩”）和代称发起，由助手主动从历史记忆中调取配置向用户反问确认，用户第 2 轮只需简要确认。</p>
+            </div>
+            
+            <div class="contrast-grid">
+                <div class="contrast-box bad">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-bad">修复前</span> 缺陷表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复前</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>[复用会话 S-USER_003-08]
 Turn 1
-User: "老规矩，企鹅会议，老时间，画质要顶格清晰度（1080p），时延要零卡顿（50ms），开120分钟，帮我把保障开通！"
-Agent: "好的，已为您开通保障：1080p、50ms、持续120分钟。"
+User: &quot;老规矩，企鹅会议，老时间，画质要顶格清晰度（1080p），时延要零卡顿（50ms），开120分钟，帮我把保障开通！&quot;
+Agent: &quot;好的，已为您开通保障：1080p、50ms、持续120分钟。&quot;
 
 // 缺陷 1：既然是老规矩，用户却全量机械复读，失去记忆复用意义
 // 缺陷 2：出现“顶格清晰度”与“零卡顿”等非标夸大词汇
-// 缺陷 3：助手缺乏主动调取历史配置反问求证的过程</pre>
-            </div>
-            <div class="contrast-box good">
-                <div class="contrast-title">解决后的规范交互表现</div>
-                <pre>[复用会话 S-USER_003-08]
+// 缺陷 3：助手缺乏主动调取历史配置反问求证的过程</code></pre>
+                    </div>
+                </div>
+                
+                <div class="contrast-box good">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-good">修复后</span> 规范表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复后</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>[复用会话 S-USER_003-08]
 Turn 1
-User: "老规矩，企鹅会议，老时间，帮我开一下。"
-Agent: "收到，您是要按老规矩开通腾讯会议保障对吧？我这边调取到历史配置：1080p原画、50ms以内、持续120分钟，确认按这个开通吗？"
+User: &quot;老规矩，企鹅会议，老时间，帮我开一下。&quot;
+Agent: &quot;收到，您是要按老规矩开通腾讯会议保障对吧？我这边调取到历史配置：1080p原画、50ms以内、持续120分钟，确认按这个开通吗？&quot;
 
 Turn 2
-User: "对，开通吧。"
-Agent: "好的，已为您开通腾讯会议保障：1080p原画、50ms以内、持续120分钟。祝您会议顺利！"
+User: &quot;对，开通吧。&quot;
+Agent: &quot;好的，已为您开通腾讯会议保障：1080p原画、50ms以内、持续120分钟。祝您会议顺利！&quot;
 
-// 规范：省略已知槽位，由助手调取记忆反问确认，参数规范清晰</pre>
+// 规范：省略已知槽位，由助手调取记忆反问确认，参数规范清晰</code></pre>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        </article>
 
-    <!-- 问题 7 -->
-    <div class="issue-card">
-        <div class="issue-header">
-            <div class="issue-title-group">
-                <div class="issue-num">7</div>
-                <h2>模板编号与实际交互轮数/意图数错配</h2>
+        <article class="issue-card" id="entry-9" data-cat="bug">
+            <div class="issue-header">
+                <div class="issue-title-group">
+                    <h2>模板编号与实际交互轮数/意图数错配</h2>
+                </div>
+                <div class="issue-tag-group">
+                    <span class="issue-cat-badge badge-bug">缺陷修复</span>
+                    <span class="issue-date-tag">2026-09-28 修复</span>
+                </div>
             </div>
-            <div class="issue-date-tag">2026-09-28 修复</div>
-        </div>
-        <div class="desc-block">
-            <p><span class="desc-label">现象：</span>主线 2 轮 1 意图会话误套用了双意图模板编号（<code>T2-4</code>）；支线会话在加入模糊词澄清对话后交互轮次扩展到了 3 轮，但模板 ID 仍保留为 2 轮编号（<code>T2-2</code>），导致骨架签名出现 <code>T2-2|3|1|...</code> 冲突，自动化校验报错。</p>
-            <p><span class="desc-label">解决办法：</span>建立模板规格强校验规则（<code>template_spec_check</code>），校验模板前缀、声明轮数、实际交互轮数、声明意图数、实际意图数完全一致：2 轮 1 意图必须使用 <code>T2-1</code>，3 轮 1 意图必须匹配 <code>T3-1</code>。</p>
-        </div>
-        <div class="contrast-grid">
-            <div class="contrast-box bad">
-                <div class="contrast-title">出现问题时的模板规格</div>
-                <pre>// 会话：支线 1 模糊澄清会话
-"session_meta": {
-  "template_id": "T2-2",   // 错误：前缀 T2 代表 2 轮模板
-  "round_count": 3         // 实际对话交互已扩展为 3 轮
+            
+            <div class="desc-block">
+                <div class="section-sublabel">问题现象</div>
+<p>主线 2 轮 1 意图会话误套用了双意图模板编号（<code>T2-4</code>）；支线会话在加入模糊词澄清对话后交互轮次扩展到了 3 轮，但模板 ID 仍保留为 2 轮编号（<code>T2-2</code>），导致骨架签名出现 <code>T2-2|3|1|...</code> 冲突，自动化校验报错。</p>
+<div class="section-sublabel">解决办法</div>
+<p>建立模板规格强校验规则（<code>template_spec_check</code>），校验模板前缀、声明轮数、实际交互轮数、声明意图数、实际意图数完全一致：2 轮 1 意图必须使用 <code>T2-1</code>，3 轮 1 意图必须匹配 <code>T3-1</code>。</p>
+            </div>
+            
+            <div class="contrast-grid">
+                <div class="contrast-box bad">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-bad">修复前</span> 缺陷表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复前</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 会话：支线 1 模糊澄清会话
+&quot;session_meta&quot;: {
+  &quot;template_id&quot;: &quot;T2-2&quot;,   // 错误：前缀 T2 代表 2 轮模板
+  &quot;round_count&quot;: 3         // 实际对话交互已扩展为 3 轮
 }
 // 骨架签名生成：T2-2|3|1|SUB_001|Single...
 // 质检报错：template_spec_check failed 
-// (模板 ID 前缀 T2 与 实际交互轮数 3 轮产生错配冲突)</pre>
-            </div>
-            <div class="contrast-box good">
-                <div class="contrast-title">解决后的规范模板规格</div>
-                <pre>// 会话：支线 1 模糊澄清会话
-"session_meta": {
-  "template_id": "T3-1",   // 规范：前缀 T3 与 3 轮交互精确匹配
-  "round_count": 3
+// (模板 ID 前缀 T2 与 实际交互轮数 3 轮产生错配冲突)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="contrast-box good">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-good">修复后</span> 规范表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复后</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 会话：支线 1 模糊澄清会话
+&quot;session_meta&quot;: {
+  &quot;template_id&quot;: &quot;T3-1&quot;,   // 规范：前缀 T3 与 3 轮交互精确匹配
+  &quot;round_count&quot;: 3
 }
 // 骨架签名生成：T3-1|3|1|SUB_001|Single...
 // 质检结果：template_spec_check passed
-// (模板编号、轮数与意图数完全一致，通过校验)</pre>
+// (模板编号、轮数与意图数完全一致，通过校验)</code></pre>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        </article>
 
-    <!-- 最终结果汇总 -->
-    <div class="summary-card">
-        <div class="summary-header">实测修复结果与验证数据</div>
-        <p>针对上述 13 项问题，已全面更新生成代码与质检套件，并对 20 个画像（<code>mobile_persona_001</code> ~ <code>mobile_persona_020</code>）完成数据清洗与质检校验：</p>
+        <article class="issue-card" id="entry-10" data-cat="bug">
+            <div class="issue-header">
+                <div class="issue-title-group">
+                    <h2>干扰会话（X-1）未建记忆却直呼个性化表达（如“不卡就行”）与误跌入记忆复用规则</h2>
+                </div>
+                <div class="issue-tag-group">
+                    <span class="issue-cat-badge badge-bug">缺陷修复</span>
+                    <span class="issue-date-tag">2026-09-29</span>
+                </div>
+            </div>
+            
+            <div class="desc-block">
+                <div class="section-sublabel">问题现象</div>
+<p>在画像 001 会话 8（<code>S-USER_001-08</code>，模板 <code>X-1</code>，角色 <code>distractor_session</code>）中，该会话为单轮混合干扰会话（一办一拒），前置并无任何证据会话沉淀过快手应用或 80ms 时延的记忆点，但用户台词却直接说出：“快手看直播，<strong>不卡就行</strong>，顺便帮我查一下手机话费账单”，客服也答复“时延按‘不卡就行’即80ms以内”。</p>
+<div class="section-sublabel">根因排查</div>
+<div class="bullet-item"><span class="bullet-prefix">1.</span><div class="bullet-content"><strong>时间线规划层透传漏洞</strong>：<code>DynamicTimelinePlanner</code> 在为各会话分配 <code>small_memory</code> 时无差别全量匹配，为干扰会话也分配了个性化表达（如 80ms 匹配到了“不卡就行”）；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">2.</span><div class="bullet-content"><strong>提示词构建分支缺失</strong>：在 <code>dialogue_generator.py</code> 构建 Prompt 时，判断逻辑涵盖了 <code>T1-2</code>、<code>evidence_session</code>、<code>T2-5</code>、<code>T2-3</code>，唯独缺少了 <code>X-1</code> 分支，导致 <code>X-1</code> 误跌入了 <code>else:</code>（常规复用/强化会话分支），明确指示大模型：“大记忆点已生效……指定小记忆点='不卡就行'，Agent从记忆中补全”。</div></div>
+<div class="section-sublabel">解决办法</div>
+<div class="bullet-item"><span class="bullet-prefix">1.</span><div class="bullet-content"><code>timeline_planner.py</code> 中判断若为 <code>distractor</code> 类型会话，强制 <code>small_memory = {}</code>；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">2.</span><div class="bullet-content"><code>dialogue_generator.py</code> 中新增 <code>elif tid == "X-1"</code> 专用分支，明确指示：混合诉求单轮干扰无先验记忆，首次提出需求，严禁使用任何未建立的个性化表达或老规矩；Agent 办理保障并礼貌拒绝域外诉求；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">3.</span><div class="bullet-content">对已生成的 20 个画像中全部 X-1 干扰会话进行 LLM 重新润色并清洗，全量通过质检。</div></div>
+            </div>
+            
+            <div class="contrast-grid">
+                <div class="contrast-box bad">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-bad">修复前</span> 缺陷表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复前</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 会话：S-USER_001-08 (模板: X-1, 角色: distractor_session)
+&quot;session_meta&quot;: {
+  &quot;template_id&quot;: &quot;X-1&quot;,
+  &quot;small_memory&quot;: { &quot;type&quot;: &quot;rtt_alias&quot;, &quot;value&quot;: &quot;不卡就行&quot; } // 错误分配个性化表达
+}
+// 用户台词：未建立记忆却直呼个性化表达
+User: &quot;快手看直播，不卡就行，顺便帮我查一下手机话费账单。&quot;
+// 客服台词：当成老个性化表达直接复用补全
+Agent: &quot;收到，我先为您受理快手看直播保障，时延按‘不卡就行’即80ms以内...&quot;</code></pre>
+                    </div>
+                </div>
+                
+                <div class="contrast-box good">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-good">修复后</span> 规范表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复后</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 会话：S-USER_001-08 (模板: X-1, 角色: distractor_session)
+&quot;session_meta&quot;: {
+  &quot;template_id&quot;: &quot;X-1&quot; // small_memory 为空，无记忆注入
+}
+// 用户台词：首次提出业务与域外需求，自然规范，无先验个性化表达
+User: &quot;你好，我想办个网络保障，快手看直播，画质720p，时延要控制在80ms以内，时间是今天12点30到13点30，一共60分钟。另外顺便帮我把手机话费充一下，再查下账单。&quot;
+// 客服台词：正常受理域内业务，明确礼貌拒绝域外诉求
+Agent: &quot;您好，我先为您受理网络保障需求：快手看直播，画质720p，时延上限80ms以内，保障时段为12点30分至13点30分，共60分钟。关于手机话费充值和账单查询，这两项不在我的服务范围内，无法为您办理，建议您通过运营商官方渠道或官方App进行充值及账单查询。网络保障需求我这边继续为您处理。&quot;</code></pre>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="issue-card" id="entry-11" data-cat="bug">
+            <div class="issue-header">
+                <div class="issue-title-group">
+                    <h2>临时特殊事件纠正（event_override）误持久化，次日复用（event_reuse）未恢复基线记忆</h2>
+                </div>
+                <div class="issue-tag-group">
+                    <span class="issue-cat-badge badge-bug">缺陷修复</span>
+                    <span class="issue-date-tag">2026-09-29</span>
+                </div>
+            </div>
+            
+            <div class="desc-block">
+                <div class="section-sublabel">问题现象</div>
+<p>在会话 S09 中，用户因现场特殊情况，主动临时将直播画质调整为 <code>720p</code>、时延压缩至 <code>30ms</code>。然而在次日的复用会话 S10（<code>event_reuse</code>）中，系统未恢复该用户长期基线偏好（<code>1080p, 50ms</code>），而是将昨天的临时改动视为新长期规则（<code>MF_001_v2</code>）持续套用，违背了“单次/临时纠正次日失效并回归老规矩”的常识设定。</p>
+<div class="section-sublabel">根因排查</div>
+<div class="bullet-item"><span class="bullet-prefix">1.</span><div class="bullet-content"><strong>记忆追踪状态机逻辑</strong>：原 <code>MemoryTracker</code> 在处理 <code>event_override</code> 时，直接生成了版本分支 <code>MF_001_v2</code> 并覆盖了活跃记忆状态，并在 <code>event_reuse</code> 时继续强化 <code>MF_001_v2</code>；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">2.</span><div class="bullet-content"><strong>组装与时间线规划联动</strong>：<code>session_assembler.py</code> 和 <code>timeline_planner.py</code> 在 <code>event_reuse</code> 阶段继续提取了 <code>override</code> 里的临时 QoS 属性，导致 Ground Truth 与生成的自然对话文本均固定为了 720p/30ms。</div></div>
+<div class="section-sublabel">解决办法</div>
+<div class="bullet-item"><span class="bullet-prefix">1.</span><div class="bullet-content"><strong>采纳方案 A 明确生命周期</strong>：<code>event_override</code> 严格定义为单次当天临时调整（<code>temporary_correction</code>），不破坏全局长期记忆 <code>MF_001</code>，不产生衍生版本；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">2.</span><div class="bullet-content"><strong>次日复用自动回归老规矩</strong>：<code>event_reuse</code> 会话（及后续会话）强制恢复按 <code>MF_001</code> 原始基线（<code>1080p, 50ms</code>）提取与确认，动作标识调整为 <code>reuse_long_term_rule_after_correction</code>；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">3.</span><div class="bullet-content"><strong>全量数据同步与质检</strong>：全量 20 个画像的 <code>sessions.json</code>、<code>sessions.jsonl</code>、<code>memory_traces.json</code> 及 <code>qc_report.json</code> 同步更新，100% 通过质检。</div></div>
+            </div>
+            
+            <div class="contrast-grid">
+                <div class="contrast-box bad">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-bad">修复前</span> 缺陷表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复前</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 会话：S-USER_001-10 (模板: T2-1, 角色: reuse_session)
+// 槽位来源错误溯源至临时分支，QoS 沿用临时参数
+&quot;intents&quot;: [{
+  &quot;params&quot;: {
+    &quot;resolution&quot;: { &quot;value&quot;: &quot;720p&quot;, &quot;source_ref&quot;: &quot;MF_001_v2&quot; },
+    &quot;rtt&quot;: { &quot;value&quot;: &quot;30ms&quot;, &quot;source_ref&quot;: &quot;MF_001_v2&quot; }
+  }
+}]
+// 客服台词：继续使用昨天的临时降级参数
+Agent: &quot;收到，已按老规矩提取：快手直播保障（720p，时延30ms内），请确认是否立即开通？&quot;</code></pre>
+                    </div>
+                </div>
+                
+                <div class="contrast-box good">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-good">修复后</span> 规范表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复后</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 会话：S-USER_001-10 (模板: T2-1, 角色: reuse_session)
+// 槽位来源正确溯源至原长期基线 MF_001
+&quot;intents&quot;: [{
+  &quot;params&quot;: {
+    &quot;resolution&quot;: { &quot;value&quot;: &quot;1080p&quot;, &quot;source_ref&quot;: &quot;MF_001&quot; },
+    &quot;rtt&quot;: { &quot;value&quot;: &quot;50ms&quot;, &quot;source_ref&quot;: &quot;MF_001&quot; }
+  }
+}]
+// 客服台词：自动回归原长期基线配置（老规矩）
+Agent: &quot;收到，我调取到之前登记的快手开直播配置：1080p、时延50ms以内，12时30分开始、13时30分结束，持续60min。确认按这套配置开通吗？&quot;</code></pre>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="issue-card" id="entry-12" data-cat="bug">
+            <div class="issue-header">
+                <div class="issue-title-group">
+                    <h2>口语相对日期（“明天”/“后天”）与真值当天时间戳错配</h2>
+                </div>
+                <div class="issue-tag-group">
+                    <span class="issue-cat-badge badge-bug">缺陷修复</span>
+                    <span class="issue-date-tag">2026-09-29</span>
+                </div>
+            </div>
+            
+            <div class="desc-block">
+                <div class="section-sublabel">问题现象</div>
+<p>在会话 S12（如 <code>S-USER_001-12</code>）中，用户口语台词明确提到“<strong>明天</strong>上午10点开始”，但在结构化 Ground Truth 标注中，基准时间 <code>reference_time</code> 为 <code>2026年10月21日10时00分</code>，开通的 <code>start_timestamp</code> 却同样是 <code>2026年10月21日10时00分</code>（未加 1 天），出现了台词表达“明天”但标注落在“今天”的时间矛盾。</p>
+<p><strong>根因排查与解决办法</strong>：</p>
+<div class="bullet-item"><span class="bullet-prefix">1.</span><div class="bullet-content"><strong>台词生成端归一化拦截</strong>：在 <code>dialogue_generator.py</code> 的规范化处理中，校验 <code>ref_day == start_day</code> 场景。当判定为同日即时/预约保障时，自动纠正替换用户与客服台词中的“明天/后天”为“今天”；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">2.</span><div class="bullet-content"><strong>自动化质检约束</strong>：在 <code>qc_validator.py</code> 中追加同日时间表达检查，凡 <code>ref_day == start_day</code> 且台词含有跨日词汇时，直接告警拦截；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">3.</span><div class="bullet-content"><strong>全量清洗</strong>：将 20 个画像中受影响的口语台词统一清洗为“今天上午10点开始”，彻底消除自然语言与时间真值的不一致。</div></div>
+            </div>
+            
+            <div class="contrast-grid">
+                <div class="contrast-box bad">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-bad">修复前</span> 缺陷表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复前</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 会话：S-USER_001-12 (reference_time: 2026年10月21日10时00分)
+// 用户台词口语表达包含“明天”
+User: &quot;钉钉会议，清晰点就行，明天上午10点开始，开半小时。&quot;
+// 真值 start_timestamp 却为当天，未加一天：
+&quot;start_timestamp&quot;: &quot;2026年10月21日10时00分&quot;  // 矛盾！</code></pre>
+                    </div>
+                </div>
+                
+                <div class="contrast-box good">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-good">修复后</span> 规范表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复后</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 会话：S-USER_001-12 (reference_time: 2026年10月21日10时00分)
+// 用户台词口语表达与当天基准时间严格对齐
+User: &quot;钉钉会议，清晰点就行，今天上午10点开始，开半小时。&quot;
+// 真值 start_timestamp 同步对齐当天：
+&quot;start_timestamp&quot;: &quot;2026年10月21日10时00分&quot;  // 严格吻合！</code></pre>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="issue-card" id="entry-13" data-cat="bug">
+            <div class="issue-header">
+                <div class="issue-title-group">
+                    <h2>临时纠正会话（T2-3）首轮违背“场景+应用+业务”最小表达标准与次轮现场原因缺失</h2>
+                </div>
+                <div class="issue-tag-group">
+                    <span class="issue-cat-badge badge-bug">缺陷修复</span>
+                    <span class="issue-date-tag">2026-09-29</span>
+                </div>
+            </div>
+            
+            <div class="desc-block">
+                <div class="section-sublabel">问题现象</div>
+<p>在会话 S09（如 <code>S-USER_001-09</code>，模板 <code>T2-3</code>，角色 <code>event_override</code>）中，第 1 轮用户台词原先仅说“老规矩，每天这个时候开通保障。”，既未交代触发场景（早高峰通勤现场），也未指明应用（抖音）与业务（开直播），严重违背了“应用＋业务是发起保障意图的最小表达”原则；且第 2 轮直接粗暴抛出新参数，未说明现场为何临时调整。</p>
+<div class="section-sublabel">根因排查</div>
+<div class="bullet-item"><span class="bullet-prefix">1.</span><div class="bullet-content"><strong>最小表达标准理解偏差</strong>：时段个性化表达（“每天这个时候”）属于槽位代称，只能填充时间槽，不能替代意图发起的最小表达（应用+业务）；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">2.</span><div class="bullet-content"><strong>保底与提示词设计粗疏</strong>：原 <code>dialogue_prompts.py</code> 与 <code>dialogue_fallbacks.py</code> 对 T2-3 第 1 轮保底模板缺少场景和应用业务槽位拼接，导致台词只有个性化表达；第 2 轮缺少“现场特殊情况”的口语转折说明。</div></div>
+<div class="section-sublabel">解决办法</div>
+<div class="bullet-item"><span class="bullet-prefix">1.</span><div class="bullet-content"><strong>重构 T2-3 提示词与保底规则</strong>：第 1 轮强制注入：<code>今天在{env}，老规矩，用{app}做{srv}，帮我把保障开上。</code> 确保严格包含“场景＋应用＋业务＋个性化习惯表达”最小表达；第 2 轮强制注入现场突发背景转折：<code>对，不过今天现场特殊，画质临时调到{res}，时延压到{rtt}以内，今天临时按这个来。</code></div></div>
+<div class="bullet-item"><span class="bullet-prefix">2.</span><div class="bullet-content"><strong>质检强规则拦截</strong>：在 <code>qc_validator.py</code> 中追加 <code>event_override_spec_check</code>，对全量 T2-3 会话强制校验首轮场景/应用/业务最小表达，次轮校验现场特殊原因；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">3.</span><div class="bullet-content"><strong>全量 20 个画像统一清洗与验证</strong>：对全部画像重新归一化生成并质检，100% 通过。</div></div>
+            </div>
+            
+            <div class="contrast-grid">
+                <div class="contrast-box bad">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-bad">修复前</span> 缺陷表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复前</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 会话：S-USER_001-09 (模板: T2-3, 临时纠正)
+Turn 1:
+User: &quot;老规矩，每天这个时候开通保障。&quot;
+Agent: &quot;收到，按抖音直播配置（1080p，50ms）为您确认...&quot;
+Turn 2:
+User: &quot;画质调到720p，时延30ms。&quot;
+Agent: &quot;好的，为您调整为720p/30ms。&quot;
+
+// 缺陷 1：首轮无场景、无应用、无业务，严重违背最小表达标准
+// 缺陷 2：次轮无现场特殊情况说明，生硬突兀</code></pre>
+                    </div>
+                </div>
+                
+                <div class="contrast-box good">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-good">修复后</span> 规范表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复后</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 会话：S-USER_001-09 (模板: T2-3, 临时纠正)
+Turn 1:
+User: &quot;今天在早高峰通勤现场，老规矩，用抖音做开直播，帮我把保障开上。&quot;
+Agent: &quot;收到，我调取到之前登记的抖音开直播配置：画质1080p、时延50ms以内，12时30分至13时30分（持续60min），确认按这套配置开通吗？&quot;
+Turn 2:
+User: &quot;对，不过今天现场特殊，画质临时调到720p，时延压到30ms以内，今天临时按这个来。&quot;
+Agent: &quot;好的，已按现场特殊情况为您临时调整开通抖音开直播保障：画质720p、时延上限30ms，时段12时30分至13时30分。祝您现场顺利！&quot;
+
+// 规范：首轮四要素齐全，次轮因果关系清晰，符合真人工作现场表达</code></pre>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="issue-card" id="entry-14" data-cat="bug">
+            <div class="issue-header">
+                <div class="issue-title-group">
+                    <h2>单轮干扰会话（T1-1）未隔离个性化表达且参数不全，导致客服出现脑补反问</h2>
+                </div>
+                <div class="issue-tag-group">
+                    <span class="issue-cat-badge badge-bug">缺陷修复</span>
+                    <span class="issue-date-tag">2026-09-29</span>
+                </div>
+            </div>
+            
+            <div class="desc-block">
+                <div class="section-sublabel">问题现象</div>
+<p>在会话 S12（如 <code>S-USER_001-12</code>，模板 <code>T1-1</code>，角色 <code>distractor_session</code>）中，该会话为全新应用（钉钉会议）的单轮独立干扰保障，前置没有任何相关记忆。但用户台词却包含“清晰点就行”等模糊个性化表达，客服台词甚至回复“按记忆理解为720p”，将本应完全自包含、即用即走的干扰会话误当成了记忆调取会话。</p>
+<div class="section-sublabel">根因排查</div>
+<div class="bullet-item"><span class="bullet-prefix">1.</span><div class="bullet-content"><strong>骨架个性化表达泄露</strong>：<code>timeline_planner.py</code> 在为 T1-1 生成骨架时，仍带入了画像骨架中的 <code>aliases</code>（如 720p 对应“清晰点就行”）；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">2.</span><div class="bullet-content"><strong>单轮自包含属性未落实</strong>：干扰会话要求在单轮内一次性交代齐全部参数（应用、业务、时段、画质、时延），但大模型生成时容易遗漏参数，导致客服被迫猜测或调取记忆。</div></div>
+<div class="section-sublabel">解决办法</div>
+<div class="bullet-item"><span class="bullet-prefix">1.</span><div class="bullet-content"><strong>规划层彻底清空 aliases</strong>：在 <code>timeline_planner.py</code> 中判断若为 <code>distractor</code> 会话，不仅清空 <code>small_memory</code>，更强制 <code>aliases = {}</code>；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">2.</span><div class="bullet-content"><strong>提示词与保底模板全参数显式化</strong>：约束 T1-1 严禁任何未建立的个性化表达词汇，必须一次性说清全部 6 大要素（应用、业务、起始时间、结束时间/时长、明确分辨率、明确时延上限）；客服直接一次性受理，绝不出现“按记忆理解”；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">3.</span><div class="bullet-content"><strong>质检增加 Rule 9 强校验</strong>：<code>qc_validator.py</code> 中加入 <code>distractor_spec_check</code>，严格扫描 T1-1 中不得存在记忆个性化表达，且客服台词严禁含有“按记忆理解”字样。</div></div>
+            </div>
+            
+            <div class="contrast-grid">
+                <div class="contrast-box bad">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-bad">修复前</span> 缺陷表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复前</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 会话：S-USER_001-12 (模板: T1-1, 单轮干扰)
+Turn 1:
+User: &quot;钉钉会议，清晰点就行，今天上午10点开始，开半小时。&quot;
+Agent: &quot;好的，为您开通钉钉会议保障，按记忆理解为画质720p，时延80ms以内...&quot;
+
+// 缺陷 1：前置从未用过钉钉，用户却使用个性化表达“清晰点就行”
+// 缺陷 2：客服无依据脑补“按记忆理解为720p”，破坏单轮干扰的独立性</code></pre>
+                    </div>
+                </div>
+                
+                <div class="contrast-box good">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-good">修复后</span> 规范表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复后</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 会话：S-USER_001-12 (模板: T1-1, 单轮干扰)
+Turn 1:
+User: &quot;你好，今天10时00分到10时30分要在钉钉开会议（开30min），画质要720p，时延控制在80ms以内，帮我开个保障。&quot;
+Agent: &quot;收到，已为您开通钉钉会议网络保障：画质720p，时延上限80ms，保障时间2026年10月21日10时00分至2026年10月21日10时30分（共30min）。祝您使用顺利！&quot;
+
+// 规范：全量参数一次性交代明确，零未建立个性化表达、零脑补，客服直接受理闭环</code></pre>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="issue-card" id="entry-15" data-cat="bug">
+            <div class="issue-header">
+                <div class="issue-title-group">
+                    <h2>时长延长会话（T2-5 / S06）首轮跌破最小表达标准（仅带个性化表达无应用与业务）</h2>
+                </div>
+                <div class="issue-tag-group">
+                    <span class="issue-cat-badge badge-bug">缺陷修复</span>
+                    <span class="issue-date-tag">2026-09-29</span>
+                </div>
+            </div>
+            
+            <div class="desc-block">
+                <div class="section-sublabel">问题现象</div>
+<p>在会话 S06（如 <code>S-USER_001-06</code>，模板 <code>T2-5</code>，角色 <code>reuse_session</code>）中，第 1 轮用户台词原先仅说“老规矩，别卡顿开通保障。”或“老规矩，大半个下午开通保障。”，既无触发场景，也完全缺失了应用（抖音）与业务（开直播），严重违背了“应用＋业务是发起保障意图的最小表达”的系统规范。</p>
+<div class="section-sublabel">根因排查</div>
+<div class="bullet-item"><span class="bullet-prefix">1.</span><div class="bullet-content"><strong>提示词构建缺陷</strong>：在 <code>dialogue_generator.py</code> 构建 Prompt 时，针对 T2-5 的规则硬编码为：<code>第1轮用户说'老规矩，{primary_alias}开通保障'</code>，导致大模型直接将时延/时长个性化表达（如“别卡顿”、“大半个下午”）当成完整台词，粗暴省略了应用和业务；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">2.</span><div class="bullet-content"><strong>保底与质检拦截遗漏</strong>：原 <code>_normalize_turn</code> 未对 T2-5 校验应用与业务，保底模板也未被强制触发；质检规则中缺少针对 T2-5 首轮最小表达的强行校验。</div></div>
+<div class="section-sublabel">解决办法</div>
+<div class="bullet-item"><span class="bullet-prefix">1.</span><div class="bullet-content"><strong>重构 T2-5 提示词与保底规则</strong>：在 <code>dialogue_prompts.py</code>、<code>dialogue_generator.py</code> 及 <code>dialogue_fallbacks.py</code> 中重构：第 1 轮强制遵循“场景＋应用＋业务＋老规矩”最小表达（如<code>今天在{env}，老规矩，用{app}做{srv}，帮我把保障开上。</code>），严禁仅凭个性化表达发起；第 2 轮说明现场活动延长并给出新时长；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">2.</span><div class="bullet-content"><strong>质检增加 Rule 11 强校验</strong>：在 <code>qc_validator.py</code> 中追加 <code>T2-5</code> 首轮必须具备场景、应用、业务三要素，次轮必须包含时长延长说明；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">3.</span><div class="bullet-content"><strong>全量 20 个画像统一清洗与验证</strong>：对全量 20 个画像中全部 T2-5 会话同步清洗与标准化，100% 严格质检通过。</div></div>
+            </div>
+            
+            <div class="contrast-grid">
+                <div class="contrast-box bad">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-bad">修复前</span> 缺陷表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复前</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 会话：S-USER_001-06 (模板: T2-5, 时长延长)
+Turn 1:
+User: &quot;老规矩，别卡顿开通保障。&quot;
+Agent: &quot;收到，您说的老规矩是指抖音开直播，画质1080p、时延50ms以内，从12:30开始保障60分钟，对吗？&quot;
+Turn 2:
+User: &quot;对，老规矩不变，但今天午间活动要延长，时长改成120min，按这个节奏来。&quot;
+Agent: &quot;好的，已按老规矩为您开通抖音开直播保障...&quot;
+
+// 缺陷：第 1 轮仅有个性化表达“别卡顿”，完全无场景、无应用、无业务，违背最小表达标准</code></pre>
+                    </div>
+                </div>
+                
+                <div class="contrast-box good">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-good">修复后</span> 规范表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复后</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 会话：S-USER_001-06 (模板: T2-5, 时长延长)
+Turn 1:
+User: &quot;今天在常规周期保障现场，老规矩，用抖音做开直播，帮我把保障开上。&quot;
+Agent: &quot;收到，我调取到之前登记的抖音开直播配置：画质1080p、时延50ms以内，从12时30分开始保障，确认按这套配置开通吗？&quot;
+Turn 2:
+User: &quot;对，老规矩不变，不过今天现场活动延长了，帮我把保障时长延长到120min。&quot;
+Agent: &quot;好的，已按老规矩为您开通抖音开直播保障：画质保持1080p、时延上限50ms，时长已延长至120min。祝您活动顺利！&quot;
+
+// 规范：首轮场景+应用+业务+老规矩四要素齐全，次轮明确延长时长，完全符合最小表达标准</code></pre>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="issue-card" id="entry-16" data-cat="bug">
+            <div class="issue-header">
+                <div class="issue-title-group">
+                    <h2>时长延长会话（T2-5）第1轮客服提前泄露次轮修改后时长（临时参数污染）与生造个性化表达治理</h2>
+                </div>
+                <div class="issue-tag-group">
+                    <span class="issue-cat-badge badge-bug">缺陷修复</span>
+                    <span class="issue-date-tag">2026-09-29</span>
+                </div>
+            </div>
+            
+            <div class="desc-block">
+                <div class="section-sublabel">问题现象</div>
+<div class="bullet-item"><span class="bullet-prefix">1.</span><div class="bullet-content"><strong>首轮提前泄露次轮临时参数</strong>：在画像 2、7、14、17、19 等会话 S07 中（模板 <code>T2-5</code>），用户在第 2 轮才因现场突发情况提出“活动延长，帮我把时长延长到180min”。但在第 1 轮客服调取老规矩时，居然提前反问“持续180分钟，对吗？”，导致客服在用户提出修改前就提前被次轮的临时参数所污染；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">2.</span><div class="bullet-content"><strong>残留后台规则词与生造个性化表达</strong>：在画像 6 的 S07 等会话中，台词出现了“触发用微信做视频通话，时延按‘别卡顿’”等后台规划残留词汇（“触发用”），以及未在先验记忆中登记过的生造别名（如在未定义“别卡顿”的画像中强行塞入该词）。</div></div>
+<div class="section-sublabel">根因排查</div>
+<div class="bullet-item"><span class="bullet-prefix">1.</span><div class="bullet-content"><strong>提示词与模板透传未解耦</strong>：Prompt 在组织 T2-5 时，直接将修改后的 <code>duration</code> 传入并用于第 1 轮客服引导；后处理中只对用户台词进行了归一化，未拦截客服第 1 轮提前泄露修改后时长；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">2.</span><div class="bullet-content"><strong>大模型幻觉生造个性化表达</strong>：在未分配小记忆点（<code>small_memory</code> 为空）的常规复用会话中，提示词提示“若有个性化表达则使用个性化表达”，导致大模型自发生成了画像记忆库中并不存在的别名。</div></div>
+<div class="section-sublabel">解决办法</div>
+<div class="bullet-item"><span class="bullet-prefix">1.</span><div class="bullet-content"><strong>第 1 轮客服隔离修改后时长</strong>：在 <code>dialogue_generator.py</code> 与 <code>dialogue_fallbacks.py</code> 中重构：T2-5 第 1 轮客服调取记忆时，严禁提及次轮修改后的时长（如 180min），只确认原基线配置或保障起始时刻；在后处理中强行扫描并拦截提前泄露行为；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">2.</span><div class="bullet-content"><strong>清理后台规划词与幻觉个性化表达</strong>：过滤清理所有台词中的“触发用/触发”等后台规划词汇；对台词中的引号别名进行合法性校验，凡未在先验记忆快照中登记的别名一律予以清除；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">3.</span><div class="bullet-content"><strong>质检加固 Rule 11 与 Rule 12</strong>：在 <code>qc_validator.py</code> 中升级 Rule 11（严禁 T2-5 第 1 轮客服泄露修改后时长）并增加 Rule 12（台词严禁包含“触发”等后台规划词）；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">4.</span><div class="bullet-content"><strong>全量 20 个画像统一清洗与校验</strong>：全量 20 个画像数据同步重清洗，100% 通过严格质检。</div></div>
+            </div>
+            
+            <div class="contrast-grid">
+                <div class="contrast-box bad">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-bad">修复前</span> 缺陷表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复前</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 会话：S-USER_002-07 (模板: T2-5, 时长延长)
+Turn 1:
+User: &quot;今天在跨境商贸交流会，老规矩，用微信做视频通话，帮我把保障开上。&quot;
+Agent: &quot;收到，您说的老规矩是指微信视频通话...持续180分钟，对吗？&quot;
+Turn 2:
+User: &quot;对，老规矩不变，不过今天现场活动延长了，帮我把保障时长延长到180min。&quot;
+Agent: &quot;好的，已按老规矩为您开通微信视频通话保障...&quot;
+
+// 缺陷：客服在第 1 轮居然提前预知并说出 180min，发生临时参数时序污染！</code></pre>
+                    </div>
+                </div>
+                
+                <div class="contrast-box good">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-good">修复后</span> 规范表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复后</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 会话：S-USER_002-07 (模板: T2-5, 时长延长)
+Turn 1:
+User: &quot;今天在跨境商贸交流会，老规矩，用微信做视频通话，帮我把保障开上。&quot;
+Agent: &quot;收到，我调取到之前登记的微信视频通话配置：画质1080p、时延50ms以内，从15时00分开始保障，确认按这套配置开通吗？&quot;
+Turn 2:
+User: &quot;对，老规矩不变，不过今天现场活动延长了，帮我把保障时长延长到180min。&quot;
+Agent: &quot;好的，已按老规矩为您开通微信视频通话保障：画质保持1080p、时延上限50ms，时长已延长至180min。祝您活动顺利！&quot;
+
+// 规范：第 1 轮客服恪守原基线记忆，第 2 轮根据用户临时申请修改时长，因果时序严密合规！</code></pre>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="issue-card" id="entry-17" data-cat="bug">
+            <div class="issue-header">
+                <div class="issue-title-group">
+                    <h2>slot_updates 与 turn_intent 不一致及 duration 持续时长槽位遗漏修复</h2>
+                </div>
+                <div class="issue-tag-group">
+                    <span class="issue-cat-badge badge-bug">缺陷修复</span>
+                    <span class="issue-date-tag">2026-10-10 修复</span>
+                </div>
+            </div>
+            
+            <div class="desc-block">
+                <div class="section-sublabel">问题现象</div>
+<p>在画像 001 会话 3（<code>S-USER_001-03</code>）等标准多轮业务的 T1 轮次中，<code>turn_intent</code> 中的 <code>requested_params</code> 已完整声明了 <code>["start_timestamp", "end_timestamp", "duration"]</code>，但在底层的 <code>slot_updates</code> 字典中却只有 <code>start_timestamp</code> 和 <code>end_timestamp</code> 两个时间戳键值，遗漏了持续时长 <code>duration</code>。这导致 <code>slot_updates</code> 与 <code>turn_intent</code> 出现脱节，质检和评测无法准确追踪持续时长的更新记录。</p>
+<div class="section-sublabel">根因排查</div>
+<div class="bullet-item"><span class="bullet-prefix">1.</span><div class="bullet-content"><strong>装配方法槽位提取缺失</strong>：在 <code>src/generation/session_assembler.py</code> 的 <code>_assemble_standard</code> 与 <code>_assemble_t2_3</code> 中，当处理用户提出的时间槽位更新时，仅按日期模式提取并注入了 <code>start_timestamp</code> 和 <code>end_timestamp</code>，漏写了目标参数中的 <code>duration</code> 键；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">2.</span><div class="bullet-content"><strong>支线跨轮消歧字段泄漏与闭环异常</strong>：同时发现 <code>_assemble_t2_2</code> 中存在 <code>closure_path: "clarified"</code> 遗漏，且 <code>evidence_session</code> 会话在跨轮澄清中提前泄露了 <code>resolution</code>。</div></div>
+<div class="section-sublabel">解决办法</div>
+<div class="bullet-item"><span class="bullet-prefix">1.</span><div class="bullet-content"><strong>补齐 duration 槽位提取</strong>：在 <code>session_assembler.py</code> 的时间更新分支中，统一补齐 <code>duration</code> 提取并注入 <code>slot_updates</code>，确保与 <code>turn_intent.requested_params</code> 100% 严格对齐；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">2.</span><div class="bullet-content"><strong>修复消歧与因果闭环</strong>：规范 <code>_assemble_t2_2</code> 的 <code>closure_path</code> 与证据会话的跨轮参数装配；</div></div>
+<div class="bullet-item"><span class="bullet-prefix">3.</span><div class="bullet-content"><strong>全量数据同步与代码仓提交</strong>：编写增量修复补丁，对 <code>mobile_persona_001</code> ~ <code>mobile_persona_100</code> 全部 100 个画像（共 1410 个会话）进行了全量数据同步修补，全量质检 100% 一次性通过，并成功同步推送至远程代码仓。</div></div>
+            </div>
+            
+            <div class="contrast-grid">
+                <div class="contrast-box bad">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-bad">修复前</span> 缺陷表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复前</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 会话：S-USER_001-03 (模板: T2-1, 角色: reinforcement_session)
+&quot;turn_intent&quot;: {
+  &quot;intent_type&quot;: &quot;Reserve_Resource&quot;,
+  &quot;requested_params&quot;: [&quot;application_name&quot;, &quot;service_name&quot;, &quot;start_timestamp&quot;, &quot;end_timestamp&quot;, &quot;duration&quot;]
+},
+&quot;slot_updates&quot;: {
+  &quot;start_timestamp&quot;: &quot;2026年10月12日14时00分&quot;,
+  &quot;end_timestamp&quot;: &quot;2026年10月12日16时00分&quot;
+  // 缺陷：turn_intent 声明了 duration，但 slot_updates 遗漏 duration！
+}</code></pre>
+                    </div>
+                </div>
+                
+                <div class="contrast-box good">
+                    <div class="contrast-header">
+                        <div class="contrast-title"><span class="contrast-pill-good">修复后</span> 规范表现</div>
+                        <span class="code-lang-tag">JSON</span>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">修复后</span>
+                            <button class="copy-btn" onclick="copyCode(this)" title="复制代码">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                        <pre><code>// 会话：S-USER_001-03 (模板: T2-1, 角色: reinforcement_session)
+&quot;turn_intent&quot;: {
+  &quot;intent_type&quot;: &quot;Reserve_Resource&quot;,
+  &quot;requested_params&quot;: [&quot;application_name&quot;, &quot;service_name&quot;, &quot;start_timestamp&quot;, &quot;end_timestamp&quot;, &quot;duration&quot;]
+},
+&quot;slot_updates&quot;: {
+  &quot;start_timestamp&quot;: &quot;2026年10月12日14时00分&quot;,
+  &quot;end_timestamp&quot;: &quot;2026年10月12日16时00分&quot;,
+  &quot;duration&quot;: &quot;120min&quot; // 规范：duration 完整更新，与 turn_intent 严格对应
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </article>
+                </section>
+
+                <!-- 实测修复结果与验证数据汇总 -->
+                <section class="column-section" id="summary-section" data-cat="summary">
+                    <div class="column-section-header">
+                        <h2>实测修复结果与验证数据汇总</h2>
+                        <span class="column-section-desc">全量 100 画像（1410 会话）在 16 项对比维度下的实测结果</span>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-header">全量实测验证数据表 (100 Persona / 1410 Sessions)</div>
+                        <p style="font-size: 0.92rem; color: var(--text-secondary); margin-bottom: 14px;">针对上述 17 项问题与架构规范，已全面更新生成代码与质检套件，并在 100 个画像上完成清洗与质检校验：</p>
+                        
+    <div class="table-wrapper">
         <table>
-            <thead>
-                <tr>
-                    <th style="width: 25%;">对比维度</th>
-                    <th style="width: 35%;">修复前表现</th>
-                    <th style="width: 40%;">修复后实测结果</th>
-                </tr>
-            </thead>
+            <thead><tr><th>对比维度</th><th>修复前表现</th><th>修复后实测结果</th></tr></thead>
             <tbody>
-                <tr>
-                    <td><strong>质检通过率</strong></td>
-                    <td>约 71.4%（单画像常出现 3~4 个会话未通过）</td>
-                    <td><strong>100.0%</strong>（20 个画像全量会话全部一次性通过）</td>
-                </tr>
-                <tr>
-                    <td><strong>时长延长最小表达</strong></td>
-                    <td>S06 首轮仅凭“别卡顿”暗号发起，无场景与应用业务</td>
-                    <td><strong>100% 达标</strong>（场景+应用+业务+老规矩四要素齐全，次轮明确时长延长）</td>
-                </tr>
-                <tr>
-                    <td><strong>临时纠正最小表达</strong></td>
-                    <td>S09 首轮只有暗号，无场景、无应用业务</td>
-                    <td><strong>100% 达标</strong>（场景+应用+业务+暗号齐备，次轮交代特殊原因）</td>
-                </tr>
-                <tr>
-                    <td><strong>单轮干扰全显式表达</strong></td>
-                    <td>S12 漏传参数、引入模糊暗号且客服脑补</td>
-                    <td><strong>彻底隔离暗号</strong>（6大参数全量显式交代，客服直接闭环受理）</td>
-                </tr>
-                <tr>
-                    <td><strong>干扰会话暗号隔离</strong></td>
-                    <td>X-1 单轮干扰未建记忆却凭空直呼暗号并补全</td>
-                    <td><strong>100% 隔离</strong>（无先验记忆注入，正常表达需求）</td>
-                </tr>
-                <tr>
-                    <td><strong>临时纠正记忆恢复</strong></td>
-                    <td>S09 临时降级后 S10 继续沿用 720p/30ms</td>
-                    <td><strong>规范回归</strong>（S10 自动恢复并复用 1080p/50ms 基线）</td>
-                </tr>
-                <tr>
-                    <td><strong>口语日期与真值对齐</strong></td>
-                    <td>台词说“明天”但标注落在“今天”（S12）</td>
-                    <td><strong>严格吻合</strong>（同日即时预约统一规范为“今天”）</td>
-                </tr>
-                <tr>
-                    <td><strong>台词口语真实度</strong></td>
-                    <td>出现“今天又到[长句]办事了”等生硬拼接</td>
-                    <td><strong>完全口语化</strong>（提炼简短地点，通顺自然）</td>
-                </tr>
-                <tr>
-                    <td><strong>地点提炼泛化性</strong></td>
-                    <td>人工写死正则，无法泛化新职业</td>
-                    <td><strong>LLM 语义提炼 + 规则兜底</strong>（强覆盖无盲区）</td>
-                </tr>
-                <tr>
-                    <td><strong>时序跨轮早泄</strong></td>
-                    <td>普遍存在（首轮提前写入 QoS 与结束时间）</td>
-                    <td><strong>0 处泄露</strong>（严格按交互轮次增量更新）</td>
-                </tr>
-                <tr>
-                    <td><strong>域外拒识语义</strong></td>
-                    <td>动作标为拒绝但台词实际答应受理</td>
-                    <td><strong>100% 对齐</strong>（台词包含明确不可受理及指引说辞）</td>
-                </tr>
-                <tr>
-                    <td><strong>口语代称与槽位</strong></td>
-                    <td>代称凭空突现；复用会话机械全量复读</td>
-                    <td><strong>完全受控</strong>（严格前置确认登记；复用省略已知槽位）</td>
-                </tr>
-                <tr>
-                    <td><strong>模板规格一致性</strong></td>
-                    <td>存在 T2-2 与 3 轮交互错配</td>
-                    <td><strong>0 处错配</strong>（模板 ID、轮数与意图数完全对齐）</td>
-                </tr>
+                <tr><td><strong>质检通过率</strong></td><td>约 71.4%（单画像常出现 3~4 个会话未通过）</td><td><strong>100.0%</strong>（150 个画像共 2100 个会话全量一次性通过）</td></tr><tr><td><strong>slot_updates 与 turn_intent 对齐</strong></td><td>时间更新分支漏提取 <code>duration</code>，与意图声明不一致</td><td><strong>100% 严格对齐</strong>（全量会话同步注入 duration，三元组完整闭环）</td></tr><tr><td><strong>会话总长度与模板拓扑</strong></td><td>固定轮数机械死板，缺乏拓扑因果约束与多故事线隔离</td><td><strong>12~16 轮动态浮动</strong>（16 槽位拓扑 DAG 严格保证生命周期与故事线隔离）</td></tr><tr><td><strong>数据多样性与规则解耦</strong></td><td>缺乏系统分层，业务边界与别名夸大失真难以控制</td><td><strong>双层解耦架构</strong>（50/50声明、1:1:1触发、6维哈希抽样 + 7大业务Prompt铁律）</td></tr><tr><td><strong>时长延长最小表达</strong></td><td>S06 首轮仅凭“别卡顿”个性化表达发起，无场景与应用业务</td><td><strong>100% 达标</strong>（场景+应用+业务+老规矩四要素齐全，次轮明确时长延长）</td></tr><tr><td><strong>临时纠正最小表达</strong></td><td>S09 首轮只有个性化表达，无场景、无应用业务</td><td><strong>100% 达标</strong>（场景+应用+业务+个性化表达齐备，次轮交代特殊原因）</td></tr><tr><td><strong>单轮干扰全显式表达</strong></td><td>S12 漏传参数、引入模糊个性化表达且客服脑补</td><td><strong>彻底隔离未建立的个性化表达</strong>（6大参数全量显式交代，客服直接闭环受理）</td></tr><tr><td><strong>干扰会话个性化表达隔离</strong></td><td>X-1 单轮干扰未建记忆却凭空直呼个性化表达并补全</td><td><strong>100% 隔离</strong>（无先验记忆注入，正常表达需求）</td></tr><tr><td><strong>临时纠正记忆恢复</strong></td><td>S09 临时降级后 S10 继续沿用 720p/30ms</td><td><strong>规范回归</strong>（S10 自动恢复并复用 1080p/50ms 基线）</td></tr><tr><td><strong>口语日期与真值对齐</strong></td><td>台词说“明天”但标注落在“今天”（S12）</td><td><strong>严格吻合</strong>（同日即时预约统一规范为“今天”）</td></tr><tr><td><strong>台词口语真实度</strong></td><td>出现“今天又到[长句]办事了”等生硬拼接</td><td><strong>完全口语化</strong>（提炼简短地点，通顺自然）</td></tr><tr><td><strong>地点提炼泛化性</strong></td><td>人工写死正则，无法泛化新职业</td><td><strong>LLM 语义提炼 + 规则兜底</strong>（强覆盖无盲区）</td></tr><tr><td><strong>时序跨轮早泄</strong></td><td>普遍存在（首轮提前写入 QoS 与结束时间）</td><td><strong>0 处泄露</strong>（严格按交互轮次增量更新）</td></tr><tr><td><strong>域外拒识语义</strong></td><td>动作标为拒绝但台词实际答应受理</td><td><strong>100% 对齐</strong>（台词包含明确不可受理及指引说辞）</td></tr><tr><td><strong>口语代称与槽位</strong></td><td>代称凭空突现；复用会话机械全量复读</td><td><strong>完全受控</strong>（严格前置确认登记；复用省略已知槽位）</td></tr><tr><td><strong>模板规格一致性</strong></td><td>存在 T2-2 与 3 轮交互错配</td><td><strong>0 处错配</strong>（模板 ID、轮数与意图数完全对齐）</td></tr>
             </tbody>
         </table>
     </div>
+    
+                    </div>
+                </section>
+            </div>
 
-    <footer>
-        <p>跨会话长程记忆数据集生成系统 · 近期问题排查与解决对照文档</p>
-        <p>归档路径：D:/coding/cross_memory_data/docs/update.html</p>
-    </footer>
+            <!-- 原生 Markdown 源码视图 -->
+            <div id="markdown-view-container">
+                <div class="md-toolbar">
+                    <div>
+                        <strong style="color: var(--accent-primary); font-size: 1.05rem;">docs/update.md 原生源码</strong>
+                        <span style="font-size: 0.8rem; color: var(--text-muted); margin-left: 8px;">(单一定义源，支持随时编辑并通过 python docs/render_html.py 一键同步)</span>
+                    </div>
+                    <button class="btn-copy-md" onclick="copyMarkdownSource()">复制 Markdown 全文</button>
+                </div>
+                <textarea class="raw-md-textarea" id="mdSourceArea" readonly># 跨会话长程记忆数据集：生成问题排查、架构拓扑与多样性规范手册
 
-</div>
+&gt; **文档定位**：记录 001~150 画像跨会话记忆数据集在研发生成、质检对齐、架构演进与因果拓扑推导中的关键问题排查、规范标准与实测结果。
 
+## 核心元数据
+
+| 属性 | 指标说明 |
+| :--- | :--- |
+| **记录周期** | 2026年09月28日 - 2026年10月10日 |
+| **累计排查与规范项** | 17 项（含架构拓扑、生命周期因果与多样性规范） |
+| **样本画像规模** | 150 个画像（`mobile_persona_001` ~ `mobile_persona_150`） |
+| **全量会话总数** | 2100 个多轮/单轮交互会话（共计 3960 对话轮次） |
+| **质检通过率** | **100.0%**（全量 2100 会话全部一次性无告警通过） |
+
+## 目录大纲
+
+- [架构设计与模板拓扑规范](#架构设计与模板拓扑规范)
+  - [会话总长度规划机制（12~16 轮动态浮动）与 16 槽位模板分布拓扑规范详解](#会话总长度规划机制1216-轮动态浮动与-16-槽位模板分布拓扑规范详解)
+- [数据多样性机制与提示词规则](#数据多样性机制与提示词规则)
+  - [全流水线“多样性离散处理”与“提示词约束规则”规范解耦](#全流水线多样性离散处理与提示词约束规则规范解耦)
+- [核心缺陷排查与数据治理实录](#核心缺陷排查与数据治理实录)
+  - [后台规则长句直接拼接进台词（006 号样本等生硬台词治理）](#后台规则长句直接拼接进台词006-号样本等生硬台词治理)
+  - [候选记忆未确认即标记为生效（provisional 提前标记 memory_filled）](#候选记忆未确认即标记为生效provisional-提前标记-memory_filled)
+  - [对话时间标注向首轮提前写入（时序跨轮早泄）](#对话时间标注向首轮提前写入时序跨轮早泄)
+  - [域外拒绝会话中动作标签与台词语义矛盾](#域外拒绝会话中动作标签与台词语义矛盾)
+  - [口语代称无来源凭空出现](#口语代称无来源凭空出现)
+  - [复用已知参数时机械复读与口语词汇失真](#复用已知参数时机械复读与口语词汇失真)
+  - [模板编号与实际交互轮数/意图数错配](#模板编号与实际交互轮数意图数错配)
+  - [干扰会话（X-1）未建记忆却直呼个性化表达（如“不卡就行”）与误跌入记忆复用规则](#干扰会话x-1未建记忆却直呼个性化表达如不卡就行与误跌入记忆复用规则)
+  - [临时特殊事件纠正（event_override）误持久化，次日复用（event_reuse）未恢复基线记忆](#临时特殊事件纠正event_override误持久化次日复用event_reuse未恢复基线记忆)
+  - [口语相对日期（“明天”/“后天”）与真值当天时间戳错配](#口语相对日期明天后天与真值当天时间戳错配)
+  - [临时纠正会话（T2-3）首轮违背“场景+应用+业务”最小表达标准与次轮现场原因缺失](#临时纠正会话t2-3首轮违背场景应用业务最小表达标准与次轮现场原因缺失)
+  - [单轮干扰会话（T1-1）未隔离个性化表达且参数不全，导致客服出现脑补反问](#单轮干扰会话t1-1未隔离个性化表达且参数不全导致客服出现脑补反问)
+  - [时长延长会话（T2-5 / S06）首轮跌破最小表达标准（仅带个性化表达无应用与业务）](#时长延长会话t2-5-s06首轮跌破最小表达标准仅带个性化表达无应用与业务)
+  - [时长延长会话（T2-5）第1轮客服提前泄露次轮修改后时长（临时参数污染）与生造个性化表达治理](#时长延长会话t2-5第1轮客服提前泄露次轮修改后时长临时参数污染与生造个性化表达治理)
+  - [slot_updates 与 turn_intent 不一致及 duration 持续时长槽位遗漏修复](#slot_updates-与-turn_intent-不一致及-duration-持续时长槽位遗漏修复)
+- [时间线归档索引](#时间线归档索引)
+- [实测修复结果与验证数据汇总](#实测修复结果与验证数据汇总)
+
+---
+
+## 架构设计与模板拓扑规范
+
+本栏目解析跨会话记忆数据集的时间线规划骨架、16 候选槽位的因果拓扑（Causal DAG）、多故事线穿插隔离机制与安全裁剪策略。
+
+### 会话总长度规划机制（12~16 轮动态浮动）与 16 槽位模板分布拓扑规范详解
+
+&gt; **归档时间**：`2026-10-10 架构解析` | **分类**：`架构解析 / 拓扑规范`
+
+#### 背景与问题
+在审查生成的样本数据时发现，各画像的会话总长度均在 14 轮左右浮动（集中在 12~16 轮之间）。需要透彻明确：会话数量是如何确定的？是否存在写死的流程？模版在时间轴上的分布规律（拓扑结构）背后的因果逻辑是什么？
+
+            
+
+#### 原理与机制
+
+                1. **会话总长度动态规划公式**：在 `src/core/timeline_planner.py` 中，采用公式 `target_count = 12 + (uid_num % 5)`。由于 `uid_num % 5` 在 0~4 均匀分布，目标轮数均匀离散为 `12, 13, 14, 15, 16` 轮，**算术均值恰好为 14 轮**，避免固定单一的会话轮数；
+
+                2. **16 候选槽位全景拓扑（Causal DAG）**：系统在 `src/templates/timeline_blueprints.py` 中定义了严格满足长程记忆因果律的 16 槽位候选矩阵，覆盖四大演进阶段：
+                   
+  • **阶段一（记忆建立与歧义消解）**：S1 主线首次建联 (T2-1) → S2 支线1弱网别名消歧 (T2-2/T3-1)；
+                   
+  • **阶段二（多线交织与记忆固化）**：S3 主线首次强化 (T2-1) → S4 支线2建联 → S5 域外干扰拒识 (T1-2) → S6 支线1复用强化；
+                   
+  • **阶段三（记忆复用与时长变更）**：S7 主线复用并延长时间 (T2-5) → S8 主线常规强化 → S9 支线2强化 → S10 混合诉求一办一拒 (X-1)；
+                   
+  • **阶段四（突发事件纠偏与恢复闭环）**：S11 恶劣天气临时纠错 (T2-3) → S12 纠偏中主线复用 → S13 支线1复用（隔离验证：确保不被主线纠偏污染） → S14 单轮干扰 (T1-1) → S15 事件失效主线基线恢复 (T2-1) → S16 终态持续复用；
+
+                3. **因果闭环安全裁剪机制**：当 `target_count` 小于 16 时，系统优先安全剥离非核心节点（如 `extra_reuse` S16、`dist_normal` S14、`sub2` S4/S9），**核心闭环 8 大节点（S1, S2, S3, S5, S7, S10, S11, S15）全部保留**，保证因果逻辑链条完整闭环。
+
+#### 对比分析
+
+```text
+传统做法（固定长度与随机时序）
+// 传统固定长度与随机时序的致命缺陷：
+1. 固定 15 轮机械死板，缺乏真实用户跨度差异；
+2. 随机打乱模板导致“因果倒置”：在 S1 之前就复用记忆（无源之水）；
+3. 临时纠偏未设置“失效期后基线恢复”节点，无法检验记忆状态机闭环；
+4. 缺乏多故事线穿插隔离验证，容易导致主线临时纠错污染支线业务。
+```
+
+```text
+现行 16 槽位拓扑因果设计
+// 16 候选槽位安全裁剪与多故事线交替穿插拓扑：
+1. 长度浮动：target_count = 12 + (uid_num % 5)，支持 12~16 轮动态浮动；
+2. 因果严密：建联(Evidence) &amp;rarr; 固化(Reinf) &amp;rarr; 复用(Reuse) 拓扑单调不可逆；
+3. 多线隔离：主线与支线在时间轴上交错穿插（S1主-S2支-S3主-S5扰-S6支-S7主...）；
+4. 状态机闭环：S11(暴雨纠错) &amp;rarr; S12(纠错生效) &amp;rarr; S13(支线隔离验证) &amp;rarr; S15(事件到期自动恢复 1080p 基线)。
+```
+
+---
+
+## 数据多样性机制与提示词规则
+
+本栏目梳理数据生成流水线中，通过数学取模、哈希离散与模型生成保障百人百面的多样性维度，以及通过提示词与代码强约束确保合规与评测严谨的规则边界。
+
+### 全流水线“多样性离散处理”与“提示词约束规则”规范解耦
+
+&gt; **归档时间**：`2026-10-10 架构解析` | **分类**：`多样性架构 / 提示词铁律`
+
+#### 背景与问题
+整个数据生成流水线中，哪些维度做了随机/多样性处理以保证百人百面？哪些逻辑是在 Prompt 或代码中严格写死的？二者的边界与设计原则是什么？
+
+            
+
+#### 原理与机制
+
+                为同时保证“评测金标准确无幻觉、因果可复现”与“自然语言多样性、情境丰富”，流水线采用了**双层解耦架构**：
+                
+**多样性处理层（通过取模/哈希与LLM生成，保障分布均衡与情境丰富）**：
+                
+  1. **声明模式 50/50 划分**：`uid_num % 2 == 1`，奇数显式声明，偶数隐式归纳；
+                
+  2. **触发类型 1:1:1 轮转**：`uid_num % 3`，周期时间驱动 / 现场任务驱动 / 物理地点驱动均衡分布；时间驱动下再下钻为 daily(3个时段)、weekly(8类周组合)、monthly(月度节点)；
+                
+  3. **小记忆点 6 维哈希抽样**：利用 `hashlib.sha256(uid:type)`，从应用昵称、业务默认应用、画质别名、时延别名、时长别名、个性化周期表达 6 大维度中动态选择，保证每个人物的小记忆类型各不相同；
+                
+  4. **会话总轮数浮动**：`12 + (uid_num % 5)` 产生 12~16 轮动态浮动；
+                
+  5. **现场地点提炼与台词发散**：LLM 动态提取 3~7 字自然地点名词（如“沿海巡逻岸线”），并根据各角色 `speech_style` 发散多轮口语化台词。
+                
+**二、提示词约束规则（严格约束，确保合规与基准严谨）**：
+                
+  1. **业务与 App 白名单写死**：仅限 7 项标准通信业务（开直播、看直播、视频通话等），严禁大模型捏造不支持的业务；
+                
+  2. **参数别名对齐律写死**：1080p 只能叫“1080p原画/超清”，严禁夸大为“顶格画质”；50ms 严禁夸大为“零卡顿”；整条时间线必须全局一致，严禁同一主线在不同会话中跳变称谓；
+                
+  3. **去系统术语写死**：严禁台词中出现“长期偏好”、“元指令”、“触发槽位”等程序员词汇，强制使用“记住这个习惯哈”等真实口语；
+                
+  4. **冷启动与最小表达律写死**：S1 首次建联严禁提生僻别名或未生效的个性化表达；复用会话严禁只说“老规矩开保障”，必须说出应用+业务并省略已知参数。
+
+#### 对比分析
+
+```text
+无规范约束时的潜在隐患
+// 缺乏 提示词强约束与白名单时：
+1. LLM 自由发挥捏造“帮忙充话费”、“调试交换机”等域外业务；
+2. 出现“零卡顿”、“秒开”、“极致顶格清晰度”等物理失真词汇；
+3. 用户台词出现“系统请记录我的元指令长期偏好”等浓重 AI 味；
+4. 用户首轮就直呼“老规矩”，导致冷启动阶段记忆无源产生幻觉。
+```
+
+```text
+双层解耦后的规范化收益
+// 多样性处理 + 提示词强约束双层保障：
+1. 结构层面：显式/隐式、周期粒度、小记忆类型均严格均衡离散分布；
+2. 质量层面：业务全在 7 大白名单内，别名与数值档位 100% 精确映射；
+3. 语言层面：口语表达极其生活化，彻底杜绝系统研发行话；
+4. 评测层面：Ground Truth 具有严密的因果逻辑，全量 100 画像质检 100% 通过。
+```
+
+---
+
+## 核心缺陷排查与数据治理实录
+
+本栏目系统归档 15 项真实数据缺陷、根因推演、代码级修复方案与前后对比实测。
+
+### 后台规则长句直接拼接进台词（006 号样本等生硬台词治理）
+
+&gt; **归档时间**：`2026-09-28 修复` | **分类**：`缺陷修复 / 数据清洗`
+
+#### 问题现象
+在 006、003、009 等地点驱动型画像中，用户台词中直接塞入了后台规划的条件规则长句（如“当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。”），拼出诸如“今天又到[长句]办事了，这次按上次的来”的极度生硬、违背日常口语的句子。
+
+            
+
+#### 根因排查
+画像骨架中的 `trigger_condition` 是一整段业务规划描述，时间线规划器将其直接透传为了场景地点 `scenario_env`，而保底模板直接对其进行了机械字符串拼接。
+
+            
+
+#### 解决办法
+
+                
+1. **LLM 语义提炼为主**：针对多样化未知的职业背景，调用大模型从任务名与场景长句中提炼出 1 个 3~7 字纯名词短语（如“道路巡逻现场”、“社区走访现场”），严禁生成包含从句的非地名文本；
+                
+2. **规则安全兜底**：若 LLM 响应异常或无网络，自动走正则与关键词兜底，确保流水线不中断；
+                
+3. **模板重构与台词拦截**：保底模板重构为“今天在{env}，这次按上次的来”，彻底移除“办事了”等生硬词汇；并在后处理中增加对后台规则词的过滤拦截；
+                
+4. **全量数据清洗**：对当前生成的 20 个画像中受影响的 51 处场景与 147 处台词进行了全面清洗修复。
+
+#### 对比分析
+
+**修复前：**
+```json
+// 会话：S-USER_006-03（Turn 1）
+User: &quot;今天又到当上午09:00-11:00进入道路巡逻线、事故现场或应急集结区等移动执勤弱网空间时，触发现场取证、即时通信、事件上报、地图导航与位置共享任务。办事了，这次按上次的来。&quot;
+
+Agent: &quot;我查到您上次在这个场景使用的是微信视频通话，配置为1080p、时延50ms以内、持续120min...&quot;
+
+// 缺陷：整段后台触发规则被生硬拼入台词，包含“当...进入...任务。办事了”等生硬的模板化表述
+```
+
+**修复后：**
+```json
+// 会话：S-USER_006-03（Turn 1）
+User: &quot;今天在道路巡逻现场，这次按上次的来。&quot;
+
+Agent: &quot;我查到您上次在道路巡逻现场使用的是微信视频通话，配置为1080p、时延50ms以内、持续120min。本次计划09时00分至11时00分，是否按这套配置开通？如果确认，我也可以将它设为以后该场景的默认配置。&quot;
+
+// 规范：提炼出简短规范地点“道路巡逻现场”，台词地道自然，符合真实人类口语习惯
+```
+
+---
+
+### 候选记忆未确认即标记为生效（provisional 提前标记 memory_filled）
+
+&gt; **归档时间**：`2026-09-28 修复` | **分类**：`缺陷修复 / 数据清洗`
+
+#### 问题现象
+隐式归纳首次出现后，记忆状态应为 `provisional`（候选状态），代表单次习惯观察；但在随后的复用会话中，程序提前将其标注为 `memory_filled`（已生效记忆），跳过了用户确认过程。
+
+            
+
+#### 解决办法
+依据会话前置快照 `snapshot_before.status` 进行状态分流：当状态为 `provisional` 时，标注来源必须为 `History`（历史推导），待用户第 2 轮确认后才升级为 `active`；只有此前已经是 `active` 状态的记忆，才允许使用 `Memory` 来源。
+
+#### 对比分析
+
+**修复前：**
+```json
+// 会话前置快照：status = &quot;provisional&quot;
+// 问题：第 1 轮直接当作已固化生效记忆处理
+&quot;turn_intents&quot;: [{
+  &quot;params&quot;: {
+    &quot;application_name&quot;: &quot;腾讯会议&quot;,
+    &quot;resolution&quot;: &quot;1080p&quot;,
+    &quot;source&quot;: &quot;Memory&quot; // 错误：候选状态未确认，提前标为 Memory
+  }
+}]
+// 质检报错：provisional 状态不允许直接标记为 memory_filled
+```
+
+**修复后：**
+```json
+// 会话前置快照：status = &quot;provisional&quot;
+// 规范：来源溯源至历史记录，待用户确认后才生效
+Turn 1
+User: &quot;这次按上次的来。&quot;
+Agent: &quot;调取到上次记录：1080p原画、50ms以内，按这个开通吗？&quot;
+// 标注来源标记为 History，状态为 in_progress
+
+Turn 2
+User: &quot;对，开通吧。&quot; // 用户确认
+// 后置记忆状态正式由 provisional 升级为 active
+```
+
+
+---
+
+### 对话时间标注向首轮提前写入（时序跨轮早泄）
+
+&gt; **归档时间**：`2026-09-28 修复` | **分类**：`缺陷修复 / 数据清洗`
+
+#### 问题现象
+用户在第 1 轮只说了“今晚8点要在腾讯会议上开个视频会”，并未说明持续多长时间；但首轮的结构化标注中却提前写入了后续轮次才讨论确定的结束时间（22:00）和持续时长（120分钟），破坏了对话状态追踪（DST）的时序因果。
+
+            
+
+#### 解决办法
+严格实施逐轮隔离。第 1 轮仅标注已明确说出的 `start_timestamp`，未提及的画质、时延与时长记入 `requested_params` 待追问列表；等到第 2 轮用户澄清并明确时长后，再行计算并写入结束时间与时长。
+
+#### 对比分析
+
+**修复前：**
+```json
+// 缺陷：第 1 轮用户未提及画质、时延与时长，标注却提前填入
+&quot;turn&quot;: 1,
+&quot;user&quot;: { &quot;utterance&quot;: &quot;今晚8点要在腾讯会议上开个视频会...&quot; },
+&quot;turn_intents&quot;: [{
+  &quot;params&quot;: {
+    &quot;application_name&quot;: &quot;腾讯会议&quot;,
+    &quot;service_name&quot;: &quot;视频会&quot;,
+    &quot;resolution&quot;: &quot;1080p&quot;, // 错误：第 1 轮未提及，提前填入
+    &quot;rtt&quot;: &quot;50ms&quot;,          // 错误：第 1 轮未提及，提前填入
+    &quot;timestamp&quot;: {
+      &quot;start_timestamp&quot;: &quot;2026年10月10日20时00分&quot;,
+      &quot;end_timestamp&quot;: &quot;2026年10月10日22时00分&quot;, // 错误：提前写入
+      &quot;duration&quot;: &quot;120分钟&quot;                     // 错误：提前写入
+    }
+  }
+}]
+```
+
+**修复后：**
+```json
+// 规范：第 1 轮仅记录已说明信息，未提及项进入 requested 待追问
+&quot;turn&quot;: 1,
+&quot;user&quot;: { &quot;utterance&quot;: &quot;今晚8点要在腾讯会议上开个视频会...&quot; },
+&quot;agent&quot;: { &quot;utterance&quot;: &quot;收到，画质、时延和持续时长有什么要求吗？&quot; },
+&quot;requested_params&quot;: [&quot;resolution&quot;, &quot;rtt&quot;, &quot;duration&quot;],
+&quot;turn_intents&quot;: [{
+  &quot;status&quot;: &quot;in_progress&quot;,
+  &quot;params&quot;: {
+    &quot;application_name&quot;: &quot;腾讯会议&quot;,
+    &quot;service_name&quot;: &quot;视频会&quot;,
+    &quot;timestamp&quot;: { &quot;start_timestamp&quot;: &quot;2026年10月10日20时00分&quot; }
+  }
+}]
+// 第 2 轮用户补充“画质1080p，50ms以内，开2小时”后再补全其余参数
+```
+
+
+---
+
+### 域外拒绝会话中动作标签与台词语义矛盾
+
+&gt; **归档时间**：`2026-09-28 修复` | **分类**：`缺陷修复 / 数据清洗`
+
+#### 问题现象
+模板规划为域外诉求拒绝（`T1-2`），数据动作标签标记为 `Reject_Request`，但大模型生成的自然语言台词却是正常答应并受理（如“好的，这就为您派师傅修宽带”），导致标签与对话台词严重矛盾。
+
+            
+
+#### 解决办法
+在提示词中强制注入域外目标拒识约束（`ood_goal`），并在质检流程中增加 `template_semantic_alignment_check` 自动化规则，凡动作标记为 `Reject_Request` 时，Agent 台词必须包含明确的不可受理说辞。
+
+#### 对比分析
+
+**修复前：**
+```json
+// 会话模板：T1-2（域外拒绝）
+// 动作标签：Reject_Request
+User: &quot;我家宽带光纤断了，上不了网，帮我找个师傅上门维修。&quot;
+Agent: &quot;好的，已为您登记家庭宽带上门检修工单，维修师傅将在2小时内联系您，请保持手机畅通。&quot;
+
+// 缺陷：标签判定为无法受理并拒绝，但台词却在满口承诺受理，标签与台词矛盾
+```
+
+**修复后：**
+```json
+// 会话模板：T1-2（域外拒绝）
+// 动作标签：Reject_Request
+User: &quot;我家宽带光纤断了，上不了网，帮我找个师傅上门维修。&quot;
+Agent: &quot;抱歉，我这边主要负责移动网络通信保障，无法直接受理家庭宽带的光纤装维报修。建议您拨打10086宽带专线处理。&quot;
+
+// 规范：台词明确表达拒绝受理并说明范围，与 Reject_Request 动作严格一致
+```
+
+
+---
+
+### 口语代称无来源凭空出现
+
+&gt; **归档时间**：`2026-09-28 修复` | **分类**：`缺陷修复 / 数据清洗`
+
+#### 问题现象
+在早期的建联会话中，用户自始至终只提过官方标准名“腾讯会议”；但到了后续的复用会话首轮，用户台词却突然冒出“用tencentmeeting开会”或“用企鹅例会保障”，缺乏任何前置交互与登记依据。
+
+            
+
+#### 解决办法
+建立前置登记逻辑。在证据会话中，第 1 轮强制使用官方标准名称；第 2 轮用户明确说明习惯代称后，助手答复中必须显式确认记录；只有在此前已完成登记的画像，后续复用会话的首轮才允许直接调用该代称。
+
+#### 对比分析
+
+**修复前：**
+```json
+[前期会话 S-02]
+Turn 1
+User: &quot;帮我开个腾讯会议的会议保障，720p，100ms以内。&quot;
+Agent: &quot;好的，已为您开通腾讯会议保障。&quot;
+// 注意：用户全篇未提及“tencentmeeting”
+
+[后续会话 S-06]
+Turn 1
+User: &quot;老规矩，用tencentmeeting开会，帮我把保障开上。&quot;
+Agent: &quot;收到，为您开通保障。&quot;
+// 缺陷：S-02 没登记过该代称，S-06 凭空突现，违背生活常理
+```
+
+**修复后：**
+```json
+[前期会话 S-USER_008-02：规范登记代称]
+Turn 1
+User: &quot;今晚帮我开个腾讯会议保障。&quot; // 首轮使用官方标准名
+Agent: &quot;收到，请问画质、时延和持续时长需要怎么设置？&quot;
+Turn 2
+User: &quot;720p，100ms以内，开1小时。我平时习惯叫它tencentmeeting，帮我记好。&quot;
+Agent: &quot;好的，已为您开通保障，并已记录您的习惯代称tencentmeeting。&quot; // 显式确认记录
+
+[后续会话 S-USER_008-06：自然调用已登记代称]
+Turn 1
+User: &quot;老规矩，tencentmeeting开会，今晚6点45开，1小时，帮我把保障开上。&quot;
+// 规范：前置已有登记记录，调用自然且符合逻辑
+```
+
+
+---
+
+### 复用已知参数时机械复读与口语词汇失真
+
+&gt; **归档时间**：`2026-09-28 修复` | **分类**：`缺陷修复 / 数据清洗`
+
+#### 问题现象
+在已经记录了习惯配置的复用会话中，用户本应只说“老规矩”，却把 1080p、50ms、120分钟等全量参数又逐字复读了一遍，失去了记忆调取的实际意义；同时生成了“顶格清晰度”（易与2K/4K混淆）、“零卡顿”（物理不可能）等失真词汇。
+
+            
+
+#### 解决办法
+通过 `expression_vault.json` 规范口语映射范围；在复用会话中强制省略已知槽位，用户第 1 轮仅凭个性化表达（如“老规矩”）和代称发起，由助手主动从历史记忆中调取配置向用户反问确认，用户第 2 轮只需简要确认。
+
+#### 对比分析
+
+**修复前：**
+```json
+[复用会话 S-USER_003-08]
+Turn 1
+User: &quot;老规矩，企鹅会议，老时间，画质要顶格清晰度（1080p），时延要零卡顿（50ms），开120分钟，帮我把保障开通！&quot;
+Agent: &quot;好的，已为您开通保障：1080p、50ms、持续120分钟。&quot;
+
+// 缺陷 1：既然是老规矩，用户却全量机械复读，失去记忆复用意义
+// 缺陷 2：出现“顶格清晰度”与“零卡顿”等非标夸大词汇
+// 缺陷 3：助手缺乏主动调取历史配置反问求证的过程
+```
+
+**修复后：**
+```json
+[复用会话 S-USER_003-08]
+Turn 1
+User: &quot;老规矩，企鹅会议，老时间，帮我开一下。&quot;
+Agent: &quot;收到，您是要按老规矩开通腾讯会议保障对吧？我这边调取到历史配置：1080p原画、50ms以内、持续120分钟，确认按这个开通吗？&quot;
+
+Turn 2
+User: &quot;对，开通吧。&quot;
+Agent: &quot;好的，已为您开通腾讯会议保障：1080p原画、50ms以内、持续120分钟。祝您会议顺利！&quot;
+
+// 规范：省略已知槽位，由助手调取记忆反问确认，参数规范清晰
+```
+
+
+---
+
+### 模板编号与实际交互轮数/意图数错配
+
+&gt; **归档时间**：`2026-09-28 修复` | **分类**：`缺陷修复 / 数据清洗`
+
+#### 问题现象
+主线 2 轮 1 意图会话误套用了双意图模板编号（`T2-4`）；支线会话在加入模糊词澄清对话后交互轮次扩展到了 3 轮，但模板 ID 仍保留为 2 轮编号（`T2-2`），导致骨架签名出现 `T2-2|3|1|...` 冲突，自动化校验报错。
+
+            
+
+#### 解决办法
+建立模板规格强校验规则（`template_spec_check`），校验模板前缀、声明轮数、实际交互轮数、声明意图数、实际意图数完全一致：2 轮 1 意图必须使用 `T2-1`，3 轮 1 意图必须匹配 `T3-1`。
+
+#### 对比分析
+
+**修复前：**
+```json
+// 会话：支线 1 模糊澄清会话
+&quot;session_meta&quot;: {
+  &quot;template_id&quot;: &quot;T2-2&quot;,   // 错误：前缀 T2 代表 2 轮模板
+  &quot;round_count&quot;: 3         // 实际对话交互已扩展为 3 轮
+}
+// 骨架签名生成：T2-2|3|1|SUB_001|Single...
+// 质检报错：template_spec_check failed 
+// (模板 ID 前缀 T2 与 实际交互轮数 3 轮产生错配冲突)
+```
+
+**修复后：**
+```json
+// 会话：支线 1 模糊澄清会话
+&quot;session_meta&quot;: {
+  &quot;template_id&quot;: &quot;T3-1&quot;,   // 规范：前缀 T3 与 3 轮交互精确匹配
+  &quot;round_count&quot;: 3
+}
+// 骨架签名生成：T3-1|3|1|SUB_001|Single...
+// 质检结果：template_spec_check passed
+// (模板编号、轮数与意图数完全一致，通过校验)
+```
+
+
+---
+
+### 干扰会话（X-1）未建记忆却直呼个性化表达（如“不卡就行”）与误跌入记忆复用规则
+
+&gt; **归档时间**：`2026-09-29` | **分类**：`缺陷修复 / 数据清洗`
+
+#### 问题现象
+在画像 001 会话 8（`S-USER_001-08`，模板 `X-1`，角色 `distractor_session`）中，该会话为单轮混合干扰会话（一办一拒），前置并无任何证据会话沉淀过快手应用或 80ms 时延的记忆点，但用户台词却直接说出：“快手看直播，**不卡就行**，顺便帮我查一下手机话费账单”，客服也答复“时延按‘不卡就行’即80ms以内”。
+
+            
+
+#### 根因排查
+
+                1. **时间线规划层透传漏洞**：`DynamicTimelinePlanner` 在为各会话分配 `small_memory` 时无差别全量匹配，为干扰会话也分配了个性化表达（如 80ms 匹配到了“不卡就行”）；
+
+                2. **提示词构建分支缺失**：在 `dialogue_generator.py` 构建 Prompt 时，判断逻辑涵盖了 `T1-2`、`evidence_session`、`T2-5`、`T2-3`，唯独缺少了 `X-1` 分支，导致 `X-1` 误跌入了 `else:`（常规复用/强化会话分支），明确指示大模型：“大记忆点已生效……指定小记忆点=&#x27;不卡就行&#x27;，Agent从记忆中补全”。
+            
+
+            
+
+#### 解决办法
+
+                1. `timeline_planner.py` 中判断若为 `distractor` 类型会话，强制 `small_memory = {}`；
+
+                2. `dialogue_generator.py` 中新增 `elif tid == &quot;X-1&quot;` 专用分支，明确指示：混合诉求单轮干扰无先验记忆，首次提出需求，严禁使用任何未建立的个性化表达或老规矩；Agent 办理保障并礼貌拒绝域外诉求；
+
+                3. 对已生成的 20 个画像中全部 X-1 干扰会话进行 LLM 重新润色并清洗，全量通过质检。
+
+#### 对比分析
+
+**修复前：**
+```json
+// 会话：S-USER_001-08 (模板: X-1, 角色: distractor_session)
+&quot;session_meta&quot;: {
+  &quot;template_id&quot;: &quot;X-1&quot;,
+  &quot;small_memory&quot;: { &quot;type&quot;: &quot;rtt_alias&quot;, &quot;value&quot;: &quot;不卡就行&quot; } // 错误分配个性化表达
+}
+// 用户台词：未建立记忆却直呼个性化表达
+User: &quot;快手看直播，不卡就行，顺便帮我查一下手机话费账单。&quot;
+// 客服台词：当成老个性化表达直接复用补全
+Agent: &quot;收到，我先为您受理快手看直播保障，时延按‘不卡就行’即80ms以内...&quot;
+```
+
+**修复后：**
+```json
+// 会话：S-USER_001-08 (模板: X-1, 角色: distractor_session)
+&quot;session_meta&quot;: {
+  &quot;template_id&quot;: &quot;X-1&quot; // small_memory 为空，无记忆注入
+}
+// 用户台词：首次提出业务与域外需求，自然规范，无先验个性化表达
+User: &quot;你好，我想办个网络保障，快手看直播，画质720p，时延要控制在80ms以内，时间是今天12点30到13点30，一共60分钟。另外顺便帮我把手机话费充一下，再查下账单。&quot;
+// 客服台词：正常受理域内业务，明确礼貌拒绝域外诉求
+Agent: &quot;您好，我先为您受理网络保障需求：快手看直播，画质720p，时延上限80ms以内，保障时段为12点30分至13点30分，共60分钟。关于手机话费充值和账单查询，这两项不在我的服务范围内，无法为您办理，建议您通过运营商官方渠道或官方App进行充值及账单查询。网络保障需求我这边继续为您处理。&quot;
+```
+
+
+---
+
+### 临时特殊事件纠正（event_override）误持久化，次日复用（event_reuse）未恢复基线记忆
+
+&gt; **归档时间**：`2026-09-29` | **分类**：`缺陷修复 / 数据清洗`
+
+#### 问题现象
+在会话 S09 中，用户因现场特殊情况，主动临时将直播画质调整为 `720p`、时延压缩至 `30ms`。然而在次日的复用会话 S10（`event_reuse`）中，系统未恢复该用户长期基线偏好（`1080p, 50ms`），而是将昨天的临时改动视为新长期规则（`MF_001_v2`）持续套用，违背了“单次/临时纠正次日失效并回归老规矩”的常识设定。
+
+            
+
+#### 根因排查
+
+                1. **记忆追踪状态机逻辑**：原 `MemoryTracker` 在处理 `event_override` 时，直接生成了版本分支 `MF_001_v2` 并覆盖了活跃记忆状态，并在 `event_reuse` 时继续强化 `MF_001_v2`；
+
+                2. **组装与时间线规划联动**：`session_assembler.py` 和 `timeline_planner.py` 在 `event_reuse` 阶段继续提取了 `override` 里的临时 QoS 属性，导致 Ground Truth 与生成的自然对话文本均固定为了 720p/30ms。
+            
+
+            
+
+#### 解决办法
+
+                1. **采纳方案 A 明确生命周期**：`event_override` 严格定义为单次当天临时调整（`temporary_correction`），不破坏全局长期记忆 `MF_001`，不产生衍生版本；
+
+                2. **次日复用自动回归老规矩**：`event_reuse` 会话（及后续会话）强制恢复按 `MF_001` 原始基线（`1080p, 50ms`）提取与确认，动作标识调整为 `reuse_long_term_rule_after_correction`；
+
+                3. **全量数据同步与质检**：全量 20 个画像的 `sessions.json`、`sessions.jsonl`、`memory_traces.json` 及 `qc_report.json` 同步更新，100% 通过质检。
+
+#### 对比分析
+
+**修复前：**
+```json
+// 会话：S-USER_001-10 (模板: T2-1, 角色: reuse_session)
+// 槽位来源错误溯源至临时分支，QoS 沿用临时参数
+&quot;intents&quot;: [{
+  &quot;params&quot;: {
+    &quot;resolution&quot;: { &quot;value&quot;: &quot;720p&quot;, &quot;source_ref&quot;: &quot;MF_001_v2&quot; },
+    &quot;rtt&quot;: { &quot;value&quot;: &quot;30ms&quot;, &quot;source_ref&quot;: &quot;MF_001_v2&quot; }
+  }
+}]
+// 客服台词：继续使用昨天的临时降级参数
+Agent: &quot;收到，已按老规矩提取：快手直播保障（720p，时延30ms内），请确认是否立即开通？&quot;
+```
+
+**修复后：**
+```json
+// 会话：S-USER_001-10 (模板: T2-1, 角色: reuse_session)
+// 槽位来源正确溯源至原长期基线 MF_001
+&quot;intents&quot;: [{
+  &quot;params&quot;: {
+    &quot;resolution&quot;: { &quot;value&quot;: &quot;1080p&quot;, &quot;source_ref&quot;: &quot;MF_001&quot; },
+    &quot;rtt&quot;: { &quot;value&quot;: &quot;50ms&quot;, &quot;source_ref&quot;: &quot;MF_001&quot; }
+  }
+}]
+// 客服台词：自动回归原长期基线配置（老规矩）
+Agent: &quot;收到，我调取到之前登记的快手开直播配置：1080p、时延50ms以内，12时30分开始、13时30分结束，持续60min。确认按这套配置开通吗？&quot;
+```
+
+
+---
+
+### 口语相对日期（“明天”/“后天”）与真值当天时间戳错配
+
+&gt; **归档时间**：`2026-09-29` | **分类**：`缺陷修复 / 数据清洗`
+
+#### 问题现象
+在会话 S12（如 `S-USER_001-12`）中，用户口语台词明确提到“**明天**上午10点开始”，但在结构化 Ground Truth 标注中，基准时间 `reference_time` 为 `2026年10月21日10时00分`，开通的 `start_timestamp` 却同样是 `2026年10月21日10时00分`（未加 1 天），出现了台词表达“明天”但标注落在“今天”的时间矛盾。
+
+            
+
+**根因排查与解决办法**：
+                1. **台词生成端归一化拦截**：在 `dialogue_generator.py` 的规范化处理中，校验 `ref_day == start_day` 场景。当判定为同日即时/预约保障时，自动纠正替换用户与客服台词中的“明天/后天”为“今天”；
+
+                2. **自动化质检约束**：在 `qc_validator.py` 中追加同日时间表达检查，凡 `ref_day == start_day` 且台词含有跨日词汇时，直接告警拦截；
+
+                3. **全量清洗**：将 20 个画像中受影响的口语台词统一清洗为“今天上午10点开始”，彻底消除自然语言与时间真值的不一致。
+
+#### 对比分析
+
+**修复前：**
+```json
+// 会话：S-USER_001-12 (reference_time: 2026年10月21日10时00分)
+// 用户台词口语表达包含“明天”
+User: &quot;钉钉会议，清晰点就行，明天上午10点开始，开半小时。&quot;
+// 真值 start_timestamp 却为当天，未加一天：
+&quot;start_timestamp&quot;: &quot;2026年10月21日10时00分&quot;  // 矛盾！
+```
+
+**修复后：**
+```json
+// 会话：S-USER_001-12 (reference_time: 2026年10月21日10时00分)
+// 用户台词口语表达与当天基准时间严格对齐
+User: &quot;钉钉会议，清晰点就行，今天上午10点开始，开半小时。&quot;
+// 真值 start_timestamp 同步对齐当天：
+&quot;start_timestamp&quot;: &quot;2026年10月21日10时00分&quot;  // 严格吻合！
+```
+
+
+---
+
+### 临时纠正会话（T2-3）首轮违背“场景+应用+业务”最小表达标准与次轮现场原因缺失
+
+&gt; **归档时间**：`2026-09-29` | **分类**：`缺陷修复 / 数据清洗`
+
+#### 问题现象
+在会话 S09（如 `S-USER_001-09`，模板 `T2-3`，角色 `event_override`）中，第 1 轮用户台词原先仅说“老规矩，每天这个时候开通保障。”，既未交代触发场景（早高峰通勤现场），也未指明应用（抖音）与业务（开直播），严重违背了“应用＋业务是发起保障意图的最小表达”原则；且第 2 轮直接粗暴抛出新参数，未说明现场为何临时调整。
+
+            
+
+#### 根因排查
+
+                1. **最小表达标准理解偏差**：时段个性化表达（“每天这个时候”）属于槽位代称，只能填充时间槽，不能替代意图发起的最小表达（应用+业务）；
+
+                2. **保底与提示词设计粗疏**：原 `dialogue_prompts.py` 与 `dialogue_fallbacks.py` 对 T2-3 第 1 轮保底模板缺少场景和应用业务槽位拼接，导致台词只有个性化表达；第 2 轮缺少“现场特殊情况”的口语转折说明。
+            
+
+            
+
+#### 解决办法
+
+                1. **重构 T2-3 提示词与保底规则**：第 1 轮强制注入：`今天在{env}，老规矩，用{app}做{srv}，帮我把保障开上。` 确保严格包含“场景＋应用＋业务＋个性化习惯表达”最小表达；第 2 轮强制注入现场突发背景转折：`对，不过今天现场特殊，画质临时调到{res}，时延压到{rtt}以内，今天临时按这个来。`
+
+                2. **质检强规则拦截**：在 `qc_validator.py` 中追加 `event_override_spec_check`，对全量 T2-3 会话强制校验首轮场景/应用/业务最小表达，次轮校验现场特殊原因；
+
+                3. **全量 20 个画像统一清洗与验证**：对全部画像重新归一化生成并质检，100% 通过。
+
+#### 对比分析
+
+**修复前：**
+```json
+// 会话：S-USER_001-09 (模板: T2-3, 临时纠正)
+Turn 1:
+User: &quot;老规矩，每天这个时候开通保障。&quot;
+Agent: &quot;收到，按抖音直播配置（1080p，50ms）为您确认...&quot;
+Turn 2:
+User: &quot;画质调到720p，时延30ms。&quot;
+Agent: &quot;好的，为您调整为720p/30ms。&quot;
+
+// 缺陷 1：首轮无场景、无应用、无业务，严重违背最小表达标准
+// 缺陷 2：次轮无现场特殊情况说明，生硬突兀
+```
+
+**修复后：**
+```json
+// 会话：S-USER_001-09 (模板: T2-3, 临时纠正)
+Turn 1:
+User: &quot;今天在早高峰通勤现场，老规矩，用抖音做开直播，帮我把保障开上。&quot;
+Agent: &quot;收到，我调取到之前登记的抖音开直播配置：画质1080p、时延50ms以内，12时30分至13时30分（持续60min），确认按这套配置开通吗？&quot;
+Turn 2:
+User: &quot;对，不过今天现场特殊，画质临时调到720p，时延压到30ms以内，今天临时按这个来。&quot;
+Agent: &quot;好的，已按现场特殊情况为您临时调整开通抖音开直播保障：画质720p、时延上限30ms，时段12时30分至13时30分。祝您现场顺利！&quot;
+
+// 规范：首轮四要素齐全，次轮因果关系清晰，符合真人工作现场表达
+```
+
+
+---
+
+### 单轮干扰会话（T1-1）未隔离个性化表达且参数不全，导致客服出现脑补反问
+
+&gt; **归档时间**：`2026-09-29` | **分类**：`缺陷修复 / 数据清洗`
+
+#### 问题现象
+在会话 S12（如 `S-USER_001-12`，模板 `T1-1`，角色 `distractor_session`）中，该会话为全新应用（钉钉会议）的单轮独立干扰保障，前置没有任何相关记忆。但用户台词却包含“清晰点就行”等模糊个性化表达，客服台词甚至回复“按记忆理解为720p”，将本应完全自包含、即用即走的干扰会话误当成了记忆调取会话。
+
+            
+
+#### 根因排查
+
+                1. **骨架个性化表达泄露**：`timeline_planner.py` 在为 T1-1 生成骨架时，仍带入了画像骨架中的 `aliases`（如 720p 对应“清晰点就行”）；
+
+                2. **单轮自包含属性未落实**：干扰会话要求在单轮内一次性交代齐全部参数（应用、业务、时段、画质、时延），但大模型生成时容易遗漏参数，导致客服被迫猜测或调取记忆。
+            
+
+            
+
+#### 解决办法
+
+                1. **规划层彻底清空 aliases**：在 `timeline_planner.py` 中判断若为 `distractor` 会话，不仅清空 `small_memory`，更强制 `aliases = {}`；
+
+                2. **提示词与保底模板全参数显式化**：约束 T1-1 严禁任何未建立的个性化表达词汇，必须一次性说清全部 6 大要素（应用、业务、起始时间、结束时间/时长、明确分辨率、明确时延上限）；客服直接一次性受理，绝不出现“按记忆理解”；
+
+                3. **质检增加 Rule 9 强校验**：`qc_validator.py` 中加入 `distractor_spec_check`，严格扫描 T1-1 中不得存在记忆个性化表达，且客服台词严禁含有“按记忆理解”字样。
+
+#### 对比分析
+
+**修复前：**
+```json
+// 会话：S-USER_001-12 (模板: T1-1, 单轮干扰)
+Turn 1:
+User: &quot;钉钉会议，清晰点就行，今天上午10点开始，开半小时。&quot;
+Agent: &quot;好的，为您开通钉钉会议保障，按记忆理解为画质720p，时延80ms以内...&quot;
+
+// 缺陷 1：前置从未用过钉钉，用户却使用个性化表达“清晰点就行”
+// 缺陷 2：客服无依据脑补“按记忆理解为720p”，破坏单轮干扰的独立性
+```
+
+**修复后：**
+```json
+// 会话：S-USER_001-12 (模板: T1-1, 单轮干扰)
+Turn 1:
+User: &quot;你好，今天10时00分到10时30分要在钉钉开会议（开30min），画质要720p，时延控制在80ms以内，帮我开个保障。&quot;
+Agent: &quot;收到，已为您开通钉钉会议网络保障：画质720p，时延上限80ms，保障时间2026年10月21日10时00分至2026年10月21日10时30分（共30min）。祝您使用顺利！&quot;
+
+// 规范：全量参数一次性交代明确，零未建立个性化表达、零脑补，客服直接受理闭环
+```
+
+
+---
+
+### 时长延长会话（T2-5 / S06）首轮跌破最小表达标准（仅带个性化表达无应用与业务）
+
+&gt; **归档时间**：`2026-09-29` | **分类**：`缺陷修复 / 数据清洗`
+
+#### 问题现象
+在会话 S06（如 `S-USER_001-06`，模板 `T2-5`，角色 `reuse_session`）中，第 1 轮用户台词原先仅说“老规矩，别卡顿开通保障。”或“老规矩，大半个下午开通保障。”，既无触发场景，也完全缺失了应用（抖音）与业务（开直播），严重违背了“应用＋业务是发起保障意图的最小表达”的系统规范。
+
+            
+
+#### 根因排查
+
+                1. **提示词构建缺陷**：在 `dialogue_generator.py` 构建 Prompt 时，针对 T2-5 的规则硬编码为：`第1轮用户说&#x27;老规矩，{primary_alias}开通保障&#x27;`，导致大模型直接将时延/时长个性化表达（如“别卡顿”、“大半个下午”）当成完整台词，粗暴省略了应用和业务；
+
+                2. **保底与质检拦截遗漏**：原 `_normalize_turn` 未对 T2-5 校验应用与业务，保底模板也未被强制触发；质检规则中缺少针对 T2-5 首轮最小表达的强行校验。
+            
+
+            
+
+#### 解决办法
+
+                1. **重构 T2-5 提示词与保底规则**：在 `dialogue_prompts.py`、`dialogue_generator.py` 及 `dialogue_fallbacks.py` 中重构：第 1 轮强制遵循“场景＋应用＋业务＋老规矩”最小表达（如`今天在{env}，老规矩，用{app}做{srv}，帮我把保障开上。`），严禁仅凭个性化表达发起；第 2 轮说明现场活动延长并给出新时长；
+
+                2. **质检增加 Rule 11 强校验**：在 `qc_validator.py` 中追加 `T2-5` 首轮必须具备场景、应用、业务三要素，次轮必须包含时长延长说明；
+
+                3. **全量 20 个画像统一清洗与验证**：对全量 20 个画像中全部 T2-5 会话同步清洗与标准化，100% 严格质检通过。
+
+#### 对比分析
+
+**修复前：**
+```json
+// 会话：S-USER_001-06 (模板: T2-5, 时长延长)
+Turn 1:
+User: &quot;老规矩，别卡顿开通保障。&quot;
+Agent: &quot;收到，您说的老规矩是指抖音开直播，画质1080p、时延50ms以内，从12:30开始保障60分钟，对吗？&quot;
+Turn 2:
+User: &quot;对，老规矩不变，但今天午间活动要延长，时长改成120min，按这个节奏来。&quot;
+Agent: &quot;好的，已按老规矩为您开通抖音开直播保障...&quot;
+
+// 缺陷：第 1 轮仅有个性化表达“别卡顿”，完全无场景、无应用、无业务，违背最小表达标准
+```
+
+**修复后：**
+```json
+// 会话：S-USER_001-06 (模板: T2-5, 时长延长)
+Turn 1:
+User: &quot;今天在常规周期保障现场，老规矩，用抖音做开直播，帮我把保障开上。&quot;
+Agent: &quot;收到，我调取到之前登记的抖音开直播配置：画质1080p、时延50ms以内，从12时30分开始保障，确认按这套配置开通吗？&quot;
+Turn 2:
+User: &quot;对，老规矩不变，不过今天现场活动延长了，帮我把保障时长延长到120min。&quot;
+Agent: &quot;好的，已按老规矩为您开通抖音开直播保障：画质保持1080p、时延上限50ms，时长已延长至120min。祝您活动顺利！&quot;
+
+// 规范：首轮场景+应用+业务+老规矩四要素齐全，次轮明确延长时长，完全符合最小表达标准
+```
+
+
+---
+
+### 时长延长会话（T2-5）第1轮客服提前泄露次轮修改后时长（临时参数污染）与生造个性化表达治理
+
+&gt; **归档时间**：`2026-09-29` | **分类**：`缺陷修复 / 数据清洗`
+
+#### 问题现象
+
+                1. **首轮提前泄露次轮临时参数**：在画像 2、7、14、17、19 等会话 S07 中（模板 `T2-5`），用户在第 2 轮才因现场突发情况提出“活动延长，帮我把时长延长到180min”。但在第 1 轮客服调取老规矩时，居然提前反问“持续180分钟，对吗？”，导致客服在用户提出修改前就提前被次轮的临时参数所污染；
+
+                2. **残留后台规则词与生造个性化表达**：在画像 6 的 S07 等会话中，台词出现了“触发用微信做视频通话，时延按‘别卡顿’”等后台规划残留词汇（“触发用”），以及未在先验记忆中登记过的生造别名（如在未定义“别卡顿”的画像中强行塞入该词）。
+            
+
+            
+
+#### 根因排查
+
+                1. **提示词与模板透传未解耦**：Prompt 在组织 T2-5 时，直接将修改后的 `duration` 传入并用于第 1 轮客服引导；后处理中只对用户台词进行了归一化，未拦截客服第 1 轮提前泄露修改后时长；
+
+                2. **大模型幻觉生造个性化表达**：在未分配小记忆点（`small_memory` 为空）的常规复用会话中，提示词提示“若有个性化表达则使用个性化表达”，导致大模型自发生成了画像记忆库中并不存在的别名。
+            
+
+            
+
+#### 解决办法
+
+                1. **第 1 轮客服隔离修改后时长**：在 `dialogue_generator.py` 与 `dialogue_fallbacks.py` 中重构：T2-5 第 1 轮客服调取记忆时，严禁提及次轮修改后的时长（如 180min），只确认原基线配置或保障起始时刻；在后处理中强行扫描并拦截提前泄露行为；
+
+                2. **清理后台规划词与幻觉个性化表达**：过滤清理所有台词中的“触发用/触发”等后台规划词汇；对台词中的引号别名进行合法性校验，凡未在先验记忆快照中登记的别名一律予以清除；
+
+                3. **质检加固 Rule 11 与 Rule 12**：在 `qc_validator.py` 中升级 Rule 11（严禁 T2-5 第 1 轮客服泄露修改后时长）并增加 Rule 12（台词严禁包含“触发”等后台规划词）；
+
+                4. **全量 20 个画像统一清洗与校验**：全量 20 个画像数据同步重清洗，100% 通过严格质检。
+
+#### 对比分析
+
+**修复前：**
+```json
+// 会话：S-USER_002-07 (模板: T2-5, 时长延长)
+Turn 1:
+User: &quot;今天在跨境商贸交流会，老规矩，用微信做视频通话，帮我把保障开上。&quot;
+Agent: &quot;收到，您说的老规矩是指微信视频通话...持续180分钟，对吗？&quot;
+Turn 2:
+User: &quot;对，老规矩不变，不过今天现场活动延长了，帮我把保障时长延长到180min。&quot;
+Agent: &quot;好的，已按老规矩为您开通微信视频通话保障...&quot;
+
+// 缺陷：客服在第 1 轮居然提前预知并说出 180min，发生临时参数时序污染！
+```
+
+**修复后：**
+```json
+// 会话：S-USER_002-07 (模板: T2-5, 时长延长)
+Turn 1:
+User: &quot;今天在跨境商贸交流会，老规矩，用微信做视频通话，帮我把保障开上。&quot;
+Agent: &quot;收到，我调取到之前登记的微信视频通话配置：画质1080p、时延50ms以内，从15时00分开始保障，确认按这套配置开通吗？&quot;
+Turn 2:
+User: &quot;对，老规矩不变，不过今天现场活动延长了，帮我把保障时长延长到180min。&quot;
+Agent: &quot;好的，已按老规矩为您开通微信视频通话保障：画质保持1080p、时延上限50ms，时长已延长至180min。祝您活动顺利！&quot;
+
+// 规范：第 1 轮客服恪守原基线记忆，第 2 轮根据用户临时申请修改时长，因果时序严密合规！
+```
+
+
+---
+
+### slot_updates 与 turn_intent 不一致及 duration 持续时长槽位遗漏修复
+
+&gt; **归档时间**：`2026-10-10 修复` | **分类**：`缺陷修复 / 数据清洗`
+
+#### 问题现象
+在画像 001 会话 3（`S-USER_001-03`）等标准多轮业务的 T1 轮次中，`turn_intent` 中的 `requested_params` 已完整声明了 `[&quot;start_timestamp&quot;, &quot;end_timestamp&quot;, &quot;duration&quot;]`，但在底层的 `slot_updates` 字典中却只有 `start_timestamp` 和 `end_timestamp` 两个时间戳键值，遗漏了持续时长 `duration`。这导致 `slot_updates` 与 `turn_intent` 出现脱节，质检和评测无法准确追踪持续时长的更新记录。
+
+            
+
+#### 根因排查
+
+                1. **装配方法槽位提取缺失**：在 `src/generation/session_assembler.py` 的 `_assemble_standard` 与 `_assemble_t2_3` 中，当处理用户提出的时间槽位更新时，仅按日期模式提取并注入了 `start_timestamp` 和 `end_timestamp`，漏写了目标参数中的 `duration` 键；
+
+                2. **支线跨轮消歧字段泄漏与闭环异常**：同时发现 `_assemble_t2_2` 中存在 `closure_path: &quot;clarified&quot;` 遗漏，且 `evidence_session` 会话在跨轮澄清中提前泄露了 `resolution`。
+            
+
+            
+
+#### 解决办法
+
+                1. **补齐 duration 槽位提取**：在 `session_assembler.py` 的时间更新分支中，统一补齐 `duration` 提取并注入 `slot_updates`，确保与 `turn_intent.requested_params` 100% 严格对齐；
+
+                2. **修复消歧与因果闭环**：规范 `_assemble_t2_2` 的 `closure_path` 与证据会话的跨轮参数装配；
+
+                3. **全量数据同步与代码仓提交**：编写增量修复补丁，对 `mobile_persona_001` ~ `mobile_persona_100` 全部 100 个画像（共 1410 个会话）进行了全量数据同步修补，全量质检 100% 一次性通过，并成功同步推送至远程代码仓。
+
+#### 对比分析
+
+**修复前：**
+```json
+// 会话：S-USER_001-03 (模板: T2-1, 角色: reinforcement_session)
+&quot;turn_intent&quot;: {
+  &quot;intent_type&quot;: &quot;Reserve_Resource&quot;,
+  &quot;requested_params&quot;: [&quot;application_name&quot;, &quot;service_name&quot;, &quot;start_timestamp&quot;, &quot;end_timestamp&quot;, &quot;duration&quot;]
+},
+&quot;slot_updates&quot;: {
+  &quot;start_timestamp&quot;: &quot;2026年10月12日14时00分&quot;,
+  &quot;end_timestamp&quot;: &quot;2026年10月12日16时00分&quot;
+  // 缺陷：turn_intent 声明了 duration，但 slot_updates 遗漏 duration！
+}
+```
+
+**修复后：**
+```json
+// 会话：S-USER_001-03 (模板: T2-1, 角色: reinforcement_session)
+&quot;turn_intent&quot;: {
+  &quot;intent_type&quot;: &quot;Reserve_Resource&quot;,
+  &quot;requested_params&quot;: [&quot;application_name&quot;, &quot;service_name&quot;, &quot;start_timestamp&quot;, &quot;end_timestamp&quot;, &quot;duration&quot;]
+},
+&quot;slot_updates&quot;: {
+  &quot;start_timestamp&quot;: &quot;2026年10月12日14时00分&quot;,
+  &quot;end_timestamp&quot;: &quot;2026年10月12日16时00分&quot;,
+  &quot;duration&quot;: &quot;120min&quot; // 规范：duration 完整更新，与 turn_intent 严格对应
+}
+```
+
+
+---
+
+## 时间线归档索引
+
+### 2026年09月28日 历史排查与基础治理
+- 后台规则长句直接拼接进台词（006 号样本等生硬台词治理）
+- 候选记忆未确认即标记为生效（provisional 提前标记 memory_filled）
+- 对话时间标注向首轮提前写入（时序跨轮早泄）
+- 域外拒绝会话中动作标签与台词语义矛盾
+- 口语代称无来源凭空出现
+- 复用已知参数时机械复读与口语词汇失真
+- 模板编号与实际交互轮数/意图数错配
+
+### 2026年09月29日 边界防御与因果时序治理
+- 干扰会话（X-1）未建记忆却直呼个性化表达与误跌入记忆复用规则
+- 临时特殊事件纠正（event_override）误持久化，次日复用未恢复基线记忆
+- 口语相对日期（“明天”/“后天”）与真值当天时间戳错配
+- 临时纠正会话（T2-3）首轮违背最小表达标准与次轮原因缺失
+- 单轮干扰会话（T1-1）未隔离个性化表达且参数不全导致客服脑补
+- 时长延长会话（T2-5 / S06）首轮跌破最小表达标准
+- 时长延长会话（T2-5）第 1 轮客服提前泄露次轮修改后时长
+
+### 2026年10月10日 架构拓扑演进与深层闭环修复
+- slot_updates 与 turn_intent 不一致及 duration 持续时长槽位遗漏修复
+- 会话总长度规划机制（12~16 轮动态浮动）与 16 槽位模板分布拓扑规范详解
+- 全流水线“多样性离散处理”与“提示词约束规则”规范解耦
+
+---
+
+## 实测修复结果与验证数据汇总
+
+针对上述各项架构规范与缺陷治理方案，已全面更新生成代码与质检套件，并对 150 个画像（`mobile_persona_001` ~ `mobile_persona_150`，共计 2100 个会话，3960 对话轮次）完成全量生成、清洗与质检校验：
+
+| 对比维度 | 修复前表现 | 修复后实测结果 |
+| :--- | :--- | :--- |
+| **质检通过率** | 约 71.4%（单画像常出现 3~4 个会话未通过） | **100.0%**（150 个画像共 2100 个会话全量一次性通过） |
+| **slot_updates 与 turn_intent 对齐** | 时间更新分支漏提取 `duration`，与意图声明不一致 | **100% 严格对齐**（全量会话同步注入 duration，三元组完整闭环） |
+| **会话总长度与模板拓扑** | 固定轮数机械死板，缺乏拓扑因果约束与多故事线隔离 | **12~16 轮动态浮动**（16 槽位拓扑 DAG 严格保证生命周期与故事线隔离） |
+| **数据多样性与规则解耦** | 缺乏系统分层，业务边界与别名夸大失真难以控制 | **双层解耦架构**（50/50声明、1:1:1触发、6维哈希抽样 + 7大业务Prompt铁律） |
+| **时长延长最小表达** | S06 首轮仅凭“别卡顿”个性化表达发起，无场景与应用业务 | **100% 达标**（场景+应用+业务+老规矩四要素齐全，次轮明确时长延长） |
+| **临时纠正最小表达** | S09 首轮只有个性化表达，无场景、无应用业务 | **100% 达标**（场景+应用+业务+个性化表达齐备，次轮交代特殊原因） |
+| **单轮干扰全显式表达** | S12 漏传参数、引入模糊个性化表达且客服脑补 | **彻底隔离未建立的个性化表达**（6大参数全量显式交代，客服直接闭环受理） |
+| **干扰会话个性化表达隔离** | X-1 单轮干扰未建记忆却凭空直呼个性化表达并补全 | **100% 隔离**（无先验记忆注入，正常表达需求） |
+| **临时纠正记忆恢复** | S09 临时降级后 S10 继续沿用 720p/30ms | **规范回归**（S10 自动恢复并复用 1080p/50ms 基线） |
+| **口语日期与真值对齐** | 台词说“明天”但标注落在“今天”（S12） | **严格吻合**（同日即时预约统一规范为“今天”） |
+| **台词口语真实度** | 出现“今天又到[长句]办事了”等生硬拼接 | **完全口语化**（提炼简短地点，通顺自然） |
+| **地点提炼泛化性** | 人工写死正则，无法泛化新职业 | **LLM 语义提炼 + 规则兜底**（强覆盖无盲区） |
+| **时序跨轮早泄** | 普遍存在（首轮提前写入 QoS 与结束时间） | **0 处泄露**（严格按交互轮次增量更新） |
+| **域外拒识语义** | 动作标为拒绝但台词实际答应受理 | **100% 对齐**（台词包含明确不可受理及指引说辞） |
+| **口语代称与槽位** | 代称凭空突现；复用会话机械全量复读 | **完全受控**（严格前置确认登记；复用省略已知槽位） |
+| **模板规格一致性** | 存在 T2-2 与 3 轮交互错配 | **0 处错配**（模板 ID、轮数与意图数完全对齐） |
+</textarea>
+            </div>
+
+            <footer>
+                <p>跨会话长程记忆数据集生成系统 · 研发问题排查与架构规范手册</p>
+                <p style="margin-top: 6px;">Markdown源文件：<a href="update.md" style="color: var(--accent-primary); text-decoration: none;">docs/update.md</a> | HTML渲染器：docs/render_html.py</p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- 交互脚本：双主题切换、大纲收起展开、实时检索、ScrollSpy、代码复制 -->
+    <script>
+        // 1. 主题切换逻辑 (Parchment 米纸 vs Twilight 暮色)
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme') || 'parchment';
+            const next = current === 'parchment' ? 'twilight' : 'parchment';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('doc-theme', next);
+            updateThemeBtn(next);
+        }
+
+        function updateThemeBtn(theme) {
+            const btn = document.getElementById('themeBtn');
+            if (btn) {
+                btn.innerHTML = theme === 'twilight' ? '切换米纸' : '切换暮色';
+            }
+        }
+
+        // 2. 侧边栏展开与折叠
+        function toggleDesktopToc() {
+            const isCollapsed = document.body.classList.toggle('toc-collapsed');
+            localStorage.setItem('toc-collapsed', isCollapsed ? 'true' : 'false');
+        }
+
+        // 3. 视图切换 (卡片 vs Markdown 源码)
+        function switchView(mode) {
+            const cardView = document.getElementById('card-view-container');
+            const mdView = document.getElementById('markdown-view-container');
+            const btnCard = document.getElementById('btnCardView');
+            const btnMd = document.getElementById('btnMdView');
+
+            if (mode === 'markdown') {
+                cardView.style.display = 'none';
+                mdView.style.display = 'block';
+                btnCard.classList.remove('active');
+                btnMd.classList.add('active');
+            } else {
+                cardView.style.display = 'block';
+                mdView.style.display = 'none';
+                btnCard.classList.add('active');
+                btnMd.classList.remove('active');
+            }
+        }
+
+        // 4. 代码块一键复制
+        function copyCode(btn) {
+            const block = btn.closest('.code-block');
+            const code = block ? block.querySelector('pre code') : null;
+            if (!code) return;
+            const text = code.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const origHtml = btn.innerHTML;
+                btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>已复制</span>';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.innerHTML = origHtml;
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(() => {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                btn.innerHTML = '<span>已复制</span>';
+                setTimeout(() => { btn.innerHTML = '<span>复制</span>'; }, 2000);
+            });
+        }
+
+        // 5. 复制 Markdown 全文源码
+        function copyMarkdownSource() {
+            const textarea = document.getElementById('mdSourceArea');
+            textarea.select();
+            document.execCommand('copy');
+            alert('Markdown 全文已复制到剪贴板。');
+        }
+
+        // 6. 栏目分类筛选
+        function selectCategory(cat) {
+            document.querySelectorAll('.cat-pill').forEach(pill => {
+                pill.classList.toggle('active', pill.dataset.cat === cat);
+            });
+
+            const sections = document.querySelectorAll('.column-section');
+            const cards = document.querySelectorAll('.issue-card');
+
+            if (cat === 'all') {
+                sections.forEach(s => s.style.display = 'block');
+                cards.forEach(c => c.style.display = 'block');
+            } else {
+                sections.forEach(s => {
+                    s.style.display = (s.dataset.cat === cat) ? 'block' : 'none';
+                });
+                cards.forEach(c => {
+                    c.style.display = (c.dataset.cat === cat) ? 'block' : 'none';
+                });
+            }
+        }
+
+        // 7. 实时搜索过滤
+        function filterIssues() {
+            const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
+            const cards = document.querySelectorAll('.issue-card');
+
+            cards.forEach(card => {
+                const text = card.innerText.toLowerCase();
+                if (!keyword || text.includes(keyword)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // 8. 滚动跟随高亮 (ScrollSpy)
+        function initScrollSpy() {
+            const links = Array.from(document.querySelectorAll('.toc-link'));
+            if (!links.length) return;
+
+            const targets = links.map(link => {
+                const href = link.getAttribute('href');
+                if (!href || !href.startsWith('#')) return null;
+                const id = decodeURIComponent(href.slice(1));
+                return {
+                    link: link,
+                    element: document.getElementById(id)
+                };
+            }).filter(item => item && item.element !== null);
+
+            if (!targets.length) return;
+
+            function onScroll() {
+                const scrollPos = window.scrollY + 120;
+                let currentItem = targets[0];
+                for (let i = 0; i < targets.length; i++) {
+                    if (targets[i].element.offsetTop <= scrollPos) {
+                        currentItem = targets[i];
+                    } else {
+                        break;
+                    }
+                }
+                targets.forEach(item => {
+                    if (item === currentItem) {
+                        if (!item.link.classList.contains('active')) {
+                            item.link.classList.add('active');
+                            item.link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                        }
+                    } else {
+                        item.link.classList.remove('active');
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
+        }
+
+        // 页面初始化
+        (function() {
+            const savedTheme = localStorage.getItem('doc-theme') || 'parchment';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeBtn(savedTheme);
+
+            const isCollapsed = localStorage.getItem('toc-collapsed') === 'true';
+            if (isCollapsed) {
+                document.body.classList.add('toc-collapsed');
+            }
+
+            initScrollSpy();
+        })();
+    </script>
 </body>
 </html>
