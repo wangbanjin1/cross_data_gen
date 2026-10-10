@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_053",
+  "category": "移动生活与现场协作",
+  "persona_summary": "高频移动网络使用者",
+  "static_profile": {
+    "user_id": "USER_053",
+    "identity": "节目统筹与嘉宾联络人，负责对接各领域影响力人物、协调其档期并安排节目出镜；日常高频在户外等候区、临时停留点、城市街区、公共活动现场及跨区域出行途中移动办公，全程依赖手机4G/5G直接联网，便携终端确需联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携工作终端（通过手机热点联网）",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "抖音",
+      "高德地图"
+    ],
+    "speech_archetype": "business_advisor",
+    "speech_style": {
+      "tone": "干练利落、节奏快，习惯用确认式短句推进事情，对时间和画质细节敏感",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "我这边信号没问题"
+      ],
+      "typical_habits": "开口先确认对方是否在线、时间是否卡点，再快速交代任务；习惯用'老规矩''老时间'指代固定安排，用'对齐一下'发起远程沟通，用'别掉链子'强调稳定性要求"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "嘉宾连线远程协作与现场素材回传",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在节目录制或嘉宾对接任务现场（14:00-16:00时段），需要与异地嘉宾或编导团队进行远程视频协作，并同步回传现场照片与短视频素材",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议",
+          "小企鹅开会"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦对齐",
+          "远程碰一下"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到四点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "下午两点老规矩"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城嘉宾对接与现场连线周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城出差期间，在户外活动现场与临时停留点频繁进行嘉宾连线与素材回传，现场人流密集、网络拥塞，需临时降低画质以保障连线稳定",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "现场短视频素材回传",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在活动现场拍摄嘉宾花絮或现场氛围后，需要快速上传短视频素材供团队剪辑使用",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "嘉宾即时沟通与位置共享",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "嘉宾到达活动现场附近但位置不明确时，通过视频通话确认位置并引导其前往对接点",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时查看活动现场直播画面确认机位状态",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "跨区域出行途中用地图导航前往下一个活动现场",
+        "application_name": "高德地图",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

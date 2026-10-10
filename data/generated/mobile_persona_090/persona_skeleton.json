@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_090",
+  "category": "体育训练与赛事保障",
+  "persona_summary": "户外训练教练",
+  "static_profile": {
+    "user_id": "USER_090",
+    "identity": "来自不同地区的电竞教练，长期在露天训练场、赛道、球场及赛事集结区开展户外训练与客场转场工作，负责队员数据查看、训练视频上传、战术回放与团队调度，全程依赖手机4G/5G移动核心网直连，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "devices": "5G智能手机＋随身拍摄设备，便携终端确需联网时使用手机热点",
+    "apps": [
+      "微信",
+      "钉钉",
+      "哔哩哔哩",
+      "腾讯会议"
+    ],
+    "speech_archetype": "athlete_speaker",
+    "speech_style": {
+      "tone": "干脆利落、带训练场口令感，习惯用短句推进节奏，强调执行与稳定",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "稳住上行"
+      ],
+      "typical_habits": "在训练场和转场途中习惯先确认网络与上传状态，再安排队员看回放、传视频和调训练；说话喜欢用固定时间点和固定地点来指代任务。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "露天训练场训练视频上传与战术回放",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处露天训练场、赛道、球场及赛事集结区等户外弱网空间，且处于09:00-11:00训练窗口时，需要上传训练视频并组织队员进行战术回放",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "09:00-11:00",
+      "application_name": "哔哩哔哩",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "小破站",
+          "B站"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "开直播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十一点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "上午训练窗口",
+          "到了场地就开"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨区域赛事周客场转场保障",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨区域赛事周期间，教练带队在客场转场途中和赛事集结区频繁移动，人群密集、弱覆盖路段增多，需要临时降低画质并收紧时延以保障训练视频续传和团队调度",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "转场途中团队视频调度",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "客场转场途中或户外热身区临时休息点，需要快速对齐队员位置和训练安排时",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "训练录像复盘与战术会议",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "晚间回到临时休息点或赛事集结区后，需要与异地教练组进行录像复盘和战术对齐时",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次在赛事集结区休息时刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在户外热身区观看其他赛事直播",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

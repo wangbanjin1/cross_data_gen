@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_084",
+  "category": "医疗健康与移动服务",
+  "persona_summary": "移动营养服务人员",
+  "static_profile": {
+    "user_id": "USER_084",
+    "identity": "移动营养服务人员，专注于饮食在免疫系统增强与疾病预防中的作用。日常在院前处置点、社区随访路线、临时医疗站、患者转运途中及户外健康服务现场之间移动，通过5G智能手机直接接入移动核心网完成远程会诊、患者信息查询、随访记录、即时通信、现场影像上传与任务协同，不依赖家庭宽带或普通Wi-Fi。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携平板与随身热点（仅在便携终端确需联网时开启）",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "飞书"
+    ],
+    "speech_archetype": "healthcare_mobile_advisor",
+    "speech_style": {
+      "tone": "专业、简洁、带现场节奏感，习惯用短句确认任务与网络状态",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先把数据传稳"
+      ],
+      "typical_habits": "在移动途中先确认网络与任务优先级，再发起会诊或上传影像；习惯用口语化别名指代应用、画质和时延，强调数据可靠与续传。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "社区随访路线远程营养会诊与影像上传",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处社区随访路线或临时医疗站弱覆盖区域，15:00-17:00进入移动核心网信号波动路段，需要边移动边完成远程营养会诊与现场影像上传",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "15:00-17:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦会诊",
+          "远程会诊"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到五点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "下午随访档期"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨社区免疫营养筛查周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨社区免疫营养筛查周期间，临时医疗站与转运车辆密集切换，弱覆盖路段增多，现场影像上传与远程会诊并发压力上升",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "随访路线即时通信与任务协同",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在社区随访路线移动途中需要快速与护士或社区医生确认患者饮食记录与随访任务",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "临时医疗站影像回传与复盘",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在临时医疗站完成现场影像采集后，需要回传并复盘营养干预记录",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次在户外健康服务现场休息时刷短视频",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在患者转运途中观看健康科普直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

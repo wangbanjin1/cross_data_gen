@@ -1,0 +1,179 @@
+{
+  "persona_id": "mobile_persona_064",
+  "category": "技术研发与现场支持",
+  "persona_summary": "移动研发支持工程师",
+  "static_profile": {
+    "user_id": "USER_064",
+    "identity": "一名专注于 .NET 与 VB6 平台互操作性的软件工程师，日常以移动研发支持为主，频繁往返于客户现场、设备机房外围、跨园区通勤路线以及外场测试点，通过手机 4G/5G 直接联网完成远程终端、代码与日志查询、视频协作、工单处理与文件传输，便携终端确需联网时使用手机热点。",
+    "devices": "5G 智能手机作为主联网与热点设备，平板电脑作为便携辅助终端，必要时连接便携笔记本进行远程调试。",
+    "apps": [
+      "腾讯会议",
+      "钉钉",
+      "微信",
+      "飞书"
+    ],
+    "speech_archetype": "engineer_speaker",
+    "speech_style": {
+      "tone": "简洁、务实、偏技术化，习惯用工程术语和排障口吻沟通，偶尔带一点现场应急的紧迫感。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先保连接",
+        "日志别断"
+      ],
+      "typical_habits": "说话前先确认网络和任务状态，喜欢用短句同步进度，遇到弱覆盖或上传失败时会反复强调续传和恢复。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "晚间远程排障与日志协同",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每天晚间黄金档高频业务，20:00-22:00 固定进行远程终端、代码与日志查询，并通过视频协作处理工单和文件传输。",
+      "period_type": "daily",
+      "days": [
+        "daily"
+      ],
+      "time_range": "20:00-22:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "鹅厂会议",
+          "腾讯会"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "远程排障会",
+          "连麦排障",
+          "视频协作"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点",
+          "一个半小时"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "晚间例行",
+          "每天晚间黄金档"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城客户现场故障处置周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城出差期间，客户现场与设备机房外围网络覆盖不稳定，需要频繁通过手机热点连接便携终端，远程终端、日志上传和视频协作对低时延与稳定续传要求更高。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "工单与日志异步回传",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "外场测试点或临时工位处理工单时，需要异步上传日志、截图和排障记录，并偶尔发起短会同步。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "客户沟通与远程演示",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "客户现场或通勤途中需要快速与客户或同事进行视频通话，确认问题现象和修复结果。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时参加公司内部全员会",
+        "application_name": "飞书",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "通勤途中单次刷短视频放松",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_058",
+  "category": "移动经营与客户服务",
+  "persona_summary": "跨现场管理人员",
+  "static_profile": {
+    "user_id": "USER_058",
+    "identity": "传统企业跨现场经营管理人员，具备教科书式的商业经济理解，日常在展会现场、商圈户外、临时经营点、市集、门店外摆区、客户拜访点及配送路线之间高频移动，依靠手机移动核心网（4G/5G）直接联网完成客户沟通、短视频营销、远程协作、移动支付、订单处理与库存查询，便携终端确需联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴设备，便携终端通过手机热点联网。",
+    "apps": [
+      "微信",
+      "抖音",
+      "腾讯会议",
+      "钉钉"
+    ],
+    "speech_archetype": "business_advisor",
+    "speech_style": {
+      "tone": "务实、直接、带管理口吻，喜欢用经营和效率词汇压节奏，强调现场执行与结果。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "现场盯紧点"
+      ],
+      "typical_habits": "习惯先确认时间与地点，再分配任务；遇到网络和订单问题会反复强调及时性与稳定性，喜欢用短句催促团队执行。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "周末商圈移动直播营销与远程协作",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每周六与周日15:00-17:00，在商圈户外区域或临时经营点进行周末专场移动直播营销，并同步远程协作处理订单与客户沟通。",
+      "period_type": "weekly",
+      "days": [
+        "Saturday",
+        "Sunday"
+      ],
+      "time_range": "15:00-17:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "开直播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到五点"
+        ],
+        "period_aliases": [
+          "每周六周日老规矩",
+          "周末这个时候",
+          "周末专场"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "双十一商圈外摆促销周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "双十一促销周期间，商圈外摆区与临时经营点人流密集，移动网络拥塞明显，直播与订单消息并发量高，需要优先保障支付与订单消息及时、人群密集区连接稳定。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "客户拜访点视频通话沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在客户拜访点或配送路线途中，需要临时与客户或团队进行视频通话确认订单、库存与交付细节。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨园区项目远程会议",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨园区通勤或项目现场需要参加视频会议，查看进度看板并处理团队即时消息。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时查看直播竞品动态",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次发布短视频营销素材",
+        "application_name": "小红书",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

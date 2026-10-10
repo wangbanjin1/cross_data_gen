@@ -1,0 +1,178 @@
+{
+  "persona_id": "mobile_persona_068",
+  "category": "交通运输与移动出行",
+  "persona_summary": "港航移动作业人员",
+  "static_profile": {
+    "user_id": "USER_068",
+    "identity": "资深航海作业人员，长期在港区、码头和近岸作业点执行船期核对、气象查看、调度接收、电子单据上传与现场作业记录任务，活动范围覆盖跨城途中、偏远路段、临时停靠点、高速公路服务区、车站、港区及机场外场，全程依赖手机4G/5G直接联网，不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携工作终端；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "钉钉",
+      "高德地图",
+      "腾讯会议"
+    ],
+    "speech_archetype": "maritime_operator",
+    "speech_style": {
+      "tone": "干脆、务实、带点海员式直爽，讲效率也讲安全，涉及船期和调度时语气会明显收紧。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "船期不等人",
+        "海上这摊子得盯紧"
+      ],
+      "typical_habits": "习惯用短句确认任务节点，先问位置、时延和单据状态，再谈其他；遇到跨区切换或信号波动会反复确认调度消息是否到位。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "港航现场调度与电子单据上传",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在港区、码头或近岸作业点执行船期核对、气象查看、调度接收与电子单据上传任务时触发，通常发生在08:30-10:30的现场作业窗口。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "08:30-10:30",
+      "application_name": "钉钉",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "钉钉",
+          "钉钉工作台",
+          "老钉"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "连麦对齐",
+          "视频对一下",
+          "现场连线"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "干到十点半"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "早班现场窗口",
+          "08:30老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨港区台风前调度保障周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "台风外围影响期间，港区与近岸作业点网络拥塞、跨区切换频繁，船期和调度消息时效要求提高，现场需要更稳的低时延视频通话与单据上传保障。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "码头现场录像复盘",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "现场作业结束后，与岸基同事复盘码头装卸、靠泊或单据异常情况时触发。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨城途中调度沟通",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨城途中或临时停靠点接到临时调度会议，需要与船方、港方或公司值班人员对齐任务时触发。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "服务区短暂休息时刷到港航资讯直播",
+        "application_name": "抖音",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "临时查看天气短视频",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

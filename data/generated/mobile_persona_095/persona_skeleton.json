@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_095",
+  "category": "野外科研与农业作业",
+  "persona_summary": "野外生态调查人员",
+  "static_profile": {
+    "user_id": "USER_095",
+    "identity": "经济地理学者兼野外生态调查人员，长期在农田、林区、河岸与山区样地开展矿物开采对地方经济影响的实地调查，沿样线导航定位、采集带坐标的照片与观测数据，并在临时观测点分批回传调查记录，同时撰写博客与远程专家协同。",
+    "devices": "主力设备为5G智能手机，辅以可穿戴设备（智能手表/定位手环）；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "field_researcher",
+    "speech_style": {
+      "tone": "务实、简练、带野外作业的干脆劲儿，习惯用行话和短句确认状态",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "信号稳住"
+      ],
+      "typical_habits": "出发前先确认路线与设备电量，现场用短句同步进度，回传前习惯说'对齐一下参数'，遇到弱覆盖会反复强调'续传别丢包'。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "野外样线调查数据回传与远程协同",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在14:00-16:00进入农田、林区、河岸或生态调查样地执行样线调查任务时，沿样线完成定位导航、带坐标照片采集与传感数据上传，并在临时观测点通过手机4G/5G直接联网与远程专家进行视频协同与记录回传。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦对齐",
+          "远程协同"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到四点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "下午例行",
+          "任务现场老规矩"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "矿区经济影响跨区域联合调查周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨区域联合调查周期间，调查队深入偏远山区与矿区周边样地，弱覆盖路段增多，需在移动现场持续回传带坐标照片与传感数据，并与后方专家保持视频协同。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "调查记录与现场照片即时回传",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在临时观测点完成一批样本记录后，需要向课题组即时同步现场照片与观测数据时触发。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "野外调查方法复盘与博客素材整理",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "结束当日样线调查后，在驻地观看相关学术直播或调查方法复盘内容，为博客撰写积累素材时触发。",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "观赛",
+            "刷直播"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次与地方农业合作社进行远程沟通，确认样地准入与调查安排",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在驻地休息时刷短视频放松，浏览矿区经济与生态调查相关资讯",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

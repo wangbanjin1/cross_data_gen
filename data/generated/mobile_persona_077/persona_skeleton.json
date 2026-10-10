@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_077",
+  "category": "移动学习与教育协作",
+  "persona_summary": "通勤与实践型学生",
+  "static_profile": {
+    "user_id": "USER_077",
+    "identity": "一名对天体物理有浓厚兴趣的年轻学生，日常在校园户外、校际通勤途中及实习点之间移动，通过手机移动核心网完成在线课程学习、资料检索、作业提交、小组视频讨论与协作文档编辑，并常向诗人请教与交流。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携工作终端；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "哔哩哔哩",
+      "钉钉"
+    ],
+    "speech_archetype": "student_learner",
+    "speech_style": {
+      "tone": "认真、好奇、略带学术热情，表达直接但礼貌，常带请教与确认语气。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "我先记一下",
+        "这段能续上吗"
+      ],
+      "typical_habits": "习惯在通勤和现场任务前先确认网络与会议链接，遇到弱覆盖会主动提醒同伴并请求续传；讨论时常引用课程资料和观测数据。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "移动端天体物理课程学习与小组研讨",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在校园户外、校际通勤途中或实习点完成天体物理在线课程学习、资料检索与小组视频研讨任务",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦研讨",
+          "开个视频会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "开到四点"
+        ],
+        "period_aliases": [
+          "老时间",
+          "下午两点到四点",
+          "任务现场这个点"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "校际天体物理观测实践周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨校通勤与户外观测点网络环境复杂，弱覆盖路段增多，需保障课程直播与小组研讨连续稳定。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "通勤途中课程回看与资料检索",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "校际通勤途中或实习点等待间隙，快速回看课程片段并检索天体物理资料",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "小组协作文档与即时沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "实践记录提交前或临时教学现场，与小组同学快速对齐文档与任务分工",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时参加一场跨校线上讲座",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "休息时刷一段天文科普短视频",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

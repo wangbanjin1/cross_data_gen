@@ -1,0 +1,176 @@
+{
+  "persona_id": "mobile_persona_063",
+  "category": "交通运输与移动出行",
+  "persona_summary": "户外观赛与兴趣社群用户",
+  "static_profile": {
+    "user_id": "USER_063",
+    "identity": "热爱旅行文学、因彼得·梅尔作品对普罗旺斯有特殊情结的户外赛事观赛与兴趣社群活跃用户，常年跨城追赛、在球场周边与观赛集结点活动，同时兼顾任务调度与电子单据上传等移动办公事务，全程依赖手机4G/5G直连，不依赖固网或普通Wi-Fi。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携工作终端（确需联网时使用手机热点）",
+    "apps": [
+      "微信",
+      "抖音",
+      "快手",
+      "腾讯会议",
+      "钉钉",
+      "哔哩哔哩",
+      "小红书"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "爽快直接、带点江湖气的户外行动派口吻，聊到普罗旺斯和旅行文学时会突然文艺起来",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "信号稳住"
+      ],
+      "typical_habits": "习惯在出发前和集结点用语音快速对齐行程与任务，开播或连麦前先确认网络与定位，遇到弱网会反复念叨'别掉链子'"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "观赛集结与社群实时分享直播",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处跨城观赛集结点、球场周边或高速公路服务区弱网区域，15:00-17:00时段需要向兴趣社群实时推流分享现场赛况",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "15:00-17:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖子"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到五点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "下午三点老规矩"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城观赛周与普罗旺斯主题书友会联动直播",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城观赛周期间，白天在球场周边与集结点弱网区域活动，晚间在服务区或临时停靠点与普罗旺斯主题书友会连线，网络环境拥挤且移动频繁",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "便携终端视频调度与电子单据上传",
+        "application_name": "钉钉",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在高速公路服务区、车站或港区临时停靠点，用便携工作终端通过手机热点与调度方视频对齐任务并上传电子单据",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "赛后录像复盘与社群讨论",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "观赛结束后在返程途中或临时停靠点，观看赛事复盘直播并在社群中参与讨论",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "观赛",
+            "刷直播"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次与书友会成员临时视频通话讨论普罗旺斯旅行文学",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在服务区休息时刷短视频打发时间",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

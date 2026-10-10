@@ -1,0 +1,178 @@
+{
+  "persona_id": "mobile_persona_076",
+  "category": "公共安全与移动执勤",
+  "persona_summary": "移动执勤人员",
+  "static_profile": {
+    "user_id": "USER_076",
+    "identity": "一名风险评估与移动执勤人员，长期在夜间值守点、事故现场、应急集结区及道路巡逻区域执行现场取证、即时通信、事件上报、地图导航、位置共享与任务调度等工作。全程依赖手机4G/5G移动核心网直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi，便携终端确需联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑，二者通过手机热点或移动核心网协同使用。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "高德地图"
+    ],
+    "speech_archetype": "risk_assessment_officer",
+    "speech_style": {
+      "tone": "简洁、克制、带有现场指挥感，习惯先确认风险再安排动作，语气偏冷静务实。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "先对齐一下",
+        "现场情况我同步一下"
+      ],
+      "typical_habits": "说话前先确认时间、地点和人员是否到位，常用短句下达任务，强调消息及时送达、画面稳定和移动过程中不断线。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "周四与周日夜间移动执勤复盘与专场互动",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每周四与周日19:30-21:30，移动执勤人员结束白天外勤后，在夜间值守点或临时集结区进行复盘与专场互动，固定使用微信视频通话与值班组同步现场情况。",
+      "period_type": "weekly",
+      "days": [
+        "Thursday",
+        "Sunday"
+      ],
+      "time_range": "19:30-21:30",
+      "application_name": "微信",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "微信",
+          "某信",
+          "小绿"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "视频对一下",
+          "连麦同步",
+          "开视频通话"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到九点半"
+        ],
+        "period_aliases": [
+          "每周四和周日老规矩",
+          "周四、周日这个点",
+          "晚间例行复盘",
+          "老时间"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨区域应急集结与事故现场专项保障周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨区域应急集结与事故现场专项保障期间，人员频繁在道路、巡逻区域和临时处置现场移动，现场网络拥塞且需要快速回传图片与短视频，主线视频通话临时降低画质并提高时延要求。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "现场取证短视频回传",
+        "application_name": "钉钉",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "事故现场或巡逻区域完成初步处置后，需要将现场照片或短视频快速回传至值班组和指挥端。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨区域任务调度会议",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨区域出行或临时停留期间，需要与多部门进行任务调度和风险对齐。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次夜间值守点休息时刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次临时查看应急直播通报",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,170 @@
+{
+  "persona_id": "mobile_persona_078",
+  "category": "文化创作与移动演出",
+  "persona_summary": "户外创作与演出人员",
+  "static_profile": {
+    "user_id": "USER_078",
+    "identity": "成功转型的自由职业网页设计师，现以教学为主，向年轻一代传授设计技能；日常在城市户外活动、跨区域出行和临时停留期间进行创作、排练与演出，全程依赖手机4G/5G直接联网，不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式，便携终端确需联网时使用手机热点。",
+    "devices": "5G智能手机＋便携工作终端",
+    "apps": [
+      "微信",
+      "抖音",
+      "哔哩哔哩",
+      "腾讯会议"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "干脆利落、带点江湖气的行业老手口吻，喜欢用短句和行话，对网络质量敏感且表达直接。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下"
+      ],
+      "typical_habits": "习惯在开播或上传前先确认网络状态，常用'老规矩'指代固定时段和固定参数，用'别掉链子'提醒团队和网络，用'对齐一下'发起沟通。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "户外音乐节现场直播与素材回传",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处音乐节、街头活动或临时排练现场等密集人群户外演出点，且处于10:00-12:00时段，需要现场音视频采集、直播与作品上传时触发。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "10:00-12:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城音乐节巡演周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城参加音乐节巡演，现场人群密集、网络拥塞，需要临时降低画质并提高时延要求以保证直播稳定。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "团队排练视频通话对齐",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在临时排练现场或户外演出点，需要与团队快速对齐排练进度和现场安排时触发。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "线上教学会议与作品点评",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在城市采风路线或展览布置区临时停留期间，需要向年轻学员进行线上教学和作品点评时触发。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次在街头活动间隙刷短视频放松",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在户外演出点观看同行直播",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

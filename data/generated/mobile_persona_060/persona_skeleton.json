@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_060",
+  "category": "野外科研与农业作业",
+  "persona_summary": "田间移动生产人员",
+  "static_profile": {
+    "user_id": "USER_060",
+    "identity": "与本地农户协作的邻近农场主，专注有机种植与创新农业技术试验，日常在农田、林区、河岸及生态调查样地间移动，使用手机4G/5G直接联网完成定位导航、样本记录、传感数据上传、现场图片回传与远程技术沟通。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴设备（智能手表/手环），便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "钉钉",
+      "腾讯会议",
+      "抖音",
+      "快手"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "朴实直接、带田间经验的务实口吻，习惯用农事节律和地点指代时间与任务。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "地头见",
+        "趁天没黑弄完"
+      ],
+      "typical_habits": "先确认位置和信号，再安排上传或通话；喜欢用‘老地方’‘老时间’指代固定协作节点，强调数据别断、画面别糊。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "傍晚田间远程农技会商与样本数据回传",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处农田、林区、河岸或生态调查样地边缘弱覆盖区域，完成下午采样后需要向技术人员回传作物状态图片、传感数据并接受远程指导。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "16:00-18:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦会商",
+          "远程过一下"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到六点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "傍晚地头例行"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "秋收后有机种植技术集中巡检周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "秋收后连续多日在偏远农田与河岸样地开展有机种植技术巡检，弱覆盖路段增多，需频繁回传病害图片并接受远程指导。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "田间短视频记录与协作沟通",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在农田或种植区发现作物长势异常、病害样本或创新技术效果时，拍摄短视频并发送给协作农户和技术人员。",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "远程视频通话指导农机与设备调试",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在偏远采样路线或临时观测点，农机或传感设备出现故障，需要与技术人员视频通话进行远程排障。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时参加线上农业技术培训直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "休息时与家人单次视频通话",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

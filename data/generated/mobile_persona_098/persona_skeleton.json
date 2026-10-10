@@ -1,0 +1,173 @@
+{
+  "persona_id": "mobile_persona_098",
+  "category": "移动生活与现场协作",
+  "persona_summary": "高频移动网络使用者",
+  "static_profile": {
+    "user_id": "USER_098",
+    "identity": "芬兰本地内容创作者与家乡推广者，长期在户外街区、公共活动现场及跨区域出行途中进行短视频拍摄、直播与远程协作，向世界介绍自己的家乡。",
+    "devices": "5G智能手机＋随身拍摄设备（运动相机/手机云台），便携终端确需联网时使用手机热点。",
+    "apps": [
+      "抖音",
+      "微信",
+      "腾讯会议",
+      "小红书"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "热情直接、带点北欧式爽朗，喜欢用短句推进节奏，强调现场感和效率。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "开整"
+      ],
+      "typical_habits": "习惯在开拍前快速确认网络和参数，用口语化指令同步团队，边移动边处理消息，喜欢用固定时间点组织任务。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "家乡户外现场直播推广",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在指定专业活动/现场任务时段，于城市街区、公共活动现场或跨区域出行途中，执行家乡景点与街区文化的现场直播推广任务，向全球观众介绍本地生活。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到四点"
+        ],
+        "period_aliases": [
+          "老规矩",
+          "下午两点老时间",
+          "任务日下午"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "家乡秋季旅游推广周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "秋季旅游推广周期间，在户外景区、城市广场和临时展台进行高频直播与短视频拍摄，现场人流密集、移动网络负载高，需优先保障画面稳定与低时延互动。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "跨区域出行视频协作",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "跨区域出行途中或临时停留点，需要与团队远程对齐拍摄计划、素材回传与推广排期时。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "现场素材复盘与短视频发布",
+        "application_name": "小红书",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "现场拍摄结束后，在户外等候区或临时停留点快速剪辑并发布家乡推广短视频，同步浏览反馈。",
+        "aliases": {
+          "app_aliases": [
+            "xiaohongshu",
+            "红薯"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次与家人视频通话",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次观看家乡赛事直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

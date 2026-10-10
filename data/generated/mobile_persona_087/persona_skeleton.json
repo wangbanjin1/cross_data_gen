@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_087",
+  "category": "移动学习与教育协作",
+  "persona_summary": "移动教学人员",
+  "static_profile": {
+    "user_id": "USER_087",
+    "identity": "政治学教授，主张非干预主义外交政策，日常以移动教学为主，频繁在校园户外区域、校际通勤途中、实习点及社会实践地开展教学活动，全程依赖手机4G/5G直接联网，不依赖固定宽带或普通Wi-Fi。",
+    "devices": "5G智能手机＋随身拍摄设备，便携终端确需联网时使用手机热点。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "educator_speaker",
+    "speech_style": {
+      "tone": "沉稳理性，带有学术口吻，但移动教学时简洁直接，强调效率与连续性。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "按原计划走"
+      ],
+      "typical_habits": "习惯在移动教学前先声明网络偏好，强调通勤切换时会话连续、视频课程稳定、大文件上传可靠，常用'老规矩'指代固定参数。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "移动教学视频答疑与资料上传",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处校园户外区域、校际通勤途中或实习点等移动教学现场，且处于14:00-16:00时段，需进行视频答疑并上传教学资料。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦答疑",
+          "开视频会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到四点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "下午两点老规矩"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "校际联合社会实践周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "校际联合社会实践周期间，频繁往返于多个实习点与运动场，弱覆盖路段增多，需临时降低画质并收紧时延以保障视频会议稳定。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "通勤途中即时通信与协作文档",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "校际通勤途中需快速沟通学生提交与课程通知，使用微信视频通话进行即时确认。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "教学资料上传与作业提交",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在实习点或临时教学现场，通过钉钉会议上传教学资料并查看学生作业提交。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次在运动场临时查看学生短视频作业",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在实践地休息时观看直播公开课",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

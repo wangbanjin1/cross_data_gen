@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_071",
+  "category": "移动生活与现场协作",
+  "persona_summary": "户外观赛与兴趣社群用户",
+  "static_profile": {
+    "user_id": "USER_071",
+    "identity": "印度当代音乐与Sidhu Moose Wala的忠实粉丝，高频参与户外观赛与兴趣社群活动的移动网络用户，常在球场周边、观赛集结点、城市街区及跨区域出行途中进行现场内容采集与社群互动",
+    "devices": "主力设备为5G智能手机，便携终端确需联网时使用手机热点",
+    "apps": [
+      "微信",
+      "抖音",
+      "快手",
+      "腾讯会议"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "热情直爽，带有现场感和社群归属感，习惯用短促有力的口语推进事情",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "现场走起"
+      ],
+      "typical_habits": "在活动现场习惯先确认网络和消息是否及时，再快速发起短视频或直播分享，遇到跨区域出行会提前检查连续覆盖"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "户外观赛现场短视频分享与社群同步",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在球场周边、观赛集结点或兴趣活动现场执行现场内容采集与社群同步任务，需即时查看赛况、参与社群讨论并上传现场短视频和照片",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "10:00-12:00",
+      "application_name": "抖音",
+      "service_name": "短视频",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "刷短视频",
+          "发短视频",
+          "现场短视频"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十二点"
+        ],
+        "period_aliases": [
+          "老规矩",
+          "现场这个点",
+          "上午任务时段"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "Sidhu Moose Wala纪念观赛周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "城市公共活动现场与跨区域出行途中人群密集，移动网络负载升高，需在户外等候区和临时停留点保持稳定上传与社群互动",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "观赛集结视频通话对齐",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在观赛集结点与社群伙伴确认到场位置、现场安排和实时赛况时发起视频通话",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨区域出行远程协作沟通",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨区域出行途中需要与兴趣社群或协作伙伴进行远程沟通、信息检索与位置共享时",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时观看音乐现场直播",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次与远方朋友临时视频通话",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

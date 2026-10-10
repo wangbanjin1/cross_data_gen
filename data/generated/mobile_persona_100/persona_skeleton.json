@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_100",
+  "category": "公共事务与外勤协作",
+  "persona_summary": "跨区域外事人员",
+  "static_profile": {
+    "user_id": "USER_100",
+    "identity": "常驻联合国系统的跨区域外事人员，冷战紧张时期在多个任务区之间往返，白天进行社区走访、公共活动现场协调与户外调研，夜间集中处理政策资料、加密通信与跨时区协调会议，全程依赖手机4G/5G移动核心网，不依赖家庭宽带或固定Wi-Fi。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备与便携终端；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "飞书"
+    ],
+    "speech_archetype": "diplomatic_field_coordinator",
+    "speech_style": {
+      "tone": "克制、准确、带外事协调口吻，习惯先确认再推进，强调时间窗口与材料完整性。",
+      "catchphrases": [
+        "老规矩",
+        "对齐一下",
+        "别掉链子",
+        "材料先回传"
+      ],
+      "typical_habits": "在跨区域移动中先确认接入网络与会议时间，再安排资料查询、表单记录和材料回传；遇到弱覆盖路段会提前说明并约定续传节点。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "晚间跨时区外事协调会议与材料回传",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每天晚间黄金档高频业务，20:00-22:00固定进行跨时区外事协调会议、加密通信与材料回传",
+      "period_type": "daily",
+      "days": [
+        "daily"
+      ],
+      "time_range": "20:00-22:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "开协调会",
+          "连麦对齐"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "晚间例行",
+          "每天晚间黄金档"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨区域外事调研与临时会议周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨区域通勤与户外调研点交替，临时会议区网络波动明显，需要优先保障会议通信稳定与材料续传。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "现场记录与电子表单回传",
+        "application_name": "钉钉",
+        "service_name": "即时通信",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "社区走访点、公共活动现场或户外调研点完成现场记录后，需要即时回传电子表单与材料",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "即时通信"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨区域途中视频通话协调",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨区域通勤途中或临时会议区需要与同事快速视频通话确认日程与材料",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次晚间休息时刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次观看公共活动直播了解现场情况",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

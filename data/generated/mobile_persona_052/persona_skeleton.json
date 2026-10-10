@@ -1,0 +1,176 @@
+{
+  "persona_id": "mobile_persona_052",
+  "category": "科研调查与移动协作",
+  "persona_summary": "移动人文调查人员",
+  "static_profile": {
+    "user_id": "USER_052",
+    "identity": "法国中部水系区域史研究者，长期在卢瓦尔河、谢尔河、安德尔河等流域开展人文地理与水利史料调查，频繁往返于档案馆、博物馆外场、遗址街区与高校之间，以移动终端完成资料采集、文献检索与团队协作。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；全程以手机4G/5G直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi，便携终端确需联网时使用手机热点。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "飞书",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "field_researcher_speaker",
+    "speech_style": {
+      "tone": "沉稳、克制、带学术口吻，习惯用时间节点和任务清单组织表达，偶尔夹杂法语地名与史料术语。",
+      "catchphrases": [
+        "老规矩",
+        "对齐一下",
+        "别掉链子",
+        "按月初那套来"
+      ],
+      "typical_habits": "习惯在月初先开一次远程例会确认本月田野计划与数据回传安排，讲话时喜欢先报时间窗口，再确认画质和时延是否够用。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "月初田野资料远程对齐会",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每月月初1-2号例行开门红与月度动员会，用于确认当月水系调查路线、档案调阅清单和团队数据回传安排。",
+      "period_type": "monthly",
+      "days": [
+        "1st",
+        "2nd"
+      ],
+      "time_range": "09:00-11:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "远程例会",
+          "连麦过方案"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "开到十一点"
+        ],
+        "period_aliases": [
+          "月初例会",
+          "每月1-2号老规矩",
+          "月初那套",
+          "老时间"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "秋季水系档案跨城采集周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "在法国中部多个沿河城镇与档案馆之间连续转场，部分河段与旧城区弱覆盖，需在移动网络下完成资料上传与远程讨论。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "田野影像回传与复盘",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "外业调查结束后，在返程车上或临时资料采集点向研究团队快速回传影像并做简短复盘。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "协作文档与文献同步",
+        "application_name": "飞书",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨校通勤路线或博物馆外场临时需要与团队同步文献批注、协作文档和数据库检索结果。",
+        "aliases": {
+          "app_aliases": [
+            "feishu",
+            "lark"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次在哔哩哔哩观看水利史公开讲座直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在微信上刷短视频查找地方口述史线索",
+        "application_name": "微信",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

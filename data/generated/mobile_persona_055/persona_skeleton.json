@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_055",
+  "category": "移动采编与内容生产",
+  "persona_summary": "突发现场记者",
+  "static_profile": {
+    "user_id": "USER_055",
+    "identity": "专注追踪并报道区块链对全球金融影响的财经记者，长期在活动现场、街区采访点、临时拍摄地及突发事件现场进行移动采编，全程依赖手机4G/5G核心网直连，不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式，便携终端确需联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携工作终端（用于稿件编辑、素材粗剪与热点共享）。",
+    "apps": [
+      "微信",
+      "抖音",
+      "腾讯会议",
+      "钉钉"
+    ],
+    "speech_archetype": "finance_field_reporter",
+    "speech_style": {
+      "tone": "语速偏快、信息密度高，习惯用财经行话与现场术语，表达直接、强调时效与准确性。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先把画面稳住",
+        "这条得赶在整点前发"
+      ],
+      "typical_habits": "在采访转场途中持续用语音与文字同步进度，习惯先确认上行带宽和直播时延，再决定画质档位；遇到弱覆盖会立刻要求续传或切换备份链路。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "午间财经快讯移动直播与短视频回传",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每天午间休息与午间复盘业务，固定时段进行财经快讯移动直播、短视频拍摄上传与素材回传",
+      "period_type": "daily",
+      "days": [
+        "daily"
+      ],
+      "time_range": "12:30-13:30",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "上直播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "一个钟头",
+          "一小时",
+          "播到一点半"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "午间例行"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "区块链金融峰会突发连线报道周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城出差参加区块链金融峰会，会场与周边街区人流密集、基站负载高，转场途中频繁进入弱覆盖路段，需要优先保障直播画面稳定与素材续传。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "转场途中视频通话选题沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "采访转场途中与编辑部或线人进行视频通话，快速确认选题方向与事实核查要点",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "晚间云端协作复盘会",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "当天报道结束后，晚间与编辑团队进行云端协作复盘，对齐次日采编计划与素材回传清单",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时参加行业闭门会，用手机入会旁听",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次休息间隙刷短视频放松",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

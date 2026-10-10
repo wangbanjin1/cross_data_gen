@@ -229,7 +229,7 @@ class QCValidator:
                 p0 = s.get("intents", [{}])[0].get("params", {})
                 app = p0.get("application_name", {}).get("value", "")
                 srv = p0.get("service_name", {}).get("value", "")
-                valid_apps = [app, "微信", "钉钉", "腾讯会议", "哔哩哔哩", "抖音", "快手", "企鹅会议", "阿抖", "小破站"]
+                valid_apps = [app, "微信", "钉钉", "腾讯会议", "哔哩哔哩", "抖音", "快手", "企鹅会议", "阿抖", "小破站", "某信", "绿泡泡", "v信", "WX", "企微"]
                 valid_srvs = [srv, "直播", "会议", "通话", "短视频", "开播", "视讯", "对齐开会", "推流"]
                 has_app = any(a in u1 for a in valid_apps if a)
                 has_srv = any(s in u1 for s in valid_srvs if s)

@@ -1,0 +1,176 @@
+{
+  "persona_id": "mobile_persona_067",
+  "category": "体育训练与赛事保障",
+  "persona_summary": "移动训练与参赛人员",
+  "static_profile": {
+    "user_id": "USER_067",
+    "identity": "前橄榄球队队友，与Kirk Cousins有私交，常在露天训练场、赛道、球场及赛事集结区活动，负责训练数据记录、赛事转场调度与团队即时通信，习惯在移动场景下用手机直接联网完成视频上传与直播互动。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携工作终端；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "抖音",
+      "微信",
+      "腾讯会议",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "athlete_speaker",
+    "speech_style": {
+      "tone": "直来直去、带点队友间的调侃，讲效率，不爱绕弯子。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "我这边先推流"
+      ],
+      "typical_habits": "习惯用短句同步安排，先确认时间再确认画质和延迟，遇到转场就反复提醒别断线。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "每周二与周六晚间赛事直播与训练复盘",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每周二与周六晚间20:00-22:00固定进行赛事直播与训练复盘，到点就开播，老规矩不变。",
+      "period_type": "weekly",
+      "days": [
+        "Tuesday",
+        "Saturday"
+      ],
+      "time_range": "20:00-22:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "开直播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点"
+        ],
+        "period_aliases": [
+          "每周二周六老时间",
+          "老规矩",
+          "晚间例行",
+          "到点就开"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "客场密集赛程周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "连续客场转场，露天球场与临时休息点人群密集，弱覆盖路段多，直播与上传容易抖动，需要临时降低画质并压低延迟保证连续。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "转场大巴上的团队视频调度",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "客场转场途中或临时休息点，需要和教练组、后勤快速对齐行程与训练安排时。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "训练录像复盘与片段回传",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "训练结束后或赛前准备会前，需要上传、回放并标记关键片段时。",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次与家人视频通话",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次观看赛事直播",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,179 @@
+{
+  "persona_id": "mobile_persona_088",
+  "category": "技术研发与现场支持",
+  "persona_summary": "外勤法律服务人员",
+  "static_profile": {
+    "user_id": "USER_088",
+    "identity": "一位极度谨慎的软件许可与专利法务顾问，长期在外勤场景中提供法律服务。工作日或任务期间持续使用移动网络，活动范围覆盖法院、客户现场、设备机房外围、外场测试点、临时工位及跨园区通勤路线。全程以5G智能手机和便携工作终端通过4G/5G移动核心网直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi，便携终端确需联网时使用手机热点。核心工作包括加密查阅案件材料、参加视频沟通、提交电子签署文件、现场记录、工单处理、远程终端操作以及代码与日志查询。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携工作终端（通过手机热点联网）",
+    "apps": [
+      "腾讯会议",
+      "钉钉",
+      "微信",
+      "飞书"
+    ],
+    "speech_archetype": "cautious_legal_advisor",
+    "speech_style": {
+      "tone": "严谨、克制、措辞精确，习惯用法律与合规术语，强调风险与证据链",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "留痕了吗",
+        "按流程走"
+      ],
+      "typical_habits": "说话前先确认事实与授权范围，喜欢用'对齐一下'来同步信息，用'老规矩'指代固定流程，用'别掉链子'提醒关键节点，重要事项必问'留痕了吗'。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "月初专利与许可案件远程会审",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每月月初1-2号例行开门红与月度动员会，需在09:00-11:00进行专利与许可案件远程会审及加密材料同步",
+      "period_type": "monthly",
+      "days": [
+        "1st",
+        "2nd"
+      ],
+      "time_range": "09:00-11:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "鹅厂会议",
+          "腾讯会"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "远程会审",
+          "过案子",
+          "连麦对齐"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十一点"
+        ],
+        "period_aliases": [
+          "月初例会",
+          "老时间",
+          "每月1-2号早上",
+          "月初动员会"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城专利诉讼证据保全与现场庭审支持",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城出差季，在法院、客户现场和设备机房外围之间高频移动，现场网络环境复杂且不稳定，需在移动中保障加密视频沟通与证据材料上传，对时延和连接稳定性要求临时提高。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "客户现场远程终端与日志查询",
+        "application_name": "钉钉",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在客户现场或设备机房外围需要远程接入终端、查询代码与日志并同步沟通时",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨园区通勤途中案件材料加密查阅与电子签署",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨园区通勤路线中需加密查阅案件材料、参加视频沟通并提交电子签署文件时",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时参加外部法律科技研讨会直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在通勤途中观看法律科普短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

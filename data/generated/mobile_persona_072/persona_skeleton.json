@@ -1,0 +1,179 @@
+{
+  "persona_id": "mobile_persona_072",
+  "category": "公共安全与移动执勤",
+  "persona_summary": "移动执勤人员",
+  "static_profile": {
+    "user_id": "USER_072",
+    "identity": "一线移动执勤侦探，长期在道路、巡逻区域、临时处置现场与夜间值守点之间机动，负责追查盗窃文物嫌疑人、现场取证、调度协同与事件上报；工作半径覆盖城区主干道、城郊结合部、事故现场与应急集结区，几乎全天候依赖手机移动核心网完成警务协同。",
+    "devices": "主力设备为5G智能手机，辅助设备包括执法记录仪、便携平板与随身热点；不依赖家庭宽带、公司固网或普通Wi-Fi，便携终端确需联网时统一走手机热点。",
+    "apps": [
+      "微信",
+      "钉钉",
+      "高德地图",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "field_operator_speaker",
+    "speech_style": {
+      "tone": "干脆、简短、带指令感，习惯用对讲式短句确认信息，遇到弱网时语气会明显收紧。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "先保回传",
+        "位置发我",
+        "收到请回复"
+      ],
+      "typical_habits": "先报位置再报事项，重要任务前会反复确认网络与电量，习惯用'老规矩'指代固定时段和固定参数，遇到卡顿会立刻要求切低画质保连通。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "夜间巡逻值守点视频回传与调度",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "当执勤人员身处城郊结合部巡逻路段、夜间值守点或事故现场周边，且时间为20:00-22:00时，因现场弱覆盖与移动性要求，触发通过手机移动核心网进行视频回传、位置共享与任务调度。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "20:00-22:00",
+      "application_name": "微信",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "微信",
+          "某信",
+          "警务微信"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "连麦回传",
+          "视频对讲",
+          "开视频"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点",
+          "值守这两小时"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "晚间例行",
+          "夜里这班老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "文物追缉跨区收网行动",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨区追缉盗窃文物嫌疑人，连续多日在城郊废弃仓库、旧货市场与临时卡点之间机动，现场建筑遮挡严重、基站切换频繁，属于典型弱覆盖与高移动性叠加环境。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "执法记录仪素材复盘",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "回到值守点或临时集结区后，需要快速回看执法记录仪片段、标记可疑人员与车辆特征时触发。",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "多警组任务对齐会",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨区收网行动前或每日交接班时，需要与指挥中心、卡点警组进行任务对齐与情报同步时触发。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次事故现场临时向指挥中心发起视频通话",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次夜间蹲守间隙刷短视频放松",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

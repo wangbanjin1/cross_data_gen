@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_092",
+  "category": "技术研发与现场支持",
+  "persona_summary": "移动研发支持工程师",
+  "static_profile": {
+    "user_id": "USER_092",
+    "identity": "移动研发支持工程师，精通Java与Swift，但从未接触过Objective-C，正在手动学习将Objective-C代码转换为Swift。日常需在客户现场、设备机房外围、跨园区通勤路线及外场测试点之间移动，通过手机4G/5G直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi。核心工作包括远程终端操作、代码与日志查询、视频协作、工单处理与文件传输，便携终端确需联网时使用手机热点。",
+    "devices": "5G智能手机＋可穿戴设备，便携终端（笔记本电脑/平板）通过手机热点联网",
+    "apps": [
+      "腾讯会议",
+      "钉钉",
+      "飞书",
+      "微信"
+    ],
+    "speech_archetype": "tech_support_engineer",
+    "speech_style": {
+      "tone": "务实、简洁、略带技术圈行话，习惯用工程化语言描述问题，语速中等偏快，遇到故障时语气紧迫但条理清晰",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先看日志",
+        "热点连上没"
+      ],
+      "typical_habits": "在客户现场或通勤途中习惯性先确认网络连接状态，再打开远程终端或日志工具；遇到线上故障时优先拉视频协作对齐信息，口头禅常带'老规矩'来指代固定流程，用'别掉链子'提醒自己和同事保障连接稳定。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "客户现场远程故障排查与代码日志协同",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在客户现场、设备机房外围或外场测试点执行移动研发支持任务时，需通过手机热点连接便携终端，远程查看代码、日志和工单，并远程协助定位线上故障，触发高频远程终端与视频协作需求",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "10:00-12:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "远程对齐",
+          "拉个会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "干到十二点"
+        ],
+        "period_aliases": [
+          "老规矩",
+          "每天这个时候",
+          "现场任务时段"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨园区紧急故障处置周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨园区多客户现场同时出现线上故障，需在弱覆盖路段和临时工位间频繁移动，通过手机热点维持远程终端与视频协作，网络环境不稳定，对时延和续传要求极高",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "外场测试点工单处理与文件回传",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在外场测试点或临时工位完成测试后，需通过钉钉快速处理工单并回传日志文件，网络条件一般，优先保障上传可靠",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "通勤途中代码评审与短视频技术资料查阅",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨园区通勤路线上，利用碎片时间通过哔哩哔哩观看技术分享短视频或查阅Objective-C转Swift教程，网络为手机4G/5G直接联网",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次与客户进行微信视频通话确认设备状态",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在飞书上参加部门周会",
+        "application_name": "飞书",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

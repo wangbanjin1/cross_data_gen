@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_082",
+  "category": "移动生活与现场协作",
+  "persona_summary": "高频移动网络使用者",
+  "static_profile": {
+    "user_id": "USER_082",
+    "identity": "匈牙利裔摔跤运动狂热爱好者，长期在城市街区、公共活动现场与跨区域出行途中活动，习惯用手机4G/5G直接联网完成导航、信息检索、位置共享、即时通信与短视频上传，便携终端需要联网时以手机热点兜底。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；全程以手机移动核心网直连，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "微信",
+      "抖音",
+      "腾讯会议",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "直爽、带点赛场口吻，喜欢用短句催促和确认，语气里常有兴奋感和行动感。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "我这边先顶上"
+      ],
+      "typical_habits": "习惯在固定晚间时段开播或看直播，出门前先确认网络和电量，遇到弱覆盖会立刻提醒同伴并尝试续传。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "晚间摔跤主题直播与互动",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每天晚间黄金档高频业务，20:00-22:00固定开启摔跤主题直播并与粉丝互动",
+      "period_type": "daily",
+      "days": [
+        "daily"
+      ],
+      "time_range": "20:00-22:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "上播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "晚间例行"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城摔跤赛事周现场直播",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城赛事周期间，场馆内外人流密集、移动网络波动明显，需要在户外等候区与临时停留点持续开直播并上传现场短视频。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "赛后录像复盘与远程讨论",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "赛事结束后的当晚或次日，和同伴远程复盘比赛录像并讨论战术",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "出行途中短视频素材上传",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨区域出行途中或活动现场间隙，上传摔跤现场短视频素材",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次与外地朋友视频通话确认行程",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次观看赛事直播回放",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

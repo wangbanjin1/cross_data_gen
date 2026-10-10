@@ -1,0 +1,173 @@
+{
+  "persona_id": "mobile_persona_074",
+  "category": "移动生活与现场协作",
+  "persona_summary": "上门移动技术工",
+  "static_profile": {
+    "user_id": "USER_074",
+    "identity": "退休木工转型的上门移动技术工，专做商铺空间翻新与现场维修，日常在不同客户现场查看维修图纸和配件信息、视频咨询复杂问题，并上传完工照片和电子服务单，活动范围覆盖城市街区、公共活动现场及跨区域出行途中。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备（运动相机/手机云台），便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "抖音",
+      "高德地图"
+    ],
+    "speech_archetype": "craftsman_field_worker",
+    "speech_style": {
+      "tone": "干脆利落、带点老匠人的笃定，喜欢用行话和短句，边干活边交代事情。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "我这边先推着走"
+      ],
+      "typical_habits": "习惯在开工前先跟客户或搭档对齐进度，遇到弱信号路段会主动提醒对方等自己恢复再继续，完工后第一时间上传照片和电子服务单。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "商铺翻新现场远程协作与完工回传",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在客户商铺翻新现场执行核心施工与验收任务时，需要与设计方或搭档视频连线确认图纸细节，并在完工后上传现场照片和电子服务单。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "腾讯会议",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "连麦对齐",
+          "视频对一下"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到四点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "下午两点老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城商铺翻新季集中交付",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城连续跑多个商铺翻新现场，途经弱覆盖路段和临时停留点，需要保证视频连线不中断、完工资料能续传。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "现场录像复盘与问题回看",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "遇到复杂维修点或客户对施工细节有疑问时，回看现场录像并与搭档沟通确认。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "客户进度同步与位置共享",
+        "application_name": "高德地图",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在跨区域出行途中或临时停留点，向客户同步到达时间并共享实时位置。",
+        "aliases": {
+          "app_aliases": [
+            "高德地图"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "午休时在户外等候区刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "临时参加同行线上经验分享会",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

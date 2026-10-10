@@ -1,0 +1,178 @@
+{
+  "persona_id": "mobile_persona_070",
+  "category": "移动学习与教育协作",
+  "persona_summary": "通勤与实践型学生",
+  "static_profile": {
+    "user_id": "USER_070",
+    "identity": "一名受教于Dr. Frank Hampel的小学生，日常在校园户外区域、校际通勤途中及实习点之间高频移动，以5G智能手机和随身拍摄设备为主要学习终端，全程依赖手机移动核心网完成在线课程、资料检索、作业提交与小组协作。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "哔哩哔哩",
+      "钉钉"
+    ],
+    "speech_archetype": "student_mobile_learner",
+    "speech_style": {
+      "tone": "轻快直接，带点学生腔，习惯把学习任务说成‘赶进度’或‘交作业’，遇到网络问题会反复强调‘别断’。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先续上再说"
+      ],
+      "typical_habits": "习惯在通勤和户外实践现场用手机直接开课、开会、交作业；遇到弱覆盖路段会先确认能不能续传，再决定是否重连。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "月末晚间小组视频复盘与作业冲刺",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每月月末28-29号例行封账冲刺与月度大复盘，20:00-22:00在通勤返程或实习点临时教学现场进行小组视频会议、课程回看与作业提交。",
+      "period_type": "monthly",
+      "days": [
+        "28th",
+        "29th"
+      ],
+      "time_range": "20:00-22:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "鹅会",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦复盘",
+          "开小组会",
+          "视频会议"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点"
+        ],
+        "period_aliases": [
+          "每月28-29号老规矩",
+          "月末晚间例行",
+          "月底冲刺档",
+          "老时间"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "校际实践周跨城通勤与临时教学点弱覆盖",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "校际实践周期间频繁跨城通勤，临时教学点位于运动场和社会实践地附近，弱覆盖路段增多，视频会议和作业上传容易中断。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "通勤途中课程回看与资料检索",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "校际通勤途中或实习点等待间隙，用手机快速回看课程片段、检索实践资料。",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "小组即时沟通与协作文档同步",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "小组临时讨论、作业分工确认或实践记录同步时，发起短时视频通话并共享协作文档。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次在运动场边看同学直播校园活动",
+        "application_name": "抖音",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在临时教学现场用钉钉提交实践记录并刷短视频放松",
+        "application_name": "钉钉",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

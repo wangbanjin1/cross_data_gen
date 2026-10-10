@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_089",
+  "category": "医疗健康与移动服务",
+  "persona_summary": "移动随访与康复人员",
+  "static_profile": {
+    "user_id": "USER_089",
+    "identity": "移动随访与康复人员，主要在外勤、通勤或活动期间使用移动网络，负责社区随访、上门康复服务、院前处置点支援及患者转运途中的医疗协同，全程以手机4G/5G直接联网，不依赖家庭宽带或普通Wi-Fi。",
+    "devices": "5G智能手机＋便携工作终端，便携终端确需联网时使用手机热点。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "飞书"
+    ],
+    "speech_archetype": "medical_mobile_speaker",
+    "speech_style": {
+      "tone": "专业、简洁、带有关怀感，习惯用医疗行业术语与团队协作口令，语速适中，强调可靠与及时。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "数据别断",
+        "按原计划走"
+      ],
+      "typical_habits": "在任务开始前习惯确认网络与设备状态，沟通时喜欢用简短明确的口令，遇到弱覆盖路段会提前提醒团队并启动续传预案。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "社区随访与远程会诊协同",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在执行社区随访、上门康复服务或院前处置点支援任务期间，需要与医疗团队进行远程会诊、查询患者信息并上传随访记录。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "08:30-10:30",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "远程会诊",
+          "连麦会诊"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "一个半小时"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "按原计划走"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨区应急随访支援周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨区支援期间，部分区域网络覆盖不稳定，需在移动过程中保持远程会诊与数据上传，优先保障连接稳定性与低时延。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "随访记录与影像上传",
+        "application_name": "钉钉",
+        "service_name": "即时通信",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在社区随访或上门服务过程中，需要即时上传患者评估结果、现场影像并与团队同步任务状态。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "即时通信"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "患者转运途中视频沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在患者转运途中，需要与接收医院或医疗团队进行视频通话，沟通患者状态与交接事项。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时参加院内线上培训",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "休息间隙刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

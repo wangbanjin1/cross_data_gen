@@ -1,0 +1,176 @@
+{
+  "persona_id": "mobile_persona_057",
+  "category": "移动生活与现场协作",
+  "persona_summary": "高频移动网络使用者",
+  "static_profile": {
+    "user_id": "USER_057",
+    "identity": "一位掌管古老灌溉系统的地主，常年奔走于田间地头、水渠闸口与跨区域灌区之间，负责巡查渠道、调度分水、维护闸门，并在现场与农户、水管员远程协作。日常活动半径覆盖城市街区、公共活动现场及跨区域出行途中，也常停留在户外等候区、临时停留点或兴趣活动现场。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴设备；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "微信",
+      "抖音",
+      "腾讯会议",
+      "钉钉"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "沉稳务实，带点老农的直爽与经验口吻，谈灌溉和网络都爱用老规矩、老时间这类说法。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "水到渠成"
+      ],
+      "typical_habits": "习惯在巡查途中用手机快速共享位置、发语音、拍现场短视频；遇到弱网会先念叨一句别掉链子，再找高处或开阔地续传。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "灌区巡查与远程分水协作",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处灌区闸口、渠道背阴段或跨区域出行途中的弱覆盖路段，需要现场共享位置、上传水情短视频并与水管员远程对齐分水安排",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "10:00-12:00",
+      "application_name": "微信",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "微信",
+          "某信",
+          "绿泡泡"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "连麦",
+          "视频通话",
+          "对一下画面"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十二点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "上午巡查老规矩"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "秋灌高峰跨区域闸口联调",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "秋灌高峰期跨区域闸口联调，现场处于渠道背阴段与临时停留点，弱覆盖明显，需要临时降低画质并压低时延以保障分水指令及时送达",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "水情短视频回传与复盘",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "巡查途中拍摄渠道水情、闸门状态并上传短视频，供灌区水管员复盘和远程判断",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨区域灌区远程会议",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在临时停留点或户外等候区参加跨区域灌区调度会议，与上下游水管员对齐分水计划",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时参加公共活动现场的直播连线",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在户外等候区与家人刷短视频消遣",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

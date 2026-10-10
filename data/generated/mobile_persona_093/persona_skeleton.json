@@ -1,0 +1,173 @@
+{
+  "persona_id": "mobile_persona_093",
+  "category": "野外科研与农业作业",
+  "persona_summary": "田间移动生产人员",
+  "static_profile": {
+    "user_id": "USER_093",
+    "identity": "偏远农田、牧场、林区与生态样地之间高频移动的田间生产与野外采样人员，日常在种植区、养殖区、河岸样带和临时观测点之间往返，负责查看气象与设备数据、记录作物与牲畜状态、拍摄病害或生产异常影像，并向技术人员远程反馈。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备、便携传感器与样本记录终端；确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "钉钉",
+      "腾讯会议",
+      "高德地图"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "直爽、务实、带点田间作业的急脾气，讲效率也讲老规矩",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先把图传回去"
+      ],
+      "typical_habits": "习惯用短句交代任务，先确认信号和电量，再安排拍摄、回传和远程沟通；遇到弱网会反复强调稳定和别断线。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "田间夜间远程指导与影像回传",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处偏远农田、林区、河岸或临时观测点等弱覆盖区域，完成当日采样或巡田后，在20:00-22:00与技术人员进行远程指导并回传现场图片视频",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "20:00-22:00",
+      "application_name": "微信",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "微信",
+          "某信"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "连麦",
+          "视频通话"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "晚间例行"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "秋收后病害集中排查周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "秋收后田间病害与生产异常集中排查，连续多日在偏远农田、林区和河岸样地夜间作业，弱覆盖更明显，需优先保证视频通话稳定与图片回传",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "田间样本记录与传感数据上传",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在农田、林区或临时观测点完成样本采集后，需要向技术组同步记录并上传传感数据时",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "巡田路线定位与远程沟通",
+        "application_name": "高德地图",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "沿偏远采样路线、山区或河岸样带移动时，需要定位导航并与同伴或技术人员保持远程沟通",
+        "aliases": {
+          "app_aliases": [
+            "高德地图"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时参加技术培训会",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "休息时单次观看农业技术直播",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

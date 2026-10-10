@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_059",
+  "category": "公共事务与外勤协作",
+  "persona_summary": "移动公共事务人员",
+  "static_profile": {
+    "user_id": "USER_059",
+    "identity": "可持续发展事务专员，长期在城市社区、公共活动现场与跨区域通勤途中开展塑料污染治理政策调研、公众宣导与材料回传工作；日常以移动网络为主要接入方式，不依赖家庭宽带或公司固网。",
+    "devices": "5G智能手机（主力）＋平板电脑（辅助），便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "飞书"
+    ],
+    "speech_archetype": "public_affairs_field_officer",
+    "speech_style": {
+      "tone": "务实、干练、略带现场指挥感，习惯用短句确认任务节点。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "现场先稳住"
+      ],
+      "typical_habits": "出发前先确认网络与材料版本，现场用语音和位置共享同步进度，遇到弱覆盖会提前说明并约定续传节点。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "社区塑料污染治理政策宣导与现场材料回传",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在社区走访点或公共活动现场执行塑料污染治理政策宣导任务，需通过腾讯会议与后方政策组进行视频会议，同步现场照片、电子表单与调研记录，并确保材料可靠回传。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "09:30-11:30",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦开会",
+          "视频会议"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "到十一点半"
+        ],
+        "period_aliases": [
+          "老时间",
+          "上午这个点",
+          "任务现场老规矩"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨区域塑料污染治理联合调研周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨区域联合调研期间，团队在多个社区与户外调研点之间移动，部分路段弱覆盖，需临时降低画质并优先保证会议稳定与材料续传。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "现场短视频素材回传与快速剪辑沟通",
+        "application_name": "微信",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在社区活动现场拍摄塑料污染治理宣导短视频后，通过微信快速回传给宣传组并沟通剪辑要点。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨区域通勤途中政策资料查询与即时通信",
+        "application_name": "钉钉",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨区域通勤途中接到临时政策咨询，需通过钉钉视频通话与同事快速确认口径并同步电子表单。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时参加外部环保组织线上直播培训，单次使用。",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "午休时在通勤途中单次刷短视频放松。",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

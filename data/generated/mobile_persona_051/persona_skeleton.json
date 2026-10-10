@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_051",
+  "category": "交通运输与移动出行",
+  "persona_summary": "户外观赛与兴趣社群用户",
+  "static_profile": {
+    "user_id": "USER_051",
+    "identity": "汽车改装创业者，与退役赛车手合作打造定制性能车；常年跨城跑赛道、观赛集结与客户交付，活动半径覆盖高速服务区、偏远路段、港区与机场外场，全程依赖手机移动核心网直接联网。",
+    "devices": "5G智能手机（主力）＋随身拍摄设备（运动相机/手机云台）＋便携热点终端",
+    "apps": [
+      "微信",
+      "抖音",
+      "快手",
+      "腾讯会议",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "gearhead_entrepreneur",
+    "speech_style": {
+      "tone": "干脆利落、带车圈行话，习惯用赛道和改装术语压缩表达，语速偏快",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "路上说"
+      ],
+      "typical_habits": "出发前先语音对齐行程，途中用短视频记录车况与路况，到点就开播或连麦复盘，习惯用'老时间''老地方'指代固定安排"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "跨城赛道集结与观赛现场直播",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处跨城高速服务区、赛道外场或观赛集结点等弱网/高移动区域，20:00-22:00 时段进行现场直播与社群互动",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "20:00-22:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖子"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "上播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "晚间例行"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城赛道周暨定制车交付季",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "连续多日跨城转场，途经偏远路段、港区外场与高速服务区，网络频繁切换且信号波动大，需保障直播与调度不中断",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "车队途中视频调度",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "跨城转场途中需要临时对齐车队位置与交付节点时发起",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "赛后录像复盘与客户沟通",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "赛事结束回到停靠点或服务区后，与退役赛车手及客户复盘录像、确认改装方案",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时在服务区休息时刷短视频打发时间",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "夜间在停靠点观看其他车手直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

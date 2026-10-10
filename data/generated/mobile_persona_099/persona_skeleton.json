@@ -1,0 +1,177 @@
+{
+  "persona_id": "mobile_persona_099",
+  "category": "移动经营与客户服务",
+  "persona_summary": "移动经营者",
+  "static_profile": {
+    "user_id": "USER_099",
+    "identity": "成功的电子烟行业创业者，日常在门店外摆区、供货市集、客户拜访点、配送路线、展会现场与商圈户外临时经营点之间高频移动，全程依赖手机4G/5G直接联网完成移动支付、订单处理、库存查询、客户沟通、短视频营销与远程协作，便携工作终端确需联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携工作终端（平板/轻薄本），二者通过手机热点互联。",
+    "apps": [
+      "微信",
+      "抖音",
+      "快手",
+      "腾讯会议",
+      "钉钉",
+      "小红书"
+    ],
+    "speech_archetype": "mobile_entrepreneur_speaker",
+    "speech_style": {
+      "tone": "干脆利落、带生意人节奏，边忙边交代，喜欢用短句和行话，强调别掉链子、要稳。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先把单子跑通",
+        "信号给我稳住"
+      ],
+      "typical_habits": "在移动途中用语音消息和短视频快速沟通，习惯先确认网络与画质档位再开播或开会，遇到弱网会主动要求续传和恢复。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "市集外摆区移动直播带货与订单处理",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "当身处市集、门店外摆区或商圈户外临时经营点，且处于10:00-12:00客流高峰、人群密集导致4G/5G上行波动时，触发抖音直播带货与订单处理主线。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "10:00-12:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "上播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十二点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "上午出摊档口"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "双十一商圈电子烟展会促销周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "展会现场与商圈户外临时经营点人流密集，5G上行拥塞明显，直播与订单消息需要更稳的时延保障。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "供货市集移动支付与库存核对",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在供货市集或客户拜访点需要与仓库/供货商核对库存、确认订单时触发。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "配送路线远程协作与短视频素材回传",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在配送路线或临时经营点需要与团队远程对齐营销素材、订单进度时触发。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "展会现场单次观看同行直播参考话术",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "通勤途中单次刷短视频找营销灵感",
+        "application_name": "小红书",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

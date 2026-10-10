@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_054",
+  "category": "移动生活与现场协作",
+  "persona_summary": "户外观赛与兴趣社群用户",
+  "static_profile": {
+    "user_id": "USER_054",
+    "identity": "居住在努纳武特地区伊魁特的居民，北极户外爱好者，圣犹达座堂社区参与成员；日常以手机移动核心网为主要联网方式，常在城市街区、公共活动现场、跨区域出行途中与户外等候点活动，习惯在观赛集结点和出行途中查看实时赛况、参与社群讨论并分享现场短视频与照片。",
+    "devices": "5G智能手机为主力设备，便携工作终端为辅助设备；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "抖音",
+      "腾讯会议",
+      "高德地图"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "直爽、节奏快，带点户外社群召集人的热络感，讲效率也讲现场感",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "我这边先顶上"
+      ],
+      "typical_habits": "习惯用简短口令式表达确认时间、地点和网络状态；遇到弱覆盖会先提醒同伴续传，再补一句老规矩。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "午间户外观赛集结与社群现场分享",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处伊魁特城市街区公共观赛集结点或户外等候区，进入11:00-13:00午间活动时段，使用手机4G/5G直接联网进行现场短视频上传与社群同步",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "11:00-13:00",
+      "application_name": "抖音",
+      "service_name": "短视频",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "刷短视频",
+          "发现场短片",
+          "推现场"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到一点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "午间老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "北极光节户外观赛周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "伊魁特户外公共活动现场与临时观赛集结点人流密集，周边基站负载升高，部分等候区出现弱覆盖与短时拥塞，需要优先保障即时通信与短视频上传稳定。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "跨区域出行途中位置共享与即时通信",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在跨区域出行途中或临时停留点与社群成员确认集合位置、共享实时位置并短时视频通话",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "便携终端远程协作与赛况同步",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在户外等候区或公共活动现场使用便携工作终端，通过手机热点接入进行远程协作与赛况同步",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次在伊魁特市区咖啡馆临时参加社群线上会议",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在户外等候区观看赛事直播",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

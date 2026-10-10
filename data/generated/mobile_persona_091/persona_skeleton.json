@@ -1,0 +1,178 @@
+{
+  "persona_id": "mobile_persona_091",
+  "category": "交通运输与移动出行",
+  "persona_summary": "跨区域移动旅行从业者",
+  "static_profile": {
+    "user_id": "USER_091",
+    "identity": "多语种自由译员，长期为柬埔寨旅客提供随行翻译与出行沟通支持，频繁跨城移动，常在景区、交通枢纽、偏远路段和临时停靠点工作，依赖手机移动核心网完成语音通信、任务调度、电子单据上传、实时导航与位置共享。",
+    "devices": "主力设备为5G智能手机，便携终端确需联网时使用手机热点；不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "高德地图"
+    ],
+    "speech_archetype": "mobile_interpreter_operator",
+    "speech_style": {
+      "tone": "务实、干脆、带点跑外勤的催促感，习惯用短句确认安排。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "我这边在路上"
+      ],
+      "typical_habits": "出发前先确认路线和联系人，途中频繁共享位置，午间固定复盘上午沟通与单据，遇到跨区切换会主动提醒对方保持在线。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "午间翻译调度与单据复盘",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每天午间休息与午间复盘业务，固定进行翻译任务调度、客户沟通确认和电子单据上传。",
+      "period_type": "daily",
+      "days": [
+        "daily"
+      ],
+      "time_range": "12:30-13:30",
+      "application_name": "微信",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "微信",
+          "某信",
+          "绿泡泡"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "视频对一下",
+          "连麦确认",
+          "开视频"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "一个钟头",
+          "一小时",
+          "午间这一档",
+          "到一点半"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "午间例行",
+          "中午这档"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "柬埔寨旅客跨境出行高峰支援周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨境旅客集中出行，口岸、车站和机场外场网络拥塞，跨区域切换频繁，需要临时提高视频通话稳定性并降低时延。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "大巴途中视频调度",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "跨城大巴途中临时接到团队调度或客户变更需求时，用会议快速对齐行程与翻译安排。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "晚间录像复盘与客户沟通",
+        "application_name": "钉钉",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "当天行程结束后，回看沟通录像、核对电子单据并与客户确认次日安排。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时参加一场线上行业分享会",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "候车时刷到旅游短视频并顺手看了一会儿直播",
+        "application_name": "抖音",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

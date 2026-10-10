@@ -1,0 +1,179 @@
+{
+  "persona_id": "mobile_persona_073",
+  "category": "医疗健康与移动服务",
+  "persona_summary": "外出医疗服务人员",
+  "static_profile": {
+    "user_id": "USER_073",
+    "identity": "以患者为中心、专注预防保健的外出医疗服务人员，日常在城市户外、跨区域出行和临时停留期间开展院前处置、社区随访、患者转运与临时医疗站服务，全程依赖手机4G/5G移动核心网直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "企业微信"
+    ],
+    "speech_archetype": "healthcare_mobile_speaker",
+    "speech_style": {
+      "tone": "简洁、务实、带医疗行业协同口吻，强调及时、稳定、可靠，说话节奏偏快但不失条理。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "关键消息别漏",
+        "路上保持在线"
+      ],
+      "typical_habits": "习惯在固定时段集中处理消息、上传现场影像、发起远程会诊和补齐随访记录；沟通时先确认对方是否在线，再快速说明患者情况与任务节点。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "午间随访复盘与远程会诊协同",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每天午间休息与午间复盘业务，固定时段集中处理即时通信、现场影像上传、远程会诊和患者信息查询",
+      "period_type": "daily",
+      "days": [
+        "daily"
+      ],
+      "time_range": "12:30-13:30",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议",
+          "鹅会"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "远程会诊",
+          "连麦复盘",
+          "开个短会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "一个钟头",
+          "一小时",
+          "午间这一小时",
+          "到一点半"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "午间例行",
+          "每天午间复盘"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨区社区随访与临时医疗站保障周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨区域社区随访与临时医疗站保障期间，户外移动性强、现场网络波动较大，需优先保障关键消息、患者信息查询和现场影像上传稳定。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "转运途中视频通话调度",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "患者转运途中需要与院内或接收点快速确认患者状态、交接事项和路线安排时",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "随访影像与任务协同上传",
+        "application_name": "钉钉",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "社区随访或临时医疗站现场需要上传现场照片、短视频并同步任务协同时",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时院内培训直播观看",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次跨城出差途中短视频浏览",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,180 @@
+{
+  "persona_id": "mobile_persona_085",
+  "category": "移动学习与教育协作",
+  "persona_summary": "通勤与实践型学生",
+  "static_profile": {
+    "user_id": "USER_085",
+    "identity": "行为主义取向的心理学学生，日常在校园户外、校际通勤途中、实习点与运动场/社会实践地之间高频移动，以5G手机为主要学习终端，习惯在移动现场完成在线课程、资料检索、作业提交、小组视频讨论与实践记录上传。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "哔哩哔哩",
+      "钉钉"
+    ],
+    "speech_archetype": "mobile_learner_speaker",
+    "speech_style": {
+      "tone": "直接、务实、带一点学生小组协作的催促感，强调别掉线和按时交材料。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先保上传",
+        "我这边切网了"
+      ],
+      "typical_habits": "习惯在移动前先确认网络与电量，讨论时先问能不能听清、画面稳不稳，提交实践记录前反复确认上传进度。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "每周二与周四移动端小组研讨与课程协作",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每周二与周四14:00-16:00常规专业培训/研讨，在校园户外、通勤途中或实习点通过手机移动核心网参加小组视频讨论并协作提交课程材料。",
+      "period_type": "weekly",
+      "days": [
+        "Tuesday",
+        "Thursday"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议",
+          "小企鹅开会"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦讨论",
+          "开组会",
+          "视频研讨"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到四点",
+          "两点到四点"
+        ],
+        "period_aliases": [
+          "每周二周四老规矩",
+          "周二周四下午老时间",
+          "老时间",
+          "每周二与周四常规研讨"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨校实践周与实习点密集走访",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨校实践周期间频繁进入弱覆盖路段、运动场边和临时教学现场，移动网络波动明显，需要优先保障视频讨论不断线和大文件实践记录可续传。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "通勤途中课程回看与资料检索",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "校际通勤途中或临时转场时，用手机快速回看课程片段、检索心理学行为分析资料。",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "实践记录上传与小组即时沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在实习点或社会实践地完成拍摄后，需要向小组同步实践记录、确认作业提交状态并进行短时视频沟通。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时参加运动场边线上讲座",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在宿舍外刷心理学公开课短视频",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}
