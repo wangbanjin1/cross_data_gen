@@ -449,6 +449,7 @@ class SessionAssembler:
                             "timestamp": {
                                 "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
                                 "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
+                                "duration": {"value": dur, "source_type": "Context", "source_ref": "U1"},
                             },
                         },
                     },
@@ -613,6 +614,7 @@ class SessionAssembler:
                     t_params["timestamp"] = {
                         "start_timestamp": {"value": start, "source_type": start_src, "source_ref": start_ref},
                         "end_timestamp": {"value": end, "source_type": end_src, "source_ref": end_ref},
+                        "duration": {"value": dur, "source_type": dur_src, "source_ref": dur_ref},
                     }
                 if role not in ["evidence_session", "correction_session"]:
                     t_params["resolution"] = {"min_value": {"value": res, "source_type": res_src, "source_ref": res_ref}}
