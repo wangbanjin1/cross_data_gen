@@ -10,7 +10,7 @@
       "memory_role": "evidence_session",
       "skeleton_signature": "T2-1|2|1|I1:抖音/开直播/1/clarified/resolved|none",
       "scenario": {
-        "environment": "户外现场音视频采集与直播推流现场",
+        "environment": "户外音乐现场直播与作品现场",
         "blueprint_type": "main",
         "memory_action": "declare_explicit_rule"
       }
@@ -26,7 +26,7 @@
           ]
         },
         "agent": {
-          "utterance": "收到，您是要在抖音开直播对吧？我先跟您对齐一下：本次画质、时延和持续时长您希望怎么配？",
+          "utterance": "收到，您是要在抖音开直播对吧？我先跟您确认一下画质、时延和持续时长，您这边希望怎么配？",
           "action_types": [
             "Request_Slot"
           ]
@@ -71,13 +71,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "画质细节要看得清就行，按1080p开，以后也照这个标准理解；时延控制在50ms以内，先开俩小时。以后我说‘细节要看得清’，画质就是1080p。",
+          "utterance": "画质1080p原画，时延要别掉链子，上限按50ms控制，以后也照这个标准理解。我说‘别掉链子’，就是时延控制在50ms以内。播俩小时，从8点半到10点半。",
           "action_types": [
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次保障，并已为您将该配置记录为长期老规矩！",
+          "utterance": "好的，已为您开通本次保障：抖音开直播，1080p原画，时延50ms以内，8点30分到10点30分，持续120分钟。已记录您说的‘别掉链子’就是时延控制在50ms以内，祝您演出顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -263,7 +263,7 @@
       "round_count": 3,
       "intent_count": 1,
       "memory_role": "evidence_session",
-      "skeleton_signature": "T3-1|3|1|I1:微信/视频通话/1/clarify/resolved|none",
+      "skeleton_signature": "T3-1|3|1|I1:微信/视频通话/1/clarified/resolved|none",
       "scenario": {
         "environment": "大巴跨城转场高速公路",
         "blueprint_type": "sub_01",
@@ -392,7 +392,7 @@
       {
         "turn": 3,
         "user": {
-          "utterance": "指的就是画质档位720p，以后默认按这个来，直接保上吧。",
+          "utterance": "对，就是画质档位720p，往后都照这个标准记，开通吧。",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -411,7 +411,7 @@
           {
             "intent_id": "I1",
             "status": "resolved",
-            "closure_path": "clarify",
+            "closure_path": "clarified",
             "expression_level": 1,
             "intent": "微信视频通话保障",
             "params": {
@@ -465,7 +465,7 @@
       {
         "intent_id": "I1",
         "status": "resolved",
-        "closure_path": "clarify",
+        "closure_path": "clarified",
         "expression_level": 1,
         "intent": "微信视频通话保障",
         "params": {
@@ -591,7 +591,7 @@
       "memory_role": "reinforcement_session",
       "skeleton_signature": "T2-1|2|1|I1:抖音/开直播/1/memory_filled/resolved|none",
       "scenario": {
-        "environment": "户外现场音视频采集与直播推流现场",
+        "environment": "户外音乐现场直播与作品现场",
         "blueprint_type": "main",
         "memory_action": "reinforce_explicit_memory"
       }
@@ -600,7 +600,7 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "老规矩，在外勤保障现场，用抖音做开直播，画质按‘细节要看得清’，帮我把保障开上。",
+          "utterance": "老规矩，在外勤保障现场，用抖音做开直播，时延按‘别掉链子’，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
@@ -1006,7 +1006,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已按老规矩为您开通本次保障，祝您转场顺利，别掉链子！",
+          "utterance": "好的，已为您开通本次保障：微信视频通话，720p，时延100ms以内，18点45分到19点45分，持续60分钟。祝您路上顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -1186,7 +1186,7 @@
       "memory_role": "reuse_session",
       "skeleton_signature": "T2-5|2|1|I1:抖音/开直播/1/amend/resolved|none",
       "scenario": {
-        "environment": "户外现场音视频采集与直播推流现场",
+        "environment": "户外音乐现场直播与作品现场",
         "blueprint_type": "main",
         "memory_action": "extend_duration_amend"
       }
@@ -1195,14 +1195,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "今天在户外现场音视频采集与直播推流现场，老规矩，用抖音做开直播，帮我把保障开上。",
+          "utterance": "今天在户外音乐现场直播与作品现场，老规矩，用抖音做开直播，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，您是要在抖音开直播对吧？我这边调取到您的老规矩配置：画质1080p、时延50ms以内、时长60分钟，今天从08:30开始，确认按这个开通吗？",
+          "utterance": "收到，您是要在抖音开直播对吧？我这边调取到您的长期老规矩配置：画质1080p原画、时延50ms以内、保障时长60分钟，今天从08:30开始，确认按这个开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -1267,14 +1267,14 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "对，老规矩不变，不过今天现场活动拉长了，帮我把保障时长延长到180分钟。",
+          "utterance": "对，老规矩不变，不过今天现场活动延长了，帮我把保障时长延长到180分钟。",
           "action_types": [
             "Confirm_Slot",
             "Modify_Request"
           ]
         },
         "agent": {
-          "utterance": "好的，已按老规矩为您开通抖音开直播保障，画质1080p、时延50ms以内，时长已延长至180分钟，从08:30到11:30生效，祝您现场顺利！",
+          "utterance": "好的，已按老规矩为您开通抖音开直播保障，画质1080p原画、时延50ms以内，保障时长已延长至180分钟，从08:30到11:30生效。",
           "action_types": [
             "Acknowledge"
           ]
@@ -1472,7 +1472,7 @@
       "memory_role": "reinforcement_session",
       "skeleton_signature": "T2-1|2|1|I1:抖音/开直播/1/memory_filled/resolved|none",
       "scenario": {
-        "environment": "户外现场音视频采集与直播推流现场",
+        "environment": "户外音乐现场直播与作品现场",
         "blueprint_type": "main",
         "memory_action": "reinforce_main_memory"
       }
@@ -1481,7 +1481,7 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "老规矩，在外勤保障现场，用抖音做开直播，画质按‘细节要看得清’，帮我把保障开上。",
+          "utterance": "老规矩，在外勤保障现场，用抖音做开直播，时延按‘别掉链子’，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
@@ -1559,7 +1559,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通抖音开直播保障，画质1080p、时延50ms以内，时长120分钟，从08:30到10:30生效，祝您现场顺利！",
+          "utterance": "好的，已为您开通抖音开直播保障，画质1080p原画、时延50ms以内，保障时长120分钟，从08:30到10:30生效。祝您现场顺利，别掉链子！",
           "action_types": [
             "Acknowledge"
           ]
@@ -1737,7 +1737,7 @@
       "round_count": 1,
       "intent_count": 2,
       "memory_role": "distractor_session",
-      "skeleton_signature": "X-1|1|2|I1:快手/看直播/1/direct/resolved;I2:手机话费充值与账单查询/0/rejected/rejected|none|none|mixed_reject",
+      "skeleton_signature": "X-1|1|2|I1:快手/短视频/1/direct/resolved;I2:手机话费充值与账单查询/0/rejected/rejected|none|none|mixed_reject",
       "scenario": {
         "environment": "周末午休个人时间",
         "blueprint_type": "distractor_mixed",
@@ -1748,14 +1748,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "周末午休想用快手看直播，画质720p，时延控制在80ms以内，时长60分钟，帮我开个保障；另外顺便帮我把手机话费充一下，再查查这个月账单。",
+          "utterance": "周末午休想用快手刷短视频，画质720p，时延控制在80ms以内，时长60分钟，帮我开个保障；另外顺便帮我把手机话费充值和账单查询也办了。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您受理快手看直播保障，画质720p、时延80ms以内、时长60分钟，从12:30到13:30生效。不过话费充值和账单查询不在本助手服务范围内，建议您通过运营商官方渠道办理，抱歉啦。",
+          "utterance": "好的，已为您受理快手短视频保障，画质720p、时延80ms以内、时长60分钟，从12:30到13:30生效。不过话费充值与账单查询不在本助手服务范围内，本助手仅支持手机移动网络保障加速，建议您通过运营商官方渠道办理。",
           "action_types": [
             "Acknowledge",
             "Reject_Request"
@@ -1772,7 +1772,7 @@
             "status": "resolved",
             "closure_path": "direct",
             "expression_level": 1,
-            "intent": "快手看直播保障",
+            "intent": "快手短视频保障",
             "params": {
               "application_name": {
                 "value": "快手",
@@ -1780,7 +1780,7 @@
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "看直播",
+                "value": "短视频",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -1834,7 +1834,7 @@
         "status": "resolved",
         "closure_path": "direct",
         "expression_level": 1,
-        "intent": "快手看直播保障",
+        "intent": "快手短视频保障",
         "params": {
           "application_name": {
             "value": "快手",
@@ -1842,7 +1842,7 @@
             "source_ref": "U1"
           },
           "service_name": {
-            "value": "看直播",
+            "value": "短视频",
             "source_type": "Turn",
             "source_ref": "U1"
           },
@@ -1902,7 +1902,7 @@
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "看直播",
+                "value": "短视频",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -1970,7 +1970,7 @@
           ]
         },
         "agent": {
-          "utterance": "收到，您是要在抖音开直播对吧？我这边调取到您的老规矩配置：画质1080p、时延50ms以内，今天从08:30开始，时长120分钟，确认按这个开通吗？",
+          "utterance": "收到，您是要在抖音开直播对吧？我这边调取到您的长期老规矩配置：画质1080p原画、时延50ms以内，今天从08:30开始，确认按这个开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -2035,14 +2035,14 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "今天现场特殊，人流密集网络有点拥塞，临时把画质调到720p、时延压到30ms，就按这个来。",
+          "utterance": "今天现场特殊，人流太密网络有点拥塞，临时把画质调到720p、时延压到30ms，就按这个来。",
           "action_types": [
             "Correct_Previous_Input",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已确认本次临时调整：抖音开直播，画质720p、时延30ms以内，时长120分钟，从08:30到10:30生效，祝您音乐节现场顺利！",
+          "utterance": "好的，已确认本次临时调整：抖音开直播，画质720p、时延30ms以内，从08:30到10:30生效，保障时长120分钟。本次按临时配置开通，老规矩配置保持不变。",
           "action_types": [
             "Acknowledge"
           ]
@@ -2246,7 +2246,7 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "老规矩，在城市音乐节现场，用抖音做开直播，时延按‘千万别转圈圈’，帮我把保障开上。",
+          "utterance": "老规矩，在城市音乐节现场，用抖音做开直播，时延按‘别掉链子’，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
@@ -2324,7 +2324,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通抖音开直播保障，画质1080p、时延50ms以内，时长120分钟，从08:30到10:30生效，祝您现场顺利！",
+          "utterance": "好的，已为您开通抖音开直播保障，画质1080p原画、时延50ms以内，保障时长120分钟，从08:30到10:30生效。祝您现场顺利，别掉链子！",
           "action_types": [
             "Acknowledge"
           ]
@@ -2585,13 +2585,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "对，直接开通，别掉链子。",
+          "utterance": "对，直接开通。以后我说‘一般清楚就行’，画质就是720p。",
           "action_types": [
             "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "好嘞，已为您开通微信视频通话保障，画质720p、时延100ms以内，保障时段18:45到19:45，稳一手，祝您转场顺利！",
+          "utterance": "好的，已为您开通本次微信视频通话保障，并已记录‘一般清楚就行’对应720p画质。祝您转场顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -2771,7 +2771,7 @@
       "memory_role": "reuse_session",
       "skeleton_signature": "T2-1|2|1|I1:抖音/开直播/1/memory_filled/resolved|none",
       "scenario": {
-        "environment": "户外现场音视频采集与直播推流现场",
+        "environment": "户外音乐现场直播与作品现场",
         "blueprint_type": "main_recovery",
         "memory_action": "recover_long_term_rule"
       }
@@ -2780,7 +2780,7 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "老规矩，在外勤保障现场，用抖音做开直播，时延按‘顺滑一点’，帮我把保障开上。",
+          "utterance": "老规矩，在外勤保障现场，用抖音做开直播，画质按‘人像要细腻’，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
@@ -2852,13 +2852,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "对，直接开通，别掉链子。",
+          "utterance": "对，直接开通。以后我说‘人像要细腻’，画质就是1080p。",
           "action_types": [
             "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "好嘞，已为您开通抖音开直播保障，画质1080p、时延50ms以内，保障时段08:30到10:30，稳一手，祝您现场顺利！",
+          "utterance": "好的，已为您开通本次抖音直播保障，并已记录‘人像要细腻’对应1080p画质。祝您演出顺利！",
           "action_types": [
             "Acknowledge"
           ]

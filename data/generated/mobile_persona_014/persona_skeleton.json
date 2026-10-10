@@ -4,32 +4,33 @@
   "persona_summary": "移动教学人员",
   "static_profile": {
     "user_id": "USER_014",
-    "identity": "小学教师，负责班级教学与课外活动组织，常在校园户外区域、校际通勤途中及实习点开展教学与协作，计划在教室创建图书角，日常通过移动网络完成课程通知、学生作业查看、视频答疑与教学资料上传。",
-    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备，便携终端确需联网时使用手机热点。",
+    "identity": "小学教师，负责班级教学与课外活动组织，计划在教室创建图书角；日常在校园户外区域、校际通勤途中及实习点、运动场、社会实践地或临时教学现场开展教学活动，全程以手机4G/5G直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi，便携终端确需联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备（如运动相机/便携摄像机），便携终端联网时使用手机热点。",
     "apps": [
       "腾讯会议",
-      "微信",
       "钉钉",
+      "微信",
       "哔哩哔哩"
     ],
     "speech_archetype": "teacher_speaker",
     "speech_style": {
-      "tone": "亲切耐心，条理清晰，习惯用教学与协作场景中的口语化表达",
+      "tone": "亲切耐心、条理清晰，带点班主任式的叮嘱感，语速适中，喜欢用教学场景打比方。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "咱们班"
+        "咱们按流程来",
+        "孩子们等着呢"
       ],
-      "typical_habits": "在活动或通勤途中快速发起沟通，偏好用固定时间与固定应用处理教学任务，强调资料上传和视频答疑的连续性。"
+      "typical_habits": "习惯在活动前反复确认网络和资料是否就绪，喜欢用'老规矩'指代固定时段的线上教学安排，遇到卡顿会立刻说'别掉链子'并切换备用方案。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "校园户外教学协作与视频答疑",
+      "name": "户外实践课远程视频答疑与资料上传",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "在校园户外活动、校际通勤或临时教学现场执行课程通知、学生作业查看、视频答疑与教学资料上传任务时触发",
+      "trigger_condition": "在校园户外区域、运动场或社会实践地完成现场教学任务后，于14:00-16:00期间通过手机移动核心网发起远程视频答疑，并向班级学生上传课程资料与作业反馈。",
       "period_type": "task_driven",
       "days": [
         "task_specific"
@@ -44,12 +45,14 @@
       "aliases": {
         "app_aliases": [
           "企鹅会议",
-          "腾讯会议"
+          "鹅厂会议",
+          "腾讯会"
         ],
         "service_aliases": [
-          "对齐开会",
+          "开视频会",
           "连麦答疑",
-          "开视频会"
+          "线上对齐",
+          "打视讯"
         ],
         "resolution_aliases": [
           "1080p原画",
@@ -64,12 +67,14 @@
         "duration_aliases": [
           "俩小时",
           "两钟头",
-          "播到四点"
+          "播到四点",
+          "一个半小时"
         ],
         "period_aliases": [
           "每天这个时候",
           "老时间",
-          "下午两点老规矩"
+          "下午固定时段",
+          "任务结束后老规矩"
         ]
       },
       "declaration_mode": "implicit_induction",
@@ -78,10 +83,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "校际联合实践周",
+        "name": "校际联合社会实践周直播连线",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "校际联合实践周期间，教师需在运动场、社会实践地或临时教学现场频繁进行视频会议与资料上传，现场网络覆盖不稳定，通勤切换频繁。",
+        "scene_description": "校际联合社会实践周期间，在运动场和社会实践地等户外临时教学现场进行多校联合直播连线，现场人员密集、网络覆盖波动较大，需保障视频连线稳定与资料快速回传。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -91,22 +96,22 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "课后录像复盘与资料回传",
+        "name": "通勤途中作业批阅与即时沟通",
         "application_name": "钉钉",
-        "service_name": "会议",
+        "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "课后在通勤途中或临时教学现场进行录像复盘、教学资料回传与协作文档处理时触发",
+        "trigger_condition": "校际通勤途中收到学生或家长紧急作业提交与沟通需求时，通过钉钉发起视频通话进行快速批阅与反馈。",
         "aliases": {
           "app_aliases": [
             "dingding",
             "钉"
           ],
           "service_aliases": [
-            "开会",
-            "进会议室"
+            "打视频",
+            "连线"
           ],
           "resolution_aliases": [
             "720p",
@@ -120,22 +125,22 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "班级即时沟通与通知发布",
+        "name": "教学资料云端检索与协作文档整理",
         "application_name": "微信",
-        "service_name": "视频通话",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "在校园户外区域或校际通勤途中发布课程通知、查看学生提交并进行即时沟通时触发",
+        "trigger_condition": "在实习点或临时教学现场需要与同事协作整理图书角建设方案和教学资料时，通过微信发起会议并共享协作文档。",
         "aliases": {
           "app_aliases": [
             "weixin",
             "wx"
           ],
           "service_aliases": [
-            "打视频",
-            "连线"
+            "开会",
+            "进会议室"
           ],
           "resolution_aliases": [
             "1080p原画",
@@ -151,7 +156,7 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "临时查看教学参考短视频",
+        "scenario": "课间休息时在校园户外区域单次刷短视频放松",
         "application_name": "哔哩哔哩",
         "service_name": "短视频",
         "params": {
@@ -161,7 +166,7 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次观看公开课直播",
+        "scenario": "临时教学现场单次观看公开课直播作为教学参考",
         "application_name": "哔哩哔哩",
         "service_name": "看直播",
         "params": {

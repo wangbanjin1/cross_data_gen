@@ -195,10 +195,10 @@ class DialogueGenerator:
             u_text, u_acts, a_text, a_acts = self._normalize_turn(t_data, turn_idx, role, is_last, s_plan)
 
             req_params = []
-            if turn_idx == 1 and role == "evidence_session" and tid not in ["T2-2", "T3-1"]:
+            if turn_idx == 1 and role == "evidence_session":
                 req_params = ["resolution", "rtt", "duration"]
-            elif turn_idx == 1 and tid in ["T2-2", "T3-1"]:
-                req_params = ["service_name", "resolution", "rtt", "duration"]
+            elif turn_idx == 2 and tid == "T3-1":
+                req_params = ["resolution"]
 
             rel_ids = ["I1", "I2"] if tid == "X-1" else ["I1"]
             ev_item = {

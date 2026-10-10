@@ -4,8 +4,8 @@
   "persona_summary": "移动训练与赛事人员",
   "static_profile": {
     "user_id": "USER_008",
-    "identity": "职业篮球得分后卫，长期随队进行客场转场、户外热身与露天球场训练，日常以5G手机和可穿戴设备完成赛事直播、团队调度、训练视频上传与数据回放，几乎不依赖固网或普通Wi-Fi。",
-    "devices": "主力为5G智能手机，辅助为可穿戴运动手环/手表，便携终端确需联网时使用手机热点。",
+    "identity": "职业篮球得分后卫，长期随队进行跨区域客场转场、露天球场训练与赛事集结，日常在户外热身区、临时休息点和赛事现场完成训练记录、团队调度与直播互动，全程依赖手机4G/5G移动核心网直连，不依赖固定宽带或普通Wi-Fi。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴运动手环与便携运动相机，便携终端确需联网时使用手机热点。",
     "apps": [
       "抖音",
       "微信",
@@ -14,22 +14,22 @@
     ],
     "speech_archetype": "athlete_speaker",
     "speech_style": {
-      "tone": "干脆直接、带点球场兄弟间的催促感，讲效率也讲默契",
+      "tone": "干脆利落、带球场口令感，语速偏快，喜欢用短句和运动术语",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
         "开整"
       ],
-      "typical_habits": "习惯用短句确认时间、画质和网络状态，任务前先喊人上线，任务中反复提醒别卡、别断，结束后顺手把录像和数据回放丢群里。"
+      "typical_habits": "习惯在训练和转场间隙用语音消息快速同步信息，开播前会先喊一句‘老规矩’确认团队就位，遇到网络波动会直接说‘别掉链子’提醒队友。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "客场转场途中赛事直播与团队调度",
+      "name": "客场训练间隙赛事直播与团队调度",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "在客场转场途中、户外热身区或临时休息点，执行赛事直播、即时通信与团队调度任务，需在人群密集和移动转场中保持通信连续。",
+      "trigger_condition": "在客场转场途中或露天球场完成热身训练后，于10:00-12:00期间使用手机移动核心网开启赛事直播，同步进行即时通信与团队调度，并上传训练视频与数据记录。",
       "period_type": "task_driven",
       "days": [
         "task_specific"
@@ -44,7 +44,7 @@
       "aliases": {
         "app_aliases": [
           "阿抖",
-          "抖子"
+          "抖音"
         ],
         "service_aliases": [
           "开播",
@@ -62,13 +62,11 @@
         ],
         "duration_aliases": [
           "俩小时",
-          "两钟头",
-          "播到十二点"
+          "两钟头"
         ],
         "period_aliases": [
-          "老时间",
-          "上午这个点",
-          "任务前老规矩"
+          "老规矩",
+          "训练完这个点"
         ]
       },
       "declaration_mode": "implicit_induction",
@@ -80,7 +78,7 @@
         "name": "跨城客场赛事周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "连续跨城转场，赛事集结区与露天球场人群密集，移动网络拥塞明显，直播与调度需优先保障上行稳定和低时延。",
+        "scene_description": "跨城客场赛事周期间，球队连续转场，赛事集结区与露天球场人群密集，移动网络拥塞明显，需要临时降低画质并收紧时延以保障直播与团队调度连续性。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -90,22 +88,22 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "大巴转场视频调度",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "name": "大巴转场视频调度会",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "球队大巴转场途中，教练组临时拉群对齐行程、人员与装备安排。",
+        "trigger_condition": "客场转场大巴途中，教练组临时召集线上视频调度会，确认战术安排与人员分工。",
         "aliases": {
           "app_aliases": [
-            "weixin",
-            "wx"
+            "tencentmeeting",
+            "会议通"
           ],
           "service_aliases": [
-            "打视频",
-            "连线"
+            "开会",
+            "进会议室"
           ],
           "resolution_aliases": [
             "720p",
@@ -119,22 +117,22 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "训练录像复盘会",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "name": "训练录像复盘与数据回放",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "训练结束后回到临时休息点，与教练和队友回放训练视频、记录数据并讨论战术。",
+        "trigger_condition": "训练结束后在临时休息点上传训练视频片段，并回放关键动作数据进行复盘。",
         "aliases": {
           "app_aliases": [
-            "tencentmeeting",
-            "会议通"
+            "bilibili",
+            "哔站"
           ],
           "service_aliases": [
-            "开会",
-            "进会议室"
+            "看短视频",
+            "刷视频"
           ],
           "resolution_aliases": [
             "1080p原画",
@@ -150,9 +148,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "临时在休息点刷短视频放松",
-        "application_name": "哔哩哔哩",
-        "service_name": "短视频",
+        "scenario": "赛前与家人单次视频通话",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -160,7 +158,7 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "赛前空档看一场别人打的比赛直播",
+        "scenario": "休息时单次观看赛事直播",
         "application_name": "抖音",
         "service_name": "看直播",
         "params": {

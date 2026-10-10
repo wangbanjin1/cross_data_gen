@@ -194,12 +194,12 @@ class SessionAssembler:
         cross_turn = evidence_mode == "cross_turn_clarification" or len(events) == 3 or tid == "T3-1"
         actual_tid = "T3-1" if cross_turn else tid
         resolution_ref = "U3" if cross_turn else "U2"
-        sig = f"{actual_tid}|{len(events)}|1|I1:{app}/{srv}/1/clarify/resolved|none"
+        sig = f"{actual_tid}|{len(events)}|1|I1:{app}/{srv}/1/clarified/resolved|none"
         intents = [
             {
                 "intent_id": "I1",
                 "status": "resolved",
-                "closure_path": "clarify",
+                "closure_path": "clarified",
                 "expression_level": 1,
                 "intent": f"{app}{srv}保障",
                 "params": {

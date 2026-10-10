@@ -4,52 +4,52 @@
   "persona_summary": "户外视觉创作者",
   "static_profile": {
     "user_id": "USER_011",
-    "identity": "阿曼籍户外视觉创作者与平面设计师，长期跨城采风、拍摄与现场提案，活动范围覆盖高速公路服务区、车站、港区与机场外场，全程依赖手机移动核心网完成创作协作与客户交付。",
-    "devices": "主力设备为5G智能手机，辅助设备包括便携相机与平板；确需联网时以手机热点共享给便携终端。",
+    "identity": "阿曼籍平面设计师，长期跨城采风与户外拍摄，频繁在高速公路服务区、车站、港区或机场外场等临时停靠点工作；全程以5G智能手机直连移动核心网，不依赖家庭宽带、公司固网或普通Wi-Fi，重点完成语音通信、任务调度与电子单据上传、实时导航、路线更新与位置共享。",
+    "devices": "主力设备为5G智能手机，辅助设备包括便携相机、平板与移动电源；便携终端确需联网时使用手机热点。",
     "apps": [
       "微信",
-      "钉钉",
       "腾讯会议",
-      "高德地图"
+      "高德地图",
+      "小红书"
     ],
-    "speech_archetype": "outdoor_streamer",
+    "speech_archetype": "outdoor_creator",
     "speech_style": {
-      "tone": "干脆利落、带点现场指挥感，喜欢用短句确认关键节点，对画质和时延有职业敏感。",
+      "tone": "干脆利落、带点催促感，习惯用短句确认安排，语气像在片场调度。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "原画给我稳住"
+        "我这边先推流"
       ],
-      "typical_habits": "开工前先确认路线与网络，任务中频繁用语音和位置共享同步进度，交付前反复强调画质和时延。"
+      "typical_habits": "出发前先报位置，开工前确认网络和电量，遇到跨区切换会主动提醒对方别断线。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "跨城采风现场高清作品回传与客户对齐",
+      "name": "跨城采风现场高清推流与客户预览",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "在跨城采风、展览或拍摄现场完成一轮素材采集后，于14:00-16:00通过手机移动核心网向客户回传高清设计稿并做实时对齐。",
+      "trigger_condition": "在跨城采风、展览或拍摄现场，于14:00-16:00执行户外视觉创作核心任务：通过手机5G直连移动核心网，向客户开直播展示现场设计稿与高清参考图，并同步进行语音沟通与位置共享。",
       "period_type": "task_driven",
       "days": [
         "task_specific"
       ],
       "time_range": "14:00-16:00",
-      "application_name": "腾讯会议",
-      "service_name": "会议",
+      "application_name": "微信",
+      "service_name": "开直播",
       "preferred_params": {
         "resolution": "1080p",
         "rtt_max": "50ms"
       },
       "aliases": {
         "app_aliases": [
-          "企鹅会议",
-          "腾讯会议"
+          "微信",
+          "某信"
         ],
         "service_aliases": [
-          "对齐开会",
-          "连麦过稿",
-          "开个短会"
+          "开播",
+          "推流",
+          "开直播"
         ],
         "resolution_aliases": [
           "1080p原画",
@@ -69,7 +69,7 @@
         "period_aliases": [
           "每天这个时候",
           "老时间",
-          "现场任务时段"
+          "下午两点老规矩"
         ]
       },
       "declaration_mode": "explicit_declaration",
@@ -78,10 +78,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨城设计展现场提案周",
+        "name": "跨城设计展现场直播周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "展会外场与港区临时停靠点网络拥塞，高速移动与跨区切换频繁，需优先保障提案画面稳定与调度消息及时。",
+        "scene_description": "在跨城展览现场与港区外场之间频繁移动，现场人流密集、基站切换频繁，需保证直播画面稳定与客户预览不中断。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -91,17 +91,18 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "采风途中位置共享与路线同步",
-        "application_name": "高德地图",
+        "name": "采风途中视频通话对齐设计稿",
+        "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "跨城途中或偏远路段临时停靠，需要与客户或同伴共享位置并同步路线时。",
+        "trigger_condition": "在高速公路服务区或临时停靠点，需要与客户快速对齐设计稿修改意见时触发。",
         "aliases": {
           "app_aliases": [
-            "高德地图"
+            "weixin",
+            "wx"
           ],
           "service_aliases": [
             "打视频",
@@ -119,22 +120,22 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "拍摄现场素材预览与客户沟通",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "name": "客户远程会议评审作品",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "在街区采风、展览或拍摄现场需要快速预览作品并与客户确认细节时。",
+        "trigger_condition": "阶段性作品需要正式评审，客户要求共享屏幕逐页过稿时触发。",
         "aliases": {
           "app_aliases": [
-            "weixin",
-            "wx"
+            "tencentmeeting",
+            "会议通"
           ],
           "service_aliases": [
-            "打视频",
-            "连线"
+            "开会",
+            "进会议室"
           ],
           "resolution_aliases": [
             "1080p原画",
@@ -150,7 +151,7 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "服务区休息时单次刷短视频放松",
+        "scenario": "在车站候车时刷短视频放松",
         "application_name": "抖音",
         "service_name": "短视频",
         "params": {
@@ -160,7 +161,7 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "临时查看同行直播寻找灵感",
+        "scenario": "夜间在酒店看设计类直播找灵感",
         "application_name": "哔哩哔哩",
         "service_name": "看直播",
         "params": {

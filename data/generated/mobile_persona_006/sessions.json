@@ -26,7 +26,7 @@
           ]
         },
         "agent": {
-          "utterance": "收到，您是要在2026年10月7日09时00分，在道路巡逻现场，用微信做视频通话对吧？请问画质、时延和持续时长有什么要求？",
+          "utterance": "收到，您是要在微信做视频通话对吧？画质、时延和持续时长需要什么标准？",
           "action_types": [
             "Request_Slot"
           ]
@@ -77,7 +77,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次保障：微信视频通话，画质1080p，时延50ms以内，持续120分钟，从2026年10月7日09时00分到11时00分。",
+          "utterance": "收到，已为您开通本次微信视频通话保障：1080p、50ms以内、持续120分钟。",
           "action_types": [
             "Acknowledge"
           ]
@@ -263,7 +263,7 @@
       "round_count": 3,
       "intent_count": 1,
       "memory_role": "evidence_session",
-      "skeleton_signature": "T3-1|3|1|I1:腾讯会议/会议/1/clarify/resolved|none",
+      "skeleton_signature": "T3-1|3|1|I1:腾讯会议/会议/1/clarified/resolved|none",
       "scenario": {
         "environment": "大巴跨城转场高速公路",
         "blueprint_type": "sub_01",
@@ -326,13 +326,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "画质标准按‘基本清爽就行’，时延控制在100ms以内，预计持续60min。",
+          "utterance": "画质按‘基本清爽就行’来，时延控制在100ms以内，预计持续60min。",
           "action_types": [
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "问一下，您说的‘基本清爽就行’具体是指哪种画质档位？往后也按这套标准来吗？",
+          "utterance": "确认一下，您说的‘基本清爽就行’具体指哪个画质档位？以后也按这个理解吗？",
           "action_types": [
             "Request_Disambiguation"
           ]
@@ -392,7 +392,7 @@
       {
         "turn": 3,
         "user": {
-          "utterance": "指的就是画质档位720p，以后默认按这个来，直接保上吧。",
+          "utterance": "对，就是画质档位720p，往后都照这个标准记，开通吧。",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -411,7 +411,7 @@
           {
             "intent_id": "I1",
             "status": "resolved",
-            "closure_path": "clarify",
+            "closure_path": "clarified",
             "expression_level": 1,
             "intent": "腾讯会议会议保障",
             "params": {
@@ -465,7 +465,7 @@
       {
         "intent_id": "I1",
         "status": "resolved",
-        "closure_path": "clarify",
+        "closure_path": "clarified",
         "expression_level": 1,
         "intent": "腾讯会议会议保障",
         "params": {
@@ -999,13 +999,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "对，开通吧。",
+          "utterance": "对，直接开通。",
           "action_types": [
             "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次保障：腾讯会议，画质720p，时延100ms以内，持续60分钟，从2026年10月18日18时45分到19时45分。",
+          "utterance": "好的，已为您开通本次腾讯会议保障，祝您执勤顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -1201,7 +1201,7 @@
           ]
         },
         "agent": {
-          "utterance": "收到。先对齐一下：您是要在道路巡逻现场，用微信做视频通话，按老规矩开通保障。老规矩基线是1080p、50ms以内、60分钟，从09:00开始。确认按这个开通吗？",
+          "utterance": "收到，先跟您对齐一下：您是要在微信做视频通话，按老规矩配置——画质1080p、时延50ms以内、时长60分钟，从今天09:00开始，对吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -1266,14 +1266,14 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "对，老规矩不变。不过今天现场活动延长了，帮我把保障时长延长到180分钟。",
+          "utterance": "对，老规矩不变，不过今天现场活动延长了，帮我把保障时长延长到180分钟。",
           "action_types": [
             "Confirm_Slot",
             "Modify_Request"
           ]
         },
         "agent": {
-          "utterance": "收到。老规矩配置不变，仍为微信视频通话、1080p、50ms以内，开始时间09:00，时长已延长至180分钟，保障到12:00。已为您开通。",
+          "utterance": "收到，老规矩配置不变，已为您将本次微信视频通话保障时长延长至180分钟，从09:00到12:00生效，现场注意安全。",
           "action_types": [
             "Acknowledge"
           ]
@@ -1558,7 +1558,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通微信视频通话保障，1080p、50ms以内，09:00至11:00。祝您巡逻顺利。",
+          "utterance": "好的，已为您开通微信视频通话保障，画质1080p、时延50ms以内、时长120分钟，从09:00到11:00生效，现场优先，注意安全。",
           "action_types": [
             "Acknowledge"
           ]
@@ -1747,14 +1747,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "周末午休，想用抖音刷会儿短视频，画质720p、时延80ms以内，开60分钟保障。另外帮我把手机话费充值和账单查询也办一下。",
+          "utterance": "周末午休，用抖音刷短视频，画质720p，时延控制在80ms以内，开60分钟保障；另外帮我把手机话费充一下，再查下账单。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到。抖音短视频保障已受理：720p、80ms以内，从12:30到13:30，共60分钟。话费充值和账单查询不在本助手服务范围内，本助手仅支持手机移动网络保障加速，建议您通过运营商官方渠道办理。",
+          "utterance": "收到，已为您受理抖音短视频保障：画质720p、时延80ms以内、时长60分钟，从12:30到13:30生效。话费充值和账单查询不在本助手支持范围内，建议您通过运营商官方渠道或对应App办理。",
           "action_types": [
             "Acknowledge",
             "Reject_Request"
@@ -1969,7 +1969,7 @@
           ]
         },
         "agent": {
-          "utterance": "收到。先对齐一下：您是要在联合执法执勤现场，用微信做视频通话，按老规矩开通保障。老规矩基线是1080p、50ms以内，从09:00开始，时长120分钟。确认按这个开通吗？",
+          "utterance": "收到，先跟您对齐一下：您是要在微信做视频通话，按老规矩配置——画质1080p、时延50ms以内，从今天09:00到11:00，时长120分钟，对吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -2034,14 +2034,14 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "今天现场特殊，人流密集，画质临时调到720p，时延压到30ms，今天先按这个来。",
+          "utterance": "今天现场特殊，人流密集，画质临时调到720p，时延压到30ms，就按这个来。",
           "action_types": [
             "Correct_Previous_Input",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到。本次临时调整：微信视频通话、720p、30ms以内，09:00至11:00，共120分钟。已按临时配置开通。",
+          "utterance": "收到，本次临时调整：微信视频通话画质720p、时延30ms以内，从09:00到11:00生效，仅限本次，现场注意安全。",
           "action_types": [
             "Acknowledge"
           ]
@@ -2323,7 +2323,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通微信视频通话保障，1080p、50ms以内，09:00至11:00。祝您执勤顺利。",
+          "utterance": "好的，已为您开通微信视频通话保障，画质1080p、时延50ms以内、时长120分钟，从09:00到11:00生效，现场优先，注意安全。",
           "action_types": [
             "Acknowledge"
           ]
@@ -2590,7 +2590,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次腾讯会议保障，画质720p、时延100ms以内、持续60分钟，并已记录‘基本清爽就行’对应720p画质。祝您会议顺利，别掉链子。",
+          "utterance": "好的，已为您开通本次保障，并已记录：以后您说‘基本清爽就行’，画质按720p处理。现场优先，别掉链子。",
           "action_types": [
             "Acknowledge"
           ]
@@ -2768,7 +2768,7 @@
       "round_count": 1,
       "intent_count": 1,
       "memory_role": "distractor_session",
-      "skeleton_signature": "T1-1|1|1|I1:腾讯会议/会议/1/direct/resolved|none",
+      "skeleton_signature": "T1-1|1|1|I1:钉钉/会议/1/direct/resolved|none",
       "scenario": {
         "environment": "阶段工作总结会",
         "blueprint_type": "distractor",
@@ -2779,14 +2779,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "今天10点开腾讯会议，画质720p，时延控制在80ms以内，开30分钟，帮我开个保障。",
+          "utterance": "钉钉开会，画质720p，时延控制在80ms以内，2026年11月07日10点开始，开30分钟，帮我开个保障。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，已为您开通腾讯会议保障，画质720p、时延80ms以内、2026年11月07日10时00分到10时30分、持续30分钟。祝您会议顺利。",
+          "utterance": "收到，已为您开通钉钉会议保障：画质720p，时延80ms以内，2026年11月07日10时00分至10时30分，持续30分钟。现场优先，别掉链子。",
           "action_types": [
             "Acknowledge"
           ]
@@ -2801,10 +2801,10 @@
             "status": "resolved",
             "closure_path": "direct",
             "expression_level": 1,
-            "intent": "腾讯会议会议保障",
+            "intent": "钉钉会议保障",
             "params": {
               "application_name": {
-                "value": "腾讯会议",
+                "value": "钉钉",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -2855,10 +2855,10 @@
         "status": "resolved",
         "closure_path": "direct",
         "expression_level": 1,
-        "intent": "腾讯会议会议保障",
+        "intent": "钉钉会议保障",
         "params": {
           "application_name": {
-            "value": "腾讯会议",
+            "value": "钉钉",
             "source_type": "Turn",
             "source_ref": "U1"
           },
@@ -2910,7 +2910,7 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "腾讯会议",
+                "value": "钉钉",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -3049,7 +3049,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次微信视频通话保障，画质1080p、时延50ms以内、持续120分钟，并已记录‘大屏看清楚’对应1080p画质。现场情况我马上回传，祝您巡逻顺利。",
+          "utterance": "好的，已为您开通本次保障，并已记录：以后您说‘大屏看清楚’，画质按1080p处理。现场优先，别掉链子。",
           "action_types": [
             "Acknowledge"
           ]

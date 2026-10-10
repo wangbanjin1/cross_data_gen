@@ -49,6 +49,7 @@ def test_file(jsonl_path: Path):
             assert "requested_params" in ev, f"Session {sid} turn {ev_idx+1} missing requested_params!"
 
         if role == "evidence_session" and len(events) >= 2:
+            assert "resolution" in events[0].get("requested_params", []), f"Session {sid} Turn 1 requested_params missing resolution!"
             t1_params = events[0]["turn_intents"][0].get("params", {})
             assert "resolution" not in t1_params, f"Session {sid} Turn 1 intent answers leaked resolution!"
             assert "rtt" not in t1_params, f"Session {sid} Turn 1 intent answers leaked rtt!"
@@ -65,6 +66,19 @@ def test_file(jsonl_path: Path):
                         p_ts = p.get("timestamp", {})
                         assert "end_timestamp" not in p_ts, f"Session {sid} Turn 1 slot_updates leaked end_timestamp!"
                         assert "duration" not in p_ts, f"Session {sid} Turn 1 slot_updates leaked duration!"
+
+            if len(events) >= 3:
+                assert "resolution" in events[1].get("requested_params", []), f"Session {sid} Turn 2 requested_params missing resolution!"
+                t2_params = events[1]["turn_intents"][0].get("params", {})
+                assert "resolution" not in t2_params, f"Session {sid} Turn 2 intent answers leaked resolution!"
+                for su in session.get("slot_updates", []):
+                    for tu in su.get("turn_updates", []):
+                        if tu.get("turn") == 2:
+                            p = tu.get("params", {})
+                            assert "resolution" not in p, f"Session {sid} Turn 2 slot_updates leaked resolution!"
+                assert events[2].get("requested_params", []) == [], f"Session {sid} Turn 3 requested_params should be empty!"
+                t3_params = events[2]["turn_intents"][0].get("params", {})
+                assert "resolution" in t3_params, f"Session {sid} Turn 3 intent answers missing resolution!"
 
         # 5. 验证用户台词不含研发元术语及与数值冲突的别名
         for ev_idx, ev in enumerate(events):

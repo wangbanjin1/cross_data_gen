@@ -4,33 +4,32 @@
   "persona_summary": "户外视觉创作者",
   "static_profile": {
     "user_id": "USER_005",
-    "identity": "退休音乐人，拥有丰富的词曲创作与制作经验，热衷于将知识传授给下一代艺术家；日常以户外视觉创作为主，活跃于街区采风、展览布置、音乐节与街头演出等移动现场，进行音视频采集、直播推流与作品上传。",
-    "devices": "主力设备为5G智能手机与平板电脑，便携终端确需联网时使用手机热点。",
+    "identity": "退休音乐人，深耕词曲创作与音乐制作，常年活跃于户外演出点、音乐节、街头活动与临时排练现场，以移动终端完成现场音视频采集、直播推流、作品上传与云端素材同步，并乐于向年轻创作者传授经验",
+    "devices": "主力为5G智能手机，辅助为平板电脑，便携终端确需联网时使用手机热点",
     "apps": [
       "抖音",
-      "微信",
+      "快手",
       "哔哩哔哩",
-      "腾讯会议"
+      "微信"
     ],
     "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "爽朗直接，带点老派音乐人的江湖气，喜欢用行话和固定口头禅，对现场节奏和网络质量很敏感。",
+      "tone": "老练、直接、带点舞台人的节奏感，喜欢用行话和固定口令安排现场",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "开整",
-        "稳一手"
+        "先推流再说"
       ],
-      "typical_habits": "开工前先确认设备和网络，习惯用简短口令指挥团队；遇到弱覆盖会立刻提醒续传或切热点，事后爱复盘。"
+      "typical_habits": "开工前先确认上行和时延，习惯用固定口语别名指代APP、业务和画质档位，遇到弱覆盖会立刻要求续传或切回热点"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "户外现场音视频采集与直播推流",
+      "name": "户外音乐现场直播与作品上传",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "在户外演出点、展览布置区或城市采风路线执行现场音视频采集与直播推流任务时触发",
+      "trigger_condition": "在户外演出点、音乐节或街头活动开始前，执行现场音视频采集、直播推流与作品上传任务",
       "period_type": "task_driven",
       "days": [
         "task_specific"
@@ -45,11 +44,11 @@
       "aliases": {
         "app_aliases": [
           "阿抖",
-          "抖子"
+          "抖音"
         ],
         "service_aliases": [
-          "推流",
-          "开播"
+          "开播",
+          "推流"
         ],
         "resolution_aliases": [
           "1080p原画",
@@ -63,11 +62,13 @@
         ],
         "duration_aliases": [
           "俩小时",
-          "两钟头"
+          "两钟头",
+          "播到十点半"
         ],
         "period_aliases": [
           "每天这个时候",
-          "老时间"
+          "老时间",
+          "早场老规矩"
         ]
       },
       "declaration_mode": "explicit_declaration",
@@ -79,7 +80,7 @@
         "name": "城市音乐节密集人群直播周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "音乐节现场人流密集、基站负载高，户外演出点与展览布置区网络拥塞，需要优先保障上行稳定与低时延互动。",
+        "scene_description": "音乐节现场人群密集、基站负载高，户外演出点与临时排练区之间频繁移动，弱覆盖路段增多，需要优先保障直播互动低时延与音视频上行稳定",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -89,14 +90,14 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "云端素材同步与团队沟通",
+        "name": "排练现场视频通话沟通",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "现场拍摄后需要与团队同步素材、确认设计稿或沟通客户需求时",
+        "trigger_condition": "临时排练现场需要与乐队成员或合作方远程确认编曲与走位时",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -118,14 +119,14 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "作品复盘与社交发布",
+        "name": "演出素材云端同步与团队沟通",
         "application_name": "哔哩哔哩",
         "service_name": "短视频",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "演出或采风结束后，整理现场片段并发布作品、进行复盘时",
+        "trigger_condition": "演出结束后整理现场音视频素材并同步给团队或发布短视频时",
         "aliases": {
           "app_aliases": [
             "bilibili",
@@ -149,7 +150,7 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "临时与外地合作方开短会确认演出曲目",
+        "scenario": "临时与外地合作方开短会确认曲目授权",
         "application_name": "腾讯会议",
         "service_name": "会议",
         "params": {
@@ -159,9 +160,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "休息时刷同行演出片段找灵感",
+        "scenario": "休息时在街头刷同行演出短视频",
         "application_name": "快手",
-        "service_name": "看直播",
+        "service_name": "短视频",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

@@ -10,7 +10,7 @@
       "memory_role": "evidence_session",
       "skeleton_signature": "T2-1|2|1|I1:抖音/短视频/1/clarified/resolved|none",
       "scenario": {
-        "environment": "晚间户外活动现场",
+        "environment": "晚间户外现场",
         "blueprint_type": "main",
         "memory_action": "declare_explicit_rule"
       }
@@ -26,7 +26,7 @@
           ]
         },
         "agent": {
-          "utterance": "收到，您是要在抖音传短视频对吧？画质、时延和持续时长您希望怎么配置？",
+          "utterance": "收到，您是要在抖音传短视频对吧？画质、时延和持续时长您这边有什么要求？",
           "action_types": [
             "Request_Slot"
           ]
@@ -77,7 +77,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次保障：抖音短视频，画质1080p，时延50ms以内，时长120分钟，起止时间为2026年10月07日20:00至22:00。并已记录：以后您说‘特写不糊’，画质按1080p处理。",
+          "utterance": "好的，已为您开通本次保障：抖音短视频，1080p画质，50ms以内时延，持续120分钟。并已为您将该配置记录为长期老规矩！",
           "action_types": [
             "Acknowledge"
           ]
@@ -263,7 +263,7 @@
       "round_count": 3,
       "intent_count": 1,
       "memory_role": "evidence_session",
-      "skeleton_signature": "T3-1|3|1|I1:腾讯会议/会议/1/clarify/resolved|none",
+      "skeleton_signature": "T3-1|3|1|I1:腾讯会议/会议/1/clarified/resolved|none",
       "scenario": {
         "environment": "大巴跨城转场高速公路",
         "blueprint_type": "sub_01",
@@ -326,13 +326,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "画质只要‘别太模糊’，时延控制在100ms以内，预计持续60min。",
+          "utterance": "画质标准按‘别太模糊’，时延控制在100ms以内，预计持续60min。",
           "action_types": [
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "确认一下，您说的‘别太模糊’具体指哪个画质档位？以后也按这个理解吗？",
+          "utterance": "问一下，您说的‘别太模糊’具体是指哪种画质档位？往后也按这套标准来吗？",
           "action_types": [
             "Request_Disambiguation"
           ]
@@ -392,7 +392,7 @@
       {
         "turn": 3,
         "user": {
-          "utterance": "指的就是画质档位720p，以后默认按这个来，直接保上吧。",
+          "utterance": "对，就是画质档位720p，往后都照这个标准记，开通吧。",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -411,7 +411,7 @@
           {
             "intent_id": "I1",
             "status": "resolved",
-            "closure_path": "clarify",
+            "closure_path": "clarified",
             "expression_level": 1,
             "intent": "腾讯会议会议保障",
             "params": {
@@ -465,7 +465,7 @@
       {
         "intent_id": "I1",
         "status": "resolved",
-        "closure_path": "clarify",
+        "closure_path": "clarified",
         "expression_level": 1,
         "intent": "腾讯会议会议保障",
         "params": {
@@ -591,7 +591,7 @@
       "memory_role": "reinforcement_session",
       "skeleton_signature": "T2-1|2|1|I1:抖音/短视频/1/memory_filled/resolved|none",
       "scenario": {
-        "environment": "晚间户外活动现场",
+        "environment": "晚间户外现场",
         "blueprint_type": "main",
         "memory_action": "reinforce_explicit_memory"
       }
@@ -874,7 +874,7 @@
           ]
         },
         "agent": {
-          "utterance": "收到，您是要在微信打视频通话对吧？画质、时延和持续时长您希望怎么配置？",
+          "utterance": "收到，您是要在微信打视频通话对吧？画质、时延和持续时长您这边有什么要求？",
           "action_types": [
             "Request_Slot"
           ]
@@ -925,7 +925,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次保障：微信视频通话，画质1080p，时延80ms以内，时长90分钟，起止时间为2026年10月15日20:15至21:45。并已记录：以后您说‘画面要透亮’，画质按1080p处理。",
+          "utterance": "好的，已为您开通本次保障：微信视频通话，1080p画质，80ms以内时延，持续90分钟。并已记录您说的‘画面要透亮’对应1080p画质。",
           "action_types": [
             "Acknowledge"
           ]
@@ -1255,13 +1255,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "对，就按这个开通。以后我说‘别太模糊’，画质就是720p。",
+          "utterance": "对，就按这个开通，以后我说‘别太模糊’，画质就是720p。",
           "action_types": [
             "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次腾讯会议保障，画质720p、时延100ms以内、时长60分钟，并已记录‘别太模糊’对应720p画质。祝您会议顺利！",
+          "utterance": "好的，已为您开通腾讯会议保障，画质720p、时延100ms以内，保障时段2026年10月21日18时45分至19时45分，共60分钟。已记录‘别太模糊’对应720p，祝您转场顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -1441,7 +1441,7 @@
       "memory_role": "reuse_session",
       "skeleton_signature": "T2-5|2|1|I1:抖音/短视频/1/amend/resolved|none",
       "scenario": {
-        "environment": "晚间户外活动现场",
+        "environment": "晚间户外现场",
         "blueprint_type": "main",
         "memory_action": "extend_duration_amend"
       }
@@ -1450,14 +1450,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "今天在晚间户外活动现场，老规矩，用抖音做短视频，帮我把保障开上。",
+          "utterance": "今天在晚间户外现场，老规矩，用抖音做短视频，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，按老规矩给您确认一下：抖音短视频保障，画质1080p原画，时延50ms以内，时长60分钟，从今晚20点开始，对吗？",
+          "utterance": "收到，按老规矩给您确认一下：抖音短视频，画质1080p，时延50ms以内，原时长60分钟，从2026年10月24日20时00分开始，对吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -1529,7 +1529,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，老规矩配置不变，已为您将本次抖音短视频保障时长延长至180分钟，从今晚20点到23点生效。祝您现场顺利！",
+          "utterance": "好的，老规矩配置不变，已为您将抖音短视频保障时长延长至180分钟，保障时段2026年10月24日20时00分至23时00分，已开通，祝您现场顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -1727,7 +1727,7 @@
       "memory_role": "reinforcement_session",
       "skeleton_signature": "T2-1|2|1|I1:抖音/短视频/1/memory_filled/resolved|none",
       "scenario": {
-        "environment": "晚间户外活动现场",
+        "environment": "晚间户外现场",
         "blueprint_type": "main",
         "memory_action": "reinforce_main_memory"
       }
@@ -1808,13 +1808,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "对，直接开通。以后我说‘特写不糊’，画质就是1080p。",
+          "utterance": "对，直接开通。",
           "action_types": [
             "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次抖音短视频保障，画质1080p、时延50ms以内、时长120分钟，并已记录‘特写不糊’对应1080p画质。祝您拍摄顺利！",
+          "utterance": "好的，已为您开通抖音短视频保障，画质1080p、时延50ms以内，保障时段2026年10月28日20时00分至22时00分，共120分钟。祝您晚间现场顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -2075,13 +2075,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "对，直接开通。以后我说‘画面要透亮’，画质就是1080p。",
+          "utterance": "对，直接开通。",
           "action_types": [
             "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次微信视频通话保障，画质1080p、时延80ms以内、时长90分钟，并已记录‘画面要透亮’对应1080p画质。祝您复盘顺利！",
+          "utterance": "好的，已为您开通微信视频通话保障，画质1080p、时延80ms以内，保障时段2026年10月29日20时15分至21时45分，共90分钟。祝您复盘顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -2259,7 +2259,7 @@
       "round_count": 1,
       "intent_count": 2,
       "memory_role": "distractor_session",
-      "skeleton_signature": "X-1|1|2|I1:哔哩哔哩/开直播/1/direct/resolved;I2:手机话费充值与账单查询/0/rejected/rejected|none|none|mixed_reject",
+      "skeleton_signature": "X-1|1|2|I1:飞书/会议/1/direct/resolved;I2:手机话费充值与账单查询/0/rejected/rejected|none|none|mixed_reject",
       "scenario": {
         "environment": "周末午休个人时间",
         "blueprint_type": "distractor_mixed",
@@ -2270,14 +2270,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "周末午休想用哔哩哔哩开个直播，画质720p，时延80ms以内，时长60分钟，帮我开个保障；顺便帮我把手机话费充一下，再查查账单。",
+          "utterance": "周末午休，用飞书开个会，画质720p，时延80ms以内，从12点30分保障到13点30分，共60分钟；另外帮我查一下手机话费账单，顺便充个话费。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，已为您受理哔哩哔哩开直播保障，画质720p、时延80ms以内、时长60分钟。话费充值和账单查询不在本助手服务范围内，建议您通过运营商官方渠道办理。",
+          "utterance": "收到，已为您受理飞书会议保障，画质720p、时延80ms以内，保障时段2026年11月01日12时30分至13时30分，共60分钟。不过手机话费充值与账单查询不在本助手服务范围内，建议您通过运营商官方渠道办理，抱歉。",
           "action_types": [
             "Acknowledge",
             "Reject_Request"
@@ -2294,15 +2294,15 @@
             "status": "resolved",
             "closure_path": "direct",
             "expression_level": 1,
-            "intent": "哔哩哔哩开直播保障",
+            "intent": "飞书会议保障",
             "params": {
               "application_name": {
-                "value": "哔哩哔哩",
+                "value": "飞书",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -2356,15 +2356,15 @@
         "status": "resolved",
         "closure_path": "direct",
         "expression_level": 1,
-        "intent": "哔哩哔哩开直播保障",
+        "intent": "飞书会议保障",
         "params": {
           "application_name": {
-            "value": "哔哩哔哩",
+            "value": "飞书",
             "source_type": "Turn",
             "source_ref": "U1"
           },
           "service_name": {
-            "value": "开直播",
+            "value": "会议",
             "source_type": "Turn",
             "source_ref": "U1"
           },
@@ -2419,12 +2419,12 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "哔哩哔哩",
+                "value": "飞书",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -2492,7 +2492,7 @@
           ]
         },
         "agent": {
-          "utterance": "收到，您是要在抖音做短视频保障对吧？我这边看到您之前的老规矩是画质1080p、时延50ms以内，保障时段按20:00到22:00、时长120分钟来，对吗？",
+          "utterance": "收到，您是要在抖音做短视频保障，按老规矩来对吧？我这边看到您之前的长期配置是画质1080p、时延50ms以内，保障时段按今晚20:00到22:00，共120分钟。确认一下，今天还是按这个老规矩开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -2557,14 +2557,14 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "今天现场特殊，人流太密，画质临时调到720p，时延压到30ms，就按这个来。",
+          "utterance": "今天现场特殊，人流太密，画质临时调到720p，时延压到30ms，就今天这么开。另外以后我说‘超清’，画质就是720p。",
           "action_types": [
             "Correct_Previous_Input",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "明白，本次临时调整：抖音短视频，画质720p，时延30ms以内，保障时段20:00到22:00，时长120分钟，已按这个开通。",
+          "utterance": "明白，本次因现场特殊，临时调整为画质720p、时延30ms以内，保障时段仍为今晚20:00到22:00，共120分钟，已按此开通。同时已记录：以后您说‘超清’，画质按720p理解。",
           "action_types": [
             "Acknowledge"
           ]
@@ -2846,7 +2846,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通抖音短视频保障：画质1080p，时延50ms以内，时段20:00到22:00，时长120分钟。祝您现场顺利，别掉链子！",
+          "utterance": "好的，已为您开通抖音短视频保障：画质1080p、时延50ms以内，今晚20:00到22:00，共120分钟。祝您现场顺利，别掉链子！",
           "action_types": [
             "Acknowledge"
           ]
@@ -3113,7 +3113,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通腾讯会议保障：画质720p，时延100ms以内，时段18:45到19:45，时长60分钟。祝您会议顺利！",
+          "utterance": "好的，已为您开通腾讯会议保障：画质720p、时延100ms以内，今晚18:45到19:45，共60分钟。祝您会议顺利，我这边先稳住！",
           "action_types": [
             "Acknowledge"
           ]
@@ -3302,14 +3302,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "今天10点在阶段工作总结会，用快手看直播，画质720p，时延控制在80ms以内，保障30分钟，帮我开一下。",
+          "utterance": "今天10点在阶段工作总结会，用快手看直播，画质720p，时延控制在80ms以内，保障开30分钟。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，已为您开通快手看直播保障：画质720p，时延80ms以内，时段10:00到10:30，时长30分钟。祝您观看顺利！",
+          "utterance": "收到，已为您开通快手看直播保障：画质720p、时延80ms以内，今天10:00到10:30，共30分钟。祝您观看顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -3485,7 +3485,7 @@
       "memory_role": "reuse_session",
       "skeleton_signature": "T2-1|2|1|I1:抖音/短视频/1/memory_filled/resolved|none",
       "scenario": {
-        "environment": "晚间户外活动现场",
+        "environment": "晚间户外现场",
         "blueprint_type": "main_recovery",
         "memory_action": "recover_long_term_rule"
       }
@@ -3572,7 +3572,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通抖音短视频保障：画质1080p，时延50ms以内，时段20:00到22:00，时长120分钟。祝您晚间现场顺利，别掉链子！",
+          "utterance": "好的，已为您开通抖音短视频保障：画质1080p、时延50ms以内，今晚20:00到22:00，共120分钟。祝您晚间户外现场推流顺畅，别掉链子！",
           "action_types": [
             "Acknowledge"
           ]
@@ -3752,7 +3752,7 @@
       "memory_role": "reuse_session",
       "skeleton_signature": "T2-1|2|1|I1:抖音/短视频/1/memory_filled/resolved|none",
       "scenario": {
-        "environment": "晚间户外活动现场",
+        "environment": "晚间户外现场",
         "blueprint_type": "main",
         "memory_action": "continuous_main_reuse"
       }
@@ -3833,13 +3833,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "对，直接开通，别掉链子。",
+          "utterance": "对，直接开通。",
           "action_types": [
             "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通抖音短视频保障，画质1080p、时延50ms以内，保障时段今晚20:00到22:00，共120分钟。祝您现场拍摄顺利，消息及时送达！",
+          "utterance": "好的，已为您开通本次保障，抖音短视频1080p、50ms以内，保障时段2026年11月20日20:00至22:00，祝您现场顺利，别掉链子！",
           "action_types": [
             "Acknowledge"
           ]

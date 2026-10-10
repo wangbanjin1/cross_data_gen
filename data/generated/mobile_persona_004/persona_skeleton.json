@@ -4,32 +4,33 @@
   "persona_summary": "外勤型项目申报人员",
   "static_profile": {
     "user_id": "USER_004",
-    "identity": "公益项目申报专员，长期在外勤现场进行项目考察、需求记录与佐证材料拍摄，擅长通过短视频与直播平台展示项目进展并吸引捐赠方关注，工作场景覆盖活动现场、街区采访点、临时拍摄地及转场途中。",
-    "devices": "主力设备为5G智能手机，辅助设备包括随身拍摄设备（如运动相机、手机云台），便携终端确需联网时使用手机热点。",
+    "identity": "公益项目申报专员（Grant Writer），长期在外勤现场采集项目佐证素材、撰写申报文本并同步预算附件给协作团队；活动范围覆盖公益活动现场、街区采访点、临时拍摄地、转场途中、户外直播点及突发事件现场，全程依赖手机移动核心网（4G/5G）直接联网，不将家庭宽带、公司固网或普通Wi-Fi作为可用接入方式。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备（运动相机/口袋云台相机）；便携终端确需联网时使用手机热点共享。",
     "apps": [
       "抖音",
       "微信",
       "腾讯会议",
-      "哔哩哔哩"
+      "飞书"
     ],
     "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "干练直接、节奏快，带有外勤人员的现场感与紧迫感，习惯用短句推进任务。",
+      "tone": "干练务实、节奏快，带外勤现场感，习惯用短句和行业行话推进任务",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "先保上传"
+        "先保推流",
+        "这条素材得回传"
       ],
-      "typical_habits": "在转场或现场间隙快速确认任务参数，习惯用口语化简称指代应用与业务，强调稳定与续传，遇到弱覆盖会主动降档保任务。"
+      "typical_habits": "习惯在开播或回传前先确认画质档位和时延余量，用口语化别名指代固定参数（如'1080p原画''50毫秒以内'），转场时反复叮嘱'别断'，事后用'老时间''老规矩'指代周期性安排。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "周二周六晚间公益项目直播",
+      "name": "每周二与周六晚间公益项目申报直播与素材回传",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每周二与周六晚间20:00-22:00的公益项目进展直播，固定使用抖音开直播向捐赠方展示项目现场与阶段成果。",
+      "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
       "period_type": "weekly",
       "days": [
         "Tuesday",
@@ -45,7 +46,7 @@
       "aliases": {
         "app_aliases": [
           "阿抖",
-          "抖家"
+          "抖音"
         ],
         "service_aliases": [
           "开播",
@@ -66,8 +67,9 @@
           "两钟头"
         ],
         "period_aliases": [
-          "每周二周六老规矩",
-          "老时间"
+          "每周二与周六晚间行业直播",
+          "老时间",
+          "老规矩"
         ]
       },
       "declaration_mode": "implicit_induction",
@@ -76,10 +78,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨城公益项目考察周",
+        "name": "跨城公益项目考察与突发直播周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "跨城转场频繁，途经弱覆盖路段与临时户外直播点，需保障素材回传与直播不中断。",
+        "scene_description": "跨城转场频繁，途经弱覆盖路段与突发事件现场，需在移动状态下持续上行推流并保证素材不中断回传",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -89,22 +91,22 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "转场途中素材回传与协作",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "name": "转场途中团队视频会议对齐申报进度",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "转场途中或临时拍摄地需要与协作团队快速对齐素材与预算附件时。",
+        "trigger_condition": "转场途中或临时拍摄地需要与协作团队对齐申报文本与预算附件时发起",
         "aliases": {
           "app_aliases": [
-            "weixin",
-            "wx"
+            "tencentmeeting",
+            "会议通"
           ],
           "service_aliases": [
-            "打视频",
-            "连线"
+            "开会",
+            "进会议室"
           ],
           "resolution_aliases": [
             "720p",
@@ -118,22 +120,22 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "项目复盘与远程会议",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "name": "现场素材即时回传与云端协作",
+        "application_name": "飞书",
+        "service_name": "视频通话",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "每周项目阶段复盘或捐赠方远程沟通时。",
+        "trigger_condition": "活动现场采集到关键佐证素材后，需即时回传并同步给协作团队时发起",
         "aliases": {
           "app_aliases": [
-            "tencentmeeting",
-            "会议通"
+            "feishu",
+            "lark"
           ],
           "service_aliases": [
-            "开会",
-            "进会议室"
+            "打视频",
+            "连线"
           ],
           "resolution_aliases": [
             "1080p原画",
@@ -149,9 +151,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次观看行业直播学习申报案例",
-        "application_name": "哔哩哔哩",
-        "service_name": "看直播",
+        "scenario": "单次临时与资助方远程沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -159,8 +161,8 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次拍摄短视频记录项目亮点",
-        "application_name": "抖音",
+        "scenario": "单次休息间隙刷短视频放松",
+        "application_name": "快手",
         "service_name": "短视频",
         "params": {
           "resolution": "720p",

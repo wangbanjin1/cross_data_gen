@@ -4,33 +4,32 @@
   "persona_summary": "外业科研协作人员",
   "static_profile": {
     "user_id": "USER_010",
-    "identity": "一位严谨细致的实验物理学家，长期从事外业科研调查与跨机构协作。日常活动覆盖外业调查点、临时实验现场、博物馆外场、资料采集点、学术活动场地及跨校通勤路线，全程依赖手机4G/5G移动核心网直接联网，不将家庭宽带、公司固网或普通Wi-Fi作为可用接入方式。工作内容以文献与数据库查询、观测数据采集上传、远程讨论、视频会议与协作文档为主，便携终端确需联网时使用手机热点。",
-    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时以手机热点共享。",
+    "identity": "一位严谨的实验物理学家，以精确测量和注重细节著称；长期在外业调查点、临时实验现场、博物馆外场或资料采集点开展科研协作，跨校通勤与学术活动频繁，依赖手机移动核心网完成文献查询、数据采集上传、远程讨论与视频协作。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点，不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式。",
     "apps": [
       "腾讯会议",
       "微信",
       "钉钉",
-      "飞书"
+      "哔哩哔哩"
     ],
     "speech_archetype": "meticulous_researcher",
     "speech_style": {
-      "tone": "严谨、克制、注重细节，习惯用数据与时间点说话，偶尔带一点外业人的直爽。",
+      "tone": "严谨、克制、注重细节，习惯用测量和复核口吻确认协作状态",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "数据先别丢",
-        "按原画传"
+        "数据先别丢"
       ],
-      "typical_habits": "说话前先确认时间、地点与参数；布置任务时反复强调上传可靠与视频稳定；遇到弱覆盖路段会主动提醒续传和恢复。"
+      "typical_habits": "说话前先确认时间与参数，常把上传、复核、续传和时延挂在嘴边；遇到弱覆盖会反复强调恢复与补传。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "晚间跨机构科研视频协作与数据复核",
+      "name": "晚间科研数据复核与远程视频协作",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每天晚间黄金档高频业务：结束外业调查或跨校通勤后，固定于20:00-22:00进行跨机构科研视频协作、观测数据复核与协作文档对齐。",
+      "trigger_condition": "每天晚间黄金档高频业务：20:00-22:00固定进行实验资料查询、观测结果复核、数据上传与远程视频协作",
       "period_type": "daily",
       "days": [
         "daily"
@@ -45,7 +44,7 @@
       "aliases": {
         "app_aliases": [
           "企鹅会议",
-          "腾讯会议",
+          "腾讯会",
           "鹅会"
         ],
         "service_aliases": [
@@ -67,8 +66,7 @@
         "duration_aliases": [
           "俩小时",
           "两钟头",
-          "播到十点",
-          "一个半小时"
+          "播到十点"
         ],
         "period_aliases": [
           "每天这个时候",
@@ -83,10 +81,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨校联合外业调查与临时实验现场数据回传周",
+        "name": "跨校联合外业采样与数据复核周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "跨校联合外业调查与临时实验现场期间，团队在弱覆盖路段、博物馆外场和资料采集点之间移动，网络波动明显，需优先保障数据上传与视频协作不中断。",
+        "scene_description": "跨校联合外业采样期间，临时实验现场与博物馆外场网络覆盖波动，团队需要频繁上传观测数据并远程复核，弱覆盖路段后要求任务续传或快速恢复。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -96,14 +94,14 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "外业采样点数据回传与远程复核",
+        "name": "外业采样后数据回传与团队复核",
         "application_name": "钉钉",
         "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "在外业调查点或临时实验现场完成一轮观测后，需要向团队回传数据文件并远程复核异常记录时触发。",
+        "trigger_condition": "外业采样结束回到临时实验现场或通勤途中，需要快速上传数据文件并让团队复核",
         "aliases": {
           "app_aliases": [
             "dingding",
@@ -125,14 +123,14 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "跨校通勤途中协作文档与语音沟通",
+        "name": "跨机构资料采集与即时沟通",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "跨校通勤路线途中需要与合作者快速对齐协作文档、确认采样安排或临时讨论实验细节时触发。",
+        "trigger_condition": "在博物馆外场或资料采集点与跨机构合作者临时确认观测记录、影像与文档细节",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -156,9 +154,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "学术活动场地临时观看公开讲座直播",
+        "scenario": "单次晚间休息时刷短视频放松",
         "application_name": "哔哩哔哩",
-        "service_name": "看直播",
+        "service_name": "短视频",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -166,9 +164,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "资料采集点休息间隙刷短视频放松",
-        "application_name": "抖音",
-        "service_name": "短视频",
+        "scenario": "单次学术活动场地临时看直播回放",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

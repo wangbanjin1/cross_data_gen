@@ -96,6 +96,13 @@ class QCValidator:
                     s_passed = False
 
             if role == "evidence_session" and len(events) >= 2:
+                # 检查第 1 轮 requested_params
+                t1_req = events[0].get("requested_params", [])
+                if "resolution" not in t1_req:
+                    report["issues"].append(f"[{sid}] 证据会话第1轮 requested_params 缺失 resolution")
+                    report["rule_checks"]["turn_intent_isolation_check"] = False
+                    s_passed = False
+
                 t1_intents = events[0].get("turn_intents", [])
                 if t1_intents:
                     t1_params = t1_intents[0].get("params", {})
@@ -123,6 +130,31 @@ class QCValidator:
                                 report["issues"].append(f"[{sid}] 证据会话第1轮 slot_updates 泄漏了未提及的结束时间/时长(end_timestamp/duration)")
                                 report["rule_checks"]["turn_intent_isolation_check"] = False
                                 s_passed = False
+
+                # 若为 3 轮证据会话（T3-1）：第 2 轮也严禁泄漏 resolution
+                if len(events) >= 3:
+                    t2_req = events[1].get("requested_params", [])
+                    if "resolution" not in t2_req:
+                        report["issues"].append(f"[{sid}] 3轮证据会话第2轮 requested_params 缺失 resolution")
+                        report["rule_checks"]["turn_intent_isolation_check"] = False
+                        s_passed = False
+
+                    t2_intents = events[1].get("turn_intents", [])
+                    if t2_intents:
+                        t2_params = t2_intents[0].get("params", {})
+                        if "resolution" in t2_params:
+                            report["issues"].append(f"[{sid}] 3轮证据会话第2轮意图答案泄漏了未确认的清晰度(resolution)")
+                            report["rule_checks"]["turn_intent_isolation_check"] = False
+                            s_passed = False
+
+                    for su in s.get("slot_updates", []):
+                        for tu in su.get("turn_updates", []):
+                            if tu.get("turn") == 2:
+                                p = tu.get("params", {})
+                                if "resolution" in p:
+                                    report["issues"].append(f"[{sid}] 3轮证据会话第2轮 slot_updates 泄漏了未确认的清晰度(resolution)")
+                                    report["rule_checks"]["turn_intent_isolation_check"] = False
+                                    s_passed = False
 
             # 6. 验证用户台词自然口语化（严禁系统/学术术语出戏，如“长期偏好”、“元指令”等），验证相对时间一致性
             ref_day = s.get("reference_time", "").split("日")[0]

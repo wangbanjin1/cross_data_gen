@@ -8,7 +8,7 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "evidence_session",
-      "skeleton_signature": "T2-1|2|1|I1:抖音/开直播/1/clarified/resolved|none",
+      "skeleton_signature": "T2-1|2|1|I1:微信/开直播/1/clarified/resolved|none",
       "scenario": {
         "environment": "沿海巡逻岸线",
         "blueprint_type": "main",
@@ -19,14 +19,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "你好，需要给抖音开直播做一个网络保障，时间是今天10时00分开始。",
+          "utterance": "你好，需要给微信开直播做一个网络保障，时间是今天10时00分开始。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，您是要在抖音开直播对吧？画质、时延和持续时长需要什么标准？",
+          "utterance": "收到，您是要在微信开直播对吧？本次保障还需要确认画质、时延和持续时长，您分别按什么标准来？",
           "action_types": [
             "Request_Slot"
           ]
@@ -45,10 +45,10 @@
             "status": "in_progress",
             "closure_path": "clarify",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "微信开直播保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "微信",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -71,13 +71,14 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "画质1080p，时延要别卡帧，上限按50ms控制，以后也照这个标准理解。我说‘别卡帧’，就是时延控制在50ms以内。持续120分钟，从10:00到12:00。",
+          "utterance": "画质1080p，时延要低时延，上限按50ms控制，以后也照这个标准理解；我说‘低时延’，就是时延控制在50ms以内。时长120分钟，从10点到12点，帮我把这个习惯记一下，以后省得每次重新挑。",
           "action_types": [
-            "Inform_Slot"
+            "Inform_Slot",
+            "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次保障：抖音开直播，1080p画质，时延50ms以内，持续120分钟（10:00-12:00）。已记录‘别卡帧’对应时延50ms以内。",
+          "utterance": "好的，已为您开通本次保障：微信开直播，1080p画质，时延50ms以内，10:00到12:00，持续120分钟；并已为您将该配置记录为长期老规矩，后续您说‘低时延’就按50ms以内处理。",
           "action_types": [
             "Acknowledge"
           ]
@@ -92,10 +93,10 @@
             "status": "resolved",
             "closure_path": "clarified",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "微信开直播保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "微信",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -146,10 +147,10 @@
         "status": "resolved",
         "closure_path": "clarified",
         "expression_level": 1,
-        "intent": "抖音开直播保障",
+        "intent": "微信开直播保障",
         "params": {
           "application_name": {
-            "value": "抖音",
+            "value": "微信",
             "source_type": "Turn",
             "source_ref": "U1"
           },
@@ -201,7 +202,7 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "微信",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -263,7 +264,7 @@
       "round_count": 3,
       "intent_count": 1,
       "memory_role": "evidence_session",
-      "skeleton_signature": "T3-1|3|1|I1:微信/视频通话/1/clarify/resolved|none",
+      "skeleton_signature": "T3-1|3|1|I1:钉钉/视频通话/1/clarified/resolved|none",
       "scenario": {
         "environment": "大巴跨城转场高速公路",
         "blueprint_type": "sub_01",
@@ -274,14 +275,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "在大巴转场途中网络不太稳，帮我给微信视频通话开个保障，时间从今天18时45分开始。",
+          "utterance": "在大巴转场途中网络不太稳，帮我给钉钉视频通话开个保障，时间从今天18时45分开始。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，已确认是微信视频通话保障。请问画质、时延和持续时长有什么具体要求？",
+          "utterance": "收到，已确认是钉钉视频通话保障。请问画质、时延和持续时长有什么具体要求？",
           "action_types": [
             "Request_Slot"
           ]
@@ -300,10 +301,10 @@
             "status": "in_progress",
             "closure_path": "clarify",
             "expression_level": 1,
-            "intent": "微信视频通话保障",
+            "intent": "钉钉视频通话保障",
             "params": {
               "application_name": {
-                "value": "微信",
+                "value": "钉钉",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -326,13 +327,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "画质标准按‘糊弄不过去就行’，时延控制在100ms以内，预计持续60min。",
+          "utterance": "画质按‘糊弄不过去就行’来，时延控制在100ms以内，预计持续60min。",
           "action_types": [
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "请教一下，您提到的‘糊弄不过去就行’具体对应哪档画质档位？以后也帮您按这个记吗？",
+          "utterance": "确认一下，您说的‘糊弄不过去就行’具体指哪个画质档位？以后也按这个理解吗？",
           "action_types": [
             "Request_Disambiguation"
           ]
@@ -349,10 +350,10 @@
             "status": "in_progress",
             "closure_path": "clarify",
             "expression_level": 1,
-            "intent": "微信视频通话保障",
+            "intent": "钉钉视频通话保障",
             "params": {
               "application_name": {
-                "value": "微信",
+                "value": "钉钉",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -392,13 +393,13 @@
       {
         "turn": 3,
         "user": {
-          "utterance": "指的就是画质档位720p，以后默认按这个来，直接保上吧。",
+          "utterance": "对，就是画质档位720p，往后都照这个标准记，开通吧。",
           "action_types": [
             "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已按您刚确认的含义记录，并为您开通微信视频通话保障（720p / 时延≤100ms）。祝您使用愉快！",
+          "utterance": "好的，已按您刚确认的含义记录，并为您开通钉钉视频通话保障（720p / 时延≤100ms）。祝您使用愉快！",
           "action_types": [
             "Acknowledge"
           ]
@@ -411,12 +412,12 @@
           {
             "intent_id": "I1",
             "status": "resolved",
-            "closure_path": "clarify",
+            "closure_path": "clarified",
             "expression_level": 1,
-            "intent": "微信视频通话保障",
+            "intent": "钉钉视频通话保障",
             "params": {
               "application_name": {
-                "value": "微信",
+                "value": "钉钉",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -465,12 +466,12 @@
       {
         "intent_id": "I1",
         "status": "resolved",
-        "closure_path": "clarify",
+        "closure_path": "clarified",
         "expression_level": 1,
-        "intent": "微信视频通话保障",
+        "intent": "钉钉视频通话保障",
         "params": {
           "application_name": {
-            "value": "微信",
+            "value": "钉钉",
             "source_type": "Turn",
             "source_ref": "U1"
           },
@@ -522,7 +523,7 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "微信",
+                "value": "钉钉",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -589,7 +590,7 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "reinforcement_session",
-      "skeleton_signature": "T2-1|2|1|I1:抖音/开直播/1/memory_filled/resolved|none",
+      "skeleton_signature": "T2-1|2|1|I1:微信/开直播/1/memory_filled/resolved|none",
       "scenario": {
         "environment": "沿海巡逻岸线",
         "blueprint_type": "main",
@@ -600,14 +601,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "老规矩，在沿海巡逻岸线，用抖音做开直播，时延按‘别卡帧’，帮我把保障开上。",
+          "utterance": "老规矩，在沿海巡逻岸线，用微信做开直播，时延按‘低时延’，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，我调取到之前登记的抖音开直播配置：1080p、时延50ms以内，10时00分开始、12时00分结束，持续120min。确认按这套配置开通吗？",
+          "utterance": "收到，我调取到之前登记的微信开直播配置：1080p、时延50ms以内，10时00分开始、12时00分结束，持续120min。确认按这套配置开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -622,10 +623,10 @@
             "status": "in_progress",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "微信开直播保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "微信",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -678,7 +679,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您成功受理抖音开直播网络保障（1080p / 时延≤50ms），祝您使用愉快！",
+          "utterance": "好的，已为您成功受理微信开直播网络保障（1080p / 时延≤50ms），祝您使用愉快！",
           "action_types": [
             "Acknowledge"
           ]
@@ -693,10 +694,10 @@
             "status": "resolved",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "微信开直播保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "微信",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -747,10 +748,10 @@
         "status": "resolved",
         "closure_path": "memory_filled",
         "expression_level": 1,
-        "intent": "抖音开直播保障",
+        "intent": "微信开直播保障",
         "params": {
           "application_name": {
-            "value": "抖音",
+            "value": "微信",
             "source_type": "Turn",
             "source_ref": "U1"
           },
@@ -802,7 +803,7 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "微信",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -917,7 +918,7 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "reinforcement_session",
-      "skeleton_signature": "T2-1|2|1|I1:微信/视频通话/1/memory_filled/resolved|none",
+      "skeleton_signature": "T2-1|2|1|I1:钉钉/视频通话/1/memory_filled/resolved|none",
       "scenario": {
         "environment": "大巴转场途中",
         "blueprint_type": "sub_01",
@@ -928,14 +929,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "老规矩，在大巴转场途中，用微信做视频通话，画质按‘糊弄不过去就行’，帮我把保障开上。",
+          "utterance": "老规矩，在大巴转场途中，用钉钉做视频通话，画质按‘糊弄不过去就行’，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，我调取到之前登记的微信视频通话配置：720p、时延100ms以内，18时45分开始、19时45分结束，持续60min。确认按这套配置开通吗？",
+          "utterance": "收到，我调取到之前登记的钉钉视频通话配置：720p、时延100ms以内，18时45分开始、19时45分结束，持续60min。确认按这套配置开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -950,10 +951,10 @@
             "status": "in_progress",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "微信视频通话保障",
+            "intent": "钉钉视频通话保障",
             "params": {
               "application_name": {
-                "value": "微信",
+                "value": "钉钉",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -1006,7 +1007,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次保障：微信视频通话，720p画质，时延100ms以内，持续60分钟（18:45-19:45）。祝您转场顺利！",
+          "utterance": "已开通，钉钉视频通话保障已生效，720p、100ms以内、持续60分钟，路上注意安全。",
           "action_types": [
             "Acknowledge"
           ]
@@ -1021,10 +1022,10 @@
             "status": "resolved",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "微信视频通话保障",
+            "intent": "钉钉视频通话保障",
             "params": {
               "application_name": {
-                "value": "微信",
+                "value": "钉钉",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -1075,10 +1076,10 @@
         "status": "resolved",
         "closure_path": "memory_filled",
         "expression_level": 1,
-        "intent": "微信视频通话保障",
+        "intent": "钉钉视频通话保障",
         "params": {
           "application_name": {
-            "value": "微信",
+            "value": "钉钉",
             "source_type": "Turn",
             "source_ref": "U1"
           },
@@ -1130,7 +1131,7 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "微信",
+                "value": "钉钉",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -1184,7 +1185,7 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "reuse_session",
-      "skeleton_signature": "T2-5|2|1|I1:抖音/开直播/1/amend/resolved|none",
+      "skeleton_signature": "T2-5|2|1|I1:微信/开直播/1/amend/resolved|none",
       "scenario": {
         "environment": "沿海巡逻岸线",
         "blueprint_type": "main",
@@ -1195,14 +1196,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "今天在沿海巡逻岸线，老规矩，用抖音做开直播，帮我把保障开上。",
+          "utterance": "今天在沿海巡逻岸线，老规矩，用微信做开直播，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，您要在沿海巡逻岸线用抖音开直播。我调取到您的老规矩配置：画质1080p、时延50ms以内、时长60分钟，起止时段按今天10:00到11:00。确认按这个开通吗？",
+          "utterance": "收到，您是在沿海巡逻岸线，用微信开直播，按老规矩来。我调取一下您的基线配置：画质1080p、时延50ms以内、时长60分钟，起止时间今天10:00到11:00。确认按这个开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -1217,10 +1218,10 @@
             "status": "in_progress",
             "closure_path": "amend",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "微信开直播保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "微信",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
@@ -1274,7 +1275,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已按老规矩为您开通抖音开直播保障，画质1080p、时延50ms以内，时长已延长至180分钟，保障时段更新为今天10:00到13:00，已生效。",
+          "utterance": "好的，老规矩配置不变，画质1080p、时延50ms以内，时长已延长至180分钟，起止时间今天10:00到13:00，保障已开通。",
           "action_types": [
             "Acknowledge"
           ]
@@ -1289,10 +1290,10 @@
             "status": "resolved",
             "closure_path": "amend",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "微信开直播保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "微信",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
@@ -1343,10 +1344,10 @@
         "status": "resolved",
         "closure_path": "amend",
         "expression_level": 1,
-        "intent": "抖音开直播保障",
+        "intent": "微信开直播保障",
         "params": {
           "application_name": {
-            "value": "抖音",
+            "value": "微信",
             "source_type": "Memory",
             "source_ref": "MF_001"
           },
@@ -1398,7 +1399,7 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "微信",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
@@ -1470,7 +1471,7 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "reinforcement_session",
-      "skeleton_signature": "T2-1|2|1|I1:抖音/开直播/1/memory_filled/resolved|none",
+      "skeleton_signature": "T2-1|2|1|I1:微信/开直播/1/memory_filled/resolved|none",
       "scenario": {
         "environment": "沿海巡逻岸线",
         "blueprint_type": "main",
@@ -1481,14 +1482,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "老规矩，在沿海巡逻岸线，用抖音做开直播，时延按‘别卡帧’，帮我把保障开上。",
+          "utterance": "老规矩，在沿海巡逻岸线，用微信做开直播，时延按‘低时延’，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，我调取到之前登记的抖音开直播配置：1080p、时延50ms以内，10时00分开始、12时00分结束，持续120min。确认按这套配置开通吗？",
+          "utterance": "收到，我调取到之前登记的微信开直播配置：1080p、时延50ms以内，10时00分开始、12时00分结束，持续120min。确认按这套配置开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -1503,10 +1504,10 @@
             "status": "in_progress",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "微信开直播保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "微信",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -1559,7 +1560,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通抖音开直播保障，画质1080p、时延50ms以内、时长120分钟，保障时段2026年10月24日10:00到12:00，已生效。",
+          "utterance": "好的，已为您开通微信开直播保障，画质1080p、时延50ms以内，时长120分钟，起止时间今天10:00到12:00。祝您巡逻顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -1574,10 +1575,10 @@
             "status": "resolved",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "微信开直播保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "微信",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -1628,10 +1629,10 @@
         "status": "resolved",
         "closure_path": "memory_filled",
         "expression_level": 1,
-        "intent": "抖音开直播保障",
+        "intent": "微信开直播保障",
         "params": {
           "application_name": {
-            "value": "抖音",
+            "value": "微信",
             "source_type": "Turn",
             "source_ref": "U1"
           },
@@ -1683,7 +1684,7 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "微信",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -1737,7 +1738,7 @@
       "round_count": 1,
       "intent_count": 2,
       "memory_role": "distractor_session",
-      "skeleton_signature": "X-1|1|2|I1:腾讯会议/会议/1/direct/resolved;I2:手机话费充值与账单查询/0/rejected/rejected|none|none|mixed_reject",
+      "skeleton_signature": "X-1|1|2|I1:快手/看直播/1/direct/resolved;I2:手机话费充值与账单查询/0/rejected/rejected|none|none|mixed_reject",
       "scenario": {
         "environment": "周末午休个人时间",
         "blueprint_type": "distractor_mixed",
@@ -1748,14 +1749,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "周末午休个人时间，帮我用腾讯会议开个会议保障，画质720p、时延80ms以内、时长60分钟；另外顺便帮我把手机话费充值和账单查询也办了。",
+          "utterance": "周末午休，用快手看直播，画质720p，时延控制在80ms以内，时长60分钟，帮我开个保障。另外帮我手机话费充个值，再查一下账单。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，已为您受理腾讯会议会议保障：画质720p、时延80ms以内、时长60分钟，保障时段2026年10月28日12:30到13:30。话费充值与账单查询不属于手机移动网络保障范围，我这边无法办理，建议您通过运营商官方渠道或拨打客服专线处理。",
+          "utterance": "收到，已为您受理快手看直播保障，画质720p、时延80ms以内、时长60分钟，起止时间今天12:30到13:30。话费充值和账单查询属于运营商业务，本助手仅支持手机移动网络保障加速，无法办理，建议您拨打运营商客服热线处理。",
           "action_types": [
             "Acknowledge",
             "Reject_Request"
@@ -1772,15 +1773,15 @@
             "status": "resolved",
             "closure_path": "direct",
             "expression_level": 1,
-            "intent": "腾讯会议会议保障",
+            "intent": "快手看直播保障",
             "params": {
               "application_name": {
-                "value": "腾讯会议",
+                "value": "快手",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "会议",
+                "value": "看直播",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -1834,15 +1835,15 @@
         "status": "resolved",
         "closure_path": "direct",
         "expression_level": 1,
-        "intent": "腾讯会议会议保障",
+        "intent": "快手看直播保障",
         "params": {
           "application_name": {
-            "value": "腾讯会议",
+            "value": "快手",
             "source_type": "Turn",
             "source_ref": "U1"
           },
           "service_name": {
-            "value": "会议",
+            "value": "看直播",
             "source_type": "Turn",
             "source_ref": "U1"
           },
@@ -1897,12 +1898,12 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "腾讯会议",
+                "value": "快手",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "会议",
+                "value": "看直播",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -1952,9 +1953,9 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "correction_session",
-      "skeleton_signature": "T2-3|2|1|I1:抖音/开直播/4/correct/resolved|none",
+      "skeleton_signature": "T2-3|2|1|I1:微信/开直播/4/correct/resolved|none",
       "scenario": {
-        "environment": "公益赛事活动现场",
+        "environment": "山脉赛事集结区",
         "blueprint_type": "event_override",
         "memory_action": "override_temporary_preference"
       }
@@ -1963,14 +1964,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "今天在公益赛事活动现场，老规矩，用抖音做开直播，帮我把保障开上。",
+          "utterance": "今天在山脉赛事集结区，老规矩，用微信做开直播，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，您要在公益赛事活动现场用抖音开直播。我调取到您的老规矩配置：画质1080p、时延50ms以内、时长120分钟，起止时段按今天10:00到12:00。确认按这个开通吗？",
+          "utterance": "收到，您是在山脉赛事集结区，用微信开直播，按老规矩来。我调取一下您的基线配置：画质1080p、时延50ms以内、时长120分钟，起止时间今天10:00到12:00。确认按这个开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -1985,10 +1986,10 @@
             "status": "in_progress",
             "closure_path": "correct",
             "expression_level": 4,
-            "intent": "抖音开直播保障",
+            "intent": "微信开直播保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "微信",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
@@ -2035,14 +2036,14 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "今天现场特殊，人流密集网络拥塞，画质临时调到720p，时延压到30ms，就按这个来。",
+          "utterance": "今天现场特殊，临时调整一下，画质调到720p，时延压到30ms，就按这个来。",
           "action_types": [
             "Correct_Previous_Input",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已确认本次临时调整：抖音开直播保障，画质720p、时延30ms以内、时长120分钟，保障时段2026年10月29日10:00到12:00，已按临时配置开通生效。",
+          "utterance": "好的，已确认本次临时调整：画质720p、时延30ms以内，时长120分钟，起止时间今天10:00到12:00，保障已开通。",
           "action_types": [
             "Acknowledge"
           ]
@@ -2057,10 +2058,10 @@
             "status": "resolved",
             "closure_path": "correct",
             "expression_level": 4,
-            "intent": "抖音开直播保障",
+            "intent": "微信开直播保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "微信",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
@@ -2111,10 +2112,10 @@
         "status": "resolved",
         "closure_path": "correct",
         "expression_level": 4,
-        "intent": "抖音开直播保障",
+        "intent": "微信开直播保障",
         "params": {
           "application_name": {
-            "value": "抖音",
+            "value": "微信",
             "source_type": "Memory",
             "source_ref": "MF_001"
           },
@@ -2166,7 +2167,7 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "微信",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
@@ -2235,9 +2236,9 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "reuse_session",
-      "skeleton_signature": "T2-1|2|1|I1:抖音/开直播/1/memory_filled/resolved|none",
+      "skeleton_signature": "T2-1|2|1|I1:微信/开直播/1/memory_filled/resolved|none",
       "scenario": {
-        "environment": "公益赛事活动现场",
+        "environment": "山脉赛事集结区",
         "blueprint_type": "event_reuse",
         "memory_action": "reuse_long_term_rule_after_correction"
       }
@@ -2246,14 +2247,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "老规矩，在公益赛事活动现场，用抖音做开直播，画质按‘绝不能有马赛克’，帮我把保障开上。",
+          "utterance": "老规矩，在山脉赛事集结区，用微信做开直播，画质按‘线条分明’，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，我调取到之前登记的抖音开直播配置：1080p、时延50ms以内，10时00分开始、12时00分结束，持续120min。确认按这套配置开通吗？",
+          "utterance": "收到，我调取到之前登记的微信开直播配置：1080p、时延50ms以内，10时00分开始、12时00分结束，持续120min。确认按这套配置开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -2268,10 +2269,10 @@
             "status": "in_progress",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "微信开直播保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "微信",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
@@ -2324,7 +2325,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通抖音开直播保障，画质1080p、时延50ms以内、时长120分钟，保障时段2026年11月01日10:00到12:00，已生效。",
+          "utterance": "好的，已为您开通微信开直播保障，画质1080p、时延50ms以内，时长120分钟，起止时间今天10:00到12:00。祝您赛事顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -2339,10 +2340,10 @@
             "status": "resolved",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "微信开直播保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "微信",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
@@ -2393,10 +2394,10 @@
         "status": "resolved",
         "closure_path": "memory_filled",
         "expression_level": 1,
-        "intent": "抖音开直播保障",
+        "intent": "微信开直播保障",
         "params": {
           "application_name": {
-            "value": "抖音",
+            "value": "微信",
             "source_type": "Memory",
             "source_ref": "MF_001"
           },
@@ -2448,7 +2449,7 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "微信",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
@@ -2502,7 +2503,7 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "reuse_session",
-      "skeleton_signature": "T2-1|2|1|I1:微信/视频通话/1/memory_filled/resolved|none",
+      "skeleton_signature": "T2-1|2|1|I1:钉钉/视频通话/1/memory_filled/resolved|none",
       "scenario": {
         "environment": "转场大巴途中",
         "blueprint_type": "sub_01",
@@ -2513,14 +2514,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "老规矩，在大巴转场途中，用微信做视频通话，画质按‘糊弄不过去就行’，帮我把保障开上。",
+          "utterance": "老规矩，在大巴转场途中，用钉钉做视频通话，画质按‘糊弄不过去就行’，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，我调取到之前登记的微信视频通话配置：720p、时延100ms以内，18时45分开始、19时45分结束，持续60min。确认按这套配置开通吗？",
+          "utterance": "收到，我调取到之前登记的钉钉视频通话配置：720p、时延100ms以内，18时45分开始、19时45分结束，持续60min。确认按这套配置开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -2535,10 +2536,10 @@
             "status": "in_progress",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "微信视频通话保障",
+            "intent": "钉钉视频通话保障",
             "params": {
               "application_name": {
-                "value": "微信",
+                "value": "钉钉",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -2585,13 +2586,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "对，直接开通，稳住，能传。",
+          "utterance": "对，直接开通，别掉链子。",
           "action_types": [
             "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "已为您开通微信视频通话保障，画质720p、时延100ms以内，保障时段2026年11月04日18时45分至19时45分，持续60分钟。祝您转场顺利，训练别掉链子！",
+          "utterance": "好的，已为您开通本次钉钉视频通话保障，画质720p、时延100ms以内，时间从2026年11月04日18时45分到19时45分，持续60分钟。祝您转场顺利，训练按点推进！",
           "action_types": [
             "Acknowledge"
           ]
@@ -2606,10 +2607,10 @@
             "status": "resolved",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "微信视频通话保障",
+            "intent": "钉钉视频通话保障",
             "params": {
               "application_name": {
-                "value": "微信",
+                "value": "钉钉",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -2660,10 +2661,10 @@
         "status": "resolved",
         "closure_path": "memory_filled",
         "expression_level": 1,
-        "intent": "微信视频通话保障",
+        "intent": "钉钉视频通话保障",
         "params": {
           "application_name": {
-            "value": "微信",
+            "value": "钉钉",
             "source_type": "Turn",
             "source_ref": "U1"
           },
@@ -2715,7 +2716,7 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "微信",
+                "value": "钉钉",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -2769,7 +2770,7 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "reuse_session",
-      "skeleton_signature": "T2-1|2|1|I1:抖音/开直播/1/memory_filled/resolved|none",
+      "skeleton_signature": "T2-1|2|1|I1:微信/开直播/1/memory_filled/resolved|none",
       "scenario": {
         "environment": "沿海巡逻岸线",
         "blueprint_type": "main_recovery",
@@ -2780,14 +2781,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "老规矩，在沿海巡逻岸线，用抖音做开直播，画质按‘超清’，帮我把保障开上。",
+          "utterance": "老规矩，在沿海巡逻岸线，用微信做开直播，时延按‘丝滑一点’，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，我调取到之前登记的抖音开直播配置：1080p、时延50ms以内，10时00分开始、12时00分结束，持续120min。确认按这套配置开通吗？",
+          "utterance": "收到，我调取到之前登记的微信开直播配置：1080p、时延50ms以内，10时00分开始、12时00分结束，持续120min。确认按这套配置开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -2802,10 +2803,10 @@
             "status": "in_progress",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "微信开直播保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "微信",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
@@ -2852,13 +2853,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "对，开通吧，老规矩，别掉链子。",
+          "utterance": "对，开通吧，按点推流。",
           "action_types": [
             "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "已为您开通抖音开直播保障，画质1080p、时延50ms以内，保障时段2026年11月07日10时00分至12时00分，持续120分钟。祝您巡逻顺利，直播稳住！",
+          "utterance": "好的，已为您开通本次微信直播保障，画质1080p、时延50ms以内，时间从2026年11月07日10时00分到12时00分，持续120分钟。祝您沿海巡逻岸线直播顺利，别掉链子！",
           "action_types": [
             "Acknowledge"
           ]
@@ -2873,10 +2874,10 @@
             "status": "resolved",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "微信开直播保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "微信",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
@@ -2927,10 +2928,10 @@
         "status": "resolved",
         "closure_path": "memory_filled",
         "expression_level": 1,
-        "intent": "抖音开直播保障",
+        "intent": "微信开直播保障",
         "params": {
           "application_name": {
-            "value": "抖音",
+            "value": "微信",
             "source_type": "Memory",
             "source_ref": "MF_001"
           },
@@ -2982,7 +2983,7 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "微信",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },

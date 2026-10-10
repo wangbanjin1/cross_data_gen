@@ -8,9 +8,9 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "evidence_session",
-      "skeleton_signature": "T2-1|2|1|I1:哔哩哔哩/开直播/1/clarified/resolved|none",
+      "skeleton_signature": "T2-1|2|1|I1:腾讯会议/会议/1/clarified/resolved|none",
       "scenario": {
-        "environment": "社区走访点",
+        "environment": "社区走访现场",
         "blueprint_type": "main",
         "memory_action": "declare_explicit_rule"
       }
@@ -19,14 +19,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "你好，需要给哔哩哔哩开直播做一个网络保障，时间是今天14时00分开始。",
+          "utterance": "你好，需要给腾讯会议会议做一个网络保障，时间是今天14时00分开始。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，您是要在哔哩哔哩开直播对吧？画质、时延和持续时长您希望怎么配置？",
+          "utterance": "收到，您是要在腾讯会议上开会议对吧？画质、时延和持续时长这边需要您确认一下。",
           "action_types": [
             "Request_Slot"
           ]
@@ -45,15 +45,15 @@
             "status": "in_progress",
             "closure_path": "clarify",
             "expression_level": 1,
-            "intent": "哔哩哔哩开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "哔哩哔哩",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -71,13 +71,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "画质1080p，时延要顺滑一点，上限按50ms控制，以后也照这个标准理解。我说‘顺滑一点’，就是时延控制在50ms以内。",
+          "utterance": "画质1080p，时延要顺滑一点，上限按50ms控制，以后也照这个标准理解。我说‘顺滑一点’，就是时延控制在50ms以内。时长先按俩小时来。",
           "action_types": [
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次保障：哔哩哔哩开直播，1080p画质，时延50ms以内，持续120分钟，从14:00到16:00。并已记录‘顺滑一点’对应时延50ms以内，以后按此标准理解。",
+          "utterance": "好的，已为您开通本次保障，并已为您将该配置记录为长期老规矩！",
           "action_types": [
             "Acknowledge"
           ]
@@ -92,15 +92,15 @@
             "status": "resolved",
             "closure_path": "clarified",
             "expression_level": 1,
-            "intent": "哔哩哔哩开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "哔哩哔哩",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -146,15 +146,15 @@
         "status": "resolved",
         "closure_path": "clarified",
         "expression_level": 1,
-        "intent": "哔哩哔哩开直播保障",
+        "intent": "腾讯会议会议保障",
         "params": {
           "application_name": {
-            "value": "哔哩哔哩",
+            "value": "腾讯会议",
             "source_type": "Turn",
             "source_ref": "U1"
           },
           "service_name": {
-            "value": "开直播",
+            "value": "会议",
             "source_type": "Turn",
             "source_ref": "U1"
           },
@@ -201,12 +201,12 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "哔哩哔哩",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -263,7 +263,7 @@
       "round_count": 3,
       "intent_count": 1,
       "memory_role": "evidence_session",
-      "skeleton_signature": "T3-1|3|1|I1:微信/视频通话/1/clarify/resolved|none",
+      "skeleton_signature": "T3-1|3|1|I1:微信/视频通话/1/clarified/resolved|none",
       "scenario": {
         "environment": "大巴跨城转场高速公路",
         "blueprint_type": "sub_01",
@@ -326,13 +326,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "画质标准按‘糊弄不过去就行’，时延控制在100ms以内，预计持续60min。",
+          "utterance": "画质按‘糊弄不过去就行’来，时延控制在100ms以内，预计持续60min。",
           "action_types": [
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "请教一下，您提到的‘糊弄不过去就行’具体对应哪档画质档位？以后也帮您按这个记吗？",
+          "utterance": "确认一下，您说的‘糊弄不过去就行’具体指哪个画质档位？以后也按这个理解吗？",
           "action_types": [
             "Request_Disambiguation"
           ]
@@ -392,7 +392,7 @@
       {
         "turn": 3,
         "user": {
-          "utterance": "指的就是画质档位720p，以后默认按这个来，直接保上吧。",
+          "utterance": "对，就是画质档位720p，往后都照这个标准记，开通吧。",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -411,7 +411,7 @@
           {
             "intent_id": "I1",
             "status": "resolved",
-            "closure_path": "clarify",
+            "closure_path": "clarified",
             "expression_level": 1,
             "intent": "微信视频通话保障",
             "params": {
@@ -465,7 +465,7 @@
       {
         "intent_id": "I1",
         "status": "resolved",
-        "closure_path": "clarify",
+        "closure_path": "clarified",
         "expression_level": 1,
         "intent": "微信视频通话保障",
         "params": {
@@ -589,9 +589,9 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "reinforcement_session",
-      "skeleton_signature": "T2-1|2|1|I1:哔哩哔哩/开直播/1/memory_filled/resolved|none",
+      "skeleton_signature": "T2-1|2|1|I1:腾讯会议/会议/1/memory_filled/resolved|none",
       "scenario": {
-        "environment": "社区走访点",
+        "environment": "社区走访现场",
         "blueprint_type": "main",
         "memory_action": "reinforce_explicit_memory"
       }
@@ -600,14 +600,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "老规矩，在社区走访现场，用哔哩哔哩做开直播，时延按‘顺滑一点’，帮我把保障开上。",
+          "utterance": "老规矩，在社区走访现场，用腾讯会议做会议，时延按‘顺滑一点’，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，我调取到之前登记的哔哩哔哩开直播配置：1080p、时延50ms以内，14时00分开始、16时00分结束，持续120min。确认按这套配置开通吗？",
+          "utterance": "收到，我调取到之前登记的腾讯会议会议配置：1080p、时延50ms以内，14时00分开始、16时00分结束，持续120min。确认按这套配置开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -622,15 +622,15 @@
             "status": "in_progress",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "哔哩哔哩开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "哔哩哔哩",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -678,7 +678,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您成功受理哔哩哔哩开直播网络保障（1080p / 时延≤50ms），祝您使用愉快！",
+          "utterance": "好的，已为您成功受理腾讯会议会议网络保障（1080p / 时延≤50ms），祝您使用愉快！",
           "action_types": [
             "Acknowledge"
           ]
@@ -693,15 +693,15 @@
             "status": "resolved",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "哔哩哔哩开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "哔哩哔哩",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -747,15 +747,15 @@
         "status": "resolved",
         "closure_path": "memory_filled",
         "expression_level": 1,
-        "intent": "哔哩哔哩开直播保障",
+        "intent": "腾讯会议会议保障",
         "params": {
           "application_name": {
-            "value": "哔哩哔哩",
+            "value": "腾讯会议",
             "source_type": "Turn",
             "source_ref": "U1"
           },
           "service_name": {
-            "value": "开直播",
+            "value": "会议",
             "source_type": "Turn",
             "source_ref": "U1"
           },
@@ -802,12 +802,12 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "哔哩哔哩",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -856,7 +856,7 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "evidence_session",
-      "skeleton_signature": "T2-1|2|1|I1:腾讯会议/会议/1/clarified/resolved|none",
+      "skeleton_signature": "T2-1|2|1|I1:哔哩哔哩/开直播/1/clarified/resolved|none",
       "scenario": {
         "environment": "驻地酒店休息区",
         "blueprint_type": "sub_02",
@@ -867,14 +867,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "你好，需要给腾讯会议会议做一个网络保障，时间是今天20时15分开始。",
+          "utterance": "你好，需要给哔哩哔哩开直播做一个网络保障，时间是今天20时15分开始。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，您是要在腾讯会议开会对吧？画质、时延和持续时长您希望怎么配置？",
+          "utterance": "收到，您是要在哔哩哔哩开直播对吧？画质、时延和持续时长这边需要您确认一下。",
           "action_types": [
             "Request_Slot"
           ]
@@ -893,15 +893,15 @@
             "status": "in_progress",
             "closure_path": "clarify",
             "expression_level": 1,
-            "intent": "腾讯会议会议保障",
+            "intent": "哔哩哔哩开直播保障",
             "params": {
               "application_name": {
-                "value": "腾讯会议",
+                "value": "哔哩哔哩",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "会议",
+                "value": "开直播",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -919,13 +919,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "画质画面通透就行，按1080p开，时延80ms以内，持续90分钟。以后我说‘画面通透’，画质就是1080p。",
+          "utterance": "画质画面通透就行，按1080p开，时延80ms以内，先开90分钟。以后我说‘画面通透’，画质就是1080p。",
           "action_types": [
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次保障：腾讯会议，1080p画质，时延80ms以内，持续90分钟，从20:15到21:45。并已记录‘画面通透’对应画质1080p，以后按此标准理解。",
+          "utterance": "好的，已为您开通本次保障，并已记录该配置与代称习惯。",
           "action_types": [
             "Acknowledge"
           ]
@@ -940,15 +940,15 @@
             "status": "resolved",
             "closure_path": "clarified",
             "expression_level": 1,
-            "intent": "腾讯会议会议保障",
+            "intent": "哔哩哔哩开直播保障",
             "params": {
               "application_name": {
-                "value": "腾讯会议",
+                "value": "哔哩哔哩",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "会议",
+                "value": "开直播",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -994,15 +994,15 @@
         "status": "resolved",
         "closure_path": "clarified",
         "expression_level": 1,
-        "intent": "腾讯会议会议保障",
+        "intent": "哔哩哔哩开直播保障",
         "params": {
           "application_name": {
-            "value": "腾讯会议",
+            "value": "哔哩哔哩",
             "source_type": "Turn",
             "source_ref": "U1"
           },
           "service_name": {
-            "value": "会议",
+            "value": "开直播",
             "source_type": "Turn",
             "source_ref": "U1"
           },
@@ -1049,12 +1049,12 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "腾讯会议",
+                "value": "哔哩哔哩",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "会议",
+                "value": "开直播",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -1255,13 +1255,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "对，直接开通。以后我说‘糊弄不过去就行’，画质就是720p，记住这个习惯哈。",
+          "utterance": "对，直接开通。以后我说‘糊弄不过去就行’，画质就是720p。",
           "action_types": [
             "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次微信视频通话保障，并已记录‘糊弄不过去就行’对应720p画质。祝您转场顺利，现场见！",
+          "utterance": "好的，已为您开通本次微信视频通话保障，画质720p、时延100ms以内，持续60分钟。同时已记录：以后您说‘糊弄不过去就行’，画质就按720p理解。祝您转场顺利，现场见！",
           "action_types": [
             "Acknowledge"
           ]
@@ -1439,9 +1439,9 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "reuse_session",
-      "skeleton_signature": "T2-5|2|1|I1:哔哩哔哩/开直播/1/amend/resolved|none",
+      "skeleton_signature": "T2-5|2|1|I1:腾讯会议/会议/1/amend/resolved|none",
       "scenario": {
-        "environment": "社区走访点",
+        "environment": "社区走访现场",
         "blueprint_type": "main",
         "memory_action": "extend_duration_amend"
       }
@@ -1450,14 +1450,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "今天在社区走访点，老规矩，用哔哩哔哩做开直播，帮我把保障开上。",
+          "utterance": "今天在社区走访现场，老规矩，用腾讯会议做会议，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，您是要在哔哩哔哩开直播。按老规矩，画质1080p、时延50ms以内、时长60分钟，从今天14:00到15:00，确认按这个开通吗？",
+          "utterance": "收到，您是要在社区走访现场用腾讯会议开会议，按老规矩来。我调取一下基线配置：画质1080p、时延50ms以内，开始时间2026年10月24日14时00分，结束时间17时00分，持续60分钟。确认按这个开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -1472,15 +1472,15 @@
             "status": "in_progress",
             "closure_path": "amend",
             "expression_level": 1,
-            "intent": "哔哩哔哩开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "哔哩哔哩",
+                "value": "腾讯会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
@@ -1529,7 +1529,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已确认老规矩配置不变：哔哩哔哩开直播，画质1080p、时延50ms以内，时长已延长至180分钟，从14:00到17:00，保障已开通。现场见！",
+          "utterance": "好的，已确认老规矩配置不变：腾讯会议、画质1080p、时延50ms以内，开始时间2026年10月24日14时00分，结束时间延长至17时00分，持续180分钟。保障已开通，祝您现场活动顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -1544,15 +1544,15 @@
             "status": "resolved",
             "closure_path": "amend",
             "expression_level": 1,
-            "intent": "哔哩哔哩开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "哔哩哔哩",
+                "value": "腾讯会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
@@ -1598,15 +1598,15 @@
         "status": "resolved",
         "closure_path": "amend",
         "expression_level": 1,
-        "intent": "哔哩哔哩开直播保障",
+        "intent": "腾讯会议会议保障",
         "params": {
           "application_name": {
-            "value": "哔哩哔哩",
+            "value": "腾讯会议",
             "source_type": "Memory",
             "source_ref": "MF_001"
           },
           "service_name": {
-            "value": "开直播",
+            "value": "会议",
             "source_type": "Memory",
             "source_ref": "MF_001"
           },
@@ -1653,12 +1653,12 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "哔哩哔哩",
+                "value": "腾讯会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
@@ -1725,9 +1725,9 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "reinforcement_session",
-      "skeleton_signature": "T2-1|2|1|I1:哔哩哔哩/开直播/1/memory_filled/resolved|none",
+      "skeleton_signature": "T2-1|2|1|I1:腾讯会议/会议/1/memory_filled/resolved|none",
       "scenario": {
-        "environment": "社区走访点",
+        "environment": "社区走访现场",
         "blueprint_type": "main",
         "memory_action": "reinforce_main_memory"
       }
@@ -1736,14 +1736,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "老规矩，在社区走访现场，用哔哩哔哩做开直播，时延按‘顺滑一点’，帮我把保障开上。",
+          "utterance": "老规矩，在社区走访现场，用腾讯会议做会议，时延按‘顺滑一点’，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，我调取到之前登记的哔哩哔哩开直播配置：1080p、时延50ms以内，14时00分开始、16时00分结束，持续120min。确认按这套配置开通吗？",
+          "utterance": "收到，我调取到之前登记的腾讯会议会议配置：1080p、时延50ms以内，14时00分开始、16时00分结束，持续120min。确认按这套配置开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -1758,15 +1758,15 @@
             "status": "in_progress",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "哔哩哔哩开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "哔哩哔哩",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -1808,13 +1808,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "对，直接开通。以后我说‘顺滑一点’，时延就按50ms以内控制。",
+          "utterance": "对，直接开通。我说‘顺滑一点’，就是时延控制在50ms以内。",
           "action_types": [
             "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次哔哩哔哩开直播保障，并已记录‘顺滑一点’对应50ms以内时延。祝您直播顺利，现场见！",
+          "utterance": "好的，已为您开通本次腾讯会议保障，画质1080p、时延50ms以内，持续120分钟。同时已记录：以后您说‘顺滑一点’，时延上限就按50ms理解。祝您走访顺利，现场见！",
           "action_types": [
             "Acknowledge"
           ]
@@ -1829,15 +1829,15 @@
             "status": "resolved",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "哔哩哔哩开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "哔哩哔哩",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -1883,15 +1883,15 @@
         "status": "resolved",
         "closure_path": "memory_filled",
         "expression_level": 1,
-        "intent": "哔哩哔哩开直播保障",
+        "intent": "腾讯会议会议保障",
         "params": {
           "application_name": {
-            "value": "哔哩哔哩",
+            "value": "腾讯会议",
             "source_type": "Turn",
             "source_ref": "U1"
           },
           "service_name": {
-            "value": "开直播",
+            "value": "会议",
             "source_type": "Turn",
             "source_ref": "U1"
           },
@@ -1938,12 +1938,12 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "哔哩哔哩",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -1992,7 +1992,7 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "reinforcement_session",
-      "skeleton_signature": "T2-1|2|1|I1:腾讯会议/会议/1/memory_filled/resolved|none",
+      "skeleton_signature": "T2-1|2|1|I1:哔哩哔哩/开直播/1/memory_filled/resolved|none",
       "scenario": {
         "environment": "驻地复盘业务",
         "blueprint_type": "sub_02",
@@ -2003,14 +2003,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "老规矩，在驻地复盘业务，用腾讯会议做会议，画质按‘画面通透’，帮我把保障开上。",
+          "utterance": "老规矩，在驻地复盘业务，用哔哩哔哩做开直播，画质按‘画面通透’，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，我调取到之前登记的腾讯会议会议配置：1080p、时延80ms以内，20时15分开始、21时45分结束，持续90min。确认按这套配置开通吗？",
+          "utterance": "收到，我调取到之前登记的哔哩哔哩开直播配置：1080p、时延80ms以内，20时15分开始、21时45分结束，持续90min。确认按这套配置开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -2025,15 +2025,15 @@
             "status": "in_progress",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "腾讯会议会议保障",
+            "intent": "哔哩哔哩开直播保障",
             "params": {
               "application_name": {
-                "value": "腾讯会议",
+                "value": "哔哩哔哩",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "会议",
+                "value": "开直播",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -2075,13 +2075,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "对，直接开通。以后我说‘画面通透’，画质就是1080p，记住这个习惯哈。",
+          "utterance": "对，直接开通。以后我说‘画面通透’，画质就是1080p。",
           "action_types": [
             "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次腾讯会议保障，并已记录‘画面通透’对应1080p画质。祝您复盘顺利，现场见！",
+          "utterance": "好的，已为您开通本次哔哩哔哩直播保障，画质1080p、时延80ms以内，持续90分钟。同时已记录：以后您说‘画面通透’，画质就按1080p理解。祝您复盘顺利，别掉链子！",
           "action_types": [
             "Acknowledge"
           ]
@@ -2096,15 +2096,15 @@
             "status": "resolved",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "腾讯会议会议保障",
+            "intent": "哔哩哔哩开直播保障",
             "params": {
               "application_name": {
-                "value": "腾讯会议",
+                "value": "哔哩哔哩",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "会议",
+                "value": "开直播",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -2150,15 +2150,15 @@
         "status": "resolved",
         "closure_path": "memory_filled",
         "expression_level": 1,
-        "intent": "腾讯会议会议保障",
+        "intent": "哔哩哔哩开直播保障",
         "params": {
           "application_name": {
-            "value": "腾讯会议",
+            "value": "哔哩哔哩",
             "source_type": "Turn",
             "source_ref": "U1"
           },
           "service_name": {
-            "value": "会议",
+            "value": "开直播",
             "source_type": "Turn",
             "source_ref": "U1"
           },
@@ -2205,12 +2205,12 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "腾讯会议",
+                "value": "哔哩哔哩",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "会议",
+                "value": "开直播",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -2259,7 +2259,7 @@
       "round_count": 1,
       "intent_count": 2,
       "memory_role": "distractor_session",
-      "skeleton_signature": "X-1|1|2|I1:快手/短视频/1/direct/resolved;I2:手机话费充值与账单查询/0/rejected/rejected|none|none|mixed_reject",
+      "skeleton_signature": "X-1|1|2|I1:抖音/短视频/1/direct/resolved;I2:手机话费充值与账单查询/0/rejected/rejected|none|none|mixed_reject",
       "scenario": {
         "environment": "周末午休个人时间",
         "blueprint_type": "distractor_mixed",
@@ -2270,14 +2270,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "周末午休刷会儿快手短视频，画质720p、时延80ms以内，时长60分钟，帮我开个保障。另外顺便帮我把手机话费充一下，再查查账单。",
+          "utterance": "周末午休刷会儿抖音短视频，画质720p，时延80ms以内，帮我开个保障。另外顺便帮我把手机话费充一下，再查查账单。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，快手短视频保障已受理：画质720p、时延80ms以内、时长60分钟，从12:30到13:30。话费充值和账单查询不在本助手服务范围内，建议您通过运营商官方渠道办理。",
+          "utterance": "收到，已为您受理抖音短视频保障：画质720p、时延80ms以内，开始时间2026年11月01日12时30分，结束时间13时30分，持续60分钟。不过话费充值和账单查询属于运营商业务，不在本助手服务范围内，建议您拨打运营商客服热线或登录官方App办理。",
           "action_types": [
             "Acknowledge",
             "Reject_Request"
@@ -2294,10 +2294,10 @@
             "status": "resolved",
             "closure_path": "direct",
             "expression_level": 1,
-            "intent": "快手短视频保障",
+            "intent": "抖音短视频保障",
             "params": {
               "application_name": {
-                "value": "快手",
+                "value": "抖音",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -2356,10 +2356,10 @@
         "status": "resolved",
         "closure_path": "direct",
         "expression_level": 1,
-        "intent": "快手短视频保障",
+        "intent": "抖音短视频保障",
         "params": {
           "application_name": {
-            "value": "快手",
+            "value": "抖音",
             "source_type": "Turn",
             "source_ref": "U1"
           },
@@ -2419,7 +2419,7 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "快手",
+                "value": "抖音",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -2474,9 +2474,9 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "correction_session",
-      "skeleton_signature": "T2-3|2|1|I1:哔哩哔哩/开直播/4/correct/resolved|none",
+      "skeleton_signature": "T2-3|2|1|I1:腾讯会议/会议/4/correct/resolved|none",
       "scenario": {
-        "environment": "社区宣传走访现场",
+        "environment": "利兹司法活动现场",
         "blueprint_type": "event_override",
         "memory_action": "override_temporary_preference"
       }
@@ -2485,14 +2485,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "今天在社区宣传走访现场，老规矩，用哔哩哔哩做开直播，帮我把保障开上。",
+          "utterance": "今天在利兹司法活动现场，老规矩，用腾讯会议做会议，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，您是要在哔哩哔哩开直播对吧？我这边看到您之前的老规矩是1080p原画、50ms以内，时长120分钟，今天下午2点到4点，对吗？",
+          "utterance": "收到，您今天在利兹司法活动现场，要用腾讯会议做会议保障。我这边看到您的老规矩是1080p、50ms以内，从14:00到16:00，共120分钟。今天还是按这个老规矩来吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -2507,15 +2507,15 @@
             "status": "in_progress",
             "closure_path": "correct",
             "expression_level": 4,
-            "intent": "哔哩哔哩开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "哔哩哔哩",
+                "value": "腾讯会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
@@ -2557,14 +2557,14 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "今天现场特殊，人流密集网络有点挤，画质临时调到720p，时延压到30ms，就今天这么来。",
+          "utterance": "今天现场特殊，人流太密，网络有点拥塞。画质临时调到720p，时延压到30ms，今天临时按这个来。另外我说‘低时延’，就是时延控制在30ms以内，以后也照这个标准理解。",
           "action_types": [
             "Correct_Previous_Input",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "明白，本次临时调整为720p、30ms以内，时长和时段不变，已为您开通。",
+          "utterance": "明白，今天现场特殊，本次临时调整为720p、30ms以内，保障从14:00到16:00，共120分钟。已按本次临时配置为您开通，并记录您说的‘低时延’对应30ms以内。祝现场顺利，别掉链子！",
           "action_types": [
             "Acknowledge"
           ]
@@ -2579,15 +2579,15 @@
             "status": "resolved",
             "closure_path": "correct",
             "expression_level": 4,
-            "intent": "哔哩哔哩开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "哔哩哔哩",
+                "value": "腾讯会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
@@ -2633,15 +2633,15 @@
         "status": "resolved",
         "closure_path": "correct",
         "expression_level": 4,
-        "intent": "哔哩哔哩开直播保障",
+        "intent": "腾讯会议会议保障",
         "params": {
           "application_name": {
-            "value": "哔哩哔哩",
+            "value": "腾讯会议",
             "source_type": "Memory",
             "source_ref": "MF_001"
           },
           "service_name": {
-            "value": "开直播",
+            "value": "会议",
             "source_type": "Memory",
             "source_ref": "MF_001"
           },
@@ -2688,12 +2688,12 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "哔哩哔哩",
+                "value": "腾讯会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
@@ -2757,9 +2757,9 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "reuse_session",
-      "skeleton_signature": "T2-1|2|1|I1:哔哩哔哩/开直播/1/memory_filled/resolved|none",
+      "skeleton_signature": "T2-1|2|1|I1:腾讯会议/会议/1/memory_filled/resolved|none",
       "scenario": {
-        "environment": "社区宣传走访现场",
+        "environment": "利兹司法活动现场",
         "blueprint_type": "event_reuse",
         "memory_action": "reuse_long_term_rule_after_correction"
       }
@@ -2768,14 +2768,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "老规矩，在社区宣传走访现场，用哔哩哔哩做开直播，画质按‘原画质感’，帮我把保障开上。",
+          "utterance": "老规矩，在利兹司法活动现场，用腾讯会议做会议，画质按‘原画质感’，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，我调取到之前登记的哔哩哔哩开直播配置：1080p、时延50ms以内，14时00分开始、16时00分结束，持续120min。确认按这套配置开通吗？",
+          "utterance": "收到，我调取到之前登记的腾讯会议会议配置：1080p、时延50ms以内，14时00分开始、16时00分结束，持续120min。确认按这套配置开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -2790,15 +2790,15 @@
             "status": "in_progress",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "哔哩哔哩开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "哔哩哔哩",
+                "value": "腾讯会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
@@ -2846,7 +2846,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次保障，祝您直播顺利！",
+          "utterance": "好的，已为您开通腾讯会议保障，1080p、50ms以内，14:00到16:00共120分钟。祝现场顺利，别掉链子！",
           "action_types": [
             "Acknowledge"
           ]
@@ -2861,15 +2861,15 @@
             "status": "resolved",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "哔哩哔哩开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "哔哩哔哩",
+                "value": "腾讯会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
@@ -2915,15 +2915,15 @@
         "status": "resolved",
         "closure_path": "memory_filled",
         "expression_level": 1,
-        "intent": "哔哩哔哩开直播保障",
+        "intent": "腾讯会议会议保障",
         "params": {
           "application_name": {
-            "value": "哔哩哔哩",
+            "value": "腾讯会议",
             "source_type": "Memory",
             "source_ref": "MF_001"
           },
           "service_name": {
-            "value": "开直播",
+            "value": "会议",
             "source_type": "Memory",
             "source_ref": "MF_001"
           },
@@ -2970,12 +2970,12 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "哔哩哔哩",
+                "value": "腾讯会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
@@ -3107,13 +3107,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "对，开通吧。",
+          "utterance": "对，直接开通。",
           "action_types": [
             "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次保障，祝您通话顺利！",
+          "utterance": "好的，已为您开通微信视频通话保障，720p、100ms以内，18:45到19:45共60分钟。路上稳住，别断！",
           "action_types": [
             "Acknowledge"
           ]
@@ -3302,14 +3302,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "今天在阶段工作总结会，用钉钉做会议，画质720p，时延控制在80ms以内，上午10点到10点半，帮我开个保障。",
+          "utterance": "今天在阶段工作总结会，用钉钉做会议，画质720p，时延控制在80ms以内，从10:00到10:30，共30分钟，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，已为您开通钉钉会议保障，画质720p、时延80ms以内，时长30分钟，上午10点到10点半。",
+          "utterance": "收到，您要用钉钉做会议保障，画质720p、时延80ms以内，从10:00到10:30共30分钟。已为您开通，祝会议顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -3483,9 +3483,9 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "reuse_session",
-      "skeleton_signature": "T2-1|2|1|I1:哔哩哔哩/开直播/1/memory_filled/resolved|none",
+      "skeleton_signature": "T2-1|2|1|I1:腾讯会议/会议/1/memory_filled/resolved|none",
       "scenario": {
-        "environment": "社区走访点",
+        "environment": "社区走访现场",
         "blueprint_type": "main_recovery",
         "memory_action": "recover_long_term_rule"
       }
@@ -3494,14 +3494,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "老规矩，在社区走访现场，用哔哩哔哩做开直播，画质按‘画面要透亮’，帮我把保障开上。",
+          "utterance": "老规矩，在社区走访现场，用腾讯会议做会议，画质按‘画面要透亮’，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，我调取到之前登记的哔哩哔哩开直播配置：1080p、时延50ms以内，14时00分开始、16时00分结束，持续120min。确认按这套配置开通吗？",
+          "utterance": "收到，我调取到之前登记的腾讯会议会议配置：1080p、时延50ms以内，14时00分开始、16时00分结束，持续120min。确认按这套配置开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -3516,15 +3516,15 @@
             "status": "in_progress",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "哔哩哔哩开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "哔哩哔哩",
+                "value": "腾讯会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
@@ -3572,7 +3572,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次保障，祝您直播顺利！",
+          "utterance": "好的，已为您开通腾讯会议保障，1080p、50ms以内，14:00到16:00共120分钟。社区走访顺利，现场见！",
           "action_types": [
             "Acknowledge"
           ]
@@ -3587,15 +3587,15 @@
             "status": "resolved",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "哔哩哔哩开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "哔哩哔哩",
+                "value": "腾讯会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
@@ -3641,15 +3641,15 @@
         "status": "resolved",
         "closure_path": "memory_filled",
         "expression_level": 1,
-        "intent": "哔哩哔哩开直播保障",
+        "intent": "腾讯会议会议保障",
         "params": {
           "application_name": {
-            "value": "哔哩哔哩",
+            "value": "腾讯会议",
             "source_type": "Memory",
             "source_ref": "MF_001"
           },
           "service_name": {
-            "value": "开直播",
+            "value": "会议",
             "source_type": "Memory",
             "source_ref": "MF_001"
           },
@@ -3696,12 +3696,12 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "哔哩哔哩",
+                "value": "腾讯会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
