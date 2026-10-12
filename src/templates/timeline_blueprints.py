@@ -6,6 +6,7 @@
 """
 
 import re
+from datetime import datetime
 
 def _parse_time_range(time_range_str: str) -> tuple[str, str, str, str, str, str]:
     """
@@ -337,7 +338,7 @@ def get_session_blueprints(
             "source": dist_02,
             "type": "distractor_mixed",
             "dur": "60min",
-            "env": "周末午休个人时间",
+            "env": "午休个人时间",
             "action": "mixed_in_out_domain",
             "ood_goal": "手机话费充值与账单查询",
             "time_kind": "dist_mixed"
@@ -483,6 +484,15 @@ def get_session_blueprints(
             item["ref_time"] = f"{d_str}12时30分"
             item["start"] = f"{d_str}12时30分"
             item["end"] = f"{d_str}13时30分"
+            m_date = re.search(r'(\d{4})年(\d{1,2})月(\d{1,2})日', d_str)
+            if m_date:
+                dt = datetime(int(m_date.group(1)), int(m_date.group(2)), int(m_date.group(3)))
+                if dt.weekday() in [5, 6]:
+                    item["env"] = "周末午休个人时间"
+                else:
+                    item["env"] = "工作日午休个人时间"
+            else:
+                item["env"] = "午休个人时间"
         elif t_kind == "dist_normal":
             item["ref_time"] = f"{d_str}10时00分"
             item["start"] = f"{d_str}10时00分"

@@ -103,17 +103,17 @@ class DialogueGenerator:
                 t1_rule = f"【纯域外拒绝：用户必须明确提出'{s_plan.get('ood_goal') or '宽带光纤装维报修'}'，不得提出任何应用网络保障或老规矩请求；Agent 必须明确说明不支持并拒绝办理。】"
             elif role == "evidence_session":
                 if b_type == "main" and decl_mode == "implicit_induction":
-                    t1_rule = f"【隐式归纳首次证据：第1轮必须直述标准应用名({tp['application_name']})、业务名({tp['service_name']})和精确开始时刻({tp['start_timestamp']})；第2轮只补充本次参数。严禁出现‘以后’‘记住’‘老规矩’或登记任何小记忆点，本轮结束后只能形成 provisional 历史记录。】"
+                    t1_rule = f"【隐式归纳首次证据：第1轮必须直述标准应用名({tp['application_name']})、业务名({tp['service_name']})和精确开始时刻({tp['start_timestamp']})；第2轮用户必须完整补充画质({tp['resolution']})、时延({tp['rtt']})以及持续时长({tp['duration']})，台词中必须显式提及持续时长（如‘持续{tp['duration']}’），三者缺一不可。严禁出现‘以后’‘记住’‘老规矩’或登记任何小记忆点，本轮结束后只能形成 provisional 历史记录。】"
                 else:
-                    t1_rule = f"【建立小记忆：证据模式={evidence_mode}。第1轮使用标准应用、业务和精确开始时刻。explicit_declaration 使用声明话术：{small_memory_declaration}；co_occurrence 使用同轮共现话术：{small_memory_co_occurrence}；cross_turn_clarification 必须用三轮，由用户先说模糊表达、Agent追问其是否对应标准值、用户最后确认。只登记指定类型={small_memory.get('type')}，不得登记其他别名。】"
+                    t1_rule = f"【建立小记忆：证据模式={evidence_mode}。第1轮使用标准应用、业务和精确开始时刻。第2轮用户必须完整补充画质、时延与持续时长({tp['duration']})，台词中必须显式提及持续时长（如‘持续{tp['duration']}’）。explicit_declaration 使用声明话术：{small_memory_declaration}；co_occurrence 使用同轮共现话术：{small_memory_co_occurrence}；cross_turn_clarification 必须用三轮，由用户先说模糊表达、Agent追问其是否对应标准值、用户最后确认。只登记指定类型={small_memory.get('type')}，不得登记其他别名。】"
             elif is_implicit_reinf:
-                t1_rule = f"【隐式归纳二次发生固化契机：第1轮用户只表达‘这次按上次的来’，不得主动说出应用、业务、参数、起止时间；第1轮客服完整复述历史候选并要求确认；第2轮确认固化，小记忆证据模式={evidence_mode}，本会话使用同轮共现话术：{small_memory_co_occurrence}，不要改写成‘X就是Y’的显式定义。业务默认应用只对当前主线场景生效。】"
+                t1_rule = f"【隐式归纳二次发生固化契机：第1轮用户必须提及业务名作为最小锚点（如‘今天在{env}，{tp['service_name']}这次按上次的来’），但不得主动说出应用名({tp['application_name']})、画质/时延参数与起止时间；第1轮客服完整复述历史候选（明确指出上次是{tp['application_name']}）并要求确认；第2轮确认固化，小记忆证据模式={evidence_mode}，本会话使用同轮共现话术：{small_memory_co_occurrence}，不要改写成‘X就是Y’的显式定义。业务默认应用只对当前主线场景生效。】"
             elif tid == "T2-5":
                 base_dur = s_plan.get("base_dur") or "60min"
                 t1_rule = (
                     f"【时长延长会话：第1轮用户必须满足最小表达，表达'今天在{env}，老规矩，用{tp['application_name']}做{tp['service_name']}，帮我把保障开上'（严禁在第1轮提及画质、时延与修改后的时长！）；"
                     f"第1轮客服调取原基线老规矩配置向用户确认（基线时长为{base_dur}，严禁在第1轮提前说出修改后的时长{tp['duration']}！）；"
-                    f"第2轮用户确认老规矩不变，但说明因现场活动延长等原因提出将时长延长到{tp['duration']}；"
+                    f"第2轮用户确认老规矩不变，但说明因现场活动延长等原因提出将时长延长到{tp['duration']}（必须明确表述为精确时长数值，如‘{tp['duration']}’或对应小时/分钟，严禁使用‘半天’、‘大半天’、‘一上午’等有歧义口语！）；"
                     f"第2轮客服确认按老规矩开通并将时长延长至{tp['duration']}。】"
                 )
             elif tid == "T2-3":
@@ -124,7 +124,13 @@ class DialogueGenerator:
                     f"第2轮客服确认本次临时调整。】"
                 )
             elif tid == "X-1":
-                t1_rule = f"【混合诉求（一办一拒）：单轮干扰会话，无先验记忆。用户首次提出业务需求，同时提出域外需求'{s_plan.get('ood_goal') or '手机话费充值与账单查询'}'；严禁使用未建立过的个性化表达或老规矩；Agent 正常受理域内业务，并明确礼貌拒绝办理域外需求。】"
+                is_weekend = "周末" in env
+                time_constraint = "用户可表述为‘周末午休’；" if is_weekend else "由于当前是工作日（周一至周五），用户台词严禁出现‘周末’字样！只能表述为‘午休’或‘今天中午午休’；"
+                t1_rule = (
+                    f"【混合诉求（一办一拒）：单轮干扰会话，无先验记忆。当前环境为'{env}'，{time_constraint}"
+                    f"用户首次提出业务需求，同时提出域外需求'{s_plan.get('ood_goal') or '手机话费充值与账单查询'}'；"
+                    f"严禁使用未建立过的个性化表达或老规矩；Agent 正常受理域内业务，并明确礼貌拒绝办理域外需求。】"
+                )
             else:
                 t1_rule = f"【常规复用/强化会话：大记忆点已生效。应用＋业务是最小表达：若小记忆类型为service_default_app，可只说业务；若为application_alias，必须说应用别名＋业务；若为画质/时延/时长/个性化周期表达，必须说标准应用＋业务＋该个性化表达。指定小记忆点='{primary_alias}'。Agent 从记忆中补全其余画质{tp['resolution']}、时延{tp['rtt']}、开始时间{tp['start_timestamp']}、结束时间{tp['end_timestamp']}和时长{tp['duration']}；不得把未说出的槽位标成 Turn 来源。】"
 

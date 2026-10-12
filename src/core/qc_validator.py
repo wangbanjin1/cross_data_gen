@@ -272,8 +272,36 @@ class QCValidator:
                     report["issues"].append(f"[{sid}] T2-5 次轮台词缺失时长延长说明: '{u2}'")
                     report["rule_checks"]["natural_dialogue_check"] = False
                     s_passed = False
+                if "半天" in u2 or "大半天" in u2 or "一上午" in u2:
+                    report["issues"].append(f"[{sid}] T2-5 次轮台词包含有歧义的时长表达('半天'): '{u2}'")
+                    report["rule_checks"]["natural_dialogue_check"] = False
+                    s_passed = False
 
-            # 12. 全量台词检查：禁止包含后台规划词'触发'
+            # 12. X-1 混合诉求检查：如果 reference_time 为工作日（周一至周五），用户台词严禁包含“周末”
+            if tid == "X-1" and events:
+                ref_time_str = s.get("reference_time", "")
+                m_d = re.search(r'(\d{4})年(\d{1,2})月(\d{1,2})日', ref_time_str)
+                if m_d:
+                    from datetime import datetime
+                    dt_check = datetime(int(m_d.group(1)), int(m_d.group(2)), int(m_d.group(3)))
+                    if dt_check.weekday() < 5:
+                        u_t = events[0].get("user", {}).get("utterance", "")
+                        if "周末" in u_t:
+                            report["issues"].append(f"[{sid}] X-1 工作日会话台词违规出现'周末': '{u_t}'")
+                            report["rule_checks"]["natural_dialogue_check"] = False
+                            s_passed = False
+
+            # 13. 隐式偏好 Session 3 检查：第1轮台词必须包含业务名锚点，避免跨会话App歧义
+            if idx == 3 and role == "reinforcement_session" and len(events) >= 1:
+                p0 = s.get("intents", [{}])[0].get("params", {})
+                srv = p0.get("service_name", {}).get("value", "")
+                u1 = events[0].get("user", {}).get("utterance", "")
+                if srv and srv not in u1 and ("上次" in u1):
+                    report["issues"].append(f"[{sid}] 隐式偏好Session 3台词缺失业务名锚点'{srv}': '{u1}'")
+                    report["rule_checks"]["natural_dialogue_check"] = False
+                    s_passed = False
+
+            # 14. 全量台词检查：禁止包含后台规划词'触发'
             for turn in events:
                 u_text = turn.get("user", {}).get("utterance", "")
                 a_text = turn.get("agent", {}).get("utterance", "")

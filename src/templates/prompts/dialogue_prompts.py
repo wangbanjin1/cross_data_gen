@@ -23,7 +23,7 @@ def build_batch_dialogue_prompt(prompt_items: list[dict], identity: str, speech:
    - 【证据会话（evidence_session）】:
      * 第1轮 User：必须使用清晰、标准、无歧义的官方应用名（app）与业务名（service），如“抖音”、“微信”、“腾讯会议”；“开直播”、“视频通话”、“会议”。可提开始时间（如“今晚8点”），【严禁在第1轮提及结束时间或持续时长，严禁在第1轮使用生僻别名（如'阿抖'、'某手'），严禁使用'老规矩'、'老时间'等未生效的个性化表达】！确保大记忆点冷启动清晰无误；
      * 第1轮 Agent：识别并明确确认用户提出的应用与业务（如“收到，您是要在抖音开直播对吧？”），仅针对未提及的画质（resolution）、时延（rtt）、持续时长（duration）进行细节追问；
-     * 第2轮 User：补充本次画质、时延与持续时长。是否登记小记忆点严格服从该会话的 turn1_requirement：隐式归纳首次证据不得登记；显式声明只能登记指定的一项，并使用与其参数类型匹配的话术。
+     * 第2轮 User：必须完整补充本次画质、时延与持续时长（持续时长不得遗漏，必须在台词中明确说出，如持续XX分钟或XX小时）。是否登记小记忆点严格服从该会话的 turn1_requirement：隐式归纳首次证据不得登记；显式声明只能登记指定的一项，并使用与其参数类型匹配的话术。
    - 【后续复用与强化会话（reinforcement_session / reuse_session，如 S-03, S-06, S-07, S-08 等）】:
      * 第1轮 User：应用与业务是最小表达。除非当前主线已有业务默认应用记忆，否则必须说出应用和业务；应用别名只能替代应用名，仍须说业务；画质、时延、时长和个性化周期表达只能替代对应参数，仍须说应用和业务。业务默认应用不得覆盖支线，其余省略参数由 Agent 展开后确认。
      * 第1轮 Agent：依据历史记忆成功理解别名，并主动调取记忆中的精确配置（如 1080p原画、50ms以内、持续120分钟）向用户反问确认；
@@ -45,6 +45,7 @@ def build_batch_dialogue_prompt(prompt_items: list[dict], identity: str, speech:
      * Agent 礼貌拒绝该域外需求，说明本助手仅支持手机移动网络保障加速，不支持光纤宽带装维报修，建议拨打专线；agent_action_types 必须为 ["Reject_Request"]！
    - 特例2【混合诉求一办一拒 X-1】(rounds == 1):
      * 用户单句同时提出手机网络保障需求 (app/service) 和域外诉求（即 ood_goal，如话费充值与账单查询）；user_action_types 为 ["Create_Intent_Request", "Inform_Slot"]。
+     * 【时间词严谨约束】：若当前环境为工作日午休，用户严禁使用‘周末’字样，必须说‘午休’或‘今天中午’；若为周末午休才可说‘周末’！
      * Agent 接受并受理移动网络保障，同时拒绝域外诉求；agent_action_types 必须为 ["Acknowledge", "Reject_Request"]！
    - 特例3【三轮参数澄清 T3-1 与 歧义消解 T2-2】(rounds == 3 或 2):
      * 第1轮 User 必须明确官方应用名与业务名，可说明开始时间，但不说画质、时延、结束时间和时长；user_action_types 为 ["Create_Intent_Request", "Inform_Slot"]。
@@ -54,8 +55,8 @@ def build_batch_dialogue_prompt(prompt_items: list[dict], identity: str, speech:
      * 第2轮 Agent 答复已开通并收尾祝福，明确确认记录该配置与代称习惯；agent_action_types 必须为 ["Acknowledge"]。
    - 特例4【时长变更延长 T2-5】(rounds == 2):
      * 第1轮 User 提及老规矩保障；Agent 反问确认老规矩配置（agent_action_types 为 ["Confirm_Slot"]）。
-     * 第2轮 User 确认老规矩但提出因现场活动延长，要求将时长延长（user_action_types 必须包含 ["Confirm_Slot", "Modify_Request"]）。
-     * 第2轮 Agent 确认时长已延长并生效；agent_action_types 必须为 ["Acknowledge"]。
+     * 第2轮 User 确认老规矩但提出因现场活动延长，要求将时长延长（user_action_types 必须包含 ["Confirm_Slot", "Modify_Request"]）。【严禁使用‘半天’、‘大半天’、‘一上午’等存在歧义的模糊词汇，必须明确说出具体数字（如‘延长到3个小时’或‘延长到180分钟’）】！
+     * 第2轮 Agent 确认时长已延长并生效；agent_action_types 必须为 ["Acknowledge"]！
 
 2. 首次建联/证据会话 (evidence_session):
    - 若 declaration_mode == "explicit_declaration" (显式声明):
@@ -74,8 +75,8 @@ def build_batch_dialogue_prompt(prompt_items: list[dict], identity: str, speech:
 
 3. 记忆强化/复用 (reinforcement / reuse):
    - 若 active_memory 中包含 [provisional] (隐式偏好二次发生，触发固化契机):
-     第1轮 User: 再次在相似触发场景下提出需求（如：“今天又来执行XX任务了/又到这个时间了/又到这个地点了，跟上次一样就行”）。【严禁在第1轮使用'老规矩'与生僻别名】！
-     第1轮 Agent: 只能把 provisional 记录作为历史候选（history_filled），不能当作 active 记忆（memory_filled）直接使用。必须明确说是“上次记录”，并完整复述应用、业务、画质、时延、持续时长及本次起止时间，再询问是否按该配置开通并设为长期老规矩；不得声称用户此前“多次使用”。（agent_action_types包含 "Confirm_Slot"）。
+     第1轮 User: 再次在相似触发场景下提出需求（如：“今天又来执行XX任务了/又到这个时间了，做XX业务跟上次一样就行”），【必须包含业务名作为最小锚点，但严禁在第1轮提及应用名、老规矩与生僻别名】；
+     第1轮 Agent: 只能把 provisional 记录作为历史候选（history_filled），不能当作 active 记忆（memory_filled）直接使用。必须明确说是“上次记录”，结合业务名唤醒主线上次记录并完整复述应用、业务、画质、时延、持续时长及本次起止时间，再询问是否按该配置开通并设为长期老规矩；不得声称用户此前“多次使用”。（agent_action_types包含 "Confirm_Slot"）。
      第2轮 User: 明确确认固化，并在此刻按 turn1_requirement 登记指定的一项小记忆；业务类应登记“该业务未指定应用时的默认应用”，不得生造业务别名。（user_action_types包含 "Confirm_Slot"）。
      第2轮 Agent: 答复已开通并收尾祝福，正式记录老规矩与代称（agent_action_types: ["Acknowledge"]）。
    - 若 active_memory 包含 [active] (常规复用已生效记忆):
