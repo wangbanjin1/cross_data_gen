@@ -4,23 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>跨会话长程记忆认知架构演进方案：指标体系、工作记忆检索与经验记忆构造</title>
-    <!-- MathJax for rendering LaTeX formulas -->
-    <script>
-        window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']],
-                processEscapes: true
-            },
-            options: {
-                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-            },
-            chtml: {
-                matchFontHeight: false
-            }
-        };
-    </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js';"></script>
+    <!-- KaTeX 本地与多重 CDN 双通道高可用样式与字体 -->
+    <link rel="stylesheet" href="katex.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css';">
+    <script src="katex.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js';"></script>
     <!-- Highlight.js for code syntax highlighting -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light">
@@ -477,15 +465,62 @@
             font-size: 0.86rem;
         }
 
-        /* 数学公式容器 */
+        /* 数学公式容器增强样式 (LaTeX 渲染专用) */
         .math-block {
             background-color: var(--math-bg);
             border: 1px solid var(--math-border);
             border-radius: 8px;
-            padding: 14px 20px;
+            padding: 16px 20px;
             margin: 18px 0;
             overflow-x: auto;
             text-align: center;
+            position: relative;
+            box-shadow: var(--card-shadow);
+        }
+
+        .math-block .katex-display {
+            margin: 8px 0;
+        }
+
+        .math-block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .math-badge {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .math-copy-btn {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .math-copy-btn:hover {
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+            background: var(--surface-elevated);
+        }
+
+        .katex-inline {
+            padding: 0 2px;
+            display: inline-block;
+            vertical-align: -0.05em;
         }
 
         /* 渲染框图专区 (SVG Diagram Box Container) */
@@ -606,6 +641,7 @@
                     <li class="toc-item toc-level-3"><a href="#核心评测指标公式" class="toc-link">核心评测指标公式</a></li>
                     <li class="toc-item toc-level-2"><a href="#工作记忆工单账本检索" class="toc-link">工作记忆工单账本检索</a></li>
                     <li class="toc-item toc-level-3"><a href="#时态推断与检索流程图" class="toc-link">时态推断与检索流程图</a></li>
+                    <li class="toc-item toc-level-3"><a href="#时态相对指称计算与检索逻辑" class="toc-link">时态相对指称计算与检索逻辑</a></li>
                     <li class="toc-item toc-level-3"><a href="#历史工单流水账结构" class="toc-link">历史工单流水账结构</a></li>
                     <li class="toc-item toc-level-3"><a href="#工作记忆新增会话模板" class="toc-link">工作记忆新增会话模板</a></li>
                     <li class="toc-item toc-level-2"><a href="#经验记忆情境主动提议" class="toc-link">经验记忆情境主动提议</a></li>
@@ -771,8 +807,12 @@
                     <!-- 交互指标两条线 -->
                     <h2 id="交互指标两条线">交互指标两条线</h2>
                     <p>
-                        在数据构造与下游模型评测中，必须构建具备明确对照关系的**两条交互主线**：
+                        在数据构造与评测体系中，必须建立清晰可量化的评估标尺。系统以<strong>冷启动无记忆多轮澄清</strong>与<strong>热启动有记忆轮次极速压缩</strong>作为两条对照主线：
                     </p>
+                    <ul>
+                        <li><strong>主线一（冷启动无记忆多轮澄清线）</strong>：用户首次发起业务时，智能体严禁脑补参数或默认开通。首轮未提供关键槽位时必须精准反问澄清，严格保证交互轮数不少于 2 轮（典型为 2~3 轮），完成“用户发起 <span class="katex-inline" data-tex="\to"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\to</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> 客服反问澄清 <span class="katex-inline" data-tex="\to"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\to</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> 用户补全并确认 <span class="katex-inline" data-tex="\to"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\to</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></span> 客服受理收尾”的完整闭环，参数早泄率与擅自默认率必须为 0.0%；</li>
+                        <li><strong>主线二（热启动有记忆轮次极速压缩线）</strong>：智能体已沉淀相应语义偏好或唤醒历史工单时，准确命中记忆槽位并直接向用户反问确认，交互轮次收敛至 1~2 轮，免去繁琐基础参数盘问，实现极速闭环。</li>
+                    </ul>
 
                     <h3 id="冷热启动交互对照流图">冷热启动交互对照流图</h3>
                     <div class="diagram-container">
@@ -838,34 +878,66 @@
 
                     <div class="callout callout-important">
                         <div class="callout-title">指标一：交互轮数压缩增益 (Turn Compression Gain, TCG)</div>
-                        <p>衡量智能体在记忆生效后为用户交互带来的效率提速比：</p>
-                        <div class="math-block">
-                            $$\text{TCG} = \frac{\bar{T}_{\text{cold}} - \bar{T}_{\text{hot}}}{\bar{T}_{\text{cold}}}$$
+                        <p>用于衡量长程记忆机制为用户带来的交互轮次效率提升比率：</p>
+                        <div class="math-block" data-tex="\text{TCG} = \frac{\bar{T}_{\text{cold}} - \bar{T}_{\text{hot}}}{\bar{T}_{\text{cold}}}">
+                            <div class="math-block-header">
+                                <span class="math-badge">LaTeX · TCG 公式</span>
+                                <button class="math-copy-btn" onclick="copyLatex(this)" data-tex="\text{TCG} = \frac{\bar{T}_{\text{cold}} - \bar{T}_{\text{hot}}}{\bar{T}_{\text{cold}}}">复制 LaTeX</button>
+                            </div>
+                            <span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>TCG</mtext><mo>=</mo><mfrac><mrow><msub><mover accent="true"><mi>T</mi><mo>ˉ</mo></mover><mtext>cold</mtext></msub><mo>−</mo><msub><mover accent="true"><mi>T</mi><mo>ˉ</mo></mover><mtext>hot</mtext></msub></mrow><msub><mover accent="true"><mi>T</mi><mo>ˉ</mo></mover><mtext>cold</mtext></msub></mfrac></mrow><annotation encoding="application/x-tex">\text{TCG} = \frac{\bar{T}_{\text{cold}} - \bar{T}_{\text{hot}}}{\bar{T}_{\text{cold}}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord">TCG</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.3572em;vertical-align:-0.8601em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4971em;"><span style="top:-2.2899em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8201em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1667em;"><span class="mord">ˉ</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">cold</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8201em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1667em;"><span class="mord">ˉ</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">cold</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8201em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1667em;"><span class="mord">ˉ</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">hot</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8601em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span>
                         </div>
                         <p>
-                            其中 $\bar{T}_{\text{cold}}$ 为冷启动会话的平均交互轮数，$\bar{T}_{\text{hot}}$ 为热启动复用会话的平均交互轮数。<strong>达标基准：$\text{TCG} \ge 35\% \sim 50\%$</strong>。
+                            其中：
                         </p>
+                        <ul>
+                            <li><span class="katex-inline" data-tex="\bar{T}_{\text{cold}}"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover accent="true"><mi>T</mi><mo>ˉ</mo></mover><mtext>cold</mtext></msub></mrow><annotation encoding="application/x-tex">\bar{T}_{\text{cold}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9701em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8201em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1667em;"><span class="mord">ˉ</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">cold</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 表示无记忆冷启动会话的平均交互轮数（理论基准：<span class="katex-inline" data-tex="2.5 \sim 3.0"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2.5</mn><mo>∼</mo><mn>3.0</mn></mrow><annotation encoding="application/x-tex">2.5 \sim 3.0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2.5</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∼</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">3.0</span></span></span></span></span> 轮）；</li>
+                            <li><span class="katex-inline" data-tex="\bar{T}_{\text{hot}}"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover accent="true"><mi>T</mi><mo>ˉ</mo></mover><mtext>hot</mtext></msub></mrow><annotation encoding="application/x-tex">\bar{T}_{\text{hot}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9701em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8201em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1667em;"><span class="mord">ˉ</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">hot</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 表示有记忆热启动会话的平均交互轮数（理论基准：<span class="katex-inline" data-tex="1.0 \sim 2.0"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1.0</mn><mo>∼</mo><mn>2.0</mn></mrow><annotation encoding="application/x-tex">1.0 \sim 2.0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1.0</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∼</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2.0</span></span></span></span></span> 轮）；</li>
+                            <li><strong>基准目标</strong>：<span class="katex-inline" data-tex="\text{TCG} \ge 35\% \sim 50\%"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>TCG</mtext><mo>≥</mo><mn>35</mn><mi mathvariant="normal">%</mi><mo>∼</mo><mn>50</mn><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">\text{TCG} \ge 35\% \sim 50\%</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8193em;vertical-align:-0.136em;"></span><span class="mord text"><span class="mord">TCG</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8056em;vertical-align:-0.0556em;"></span><span class="mord">35%</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∼</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8056em;vertical-align:-0.0556em;"></span><span class="mord">50%</span></span></span></span></span>。</li>
+                        </ul>
                     </div>
 
                     <div class="callout callout-warn">
                         <div class="callout-title">指标二：零记忆澄清完整率 (Cold-Start Clarification Rate, CSCR)</div>
-                        <p>验证在无记忆状态下，智能体杜绝私自默认填充的抗幻觉能力：</p>
-                        <div class="math-block">
-                            $$\text{CSCR} = \frac{N_{\text{valid\_clarification}}}{N_{\text{cold\_sessions}}} \times 100\%$$
+                        <p>衡量智能体在无先验记忆时的抗幻觉与规范反问能力：</p>
+                        <div class="math-block" data-tex="\text{CSCR} = \frac{N_{\text{valid\_clarification}}}{N_{\text{cold\_sessions}}} \times 100\%">
+                            <div class="math-block-header">
+                                <span class="math-badge">LaTeX · CSCR 公式</span>
+                                <button class="math-copy-btn" onclick="copyLatex(this)" data-tex="\text{CSCR} = \frac{N_{\text{valid\_clarification}}}{N_{\text{cold\_sessions}}} \times 100\%">复制 LaTeX</button>
+                            </div>
+                            <span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>CSCR</mtext><mo>=</mo><mfrac><msub><mi>N</mi><mtext>valid_clarification</mtext></msub><msub><mi>N</mi><mtext>cold_sessions</mtext></msub></mfrac><mo>×</mo><mn>100</mn><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">\text{CSCR} = \frac{N_{\text{valid\_clarification}}}{N_{\text{cold\_sessions}}} \times 100\%</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord">CSCR</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.4933em;vertical-align:-1.053em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4403em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">cold_sessions</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.367em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.757em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">valid_clarification</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.367em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.053em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8056em;vertical-align:-0.0556em;"></span><span class="mord">100%</span></span></span></span></span>
                         </div>
                         <p>
-                            首轮通信槽位缺失时，智能体行为必须包含 <code>Clarify_Slot</code> 或 <code>Request_Info</code>，且严禁提前写入未提及的参数。<strong>目标达标线：100.0%</strong>。
+                            首轮缺少画质/时延/时长等关键通信槽位时，智能体动作必须包含 <code>Clarify_Slot</code> 或 <code>Request_Info</code>，且严禁提前私自默认开通。<strong>目标达标线：100.0%</strong>。
                         </p>
                     </div>
 
                     <div class="callout callout-note">
                         <div class="callout-title">指标三：工作记忆单据检索准确率 (Episodic Record Retrieval Accuracy, ERRA)</div>
-                        <p>当用户台词出现时态相对代词时，模型定位目标历史工单的命中率：</p>
-                        <div class="math-block">
-                            $$\text{ERRA} = \frac{N_{\text{correct\_record\_retrieved}}}{N_{\text{relative\_time\_sessions}}} \times 100\%$$
+                        <p>衡量用户使用时态相对代词时，模型在历史工单流水账中定位目标单据的准确率：</p>
+                        <div class="math-block" data-tex="\text{ERRA} = \frac{N_{\text{correct\_record\_retrieved}}}{N_{\text{relative\_time\_sessions}}} \times 100\%">
+                            <div class="math-block-header">
+                                <span class="math-badge">LaTeX · ERRA 公式</span>
+                                <button class="math-copy-btn" onclick="copyLatex(this)" data-tex="\text{ERRA} = \frac{N_{\text{correct\_record\_retrieved}}}{N_{\text{relative\_time\_sessions}}} \times 100\%">复制 LaTeX</button>
+                            </div>
+                            <span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>ERRA</mtext><mo>=</mo><mfrac><msub><mi>N</mi><mtext>correct_record_retrieved</mtext></msub><msub><mi>N</mi><mtext>relative_time_sessions</mtext></msub></mfrac><mo>×</mo><mn>100</mn><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">\text{ERRA} = \frac{N_{\text{correct\_record\_retrieved}}}{N_{\text{relative\_time\_sessions}}} \times 100\%</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord">ERRA</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.4933em;vertical-align:-1.053em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4403em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">relative_time_sessions</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.367em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.757em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">correct_record_retrieved</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.367em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.053em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8056em;vertical-align:-0.0556em;"></span><span class="mord">100%</span></span></span></span></span>
                         </div>
                         <p>
-                            提取的单据 ID 与参数继承准确率必须达到 <strong>100.0%</strong>。
+                            提取的历史单据 ID 与参数继承准确率必须与标注真值严格一致。<strong>目标达标线：100.0%</strong>。
+                        </p>
+                    </div>
+
+                    <div class="callout callout-important">
+                        <div class="callout-title">指标四：经验记忆情境激活与采纳率 (Experiential Memory Trigger & Acceptance Rate, EMTAR)</div>
+                        <p>衡量在特定外场困难情境下，智能体经验建议被合理触发并被用户采纳的比例：</p>
+                        <div class="math-block" data-tex="\text{EMTAR} = \frac{N_{\text{accepted\_experience\_suggestions}}}{N_{\text{experience\_trigger\_contexts}}} \times 100\%">
+                            <div class="math-block-header">
+                                <span class="math-badge">LaTeX · EMTAR 公式</span>
+                                <button class="math-copy-btn" onclick="copyLatex(this)" data-tex="\text{EMTAR} = \frac{N_{\text{accepted\_experience\_suggestions}}}{N_{\text{experience\_trigger\_contexts}}} \times 100\%">复制 LaTeX</button>
+                            </div>
+                            <span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>EMTAR</mtext><mo>=</mo><mfrac><msub><mi>N</mi><mtext>accepted_experience_suggestions</mtext></msub><msub><mi>N</mi><mtext>experience_trigger_contexts</mtext></msub></mfrac><mo>×</mo><mn>100</mn><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">\text{EMTAR} = \frac{N_{\text{accepted\_experience\_suggestions}}}{N_{\text{experience\_trigger\_contexts}}} \times 100\%</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord">EMTAR</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.4933em;vertical-align:-1.053em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4403em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3175em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">experience_trigger_contexts</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.367em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.757em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">accepted_experience_suggestions</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.367em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.053em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8056em;vertical-align:-0.0556em;"></span><span class="mord">100%</span></span></span></span></span>
+                        </div>
+                        <p>
+                            在识别到特定现场外部挑战（如人流高密拥塞、恶劣天气弱网丢包）时，智能体经验提议命中并被用户确认采纳的比例。<strong>目标达标线：&ge; 90.0%</strong>。
                         </p>
                     </div>
 
@@ -924,6 +996,17 @@
                         </svg>
                         <div class="diagram-caption">图 3：工作记忆时态推断与历史工单检索流程图</div>
                     </div>
+
+                    <h3 id="时态相对指称计算与检索逻辑">时态相对指称计算与检索逻辑</h3>
+                    <p>
+                        系统根据当前会话的基准时间 <code>reference_time</code>，动态计算与历史各工单单据的时间差 <span class="katex-inline" data-tex="\Delta t"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">\Delta t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Δ</span><span class="mord mathnormal">t</span></span></span></span></span>，并构建精准自然的口语指代：
+                    </p>
+                    <ul>
+                        <li><strong><span class="katex-inline" data-tex="\Delta t = 1"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>t</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\Delta t = 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Δ</span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> 天</strong>：映射为“昨天”或“昨天的那个保障”；</li>
+                        <li><strong><span class="katex-inline" data-tex="\Delta t = 2"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>t</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">\Delta t = 2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Δ</span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span></span></span></span></span> 天</strong>：映射为“前天”；</li>
+                        <li><strong><span class="katex-inline" data-tex="3 \le \Delta t \le 7"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>≤</mo><mi mathvariant="normal">Δ</mi><mi>t</mi><mo>≤</mo><mn>7</mn></mrow><annotation encoding="application/x-tex">3 \le \Delta t \le 7</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7804em;vertical-align:-0.136em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8193em;vertical-align:-0.136em;"></span><span class="mord">Δ</span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">7</span></span></span></span></span> 天</strong>：映射为“上周”或“上周同期的保障”；</li>
+                        <li><strong>同类型最近一条记录</strong>：映射为“上次”或“上回在[地点]办的那个”。</li>
+                    </ul>
 
                     <h3 id="历史工单流水账结构">历史工单流水账结构</h3>
                     <pre><code class="language-json">{
@@ -1021,6 +1104,16 @@
                     </div>
 
                     <h3 id="经验记忆本体定义">经验记忆本体定义</h3>
+                    <p>
+                        经验记忆不是固定的槽位配置，而是<strong>结构化的情境决策知识库</strong>，形式化定义为四元组：
+                    </p>
+                    <div class="math-block" data-tex="\text{Experience} = \langle \text{Trigger Context}, \text{Identified Problem}, \text{Empirical Solution}, \text{Outcome Reflection} \rangle">
+                        <div class="math-block-header">
+                            <span class="math-badge">LaTeX · 经验四元组形式化定义</span>
+                            <button class="math-copy-btn" onclick="copyLatex(this)" data-tex="\text{Experience} = \langle \text{Trigger Context}, \text{Identified Problem}, \text{Empirical Solution}, \text{Outcome Reflection} \rangle">复制 LaTeX</button>
+                        </div>
+                        <span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Experience</mtext><mo>=</mo><mo stretchy="false">⟨</mo><mtext>Trigger Context</mtext><mo separator="true">,</mo><mtext>Identified Problem</mtext><mo separator="true">,</mo><mtext>Empirical Solution</mtext><mo separator="true">,</mo><mtext>Outcome Reflection</mtext><mo stretchy="false">⟩</mo></mrow><annotation encoding="application/x-tex">\text{Experience} = \langle \text{Trigger Context}, \text{Identified Problem}, \text{Empirical Solution}, \text{Outcome Reflection} \rangle</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord">Experience</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">⟨</span><span class="mord text"><span class="mord">Trigger Context</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord text"><span class="mord">Identified Problem</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord text"><span class="mord">Empirical Solution</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord text"><span class="mord">Outcome Reflection</span></span><span class="mclose">⟩</span></span></span></span></span>
+                    </div>
                     <pre><code class="language-json">{
   "experience_id": "EXP_STADIUM_CONGESTION_01",
   "domain": "大型场馆高密人流保障",
@@ -1168,6 +1261,24 @@ python scripts/evaluate_memory_benchmark.py --input data/generated</code></pre>
                 hljs.highlightAll();
             }
         });
+
+        // 复制 LaTeX 公式源码
+        function copyLatex(btn) {
+            const tex = btn.getAttribute('data-tex');
+            if (tex) {
+                navigator.clipboard.writeText(tex).then(() => {
+                    const orig = btn.innerText;
+                    btn.innerText = '已复制 LaTeX';
+                    btn.style.color = 'var(--accent-primary)';
+                    setTimeout(() => {
+                        btn.innerText = orig;
+                        btn.style.color = '';
+                    }, 1800);
+                }).catch(err => {
+                    console.error('复制失败:', err);
+                });
+            }
+        }
     </script>
 </body>
 </html>
