@@ -1530,9 +1530,1012 @@ def render_html_page(md_path: Path, html_path: Path):
     html_path.write_text(full_html, encoding="utf-8")
     print(f"[✓] 渲染完成！已成功输出: {html_path} (大小: {len(full_html) // 1024} KB)")
 
+
+
+# ==============================================================================
+# 通用认知架构与演进规划文档渲染器 (用于 memory_evolution_plan.md 等)
+# ==============================================================================
+
+DOC_HTML_SHELL = """<!DOCTYPE html>
+<html lang="zh-CN" data-theme="parchment">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{PAGE_TITLE}</title>
+    <!-- KaTeX 本地与多重 CDN 双通道高可用样式与字体 -->
+    <link rel="stylesheet" href="katex.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css';">
+    <script src="katex.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js';"></script>
+    <!-- Highlight.js for code syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light">
+    <!-- Mermaid.js for dynamic diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root[data-theme="parchment"] {
+            --bg-color: #f7f4ec;
+            --surface-color: #eee9dc;
+            --surface-elevated: #e6dfcf;
+            --border-color: #dcd4c0;
+            --border-subtle: #e6dfd1;
+            --text-primary: #2d3748;
+            --text-secondary: #5c687a;
+            --text-muted: #798696;
+            --accent-primary: #a35d28;
+            --accent-glow: rgba(163, 93, 40, 0.08);
+            --code-bg: #eae3d2;
+            --code-text: #8d3a2b;
+            --pre-bg: #ece5d6;
+            --pre-text: #2d3748;
+            --callout-note-bg: #e5ede3;
+            --callout-note-border: #709775;
+            --callout-note-text: #2b5133;
+            --callout-warn-bg: #f5eedb;
+            --callout-warn-border: #c48a37;
+            --callout-warn-text: #704b12;
+            --callout-imp-bg: #e5eaf5;
+            --callout-imp-border: #5c7cb6;
+            --callout-imp-text: #1e3863;
+            --math-bg: #eee7d7;
+            --math-border: #c9bea6;
+            --table-header: #e4dccb;
+            --table-alt: #f1ecdf;
+            --tag-bg: #dfd5be;
+            --tag-text: #59472d;
+            --toggle-bg: #dfd6c2;
+            --card-shadow: 0 4px 18px rgba(45, 55, 72, 0.04);
+            --card-hover-shadow: 0 8px 24px rgba(163, 93, 40, 0.1);
+            --diagram-bg: #fbf9f3;
+            --diagram-box-bg: #ffffff;
+            --diagram-box-border: #d2c8b2;
+            --diagram-text: #2d3748;
+            --diagram-arrow: #8c7853;
+        }
+
+        :root[data-theme="twilight"] {
+            --bg-color: #1a1e24;
+            --surface-color: #232931;
+            --surface-elevated: #2c343f;
+            --border-color: #39424e;
+            --border-subtle: #2d3642;
+            --text-primary: #dce1e8;
+            --text-secondary: #9da7b3;
+            --text-muted: #707b88;
+            --accent-primary: #e09f67;
+            --accent-glow: rgba(224, 159, 103, 0.1);
+            --code-bg: #15181d;
+            --code-text: #f08d70;
+            --pre-bg: #171b21;
+            --pre-text: #cdd3dc;
+            --callout-note-bg: #202b28;
+            --callout-note-border: #4d7a68;
+            --callout-note-text: #8bbfa8;
+            --callout-warn-bg: #2b251d;
+            --callout-warn-border: #8a6c38;
+            --callout-warn-text: #d9b168;
+            --callout-imp-bg: #1d2533;
+            --callout-imp-border: #4a638c;
+            --callout-imp-text: #96b5e3;
+            --math-bg: #1f252d;
+            --math-border: #3b4654;
+            --table-header: #262e38;
+            --table-alt: #1f242c;
+            --tag-bg: #323c48;
+            --tag-text: #d2a679;
+            --toggle-bg: #323b47;
+            --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
+            --card-hover-shadow: 0 8px 24px rgba(224, 159, 103, 0.15);
+            --diagram-bg: #171b21;
+            --diagram-box-bg: #222933;
+            --diagram-box-border: #3f4c5e;
+            --diagram-text: #dce1e8;
+            --diagram-arrow: #e09f67;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-size: 15px;
+            padding: 0;
+            margin: 0;
+        }
+
+        .layout-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 侧边栏 TOC */
+        .sidebar-toc {
+            width: 290px;
+            background-color: var(--surface-color);
+            border-right: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding: 24px 18px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            z-index: 100;
+        }
+
+        .toc-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 12px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .toc-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .toc-action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            padding: 4px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toc-action-btn:hover {
+            color: var(--accent-primary);
+            background-color: var(--surface-elevated);
+        }
+
+        .toc-body {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-item {
+            margin-bottom: 4px;
+        }
+
+        .toc-item.toc-level-2 {
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        .toc-item.toc-level-3 {
+            padding-left: 14px;
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+        }
+
+        .toc-link {
+            display: block;
+            padding: 4px 8px;
+            color: inherit;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.2s;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .toc-link:hover {
+            background-color: var(--surface-elevated);
+            color: var(--accent-primary);
+        }
+
+        .toc-link.active {
+            background-color: var(--accent-glow);
+            color: var(--accent-primary);
+            font-weight: 700;
+            border-left: 3px solid var(--accent-primary);
+        }
+
+        /* 主内容区域 */
+        .main-content {
+            flex: 1;
+            padding: 36px 48px 80px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 6px;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            background-color: var(--surface-elevated);
+        }
+
+        .theme-switch-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 6px;
+            background-color: var(--toggle-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .theme-switch-btn:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        /* Markdown 内容体 */
+        .markdown-body {
+            color: var(--text-primary);
+        }
+
+        .markdown-body h1 {
+            font-size: 1.95rem;
+            font-weight: 800;
+            line-height: 1.35;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .markdown-body h2 {
+            font-size: 1.45rem;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-top: 48px;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .markdown-body h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            line-height: 1.45;
+            margin-top: 30px;
+            margin-bottom: 14px;
+            color: var(--text-primary);
+        }
+
+        .markdown-body h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-top: 22px;
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+        }
+
+        .markdown-body p {
+            margin-bottom: 16px;
+            line-height: 1.75;
+            color: var(--text-primary);
+        }
+
+        .markdown-body ul, .markdown-body ol {
+            margin-bottom: 18px;
+            padding-left: 24px;
+        }
+
+        .markdown-body li {
+            margin-bottom: 8px;
+            line-height: 1.7;
+        }
+
+        .markdown-body strong {
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .markdown-body code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .markdown-body pre {
+            background-color: var(--pre-bg);
+            color: var(--pre-text);
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            margin: 18px 0 24px;
+            line-height: 1.5;
+        }
+
+        .markdown-body pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: 0.88rem;
+        }
+
+        .doc-intro {
+            background-color: var(--surface-color);
+            border-left: 4px solid var(--accent-primary);
+            padding: 16px 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 32px;
+            color: var(--text-secondary);
+            font-size: 0.96rem;
+            line-height: 1.7;
+        }
+
+        blockquote {
+            background-color: var(--surface-color);
+            border-left: 4px solid var(--border-color);
+            padding: 12px 18px;
+            margin: 18px 0;
+            border-radius: 0 6px 6px 0;
+            color: var(--text-secondary);
+        }
+
+        .table-wrapper {
+            margin: 22px 0 28px;
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+            text-align: left;
+        }
+
+        thead tr {
+            background-color: var(--table-header);
+        }
+
+        th {
+            padding: 11px 14px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        td {
+            padding: 11px 14px;
+            border-bottom: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: var(--table-alt);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .diagram-container {
+            margin: 24px 0 32px;
+            padding: 24px;
+            background-color: var(--diagram-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: var(--card-shadow);
+        }
+
+        .diagram-caption {
+            margin-top: 14px;
+            font-size: 0.86rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 0.03em;
+        }
+
+        .math-block {
+            background-color: var(--math-bg);
+            border: 1px solid var(--math-border);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 18px 0 24px;
+            position: relative;
+        }
+
+        .math-block-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.78rem;
+        }
+
+        .math-badge {
+            color: var(--accent-primary);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .math-copy-btn {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .math-copy-btn:hover {
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .roadmap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 16px;
+            margin: 24px 0 32px;
+        }
+
+        .roadmap-card {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 18px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .roadmap-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--card-hover-shadow);
+            border-color: var(--accent-primary);
+        }
+
+        .roadmap-phase {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .roadmap-title {
+            font-size: 1.02rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .roadmap-desc {
+            font-size: 0.86rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        body.toc-collapsed .sidebar-toc {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="layout-wrapper">
+        <aside class="sidebar-toc" id="sidebarToc">
+            <div class="toc-header">
+                <div class="toc-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="8" y1="6" x2="21" y2="6"></line>
+                        <line x1="8" y1="12" x2="21" y2="12"></line>
+                        <line x1="8" y1="18" x2="21" y2="18"></line>
+                        <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                        <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                        <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                    </svg>
+                    <span>目录大纲</span>
+                </div>
+                <button class="toc-action-btn" onclick="toggleDesktopToc()" title="收起大纲">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+            </div>
+            <nav class="toc-body">
+                <ul class="toc-list">
+{TOC_ITEMS}
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="container">
+                <div class="top-bar">
+                    <div class="nav-links">
+                        <button class="nav-btn" id="expandTocBtn" onclick="toggleDesktopToc()" style="display: none;" title="展开大纲侧边栏">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                            <span>显示大纲</span>
+                        </button>
+                        <a href="update.html" class="nav-btn">排查手册 update.html</a>
+                        <span style="color: var(--border-color)">|</span>
+                        <span style="font-size: 0.88rem; color: var(--text-muted);">{MD_FILENAME}</span>
+                    </div>
+                    <button class="theme-switch-btn" onclick="toggleTheme()" id="themeBtn">
+                        切换暮色
+                    </button>
+                </div>
+
+                <article class="markdown-body">
+{ARTICLE_BODY}
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'parchment' ? 'twilight' : 'parchment';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            document.getElementById('themeBtn').innerText = newTheme === 'parchment' ? '切换暮色' : '切换米纸';
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'parchment';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.getElementById('themeBtn').innerText = savedTheme === 'parchment' ? '切换暮色' : '切换米纸';
+
+        function toggleDesktopToc() {
+            document.body.classList.toggle('toc-collapsed');
+            const isCollapsed = document.body.classList.contains('toc-collapsed');
+            document.getElementById('expandTocBtn').style.display = isCollapsed ? 'inline-flex' : 'none';
+        }
+
+        function copyLatex(btn) {
+            const tex = btn.getAttribute('data-tex');
+            if (tex) {
+                navigator.clipboard.writeText(tex).then(() => {
+                    const orig = btn.innerText;
+                    btn.innerText = '已复制 LaTeX';
+                    btn.style.color = 'var(--accent-primary)';
+                    setTimeout(() => {
+                        btn.innerText = orig;
+                        btn.style.color = '';
+                    }, 1800);
+                }).catch(err => {
+                    console.error('复制失败:', err);
+                });
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.katex) {
+                document.querySelectorAll('.katex-inline').forEach(el => {
+                    const tex = el.getAttribute('data-tex');
+                    if (tex) {
+                        try {
+                            el.innerHTML = katex.renderToString(tex, { displayMode: false, throwOnError: false });
+                        } catch(e) {}
+                    }
+                });
+
+                document.querySelectorAll('.katex-display-container').forEach(el => {
+                    const tex = el.getAttribute('data-tex');
+                    if (tex) {
+                        try {
+                            el.innerHTML = katex.renderToString(tex, { displayMode: true, throwOnError: false });
+                        } catch(e) {}
+                    }
+                });
+            }
+
+            if (window.mermaid) {
+                mermaid.initialize({
+                    startOnLoad: true,
+                    theme: document.documentElement.getAttribute('data-theme') === 'twilight' ? 'dark' : 'neutral'
+                });
+            }
+
+            if (window.hljs) {
+                hljs.highlightAll();
+            }
+
+            const links = document.querySelectorAll('.toc-link');
+            const sections = [];
+            links.forEach(link => {
+                const targetId = link.getAttribute('href').slice(1);
+                const section = document.getElementById(targetId);
+                if (section) {
+                    sections.push({ id: targetId, el: section, link: link });
+                }
+            });
+
+            window.addEventListener('scroll', () => {
+                const scrollPos = window.scrollY + 100;
+                let activeId = null;
+                for (let i = 0; i < sections.length; i++) {
+                    if (sections[i].el.offsetTop <= scrollPos) {
+                        activeId = sections[i].id;
+                    }
+                }
+                links.forEach(link => {
+                    if (link.getAttribute('href') === '#' + activeId) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+"""
+
+def parse_doc_markdown(md_text: str):
+    lines = md_text.splitlines()
+    title = "跨会话长程记忆认知架构演进方案"
+    body_parts = []
+    toc_items = []
+    
+    i = 0
+    n = len(lines)
+    
+    in_code_block = False
+    code_lang = ""
+    code_lines = []
+    
+    in_raw_html_block = False
+    raw_html_lines = []
+    
+    in_table = False
+    table_lines = []
+    
+    def flush_table():
+        nonlocal in_table, table_lines
+        if not in_table or not table_lines:
+            in_table = False
+            table_lines = []
+            return
+        
+        headers = [c.strip() for c in table_lines[0].strip('|').split('|')]
+        rows = []
+        for line in table_lines[2:]:
+            cols = [c.strip() for c in line.strip('|').split('|')]
+            if cols:
+                rows.append(cols)
+                
+        th_html = "".join([f"<th>{h}</th>" for h in headers])
+        tr_html = []
+        for r in rows:
+            tds = []
+            for c in r:
+                c_fmt = c
+                c_fmt = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', c_fmt)
+                c_fmt = re.sub(r'`(.*?)`', r'<code>\1</code>', c_fmt)
+                c_fmt = re.sub(r'\$(.*?)\$', r'<span class="katex-inline" data-tex="\1">$\1$</span>', c_fmt)
+                tds.append(f"<td>{c_fmt}</td>")
+            tr_html.append(f"<tr>{''.join(tds)}</tr>")
+            
+        table_html = f"""
+        <div class="table-wrapper">
+            <table>
+                <thead><tr>{th_html}</tr></thead>
+                <tbody>
+                    {''.join(tr_html)}
+                </tbody>
+            </table>
+        </div>
+        """
+        body_parts.append(table_html)
+        in_table = False
+        table_lines = []
+
+    while i < n:
+        line = lines[i]
+        line_s = line.strip()
+        
+        # Raw HTML (like <div class="diagram-container"> or <svg> or <div class="roadmap-grid">)
+        if not in_code_block and not in_raw_html_block:
+            if line_s.startswith('<div class="diagram-container">') or line_s.startswith('<svg') or line_s.startswith('<div class="roadmap-grid">'):
+                flush_table()
+                in_raw_html_block = True
+                raw_html_lines = [line]
+                i += 1
+                continue
+                
+        if in_raw_html_block:
+            raw_html_lines.append(line)
+            if line_s == '</div>' and (len(raw_html_lines) > 2 and ('</div>' in raw_html_lines[-2] or '</svg>' in raw_html_lines[-2] or '</div>' in raw_html_lines[-1])):
+                body_parts.append("\n".join(raw_html_lines))
+                in_raw_html_block = False
+                raw_html_lines = []
+            elif line_s == '</svg>' and not any('diagram-container' in l for l in raw_html_lines):
+                body_parts.append("\n".join(raw_html_lines))
+                in_raw_html_block = False
+                raw_html_lines = []
+            i += 1
+            continue
+
+        # Code block
+        if line_s.startswith('```'):
+            flush_table()
+            if in_code_block:
+                in_code_block = False
+                full_code = "\n".join(code_lines)
+                if code_lang == 'mermaid':
+                    body_parts.append(f'<div class="mermaid">\n{full_code}\n</div>')
+                else:
+                    body_parts.append(f'<pre><code class="language-{code_lang}">{html.escape(full_code)}</code></pre>')
+                code_lines = []
+                code_lang = ""
+            else:
+                in_code_block = True
+                code_lang = line_s[3:].strip()
+                code_lines = []
+            i += 1
+            continue
+            
+        if in_code_block:
+            code_lines.append(line)
+            i += 1
+            continue
+            
+        # Table
+        if line_s.startswith('|') and line_s.endswith('|'):
+            in_table = True
+            table_lines.append(line_s)
+            i += 1
+            continue
+        elif in_table:
+            flush_table()
+
+        if not line_s:
+            i += 1
+            continue
+            
+        # HTML comments
+        if line_s.startswith('<!--'):
+            body_parts.append(line)
+            i += 1
+            continue
+            
+        # Title (# )
+        if line_s.startswith('# '):
+            title = line_s[2:].strip()
+            body_parts.append(f'<h1>{title}</h1>')
+            i += 1
+            continue
+            
+        # Intro blockquote
+        if line_s.startswith('> **文档定位**') or line_s.startswith('> **方案概述**'):
+            intro_text = line_s[1:].strip()
+            intro_text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', intro_text)
+            body_parts.append(f'<div class="doc-intro">{intro_text}</div>')
+            i += 1
+            continue
+            
+        if line_s.startswith('> '):
+            quote_text = line_s[2:].strip()
+            quote_text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', quote_text)
+            body_parts.append(f'<blockquote><p>{quote_text}</p></blockquote>')
+            i += 1
+            continue
+            
+        if line_s in ['---', '***', '___']:
+            body_parts.append('<hr style="border: none; border-top: 1px solid var(--border-color); margin: 36px 0;">')
+            i += 1
+            continue
+            
+        # Headings
+        if line_s.startswith('## '):
+            h_text = line_s[3:].strip()
+            h_id = re.sub(r'[\s、，（）()]+', '_', h_text).strip('_')
+            toc_items.append({'level': 2, 'id': h_id, 'title': h_text})
+            body_parts.append(f'<h2 id="{h_id}">{h_text}</h2>')
+            i += 1
+            continue
+            
+        if line_s.startswith('### '):
+            h_text = line_s[4:].strip()
+            h_id = re.sub(r'[\s、，（）()]+', '_', h_text).strip('_')
+            toc_items.append({'level': 3, 'id': h_id, 'title': h_text})
+            body_parts.append(f'<h3 id="{h_id}">{h_text}</h3>')
+            i += 1
+            continue
+
+        if line_s.startswith('#### '):
+            h_text = line_s[5:].strip()
+            h_id = re.sub(r'[\s、，（）()]+', '_', h_text).strip('_')
+            body_parts.append(f'<h4 id="{h_id}">{h_text}</h4>')
+            i += 1
+            continue
+            
+        # Display Math ($$...$$)
+        if line_s.startswith('$$'):
+            math_lines = []
+            if line_s.endswith('$$') and len(line_s) > 2:
+                tex = line_s[2:-2].strip()
+            else:
+                math_lines.append(line_s[2:].strip())
+                i += 1
+                while i < n and not lines[i].strip().endswith('$$'):
+                    math_lines.append(lines[i])
+                    i += 1
+                if i < n:
+                    last_l = lines[i].strip()
+                    math_lines.append(last_l[:-2].strip())
+                tex = "\n".join(math_lines).strip()
+                
+            block_html = f"""
+            <div class="math-block" data-tex="{html.escape(tex)}">
+                <div class="math-block-header">
+                    <span class="math-badge">LaTeX · 公式定义</span>
+                    <button class="math-copy-btn" onclick="copyLatex(this)" data-tex="{html.escape(tex)}">复制 LaTeX</button>
+                </div>
+                <div class="katex-display-container" data-tex="{html.escape(tex)}"></div>
+            </div>
+            """
+            body_parts.append(block_html)
+            i += 1
+            continue
+            
+        # Bullet list
+        if line_s.startswith('- ') or line_s.startswith('* '):
+            list_items = []
+            while i < n and (lines[i].strip().startswith('- ') or lines[i].strip().startswith('* ')):
+                item_text = lines[i].strip()[2:].strip()
+                item_text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', item_text)
+                item_text = re.sub(r'`(.*?)`', r'<code>\1</code>', item_text)
+                item_text = re.sub(r'\$(.*?)\$', r'<span class="katex-inline" data-tex="\1">$\1$</span>', item_text)
+                list_items.append(f'<li>{item_text}</li>')
+                i += 1
+            body_parts.append(f'<ul>\n{"".join(list_items)}\n</ul>')
+            continue
+            
+        # Numbered list
+        num_m = re.match(r'^\d+\.\s+(.*)', line_s)
+        if num_m:
+            list_items = []
+            while i < n and re.match(r'^\d+\.\s+(.*)', lines[i].strip()):
+                item_text = re.match(r'^\d+\.\s+(.*)', lines[i].strip()).group(1)
+                item_text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', item_text)
+                item_text = re.sub(r'`(.*?)`', r'<code>\1</code>', item_text)
+                item_text = re.sub(r'\$(.*?)\$', r'<span class="katex-inline" data-tex="\1">$\1$</span>', item_text)
+                list_items.append(f'<li>{item_text}</li>')
+                i += 1
+            body_parts.append(f'<ol>\n{"".join(list_items)}\n</ol>')
+            continue
+            
+        # Normal paragraph
+        p_text = line
+        p_text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', p_text)
+        p_text = re.sub(r'`(.*?)`', r'<code>\1</code>', p_text)
+        p_text = re.sub(r'\$(.*?)\$', r'<span class="katex-inline" data-tex="\1">$\1$</span>', p_text)
+        body_parts.append(f'<p>{p_text}</p>')
+        i += 1
+
+    flush_table()
+    
+    toc_html_list = []
+    for item in toc_items:
+        cls = "toc-level-2" if item['level'] == 2 else "toc-level-3"
+        toc_html_list.append(f'<li class="toc-item {cls}"><a href="#{item["id"]}" class="toc-link">{item["title"]}</a></li>')
+        
+    toc_html = "\n".join(toc_html_list)
+    body_html = "\n".join(body_parts)
+    return title, toc_html, body_html
+
+def render_evolution_plan_page(md_path: Path, html_path: Path):
+    print(f"[*] 读取 Markdown 源文件: {md_path}")
+    md_text = md_path.read_text(encoding="utf-8")
+    title, toc_html, body_html = parse_doc_markdown(md_text)
+    
+    full_html = DOC_HTML_SHELL
+    full_html = full_html.replace("{PAGE_TITLE}", title)
+    full_html = full_html.replace("{MD_FILENAME}", md_path.name)
+    full_html = full_html.replace("{TOC_ITEMS}", toc_html)
+    full_html = full_html.replace("{ARTICLE_BODY}", body_html)
+    
+    html_path.write_text(full_html, encoding="utf-8")
+    print(f"[+] 渲染完成！已成功输出: {html_path} (大小: {len(full_html) // 1024} KB)")
+
+
 if __name__ == '__main__':
-    md_p, html_p = get_paths()
-    if not md_p.exists():
-        print(f"[ERROR] 找不到 Markdown 源文件: {md_p}")
-        sys.exit(1)
-    render_html_page(md_p, html_p)
+    curr_dir = Path(__file__).resolve().parent
+    args = sys.argv[1:]
+    
+    if args:
+        target = Path(args[0])
+        if not target.is_absolute():
+            target = (curr_dir / target) if (curr_dir / target).exists() else target.resolve()
+            
+        if not target.exists():
+            print(f"[ERROR] 找不到指定的 Markdown 文件: {target}")
+            sys.exit(1)
+            
+        if "update" in target.name.lower():
+            render_html_page(target, target.with_suffix(".html"))
+        else:
+            render_evolution_plan_page(target, target.with_suffix(".html"))
+    else:
+        # 无参数模式：自动全量渲染 docs/ 下的主要 Markdown 文档
+        print("=" * 60)
+        print("[*] render_html.py: 扫描并全量渲染 Markdown 文档")
+        print("=" * 60)
+        
+        up_md = curr_dir / "update.md"
+        if up_md.exists():
+            render_html_page(up_md, curr_dir / "update.html")
+            
+        ev_md = curr_dir / "memory_evolution_plan.md"
+        if ev_md.exists():
+            render_evolution_plan_page(ev_md, curr_dir / "memory_evolution_plan.html")
+            
+        print("=" * 60)
+        print("[+] 全部文档渲染完成！")
+        print("=" * 60)
