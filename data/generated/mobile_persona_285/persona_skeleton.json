@@ -1,0 +1,176 @@
+{
+  "persona_id": "mobile_persona_285",
+  "category": "公共安全与移动执勤",
+  "persona_summary": "移动执勤人员",
+  "static_profile": {
+    "user_id": "USER_285",
+    "identity": "一线移动执勤人员，日常在城市道路、巡逻区域、临时处置现场与夜间值守点之间高频流动，长期依赖手机移动核心网完成地图导航、位置共享、任务调度、现场取证与事件上报，几乎不依赖家庭宽带或固定Wi-Fi。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备与便携终端，必要时通过手机热点为便携终端提供联网。",
+    "apps": [
+      "微信",
+      "钉钉",
+      "高德地图",
+      "腾讯会议"
+    ],
+    "speech_archetype": "field_duty_officer",
+    "speech_style": {
+      "tone": "简短直接、命令式与协作式并存，强调时效、位置和证据回传，不爱绕弯子。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "先对齐一下",
+        "马上回传",
+        "位置发我"
+      ],
+      "typical_habits": "习惯先确认位置和网络状态，再安排取证、上报或视频沟通；遇到弱覆盖路段会反复强调续传和恢复。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "午间巡逻现场取证与事件上报",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "当11:00-13:00进入城市道路巡逻段、临时处置现场或夜间值守点周边的弱覆盖路段时，需要边移动边完成现场取证、位置共享与事件上报。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "11:00-13:00",
+      "application_name": "微信",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "微信",
+          "某信"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "连麦",
+          "视频对讲"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "午间这一段"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "午间例行",
+          "到点就开"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨区域联合整治行动周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨区域联合整治期间，巡逻路线拉长，临时处置现场增多，部分路段和地下通道出现弱覆盖，现场视频回传与位置共享压力明显上升。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "巡逻车内视频调度会",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "巡逻车临时停靠或返回集结区后，需要参加短时视频调度会并同步现场情况。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "现场录像复盘与证据整理",
+        "application_name": "钉钉",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "处置结束后回到值守点或临时办公点，需要与同事复盘录像、核对证据并补充上报材料。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次夜间值守点刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次临时查看赛事直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

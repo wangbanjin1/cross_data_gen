@@ -1,0 +1,179 @@
+{
+  "persona_id": "mobile_persona_277",
+  "category": "科研调查与移动协作",
+  "persona_summary": "移动科研调查人员",
+  "static_profile": {
+    "user_id": "USER_277",
+    "identity": "启蒙运动研究方向的资深学者，长期从事跨校、跨馆的移动科研调查与资料采集工作，日常在外业调查点、学术活动场地、博物馆外场及跨校通勤路线之间移动，依靠手机移动核心网完成文献检索、数据上传、远程研讨与协作办公。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "scholar_researcher",
+    "speech_style": {
+      "tone": "严谨、克制、条理清晰，带有学术讨论式的引导口吻，习惯把任务拆成步骤再逐项确认。",
+      "catchphrases": [
+        "老规矩",
+        "对齐一下",
+        "别掉链子",
+        "先把材料过一遍"
+      ],
+      "typical_habits": "在移动途中先发定位和议程，再发起会议或上传资料；遇到弱覆盖路段会先说明可能中断，恢复后立即续传并补一句确认。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "月中移动科研综合对账与远程协作巡检",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每月月中15-16号例行综合对账与业务巡检，固定于14:00-16:00进行跨地点研究数据核对、远程讨论与协作文档同步。",
+      "period_type": "monthly",
+      "days": [
+        "15th",
+        "16th"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "鹅会",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦研讨",
+          "远程过材料",
+          "开个会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到四点",
+          "一个半小时"
+        ],
+        "period_aliases": [
+          "每月月中老规矩",
+          "15-16号这个时候",
+          "月中例行",
+          "老时间"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城档案联合采集与临时展陈调研周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城出差期间在档案馆外场、临时展陈点和通勤路段之间移动，现场网络覆盖波动较大，需优先保障研究数据上传与远程讨论稳定。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "外业采集现场短视频回传与资料留档",
+        "application_name": "微信",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在外业调查点、博物馆外场或资料采集点完成阶段性拍摄后，需要即时回传现场短视频并同步给协作组留档。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨校通勤途中文献研讨与直播回看",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨校通勤路线或临时停留期间，需要观看学术讲座直播回放并参与远程讨论，保持研究进度连续。",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "观赛",
+            "刷直播"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时实验现场单次视频通话确认设备状态",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "学术活动场地单次短视频浏览与资料检索",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_339",
+  "category": "科研调查与移动协作",
+  "persona_summary": "外业科研协作人员",
+  "static_profile": {
+    "user_id": "USER_339",
+    "identity": "外业科研协作人员，主要活动于外业调查点、临时实验现场、博物馆外场、资料采集点及跨校通勤路线，依赖手机移动核心网完成文献数据库查询、观测记录、数据上传与远程协作。",
+    "devices": "5G智能手机为主力联网设备，便携工作终端在确需联网时通过手机热点接入；不将家庭宽带、公司固网或普通Wi-Fi作为可用接入方式。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "飞书"
+    ],
+    "speech_archetype": "field_researcher_speaker",
+    "speech_style": {
+      "tone": "简洁、务实、偏工作协同口吻，强调稳定、连续和别掉链子。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先把数据传稳"
+      ],
+      "typical_habits": "在外业点或通勤途中先确认网络与会议状态，再用手机热点带便携终端；习惯用固定口语描述画质、时延和续传要求。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "外业调查点远程协作会议",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "当身处外业调查点、临时实验现场、博物馆外场或资料采集点等移动核心网弱覆盖空间，且时间为14:00-16:00时，使用腾讯会议进行远程讨论与数据复核。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "远程讨论",
+          "开个会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到四点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "外业点下午例行"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨校联合外业调查周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨校联合外业调查周期间，团队在多个外业调查点与博物馆外场之间移动，弱覆盖路段增多，需要临时降低画质并提高时延保障优先级。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "采样点数据回传复核",
+        "application_name": "钉钉",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在采样点完成观测记录后，需要与团队快速复核数据文件与研究影像时触发。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨校通勤途中文献讨论",
+        "application_name": "飞书",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨校通勤路线上临时发起文献与数据库查询讨论，并需要协作文档同步时触发。",
+        "aliases": {
+          "app_aliases": [
+            "feishu",
+            "lark"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "外业间隙单次查看短视频资料",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "临时实验现场单次观看直播讲座",
+        "application_name": "微信",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

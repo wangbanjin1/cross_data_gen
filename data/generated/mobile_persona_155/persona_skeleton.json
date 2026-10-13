@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_155",
+  "category": "交通运输与移动出行",
+  "persona_summary": "户外内容创作者",
+  "static_profile": {
+    "user_id": "USER_155",
+    "identity": "户外内容创作者、旅行博主，长期在高速公路服务区、车站、港区、机场外场及跨城途中进行短视频拍摄、直播与素材上传，依赖手机4G/5G移动核心网完成实时导航、路线更新、位置共享、语音通信、任务调度与电子单据上传。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携工作终端；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "抖音",
+      "快手",
+      "微信",
+      "小红书"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "干脆利落、现场感强，习惯用短句推进任务，强调别掉链子、稳住信号、赶紧续传。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "信号稳住",
+        "先推流再说"
+      ],
+      "typical_habits": "在移动现场先确认网络与定位，再开播或上传素材；遇到弱覆盖会反复提醒续传和恢复，习惯用行话快速调度。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "迪士尼乐园深度采风直播与素材回传",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "作为旅行博主，在迪士尼乐园进行深度采风时，需在10:00-12:00现场开启直播，带观众云逛园区并实时讲解游玩攻略，同时分段上传原始素材用于后续撰写综合评测。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "10:00-12:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "开直播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十二点"
+        ],
+        "period_aliases": [
+          "老规矩",
+          "上午这个点",
+          "任务现场老时间"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城展会周移动直播保障",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城展会周期间，频繁在高速公路服务区、车站、港区或机场外场进行移动直播与素材回传，弱覆盖路段增多，跨区域切换频繁，需优先保障业务连续与快速恢复。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "现场素材分段回传与云端备份",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "拍摄结束后在服务区或临时停靠点，与剪辑同事视频通话对齐素材分段上传和备份进度。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨城途中路线复盘与任务调度",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨城途中或偏远路段临时停靠时，发起短会同步路线更新、位置共享和电子单据上传安排。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次在服务区休息时刷短视频放松",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在机场外场等待时看同行直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

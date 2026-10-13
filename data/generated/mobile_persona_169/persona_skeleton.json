@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_169",
+  "category": "移动经营与客户服务",
+  "persona_summary": "跨现场管理人员",
+  "static_profile": {
+    "user_id": "USER_169",
+    "identity": "跨现场管理人员（人力资源经理），负责在多个园区、市集、门店外摆区、客户拜访点及展会现场之间移动办公，日常进行工单审批、视频会议、进度看板查看、团队即时消息处理、移动支付、订单处理与库存查询、客户沟通、短视频营销与远程协作。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴设备；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "钉钉",
+      "腾讯会议",
+      "抖音"
+    ],
+    "speech_archetype": "business_advisor",
+    "speech_style": {
+      "tone": "干练、直接、带管理口吻，喜欢用简短指令和确认式问句",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "盯紧点"
+      ],
+      "typical_habits": "在移动现场快速布置任务、确认进度，习惯用口语化简称指代应用、业务和参数档位，强调稳定和及时。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "月度跨现场综合对账与业务巡检",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每月月中15-16号例行综合对账与业务巡检，14:00-16:00进行跨现场视频会议、订单对账与团队进度对齐",
+      "period_type": "monthly",
+      "days": [
+        "15th",
+        "16th"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "开会对齐",
+          "视频会议"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到四点"
+        ],
+        "period_aliases": [
+          "每月月中15-16号老规矩",
+          "月中例行对账巡检",
+          "老时间"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "双十一商圈户外促销展会",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "商圈户外临时经营点人群密集，移动网络拥塞，需要临时降低画质并提高时延要求以保障订单与支付消息及时。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "外勤途中团队视频调度",
+        "application_name": "钉钉",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "跨园区通勤或客户拜访途中，需要快速与团队进行视频通话调度",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "短视频营销素材复盘",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "门店外摆区或展会现场拍摄后，回看并复盘短视频营销素材",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时客户沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次观看直播活动",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

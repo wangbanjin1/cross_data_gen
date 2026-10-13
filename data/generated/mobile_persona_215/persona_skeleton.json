@@ -1,0 +1,172 @@
+{
+  "persona_id": "mobile_persona_215",
+  "category": "移动采编与内容生产",
+  "persona_summary": "现场系统保障工程师",
+  "static_profile": {
+    "user_id": "USER_215",
+    "identity": "现场系统保障工程师，负责活动现场、街区采访点及临时拍摄地的移动采编系统保障，高频在转场途中、户外直播点或突发事件现场处理安全告警、检查日志指标、参加故障会议，并上传诊断结果和处置记录。全程以手机4G/5G直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi，便携终端确需联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴设备，便携终端通过手机热点联网。",
+    "apps": [
+      "抖音",
+      "微信",
+      "腾讯会议",
+      "快手"
+    ],
+    "speech_archetype": "field_support_engineer",
+    "speech_style": {
+      "tone": "干脆利落、略带焦躁但务实，习惯用工程术语和现场行话快速对齐问题。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先保上行",
+        "稳住推流"
+      ],
+      "typical_habits": "遇到故障先看日志和告警，再拉会同步；习惯用口语化简称指代应用、画质和时延，强调现场任务优先。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "现场采编系统保障与移动直播推流",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在活动现场、街区采访点或临时拍摄地执行现场系统保障任务时，需通过手机4G/5G进行短视频拍摄上传与移动直播，并持续监控上行带宽、直播时延与画面稳定性。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "08:30-10:30",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "突发事件现场直播保障周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "突发事件现场人流密集、基站负载高，转场途中弱覆盖路段增多，需优先保障直播画面稳定与快速续传。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "故障会议与云端协作",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "现场设备出现安全告警或日志异常时，需快速拉会同步诊断结果和处置记录。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "素材回传与即时通信",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "转场途中或临时拍摄地需要与后方编辑、云端协作人员快速确认素材回传与处置进度。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次任务场景：在临时拍摄地休息时刷短视频放松。",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次任务场景：转场途中观看同行直播了解现场动态。",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

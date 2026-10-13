@@ -1,0 +1,176 @@
+{
+  "persona_id": "mobile_persona_238",
+  "category": "移动学习与教育协作",
+  "persona_summary": "移动教学人员",
+  "static_profile": {
+    "user_id": "USER_238",
+    "identity": "高中校长，长期致力于预防校园到监狱管道（school-to-prison pipeline）问题，日常在校园户外区域、运动场、社会实践地、校际通勤途中及实习点之间高频移动办公，通过手机4G/5G移动核心网直接联网，不依赖家庭宽带或固定Wi-Fi，重点开展视频会议、即时通信、协作文档、在线课程、资料检索与作业提交等移动教学与教育协作活动。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "educator_principal_speaker",
+    "speech_style": {
+      "tone": "沉稳务实、带有教育管理者的号召力与紧迫感，强调纪律、连续性与责任落实。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "按周一周五的节奏来",
+        "先把孩子们的事稳住"
+      ],
+      "typical_habits": "习惯用周期性例会推动工作，口头布置任务时强调时间点、画质和连接稳定性，常以‘老规矩’指代固定周周期安排。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "周一周五校际移动教学例会与视频答疑",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每周一与周五上午09:30-11:30固定开展校际移动教学例会、视频答疑与业务对齐，校长在通勤或校园户外现场通过手机移动核心网接入。",
+      "period_type": "weekly",
+      "days": [
+        "Monday",
+        "Friday"
+      ],
+      "time_range": "09:30-11:30",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦开会",
+          "视频例会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "开到十一点半"
+        ],
+        "period_aliases": [
+          "每周一五老规矩",
+          "老时间",
+          "周一周五上午例行",
+          "周级固定例会"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨校预防辍学与司法协同专项周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "专项周期间校长频繁往返法院、社区矫正点、社会实践地与校园户外区域，移动网络环境复杂且切换频繁，需要优先保障视频通话与会议稳定。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "通勤途中学生提交与作业批阅",
+        "application_name": "钉钉",
+        "service_name": "即时通信与协作文档",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "校际通勤途中或实习点临时停留时，查看学生提交、批阅作业并上传教学资料。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "即时通信与协作文档"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "社会实践现场视频答疑与资料检索",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在运动场、社会实践地或临时教学现场，与学生或教师进行视频答疑、即时沟通和资料检索。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次观看教育政策直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次短视频资料浏览",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "persona_id": "mobile_persona_332",
+  "category": "交通运输与移动出行",
+  "persona_summary": "航空外场移动人员",
+  "static_profile": {
+    "user_id": "USER_332",
+    "identity": "商业飞行员，执飞国内干线航班，日常在机场外场、异地驻留点与跨城途中活动，需与塔台、签派、机组和地面保障人员保持即时通信，实时接收航班与气象更新并上传电子单据。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携工作终端（通过手机热点联网）",
+    "apps": [
+      "微信",
+      "钉钉",
+      "腾讯会议",
+      "高德地图"
+    ],
+    "speech_archetype": "aviation_ops_speaker",
+    "speech_style": {
+      "tone": "简洁干练、指令化，带航空运行术语，语速偏快，强调时效与安全",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "收到请回复",
+        "按检查单来"
+      ],
+      "typical_habits": "习惯用短句确认关键信息，任务前先对齐时间与频点，遇到弱覆盖会主动要求续传或重连"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "航班外场运行协同与气象更新接收",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "执行航班外场保障与机组协同任务，在机场外场或异地驻留点接收航班与气象更新、查询运行资料，并与机组和地面人员保持即时通信",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "09:30-11:30",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会",
+          "鹅厂会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦协同",
+          "开协调会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "开到十一点半"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "上午例行",
+          "老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城航班保障与恶劣天气绕飞协同周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城航班保障期间遭遇恶劣天气，需频繁绕飞与备降协同，机场外场和高速服务区网络拥塞，弱覆盖路段增多，要求更低时延与更稳续传",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "机组与地面人员语音调度",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "航班保障间隙或临时停靠点需要快速确认机组与地面人员状态时",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "运行资料与电子单据上传",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "异地驻留期间需上传电子单据并同步运行资料时",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次任务：驻留酒店与家人视频通话",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次任务：候机时刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

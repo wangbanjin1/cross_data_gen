@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_345",
+  "category": "公共安全与移动执勤",
+  "persona_summary": "外出医疗服务人员",
+  "static_profile": {
+    "user_id": "USER_345",
+    "identity": "急诊科医生，长期在外执行院前急救、社区义诊、患者转运与远程会诊任务，活动半径覆盖城市道路、巡逻区域、临时处置现场、夜间值守点、事故现场与应急集结区，对网络技术细节不敏感，只关心任务能否顺畅完成。",
+    "devices": "5G智能手机为主力联网设备，便携工作终端为辅助设备，确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "高德地图",
+      "钉钉"
+    ],
+    "speech_archetype": "emergency_physician_speaker",
+    "speech_style": {
+      "tone": "语速偏快、直接务实，带急救现场的紧迫感，但不使用技术黑话，习惯用生活化说法描述网络需求。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "先把画面稳住",
+        "我这边在路上"
+      ],
+      "typical_habits": "出发前先确认手机信号和电量，任务中习惯说“保持在线”“别断”，遇到弱覆盖会反复强调“能续上就行”。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "夜间急救远程会诊与现场影像回传",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "当夜间20:00-22:00身处事故现场、应急集结区或夜间值守点等弱覆盖路段，需要向院内医生发起远程会诊并回传现场检查影像时触发。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "20:00-22:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "连麦会诊",
+          "对齐一下病情",
+          "开个远程会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "晚间例行"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨区重大交通事故应急支援周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨区重大交通事故应急支援期间，夜间在高速出口临时处置点与应急集结区之间移动，现场人员密集、基站负载高，弱覆盖与拥塞交替出现。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "转运途中视频通话交接",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "患者转运途中需要与接收医院急诊科快速交接病情时触发。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "现场取证短视频回传",
+        "application_name": "钉钉",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在事故现场完成初步处置后，需要录制并回传现场取证短视频时触发。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次夜间值守点参加院内临时会议",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次休息间隙刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

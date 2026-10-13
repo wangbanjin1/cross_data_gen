@@ -1,0 +1,176 @@
+{
+  "persona_id": "mobile_persona_255",
+  "category": "交通运输与移动出行",
+  "persona_summary": "长途移动驾驶人员",
+  "static_profile": {
+    "user_id": "USER_255",
+    "identity": "长途货运卡车司机，常年跨城跨省执行严格时效的配送任务，每周4至7天在高速、服务区、港区及偏远路段移动作业，全程依赖手机4G/5G直接联网完成导航、调度与电子回单。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑，便携终端确需联网时使用手机热点。",
+    "apps": [
+      "高德地图",
+      "微信",
+      "钉钉",
+      "货车帮"
+    ],
+    "speech_archetype": "truck_driver_operator",
+    "speech_style": {
+      "tone": "直爽、急促、带点疲惫，习惯用行话和短句确认任务，强调时效与安全。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "路上说"
+      ],
+      "typical_habits": "在停车点先看路况再语音对调度，说话前习惯先报位置和剩余里程，确认参数时反复强调‘别卡’。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "高速服务区停车窗口调度与电子回单上传",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "当车辆驶入高速公路服务区、港区外场或偏远临时停靠点，且处于14:00-16:00停车休息窗口时，司机在驾驶室或休息区通过手机4G/5G直接联网，使用高德地图和钉钉完成实时导航更新、位置共享、语音调度确认与电子回单上传。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "钉钉",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "钉钉",
+          "钉钉办公",
+          "调度钉钉"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "连麦对单",
+          "视频对调度"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到四点",
+          "一个半小时"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "下午停车窗口",
+          "服务区老规矩"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "双十一跨省干线爆仓应急运输周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "双十一期间跨省干线货量激增，司机连续在高速服务区、港区外场和偏远路段临时停靠，弱覆盖与高负载导致网络波动，调度视频通话需临时降低画质并收紧时延以保障任务续传。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "车队微信语音调度与位置共享",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在服务区或临时停靠点收到车队群调度通知，需要快速共享位置并语音确认下一站任务时。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "货车帮电子回单与路线复盘",
+        "application_name": "货车帮",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "完成配送后停车休息，上传电子回单并查看平台推送的路况短视频与路线复盘内容时。",
+        "aliases": {
+          "app_aliases": [
+            "货车帮"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次在服务区休息时打开哔哩哔哩看卡车维修短视频",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在港区外场等待装卸时用腾讯会议参加车队安全例会",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

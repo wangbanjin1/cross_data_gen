@@ -1,0 +1,173 @@
+{
+  "persona_id": "mobile_persona_242",
+  "category": "移动生活与现场协作",
+  "persona_summary": "移动家庭沟通用户",
+  "static_profile": {
+    "user_id": "USER_242",
+    "identity": "跨文化背景的童年好友，长期在城市街区、公共活动现场及跨区域出行途中进行家庭沟通与现场协作，习惯在接送、出行和户外等候期间完成视频通话、位置共享、家庭消息查看及沿途照片文件上传，全程依赖手机4G/5G直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "devices": "主力设备为5G智能手机，便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "抖音",
+      "高德地图"
+    ],
+    "speech_archetype": "mobile_family_coordinator",
+    "speech_style": {
+      "tone": "亲切直接，带点跨文化背景的随和感，强调别掉链子和及时同步。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "我这边信号还行"
+      ],
+      "typical_habits": "习惯在出发前和途中用短句确认位置与进度，遇到弱覆盖路段会提前说明并提醒续传。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "跨区域家庭现场视频沟通与位置共享",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在跨区域出行、公共活动现场或户外等候区执行家庭沟通与现场协作任务时，使用微信进行视频通话、位置共享和家庭消息同步。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "微信",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "微信",
+          "绿泡泡"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "视频通话",
+          "连个视频"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到四点"
+        ],
+        "period_aliases": [
+          "老规矩",
+          "老时间",
+          "每周三到五次这个点"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城家庭聚会与现场活动周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城出行途中和公共活动现场，人流密集、弱覆盖路段增多，需要临时降低画质并收紧时延以保障视频通话和位置共享连续可用。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "出行途中位置共享与消息同步",
+        "application_name": "高德地图",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在接送、跨区域出行途中需要共享位置并同步家庭消息时触发。",
+        "aliases": {
+          "app_aliases": [
+            "高德地图"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "活动现场短视频记录与上传",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在公共活动现场或兴趣活动现场拍摄并上传沿途照片、短视频时触发。",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时参加线上家庭会议",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "户外等候时单次观看直播",
+        "application_name": "抖音",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "persona_id": "mobile_persona_307",
+  "category": "移动生活与现场协作",
+  "persona_summary": "户外观赛与兴趣社群用户",
+  "static_profile": {
+    "user_id": "USER_307",
+    "identity": "历史爱好者与魔兽世界剧情考据者，常在城市街区、公共活动现场及跨区域出行途中活动，习惯将魔兽世界剧情与真实历史事件做平行对照，并在兴趣社群中分享考据内容与现场短视频。日常以手机4G/5G直接联网，不依赖家庭宽带或公司固网，便携工作终端确需联网时使用手机热点。",
+    "devices": "5G智能手机（主力）＋便携工作终端（辅助，通过手机热点联网）",
+    "apps": [
+      "微信",
+      "抖音",
+      "哔哩哔哩",
+      "腾讯会议"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "热情考据型，喜欢把魔兽剧情和真实历史对照着讲，语速偏快，带点社群黑话",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "这段剧情对应的是……"
+      ],
+      "typical_habits": "习惯在午间休息时开直播和社群同好对齐考据进度，出门前先确认热点和电量，遇到弱覆盖路段会提前提醒同伴续传"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "午间魔兽剧情考据直播与社群对齐",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每天午间休息与午间复盘业务，12:30准时开播，和社群同好对齐魔兽剧情与历史事件的对照考据进度",
+      "period_type": "daily",
+      "days": [
+        "daily"
+      ],
+      "time_range": "12:30-13:30",
+      "application_name": "哔哩哔哩",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "小破站",
+          "B站",
+          "哔哩哔哩"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "开直播",
+          "连麦对齐"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "一个钟头",
+          "一个小时",
+          "播到一点半"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "午间例行",
+          "每天午间休息与午间复盘业务"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城魔兽主题展与历史考据沙龙周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城参加魔兽主题展与历史考据沙龙，现场人流密集、场馆内外网络拥塞，需在移动过程中保持直播与社群同步，弱覆盖路段频繁出现",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "出行途中社群语音对齐",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "跨区域出行途中或临时停留点，与社群同好语音对齐当日考据要点和集合位置",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "现场短视频素材回传与复盘",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "观赛或展会现场拍摄短视频后，在户外等候区或临时停留点上传素材并做简短复盘",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时远程协作会议",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次观看赛事直播",
+        "application_name": "抖音",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

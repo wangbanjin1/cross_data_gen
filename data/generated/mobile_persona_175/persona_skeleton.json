@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_175",
+  "category": "野外科研与农业作业",
+  "persona_summary": "田间移动生产人员",
+  "static_profile": {
+    "user_id": "USER_175",
+    "identity": "澳大利亚中年养猪场主，日常在牧场、饲料区与偏远放牧带之间移动，对科学术语理解有限，但高度依赖手机与平板完成生产记录、远程请教兽医或技术员，并习惯用口语化说法描述网络与画质。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；在田间临时需要联网时，以手机热点给平板供电与联网。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "抖音"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "直白、务实、带点农场口音的随意表达，不爱用专业术语，喜欢把复杂事情说成‘老规矩’和‘别掉链子’。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "能看清就行"
+      ],
+      "typical_habits": "遇到设备、病害或猪群异常时，先拍图拍视频发群里，再开视频或会议请人远程看；每周固定时间做生产复盘与远程对齐。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "每周牧场生产复盘与远程技术对齐",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每周一与周五上午09:30到11:30，在养猪场办公区或饲料棚内固定进行生产数据复盘、猪群状态汇报与远程技术对齐。",
+      "period_type": "weekly",
+      "days": [
+        "Monday",
+        "Friday"
+      ],
+      "time_range": "09:30-11:30",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦开会",
+          "远程碰一下"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "从九点半开到十一点半"
+        ],
+        "period_aliases": [
+          "每周一五老规矩",
+          "周一和周五上午老时间",
+          "周一周五例行对齐"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "春季猪群疫病排查与远程兽医会诊周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "偏远放牧带与隔离猪舍出现疑似疫病，现场弱覆盖且需要频繁视频回传与远程会诊，网络稳定性优先于画质。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "田间病害图片与短视频回传",
+        "application_name": "微信",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在牧场、饲料区或放牧带发现猪只异常、饲料霉变或设备故障时，随手拍短视频发到微信群请技术员看。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "远程兽医视频通话",
+        "application_name": "钉钉",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "猪群出现急症或需要兽医现场指导用药时，直接发起一对一视频通话，要求能看清伤口和猪只状态。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "午后休息时在手机上看养猪技术直播",
+        "application_name": "抖音",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "临时参加农资供应商的线上会议",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

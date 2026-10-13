@@ -1,0 +1,179 @@
+{
+  "persona_id": "mobile_persona_306",
+  "category": "公共事务与外勤协作",
+  "persona_summary": "移动公共事务人员",
+  "static_profile": {
+    "user_id": "USER_306",
+    "identity": "政府公共事务外勤人员，负责政策落地巡查、群众诉求收集、社区走访与跨区域通勤协作；高频在户外调研点、临时会议区、群众服务现场和公共活动现场之间移动办公，全程依赖手机移动核心网完成视频会议、即时通信、材料回传、政策资料查询与电子表单记录。",
+    "devices": "主力设备为5G智能手机，辅助使用便携终端；便携终端确需联网时通过手机热点接入，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "飞书"
+    ],
+    "speech_archetype": "government_field_coordinator",
+    "speech_style": {
+      "tone": "务实、克制、强调时效与责任，习惯用工作口令推进协作，语气直接但不失分寸。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "现场情况我马上回传",
+        "这个点必须稳住"
+      ],
+      "typical_habits": "外出途中先确认会议和材料节点，遇到弱网环境会主动切换保障方式；习惯用简短口令同步团队，强调消息及时送达、材料可靠回传和会议通信稳定。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "午间外勤视频会议与材料回传",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "当11:00-13:00身处社区走访点、公共活动现场、户外调研点或临时会议区等外勤空间，且需要与团队同步群众诉求、政策材料与现场记录时，触发腾讯会议视频会议和微信材料回传。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "11:00-13:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议",
+          "会议App"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦开会",
+          "视频会议",
+          "线上碰头"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "开到一点",
+          "一个半小时"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "午间例行",
+          "外勤点位一到就开"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨区群众服务现场联合巡查周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨区群众服务现场联合巡查期间，人员频繁进入临时搭建设施、地下通道和人群密集区域，移动网络波动明显，需要优先保障即时通信与材料回传稳定。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "社区走访即时通信与诉求回传",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在社区走访点临时需要向团队说明群众诉求、展示现场材料或确认表单内容时，使用微信视频通话快速沟通。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "政策材料查询与电子表单记录",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在临时会议区或跨区域通勤途中，需要查询政策资料、填写电子表单并同步现场记录时，使用钉钉进行短会沟通与材料确认。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次公共活动现场，休息间隙查看短视频了解宣传素材",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次跨区域通勤途中，临时观看政策发布直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

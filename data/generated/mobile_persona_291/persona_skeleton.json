@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_291",
+  "category": "医疗健康与移动服务",
+  "persona_summary": "移动随访与康复人员",
+  "static_profile": {
+    "user_id": "USER_291",
+    "identity": "军队护士，负责在心理医生与患者之间进行常规联络，属于移动随访与康复人员。高频外出，每周3至6个外出时段，活动范围包括患者转运途中、户外健康服务现场、院前处置点、社区随访路线及临时医疗站。全程依赖手机4G/5G移动核心网直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi，便携终端确需联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "飞书"
+    ],
+    "speech_archetype": "medical_mobile_coordinator",
+    "speech_style": {
+      "tone": "干练、务实、带有医疗与军队背景的简洁指令感，沟通时注重确认与闭环。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "收到请回复"
+      ],
+      "typical_habits": "习惯在出发前确认网络与设备状态，沟通时先报位置与任务节点，再同步患者状态；关键信息要求对方复述确认。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "社区随访途中移动视频会诊与患者状态同步",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "当在16:00-18:00时段身处社区随访路线、院前处置点或临时医疗站等户外移动医疗现场，且处于移动核心网边缘覆盖或建筑遮挡导致的弱网区域时，触发与心理医生及医疗团队的移动视频会诊和患者状态同步。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "16:00-18:00",
+      "application_name": "腾讯会议",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "连麦会诊",
+          "视频对齐"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到六点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "下午随访档口",
+          "傍晚交接前"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨区联合康复转运演练周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨区联合康复转运演练期间，随车队在城郊结合部与山区临时医疗站之间移动，现场基站覆盖稀疏，建筑与山体遮挡严重，需在颠簸转运途中保持远程会诊与患者数据上传。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "转运途中即时通信与任务协同",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在患者转运途中或户外健康服务现场，需要与医疗团队快速同步位置、患者状态和任务节点时触发。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "随访记录与现场影像上传协同",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在社区随访路线或临时医疗站完成评估后，需要上传现场影像、随访记录并参与团队任务复盘会议时触发。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时参加院前急救技能线上培训",
+        "application_name": "飞书",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在临时医疗站休息时观看康复教学短视频",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

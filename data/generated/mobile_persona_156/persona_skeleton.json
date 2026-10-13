@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_156",
+  "category": "移动生活与现场协作",
+  "persona_summary": "高频移动网络使用者",
+  "static_profile": {
+    "user_id": "USER_156",
+    "identity": "大型酿酒企业代表，长期为啤酒行业政策奔走倡导；日常高频外出，活动半径覆盖城市街区、公共活动现场、户外等候区、临时停留点及跨区域出行途中，全程依赖手机4G/5G移动核心网直接联网，便携工作终端确需联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携工作终端（通过手机热点联网）",
+    "apps": [
+      "微信",
+      "抖音",
+      "腾讯会议",
+      "钉钉",
+      "高德地图",
+      "小红书"
+    ],
+    "speech_archetype": "business_advisor",
+    "speech_style": {
+      "tone": "干练务实、带点行业老炮的直爽，谈事讲效率，习惯用行业黑话和固定口头禅推进协作",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "这个点必须稳"
+      ],
+      "typical_habits": "在移动途中用简短语音和固定口令同步进度，遇到关键节点先确认网络与画质再开播或开会，习惯把复杂安排压缩成'老时间''老地方'这类固定说法"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "晚间户外移动直播倡导",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处城市公共活动现场或跨区域出行途中的户外等候区、临时停留点，20:00-22:00时段以手机5G移动核心网直接联网，需要面向行业受众进行政策倡导直播与即时互动",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "20:00-22:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "晚间例行"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城啤酒行业政策推介周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城出差季，连续多日在不同城市公共活动现场与临时停留点之间移动，现场人流密集、基站负载高，需在弱网环境下保障直播与远程协作稳定",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "移动途中远程政策对齐会",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "跨区域出行途中或临时停留点，需要与协会及企业团队快速对齐政策口径与行程安排",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "现场素材短视频复盘发布",
+        "application_name": "小红书",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "活动结束后在户外等候区或返程途中，整理现场照片与短视频并发布行业观察内容",
+        "aliases": {
+          "app_aliases": [
+            "xiaohongshu",
+            "红薯"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时与同事视频通话确认展位布置",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在活动现场休息时观看行业相关直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_250",
+  "category": "体育训练与赛事保障",
+  "persona_summary": "移动人文调查人员",
+  "static_profile": {
+    "user_id": "USER_250",
+    "identity": "移动人文调查人员兼足球历史研究者，长期在露天训练场、赛道、球场及赛事集结区进行定位记录、资料检索和影像采集，并将田野笔记同步给研究团队；同时是足球史爱好者，关注1962年世界杯等历史赛事资料。",
+    "devices": "5G智能手机＋便携工作终端，便携终端确需联网时使用手机热点",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "抖音",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "干脆利落、带点老球迷和田野工作者的行话，讲效率也讲情怀",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "月底这波得顶住"
+      ],
+      "typical_habits": "习惯用口语化简称指代设备和业务，强调网络稳定和续传，常把月度复盘说成‘封账冲刺’"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "月末赛事资料直播复盘与团队对齐",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每月月末28-29号例行封账冲刺与月度大复盘，20:00-22:00进行赛事资料直播复盘和团队对齐",
+      "period_type": "monthly",
+      "days": [
+        "28th",
+        "29th"
+      ],
+      "time_range": "20:00-22:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "鹅会"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦复盘",
+          "开个复盘会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点"
+        ],
+        "period_aliases": [
+          "每月月末28-29号老规矩",
+          "月底封账冲刺",
+          "月度大复盘老时间"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城赛事周田野调查与直播保障",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城转场途中和赛事集结区人群密集，网络波动大，需要临时降低画质并优先保证低时延通信",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "训练视频上传与回放",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在露天训练场或户外热身区采集训练视频后，需要快速上传并和团队回放确认",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "赛事直播观看与即时通信",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "客场转场途中或临时休息点，需要观看赛事直播并同步和团队即时沟通",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "观赛",
+            "刷直播"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次在博物馆外场进行资料检索时刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在赛事集结区临时开直播分享现场氛围",
+        "application_name": "抖音",
+        "service_name": "开直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

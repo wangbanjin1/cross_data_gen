@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_180",
+  "category": "移动采编与内容生产",
+  "persona_summary": "户外内容创作者",
+  "static_profile": {
+    "user_id": "USER_180",
+    "identity": "复古风格平面模特兼内容博主，日常在城市街区、活动现场与临时拍摄地之间高频转场，以手机4G/5G直连完成短视频拍摄、移动直播与素材回传，不依赖家庭宽带或固定Wi-Fi。",
+    "devices": "主力为5G智能手机，辅以可穿戴设备（智能手表/无线麦克风/运动相机联动），便携终端确需联网时使用手机热点。",
+    "apps": [
+      "抖音",
+      "快手",
+      "小红书",
+      "微信"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "轻快直接、带点复古圈行话，习惯用短句催促与确认，强调画面和信号别出问题。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "先保上行",
+        "这条重来一遍"
+      ],
+      "typical_habits": "开播前先看信号格和上行，拍摄中反复确认画面稳不稳，转场时口头提醒团队素材别断传。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "街区复古穿搭短视频拍摄与移动直播",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "当11:00-13:00身处城市街区采访点、临时拍摄地或户外直播点，且现场仅能靠手机4G/5G直连时，触发短视频拍摄上传与移动直播主线任务。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "11:00-13:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "上直播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到一点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "午间档老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "复古市集快闪直播周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "连续多日在老城区地下市集与半封闭展棚内进行复古穿搭快闪直播，现场人流密集、遮挡严重，手机信号在负一层与展棚角落明显衰减。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "转场途中素材回传与云端协作",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "拍摄结束转场途中，需要与剪辑师或品牌方快速对齐素材片段与修改意见时触发。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "拍摄后录像复盘与互动数据查看",
+        "application_name": "小红书",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "回到临时休息点或车内，回看当日拍摄素材、查看互动数据并发布图文短视频时触发。",
+        "aliases": {
+          "app_aliases": [
+            "xiaohongshu",
+            "红薯"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时接到品牌方线上会议邀请，在咖啡馆角落单次参加。",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "晚间休息时单次观看同行直播并随手刷短视频。",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "persona_id": "mobile_persona_264",
+  "category": "文化创作与移动演出",
+  "persona_summary": "户外创作与演出人员",
+  "static_profile": {
+    "user_id": "USER_264",
+    "identity": "小镇戏剧演员，Morrow Little Theatre社区成员，日常活跃于户外演出点、展览布置区、城市采风路线及音乐节、街头活动或临时排练现场，以5G智能手机＋便携工作终端作为主力创作与演出设备。",
+    "devices": "5G智能手机＋便携工作终端（手机热点为便携终端提供联网）",
+    "apps": [
+      "抖音",
+      "微信",
+      "哔哩哔哩",
+      "腾讯会议"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "热情、直接、带点舞台腔，喜欢用行话和固定口头禅安排现场工作",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "推流稳住"
+      ],
+      "typical_habits": "演出或排练前习惯用固定口语确认时间、画质和时延要求，遇到弱网会反复强调续传和恢复"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "午间户外演出直播与现场素材上传",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处城市户外演出点、展览布置区或街头临时排练现场，且进入11:00-13:00午间演出/排练时段，需用手机4G/5G直接联网完成现场音视频采集、直播与作品上传",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "11:00-13:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到一点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "午间例行"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "秋季街头戏剧节密集演出周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "秋季街头戏剧节期间，密集人群聚集在户外演出点与临时舞台周边，网络拥塞且部分路段弱覆盖，需要临时降低画质并提高时延保障以维持直播与素材续传",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "团队排练后录像复盘与沟通",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "户外排练或演出结束后，在临时休息点或返程途中与剧团成员进行录像复盘和任务对齐",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨区域采风素材云端同步与社交发布",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "城市采风路线途中或临时停留期间，与团队视频沟通并同步云端素材、发布社交动态",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时与外地合作方进行线上会议沟通",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在通勤途中刷短视频放松",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

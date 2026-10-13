@@ -1,0 +1,178 @@
+{
+  "persona_id": "mobile_persona_283",
+  "category": "移动生活与现场协作",
+  "persona_summary": "港航移动作业人员",
+  "static_profile": {
+    "user_id": "USER_283",
+    "identity": "越南沿海地区海鲜出口商，日常在港区、码头和近岸作业点之间移动，负责查看船期与气象、接收调度、上传电子单据与现场作业记录，并通过手机热点为随身拍摄设备提供网络。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备（运动相机/手机云台），便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "抖音",
+      "腾讯会议",
+      "高德地图"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "干脆利落、带海港作业节奏的务实口吻，常用短句确认安排。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "按老时间走"
+      ],
+      "typical_habits": "习惯在出海或码头作业前后用语音消息快速确认，遇到关键节点会主动发起视频通话或会议对齐，强调覆盖和时延稳定。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "周三周五晚间海鲜出口对账与远程复盘",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每周三与周五晚间19:00-21:00，在码头临时停留点或近岸作业点，与岸上团队、客户进行对账、船期复盘和远程协作。",
+      "period_type": "weekly",
+      "days": [
+        "Wednesday",
+        "Friday"
+      ],
+      "time_range": "19:00-21:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议",
+          "会议App"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "远程复盘",
+          "连麦对账",
+          "开个会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到九点"
+        ],
+        "period_aliases": [
+          "每周三周五老规矩",
+          "老时间",
+          "晚间例行",
+          "周三周五这个时候"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "2026年11月海鲜出口旺季码头连续作业周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "出口旺季码头连续作业，现场人员密集、网络拥塞，需要在移动过程中保持稳定音视频与消息送达。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "码头现场短视频记录与上传",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在码头或近岸作业点完成一批海鲜装运后，用手机快速拍摄现场记录并上传。",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨区域运输途中视频通话调度",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨区域运输途中需要与司机、码头调度或客户临时确认到货时间与位置。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次与海外客户临时看货直播",
+        "application_name": "快手",
+        "service_name": "开直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次休息时观看赛事直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

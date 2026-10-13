@@ -1,0 +1,176 @@
+{
+  "persona_id": "mobile_persona_166",
+  "category": "医疗健康与移动服务",
+  "persona_summary": "移动随访与康复人员",
+  "static_profile": {
+    "user_id": "USER_166",
+    "identity": "社区移动随访与康复治疗师，负责院前处置点、社区随访路线及临时医疗站的现场评估与远程会诊，每周一三五上午固定开展移动随访例会与患者状态同步。",
+    "devices": "5G智能手机（主力）＋可穿戴健康监测设备（辅助），便携终端确需联网时使用手机热点。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "飞书"
+    ],
+    "speech_archetype": "healthcare_mobile_speaker",
+    "speech_style": {
+      "tone": "干练务实、节奏紧凑，带医疗行业特有的严谨与安抚感",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "数据先传稳"
+      ],
+      "typical_habits": "习惯用简短指令同步任务，强调连接稳定与数据可靠，会前必说‘老规矩’确认流程。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "周一三五移动随访远程会诊例会",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "工作日一三五常规业务例会，10:00-12:00固定开展移动随访与远程会诊",
+      "period_type": "weekly",
+      "days": [
+        "Monday",
+        "Wednesday",
+        "Friday"
+      ],
+      "time_range": "10:00-12:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦会诊",
+          "开例会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十二点"
+        ],
+        "period_aliases": [
+          "每周一三五老规矩",
+          "工作日一三五这个时候",
+          "老时间"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "社区突发公共卫生事件应急随访周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "社区突发公共卫生事件期间，临时医疗站与转运途中网络拥塞，需优先保障关键消息与影像上传，画质临时降级、时延要求更严。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "转运途中视频通话调度",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "患者转运途中需与医疗团队实时视频沟通患者状态时",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "随访记录与影像上传协同",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "社区随访路线中需上传现场影像并同步任务协同时",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时医疗站远程会诊",
+        "application_name": "飞书",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次患者信息查询与随访记录",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

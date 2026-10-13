@@ -1,0 +1,172 @@
+{
+  "persona_id": "mobile_persona_308",
+  "category": "移动学习与教育协作",
+  "persona_summary": "移动教学人员",
+  "static_profile": {
+    "user_id": "USER_308",
+    "identity": "音乐教师，深谙营养对音乐表演的影响，常在校园户外、运动场、社会实践地或临时教学现场开展移动教学，并通过手机4G/5G直接联网完成视频答疑、课程通知、学生作业提交与教学资料上传。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴设备；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "music_teacher_mobile_mentor",
+    "speech_style": {
+      "tone": "温和但节奏明确，习惯用音乐与营养类比提醒学生状态管理，讲话带教学现场感。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "状态先稳住"
+      ],
+      "typical_habits": "在临时教学现场先确认网络与设备，再安排视频答疑、资料上传和课程通知；遇到通勤切换会提前提醒学生保持会话连续。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "户外移动音乐教学视频答疑与资料上传",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在校园户外、运动场、社会实践地或临时教学现场执行音乐教学任务时，于14:00-16:00通过手机4G/5G直接联网，使用腾讯会议进行视频答疑、课程通知、学生提交查看与教学资料上传。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "视频答疑",
+          "连麦指导"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到四点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "下午教学档"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "校际音乐展演周移动教学保障",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "校际音乐展演周期间，教师频繁往返校园户外、展演场地与通勤途中，现场网络拥塞且切换频繁，需要临时降低画质并提高时延稳定性以保障视频答疑和资料上传。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "通勤途中学生提交与课程通知查看",
+        "application_name": "微信",
+        "service_name": "即时通信与协作文档",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "校际通勤途中或实习点转场时，通过微信查看学生提交、发布课程通知并协作文档。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "即时通信与协作文档"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "教学资料检索与在线课程学习",
+        "application_name": "哔哩哔哩",
+        "service_name": "在线课程、资料检索与作业提交",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在临时教学现场或校园户外区域，需要检索音乐教学资料、观看在线课程并提交作业时。",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "在线课程、资料检索与作业提交"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次与校外音乐导师进行短视频沟通",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次观看音乐教学直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_195",
+  "category": "移动经营与客户服务",
+  "persona_summary": "移动看房与物业人员",
+  "static_profile": {
+    "user_id": "USER_195",
+    "identity": "一名不熟悉美国房产市场的房产经纪人，日常高频在楼盘现场、物业小区、商圈外摆区、展会及客户拜访点之间移动办公，主要依靠5G智能手机和随身拍摄设备完成视频看房、房源照片上传、合同资料查询、客户预约确认、移动支付、订单处理、库存查询、短视频营销与远程协作。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "微信",
+      "抖音",
+      "腾讯会议",
+      "钉钉"
+    ],
+    "speech_archetype": "business_advisor",
+    "speech_style": {
+      "tone": "干练、务实、带一点销售节奏感，习惯用短句推进事情，强调别耽误客户和别掉链子。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "我这边先推流",
+        "信号稳住"
+      ],
+      "typical_habits": "习惯在出发前先确认路线和网络，到了现场先测信号再开视频或直播；遇到弱覆盖会主动说先切低画质、别断线，等回到稳定区域再续传。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "上午移动看房直播与房源实拍上传",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "当身处楼盘样板间、物业小区户外带看路线或商圈临时经营点，且时间为09:00-11:00的移动看房高峰时段，需要边走边开直播展示房源并上传实拍素材。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "09:00-11:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "开直播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十一点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "上午带看老规矩"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "秋季房展会移动直播周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "房展会现场人群密集、临时展位多、无线环境复杂，09:00-11:00需要连续进行移动看房直播和短视频素材回传，网络容易拥塞。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "客户远程视频看房沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "客户无法到现场时，在楼盘楼道、地下车库或物业大堂等弱覆盖区域发起视频通话，带看并确认合同细节。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "团队远程对齐与房源复盘",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "回到商圈外摆区或临时经营点后，与团队远程对齐房源状态、客户预约和短视频营销安排。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "午间在商圈外摆区单次刷短视频放松",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "晚间在临时经营点单次观看同行直播学习话术",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_162",
+  "category": "移动经营与客户服务",
+  "persona_summary": "移动经营者",
+  "static_profile": {
+    "user_id": "USER_162",
+    "identity": "移动经营者，经营纺织面料与服装辅料生意，日常在市集、门店外摆区、客户拜访点及配送路线之间往返，为剧团服装部门等客户定期供货。每周3至5次外出任务，全程依赖手机4G/5G直接联网，不依赖固网宽带，便携工作终端确需联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携工作终端（平板/轻薄笔记本），两者通过手机热点互联。",
+    "apps": [
+      "微信",
+      "抖音",
+      "快手",
+      "腾讯会议"
+    ],
+    "speech_archetype": "mobile_merchant_speaker",
+    "speech_style": {
+      "tone": "干脆利落、带生意人特有的务实与催促感，谈事直接、不绕弯子",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "抓紧推流"
+      ],
+      "typical_habits": "习惯用短句快速确认订单与库存，出门前先看信号格数，遇到弱网会先念叨'别掉链子'再切热点或换位置。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "市集外摆区短视频营销与订单处理",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "每周固定时段身处市集摊位、门店外摆区或商圈临时经营点，在人群密集、信号竞争激烈的户外弱网空间内，需要边看摊边发布短视频营销内容并同步处理移动支付与订单消息",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "10:00-12:00",
+      "application_name": "抖音",
+      "service_name": "短视频",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖子"
+        ],
+        "service_aliases": [
+          "推流",
+          "发短视频",
+          "刷片子"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十二点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "上午出摊那阵"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "秋冬面料展销会临时摊位",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "展销会现场人流密集、金属展棚遮挡严重，4G/5G信号波动大，需在临时摊位内持续上传短视频并处理订单",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "客户拜访途中视频通话确认面料细节",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在客户拜访点或配送路线途中，客户临时要求确认面料花色与批次时发起视频通话",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "与剧团服装部门远程会议对齐供货清单",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "每周固定与剧团服装部门远程对齐下一批供货清单与交期，通常在门店外摆区收摊后接入",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "展会间隙在临时休息区单次观看同行直播",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "晚间在配送路线终点单次开直播清库存尾货",
+        "application_name": "抖音",
+        "service_name": "开直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

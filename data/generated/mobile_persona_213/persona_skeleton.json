@@ -1,0 +1,177 @@
+{
+  "persona_id": "mobile_persona_213",
+  "category": "移动生活与现场协作",
+  "persona_summary": "移动演出与音乐创作者",
+  "static_profile": {
+    "user_id": "USER_213",
+    "identity": "独立地下说唱歌手，长期在城市街区、公共活动现场及跨区域出行途中进行户外演出、排练转场与音乐创作，全程依赖手机4G/5G移动核心网联网，不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式，随身携带5G智能手机与便携拍摄设备，高频进行直播片段、音频工程传输、演出内容发布及与乐队成员实时沟通。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备、便携声卡与无线耳返；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "抖音",
+      "快手",
+      "腾讯会议",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "underground_artist_streamer",
+    "speech_style": {
+      "tone": "直率、带点地下圈子的自嘲与较劲，聊到设备和网络时格外较真，习惯用演出行话和口语化表达。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "这段必须原画",
+        "低时延才敢连麦"
+      ],
+      "typical_habits": "演出转场或排练间隙会主动口述固定网络偏好，强调画质、时延和时长，喜欢用'老时间''老地方'指代固定直播安排，对掉线和延迟极其敏感。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "户外演出转场直播与音频工程回传",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "当身处城市街区、公共活动现场或跨区域出行途中的户外等候区、临时停留点，且时间为14:00-16:00的演出转场或排练间隙时，使用5G手机移动核心网直接开直播并回传音频工程。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "开直播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到四点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "老地方",
+          "下午两点到四点的老规矩"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城地下说唱巡演周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城巡演期间频繁出入陌生城市街区、地下Livehouse周边与临时停留点，移动核心网覆盖波动大，需临时降低画质并收紧时延以保障直播与音频工程回传不中断。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "乐队远程排练对齐",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "演出前在临时停留点或户外等候区与乐队成员远程对齐编曲、分轨和走位时。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "演出片段复盘与发布",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "演出结束后在城市街区或返程途中回看拍摄素材、剪辑演出片段并上传发布时。",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次与外地制作人视频通话沟通合作",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在活动现场休息时刷短视频放松",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

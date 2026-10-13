@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_209",
+  "category": "技术研发与现场支持",
+  "persona_summary": "外业科研协作人员",
+  "static_profile": {
+    "user_id": "USER_209",
+    "identity": "外业科研协作人员，负责统筹现场外业科研工作，监督现场作业人员活动并确保其遵守安全规程；日常在客户现场、设备机房外围、跨园区通勤路线及外场测试点之间移动，通过手机移动核心网远程查询实验资料、记录观测结果、上传数据文件与研究影像供团队复核。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴设备；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "腾讯会议",
+      "钉钉",
+      "微信",
+      "飞书"
+    ],
+    "speech_archetype": "field_research_coordinator",
+    "speech_style": {
+      "tone": "简洁、务实、带现场指挥感，习惯用短句确认任务节点，强调安全与数据可靠。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "数据先回传",
+        "安全第一"
+      ],
+      "typical_habits": "在任务开始前先确认网络与设备状态，现场过程中频繁用语音或文字同步进度，遇到弱覆盖路段会提前提醒团队续传或切换热点。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "外业科研现场远程协作与数据回传",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在外场测试点、临时工位或故障处置现场执行外业科研任务时，需要远程查询实验资料、记录观测结果，并通过视频协作与团队复核数据文件和研究影像。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "07:30-10:30",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦复核",
+          "远程协作"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "到十点半"
+        ],
+        "period_aliases": [
+          "老规矩",
+          "任务现场这个点",
+          "外业早班"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨园区外场测试周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨园区外场测试周期间，现场处于弱覆盖路段与临时工位交替环境，需要保障日志和文件上传可靠，并确保远程操作低时延。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "现场工单与日志回传",
+        "application_name": "钉钉",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "现场设备出现异常或需要远程终端查询代码与日志时，通过钉钉发起视频通话进行工单处理与文件传输。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "团队影像复核与资料同步",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "外业采样或观测结束后，需要将研究影像和数据文件发送给团队复核，并通过微信视频通话快速对齐结论。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次跨机构活动现场，临时需要观看直播了解合作方动态。",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "通勤途中单次刷短视频放松，与主线任务无关。",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_223",
+  "category": "公共安全与移动执勤",
+  "persona_summary": "跨区域外事人员",
+  "static_profile": {
+    "user_id": "USER_223",
+    "identity": "驻外外交机构的外事人员，长期在跨区域移动与夜间值守环境中执行外事协调、现场取证与应急通信任务，工作地点涵盖夜间值守点、事故现场、应急集结区、道路与巡逻区域，全程依赖手机4G/5G移动核心网直连，不依赖家庭宽带或固定Wi-Fi。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携平板（通过手机热点联网）",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "高德地图"
+    ],
+    "speech_archetype": "diplomatic_field_officer",
+    "speech_style": {
+      "tone": "沉稳克制、条理清晰，带有外事人员的正式感与现场处置的干练",
+      "catchphrases": [
+        "老规矩",
+        "对齐一下",
+        "别掉链子",
+        "按流程走"
+      ],
+      "typical_habits": "习惯在行动前先确认通信链路与日程节点，偏好用简短指令同步信息，遇到突发情况先报位置再展开细节"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "月度跨区域外事协调与现场巡检视频会议",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每月逢十例行综合盘点与巡回沟通，15:00-17:00进行跨区域外事协调与现场巡检视频会议",
+      "period_type": "monthly",
+      "days": [
+        "10th",
+        "20th"
+      ],
+      "time_range": "15:00-17:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦开会",
+          "视频协调会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到五点"
+        ],
+        "period_aliases": [
+          "每月逢十老规矩",
+          "月度例会",
+          "老时间"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨区域外事应急联合演练",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "演练期间人员分散在多个临时处置现场与巡逻区域，移动核心网负载升高，需优先保障即时通信与位置共享的稳定性",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "现场取证与事件上报",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在事故现场或巡逻区域发现需即时上报的异常情况时，通过微信视频通话进行现场取证与同步汇报",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "任务调度与位置共享",
+        "application_name": "高德地图",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨地点移动或临时集结时，通过高德地图位置共享配合腾讯会议进行任务调度与路线对齐",
+        "aliases": {
+          "app_aliases": [
+            "高德地图"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "夜间值守间隙单次观看短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "临时参加非例行内部通报直播",
+        "application_name": "钉钉",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

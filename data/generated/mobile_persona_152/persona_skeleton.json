@@ -1,0 +1,177 @@
+{
+  "persona_id": "mobile_persona_152",
+  "category": "移动生活与现场协作",
+  "persona_summary": "高频移动网络使用者",
+  "static_profile": {
+    "user_id": "USER_152",
+    "identity": "城市停车场现场管理员，负责日常车辆引导、车位调度、客户咨询与现场突发协调，长期在户外岗亭、出入口与街区周边移动办公，依赖手机移动核心网完成全部业务通信",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴手表；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi",
+    "apps": [
+      "微信",
+      "高德地图",
+      "抖音",
+      "腾讯会议"
+    ],
+    "speech_archetype": "field_coordinator",
+    "speech_style": {
+      "tone": "干脆利落、现场感强，习惯用短句确认位置与状态，带一点老练的调度口吻",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "我这边先盯着"
+      ],
+      "typical_habits": "遇到任务先报位置再拉群，习惯用语音和短视频快速同步现场，重要节点会反复确认时延和画面是否稳定"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "早高峰停车场现场调度与远程协作",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "每个工作日早高峰时段，停车场出入口车流集中，需在岗亭与街区周边移动巡查，通过手机移动核心网进行位置共享、即时通信、现场短视频上传与远程协作，确保车辆引导和客户服务不掉线",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "08:30-10:30",
+      "application_name": "微信",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "微信",
+          "企微",
+          "小绿"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "连麦",
+          "视频对讲",
+          "开视频"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "到十点半"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "早高峰老规矩",
+          "八点半到十点半"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "商圈大型促销活动停车场保障周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "商圈促销活动期间停车场车流激增，出入口和周边街区出现临时拥堵，移动网络在人群密集区域波动明显，需要优先保障视频通话和位置共享的稳定性",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "现场短视频快速上报",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "停车场出现剐蹭、纠纷或特殊车辆占位时，用短视频快速记录现场并上传到工作群，便于远程主管判断",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨区域远程会议对齐",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "每周与片区主管或其他停车场管理员远程开会，对齐车位调度、客户投诉和临时任务安排",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "午休时在岗亭用手机看直播放松",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "下班后与朋友组队玩一局手机游戏",
+        "application_name": "王者荣耀",
+        "service_name": "游戏",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

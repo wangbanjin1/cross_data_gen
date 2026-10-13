@@ -1,0 +1,177 @@
+{
+  "persona_id": "mobile_persona_266",
+  "category": "野外科研与农业作业",
+  "persona_summary": "田间移动生产人员",
+  "static_profile": {
+    "user_id": "USER_266",
+    "identity": "一位保守的美国农民，不认同气候变化，日常在农田、牧场、林区与河岸样地之间移动，进行作物状态巡检、病害记录、气象与传感数据采集，并通过手机与农技人员远程沟通。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴设备；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "钉钉",
+      "腾讯会议",
+      "高德地图"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "直来直去、务实粗犷，带点固执和乡土气，不爱绕弯子。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "地里的活儿不等人",
+        "先看数据再说"
+      ],
+      "typical_habits": "习惯在田间地头直接开视频或发语音，先报位置和作物情况，再让技术员远程判断；遇到弱信号会反复确认‘能听见不’。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "田间作物病害巡检与远程技术会商",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在农田、牧场或种植区执行作物病害巡检任务，需要现场拍摄叶片、茎秆与土壤状态，并通过视频通话向农技人员实时反馈异常情况。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "微信",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "微信",
+          "微讯",
+          "那个绿图标"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "连麦看地",
+          "视频通话",
+          "开视频"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "从两点弄到四点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "下午下地那会儿",
+          "两点到四点的巡检"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "秋收前病害爆发应急巡检周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "秋收前连续阴雨导致田间病害扩散，需要在弱覆盖的偏远农田与河岸样地之间高频往返，实时回传病株图片并接受远程指导。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "农机调度与作业进度同步",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "收割或播种前需要与农机手、合作社调度员对齐作业地块、时间与机具安排。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "远程农技培训与录像复盘",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "晚间或雨天无法下地时，参加农技站组织的线上培训，回看白天拍摄的病害录像并做标记。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次与家人视频报平安",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次查看天气与农资短视频",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,179 @@
+{
+  "persona_id": "mobile_persona_234",
+  "category": "移动生活与现场协作",
+  "persona_summary": "移动数据研究人员",
+  "static_profile": {
+    "user_id": "USER_234",
+    "identity": "初级统计师，长期跟随资深统计师学习广义线性模型，日常在城市街区、公共活动现场及跨区域出行途中进行移动数据研究，习惯在户外等候区、临时停留点或兴趣活动现场用5G手机直接联网完成数据查询、模型报告审阅与代码同步。",
+    "devices": "主力设备为5G智能手机，便携终端确需联网时使用手机热点；不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "junior_researcher_speaker",
+    "speech_style": {
+      "tone": "谨慎、好学、偏技术化，说话时喜欢先确认再下结论，常带一点请教的语气。",
+      "catchphrases": [
+        "我这边先对齐一下",
+        "别掉链子",
+        "老规矩",
+        "我记一下参数",
+        "弱网也别断"
+      ],
+      "typical_habits": "遇到模型问题先翻笔记再问资深统计师，习惯在移动途中用手机快速记录参数和结论，重要讨论前会提前说好接入方式。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "跨园区通勤与外部研讨现场远程模型对齐",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "当身处城市街区、公共活动现场、跨区域出行途中或户外等候区、临时停留点等移动环境，且时间为14:00-16:00时，使用5G手机在腾讯会议中参加广义线性模型研讨与数据结果对齐。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议",
+          "会议App"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "远程研讨",
+          "连麦讨论",
+          "开会议"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "开到四点",
+          "一个半小时"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "下午两点老规矩",
+          "外勤时段的例行对齐"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城统计建模研讨会周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城参加统计建模研讨会，频繁在高铁沿线、会场周边和临时停留点接入腾讯会议，弱覆盖路段较多，需要保证模型报告共享与语音讨论连续。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "通勤途中短视频学习记录",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在城市街区通勤或户外等候区临时停留时，用手机快速浏览统计建模与广义线性模型相关短视频并做笔记。",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "现场数据结果即时沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在公共活动现场或跨区域出行途中，需要与资深统计师快速确认数据结果、模型参数或代码同步问题时发起视频通话。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时参加线上统计软件培训直播",
+        "application_name": "钉钉",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在活动现场用手机热点给便携终端同步小型数据文件时顺便刷短视频",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

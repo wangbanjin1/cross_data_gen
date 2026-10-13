@@ -1,0 +1,178 @@
+{
+  "persona_id": "mobile_persona_248",
+  "category": "移动学习与教育协作",
+  "persona_summary": "移动教学人员",
+  "static_profile": {
+    "user_id": "USER_248",
+    "identity": "退休返聘教授，长期从事时间管理与优先级排序方向的教学与咨询，现以移动教学人员身份活跃于校园户外、社会实践地、临时教学现场及校际通勤途中，全程依赖手机4G/5G移动核心网直连，不依赖固网或普通Wi-Fi，常携带5G智能手机与随身拍摄设备完成课程通知、作业批阅、视频答疑与资料上传。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备（便携云台/运动相机），确需联网时以手机热点为便携终端供网。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "educator_mentor",
+    "speech_style": {
+      "tone": "沉稳、条理清晰，带教授式引导口吻，喜欢先定优先级再谈执行，语速不快但信息密度高。",
+      "catchphrases": [
+        "先排优先级",
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "按时间盒来"
+      ],
+      "typical_habits": "习惯在任务开始前用一句话明确目标与时限，常用时间管理术语组织表达，遇到协作事项会主动要求'对齐一下'，对网络稳定性与上传可靠性极为敏感。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "户外移动课堂视频答疑与资料上传",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在校园户外区域、社会实践地或临时教学现场执行移动教学任务时，于09:30-11:30面向学生开展视频答疑、课程通知发布与教学资料上传，全程以手机4G/5G直连移动核心网完成。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "09:30-11:30",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议",
+          "鹅会"
+        ],
+        "service_aliases": [
+          "开视频答疑",
+          "连麦对齐",
+          "线上碰头",
+          "开个短会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十一点半"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "上午例行",
+          "任务时段老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "校际联合社会实践周现场直播教学",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "校际联合社会实践周期间，教学现场转移至偏远实践基地，移动核心网信号波动较大，需临时降低画质并收紧时延以保障直播教学与即时互动不中断。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "通勤途中作业批阅与协作文档沟通",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "校际通勤途中或实习点转场间隙，通过钉钉发起短时会议或语音沟通，查看学生提交并同步批阅意见。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "课程回放与教学短视频复盘",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "教学任务结束后或晚间复盘时段，在哔哩哔哩观看课程回放与教学短视频，整理时间管理案例素材。",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时跨校视频通话确认场地与设备",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次观看教育类直播公开课",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

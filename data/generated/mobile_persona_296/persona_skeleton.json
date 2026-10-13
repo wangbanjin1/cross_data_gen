@@ -1,0 +1,173 @@
+{
+  "persona_id": "mobile_persona_296",
+  "category": "移动生活与现场协作",
+  "persona_summary": "现场系统保障工程师",
+  "static_profile": {
+    "user_id": "USER_296",
+    "identity": "资深IT故障排查与现场系统保障工程师，长期在户外等候区、临时停留点、城市街区、公共活动现场及跨区域出行途中执行设备现场保障任务，负责接收安全告警、检查日志指标、参加故障会议并上传诊断结果与处置记录。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携工作终端；便携终端确需联网时使用手机热点，全程以手机4G/5G直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "抖音"
+    ],
+    "speech_archetype": "field_engineer_speaker",
+    "speech_style": {
+      "tone": "干练、直接、带现场指挥感，习惯用短句确认状态和节点",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先保通再细看"
+      ],
+      "typical_habits": "开工前先确认网络和消息通道，任务中频繁用语音和位置共享同步进度，收尾时要求上传诊断记录并口头复盘。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "现场系统保障远程故障会议与诊断上传",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在设备现场执行系统保障任务时，收到安全告警或故障工单，需要立即接入远程故障会议、检查日志指标并上传诊断结果与处置记录",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "15:00-17:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "故障会",
+          "远程协作会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "开到五点"
+        ],
+        "period_aliases": [
+          "老规矩",
+          "现场任务时段",
+          "下午保障窗口"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨区域公共活动现场系统保障周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨区域公共活动现场人员密集、移动网络拥塞，现场保障任务密集，需在户外等候区与临时停留点之间频繁切换，远程会议和诊断上传对时延更敏感。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "现场日志截图与诊断记录回传",
+        "application_name": "微信",
+        "service_name": "即时通信",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "现场检查日志指标后，需要把关键截图、诊断结论和处置记录快速回传给后台团队",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "即时通信"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "移动途中位置共享与导航协同",
+        "application_name": "钉钉",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨区域出行途中需要与现场同事共享位置、确认路线并临时拉起视频通话对齐处置方案",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "任务间隙单次刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "非任务时段单次观看直播了解行业动态",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

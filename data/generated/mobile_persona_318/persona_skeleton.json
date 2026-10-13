@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_318",
+  "category": "移动学习与教育协作",
+  "persona_summary": "移动家庭沟通用户",
+  "static_profile": {
+    "user_id": "USER_318",
+    "identity": "大一新生，摄影爱好者，与Dylan Pietrs是好友；日常在运动场、社会实践地、临时教学现场、校园户外区域、校际通勤途中及实习点之间移动，全程依赖手机4G/5G直连，不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式，重点完成视频会议、即时通信与协作文档、在线课程、资料检索与作业提交，便携终端确需联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴设备；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "哔哩哔哩",
+      "钉钉"
+    ],
+    "speech_archetype": "student_mobile_learner",
+    "speech_style": {
+      "tone": "轻快直接，带校园口语和摄影圈习惯，讲效率也讲稳定，常把网络状态挂在嘴边。",
+      "catchphrases": [
+        "老规矩",
+        "别掉线",
+        "对齐一下",
+        "我这边信号还行"
+      ],
+      "typical_habits": "出门前先看电量与信号，路上用可穿戴设备看消息，到了运动场或实践地就找相对稳定的位置开视频、传照片和交作业。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "校园户外与通勤途中移动学习协作",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "当身处校园户外区域、运动场、社会实践地、临时教学现场或校际通勤途中，且时间为14:00-16:00的移动学习与协作时段，使用5G手机直连移动核心网进行视频会议、即时通信与协作文档、在线课程、资料检索与作业提交。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦开会",
+          "开个会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到四点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "下午两点到四点的老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "校际摄影实践周与实习点走访",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "2026年11月初校际摄影实践周与实习点走访叠加，频繁在运动场、社会实践地、临时教学现场和校际通勤途中移动，现场人流大、基站切换频繁，需临时降低画质并收紧时延以保障视频会议和作业提交。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "通勤途中家庭视频通话与位置共享",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在接送、出行和户外等候期间，与家人进行视频通话、共享位置并查看家庭消息。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "实践现场资料检索与作业提交",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在运动场、社会实践地或临时教学现场，需要快速检索资料、上传沿途照片或文件并提交作业时。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "午休时在校园户外区域单次刷短视频放松",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "临时教学现场单次观看在线课程直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

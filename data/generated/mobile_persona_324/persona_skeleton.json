@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_324",
+  "category": "移动生活与现场协作",
+  "persona_summary": "高频移动网络使用者",
+  "static_profile": {
+    "user_id": "USER_324",
+    "identity": "社区临街小店主，长期遭遇入室盗窃，活跃于城市街区与商户互助圈，常在夜间闭店后通过手机直播分享防盗经验与小微商户生存洞察，活动半径覆盖店铺周边街区、社区活动中心及跨区批发市场。",
+    "devices": "主力：5G智能手机；辅助：随身拍摄设备（用于店内监控回看与现场取证拍摄）",
+    "apps": [
+      "微信",
+      "抖音",
+      "快手",
+      "腾讯会议"
+    ],
+    "speech_archetype": "community_advocate",
+    "speech_style": {
+      "tone": "直白务实，带点街坊邻里的热络与警惕，说话像在柜台后跟熟客唠嗑",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "盯紧点",
+        "咱这条街"
+      ],
+      "typical_habits": "习惯用具体案例说事，开口先提最近哪家店又被撬了，再顺势带出防盗和经营建议；夜间直播时爱用‘老时间’指代固定开播时段。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "夜间闭店后街区防盗经验直播",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "每晚20:00-22:00闭店后，身处店铺后巷或社区街角临时停留点，使用手机4G/5G直接联网，在抖音开启直播向周边商户分享当日防盗观察与街区安全动态",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "20:00-22:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "上播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "晚间例行"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "街区连环盗窃案商户安全周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "社区连续发生三起入室盗窃，商户互助会组织夜间联合巡逻与安全直播，店主在店铺后巷及巡逻路线沿途使用手机直播，部分路段处于楼宇遮挡弱覆盖区，需临时降低画质保障推流稳定",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "商户互助群视频通话",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "街区发生可疑人员徘徊或突发盗窃事件时，在店铺周边或巡逻途中通过微信商户互助群发起视频通话，实时通报现场情况",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨区批发市场远程选品会议",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "每周前往跨区批发市场进货途中或市场临时停留点，通过腾讯会议与供应商远程对接选品与补货清单",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次在店铺内用手机观看同行防盗直播",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在通勤途中刷短视频消遣",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

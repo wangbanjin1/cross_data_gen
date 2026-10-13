@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_303",
+  "category": "移动采编与内容生产",
+  "persona_summary": "户外内容创作者",
+  "static_profile": {
+    "user_id": "USER_303",
+    "identity": "户外内容创作者兼体育评论员，长期在城市街区、活动现场与突发事件现场进行短视频拍摄与移动直播，全程依赖手机4G/5G移动核心网，不接入家庭宽带或固定Wi-Fi，便携设备联网时使用手机热点。",
+    "devices": "5G智能手机（主力）＋随身拍摄设备（运动相机、无线麦克风、便携云台）",
+    "apps": [
+      "抖音",
+      "快手",
+      "微信",
+      "哔哩哔哩",
+      "腾讯会议"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "直率、带点挑衅式点评，语速快，喜欢用行话和圈内梗，对网络质量极度敏感",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "推流走起",
+        "对齐一下",
+        "这波稳不稳"
+      ],
+      "typical_habits": "开播前必先测上行速率，转场途中习惯用语音消息协调团队，遇到弱网会反复强调'别断流'，对画质和时延有明确的档位要求。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "晚间户外街区直播与素材回传",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处城市街区采访点或临时拍摄地，进入晚间20:00-22:00弱网时段，周边基站负载高、上行带宽波动，需在转场切换中保持直播推流与素材分段上传不中断。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "20:00-22:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖家"
+        ],
+        "service_aliases": [
+          "推流",
+          "开播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "晚间例行"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "城市马拉松赛事周现场直播",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "赛事周期间在赛道沿线、起点集结区和终点采访区进行移动直播，现场人群密集、基站拥塞严重，转场频繁且需即时回传高码率素材。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "赛后录像复盘与团队语音沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "拍摄结束后在临时休息点或转场车内，与编导团队进行录像复盘和次日选题对齐。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨城转场途中素材粗剪与云端协作",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨城转场途中在高铁或大巴上，与后期团队远程对齐素材分段上传进度和剪辑方向。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时接到品牌方需求，在活动现场用手机快速发起一次短视频拍摄上传",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "休息间隙在户外直播点观看同行赛事直播，了解热点话题",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

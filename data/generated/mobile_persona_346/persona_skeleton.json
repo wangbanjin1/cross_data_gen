@@ -1,0 +1,179 @@
+{
+  "persona_id": "mobile_persona_346",
+  "category": "科研调查与移动协作",
+  "persona_summary": "移动营养服务人员",
+  "static_profile": {
+    "user_id": "USER_346",
+    "identity": "食品科学家与移动营养服务人员，长期面向低收入社区开发平价营养产品，日常在临时实验现场、博物馆外场、资料采集点、外业调查点、学术活动场地及跨校通勤路线之间高频移动，以5G智能手机和可穿戴设备作为唯一联网入口，完成饮食数据记录、配方资料查询、远程营养指导与跨地点科研协作。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴设备（用于饮食与活动数据采集），便携终端确需联网时使用手机热点。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "飞书",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "research_field_worker",
+    "speech_style": {
+      "tone": "务实、简洁、带科研现场感的协作口吻，习惯把复杂事项压缩成可执行动作。",
+      "catchphrases": [
+        "老规矩",
+        "对齐一下",
+        "别掉链子",
+        "数据先传稳"
+      ],
+      "typical_habits": "在移动场景中先确认网络与上传状态，再进入讨论；偏好用短句同步进度，强调数据可靠和会话连续。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "周三周五晚间跨地点营养配方复盘会",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每周三与周五晚间19:00-21:00，结束外场调研后固定发起跨地点营养配方复盘与远程协作会议。",
+      "period_type": "weekly",
+      "days": [
+        "Wednesday",
+        "Friday"
+      ],
+      "time_range": "19:00-21:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会",
+          "小企鹅开会"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦复盘",
+          "远程碰一下",
+          "开个协作会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到九点",
+          "一个半小时到两小时"
+        ],
+        "period_aliases": [
+          "每周三周五老规矩",
+          "老时间",
+          "晚间例行",
+          "周三周五晚上这个点"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "低收入社区营养干预产品试吃与数据回收周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "在社区活动点与临时实验现场连续开展试吃、问卷和饮食数据回收，现场人员密集、移动网络波动明显，需要优先保障数据上传与远程指导稳定。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "外业调查点饮食数据回传与文献速查",
+        "application_name": "飞书",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在外业调查点完成一轮饮食记录后，需要快速回传数据并与协作者短会确认字段与文献引用。",
+        "aliases": {
+          "app_aliases": [
+            "feishu",
+            "lark"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨校通勤途中营养指导视频通话",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨校通勤路线上临时接到社区营养咨询或合作方沟通需求，需要即时视频通话确认方案。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "学术活动场地临时观看一场食品科技直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "博物馆外场资料采集间隙刷短视频放松",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

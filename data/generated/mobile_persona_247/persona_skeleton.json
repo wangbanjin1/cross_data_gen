@@ -1,0 +1,176 @@
+{
+  "persona_id": "mobile_persona_247",
+  "category": "技术研发与现场支持",
+  "persona_summary": "移动数据研究人员",
+  "static_profile": {
+    "user_id": "USER_247",
+    "identity": "可解释AI与机器学习公平性方向的研究人员，长期在客户现场、设备机房外围、跨园区通勤路线及外场测试点之间移动办公；以5G智能手机和平板电脑为主要终端，全程依赖4G/5G移动核心网直连，不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式；重点完成远程终端、代码与日志查询、视频协作、工单处理与文件传输，便携终端确需联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "腾讯会议",
+      "钉钉",
+      "微信",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "technical_researcher_speaker",
+    "speech_style": {
+      "tone": "理性、克制、偏工程化表达，习惯用参数和边界条件描述问题，偶尔夹杂实验室与现场支持行话。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先看日志",
+        "这个链路要稳"
+      ],
+      "typical_habits": "说话前先确认场景与参数，喜欢把任务拆成可验证步骤；遇到网络问题会先问时延、丢包和续传，再讨论业务本身。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "周末模型评审与远程代码日志协同",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每周六与周日15:00-17:00固定进行周末模型评审与远程代码日志协同，属于周级周期任务，到点即发起腾讯会议并共享屏幕审阅模型报告、远程终端与日志。",
+      "period_type": "weekly",
+      "days": [
+        "Saturday",
+        "Sunday"
+      ],
+      "time_range": "15:00-17:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "远程评审",
+          "连麦过模型"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到五点"
+        ],
+        "period_aliases": [
+          "每周六周日老规矩",
+          "周末下午老时间",
+          "周六周日这个时候"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城客户现场模型交付与弱覆盖路段保障",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城客户现场交付可解释AI模型，期间频繁经过园区外围弱覆盖路段与临时工位，移动核心网信号波动明显，需要优先保障远程终端、日志上传和视频协作的连续性与快速恢复。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "外场测试点日志回传与工单处理",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在外场测试点或临时工位完成测试后，需要快速回传日志、处理工单并与后方同事短会确认。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "通勤途中模型报告速览与代码片段同步",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨园区通勤路线上收到模型报告更新或代码片段同步请求时，通过微信视频通话快速对齐关键结论。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次晚间技术分享直播观看",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次客户沟通后短视频放松",
+        "application_name": "微信",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

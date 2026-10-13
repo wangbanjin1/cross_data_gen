@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_170",
+  "category": "文化创作与移动演出",
+  "persona_summary": "移动演出与音乐创作者",
+  "static_profile": {
+    "user_id": "USER_170",
+    "identity": "活跃于复古游戏展会的现场芯片音乐（chiptune）演奏者，常年在户外演出点、展览布置区、城市采风路线与音乐节、街头活动或临时排练现场之间高频转场，全程以5G智能手机作为唯一联网终端，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "devices": "主力设备为5G智能手机，辅助设备包括便携音频接口、掌上合成器与移动热点（确需联网时使用手机热点为便携终端供网）。",
+    "apps": [
+      "哔哩哔哩",
+      "抖音",
+      "微信",
+      "腾讯会议"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "节奏快、带现场感的乐手口吻，喜欢用演出行话和倒计时式表达，语气直接、务实。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "推流走起",
+        "稳住上行"
+      ],
+      "typical_habits": "习惯在开演前用一句话确认设备与网络状态，转场途中用语音消息同步进度，遇到弱覆盖路段会先喊'续传'再处理。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "复古游戏展会现场芯片音乐直播演出",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在复古游戏展会或音乐节现场执行芯片音乐演奏任务，需在15:00-17:00演出时段内通过手机5G网络进行现场音视频采集与直播推流，并同步上传音频工程与云端素材。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "15:00-17:00",
+      "application_name": "哔哩哔哩",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "小破站",
+          "B站"
+        ],
+        "service_aliases": [
+          "推流",
+          "开播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到五点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "下午三点老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "复古游戏展密集人群直播保障周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "展会主舞台周边人群密集、无线环境复杂，上行带宽波动明显，需临时降低画质并收紧时延以保障直播互动不中断。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "排练转场途中与乐队成员视频通话对齐编曲",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在城市采风路线或临时排练现场转场途中，需要与乐队成员快速对齐编曲与演出顺序时触发。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "演出后云端素材同步与团队复盘会议",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "演出结束后回到临时休息点，需要与团队同步云端素材、复盘演出片段并安排下一场排练时触发。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "展会间隙在休息区单次刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "临时观看同行在音乐节现场的直播片段",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

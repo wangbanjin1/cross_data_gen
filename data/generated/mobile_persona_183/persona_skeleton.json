@@ -1,0 +1,178 @@
+{
+  "persona_id": "mobile_persona_183",
+  "category": "医疗健康与移动服务",
+  "persona_summary": "通勤与实践型学生",
+  "static_profile": {
+    "user_id": "USER_183",
+    "identity": "医学专业学生，受祖辈经历影响立志专攻感染病学方向。日常在医学院校、教学医院实习点、社区随访路线及院前处置点之间高频通勤，全程依赖手机4G/5G移动核心网直连，不依赖家庭宽带或普通Wi-Fi。核心活动包括参加远程病例讨论、上传现场影像、查询患者信息、记录随访数据，并在转运途中或户外健康服务现场完成学习与实践任务。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携工作终端（平板/轻薄本），便携终端确需联网时使用手机热点共享。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "medical_student_practitioner",
+    "speech_style": {
+      "tone": "务实、紧凑、带临床与学业双重节奏感，习惯用短句确认任务与时间节点。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "我这边信号还行",
+        "先保关键消息"
+      ],
+      "typical_habits": "在通勤与现场切换时先确认网络与接入方式，再按固定时段参加远程讨论；偏好提前说明画质与时延要求，避免关键影像上传或会诊中断。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "通勤途中远程病例讨论与随访资料协同",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "当身处地铁地下换乘通道、地下人行连廊或院前处置点地下层等弱网空间，且时间为10:00-12:00时，使用手机5G移动核心网直连，参加远程病例讨论并同步上传随访记录与现场影像。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "10:00-12:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议",
+          "鹅会"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦讨论",
+          "远程病例会",
+          "开个会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "开到十二点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "上午十点到十二点老规矩",
+          "通勤路上这个点"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "秋冬季社区呼吸道感染随访高峰",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "社区随访路线临时加密，需在户外临时医疗站与转运途中频繁上传患者随访影像并参加远程会诊，现场人员密集、移动网络波动明显。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "实习点小组视频复盘",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在实习点结束现场操作后，与同组同学临时发起视频通话，快速复盘病例处置与随访记录。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "通勤途中课程回看与资料查询",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在校园户外、实习点往返通勤途中，利用碎片时间观看感染病学课程片段与操作演示短视频。",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时参加跨校线上学术讲座，单次使用后不再固定。",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "午休时在临时医疗站单次观看娱乐直播放松。",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

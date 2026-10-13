@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_310",
+  "category": "移动生活与现场协作",
+  "persona_summary": "高频移动网络使用者",
+  "static_profile": {
+    "user_id": "USER_310",
+    "identity": "一名臭名昭著的艺术品窃贼，常年流窜于城市街区、公共活动现场与跨区域出行途中，善于在移动状态下完成信息检索、位置共享、即时通信与现场影像回传，对目标物品有极强占有欲，习惯用手机4G/5G直接联网，不依赖固定宽带或普通Wi-Fi。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备（便携相机/运动相机），必要时以手机热点为便携终端提供联网。",
+    "apps": [
+      "微信",
+      "抖音",
+      "腾讯会议",
+      "高德地图"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "低沉、简短、带点江湖气，喜欢用行话和暗语，不爱多解释。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "东西到手再说"
+      ],
+      "typical_habits": "习惯在行动前用短句确认时间、地点和分工，行动中只发关键指令，事后用影像复盘；对网络中断和消息延迟极度敏感。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "周末踩点直播与远程协作",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每周六与周日15:00-17:00的周末目标踩点专场，固定开直播向同伙展示现场环境并远程对齐行动细节。",
+      "period_type": "weekly",
+      "days": [
+        "Saturday",
+        "Sunday"
+      ],
+      "time_range": "15:00-17:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖子"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "踩点直播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到五点"
+        ],
+        "period_aliases": [
+          "每周六周日老时间",
+          "周末下午老规矩",
+          "周六周日这个点"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城拍卖会踩点周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城参加拍卖会预展与周边踩点，现场人流密集、建筑遮挡严重，移动网络在会场内部和地下车库频繁弱覆盖，需要临时降低画质并压低时延以保证直播和位置共享不中断。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "行动后录像复盘",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "每次踩点或行动结束后，与同伙在临时停留点用微信视频通话快速回看录像、核对路线和分工。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "远程情报对齐会",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "收到新目标线索后，临时召集同伙在腾讯会议上对齐情报、分配任务和确认时间窗口。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次在户外等候区刷短视频打发时间",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在跨区域出行途中观看赛事直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

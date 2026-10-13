@@ -1,0 +1,172 @@
+{
+  "persona_id": "mobile_persona_281",
+  "category": "移动学习与教育协作",
+  "persona_summary": "通勤与实践型学生",
+  "static_profile": {
+    "user_id": "USER_281",
+    "identity": "一名高中学生，日常在校园户外区域、校际通勤途中及实习点之间移动，经常在运动场、社会实践地或临时教学现场参与几何证明学习与小组协作，依赖手机移动核心网完成在线课程、资料检索、作业提交与视频讨论。",
+    "devices": "5G智能手机＋可穿戴设备，必要时使用手机热点为便携终端提供联网",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "哔哩哔哩",
+      "钉钉"
+    ],
+    "speech_archetype": "student_learner",
+    "speech_style": {
+      "tone": "直接、务实，带一点学生之间的轻松感，强调别耽误小组进度",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先把证明思路过一遍"
+      ],
+      "typical_habits": "习惯在任务开始前先确认网络和会议链接，遇到通勤切换会提前说明，喜欢用简短口语同步进度"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "几何证明小组视频研讨与作业提交",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在校园户外、实习点或临时教学现场进行几何证明小组研讨时，需要进入腾讯会议参加视频讨论、共享证明步骤并提交实践记录",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "10:00-12:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦讨论",
+          "开小组会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "从十点开到十二点"
+        ],
+        "period_aliases": [
+          "老规矩",
+          "任务现场这个点",
+          "十点到十二点这段"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "校际几何证明实践周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "校际实践周期间，学生频繁在运动场、社会实践地和通勤途中参加临时教学直播与小组视频讨论，现场人流多、网络切换频繁，需要优先保证会话连续和作业上传稳定。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "通勤途中观看几何证明课程回放",
+        "application_name": "哔哩哔哩",
+        "service_name": "在线课程",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "校际通勤途中或临时教学现场等待时，用手机观看几何证明课程回放并记录关键步骤",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "在线课程"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "小组即时通信与协作文档同步",
+        "application_name": "微信",
+        "service_name": "即时通信与协作文档",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在运动场、社会实践地或实习点临时需要同步证明草稿、提交作业或确认小组分工时",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "即时通信与协作文档"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时被拉入跨校几何证明公开课直播，仅单次观看",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "课间在校园户外与同学单次视频通话确认作业提交格式",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

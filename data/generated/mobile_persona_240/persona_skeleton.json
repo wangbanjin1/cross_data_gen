@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_240",
+  "category": "文化创作与移动演出",
+  "persona_summary": "移动人文调查人员",
+  "static_profile": {
+    "user_id": "USER_240",
+    "identity": "专注于政治与经济因素对内战结局影响的历史学者，以移动人文调查方式在遗址、街区、博物馆外场及音乐节、街头活动等临时现场进行田野工作，高频使用手机移动核心网完成音视频采集、直播、云端同步与团队沟通。",
+    "devices": "5G智能手机＋随身拍摄设备（便携云台、无线麦克风、运动相机），便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "抖音",
+      "腾讯会议",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "干练、现场感强，带学术调查者的精确与演出者的节奏感，常边操作设备边短句指令。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先保上行"
+      ],
+      "typical_habits": "习惯在进入现场前先确认网络与电量，用口语化简称指代应用和画质档位；遇到弱覆盖会立刻要求团队切换备份链路或续传。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "遗址外场夜间直播与田野影像回传",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处历史遗址外场、街区采风路线或博物馆外场临时展演区，进入20:00-22:00夜间弱覆盖时段，需要边直播边将田野影像同步给研究团队。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "20:00-22:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "开直播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "晚间例行",
+          "到点就开"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "内战遗址夜间纪念展演周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "纪念展演周期间遗址外场人流密集、临时展棚与金属结构造成上行干扰，20:00-22:00直播与素材回传并发，弱覆盖路段增多。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "研究团队夜间视频复盘会",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "夜间直播结束后在返程车或临时驻地，与异地研究团队快速对齐当日田野发现与影像标注。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "云端素材同步与社交发布",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "现场采集完成后需要向合作方确认素材版本，并通过微信视频通话快速核对关键片段与发布文案。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时街头活动，用手机热点给便携终端联网后刷短视频等待团队集合。",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在音乐节临时排练现场休息时，用手机看同行直播了解现场动态。",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

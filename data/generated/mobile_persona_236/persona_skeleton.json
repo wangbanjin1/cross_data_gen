@@ -1,0 +1,176 @@
+{
+  "persona_id": "mobile_persona_236",
+  "category": "公共安全与移动执勤",
+  "persona_summary": "移动执勤人员",
+  "static_profile": {
+    "user_id": "USER_236",
+    "identity": "边境巡逻执勤人员，日常在道路、巡逻区域及临时处置现场执行巡逻与事件处置任务，高频使用手机移动核心网进行现场取证、即时通信、事件上报、地图导航、位置共享与任务调度，下班后喜欢品尝当地特色美食放松。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴设备；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "钉钉",
+      "高德地图",
+      "腾讯会议"
+    ],
+    "speech_archetype": "field_patrol_agent",
+    "speech_style": {
+      "tone": "干脆利落、指令式、现场感强，习惯用短句确认任务与位置",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "收到请回复",
+        "位置发我",
+        "现场情况先传回来"
+      ],
+      "typical_habits": "执勤时先确认调度消息和位置共享，再上传现场图片与执法记录；遇到突发情况会反复强调低时延和连续覆盖，收队后才放松聊吃的。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "边境巡逻现场取证与任务调度",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在边境巡逻执勤时段执行道路、巡逻区域及临时处置现场的巡逻任务，需要接收调度、共享位置、查询人员或车辆信息，并上传现场图片与执法记录",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "08:30-10:30",
+      "application_name": "微信",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "微信",
+          "某信",
+          "企微"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "连麦",
+          "视频通话",
+          "现场连线"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "到十点半"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "早班巡逻老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "边境突发事件联合处置行动",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "边境路段突发多起异常越境事件，巡逻区域临时增设检查点，现场网络拥塞且移动性强，需要优先保障调度消息及时送达和现场图片稳定回传",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "巡逻车辆与人员位置调度",
+        "application_name": "高德地图",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "巡逻车辆换班或临时调整巡逻路线时，通过地图导航与位置共享进行任务调度",
+        "aliases": {
+          "app_aliases": [
+            "高德地图"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "执法记录复盘与事件上报",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "执勤结束后回传现场图片与执法记录，并进行事件复盘与上报",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "下班后与同事在驻地附近餐馆品尝当地特色美食，临时发起群聊视频",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "休息时刷本地美食探店短视频，寻找换班后可以去吃的馆子",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

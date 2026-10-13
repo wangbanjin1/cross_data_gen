@@ -1,0 +1,179 @@
+{
+  "persona_id": "mobile_persona_330",
+  "category": "野外科研与农业作业",
+  "persona_summary": "野外生态调查人员",
+  "static_profile": {
+    "user_id": "USER_330",
+    "identity": "野外生态调查人员兼野生动物康复营养规划师，长期在农田、林区、河岸与生态样地开展样线调查，负责为受伤或孤儿野生动物制定营养方案，高频在偏远山区与临时观测点用手机4G/5G直接联网完成定位导航、样本记录、传感数据上传与现场图片回传。",
+    "devices": "5G智能手机＋随身拍摄设备，便携终端确需联网时使用手机热点",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "outdoor_researcher_speaker",
+    "speech_style": {
+      "tone": "干脆利落、务实克制，带一点野外作业的粗粝感，讲求节点和证据",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先把点位打上",
+        "信号弱也得续上"
+      ],
+      "typical_habits": "习惯用短句确认任务节点，出发前先看覆盖与电量，弱网路段反复强调续传和恢复，回传后要求把坐标与样本编号对齐。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "样线调查数据回传与远程营养方案会商",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处林区边缘或河岸样地临时观测点弱覆盖区域，10:00-12:00沿样线完成定位导航与样本记录后，需要把带坐标照片、观测数据和传感记录分批回传，并与救护中心远程会商受伤或孤儿动物的营养方案",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "10:00-12:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议",
+          "鹅会"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦会商",
+          "远程碰一下",
+          "开个短会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十二点",
+          "一个半小时"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "上午十点到十二点老规矩",
+          "样地一到就开"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "秋季候鸟迁徙期救护站远程营养会商保障",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "秋季候鸟迁徙高峰，救护站临时接收大量受伤或孤儿候鸟，调查人员在山谷林区与河岸样地弱覆盖区域频繁回传影像并远程会商营养方案，网络波动明显，需要优先保证语音与画面稳定",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "现场图片与观测记录回传",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在偏远采样路线或山区临时观测点拍到受伤动物或关键样本后，需要快速把带坐标照片和短视频发给救护中心确认",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "调查记录复盘与样本编号核对",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "当天样线调查结束后回到临时驻点，需要与团队复盘观测记录、核对样本编号和营养方案执行情况",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时驻点休息时刷野外救护科普视频",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次与外地野生动物营养专家临时看直播讲座",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

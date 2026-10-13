@@ -1,0 +1,178 @@
+{
+  "persona_id": "mobile_persona_196",
+  "category": "移动生活与现场协作",
+  "persona_summary": "港航移动作业人员",
+  "static_profile": {
+    "user_id": "USER_196",
+    "identity": "沿海城市港航移动作业人员，长期在港区、码头和近岸作业点之间往返，负责船期核对、气象查看、调度接收、电子单据上传与现场作业记录回传，全程依赖手机移动核心网完成即时通信、远程协作、地图导航与位置共享。",
+    "devices": "主力设备为5G智能手机，便携终端确需联网时使用手机热点；不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "抖音",
+      "高德地图"
+    ],
+    "speech_archetype": "port_ops_speaker",
+    "speech_style": {
+      "tone": "干脆直接、带港区作业节奏感，讲求时效和确认，习惯用短句催办与复述关键信息。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "收到请回",
+        "按月初那套来"
+      ],
+      "typical_habits": "先确认船期和天气，再拉群或开会对齐调度；重要事项喜欢用语音和位置共享同步，遇到月初动员会会提前测试网络与会议参数。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "月初港航调度远程例会与现场视频对齐",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每月月初1-2号例行开门红与月度动员会，港航移动作业人员在09:00-11:00通过手机移动核心网参加远程调度例会，并与码头、近岸作业点视频对齐。",
+      "period_type": "monthly",
+      "days": [
+        "1st",
+        "2nd"
+      ],
+      "time_range": "09:00-11:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "开例会",
+          "远程调度会",
+          "视频对齐"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "开到十一点"
+        ],
+        "period_aliases": [
+          "每月月初1-2号",
+          "月初老规矩",
+          "月度动员会",
+          "月初例会"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "台风季前港航联合应急演练与船期加密核对",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "台风季前港区与近岸作业点进入联合应急演练期，码头现场风大、人员分散、跨区域移动频繁，移动核心网需要优先保障调度消息、视频对齐与位置共享的连续覆盖。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "码头现场短视频作业记录回传",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在码头、近岸作业点完成阶段性巡检后，需要快速拍摄并上传现场短视频作为作业记录与交接凭证。",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨区域船期沟通与位置共享",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨区域出行途中或临时停留点需要与船代、码头值班人员快速视频通话，确认船期变化并共享实时位置。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时参加港区安全培训直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次夜间值班间隙与家人视频通话",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

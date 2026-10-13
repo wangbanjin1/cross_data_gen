@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_176",
+  "category": "移动经营与客户服务",
+  "persona_summary": "移动经营者",
+  "static_profile": {
+    "user_id": "USER_176",
+    "identity": "本地餐厅老板，主营萨尔瓦多风味餐饮，长期在展会现场、商圈户外区域、临时经营点、市集、门店外摆区、客户拜访点及配送路线之间移动经营，负责客户沟通、短视频营销、远程协作、移动支付、订单处理与库存查询。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "微信",
+      "抖音",
+      "快手",
+      "腾讯会议"
+    ],
+    "speech_archetype": "mobile_business_operator",
+    "speech_style": {
+      "tone": "干脆、务实、带点生意人的热络，习惯边忙边确认细节",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先把单子跑顺"
+      ],
+      "typical_habits": "说话喜欢先定时间和地点，再确认订单、支付和出片效果；遇到现场忙乱时会反复强调连接稳定和消息及时。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "萨尔瓦多主题快闪餐食现场短视频营销与订单协同",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在展会现场、商圈户外区域或临时经营点执行萨尔瓦多主题快闪餐食出摊任务时，需要边接待客户边拍摄并上传短视频做现场引流，同时处理移动支付、订单和库存核对。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "10:00-12:00",
+      "application_name": "抖音",
+      "service_name": "短视频",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "出片",
+          "发短视频",
+          "推现场"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十二点"
+        ],
+        "period_aliases": [
+          "老时间",
+          "上午出摊这个点",
+          "十点到十二点老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "萨尔瓦多主题快闪市集促销周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "快闪市集促销周期间，商圈户外和临时经营点人群密集，现场网络拥塞明显，需要优先保证支付、订单消息和短视频上传稳定。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "客户拜访途中视频通话确认订单",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在客户拜访点或配送路线途中，需要与供应商或合作方快速确认订单、库存和配送细节时。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "门店外摆远程协作对齐出摊安排",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在门店外摆区或市集现场，需要与团队远程对齐快闪活动排期、物料和人员分工时。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时在展会现场观看同行直播，了解竞品活动形式",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "配送路线等待间隙，单次刷短视频放松",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

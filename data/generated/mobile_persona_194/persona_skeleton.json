@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_194",
+  "category": "移动生活与现场协作",
+  "persona_summary": "高频移动网络使用者",
+  "static_profile": {
+    "user_id": "USER_194",
+    "identity": "神职人员，致力于纠正对基督教信仰的误解并提供灵性指引；日常需在城市街区、公共活动现场及跨区域出行途中进行外勤探访、信仰答疑与现场灵修带领，全程依赖手机移动核心网直接联网。",
+    "devices": "5G智能手机＋随身拍摄设备（用于记录现场活动与远程分享），便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "抖音",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "clergy_speaker",
+    "speech_style": {
+      "tone": "温和沉稳、循循善诱，带有牧养关怀与劝勉口吻，语速平缓但重点清晰。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "我们同心合意",
+        "愿平安与你们同在"
+      ],
+      "typical_habits": "习惯在活动开始前用简短祷告或确认信息对齐参与者，强调消息及时送达与音视频稳定，常用‘老规矩’指代固定时段的线上灵修或答疑安排。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "晨间线上信仰答疑与灵修直播",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在跨区域外勤或公共活动现场的晨间时段，面向信众与慕道者开展信仰误解纠正与灵性指引，需通过直播进行实时答疑并上传现场短片。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "08:30-10:30",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "开直播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点半"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "晨间例行"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城信仰讲座与户外探访周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城出差期间，在城市街区、户外等候区与临时停留点进行连续多场信仰讲座与探访，移动网络覆盖波动较大，需优先保障消息及时送达与音视频稳定。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "远程协作与信众沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在外勤途中或临时停留点，需要与同工或信众进行一对一视频沟通、位置共享与即时消息确认时。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "活动录像复盘与短片上传",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "公共活动现场结束后，需要回看录像、剪辑短片并上传分享信仰答疑内容时。",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次与外地同工临时召开线上会议",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在等候区浏览信仰类直播",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

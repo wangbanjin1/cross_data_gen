@@ -1,0 +1,178 @@
+{
+  "persona_id": "mobile_persona_278",
+  "category": "移动经营与客户服务",
+  "persona_summary": "跨现场管理人员",
+  "static_profile": {
+    "user_id": "USER_278",
+    "identity": "连锁餐饮创业者，正在筹备新门店，日常跨园区通勤、在展会现场、商圈户外区域、临时经营点、市集、门店外摆区、客户拜访点及配送路线之间移动办公，依赖手机移动核心网完成客户沟通、短视频营销、远程协作、移动支付、订单处理与库存查询，便携终端确需联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备（手机云台/运动相机），便携终端通过手机热点联网。",
+    "apps": [
+      "微信",
+      "抖音",
+      "腾讯会议",
+      "钉钉"
+    ],
+    "speech_archetype": "business_advisor",
+    "speech_style": {
+      "tone": "干脆利落、带点生意人的催促感，喜欢用短句和现场指令式表达。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先把画面稳住"
+      ],
+      "typical_habits": "习惯在任务现场先确认网络和画面，再安排团队动作；说话常带时间节点和交付要求，喜欢用'老规矩'指代固定流程。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "新店选址现场视频巡查与团队远程对齐",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在筹备新门店期间，于工作日早上08:30-10:30到达候选商圈或市集点位，使用手机与随身拍摄设备进行现场视频巡查，并通过视频通话/会议与团队和物业经理远程对齐选址、外摆区、客流与配送动线。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "08:30-10:30",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议",
+          "鹅会"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "开个会",
+          "远程碰一下",
+          "视频对齐"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点半",
+          "一个半小时"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "早上例行",
+          "老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "双十一商圈快闪促销与临时外摆活动",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "双十一期间在核心商圈开展快闪促销和门店外摆，现场人群密集、移动网络拥塞，需要优先保障支付、订单消息和短视频上传稳定，视频会议与巡查画质临时下调。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "门店短视频营销素材拍摄与上传",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在门店外摆区、市集或临时经营点拍摄新品、促销和客流素材后，需要快速剪辑并上传短视频进行本地引流。",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "配送路线与库存远程沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在客户拜访点或配送路线途中，与店长、供应商或配送人员视频通话，确认订单处理、库存查询和到货情况。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次在展会现场用手机看直播，了解同行新店活动。",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在临时经营点用手机开直播，试水新店预热。",
+        "application_name": "哔哩哔哩",
+        "service_name": "开直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

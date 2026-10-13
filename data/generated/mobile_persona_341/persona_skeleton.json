@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_341",
+  "category": "移动采编与内容生产",
+  "persona_summary": "突发现场记者",
+  "static_profile": {
+    "user_id": "USER_341",
+    "identity": "企业社会责任（CSR）专题方向的商业记者，长期追踪企业CSR举措对财务表现的影响。日常以突发现场采访、企业发布会、街区随访和户外直播连线为主，需要在转场途中持续改稿与回传素材，全程依赖手机移动核心网（4G/5G）直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携工作终端（笔记本/平板），便携终端确需联网时使用手机热点。",
+    "apps": [
+      "抖音",
+      "微信",
+      "腾讯会议",
+      "剪映"
+    ],
+    "speech_archetype": "business_reporter",
+    "speech_style": {
+      "tone": "干练、节奏快、新闻播报式口语，夹杂行业术语与时间点，语速偏快且信息密度高。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先把画面稳住",
+        "这条稿子得赶在整点前回传"
+      ],
+      "typical_habits": "习惯在出发前先口头确认一遍设备、网络和回传路径，现场连线前反复叮嘱'上行别断'，转场途中用语音消息与编辑沟通稿件修改。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "CSR现场采访移动直播连线",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "接到CSR专题突发现场任务（如企业CSR发布会、公益项目落地现场、街区随访点）后，在08:30-10:30时段内以手机4G/5G直接开直播完成现场连线与素材回传。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "08:30-10:30",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "连线直播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点半"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "早间现场连线老规矩"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "CSR年度峰会突发报道周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "CSR年度峰会期间，多个企业集中发布社会责任报告，记者需在会场、街区采访点与转场途中连续完成多场直播连线与素材回传，现场人流密集、无线环境复杂，对上行稳定性和时延要求更高。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "编辑室云端稿件协作",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "转场途中或临时拍摄地需要与编辑室对齐稿件修改、事实核查结论时发起。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "短视频素材快剪上传",
+        "application_name": "剪映",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "现场采访结束后，需要在移动端快速剪辑并上传短视频素材至云端协作平台时触发。",
+        "aliases": {
+          "app_aliases": [
+            "剪映"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次与家人视频通话报平安",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在休息间隙刷短视频放松",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

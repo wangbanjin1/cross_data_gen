@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_204",
+  "category": "公共事务与外勤协作",
+  "persona_summary": "跨区域外事人员",
+  "static_profile": {
+    "user_id": "USER_204",
+    "identity": "斯威士兰历史文化讲解员兼跨区域外事协作人员，长期在社区走访点、公共活动现场、户外调研点与临时会议区之间移动，为来访者提供斯威士历史与传统教育导览，同时承担政策资料查询、现场记录与材料回传等公共事务外勤工作。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "飞书"
+    ],
+    "speech_archetype": "cultural_field_coordinator",
+    "speech_style": {
+      "tone": "沉稳、务实、带现场调度感，习惯用短句确认任务与网络状态",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "材料先回传",
+        "这段路信号不稳"
+      ],
+      "typical_habits": "出发前先确认日程与资料，移动中随时查看消息，进入弱覆盖路段前会提前说明并约定续传或恢复方式。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "外勤导览途中临时视频协调会",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处社区走访点、公共活动现场或跨区域通勤途中的弱覆盖路段，且时间为10:00-12:00，需要与后方同事临时召开视频协调会并同步现场材料。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "10:00-12:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "开个协调会",
+          "连麦对一下"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "开到中午"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "上午外勤点位上"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨区域文化巡展与社区走访周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "巡展周期间在多个社区走访点与临时展区之间高频移动，现场人流密集、临时搭建区域信号遮挡明显，需要优先保障材料回传与会议连通。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "现场材料回传与即时沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在社区走访点或户外调研点完成现场记录后，需要向后方同事快速回传材料并简短视频确认。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "导览录像复盘与资料核对",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "结束当天导览或跨区域通勤返回临时会议区后，与团队复盘录像、核对政策资料与次日安排。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次在临时会议区参加跨部门政策宣讲会",
+        "application_name": "飞书",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在通勤途中观看文化宣传短视频",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

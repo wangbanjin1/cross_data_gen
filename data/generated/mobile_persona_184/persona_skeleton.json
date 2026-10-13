@@ -1,0 +1,179 @@
+{
+  "persona_id": "mobile_persona_184",
+  "category": "科研调查与移动协作",
+  "persona_summary": "移动人文调查人员",
+  "static_profile": {
+    "user_id": "USER_184",
+    "identity": "专注于记录不同文化中植物历史用途的人文学科历史学家，长期在外业调查点、博物馆外场、资料采集点与跨校通勤路线之间移动，依赖手机移动核心网完成文献检索、田野笔记同步、影像采集上传与远程学术协作。",
+    "devices": "主力设备为5G智能手机，辅助设备包括便携影像采集终端与移动热点；不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "飞书",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "field_researcher_speaker",
+    "speech_style": {
+      "tone": "学术化但口语直接，常带田野工作者的务实感，强调记录、同步和别断线。",
+      "catchphrases": [
+        "老规矩",
+        "先对齐一下",
+        "别掉链子",
+        "这段得留档"
+      ],
+      "typical_habits": "习惯在移动途中用手机快速发起讨论或会议，先确认资料是否同步，再进入正式交流；对网络稳定性和会话连续性非常敏感。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "周末植物史料远程协作会",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每周六与周日15:00-17:00固定进行植物史料远程协作会，用于跨校团队汇报田野记录、核对文献与同步影像资料。",
+      "period_type": "weekly",
+      "days": [
+        "Saturday",
+        "Sunday"
+      ],
+      "time_range": "15:00-17:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会",
+          "小企鹅会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦讨论",
+          "远程碰头",
+          "开个协作会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到五点",
+          "一个下午段"
+        ],
+        "period_aliases": [
+          "每周六周日老规矩",
+          "周末下午老时间",
+          "周六周日这个点",
+          "周末例行协作会"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城植物史料联合采集周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城联合采集期间，团队在博物馆外场、遗址和临时资料点之间频繁移动，部分区域进入弱覆盖路段，需要优先保障语音与资料上传，视频会议画质临时下调。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "田野影像复盘与标注",
+        "application_name": "飞书",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "外业调查结束后，在返程车辆或临时资料点对当日影像和田野笔记进行复盘标注。",
+        "aliases": {
+          "app_aliases": [
+            "feishu",
+            "lark"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "移动途中文献速查与团队沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨校通勤或转场途中，需要快速与研究助理确认文献条目、上传照片并同步采集进度。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时参加一场公众植物史讲座直播，仅单次观看。",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "在资料采集点等待交接时，单次刷短视频放松。",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

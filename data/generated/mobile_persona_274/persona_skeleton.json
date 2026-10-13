@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_274",
+  "category": "移动生活与现场协作",
+  "persona_summary": "通勤与实践型学生",
+  "static_profile": {
+    "user_id": "USER_274",
+    "identity": "一名文学系本科生，对学术行动主义的现实影响力持怀疑态度，日常以通勤、实习、田野调研和兴趣活动为主，频繁在城市街区、公共活动现场与跨区域出行途中使用移动网络完成学习与实践任务。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "哔哩哔哩",
+      "抖音"
+    ],
+    "speech_archetype": "cynical_literature_student",
+    "speech_style": {
+      "tone": "略带讽刺、冷静克制，习惯用轻描淡写的语气表达对形式化活动的怀疑，但涉及具体任务时又很务实。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先这样吧"
+      ],
+      "typical_habits": "说话前先观察现场，喜欢用反问句表达不信任；安排协作时强调时间点和网络稳定性，常用“老规矩”指代固定周期活动。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "每周二与周四下午的远程研讨与现场记录同步",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每周二与周四常规专业培训/研讨，14:00-16:00在通勤途中或公共活动现场通过移动网络参加远程会议并同步实践记录。",
+      "period_type": "weekly",
+      "days": [
+        "Tuesday",
+        "Thursday"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦讨论",
+          "远程研讨"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到四点"
+        ],
+        "period_aliases": [
+          "每周二周四老规矩",
+          "老时间",
+          "周二周四下午例行"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城田野调研与现场直播周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城田野调研期间，频繁在户外等候区、临时停留点和移动交通工具上参加远程讨论，现场网络波动明显，需要临时降低画质并提高时延容忍度以保障任务续传。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "通勤途中短视频素材上传与复盘",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在跨区域出行途中或活动结束后，需要快速上传现场短视频素材并浏览反馈。",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "小组远程视频讨论与资料共享",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "临时小组讨论或实践记录同步，通常发生在户外等候区或临时停留点。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次观看公开讲座直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次与朋友进行游戏开黑",
+        "application_name": "腾讯会议",
+        "service_name": "游戏",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

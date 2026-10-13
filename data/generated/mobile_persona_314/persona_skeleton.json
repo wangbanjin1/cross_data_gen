@@ -1,0 +1,180 @@
+{
+  "persona_id": "mobile_persona_314",
+  "category": "移动生活与现场协作",
+  "persona_summary": "高频移动网络使用者",
+  "static_profile": {
+    "user_id": "USER_314",
+    "identity": "欧洲空间局（ESA）联合任务协调代表，负责多国航天机构间的联合任务协调、科学数据共享与现场外勤协作，常年往返于城市航天控制中心、公共科普活动现场及跨区域任务现场之间，全程依赖手机4G/5G移动核心网直接联网。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴智能终端（智能手表/AR眼镜），便携终端确需联网时使用手机热点共享。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "哔哩哔哩",
+      "抖音"
+    ],
+    "speech_archetype": "mission_coordinator_speaker",
+    "speech_style": {
+      "tone": "干练、精准、略带紧迫感，习惯用航天任务术语和协作行话，说话节奏快但条理清晰。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "链路稳住",
+        "按窗口走"
+      ],
+      "typical_habits": "在任务现场习惯先确认网络链路状态再发起协作，喜欢用'对齐一下'来发起同步，用'老规矩'指代固定参数配置，遇到弱覆盖会反复强调'别掉链子'。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "ESA联合任务现场远程协作与科学数据共享",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "执行ESA联合任务现场协调任务，在跨区域任务现场或公共科普活动现场，通过手机移动核心网发起远程协作会议并实时共享科学数据与现场影像。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "07:30-10:30",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "鹅会",
+          "腾讯会"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦对齐",
+          "开协作会",
+          "远程对齐"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点半",
+          "一个半小时"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "早间例行",
+          "任务窗口老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "ESA跨区域联合任务演练周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨区域联合任务演练期间，团队在多个城市户外临时停留点与移动途中连续切换，网络覆盖波动大，需在弱覆盖路段保障协作会议与数据共享不中断。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "任务现场短视频记录与回传",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在任务现场或科普活动现场，需要快速拍摄并上传现场短视频用于对外宣传与内部存档。",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨区域任务途中即时通信与位置共享",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在跨区域出行途中或临时停留点，需要与团队成员进行即时视频通话并共享实时位置。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次任务：在公共科普活动现场临时发起直播，向公众展示ESA任务进展。",
+        "application_name": "哔哩哔哩",
+        "service_name": "开直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次任务：在任务间隙观看航天发射直播，了解其他机构动态。",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

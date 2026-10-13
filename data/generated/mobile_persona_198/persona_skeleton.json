@@ -1,0 +1,179 @@
+{
+  "persona_id": "mobile_persona_198",
+  "category": "科研调查与移动协作",
+  "persona_summary": "外业科研协作人员",
+  "static_profile": {
+    "user_id": "USER_198",
+    "identity": "专注于喜马拉雅地区夏尔巴探险文化意义保存与研究的科研调查人员，长期在临时实验现场、博物馆外场、资料采集点及外业调查点之间移动，跨校通勤频繁，全程依赖手机4G/5G直接联网完成远程讨论、视频会议、协作文档、文献与数据库查询及数据采集上传。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "飞书"
+    ],
+    "speech_archetype": "field_researcher_speaker",
+    "speech_style": {
+      "tone": "务实、简洁、带外业科研人员的现场感，习惯用短句确认进度与网络状态。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先保上传",
+        "信号稳不稳"
+      ],
+      "typical_habits": "在进入采集点或跨机构活动现场前先确认网络与设备状态，习惯用口语化指令同步团队，强调数据上传可靠与视频协作稳定。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "外业采集点晚间数据回传与远程协作例会",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "当身处外业调查点、临时实验现场或博物馆外场资料采集点，且时间为20:00-22:00晚间整理时段，需要将当日观测结果、研究影像与采集数据上传团队复核，并与跨校合作者进行远程讨论与视频会议。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "20:00-22:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会",
+          "会议软件"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦对齐",
+          "远程例会",
+          "视频协作"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点",
+          "一个半小时"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "晚间例行",
+          "外业点晚上老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "喜马拉雅夏尔巴口述史影像集中采集周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "在喜马拉雅高海拔外业调查点与临时资料采集点连续开展夏尔巴探险口述史影像采集，现场网络覆盖不稳定，需优先保障研究影像与观测数据上传，并降低视频协作画质以维持会话连续。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "跨校文献与数据库查询同步",
+        "application_name": "飞书",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在跨校通勤路线或学术活动场地临时需要与合作者同步文献与数据库查询结果时触发。",
+        "aliases": {
+          "app_aliases": [
+            "feishu",
+            "lark"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "采集影像与观测记录复核",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在博物馆外场或资料采集点完成当日拍摄后，与团队复核研究影像与观测记录时触发。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次在学术活动场地休息时刷短视频放松",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在跨校通勤途中观看学术直播讲座",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

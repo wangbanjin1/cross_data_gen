@@ -1,0 +1,179 @@
+{
+  "persona_id": "mobile_persona_331",
+  "category": "公共安全与移动执勤",
+  "persona_summary": "现场系统保障工程师",
+  "static_profile": {
+    "user_id": "USER_331",
+    "identity": "网络安全公司品牌经理兼现场系统保障工程师，负责在夜间值守点、事故现场、应急集结区及道路巡逻区域进行设备现场保障，接收安全告警、检查日志指标、参加故障会议、上传诊断结果与处置记录，并承担现场取证、即时通信、事件上报、地图导航、位置共享与任务调度等工作。",
+    "devices": "主力设备为5G智能手机，辅助设备包括便携终端与现场诊断设备；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "高德地图"
+    ],
+    "speech_archetype": "field_engineer_communicator",
+    "speech_style": {
+      "tone": "干脆利落、务实直接，带现场指挥与保障口吻，强调时效与稳定。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "现场优先",
+        "马上回传"
+      ],
+      "typical_habits": "习惯用短句同步状态，先确认时延和回传质量，再安排取证、上报与调度；遇到复杂问题会要求先对齐口径再对外沟通。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "月度现场保障综合盘点与巡回沟通",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每月逢十例行综合盘点与巡回沟通，固定于10th和20th的15:00-17:00进行现场保障复盘、日志指标检查与故障会议。",
+      "period_type": "monthly",
+      "days": [
+        "10th",
+        "20th"
+      ],
+      "time_range": "15:00-17:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "鹅会",
+          "腾讯会"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "故障会",
+          "复盘会",
+          "连麦沟通"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到五点",
+          "一个半钟头"
+        ],
+        "period_aliases": [
+          "每月逢十老规矩",
+          "十号二十号老时间",
+          "月度例行盘点",
+          "逢十下午三点档"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨区域应急演练与事故现场保障周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨区域应急演练叠加多起事故现场保障，夜间值守点与临时处置现场网络拥塞，移动过程中需保持连续覆盖与稳定回传。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "现场取证与即时通信回传",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "现场发现设备异常或安全告警时，立即与后台支撑人员视频通话确认取证细节并回传诊断结果。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "巡逻路线调度与位置共享",
+        "application_name": "高德地图",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "道路巡逻与临时处置现场需要多车协同调度时，通过地图位置共享与语音会议同步路线和任务。",
+        "aliases": {
+          "app_aliases": [
+            "高德地图"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次夜间值守点安全告警接收与日志检查",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次事故现场短视频记录与内部留存",
+        "application_name": "微信",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

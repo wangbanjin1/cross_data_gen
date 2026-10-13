@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_319",
+  "category": "移动生活与现场协作",
+  "persona_summary": "高频移动网络使用者",
+  "static_profile": {
+    "user_id": "USER_319",
+    "identity": "一位坚定的无神论者，对恶魔与驱魔概念持强烈反对态度；日常以城市户外活动、跨区域出行和公共现场参与为主，习惯在移动过程中完成信息检索、位置共享、即时通信与短视频内容上传，属于高频移动网络使用者。",
+    "devices": "主力设备为5G智能手机，辅助设备包括可穿戴设备；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "微信",
+      "抖音",
+      "腾讯会议",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "mobile_field_operator",
+    "speech_style": {
+      "tone": "直接、理性、略带质疑，偏好用事实和证据说话，不喜欢玄学化表达。",
+      "catchphrases": [
+        "别掉链子",
+        "老规矩",
+        "对齐一下",
+        "按事实来"
+      ],
+      "typical_habits": "说话讲究效率，常先确认时间和网络状态，再安排任务；对超自然话题会明确反驳，对技术参数则会反复确认。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "每周二与周六晚间移动直播协作",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每周二与周六晚间20:00-22:00，固定进行行业直播与远程协作，使用手机5G网络直接开播并同步互动。",
+      "period_type": "weekly",
+      "days": [
+        "Tuesday",
+        "Saturday"
+      ],
+      "time_range": "20:00-22:00",
+      "application_name": "哔哩哔哩",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "小破站",
+          "B站"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "上播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点"
+        ],
+        "period_aliases": [
+          "每周二周六老规矩",
+          "周二周六晚间例行",
+          "老时间"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城户外活动现场直播保障周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城参加户外公共活动，现场人流密集、基站负载高，且存在弱覆盖路段；需要临时降低画质并提高时延容忍，以保证直播连续与消息送达。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "移动途中远程会议对齐",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "跨区域出行途中或临时停留点需要与团队快速对齐任务时，使用手机热点接入腾讯会议。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "现场短视频素材回传与复盘",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "公共活动现场拍摄完成后，需要即时上传短视频素材并进行远程复盘时触发。",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次与外地朋友视频通话确认行程",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次观看兴趣活动赛事直播",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

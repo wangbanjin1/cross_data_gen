@@ -1,0 +1,179 @@
+{
+  "persona_id": "mobile_persona_312",
+  "category": "公共安全与移动执勤",
+  "persona_summary": "户外视觉创作者",
+  "static_profile": {
+    "user_id": "USER_312",
+    "identity": "户外视觉创作者（插画师），以士兵推荐书目为灵感进行插画创作；日常在街区、巡逻区域、临时处置现场、夜间值守点、事故现场或应急集结区采风、拍摄与现场预览，并将高清图片和设计稿上传给客户；全程以手机4G/5G直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi，便携工作终端确需联网时使用手机热点。",
+    "devices": "主力设备：5G智能手机；辅助设备：便携工作终端（通过手机热点联网）",
+    "apps": [
+      "微信",
+      "钉钉",
+      "高德地图",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "干脆利落、带点江湖气的现场指挥口吻，习惯把技术参数说成行话，强调稳定和别掉链子。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "稳住回传",
+        "这个点信号又飘了"
+      ],
+      "typical_habits": "出发前先看地图和电量，现场先试推流再正式开工；遇到弱覆盖会先降画质保连通，事后补传高清原图；喜欢用口语别名指代应用和业务。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "傍晚现场采风与作品回传",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处城市道路、巡逻区域、临时处置现场或夜间值守点等移动执勤环境，进入16:00-18:00傍晚弱覆盖路段或临时集结区边缘，需要边采风边预览边把高清图片和设计稿回传给客户。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "16:00-18:00",
+      "application_name": "微信",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "微信",
+          "某信",
+          "小绿"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "连麦",
+          "视频对一下",
+          "开视频"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到六点",
+          "一个半小时"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "傍晚例行",
+          "下午四点档"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨区应急集结与现场取证周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨区应急集结期间，频繁进出事故现场、夜间值守点和临时处置现场，弱覆盖路段增多，现场图片和视频需要稳定回传，移动过程中要求连续覆盖与低时延消息送达。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "现场取证与事件上报",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在事故现场或临时处置现场完成取证后，需要即时通信并向指挥端上报事件、对齐任务调度。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "采风素材复盘与客户沟通",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "夜间值守点或应急集结区休整时，观看参考直播、复盘采风素材，并与客户沟通设计稿修改。",
+        "aliases": {
+          "app_aliases": [
+            "bilibili",
+            "哔站"
+          ],
+          "service_aliases": [
+            "观赛",
+            "刷直播"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时远程会议",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次休息刷短视频",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

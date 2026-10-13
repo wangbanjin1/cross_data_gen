@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_258",
+  "category": "技术研发与现场支持",
+  "persona_summary": "外场工程技术人员",
+  "static_profile": {
+    "user_id": "USER_258",
+    "identity": "退休日本铁路工程师，从事铁路项目40年，现以技术顾问身份参与外场工程支持，日常活动半径覆盖外场测试点、临时工位、故障处置现场、客户现场、设备机房外围及跨园区通勤路线，全程依赖手机移动核心网（4G/5G）直接联网，不把家庭宽带、公司固网或普通Wi-Fi作为可用接入方式，便携终端确需联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备，便携终端通过手机热点联网。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "飞书"
+    ],
+    "speech_archetype": "field_engineer_speaker",
+    "speech_style": {
+      "tone": "沉稳、务实、带现场指挥感，说话简短直接，习惯用工程术语和确认式口吻。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "按这个参数走"
+      ],
+      "typical_habits": "在弱网现场先确认链路和时延，再发起视频协作或远程终端，习惯用口语别名指代应用和画质档位，强调稳定和可追溯。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "外场测试点远程视频协作与工单处理",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处外场测试点、临时工位或故障处置现场等弱网区域，且处于09:00-11:00时段，需要与后方专家视频连线、查看图纸参数并上传故障照片与检测报告。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "09:00-11:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦对齐",
+          "开个会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "到十一点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "外场例行"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨园区故障处置周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨园区通勤路线与设备机房外围弱网区域，临时工位多、移动性强，需高频远程终端与日志查询，网络抖动明显。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "客户现场工单与文件传输",
+        "application_name": "钉钉",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在客户现场或设备机房外围需要快速确认工单、上传检测报告并同步现场照片时。",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "远程终端与日志查询",
+        "application_name": "飞书",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在临时工位或故障处置现场需要远程登录终端、查询代码与日志并共享屏幕时。",
+        "aliases": {
+          "app_aliases": [
+            "feishu",
+            "lark"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次跨园区通勤途中查看短视频",
+        "application_name": "哔哩哔哩",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次客户现场等待时观看直播",
+        "application_name": "微信",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

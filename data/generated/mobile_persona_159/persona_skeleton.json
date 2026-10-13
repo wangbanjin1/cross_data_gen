@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_159",
+  "category": "体育训练与赛事保障",
+  "persona_summary": "户外训练教练",
+  "static_profile": {
+    "user_id": "USER_159",
+    "identity": "查谟与克什米尔地区的一名户外足球教练，日常在露天训练场、球场及赛事集结区带队训练，频繁进行客场转场，全程依赖手机4G/5G移动核心网直连，不依赖家庭宽带或固定Wi-Fi，便携工作终端确需联网时使用手机热点。",
+    "devices": "5G智能手机＋便携工作终端（用于视频回放与数据记录）",
+    "apps": [
+      "微信",
+      "钉钉",
+      "抖音",
+      "腾讯会议"
+    ],
+    "speech_archetype": "athlete_speaker",
+    "speech_style": {
+      "tone": "干脆利落、带训练口令感，习惯用短句和命令式表达，偶尔夹杂球场行话",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "跑起来",
+        "稳住节奏"
+      ],
+      "typical_habits": "在训练场或转场途中习惯用语音消息和群组通话快速调度，遇到网络波动会反复确认'能听到吗'，偏好用'老时间''老地方'指代固定安排"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "午间训练场战术直播与团队调度",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处露天训练场或球场边线弱覆盖区域，11:00-13:00午间训练时段需要向远端助教和替补队员开直播同步战术演练，同时通过群组消息调整训练安排",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "11:00-13:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖子"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "开个直播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到一点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "午间例行"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨区青少年足球邀请赛赛事周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "客场转场至陌生球场，赛事集结区人群密集、临时看台遮挡导致4G/5G信号波动，需在弱覆盖环境下持续上传比赛视频并保持团队通信",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "客场转场大巴视频调度",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "客场转场途中在大巴或临时休息点，需要与前方教练组开短会同步队员状态和战术调整",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "训练录像复盘与数据回传",
+        "application_name": "钉钉",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "训练结束后在户外热身区或临时休息点，与数据分析师视频通话逐帧复盘训练录像并上传数据记录",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "赛前在临时休息点与家人单次视频通话",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "午休时在训练场边单次刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

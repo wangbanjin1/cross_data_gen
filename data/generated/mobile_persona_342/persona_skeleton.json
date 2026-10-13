@@ -1,0 +1,171 @@
+{
+  "persona_id": "mobile_persona_342",
+  "category": "移动生活与现场协作",
+  "persona_summary": "移动销售与品牌人员",
+  "static_profile": {
+    "user_id": "USER_342",
+    "identity": "香氛品牌市场专员，擅长策划令人难忘的广告活动；日常需在城市街区、展会路演现场、客户拜访点及跨区域出行途中进行产品演示、报价库存查询、客户记录与现场素材回传，全程依赖手机4G/5G直连，不依赖固网或普通Wi-Fi，便携设备通过手机热点联网。",
+    "devices": "5G智能手机（主力）＋随身拍摄设备（辅助）",
+    "apps": [
+      "微信",
+      "抖音",
+      "腾讯会议",
+      "钉钉"
+    ],
+    "speech_archetype": "business_advisor",
+    "speech_style": {
+      "tone": "干练直接，带点营销人的热情与催促感，习惯用短句推进事情",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "抓紧推流"
+      ],
+      "typical_habits": "在移动途中快速交代任务，喜欢用'老规矩'指代固定动作，遇到网络波动会反复确认是否续传成功"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "展会/路演现场直播推流与远程协作",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处城市街区展会、路演现场或跨区域出行途中的临时停留点，进入人流密集或建筑遮挡导致的弱覆盖路段，需要向团队实时推流现场画面并同步客户记录",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "09:00-11:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城香氛快闪路演周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "连续多城快闪路演，现场位于城市街区临时搭建区，人流密集、建筑遮挡严重，移动网络频繁切换，需在弱覆盖路段保障直播推流与客户素材回传",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "客户拜访后视频复盘沟通",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "结束客户拜访后在临时停留点或户外等候区，与团队快速对齐客户反馈与下一步方案",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "现场素材短视频回传",
+        "application_name": "微信",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在展会或路演现场拍摄产品素材后，通过即时通信快速回传团队群，要求消息及时送达",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "午休时在临时停留点刷短视频放松",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "跨城出行途中观看行业直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

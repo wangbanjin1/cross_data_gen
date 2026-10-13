@@ -1,0 +1,176 @@
+{
+  "persona_id": "mobile_persona_333",
+  "category": "移动生活与现场协作",
+  "persona_summary": "高频移动网络使用者",
+  "static_profile": {
+    "user_id": "USER_333",
+    "identity": "花车搭建师，长期为本地巡游活动制作造型复杂、充满奇思妙想的花车，工作地点多在户外工棚、城市街区、公共活动现场及跨区域运输途中，全程依赖手机移动核心网进行即时通信、远程协作、素材上传与位置共享。",
+    "devices": "5G智能手机＋随身拍摄设备（运动相机、手机云台、便携补光灯）",
+    "apps": [
+      "微信",
+      "抖音",
+      "腾讯会议",
+      "高德地图",
+      "小红书"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "直爽、急促、带现场指挥感，喜欢用短句和行话推进事情",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先保连麦",
+        "画面稳住"
+      ],
+      "typical_habits": "在搭建现场边走边拍边发，遇到网络波动会立刻要求切低画质保通话，习惯用口语别名指代应用、业务和画质档位。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "花车巡游现场远程协作与素材回传",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "在城市街区或公共活动现场的花车搭建与巡游准备区域，处于移动核心网边缘覆盖波动时段，需要边搭建边与团队远程对齐进度并上传现场短视频素材",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "16:00-18:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议",
+          "会议App"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦对齐",
+          "远程碰进度"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到六点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "下午四点老规矩"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "秋季城市巡游花车集中搭建周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "巡游活动前集中搭建期，现场位于城市主干道旁临时工棚与公共广场交界处，基站负载高、遮挡多，移动网络时延波动明显，需要临时降低画质并优先保证远程会议稳定。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "花车制作过程短视频回传",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在户外工棚或巡游现场完成一段花车搭建花絮后，需要快速剪辑并上传短视频，网络一般时优先保上传成功率",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨区域运输途中位置共享与导航协同",
+        "application_name": "高德地图",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "花车部件跨区域运输途中，需要与司机和现场团队共享位置、同步到达时间，并在车内进行简短语音会议",
+        "aliases": {
+          "app_aliases": [
+            "高德地图"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时在活动现场休息时刷短视频放松",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "巡游当天临时用手机看活动直播确认队伍位置",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}
