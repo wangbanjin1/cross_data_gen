@@ -277,19 +277,31 @@ class QCValidator:
                     report["rule_checks"]["natural_dialogue_check"] = False
                     s_passed = False
 
-            # 12. X-1 混合诉求检查：如果 reference_time 为工作日（周一至周五），用户台词严禁包含“周末”
+            # 12. X-1 混合诉求检查：
+            # (1) 如果 reference_time 为工作日（周一至周五），用户台词严禁包含“周末”
+            # (2) 单轮自闭环检查：用户台词必须明确包含具体时刻点（如 12:30 或 12点30分）以及明确时长（如 60分钟）
             if tid == "X-1" and events:
                 ref_time_str = s.get("reference_time", "")
                 m_d = re.search(r'(\d{4})年(\d{1,2})月(\d{1,2})日', ref_time_str)
+                u_t = events[0].get("user", {}).get("utterance", "")
                 if m_d:
                     from datetime import datetime
                     dt_check = datetime(int(m_d.group(1)), int(m_d.group(2)), int(m_d.group(3)))
-                    if dt_check.weekday() < 5:
-                        u_t = events[0].get("user", {}).get("utterance", "")
-                        if "周末" in u_t:
-                            report["issues"].append(f"[{sid}] X-1 工作日会话台词违规出现'周末': '{u_t}'")
-                            report["rule_checks"]["natural_dialogue_check"] = False
-                            s_passed = False
+                    if dt_check.weekday() < 5 and "周末" in u_t:
+                        report["issues"].append(f"[{sid}] X-1 工作日会话台词违规出现'周末': '{u_t}'")
+                        report["rule_checks"]["natural_dialogue_check"] = False
+                        s_passed = False
+
+                has_tp = bool(re.search(r'(\d{1,2}[:：点时]\d{0,2})', u_t))
+                has_dur = bool(re.search(r'(\d+|两|俩|半)(分钟|min|小时|分)', u_t))
+                if not has_tp:
+                    report["issues"].append(f"[{sid}] X-1 单轮会话用户台词缺失明确起止时刻点: '{u_t}'")
+                    report["rule_checks"]["natural_dialogue_check"] = False
+                    s_passed = False
+                if not has_dur:
+                    report["issues"].append(f"[{sid}] X-1 单轮会话用户台词缺失明确时长: '{u_t}'")
+                    report["rule_checks"]["natural_dialogue_check"] = False
+                    s_passed = False
 
             # 13. 隐式偏好 Session 3 检查：第1轮台词必须包含业务名锚点，避免跨会话App歧义
             if idx == 3 and role == "reinforcement_session" and len(events) >= 1:

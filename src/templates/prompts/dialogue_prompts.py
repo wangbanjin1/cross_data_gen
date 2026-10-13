@@ -45,7 +45,7 @@ def build_batch_dialogue_prompt(prompt_items: list[dict], identity: str, speech:
      * Agent 礼貌拒绝该域外需求，说明本助手仅支持手机移动网络保障加速，不支持光纤宽带装维报修，建议拨打专线；agent_action_types 必须为 ["Reject_Request"]！
    - 特例2【混合诉求一办一拒 X-1】(rounds == 1):
      * 用户单句同时提出手机网络保障需求 (app/service) 和域外诉求（即 ood_goal，如话费充值与账单查询）；user_action_types 为 ["Create_Intent_Request", "Inform_Slot"]。
-     * 【时间词严谨约束】：若当前环境为工作日午休，用户严禁使用‘周末’字样，必须说‘午休’或‘今天中午’；若为周末午休才可说‘周末’！
+     * 【时间词严谨约束】：单轮会话必须自闭环时间范围！用户台词必须明确说出具体起止时间点（如‘12点30分到13点30分’或‘12:30至13:30’）以及持续时长（如‘持续60分钟’或‘开60分钟保障’），严禁只说‘午休’、‘中午’或‘刷会儿’等无法确定起止点的模糊词汇！若当前环境为工作日午休，用户严禁使用‘周末’字样，必须说‘午休’或‘今天中午’；若为周末午休才可说‘周末’！
      * Agent 接受并受理移动网络保障，同时拒绝域外诉求；agent_action_types 必须为 ["Acknowledge", "Reject_Request"]！
    - 特例3【三轮参数澄清 T3-1 与 歧义消解 T2-2】(rounds == 3 或 2):
      * 第1轮 User 必须明确官方应用名与业务名，可说明开始时间，但不说画质、时延、结束时间和时长；user_action_types 为 ["Create_Intent_Request", "Inform_Slot"]。

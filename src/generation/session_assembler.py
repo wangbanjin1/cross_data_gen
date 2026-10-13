@@ -134,7 +134,7 @@ class SessionAssembler:
                     "timestamp": {
                         "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
                         "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
-                        "duration": {"value": dur, "source_type": "Context", "source_ref": "U1"},
+                        "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"},
                     },
                 },
             },
@@ -161,7 +161,7 @@ class SessionAssembler:
                             "timestamp": {
                                 "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
                                 "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
-                                "duration": {"value": dur, "source_type": "Context", "source_ref": "U1"},
+                                "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"},
                             },
                         },
                     }
