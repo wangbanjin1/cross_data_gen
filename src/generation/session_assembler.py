@@ -66,6 +66,40 @@ class SessionAssembler:
                 app_name, srv_name, res_val, rtt_val, start_ts, end_ts, dur_val,
                 event_sequence, snapshot_before, memory_events, gold_after
             )
+        elif tid == "T2-6":
+            return cls._assemble_t2_6(
+                sid, uid, ref_time, tid, role, b_type, env, act,
+                app_name, srv_name, res_val, rtt_val, start_ts, end_ts, dur_val,
+                event_sequence, snapshot_before, memory_events, gold_after,
+                working_memory_pointer=s_plan.get("working_memory_pointer", {})
+            )
+        elif tid == "T2-7":
+            return cls._assemble_t2_7(
+                sid, uid, ref_time, tid, role, b_type, env, act,
+                app_name, srv_name, res_val, rtt_val, start_ts, end_ts, dur_val,
+                event_sequence, snapshot_before, memory_events, gold_after,
+                working_memory_pointer=s_plan.get("working_memory_pointer", {})
+            )
+        elif tid == "T2-8":
+            return cls._assemble_t2_8(
+                sid, uid, ref_time, tid, role, b_type, env, act,
+                event_sequence, snapshot_before, memory_events, gold_after,
+                working_memory_query=s_plan.get("working_memory_query", {})
+            )
+        elif tid == "T2-9":
+            return cls._assemble_t2_9(
+                sid, uid, ref_time, tid, role, b_type, env, act,
+                app_name, srv_name, res_val, rtt_val, start_ts, end_ts, dur_val,
+                event_sequence, snapshot_before, memory_events, gold_after,
+                experience_citation=s_plan.get("experience_citation", {})
+            )
+        elif tid == "T2-10":
+            return cls._assemble_t2_10(
+                sid, uid, ref_time, tid, role, b_type, env, act,
+                app_name, srv_name, res_val, rtt_val, start_ts, end_ts, dur_val,
+                event_sequence, snapshot_before, memory_events, gold_after,
+                experience_citation=s_plan.get("experience_citation", {})
+            )
         else:
             return cls._assemble_standard(
                 sid, uid, ref_time, tid, role, b_type, env, act,
@@ -725,4 +759,437 @@ class SessionAssembler:
             "intents": intents,
             "relations": [],
             "slot_updates": [{"intent_id": "I1", "turn_updates": slot_updates_turn}],
+        }
+
+    @classmethod
+    def _assemble_t2_6(cls, sid, uid, ref_time, tid, role, b_type, env, act, app, srv, res, rtt, start, end, dur, events, snap, mems, gold, working_memory_pointer=None):
+        """T2-6: 工作记忆历史工单跨期复用 (2 轮 / 1 意图)"""
+        wm_ptr = working_memory_pointer or {}
+        rec_id = wm_ptr.get("target_record_id") or "REC_PRIOR"
+        sig = f"T2-6|{len(events)}|1|I1:{app}/{srv}/1/working_record_reuse/resolved|none"
+
+        intents = [
+            {
+                "intent_id": "I1",
+                "status": "resolved",
+                "closure_path": "working_record_reuse",
+                "expression_level": 1,
+                "intent": f"{app}{srv}保障",
+                "params": {
+                    "application_name": {"value": app, "source_type": "WorkingRecord", "source_ref": rec_id},
+                    "service_name": {"value": srv, "source_type": "WorkingRecord", "source_ref": rec_id},
+                    "resolution": {"min_value": {"value": res, "source_type": "WorkingRecord", "source_ref": rec_id}},
+                    "rtt": {"max_value": {"value": rtt, "source_type": "WorkingRecord", "source_ref": rec_id}},
+                    "timestamp": {
+                        "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U2"},
+                        "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U2"},
+                        "duration": {"value": dur, "source_type": "Turn", "source_ref": "U2"},
+                    },
+                },
+            }
+        ]
+
+        slot_updates = [
+            {
+                "intent_id": "I1",
+                "turn_updates": [
+                    {
+                        "turn": 1,
+                        "params": {
+                            "application_name": {"value": app, "source_type": "WorkingRecord", "source_ref": rec_id},
+                            "service_name": {"value": srv, "source_type": "WorkingRecord", "source_ref": rec_id},
+                            "resolution": {"min_value": {"value": res, "source_type": "WorkingRecord", "source_ref": rec_id}},
+                            "rtt": {"max_value": {"value": rtt, "source_type": "WorkingRecord", "source_ref": rec_id}},
+                        },
+                    },
+                    {
+                        "turn": 2,
+                        "params": {
+                            "timestamp": {
+                                "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U2"},
+                                "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U2"},
+                                "duration": {"value": dur, "source_type": "Turn", "source_ref": "U2"},
+                            },
+                        },
+                    },
+                ],
+            }
+        ]
+
+        if events and len(events) >= 2:
+            events[0]["requested_params"] = ["timestamp"]
+            events[0]["turn_intents"] = [
+                {
+                    "intent_id": "I1",
+                    "status": "in_progress",
+                    "closure_path": "working_record_reuse",
+                    "expression_level": 1,
+                    "intent": f"{app}{srv}保障",
+                    "params": {
+                        "application_name": {"value": app, "source_type": "WorkingRecord", "source_ref": rec_id},
+                        "service_name": {"value": srv, "source_type": "WorkingRecord", "source_ref": rec_id},
+                        "resolution": {"min_value": {"value": res, "source_type": "WorkingRecord", "source_ref": rec_id}},
+                        "rtt": {"max_value": {"value": rtt, "source_type": "WorkingRecord", "source_ref": rec_id}},
+                    },
+                }
+            ]
+            events[0]["working_memory_pointer"] = wm_ptr
+            events[1]["requested_params"] = []
+            events[1]["turn_intents"] = intents
+        elif events and len(events) == 1:
+            events[0]["requested_params"] = []
+            events[0]["turn_intents"] = intents
+            events[0]["working_memory_pointer"] = wm_ptr
+
+        return {
+            "session_id": sid,
+            "user_id": uid,
+            "reference_time": ref_time,
+            "session_meta": {
+                "template_id": tid,
+                "round_count": len(events),
+                "intent_count": 1,
+                "memory_role": role,
+                "skeleton_signature": sig,
+                "scenario": {"environment": env, "blueprint_type": b_type, "memory_action": act},
+                "working_memory_pointer": wm_ptr,
+            },
+            "working_memory_pointer": wm_ptr,
+            "event_sequence": events,
+            "intents": intents,
+            "relations": [],
+            "slot_updates": slot_updates,
+        }
+
+    @classmethod
+    def _assemble_t2_7(cls, sid, uid, ref_time, tid, role, b_type, env, act, app, srv, res, rtt, start, end, dur, events, snap, mems, gold, working_memory_pointer=None):
+        """T2-7: 工作记忆历史单据变更改期 (2 轮 / 1 意图)"""
+        wm_ptr = working_memory_pointer or {}
+        rec_id = wm_ptr.get("target_record_id") or "REC_PRIOR"
+        sig = f"T2-7|{len(events)}|1|I1:{app}/{srv}/1/working_record_reschedule/resolved|none"
+
+        intents = [
+            {
+                "intent_id": "I1",
+                "status": "resolved",
+                "closure_path": "working_record_reschedule",
+                "expression_level": 1,
+                "intent": f"{app}{srv}保障",
+                "params": {
+                    "application_name": {"value": app, "source_type": "WorkingRecord", "source_ref": rec_id},
+                    "service_name": {"value": srv, "source_type": "WorkingRecord", "source_ref": rec_id},
+                    "resolution": {"min_value": {"value": res, "source_type": "WorkingRecord", "source_ref": rec_id}},
+                    "rtt": {"max_value": {"value": rtt, "source_type": "WorkingRecord", "source_ref": rec_id}},
+                    "timestamp": {
+                        "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
+                        "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
+                        "duration": {"value": dur, "source_type": "WorkingRecord", "source_ref": rec_id},
+                    },
+                },
+            }
+        ]
+
+        slot_updates = [
+            {
+                "intent_id": "I1",
+                "turn_updates": [
+                    {
+                        "turn": 1,
+                        "params": {
+                            "application_name": {"value": app, "source_type": "WorkingRecord", "source_ref": rec_id},
+                            "service_name": {"value": srv, "source_type": "WorkingRecord", "source_ref": rec_id},
+                            "resolution": {"min_value": {"value": res, "source_type": "WorkingRecord", "source_ref": rec_id}},
+                            "rtt": {"max_value": {"value": rtt, "source_type": "WorkingRecord", "source_ref": rec_id}},
+                            "timestamp": {
+                                "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
+                                "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
+                                "duration": {"value": dur, "source_type": "WorkingRecord", "source_ref": rec_id},
+                            },
+                        },
+                    },
+                    {
+                        "turn": 2,
+                        "params": {},
+                    },
+                ],
+            }
+        ]
+
+        if events and len(events) >= 2:
+            events[0]["requested_params"] = []
+            events[0]["turn_intents"] = [
+                {
+                    "intent_id": "I1",
+                    "status": "in_progress",
+                    "closure_path": "working_record_reschedule",
+                    "expression_level": 1,
+                    "intent": f"{app}{srv}保障",
+                    "params": intents[0]["params"],
+                }
+            ]
+            events[0]["working_memory_pointer"] = wm_ptr
+            events[1]["requested_params"] = []
+            events[1]["turn_intents"] = intents
+        elif events and len(events) == 1:
+            events[0]["requested_params"] = []
+            events[0]["turn_intents"] = intents
+            events[0]["working_memory_pointer"] = wm_ptr
+
+        return {
+            "session_id": sid,
+            "user_id": uid,
+            "reference_time": ref_time,
+            "session_meta": {
+                "template_id": tid,
+                "round_count": len(events),
+                "intent_count": 1,
+                "memory_role": role,
+                "skeleton_signature": sig,
+                "scenario": {"environment": env, "blueprint_type": b_type, "memory_action": act},
+                "working_memory_pointer": wm_ptr,
+            },
+            "working_memory_pointer": wm_ptr,
+            "event_sequence": events,
+            "intents": intents,
+            "relations": [],
+            "slot_updates": slot_updates,
+        }
+
+    @classmethod
+    def _assemble_t2_8(cls, sid, uid, ref_time, tid, role, b_type, env, act, events, snap, mems, gold, working_memory_query=None):
+        """T2-8: 工作记忆历史记录对账核查 (1 轮 / 1 意图)"""
+        wm_qry = working_memory_query or {}
+        sig = f"T2-8|{len(events)}|1|I1:历史工单流水对账核查/0/direct/resolved|none"
+
+        intents = [
+            {
+                "intent_id": "I1",
+                "status": "resolved",
+                "closure_path": "direct",
+                "expression_level": 0,
+                "intent": "历史工单流水对账核查",
+                "params": {},
+            }
+        ]
+
+        if events and len(events) >= 1:
+            events[0]["requested_params"] = []
+            events[0]["turn_intents"] = intents
+            events[0]["working_memory_query"] = wm_qry
+
+        return {
+            "session_id": sid,
+            "user_id": uid,
+            "reference_time": ref_time,
+            "session_meta": {
+                "template_id": tid,
+                "round_count": len(events),
+                "intent_count": 1,
+                "memory_role": role,
+                "skeleton_signature": sig,
+                "scenario": {"environment": env, "blueprint_type": b_type, "memory_action": act},
+                "working_memory_query": wm_qry,
+            },
+            "working_memory_query": wm_qry,
+            "event_sequence": events,
+            "intents": intents,
+            "relations": [],
+            "slot_updates": [],
+        }
+
+    @classmethod
+    def _assemble_t2_9(cls, sid, uid, ref_time, tid, role, b_type, env, act, app, srv, res, rtt, start, end, dur, events, snap, mems, gold, experience_citation=None):
+        """T2-9: 经验记忆 ReasoningBank 主动经验提议 (2 轮 / 1 意图)"""
+        exp_c = experience_citation or {}
+        exp_id = exp_c.get("experience_id") or "EXP_STADIUM_CONGESTION_01"
+        sig = f"T2-9|{len(events)}|1|I1:{app}/{srv}/1/proactive_experience/resolved|none"
+
+        intents = [
+            {
+                "intent_id": "I1",
+                "status": "resolved",
+                "closure_path": "proactive_experience",
+                "expression_level": 1,
+                "intent": f"{app}{srv}保障",
+                "params": {
+                    "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
+                    "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
+                    "resolution": {"min_value": {"value": res, "source_type": "Experience", "source_ref": exp_id}},
+                    "rtt": {"max_value": {"value": rtt, "source_type": "Experience", "source_ref": exp_id}},
+                    "timestamp": {
+                        "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
+                        "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
+                        "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"},
+                    },
+                },
+            }
+        ]
+
+        slot_updates = [
+            {
+                "intent_id": "I1",
+                "turn_updates": [
+                    {
+                        "turn": 1,
+                        "params": {
+                            "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
+                            "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
+                            "timestamp": {
+                                "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
+                                "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
+                                "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"},
+                            },
+                        },
+                    },
+                    {
+                        "turn": 2,
+                        "params": {
+                            "resolution": {"min_value": {"value": res, "source_type": "Experience", "source_ref": exp_id}},
+                            "rtt": {"max_value": {"value": rtt, "source_type": "Experience", "source_ref": exp_id}},
+                        },
+                    },
+                ],
+            }
+        ]
+
+        if events and len(events) >= 2:
+            events[0]["requested_params"] = []
+            events[0]["turn_intents"] = [
+                {
+                    "intent_id": "I1",
+                    "status": "in_progress",
+                    "closure_path": "proactive_experience",
+                    "expression_level": 1,
+                    "intent": f"{app}{srv}保障",
+                    "params": {
+                        "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
+                        "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
+                        "timestamp": {
+                            "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
+                            "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
+                            "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"},
+                        },
+                    },
+                }
+            ]
+            events[0]["experience_citation"] = exp_c
+            events[1]["requested_params"] = []
+            events[1]["turn_intents"] = intents
+        elif events and len(events) == 1:
+            events[0]["requested_params"] = []
+            events[0]["turn_intents"] = intents
+            events[0]["experience_citation"] = exp_c
+
+        return {
+            "session_id": sid,
+            "user_id": uid,
+            "reference_time": ref_time,
+            "session_meta": {
+                "template_id": tid,
+                "round_count": len(events),
+                "intent_count": 1,
+                "memory_role": role,
+                "skeleton_signature": sig,
+                "scenario": {"environment": env, "blueprint_type": b_type, "memory_action": act},
+                "experience_citation": exp_c,
+            },
+            "experience_citation": exp_c,
+            "event_sequence": events,
+            "intents": intents,
+            "relations": [],
+            "slot_updates": slot_updates,
+        }
+
+    @classmethod
+    def _assemble_t2_10(cls, sid, uid, ref_time, tid, role, b_type, env, act, app, srv, res, rtt, start, end, dur, events, snap, mems, gold, experience_citation=None):
+        """T2-10: 经验记忆 ReasoningBank 经验回溯与边界防线 (2 轮 / 1 意图)"""
+        exp_c = experience_citation or {}
+        exp_id = exp_c.get("experience_id") or "EXP_SEVERE_WEATHER_01"
+        sig = f"T2-10|{len(events)}|1|I1:{app}/{srv}/1/empirical_recall/resolved|none"
+
+        intents = [
+            {
+                "intent_id": "I1",
+                "status": "resolved",
+                "closure_path": "empirical_recall",
+                "expression_level": 1,
+                "intent": f"{app}{srv}保障",
+                "params": {
+                    "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
+                    "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
+                    "resolution": {"min_value": {"value": res, "source_type": "Experience", "source_ref": exp_id}},
+                    "rtt": {"max_value": {"value": rtt, "source_type": "Experience", "source_ref": exp_id}},
+                    "timestamp": {
+                        "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
+                        "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
+                        "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"},
+                    },
+                },
+            }
+        ]
+
+        slot_updates = [
+            {
+                "intent_id": "I1",
+                "turn_updates": [
+                    {
+                        "turn": 1,
+                        "params": {
+                            "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
+                            "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
+                            "resolution": {"min_value": {"value": res, "source_type": "Experience", "source_ref": exp_id}},
+                            "rtt": {"max_value": {"value": rtt, "source_type": "Experience", "source_ref": exp_id}},
+                            "timestamp": {
+                                "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
+                                "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
+                                "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"},
+                            },
+                        },
+                    },
+                    {
+                        "turn": 2,
+                        "params": {},
+                    },
+                ],
+            }
+        ]
+
+        if events and len(events) >= 2:
+            events[0]["requested_params"] = []
+            events[0]["turn_intents"] = [
+                {
+                    "intent_id": "I1",
+                    "status": "in_progress",
+                    "closure_path": "empirical_recall",
+                    "expression_level": 1,
+                    "intent": f"{app}{srv}保障",
+                    "params": intents[0]["params"],
+                }
+            ]
+            events[0]["experience_citation"] = exp_c
+            events[1]["requested_params"] = []
+            events[1]["turn_intents"] = intents
+        elif events and len(events) == 1:
+            events[0]["requested_params"] = []
+            events[0]["turn_intents"] = intents
+            events[0]["experience_citation"] = exp_c
+
+        return {
+            "session_id": sid,
+            "user_id": uid,
+            "reference_time": ref_time,
+            "session_meta": {
+                "template_id": tid,
+                "round_count": len(events),
+                "intent_count": 1,
+                "memory_role": role,
+                "skeleton_signature": sig,
+                "scenario": {"environment": env, "blueprint_type": b_type, "memory_action": act},
+                "experience_citation": exp_c,
+            },
+            "experience_citation": exp_c,
+            "event_sequence": events,
+            "intents": intents,
+            "relations": [],
+            "slot_updates": slot_updates,
         }

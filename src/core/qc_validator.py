@@ -12,8 +12,10 @@ class QCValidator:
     TEMPLATE_SPEC = {
         "T1-1": (1, 1), "T1-2": (1, 1), "T1-3": (1, 2), "T1-4": (1, 1),
         "T2-1": (2, 1), "T2-2": (2, 1), "T2-3": (2, 1), "T2-4": (2, 2),
-        "T2-5": (2, 1), "T2-6": (2, 2), "T3-1": (3, 1), "T3-2": (3, 1),
-        "T3-3": (3, 1), "T3-4": (3, 1), "X-1": (1, 2), "X-2": (3, 3),
+        "T2-5": (2, 1), "T2-6": (2, 1), "T2-7": (2, 1), "T2-8": (1, 1),
+        "T2-9": (2, 1), "T2-10": (2, 1),
+        "T3-1": (3, 1), "T3-2": (3, 1), "T3-3": (3, 1), "T3-4": (3, 1),
+        "X-1": (1, 2), "X-2": (3, 3),
     }
 
     @classmethod
@@ -74,9 +76,9 @@ class QCValidator:
                     report["rule_checks"]["source_type_integrity_check"] = False
                     s_passed = False
 
-            # 4. 验证白名单合规性（域外拒绝意图除外）
+            # 4. 验证白名单合规性（域外拒绝意图与对账核查除外）
             intents = s.get("intents", [])
-            if intents and intents[0].get("status") != "rejected":
+            if intents and intents[0].get("status") != "rejected" and s.get("session_meta", {}).get("template_id") != "T2-8":
                 app_val = intents[0].get("params", {}).get("application_name", {}).get("value")
                 srv_val = intents[0].get("params", {}).get("service_name", {}).get("value")
                 if not app_val or not srv_val:

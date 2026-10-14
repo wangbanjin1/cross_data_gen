@@ -100,6 +100,35 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
             return f"今天在{env}，老规矩，用{app_alias}做{srv_alias}，帮我把保障开上。"
         else:
             return f"对，老规矩不变，不过今天现场活动延长了，帮我把保障时长延长到{tp['duration']}。"
+    elif tid == "T2-6":
+        start_t = tp['start_timestamp'].split('日')[-1]
+        end_t = tp['end_timestamp'].split('日')[-1]
+        if turn_idx == 1:
+            return f"这次去{env}，还按上周在{env}办的那个规格来。"
+        else:
+            return f"今天是从{start_t}到{end_t}，持续{tp['duration']}。"
+    elif tid == "T2-7":
+        start_t = tp['start_timestamp'].split('日')[-1]
+        if turn_idx == 1:
+            return f"把昨天预约的{app}{srv}保障往后推迟一个小时。"
+        else:
+            return "对，确认修改。"
+    elif tid == "T2-8":
+        return f"帮我查下这周总共开了几次保障，一共多长时间？"
+    elif tid == "T2-9":
+        start_t = tp['start_timestamp'].split('日')[-1]
+        end_t = tp['end_timestamp'].split('日')[-1]
+        if turn_idx == 1:
+            return f"今天在{env}有大型活动，需要开{app}{srv}保障，时间从{start_t}到{end_t}。"
+        else:
+            return "好的，按你的专业建议来，就用这个加固方案。"
+    elif tid == "T2-10":
+        start_t = tp['start_timestamp'].split('日')[-1]
+        end_t = tp['end_timestamp'].split('日')[-1]
+        if turn_idx == 1:
+            return f"今天在{env}现场天气很恶劣，按上次恶劣天气的抗衰落加固方案配{app}{srv}，从{start_t}开始。"
+        else:
+            return "对，直接按这套加固方案开通。"
     elif tid == "T2-3":
         if turn_idx == 1:
             return f"今天在{env}，老规矩，用{app}做{srv}，帮我把保障开上。"
@@ -192,6 +221,39 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
             return f"收到，我调取到之前登记的{app}{srv}配置：画质{res}、时延{rtt}以内，从{start_t}开始保障，确认按这套配置开通吗？"
         else:
             return f"好的，已按老规矩为您开通{app}{srv}保障：画质保持{res}、时延上限{rtt}，时长已延长至{tp['duration']}。祝您活动顺利！"
+    elif tid == "T2-6":
+        start_t = tp['start_timestamp'].split('日')[-1]
+        end_t = tp['end_timestamp'].split('日')[-1]
+        if turn_idx == 1:
+            return f"收到，已为您在历史工单账本中找到上周在{env}的{app}{srv}保障单（画质{res}、时延≤{rtt}）。请问今天具体的保障时间是几点到几点呢？"
+        else:
+            return f"好的，已按您引用的历史工单规格为您成功开通今日{app}{srv}保障（{res} / 时延≤{rtt}，时段{start_t}至{end_t}）。祝您工作顺利！"
+    elif tid == "T2-7":
+        start_t = tp['start_timestamp'].split('日')[-1]
+        end_t = tp['end_timestamp'].split('日')[-1]
+        if turn_idx == 1:
+            return f"收到，已找到您此前预约的{app}{srv}保障工单。往后推迟一小时后，新的保障时段为{start_t}至{end_t}，确认进行改期吗？"
+        else:
+            return f"好的，已为您成功办理工单延期变更，保障时段已更新为{start_t}至{end_t}生效。祝您使用顺利！"
+    elif tid == "T2-8":
+        query_info = s_plan.get("working_memory_query", {})
+        total_orders = query_info.get("total_orders", 3)
+        total_mins = query_info.get("total_duration_minutes", 300)
+        return f"已为您查询到本周历史工单流水账：本周您共成功办理了 {total_orders} 次移动网络保障，累计保障时长达 {total_mins} 分钟，涵盖{app}{srv}等场景，所有工单均已按期履约。"
+    elif tid == "T2-9":
+        exp = s_plan.get("experience_citation", {})
+        exp_title = exp.get("title", "极值与高密环境主动降画质保抗丢包平稳度")
+        if turn_idx == 1:
+            return f"收到，注意到{env}属于超高密度人流聚集现场。根据专家经验库【{exp_title}】，极度拥塞环境下盲目开超清易引发上行信道争抢与丢包，建议将画质微调为{res}、时延锁定在{rtt}以内以稳定性优先。请问是否同意采纳该优化建议？"
+        else:
+            return f"好的，已采纳高密防拥塞加固经验，为您成功开通{app}{srv}稳定性保障（{res} / 时延≤{rtt}）。祝您现场活动顺利！"
+    elif tid == "T2-10":
+        exp = s_plan.get("experience_citation", {})
+        exp_title = exp.get("title", "恶劣天气高衰减环境增强抗丢包加固策略")
+        if turn_idx == 1:
+            return f"收到，已为您调取应对极端恶劣天气的抗衰落加固方案【{exp_title}】：画质微降至{res}、时延收紧至{rtt}以内（持续{tp['duration']}），以抗丢包连续性优先。确认按此方案启动保障吗？"
+        else:
+            return f"好的，已为您启动恶劣天气加固网络保障（{res} / 时延≤{rtt}）。祝您外勤平安顺利！"
     elif tid == "T2-3":
         start_t = tp['start_timestamp'].split('日')[-1]
         end_t = tp['end_timestamp'].split('日')[-1]
@@ -252,6 +314,28 @@ def get_normalized_action_types(s_plan: dict, turn_idx: int, role: str, is_last:
             return ["Create_Intent_Request", "Inform_Slot"], ["Confirm_Slot"]
         else:
             return ["Confirm_Slot", "Modify_Request"], ["Acknowledge"]
+    elif tid == "T2-6":
+        if turn_idx == 1:
+            return ["Create_Intent_Request", "Inform_Slot"], ["Confirm_Slot", "Request_Slot"]
+        else:
+            return ["Confirm_Slot", "Inform_Slot"], ["Acknowledge"]
+    elif tid == "T2-7":
+        if turn_idx == 1:
+            return ["Modify_Request", "Inform_Slot"], ["Confirm_Slot"]
+        else:
+            return ["Confirm_Slot"], ["Acknowledge"]
+    elif tid == "T2-8":
+        return ["Create_Intent_Request"], ["Acknowledge"]
+    elif tid == "T2-9":
+        if turn_idx == 1:
+            return ["Create_Intent_Request", "Inform_Slot"], ["Confirm_Slot"]
+        else:
+            return ["Confirm_Slot"], ["Acknowledge"]
+    elif tid == "T2-10":
+        if turn_idx == 1:
+            return ["Create_Intent_Request", "Inform_Slot"], ["Confirm_Slot"]
+        else:
+            return ["Confirm_Slot"], ["Acknowledge"]
     elif tid == "T2-3":
         if turn_idx == 1:
             return ["Create_Intent_Request", "Inform_Slot"], ["Confirm_Slot"]

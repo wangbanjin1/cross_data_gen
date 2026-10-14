@@ -1,0 +1,191 @@
+# -*- coding: utf-8 -*-
+"""
+ReasoningBank 结构化经验知识库 (ExperienceBank)
+---------------------------------------------------------------
+职责：
+1. 落地 ReasoningBank 核心卡片规范，每条经验封装为标准三元组：
+   (title, description, content) 以及适用边界（applicable_boundaries）与负向反例（negative_counterexamples）；
+2. 维护通信保障场景下的专家避坑与元认知策略库；
+3. 支持情境触发匹配（Trigger Context Matching），为智能体提供：
+   - 通路 A：主动经验提议（Proactive Suggestion，如人流拥塞主动降画质保稳定）；
+   - 通路 B：用户经验回溯（Empirical Recall，如恶劣天气经验方案调取）；
+   - 通用策略迁移：指导跨期单据消歧、作用域隔离、多意图修正。
+"""
+
+import json
+from pathlib import Path
+from typing import Optional, List, Dict, Any
+
+
+DEFAULT_EXPERIENCE_ENTRIES = [
+    {
+        "experience_id": "EXP_STADIUM_CONGESTION_01",
+        "title": "极值与高密环境主动降画质保抗丢包平稳度",
+        "description": "大型体育场馆、漫展或演唱会万人集聚场景下，上行空口资源严重争抢，盲目开高画质易引发频繁卡顿掉帧。",
+        "content": "识别到体育场、会展中心等高密人流场景时，主动提议将画质调整为 720p、时延锁定在 30ms 以内，以稳定性优先策略确保网络推流零卡顿。",
+        "trigger_conditions": {
+            "keywords": ["体育场", "漫展", "演唱会", "会展中心", "奥体", "工体", "万人"],
+            "crowd_density": "极度密集",
+            "risk_factors": ["上行信道争抢", "突发丢包"]
+        },
+        "recommended_adjustments": {
+            "resolution": "720p",
+            "rtt_max": "30ms",
+            "strategy": "稳定性优先"
+        },
+        "applicable_boundaries": "仅适用于公众聚集、基站突发过载的外场保障；私有专网或独立微基站切片保障的 VIP 场景不适用此降质规则。",
+        "negative_counterexamples": "用户明确声明“无论多卡都必须保留 1080p 或 4K 原画录制”时，智能体不得强行覆盖，应提示风险后遵从用户指令。",
+        "strategy_type": "proactive_suggestion"
+    },
+    {
+        "experience_id": "EXP_SEVERE_WEATHER_01",
+        "title": "恶劣天气高衰减环境增强抗丢包加固策略",
+        "description": "野外高山、海岛或偏远林区遇暴雨、大雾等极端恶劣天气时，无线高频信道衰落严重，数据包易发生突发抖动与丢弃。",
+        "content": "识别到大暴雨、极端天气或海岛高山复杂环境时，调取抗恶劣天气加固方案，采用 720p 高清压缩帧与 30ms 极低时延收紧门限，优先保障音画不中断。",
+        "trigger_conditions": {
+            "keywords": ["大暴雨", "恶劣天气", "暴雨", "台风", "深山", "海上", "狂风"],
+            "environment": "户外极端气候",
+            "risk_factors": ["雨衰效应", "信道深度衰落"]
+        },
+        "recommended_adjustments": {
+            "resolution": "720p",
+            "rtt_max": "30ms",
+            "strategy": "抗衰落连续性优先"
+        },
+        "applicable_boundaries": "仅适用于外场无遮挡直面恶劣天气的作业；室内封闭机房或有线接入环境不适用。",
+        "negative_counterexamples": "若用户已处于室内固定光纤专线，无需调用无线雨衰抗丢包经验。",
+        "strategy_type": "empirical_recall"
+    },
+    {
+        "experience_id": "EXP_TEMPORAL_DISAMBIGUATION_01",
+        "title": "跨期单据复用先校验业务应用与时效范围",
+        "description": "多业务用户使用“上周/上次”发起相对指代时，极易因就近原则误判目标单据，引发非目标参数被错误继承。",
+        "content": "定位历史工单时，先以应用/业务类型为强约束过滤候选集，再匹配相对时态；当前输入的明确值（如今日时间段）优先级最高，仅复用历史体验参数槽位，严禁将历史日期整条照搬。",
+        "trigger_conditions": {
+            "keywords": ["上周", "上次", "昨天", "那次开的", "老规格"],
+            "risk_factors": ["多业务同期干扰", "历史日期越界倒灌"]
+        },
+        "recommended_adjustments": {
+            "rule": "业务强约束过滤 -> 时态窗口匹配 -> 仅继承体验参数"
+        },
+        "applicable_boundaries": "适用于用户发起跨期单据复用会话；若单据候选不唯一，必须触发 Request_Disambiguation，严禁脑补盲猜。",
+        "negative_counterexamples": "用户口语为“今天按上周那次来”，且上周既有会议又有直播，智能体不得自行指定一个，必须追问确认业务。",
+        "strategy_type": "procedural_reasoning"
+    },
+    {
+        "experience_id": "EXP_SCOPE_ISOLATION_01",
+        "title": "参数提取先判断时效作用域与生命周期",
+        "description": "用户在多轮交互中口语表达“这次/今天”与“以后/默认”，代表截然不同的生命周期与作用范围，机械按最新值覆盖会导致后续任务错用参数。",
+        "content": "参数提取前先识别作用域标志词；“这次/临时/今天”仅作用于当前任务（temporary_choice），“以后/默认/改规矩”才触发长期画像更新（permanent_update）；冲突消解以同作用域为准，严禁单凭时间戳机械取最新值。",
+        "trigger_conditions": {
+            "keywords": ["这次", "临时", "今天", "以后", "默认", "改下规矩"],
+            "risk_factors": ["临时参数污染长期默认", "最新值盲目覆盖"]
+        },
+        "recommended_adjustments": {
+            "rule": "判断作用域 (Session-temporary vs Profile-permanent)"
+        },
+        "applicable_boundaries": "适用于存在参数临时变动与长期默认变更的所有提参会话。",
+        "negative_counterexamples": "用户说“这次用1080P，以后还是720P”，当前任务提取 1080P，但画像长期事实必须保留 720P。",
+        "strategy_type": "scope_isolation"
+    },
+    {
+        "experience_id": "EXP_TRI_STATE_CLARIFICATION_01",
+        "title": "多候选无依据时结构化反问替代泛泛追问",
+        "description": "面对模糊形容词（如“清晰一点”、“省心档”）且无历史先验映射时，擅自冒进猜测会引发用户纠错，而漫无边际追问则增加无谓交互轮次。",
+        "content": "缺乏先验依据时，严格根据支持矩阵（Support Matrix）列出合法候选发起定向反问，精准聚焦缺失槽位（例如“画质支持 720p 与 1080p，请问您倾向哪个规格？”），两轮高效闭环。",
+        "trigger_conditions": {
+            "keywords": ["清晰点", "高清一点", "好一点", "省心档"],
+            "risk_factors": ["无先验冒进猜测", "漫无焦点泛泛提问"]
+        },
+        "recommended_adjustments": {
+            "action": "Request_Clarification",
+            "rule": "基于 Support Matrix 提供定向候选选项"
+        },
+        "applicable_boundaries": "仅适用于槽位缺失且无先验证据的场景；若用户此前已明确“高清指的是 1080p”，则应命中事实记忆，不重复反问。",
+        "negative_counterexamples": "严禁将毫无证据的盲猜包装成 Confirm_Hypothesis 反问。",
+        "strategy_type": "clarification_strategy"
+    },
+    {
+        "experience_id": "EXP_MULTI_INTENT_PARTITION_01",
+        "title": "多意图局部修正严格隔离意图作用域",
+        "description": "复合多意图长会话中，用户修正某一个意图的参数时，极易对同会话内的其他并行意图造成交叉污染或将未来值倒灌回早期轮次。",
+        "content": "参数更新必须先绑定目标意图单元（intent_key）；禁止因位置临近跨意图转移参数；严格保持时序因果性，局部修正仅更新被指定意图，其余意图保持稳定。",
+        "trigger_conditions": {
+            "keywords": ["改一下", "调整", "不变", "另一个"],
+            "risk_factors": ["跨意图污染", "未来值向历史倒灌"]
+        },
+        "recommended_adjustments": {
+            "rule": "严格按 intent_key 进行局部更新与真值隔离"
+        },
+        "applicable_boundaries": "适用于单次会话内包含 2 个及以上业务意图（如上午会议 + 晚上直播）的场景。",
+        "negative_counterexamples": "T2 轮次用户说“直播不变，会议这次改 1080p”，直播参数绝不能跟随变更为 1080p。",
+        "strategy_type": "multi_intent_partition"
+    }
+]
+
+
+class ExperienceBank:
+    """ReasoningBank 结构化经验知识库管理器"""
+
+    def __init__(self, custom_path: Optional[Path] = None, user_id: Optional[str] = None, **kwargs):
+        self.user_id = user_id
+        self.custom_path = Path(custom_path) if custom_path else None
+        self.entries: List[Dict[str, Any]] = []
+
+        if self.custom_path and self.custom_path.exists():
+            self.load()
+        else:
+            self.entries = list(DEFAULT_EXPERIENCE_ENTRIES)
+
+    def load(self) -> None:
+        """加载自定义经验库"""
+        if not self.custom_path or not self.custom_path.exists():
+            return
+        with open(self.custom_path, "r", encoding="utf-8") as f:
+            self.entries = json.load(f)
+
+    def save(self) -> None:
+        """持久化保存经验知识库"""
+        if not self.custom_path:
+            return
+        self.custom_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(self.custom_path, "w", encoding="utf-8") as f:
+            json.dump(self.entries, f, ensure_ascii=False, indent=2)
+
+    def get_all_experiences(self) -> List[Dict[str, Any]]:
+        """获取所有可用经验卡片"""
+        return list(self.entries)
+
+    def match_proactive_experience(self, scenario_env: str, task_name: str = "") -> Optional[Dict[str, Any]]:
+        """
+        根据作业现场与任务特征，检索是否触发【智能体主动提议（Proactive Suggestion）】卡片。
+        例如：大型场馆、万人漫展 -> EXP_STADIUM_CONGESTION_01
+        """
+        combined_text = f"{scenario_env} {task_name}"
+        for exp in self.entries:
+            if exp.get("strategy_type") != "proactive_suggestion":
+                continue
+            kws = exp.get("trigger_conditions", {}).get("keywords", [])
+            if any(k in combined_text for k in kws):
+                return exp
+        return None
+
+    def match_empirical_recall(self, query_text: str) -> Optional[Dict[str, Any]]:
+        """
+        根据用户台词特征，检索是否触发【用户经验回溯（Empirical Recall）】卡片。
+        例如：“按上次恶劣天气那套方案配” -> EXP_SEVERE_WEATHER_01
+        """
+        for exp in self.entries:
+            if exp.get("strategy_type") != "empirical_recall":
+                continue
+            kws = exp.get("trigger_conditions", {}).get("keywords", [])
+            if any(k in query_text for k in kws):
+                return exp
+        return None
+
+    def find_by_id(self, experience_id: str) -> Optional[Dict[str, Any]]:
+        """按 ID 检索经验卡片"""
+        for exp in self.entries:
+            if exp.get("experience_id") == experience_id:
+                return exp
+        return None

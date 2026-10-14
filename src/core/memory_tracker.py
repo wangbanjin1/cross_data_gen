@@ -246,6 +246,57 @@ class MemoryTracker:
                 "description": "成功复用原长期主线偏好配置。"
             })
 
+        elif b_type == "working_record_reuse":
+            wm_ptr = s_plan.get("working_memory_pointer", {})
+            rec_id = wm_ptr.get("target_record_id", "REC_PRIOR")
+            delta_d = wm_ptr.get("inferred_delta_days", 7)
+            memory_events.append({
+                "event_type": "retrieve_working_record",
+                "record_id": rec_id,
+                "delta_days": delta_d,
+                "description": f"用户使用相对时态引用历史工单 {rec_id}（距今约 {delta_d} 天），Agent 成功定位工单并继承体验规格（{tp['resolution']}, {tp['rtt']}），反问今日起止时段。",
+                "retrieved_slots": ["resolution", "rtt_max"]
+            })
+
+        elif b_type == "working_record_reschedule":
+            wm_ptr = s_plan.get("working_memory_pointer", {})
+            rec_id = wm_ptr.get("target_record_id", "REC_PRIOR")
+            memory_events.append({
+                "event_type": "reschedule_working_record",
+                "record_id": rec_id,
+                "description": f"用户申请对历史预约工单 {rec_id} 变更改期，Agent 定位工单并将新时段（{tp['start_timestamp']} 至 {tp['end_timestamp']}）更新生效。",
+                "modified_slots": ["start_timestamp", "end_timestamp"]
+            })
+
+        elif b_type == "working_record_reconcile":
+            wm_qry = s_plan.get("working_memory_query", {})
+            total_orders = wm_qry.get("total_orders", 0)
+            memory_events.append({
+                "event_type": "reconcile_working_records",
+                "total_orders": total_orders,
+                "description": f"用户发起工单流水账对账核查，Agent 检索统计已开通的 {total_orders} 次保障记录并输出清单明细。",
+            })
+
+        elif b_type == "proactive_experience":
+            exp = s_plan.get("experience_citation", {})
+            exp_id = exp.get("experience_id", "EXP_STADIUM_CONGESTION_01")
+            memory_events.append({
+                "event_type": "proactive_experience_suggestion",
+                "experience_id": exp_id,
+                "description": f"Agent 识别到高密人流现场风险，主动调取 ReasoningBank 经验卡片 {exp_id} 提议稳定性优先方案（{tp['resolution']}, {tp['rtt']}），用户采纳闭环。",
+                "suggested_slots": ["resolution", "rtt_max"]
+            })
+
+        elif b_type == "empirical_recall":
+            exp = s_plan.get("experience_citation", {})
+            exp_id = exp.get("experience_id", "EXP_SEVERE_WEATHER_01")
+            memory_events.append({
+                "event_type": "empirical_recall",
+                "experience_id": exp_id,
+                "description": f"用户在恶劣天气下调取既往抗衰落经验方案 {exp_id}，Agent 调取经验卡片并向用户反问确认加固参数（{tp['resolution']}, {tp['rtt']}）。",
+                "retrieved_slots": ["resolution", "rtt_max"]
+            })
+
         elif b_type in ["distractor", "distractor_ood", "distractor_mixed"]:
             memory_events.append({
                 "event_type": "no_memory_change",

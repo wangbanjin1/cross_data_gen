@@ -249,20 +249,17 @@ def get_session_blueprints(
             "trigger_condition": main_trigger_desc,
             "time_kind": "main"
         },
-        # 4: Sub 2 Evidence (T2-1 支线2建联) - 可选支线
+        # 4: Working Memory Reuse (T2-6 历史工单跨期复用) - 工作记忆核心
         {
-            "tag": "sub2",
-            "template_id": "T2-1",
-            "role": "evidence_session",
-            "source": sub_02,
-            "type": "sub_02",
-            "dur": "90min",
-            "env": "驻地酒店休息区",
-            "action": "establish_sub_storyline_2",
-            "declaration_mode": "implicit_induction",
-            "storyline_trigger_type": "location_environment",
-            "trigger_condition": "驻地酒店休息区",
-            "time_kind": "sub2"
+            "tag": "wm_reuse",
+            "template_id": "T2-6",
+            "role": "reuse_session",
+            "source": main_mt,
+            "type": "working_record_reuse",
+            "dur": base_dur,
+            "env": main_env_desc,
+            "action": "retrieve_working_record_reuse",
+            "time_kind": "main"
         },
         # 5: Distractor 1 (T1-2 纯域外拒绝，如宽带光纤报修) - 核心必须
         {
@@ -277,17 +274,17 @@ def get_session_blueprints(
             "ood_goal": "宽带光纤装维报修",
             "time_kind": "dist_ood"
         },
-        # 6: Sub 1 Reinforcement (T2-1 支线1复用/强化) - 核心必须
+        # 6: Working Memory Reschedule (T2-7 历史工单延期变更) - 工作记忆核心
         {
-            "tag": "sub1_reinf",
-            "template_id": "T2-1",
-            "role": "reinforcement_session",
-            "source": sub_01,
-            "type": "sub_01",
-            "dur": "60min",
-            "env": "大巴转场途中",
-            "action": "reinforce_sub_storyline_1",
-            "time_kind": "sub1"
+            "tag": "wm_reschedule",
+            "template_id": "T2-7",
+            "role": "reuse_session",
+            "source": main_mt,
+            "type": "working_record_reschedule",
+            "dur": base_dur,
+            "env": main_env_desc,
+            "action": "reschedule_working_record",
+            "time_kind": "main"
         },
         # 7: Main Reuse (T2-5 变更延长时长) - 核心必须
         {
@@ -304,31 +301,29 @@ def get_session_blueprints(
             "trigger_condition": main_trigger_desc,
             "time_kind": "main_amend"
         },
-        # 8: Main Reinforcement 2 (T2-1 主线常规强化) - 核心必须
+        # 8: Working Memory Reconcile (T2-8 历史工单流水对账核查) - 工作记忆核查
         {
-            "tag": "main_reinf_2",
-            "template_id": "T2-1",
-            "role": "reinforcement_session",
+            "tag": "wm_reconcile",
+            "template_id": "T2-8",
+            "role": "distractor_session",
             "source": main_mt,
-            "type": "main",
-            "dur": base_dur,
-            "env": main_env_desc,
-            "action": "reinforce_main_memory",
-            "storyline_trigger_type": storyline_trigger_type,
-            "trigger_condition": main_trigger_desc,
-            "time_kind": "main"
+            "type": "working_record_reconcile",
+            "dur": "15min",
+            "env": "工单系统对账窗口",
+            "action": "reconcile_working_records",
+            "time_kind": "dist_normal"
         },
-        # 9: Sub 2 Reinforcement (T2-1 支线2强化) - 可选支线
+        # 9: Experiential Proactive Suggestion (T2-9 ReasoningBank 主动经验提议) - 经验记忆核心
         {
-            "tag": "sub2",
-            "template_id": "T2-1",
-            "role": "reinforcement_session",
-            "source": sub_02,
-            "type": "sub_02",
-            "dur": "90min",
-            "env": "驻地复盘业务",
-            "action": "reinforce_sub_storyline_2",
-            "time_kind": "sub2"
+            "tag": "exp_proactive",
+            "template_id": "T2-9",
+            "role": "reuse_session",
+            "source": main_mt,
+            "type": "proactive_experience",
+            "dur": base_dur,
+            "env": "奥体中心大型集结现场",
+            "action": "proactive_experience_suggestion",
+            "time_kind": "main"
         },
         # 10: Distractor 2 (X-1 混合诉求一办一拒) - 核心必须
         {
@@ -356,7 +351,19 @@ def get_session_blueprints(
             "override": evt_01.get("preference_override", {}),
             "time_kind": "main"
         },
-        # 12: Event Reuse (T2-1 临时纠正后恢复主线复用) - 核心必须
+        # 12: Experiential Recall (T2-10 经验回溯与边界确认) - 经验记忆核心
+        {
+            "tag": "exp_recall",
+            "template_id": "T2-10",
+            "role": "reuse_session",
+            "source": main_mt,
+            "type": "empirical_recall",
+            "dur": base_dur,
+            "env": _extract_clean_event_env(evt_01, time_range),
+            "action": "empirical_recall_or_boundary_check",
+            "time_kind": "main"
+        },
+        # 13: Event Reuse (T2-1 临时纠正后恢复主线复用) - 核心必须
         {
             "tag": "evt_reuse",
             "template_id": "T2-1",
@@ -368,7 +375,7 @@ def get_session_blueprints(
             "action": "reuse_long_term_rule_after_correction",
             "time_kind": "main"
         },
-        # 13: Sub 1 Reuse (T2-1 支线隔离验证) - 核心必须
+        # 14: Sub 1 Reuse (T2-1 支线隔离验证) - 核心必须
         {
             "tag": "sub1_reuse",
             "template_id": "T2-1",
@@ -379,18 +386,6 @@ def get_session_blueprints(
             "env": "转场大巴途中",
             "action": "sub_memory_unaffected",
             "time_kind": "sub1"
-        },
-        # 14: Distractor 3 (T1-1 单轮单次业务) - 可选单轮干扰
-        {
-            "tag": "dist_normal",
-            "template_id": "T1-1",
-            "role": "distractor_session",
-            "source": dist_01,
-            "type": "distractor",
-            "dur": "30min",
-            "env": "阶段工作总结会",
-            "action": "distractor_no_memory",
-            "time_kind": "dist_normal"
         },
         # 15: Event Expiry & Main Recovery (T2-1 临时失效主线恢复) - 核心必须
         {
@@ -406,7 +401,34 @@ def get_session_blueprints(
             "trigger_condition": main_trigger_desc,
             "time_kind": "main"
         },
-        # 16: Extra Main Reuse (T2-1 主线后续持续生效) - 可选第16轮
+        # 16: Sub 2 Evidence (T2-1 支线2建联) - 可选支线
+        {
+            "tag": "sub2",
+            "template_id": "T2-1",
+            "role": "evidence_session",
+            "source": sub_02,
+            "type": "sub_02",
+            "dur": "90min",
+            "env": "驻地酒店休息区",
+            "action": "establish_sub_storyline_2",
+            "declaration_mode": "implicit_induction",
+            "storyline_trigger_type": "location_environment",
+            "trigger_condition": "驻地酒店休息区",
+            "time_kind": "sub2"
+        },
+        # 17: Distractor 3 (T1-1 单轮单次业务) - 可选单轮干扰
+        {
+            "tag": "dist_normal",
+            "template_id": "T1-1",
+            "role": "distractor_session",
+            "source": dist_01,
+            "type": "distractor",
+            "dur": "30min",
+            "env": "阶段工作总结会",
+            "action": "distractor_no_memory",
+            "time_kind": "dist_normal"
+        },
+        # 18: Extra Main Reuse (T2-1 主线后续持续生效) - 可选第18轮
         {
             "tag": "extra_reuse",
             "template_id": "T2-1",
@@ -427,15 +449,21 @@ def get_session_blueprints(
     for slot in candidate_slots:
         tag = slot["tag"]
         if target_count <= 12:
-            if tag in ["sub2", "dist_normal", "extra_reuse"]:
+            if tag in ["wm_reconcile", "exp_recall", "sub2", "dist_normal", "extra_reuse", "wm_reschedule"]:
                 continue
         elif target_count == 13:
-            if tag in ["sub2", "extra_reuse"]:
+            if tag in ["wm_reconcile", "exp_recall", "sub2", "dist_normal", "extra_reuse"]:
                 continue
         elif target_count == 14:
-            if tag in ["dist_normal", "extra_reuse"]:
+            if tag in ["wm_reconcile", "sub2", "dist_normal", "extra_reuse"]:
                 continue
         elif target_count == 15:
+            if tag in ["sub2", "dist_normal", "extra_reuse"]:
+                continue
+        elif target_count == 16:
+            if tag in ["dist_normal", "extra_reuse"]:
+                continue
+        elif target_count == 17:
             if tag in ["extra_reuse"]:
                 continue
         selected.append(dict(slot))

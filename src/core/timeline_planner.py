@@ -2,6 +2,9 @@ import hashlib
 import re
 from src.templates.timeline_blueprints import get_15_session_blueprints
 from src.core.small_memory_selector import build_small_memory_candidates
+from src.core.working_records_ledger import WorkingRecordsLedger
+from src.core.experience_bank import ExperienceBank
+from src.core.temporal_engine import TemporalEngine
 
 class DynamicTimelinePlanner:
     """
@@ -92,8 +95,12 @@ class DynamicTimelinePlanner:
         return cls._extract_clean_location(raw_trig_cond, task_name)
 
     @classmethod
-    def plan(cls, persona: dict, llm=None) -> list[dict]:
+    def plan(cls, persona: dict, llm=None, working_ledger=None, experience_bank=None) -> list[dict]:
         user_id = persona["static_profile"]["user_id"]
+        if working_ledger is None:
+            working_ledger = WorkingRecordsLedger(user_id=user_id)
+        if experience_bank is None:
+            experience_bank = ExperienceBank()
         main_mt = persona["dynamic_profile"]["periodic_main_storyline"]
         scenario_events = persona["dynamic_profile"].get("scenario_events", [])
         sub_list = persona["dynamic_profile"].get("sub_storylines", [])
@@ -188,11 +195,82 @@ class DynamicTimelinePlanner:
                 "sub_01": "cross_turn_clarification",
                 "sub_02": "explicit_declaration",
             }.get(cfg["type"], "explicit_declaration") if small_memory else "none"
-            round_count = 1 if (cfg["template_id"].startswith("T1") or cfg["template_id"].startswith("X-1")) else 2
+            round_count = 1 if (cfg["template_id"].startswith("T1") or cfg["template_id"].startswith("X-1") or cfg["template_id"] == "T2-8") else 2
             template_id = cfg["template_id"]
             if cfg["role"] == "evidence_session" and evidence_mode == "cross_turn_clarification":
                 round_count = 3
                 template_id = "T3-1"
+
+            working_memory_pointer = {}
+            working_memory_query = {}
+            experience_citation = {}
+
+            if template_id == "T2-6":
+                # 跨期单据复用：检索历史工单
+                prior_recs = working_ledger.query_prior_records(cfg["ref_time"])
+                target_rec = next((r for r in prior_recs if r.get("application_name") == src["application_name"]), prior_recs[0] if prior_recs else None)
+                if target_rec:
+                    working_memory_pointer = working_ledger.generate_session_pointer(target_rec, cfg["ref_time"])
+                else:
+                    working_memory_pointer = {
+                        "target_record_id": f"REC_{user_id}_20261005_01",
+                        "inferred_delta_days": 7,
+                        "matched_application": src["application_name"],
+                        "matched_service": src["service_name"],
+                        "inherited_slots": {"resolution": res, "rtt_max": rtt, "duration": cfg["dur"]}
+                    }
+            elif template_id == "T2-7":
+                # 延期变更改期：定位此前预约工单
+                prior_recs = working_ledger.query_prior_records(cfg["ref_time"])
+                target_rec = prior_recs[-1] if prior_recs else None
+                if target_rec:
+                    d_days = TemporalEngine.calculate_delta_days(cfg["ref_time"], target_rec.get("created_at") or target_rec.get("start_timestamp"))
+                    working_memory_pointer = {
+                        "target_record_id": target_rec["record_id"],
+                        "inferred_delta_days": d_days,
+                        "matched_application": target_rec.get("application_name"),
+                        "matched_service": target_rec.get("service_name"),
+                        "modified_slots": {"start_timestamp": cfg["start"], "end_timestamp": cfg["end"]}
+                    }
+                else:
+                    working_memory_pointer = {
+                        "target_record_id": f"REC_{user_id}_PRIOR",
+                        "inferred_delta_days": 1,
+                        "matched_application": src["application_name"],
+                        "matched_service": src["service_name"],
+                        "modified_slots": {"start_timestamp": cfg["start"], "end_timestamp": cfg["end"]}
+                    }
+            elif template_id == "T2-8":
+                # 对账核查：统计本周流水
+                all_recs = working_ledger.get_all_records()
+                working_memory_query = {
+                    "reconciled_record_ids": [r["record_id"] for r in all_recs],
+                    "total_orders": len(all_recs) if all_recs else 3,
+                    "total_duration_minutes": sum(int(re.search(r'\d+', r.get("duration", "60")).group()) for r in all_recs if re.search(r'\d+', r.get("duration", ""))) or 360
+                }
+            elif template_id == "T2-9":
+                # 主动经验提议：高密人流场景
+                exp = experience_bank.match_proactive_experience(cfg["env"], task_name) or experience_bank.find_by_id("EXP_STADIUM_CONGESTION_01")
+                experience_citation = {
+                    "experience_id": exp["experience_id"],
+                    "title": exp["title"],
+                    "strategy_type": exp["strategy_type"],
+                    "suggested_adjustments": exp.get("recommended_adjustments", {})
+                }
+                res = exp.get("recommended_adjustments", {}).get("resolution", "720p")
+                rtt = exp.get("recommended_adjustments", {}).get("rtt_max", "30ms")
+            elif template_id == "T2-10":
+                # 经验回溯：恶劣天气加固
+                exp = experience_bank.find_by_id("EXP_SEVERE_WEATHER_01")
+                experience_citation = {
+                    "experience_id": exp["experience_id"],
+                    "title": exp["title"],
+                    "strategy_type": exp["strategy_type"],
+                    "suggested_adjustments": exp.get("recommended_adjustments", {})
+                }
+                res = exp.get("recommended_adjustments", {}).get("resolution", "720p")
+                rtt = exp.get("recommended_adjustments", {}).get("rtt_max", "30ms")
+
             s_obj = {
                 "session_id": f"S-{user_id}-{cfg['idx']:02d}",
                 "user_id": user_id,
@@ -222,7 +300,16 @@ class DynamicTimelinePlanner:
                 "aliases": aliases,
                 "small_memory": small_memory,
                 "small_memory_evidence_mode": evidence_mode,
+                "working_memory_pointer": working_memory_pointer,
+                "working_memory_query": working_memory_query,
+                "experience_citation": experience_citation,
             }
+
+            # 若为真实开通的保障业务（非纯域外拒绝与对账），将单据记入工单账本
+            if template_id not in ["T1-2", "T2-8"]:
+                new_rec = working_ledger.create_record_from_session(s_obj)
+                working_ledger.append_record(new_rec)
+
             sessions.append(s_obj)
 
         return sessions

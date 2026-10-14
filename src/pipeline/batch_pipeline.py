@@ -12,6 +12,8 @@ from src.generation.dialogue_generator import DialogueGenerator
 from src.core.timeline_planner import DynamicTimelinePlanner
 from src.core.memory_tracker import MemoryTracker
 from src.core.qc_validator import QCValidator
+from src.core.working_records_ledger import WorkingRecordsLedger
+from src.core.experience_bank import ExperienceBank
 
 class BatchPipeline:
     """
@@ -70,9 +72,11 @@ class BatchPipeline:
                 json.dump(persona_skeleton, f, ensure_ascii=False, indent=2)
             print(f"    - Generated Persona Skeleton -> {persona_skeleton_path.name}")
 
-        # 2. 动态规划 15 会话时间线
-        timeline = DynamicTimelinePlanner.plan(persona_skeleton, llm=self.llm)
-        print(f"    - Planned {len(timeline)} sessions across timeline.")
+        # 2. 动态规划认知记忆时间线（绑定独立工单账本与经验知识库）
+        working_ledger = WorkingRecordsLedger(user_id=pid, storage_path=sample_dir / "working_records.jsonl")
+        experience_bank = ExperienceBank()
+        timeline = DynamicTimelinePlanner.plan(persona_skeleton, llm=self.llm, working_ledger=working_ledger, experience_bank=experience_bank)
+        print(f"    - Planned {len(timeline)} sessions across timeline (including working memory & experiential memory).")
 
         # 3. 计算记忆状态演进与批次渲染
         memory_tracker = MemoryTracker()
@@ -95,7 +99,7 @@ class BatchPipeline:
         print(f"    - Batch rendering {len(timeline)} sessions with DeepSeek Flash (thinking disabled)...")
         rendered_sessions = self.dialogue_gen.generate_sessions_batch(planned_items, persona_skeleton, batch_size=self.batch_size)
 
-        # 4. 保存标准对话 sessions.jsonl 与 sessions.json
+        # 4. 保存标准对话 sessions.jsonl 与 sessions.json（轻量级索引，严格解耦）
         out_sessions_path = sample_dir / "sessions.jsonl"
         with open(out_sessions_path, "w", encoding="utf-8") as f:
             for s in rendered_sessions:
@@ -104,6 +108,18 @@ class BatchPipeline:
         out_sessions_json = sample_dir / "sessions.json"
         with open(out_sessions_json, "w", encoding="utf-8") as f:
             json.dump(rendered_sessions, f, ensure_ascii=False, indent=2)
+
+        # 4.1 独立持久化工作记忆工单流水账（working_records.jsonl / .json）严格解耦存储
+        working_ledger.save()
+        out_records_json = sample_dir / "working_records.json"
+        with open(out_records_json, "w", encoding="utf-8") as f:
+            json.dump(working_ledger.get_all_records(), f, ensure_ascii=False, indent=2)
+        print(f"    - Saved decoupled Working Records Ledger ({len(working_ledger.get_all_records())} records) -> working_records.jsonl")
+
+        # 4.2 保存经验记忆库快照 experience_bank.json
+        out_exp_json = sample_dir / "experience_bank.json"
+        with open(out_exp_json, "w", encoding="utf-8") as f:
+            json.dump(experience_bank.get_all_experiences(), f, ensure_ascii=False, indent=2)
 
         # 5. 保存评测记忆萃取能力的 memory_traces.json
         out_traces_path = sample_dir / "memory_traces.json"

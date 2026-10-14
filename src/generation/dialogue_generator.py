@@ -123,6 +123,49 @@ class DialogueGenerator:
                     f"第2轮用户说明因现场特殊临时调整画质为{tp['resolution']}、时延为{tp['rtt']}；"
                     f"第2轮客服确认本次临时调整。】"
                 )
+            elif tid == "T2-6":
+                wm_ptr = s_plan.get("working_memory_pointer", {})
+                rec_id = wm_ptr.get("target_record_id", "历史工单")
+                delta_d = wm_ptr.get("inferred_delta_days", 7)
+                t1_rule = (
+                    f"【工作记忆跨期复用会话：第1轮用户表达'这次去{env}，还按上周在{env}办的那个规格来'，"
+                    f"指代历史工单({rec_id}，距今约{delta_d}天)，省略画质和时延，但提出今日保障；"
+                    f"第1轮客服从工作记忆工单账本中检索定位该单据，向用户确认继承的体验参数（画质{tp['resolution']}、时延{tp['rtt']}），并询问今日保障的具体起止时间；"
+                    f"第2轮用户补充说明今日的起止时间（{tp['start_timestamp'].split('日')[-1]}至{tp['end_timestamp'].split('日')[-1]}，持续{tp['duration']}）；"
+                    f"第2轮客服确认开通并收尾祝福。】"
+                )
+            elif tid == "T2-7":
+                wm_ptr = s_plan.get("working_memory_pointer", {})
+                rec_id = wm_ptr.get("target_record_id", "历史工单")
+                t1_rule = (
+                    f"【工作记忆单据改期会话：第1轮用户提出把昨天预约的{tp['application_name']}{tp['service_name']}保障往后推迟一个小时；"
+                    f"第1轮客服调取预约工单({rec_id})，向用户反问确认推迟后的新时段（{tp['start_timestamp'].split('日')[-1]}至{tp['end_timestamp'].split('日')[-1]}）；"
+                    f"第2轮用户简短确认（如'对，确认修改'）；"
+                    f"第2轮客服确认工单改期生效并收尾。】"
+                )
+            elif tid == "T2-8":
+                t1_rule = (
+                    f"【工作记忆对账核查会话（单轮）：第1轮用户询问历史保障统计（如'帮我查下这周总共开了几次保障，一共多长时间？'）；"
+                    f"第1轮客服调取历史工单流水账，明确回复已开通的总次数、累计保障时长与明细，礼貌闭环。】"
+                )
+            elif tid == "T2-9":
+                exp = s_plan.get("experience_citation", {})
+                exp_title = exp.get("title", "极值与高密环境主动降画质保抗丢包平稳度")
+                t1_rule = (
+                    f"【经验记忆主动提议会话：当前环境为高密现场'{env}'。第1轮用户提出在{env}开启{tp['application_name']}{tp['service_name']}保障；"
+                    f"第1轮客服依据ReasoningBank经验卡片【{exp_title}】，主动提示现场人流拥塞信道争抢风险，建议采用稳定性优先方案（画质微调为{tp['resolution']}、时延收紧至{tp['rtt']}），询问用户是否同意采纳；"
+                    f"第2轮用户采纳经验建议（如'好的，按你的专业建议来'）；"
+                    f"第2轮客服确认按优化方案开通并收尾。】"
+                )
+            elif tid == "T2-10":
+                exp = s_plan.get("experience_citation", {})
+                exp_title = exp.get("title", "恶劣天气高衰减环境增强抗丢包加固策略")
+                t1_rule = (
+                    f"【经验记忆经验回溯会话：第1轮用户主动调取既往避坑经验（如'今天在{env}天气很恶劣，按上次恶劣天气的抗衰落加固方案配{tp['application_name']}{tp['service_name']}'）；"
+                    f"第1轮客服调取经验卡片【{exp_title}】，向用户反问确认加固方案（画质{tp['resolution']}、时延{tp['rtt']}、持续{tp['duration']}）；"
+                    f"第2轮用户确认（如'对，直接开'）；"
+                    f"第2轮客服确认按加固配置开通并收尾。】"
+                )
             elif tid == "X-1":
                 is_weekend = "周末" in env
                 time_constraint = "用户可表述为‘周末午休’；" if is_weekend else "由于当前是工作日（周一至周五），用户台词严禁出现‘周末’字样！只能表述为‘午休’或‘今天中午午休’；"
@@ -311,7 +354,7 @@ class DialogueGenerator:
                 u_text = u_text.replace(bad_word, f"{tp.get('rtt', '')}以内")
 
         # 常规复用/强化会话第 1 轮：大记忆点已生效，用户提及老规矩/代称时，若仍堆砌了已沉淀的画质/时延/时长，予以自然精简
-        if turn_idx == 1 and role in ["reinforcement_session", "reuse_session"] and tid not in ["T2-3", "T2-5"]:
+        if turn_idx == 1 and role in ["reinforcement_session", "reuse_session"] and tid not in ["T2-3", "T2-5", "T2-6", "T2-7", "T2-8", "T2-9", "T2-10"]:
             has_shorthand = any(k in u_text for k in ["老规矩", "老时间", "老样子", "照旧", "按习惯", "跟上次一样"])
             if has_shorthand:
                 patterns_to_strip = [
@@ -372,7 +415,7 @@ class DialogueGenerator:
                     a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
         if turn_idx == 2 and role == "reinforcement_session" and s_plan.get("small_memory_evidence_mode") == "co_occurrence" and s_plan.get("session_id", "").endswith("-03"):
             a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
-        if turn_idx == 1 and role in ["reinforcement_session", "reuse_session"] and tid not in ["T2-3", "T2-5"]:
+        if turn_idx == 1 and role in ["reinforcement_session", "reuse_session"] and tid not in ["T2-3", "T2-5", "T2-6", "T2-7", "T2-8", "T2-9", "T2-10"]:
             u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
             # 执行前必须把记忆补全出的时间与参数完整回显，不能让结构化时间凭空出现。
             a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
