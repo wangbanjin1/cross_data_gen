@@ -1936,6 +1936,93 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
             color: var(--text-secondary);
         }
 
+        /* Callout Alerts (Parchment & Twilight) */
+        .callout-card {
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 22px 0;
+            border-left: 4px solid var(--accent-primary);
+            background-color: var(--surface-color);
+        }
+
+        .callout-card.callout-important {
+            background-color: var(--callout-imp-bg);
+            border-color: var(--callout-imp-border);
+            color: var(--callout-imp-text);
+        }
+
+        .callout-card.callout-tip, .callout-card.callout-note {
+            background-color: var(--callout-note-bg);
+            border-color: var(--callout-note-border);
+            color: var(--callout-note-text);
+        }
+
+        .callout-card.callout-warn, .callout-card.callout-warning {
+            background-color: var(--callout-warn-bg);
+            border-color: var(--callout-warn-border);
+            color: var(--callout-warn-text);
+        }
+
+        .callout-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+
+        .callout-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+        }
+
+        .callout-important .callout-badge {
+            background-color: var(--callout-imp-border);
+            color: #ffffff;
+        }
+
+        .callout-tip .callout-badge, .callout-note .callout-badge {
+            background-color: var(--callout-note-border);
+            color: #ffffff;
+        }
+
+        .callout-warn .callout-badge {
+            background-color: var(--callout-warn-border);
+            color: #ffffff;
+        }
+
+        .callout-content {
+            font-size: 0.92rem;
+            line-height: 1.7;
+        }
+
+        .callout-content p {
+            margin: 6px 0;
+            color: inherit;
+        }
+
+        .callout-content ul, .callout-content ol {
+            margin: 6px 0;
+            padding-left: 20px;
+            color: inherit;
+        }
+
+        .callout-content li {
+            margin-bottom: 6px;
+            line-height: 1.6;
+        }
+
+        .callout-content strong {
+            color: inherit;
+        }
+
+
         .table-wrapper {
             margin: 22px 0 28px;
             overflow-x: auto;
@@ -2371,20 +2458,114 @@ def parse_doc_markdown(md_text: str):
             i += 1
             continue
             
-        # Intro blockquote
-        if line_s.startswith('> **文档定位**') or line_s.startswith('> **方案概述**'):
-            intro_text = line_s[1:].strip()
-            intro_text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', intro_text)
-            body_parts.append(f'<div class="doc-intro">{intro_text}</div>')
-            i += 1
-            continue
+        # Blockquote / Callout / Intro 处理
+        if line_s.startswith('>'):
+            quote_lines = []
+            while i < n and (lines[i].strip().startswith('>') or (lines[i].strip() and quote_lines and lines[i].startswith('   '))):
+                raw_q = lines[i].strip()
+                if raw_q.startswith('>'):
+                    cleaned = raw_q[1:].strip()
+                else:
+                    cleaned = raw_q.strip()
+                quote_lines.append(cleaned)
+                i += 1
             
-        if line_s.startswith('> '):
-            quote_text = line_s[2:].strip()
-            quote_text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', quote_text)
-            body_parts.append(f'<blockquote><p>{quote_text}</p></blockquote>')
-            i += 1
+            if not quote_lines:
+                continue
+
+            first_line = quote_lines[0]
+            
+            # 1. 顶层文档定位/方案概述
+            if first_line.startswith('**文档定位**') or first_line.startswith('**方案概述**'):
+                intro_text = " ".join([q for q in quote_lines if q])
+                intro_text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', intro_text)
+                body_parts.append(f'<div class="doc-intro">{intro_text}</div>')
+                continue
+                
+            # 2. GitHub-style Alert Callout ([!IMPORTANT], [!TIP], [!NOTE], [!WARNING], [!CAUTION])
+            alert_m = re.match(r'^\[!(IMPORTANT|TIP|NOTE|WARNING|CAUTION)\]$', first_line, re.IGNORECASE)
+            alert_type = None
+            badge_text = ""
+            content_lines = quote_lines
+            
+            if alert_m:
+                raw_type = alert_m.group(1).lower()
+                content_lines = quote_lines[1:]
+                if raw_type in ['important', 'caution']:
+                    alert_type = 'important'
+                    badge_text = '重点规范'
+                elif raw_type in ['tip']:
+                    alert_type = 'tip'
+                    badge_text = '架构提示'
+                elif raw_type in ['warning']:
+                    alert_type = 'warn'
+                    badge_text = '风险告警'
+                else:
+                    alert_type = 'note'
+                    badge_text = '说明'
+            elif '【重点规范】' in first_line:
+                alert_type = 'important'
+                badge_text = '重点规范'
+            elif '【核心架构收益】' in first_line or '【架构收益】' in first_line:
+                alert_type = 'tip'
+                badge_text = '核心收益'
+                
+            inner_html_parts = []
+            j = 0
+            m_len = len(content_lines)
+            while j < m_len:
+                c_line = content_lines[j].strip()
+                if not c_line:
+                    j += 1
+                    continue
+                if c_line.startswith('- ') or c_line.startswith('* '):
+                    items = []
+                    while j < m_len and (content_lines[j].strip().startswith('- ') or content_lines[j].strip().startswith('* ')):
+                        it = content_lines[j].strip()[2:].strip()
+                        it = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', it)
+                        it = re.sub(r'`(.*?)`', r'<code>\1</code>', it)
+                        it = re.sub(r'\$(.*?)\$', r'<span class="katex-inline" data-tex="\1">$\1$</span>', it)
+                        items.append(f'<li>{it}</li>')
+                        j += 1
+                    inner_html_parts.append(f'<ul>{"".join(items)}</ul>')
+                    continue
+                num_m = re.match(r'^\d+\.\s+(.*)', c_line)
+                if num_m:
+                    items = []
+                    while j < m_len and re.match(r'^\d+\.\s+(.*)', content_lines[j].strip()):
+                        it = re.match(r'^\d+\.\s+(.*)', content_lines[j].strip()).group(1)
+                        it = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', it)
+                        it = re.sub(r'`(.*?)`', r'<code>\1</code>', it)
+                        it = re.sub(r'\$(.*?)\$', r'<span class="katex-inline" data-tex="\1">$\1$</span>', it)
+                        items.append(f'<li>{it}</li>')
+                        j += 1
+                    inner_html_parts.append(f'<ol>{"".join(items)}</ol>')
+                    continue
+                fmt_line = c_line
+                fmt_line = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', fmt_line)
+                fmt_line = re.sub(r'`(.*?)`', r'<code>\1</code>', fmt_line)
+                fmt_line = re.sub(r'\$(.*?)\$', r'<span class="katex-inline" data-tex="\1">$\1$</span>', fmt_line)
+                inner_html_parts.append(f'<p>{fmt_line}</p>')
+                j += 1
+                
+            inner_html = "\n".join(inner_html_parts)
+            
+            if alert_type:
+                callout_html = f"""
+                <div class="callout-card callout-{alert_type}">
+                    <div class="callout-header">
+                        <span class="callout-badge">{badge_text}</span>
+                    </div>
+                    <div class="callout-content">
+                        {inner_html}
+                    </div>
+                </div>
+                """
+                body_parts.append(callout_html)
+            else:
+                body_parts.append(f'<blockquote>{inner_html}</blockquote>')
             continue
+
             
         if line_s in ['---', '***', '___']:
             body_parts.append('<hr style="border: none; border-top: 1px solid var(--border-color); margin: 36px 0;">')

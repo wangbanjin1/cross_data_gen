@@ -398,6 +398,93 @@
             color: var(--text-secondary);
         }
 
+        /* Callout Alerts (Parchment & Twilight) */
+        .callout-card {
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 22px 0;
+            border-left: 4px solid var(--accent-primary);
+            background-color: var(--surface-color);
+        }
+
+        .callout-card.callout-important {
+            background-color: var(--callout-imp-bg);
+            border-color: var(--callout-imp-border);
+            color: var(--callout-imp-text);
+        }
+
+        .callout-card.callout-tip, .callout-card.callout-note {
+            background-color: var(--callout-note-bg);
+            border-color: var(--callout-note-border);
+            color: var(--callout-note-text);
+        }
+
+        .callout-card.callout-warn, .callout-card.callout-warning {
+            background-color: var(--callout-warn-bg);
+            border-color: var(--callout-warn-border);
+            color: var(--callout-warn-text);
+        }
+
+        .callout-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+
+        .callout-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+        }
+
+        .callout-important .callout-badge {
+            background-color: var(--callout-imp-border);
+            color: #ffffff;
+        }
+
+        .callout-tip .callout-badge, .callout-note .callout-badge {
+            background-color: var(--callout-note-border);
+            color: #ffffff;
+        }
+
+        .callout-warn .callout-badge {
+            background-color: var(--callout-warn-border);
+            color: #ffffff;
+        }
+
+        .callout-content {
+            font-size: 0.92rem;
+            line-height: 1.7;
+        }
+
+        .callout-content p {
+            margin: 6px 0;
+            color: inherit;
+        }
+
+        .callout-content ul, .callout-content ol {
+            margin: 6px 0;
+            padding-left: 20px;
+            color: inherit;
+        }
+
+        .callout-content li {
+            margin-bottom: 6px;
+            line-height: 1.6;
+        }
+
+        .callout-content strong {
+            color: inherit;
+        }
+
+
         .table-wrapper {
             margin: 22px 0 28px;
             overflow-x: auto;
@@ -627,11 +714,17 @@
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 36px 0;">
 <h2 id="理论支柱与“双真值链”机制">理论支柱与“双真值链”机制</h2>
 <p>在融入 MemoryArena 与 ReasoningBank 的核心理念时，本系统严格确立了学术工作与工程落地的边界，并确立了<strong>“双真值链”</strong>的核心架构机制：</p>
-<blockquote><p>[!IMPORTANT]</p></blockquote>
-<blockquote><p><strong>学术理论与工程落地边界规范</strong>：</p></blockquote>
-<blockquote><p>- <strong>论文工作</strong>：MemoryArena（多 Session 任务强依赖、评测记忆是否真正帮助行动）与 ReasoningBank（从成功与失败轨迹中提炼 title/description/content 经验卡片并在新任务中检索注入）。论文原生基准为网页购物（WebShop）、团体旅行（TravelPlanner）或软件代码（SWE-Bench）。</p></blockquote>
-<blockquote><p>- <strong>项目建议</strong>：将上述思想系统迁移至<strong>移动核心网提参智能体（Parameter Extraction Agent）</strong>——专注于多轮交互中的<strong>意图与槽位抽取、相对时态与历史工单解析、多轮局部修正、以及追问/消歧决策</strong>。</p></blockquote>
-<blockquote><p>- <strong>业务边界</strong>：本系统范围严格限定在提参 Agent 数据生成与评测，<strong>不涉及核心网底层策略下发与物理网络执行</strong>。</p></blockquote>
+
+                <div class="callout-card callout-important">
+                    <div class="callout-header">
+                        <span class="callout-badge">重点规范</span>
+                    </div>
+                    <div class="callout-content">
+                        <p><strong>【重点规范】学术理论与工程落地边界</strong></p>
+<ul><li><strong>论文工作</strong>：MemoryArena（多 Session 任务强依赖、评测记忆是否真正帮助行动）与 ReasoningBank（从成功与失败轨迹中提炼 title/description/content 经验卡片并在新任务中检索注入）。论文原生基准为网页购物（WebShop）、团体旅行（TravelPlanner）或软件代码（SWE-Bench）。</li><li><strong>项目建议</strong>：将上述思想系统迁移至<strong>移动核心网提参智能体（Parameter Extraction Agent）</strong>——专注于多轮交互中的<strong>意图与槽位抽取、相对时态与历史工单解析、多轮局部修正、以及追问/消歧决策</strong>。</li><li><strong>业务边界</strong>：本系统范围严格限定在提参 Agent 数据生成与评测，<strong>不涉及核心网底层策略下发与物理网络执行</strong>。</li></ul>
+                    </div>
+                </div>
+                
 <h3 id="核心设计范式：分开生成两条“双真值链”">核心设计范式：分开生成两条“双真值链”</h3>
 <p>本系统在数据合成中坚决拒绝把通用经验与个人偏好混为一谈，首创采用<strong>事实链</strong>与<strong>经验链</strong>解耦并行的生成机制：</p>
 <ol>
@@ -806,42 +899,39 @@
 <h4 id="交互轮数压缩增益_Turn_Compression_Gain,_TCG">交互轮数压缩增益（Turn Compression Gain, TCG）</h4>
 <p>定量衡量长程事实记忆机制为用户减少的无谓交互轮次比例：</p>
 
-            <div class="math-block" data-tex="ext{TCG} =
-rac{ar{T}_{	ext{cold}} - ar{T}_{	ext{hot}}}{ar{T}_{	ext{cold}}} 	imes 100\%">
+            <div class="math-block" data-tex="ext{TCG} = \frac{\bar{T}_{	ext{cold}} - \bar{T}_{	ext{hot}}}{\bar{T}_{	ext{cold}}} 	imes 100\%">
                 <div class="math-block-header">
                     <span class="math-badge">LaTeX · 公式定义</span>
-                    <button class="math-copy-btn" onclick="copyLatex(this)" data-tex="ext{TCG} =
-rac{ar{T}_{	ext{cold}} - ar{T}_{	ext{hot}}}{ar{T}_{	ext{cold}}} 	imes 100\%">复制 LaTeX</button>
+                    <button class="math-copy-btn" onclick="copyLatex(this)" data-tex="ext{TCG} = \frac{\bar{T}_{	ext{cold}} - \bar{T}_{	ext{hot}}}{\bar{T}_{	ext{cold}}} 	imes 100\%">复制 LaTeX</button>
                 </div>
-                <div class="katex-display-container" data-tex="ext{TCG} =
-rac{ar{T}_{	ext{cold}} - ar{T}_{	ext{hot}}}{ar{T}_{	ext{cold}}} 	imes 100\%"></div>
+                <div class="katex-display-container" data-tex="ext{TCG} = \frac{\bar{T}_{	ext{cold}} - \bar{T}_{	ext{hot}}}{\bar{T}_{	ext{cold}}} 	imes 100\%"></div>
             </div>
             
 <p>其中：</p>
 <ul>
-<li><span class="katex-inline" data-tex="ar{T}_{	ext{cold}}">$ar{T}_{	ext{cold}}$</span> 表示无记忆冷启动会话的平均交互轮数（理论基准：<span class="katex-inline" data-tex="2.5 \sim 3.0">$2.5 \sim 3.0$</span> 轮）；</li><li><span class="katex-inline" data-tex="ar{T}_{	ext{hot}}">$ar{T}_{	ext{hot}}$</span> 表示有记忆热启动会话的平均交互轮数（理论基准：<span class="katex-inline" data-tex="1.0 \sim 2.0">$1.0 \sim 2.0$</span> 轮）；</li><li><strong>评测达标线</strong>：<span class="katex-inline" data-tex="	ext{TCG} \ge 40\% \sim 50\%">$	ext{TCG} \ge 40\% \sim 50\%$</span>。</li><li><strong>前置质检硬门槛（Hard Gate）</strong>：冷启动零记忆场景下，参数反问澄清完整率必须达到 <strong>100.0%</strong>，参数提前泄露与擅自脑补率必须为 <strong>0.0%</strong>。未达门槛的样本直接判定为质检不合格，不进入 TCG 评分。</li>
+<li><span class="katex-inline" data-tex="\bar{T}_{	ext{cold}}">$\bar{T}_{	ext{cold}}$</span> 表示无记忆冷启动会话的平均交互轮数（理论基准：<span class="katex-inline" data-tex="2.5 \sim 3.0">$2.5 \sim 3.0$</span> 轮）；</li><li><span class="katex-inline" data-tex="\bar{T}_{	ext{hot}}">$\bar{T}_{	ext{hot}}$</span> 表示有记忆热启动会话的平均交互轮数（理论基准：<span class="katex-inline" data-tex="1.0 \sim 2.0">$1.0 \sim 2.0$</span> 轮）；</li><li><strong>评测达标线</strong>：<span class="katex-inline" data-tex="	ext{TCG} \ge 40\% \sim 50\%">$	ext{TCG} \ge 40\% \sim 50\%$</span>。</li><li><strong>前置质检硬门槛（Hard Gate）</strong>：冷启动零记忆场景下，参数反问澄清完整率必须达到 <strong>100.0%</strong>，参数提前泄露与擅自脑补率必须为 <strong>0.0%</strong>。未达门槛的样本直接判定为质检不合格，不进入 TCG 评分。</li>
 </ul>
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 36px 0;">
 <h3 id="生成端总控因子：记忆敏捷度因子_α">生成端总控因子：记忆敏捷度因子（α）</h3>
-<p>为了将评测指标反哺并精确指导数据生成，在批量生成流水线中首创引入 <strong>1 个全局控制因子 —— 记忆敏捷度因子（Memory Agility Factor, <span class="katex-inline" data-tex="lpha \in [0.0, 1.0]">$lpha \in [0.0, 1.0]$</span>）</strong>，作为控制对话压缩与默契梯度的总控旋钮。</p>
+<p>为了将评测指标反哺并精确指导数据生成，在批量生成流水线中首创引入 <strong>1 个全局控制因子 —— 记忆敏捷度因子（Memory Agility Factor, <span class="katex-inline" data-tex="\alpha \in [0.0, 1.0]">$\alpha \in [0.0, 1.0]$</span>）</strong>，作为控制对话压缩与默契梯度的总控旋钮。</p>
 <h4 id="1._控制目标轮次压缩公式">1. 控制目标轮次压缩公式</h4>
-<p>在时间线规划器（<code>TimelinePlanner</code>）中，热启动会话的目标交互轮数由 <span class="katex-inline" data-tex="lpha">$lpha$</span> 线性调制确定：</p>
+<p>在时间线规划器（<code>TimelinePlanner</code>）中，热启动会话的目标交互轮数由 <span class="katex-inline" data-tex="\alpha">$\alpha$</span> 线性调制确定：</p>
 
-            <div class="math-block" data-tex="T_{	ext{hot}} = 	ext{round}ig(T_{	ext{cold}} \cdot (1 - lpha)ig)">
+            <div class="math-block" data-tex="T_{	ext{hot}} = 	ext{round}\big(T_{	ext{cold}} \cdot (1 - \alpha)\big)">
                 <div class="math-block-header">
                     <span class="math-badge">LaTeX · 公式定义</span>
-                    <button class="math-copy-btn" onclick="copyLatex(this)" data-tex="T_{	ext{hot}} = 	ext{round}ig(T_{	ext{cold}} \cdot (1 - lpha)ig)">复制 LaTeX</button>
+                    <button class="math-copy-btn" onclick="copyLatex(this)" data-tex="T_{	ext{hot}} = 	ext{round}\big(T_{	ext{cold}} \cdot (1 - \alpha)\big)">复制 LaTeX</button>
                 </div>
-                <div class="katex-display-container" data-tex="T_{	ext{hot}} = 	ext{round}ig(T_{	ext{cold}} \cdot (1 - lpha)ig)"></div>
+                <div class="katex-display-container" data-tex="T_{	ext{hot}} = 	ext{round}\big(T_{	ext{cold}} \cdot (1 - \alpha)\big)"></div>
             </div>
             
 <ul>
-<li><strong><span class="katex-inline" data-tex="lpha = 0.0">$lpha = 0.0$</span>（极端保守 / 冷启动基线）</strong>：强制不唤醒事实记忆，客服对所有关键参数逐项盘问澄清，交互轮数保持 <span class="katex-inline" data-tex="T = 3">$T = 3$</span> 轮；</li><li><strong><span class="katex-inline" data-tex="lpha = 0.5">$lpha = 0.5$</span>（常规稳健热启动）</strong>：客服从记忆中调取配置向用户反问确认，用户确认后开通，交互轮数稳定在 <span class="katex-inline" data-tex="T = 2">$T = 2$</span> 轮；</li><li><strong><span class="katex-inline" data-tex="lpha = 1.0">$lpha = 1.0$</span>（极致敏捷热启动）</strong>：用户极简口语触发（如“按老规矩办”），客服秒级命中并默认直接受理闭环，达成极速 <span class="katex-inline" data-tex="T = 1">$T = 1$</span> 轮交互。</li>
+<li><strong><span class="katex-inline" data-tex="\alpha = 0.0">$\alpha = 0.0$</span>（极端保守 / 冷启动基线）</strong>：强制不唤醒事实记忆，客服对所有关键参数逐项盘问澄清，交互轮数保持 <span class="katex-inline" data-tex="T = 3">$T = 3$</span> 轮；</li><li><strong><span class="katex-inline" data-tex="\alpha = 0.5">$\alpha = 0.5$</span>（常规稳健热启动）</strong>：客服从记忆中调取配置向用户反问确认，用户确认后开通，交互轮数稳定在 <span class="katex-inline" data-tex="T = 2">$T = 2$</span> 轮；</li><li><strong><span class="katex-inline" data-tex="\alpha = 1.0">$\alpha = 1.0$</span>（极致敏捷热启动）</strong>：用户极简口语触发（如“按老规矩办”），客服秒级命中并默认直接受理闭环，达成极速 <span class="katex-inline" data-tex="T = 1">$T = 1$</span> 轮交互。</li>
 </ul>
 <h4 id="2._控制用户台词口语省略深度_Omission_Intensity">2. 控制用户台词口语省略深度（Omission Intensity）</h4>
-<p>敏捷度因子 <span class="katex-inline" data-tex="lpha">$lpha$</span> 直接调控 Prompt 中对用户台词槽位省略的严格级别：</p>
+<p>敏捷度因子 <span class="katex-inline" data-tex="\alpha">$\alpha$</span> 直接调控 Prompt 中对用户台词槽位省略的严格级别：</p>
 <ul>
-<li><strong>低敏捷度（<span class="katex-inline" data-tex="lpha \le 0.3">$lpha \le 0.3$</span>）</strong>：用户台词允许保留部分辅助信息（如应用名 + 部分参数），属于弱省略；</li><li><strong>高敏捷度（<span class="katex-inline" data-tex="lpha \ge 0.7">$lpha \ge 0.7$</span>）</strong>：用户台词强制深度省略画质、时延、时长甚至应用名，仅使用极简代称（如“老规矩开保障”），倒逼智能体必须 100% 依赖事实记忆补全所有通信参数。</li>
+<li><strong>低敏捷度（<span class="katex-inline" data-tex="\alpha \le 0.3">$\alpha \le 0.3$</span>）</strong>：用户台词允许保留部分辅助信息（如应用名 + 部分参数），属于弱省略；</li><li><strong>高敏捷度（<span class="katex-inline" data-tex="\alpha \ge 0.7">$\alpha \ge 0.7$</span>）</strong>：用户台词强制深度省略画质、时延、时长甚至应用名，仅使用极简代称（如“老规矩开保障”），倒逼智能体必须 100% 依赖事实记忆补全所有通信参数。</li>
 </ul>
 <h4 id="3._生成控制到评测指标的因果闭环">3. 生成控制到评测指标的因果闭环</h4>
 <div class="mermaid">
@@ -851,7 +941,7 @@ flowchart LR
     C --> D["评测端：计算模型实际压缩增益 TCG"]
     D --> E["验证闭环：实测 TCG ≈ α · TCG_max (模型完美对齐)"]
 </div>
-<p>在生成 150 个画像时，通过配置 <span class="katex-inline" data-tex="lpha">$lpha$</span> 梯度分布（如 20% 生成 <span class="katex-inline" data-tex="lpha=1.0">$lpha=1.0$</span>、60% 生成 <span class="katex-inline" data-tex="lpha=0.5">$lpha=0.5$</span>、20% 生成 <span class="katex-inline" data-tex="lpha=0.0">$lpha=0.0$</span>），即可系统化构建覆盖从初识到熟客不同默契深度的全阶梯评测基准。</p>
+<p>在生成 150 个画像时，通过配置 <span class="katex-inline" data-tex="\alpha">$\alpha$</span> 梯度分布（如 20% 生成 <span class="katex-inline" data-tex="\alpha=1.0">$\alpha=1.0$</span>、60% 生成 <span class="katex-inline" data-tex="\alpha=0.5">$\alpha=0.5$</span>、20% 生成 <span class="katex-inline" data-tex="\alpha=0.0">$\alpha=0.0$</span>），即可系统化构建覆盖从初识到熟客不同默契深度的全阶梯评测基准。</p>
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 36px 0;">
 <h2 id="工作记忆架构与时态检索机制">工作记忆架构与时态检索机制</h2>
 <p>工作记忆以现实时间流为轴线，解决用户口语中频繁出现的<strong>时态相对代指与工单追溯</strong>。</p>
@@ -917,11 +1007,17 @@ flowchart LR
             </table>
         </div>
         
-<blockquote><p>[!TIP]</p></blockquote>
-<blockquote><p><strong>文件解耦的三大核心工程收益</strong>：</p></blockquote>
-<blockquote><p>1. <strong>杜绝 Prompt 上下文剧烈爆炸</strong>：若将用户过去数十次工单全量嵌入每轮对话的 session 中，会话文件体积极速膨胀，不仅极大浪费推理 Token，还会引入无关干扰；解耦后保持会话轻盈纯净。</p></blockquote>
-<blockquote><p>2. <strong>真实映射电信生产架构</strong>：在真实运营商核心网中，CRM 客户中心与 OSS/BSS 工单系统是彼此独立的外部数据库。提参 Agent 必须通过“语义提取 $	o$ 构造查询 $	o$ 调用接口”完成取数，解耦能完美模拟真实系统的接口调用。</p></blockquote>
-<blockquote><p>3. <strong>便于外部 Verifier 校验</strong>：自动化质检脚本可独立对 `working_records.jsonl` 进行时间连续性、主键唯一性校验，与会话多轮质检互不干扰。</p></blockquote>
+
+                <div class="callout-card callout-tip">
+                    <div class="callout-header">
+                        <span class="callout-badge">核心收益</span>
+                    </div>
+                    <div class="callout-content">
+                        <p><strong>【核心架构收益】工作记忆工单流水独立解耦的三大价值</strong></p>
+<ol><li><strong>杜绝 Prompt 上下文剧烈爆炸</strong>：若将用户过去数十次工单全量嵌入每轮对话的 session 中，会话文件体积极速膨胀，不仅极大浪费推理 Token，还会引入无关干扰；解耦后保持会话轻盈纯净。</li><li><strong>真实映射电信生产架构</strong>：在真实运营商核心网中，CRM 客户中心与 OSS/BSS 工单系统是彼此独立的外部数据库。提参 Agent 必须通过“语义提取 <span class="katex-inline" data-tex="\to">$\to$</span> 构造查询 <span class="katex-inline" data-tex="\to">$\to$</span> 调用接口”完成取数，解耦能完美模拟真实系统的接口调用。</li><li><strong>便于外部 Verifier 校验</strong>：自动化质检脚本可独立对 <code>working_records.jsonl</code> 进行时间连续性、主键唯一性校验，与会话多轮质检互不干扰。</li></ol>
+                    </div>
+                </div>
+                
 <h4 id="独立历史工单流水账结构_`working_records.jsonl`">独立历史工单流水账结构（`working_records.jsonl`）</h4>
 <pre><code class="language-json">{
   &quot;record_id&quot;: &quot;REC_20261017_01&quot;,
@@ -1042,7 +1138,7 @@ flowchart LR
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 36px 0;">
 <h3 id="方案_2：从“最新值覆盖”升级为“作用域与时效联合判断”">方案 2：从“最新值覆盖”升级为“作用域与时效联合判断”</h3>
 <ul>
-<li><strong>理论借鉴</strong>：借鉴跨会话状态机演化机制，从失败轨迹中提炼“临时变更”与“长期更新”的生命周期边界。</li><li><strong>状态演进时序</strong>：</li><li><strong>S1</strong>：“以后会议默认 720P。” <span class="katex-inline" data-tex="	o">$	o$</span> 建立长期事实记忆：会议=720P；</li><li><strong>S2</strong>：“今天会议这次 1080P。” <span class="katex-inline" data-tex="	o">$	o$</span> 临时变更（Temporary Choice）：当前会议=1080P，长期默认仍保持 720P；</li><li><strong>S3</strong>：“明天会议按默认的。” <span class="katex-inline" data-tex="	o">$	o$</span> 正确提取长期默认 720P（<strong>若按机械最新值将误判为 1080P</strong>）；</li><li><strong>S4</strong>：“以后会议默认 1080P。” <span class="katex-inline" data-tex="	o">$	o$</span> 用户明确指示，长期事实记忆更新为 1080P（Permanent Update）；</li><li><strong>S5</strong>：“今天会议照旧。” <span class="katex-inline" data-tex="	o">$	o$</span> 提取更新后的长期默认 1080P。</li><li><strong>成败轨迹对照</strong>：</li><li><strong>失败轨迹</strong>：Agent 误把 S2 的“这次”当成全局覆盖，导致 S3 错误继承 1080P；</li><li><strong>成功轨迹</strong>：精准标记 <code>scope="session_temporary"</code> 与 <code>scope="profile_permanent"</code>，S3 稳定恢复 720P。</li><li><strong>提炼 ReasoningBank 经验卡片</strong>：</li><li><strong>Title</strong>：参数提取先判断时效作用域与生命周期</li><li><strong>Description</strong>：口语中“这次/今天”与“以后/默认”存在截然不同的生效边界。</li><li><strong>Content</strong>：参数提取前先识别作用域标志词；“这次/临时/今天”仅作用于当前任务，“以后/默认/改规矩”才触发长期画像更新；冲突消解以同作用域为准，严禁单凭时间戳机械取最新值。</li><li><strong>边界反例</strong>：“上次那个 720P”仅引用具体历史单据，不自动建立长期默认；“以后都按 720P”才是真正的全局事实更新。</li>
+<li><strong>理论借鉴</strong>：借鉴跨会话状态机演化机制，从失败轨迹中提炼“临时变更”与“长期更新”的生命周期边界。</li><li><strong>状态演进时序</strong>：</li><li><strong>S1</strong>：“以后会议默认 720P。” <span class="katex-inline" data-tex="\to">$\to$</span> 建立长期事实记忆：会议=720P；</li><li><strong>S2</strong>：“今天会议这次 1080P。” <span class="katex-inline" data-tex="\to">$\to$</span> 临时变更（Temporary Choice）：当前会议=1080P，长期默认仍保持 720P；</li><li><strong>S3</strong>：“明天会议按默认的。” <span class="katex-inline" data-tex="\to">$\to$</span> 正确提取长期默认 720P（<strong>若按机械最新值将误判为 1080P</strong>）；</li><li><strong>S4</strong>：“以后会议默认 1080P。” <span class="katex-inline" data-tex="\to">$\to$</span> 用户明确指示，长期事实记忆更新为 1080P（Permanent Update）；</li><li><strong>S5</strong>：“今天会议照旧。” <span class="katex-inline" data-tex="\to">$\to$</span> 提取更新后的长期默认 1080P。</li><li><strong>成败轨迹对照</strong>：</li><li><strong>失败轨迹</strong>：Agent 误把 S2 的“这次”当成全局覆盖，导致 S3 错误继承 1080P；</li><li><strong>成功轨迹</strong>：精准标记 <code>scope="session_temporary"</code> 与 <code>scope="profile_permanent"</code>，S3 稳定恢复 720P。</li><li><strong>提炼 ReasoningBank 经验卡片</strong>：</li><li><strong>Title</strong>：参数提取先判断时效作用域与生命周期</li><li><strong>Description</strong>：口语中“这次/今天”与“以后/默认”存在截然不同的生效边界。</li><li><strong>Content</strong>：参数提取前先识别作用域标志词；“这次/临时/今天”仅作用于当前任务，“以后/默认/改规矩”才触发长期画像更新；冲突消解以同作用域为准，严禁单凭时间戳机械取最新值。</li><li><strong>边界反例</strong>：“上次那个 720P”仅引用具体历史单据，不自动建立长期默认；“以后都按 720P”才是真正的全局事实更新。</li>
 </ul>
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 36px 0;">
 <h3 id="方案_3：从“单一正确轨迹”升级为“追问策略三态对照”">方案 3：从“单一正确轨迹”升级为“追问策略三态对照”</h3>
