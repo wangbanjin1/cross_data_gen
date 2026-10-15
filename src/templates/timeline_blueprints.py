@@ -213,10 +213,11 @@ def get_session_blueprints(
         return f"{d_str}{parts[0]}时{parts[1]}分"
 
     candidate_slots = [
-        # 1: Main Evidence (T2-1 首次建联证据 / 参数反问补全)
+        # 1: Main Evidence (T2-1 冷启动无记忆多轮澄清线 - 3轮反问澄清完整闭环)
         {
             "tag": "main_evidence",
             "template_id": "T2-1",
+            "memory_tier": "factual_memory",
             "role": "evidence_session",
             "source": main_mt,
             "type": "main",
@@ -226,12 +227,16 @@ def get_session_blueprints(
             "declaration_mode": decl_mode,
             "storyline_trigger_type": storyline_trigger_type,
             "trigger_condition": main_trigger_desc,
+            "round_count": 3,
+            "cold_hot_type": "cold_start",
+            "agility_factor": 0.0,
             "time_kind": "main"
         },
-        # 2: Sub 1 Evidence (T3-1 支线1跨轮澄清消歧)
+        # 2: Sub 1 Evidence (T3-1 支线1冷启动跨轮消歧建联 - 3轮)
         {
             "tag": "sub1_evidence",
             "template_id": "T3-1",
+            "memory_tier": "factual_memory",
             "role": "evidence_session",
             "source": sub_01,
             "type": "sub_01",
@@ -241,12 +246,16 @@ def get_session_blueprints(
             "declaration_mode": "implicit_induction",
             "storyline_trigger_type": "location_environment",
             "trigger_condition": "大巴转场弱网环境",
+            "round_count": 3,
+            "cold_hot_type": "cold_start",
+            "agility_factor": 0.0,
             "time_kind": "sub1"
         },
-        # 3: Main Reinforcement (T2-1 主线事实记忆热启动)
+        # 3: Main Reinforcement (T2-1 事实记忆常规稳健热启动 α=0.5 - 2轮)
         {
             "tag": "main_reinf_1",
             "template_id": "T2-1",
+            "memory_tier": "factual_memory",
             "role": "reinforcement_session",
             "source": main_mt,
             "type": "main",
@@ -256,49 +265,48 @@ def get_session_blueprints(
             "declaration_mode": decl_mode,
             "storyline_trigger_type": storyline_trigger_type,
             "trigger_condition": main_trigger_desc,
+            "round_count": 2,
+            "cold_hot_type": "hot_start",
+            "agility_factor": 0.5,
             "time_kind": "main"
         },
         # 4: Working Memory Reuse 1 (T2-6 历史工单跨期复用 - 单工单精准匹配)
         {
             "tag": "wm_reuse",
             "template_id": "T2-6",
+            "memory_tier": "working_memory",
             "role": "reuse_session",
             "source": main_mt,
             "type": "working_record_reuse",
             "dur": base_dur,
             "env": main_env_desc,
             "action": "retrieve_working_record_reuse",
+            "round_count": 2,
+            "cold_hot_type": None,
+            "agility_factor": None,
             "time_kind": "main"
         },
-        # 5: Distractor 1 (T1-2 纯域外拒绝，如宽带光纤报修)
-        {
-            "tag": "dist_ood",
-            "template_id": "T1-2",
-            "role": "distractor_session",
-            "source": dist_01,
-            "type": "distractor_ood",
-            "dur": "30min",
-            "env": "驻地酒店临时办公区",
-            "action": "reject_out_of_domain",
-            "ood_goal": "宽带光纤装维报修",
-            "time_kind": "dist_ood"
-        },
-        # 6: Working Memory Reschedule 1 (T2-7 历史工单延期变更)
+        # 5: Working Memory Reschedule 1 (T2-7 历史工单延期变更)
         {
             "tag": "wm_reschedule",
             "template_id": "T2-7",
+            "memory_tier": "working_memory",
             "role": "reuse_session",
             "source": main_mt,
             "type": "working_record_reschedule",
             "dur": base_dur,
             "env": main_env_desc,
             "action": "reschedule_working_record",
+            "round_count": 2,
+            "cold_hot_type": None,
+            "agility_factor": None,
             "time_kind": "main"
         },
-        # 7: Main Reuse (T2-5 变更延长时长)
+        # 6: Main Reuse (T2-5 事实记忆局部时长修改 α=0.5 - 2轮)
         {
             "tag": "main_amend",
             "template_id": "T2-5",
+            "memory_tier": "factual_memory",
             "role": "reuse_session",
             "source": main_mt,
             "type": "main",
@@ -308,12 +316,16 @@ def get_session_blueprints(
             "action": "extend_duration_amend",
             "storyline_trigger_type": storyline_trigger_type,
             "trigger_condition": main_trigger_desc,
+            "round_count": 2,
+            "cold_hot_type": "hot_start",
+            "agility_factor": 0.5,
             "time_kind": "main_amend"
         },
-        # 8: Working Memory Disambiguation (T2-6 工作记忆多候选消歧 - 3轮深度交互)
+        # 7: Working Memory Disambiguation (T2-6 工作记忆多候选消歧 - 3轮深度交互)
         {
             "tag": "wm_disambig",
             "template_id": "T2-6",
+            "memory_tier": "working_memory",
             "role": "reuse_session",
             "source": main_mt,
             "type": "working_record_disambig",
@@ -321,37 +333,33 @@ def get_session_blueprints(
             "env": main_env_desc,
             "action": "disambiguate_working_record",
             "round_count": 3,
+            "cold_hot_type": None,
+            "agility_factor": None,
             "time_kind": "main"
         },
-        # 9: Working Memory Reconcile 1 (T2-8 历史工单半月阶段流水对账核查)
+        # 8: Main Agile Reuse (T2-1 事实记忆极致敏捷热启动 α=1.0 - 1轮极速闭环)
         {
-            "tag": "wm_reconcile",
-            "template_id": "T2-8",
-            "role": "distractor_session",
+            "tag": "main_agile",
+            "template_id": "T2-1",
+            "memory_tier": "factual_memory",
+            "role": "reuse_session",
             "source": main_mt,
-            "type": "working_record_reconcile",
-            "dur": "15min",
-            "env": "工单系统对账窗口",
-            "action": "reconcile_working_records",
-            "time_kind": "dist_normal"
+            "type": "main",
+            "dur": base_dur,
+            "env": main_env_desc,
+            "action": "continuous_main_reuse",
+            "storyline_trigger_type": storyline_trigger_type,
+            "trigger_condition": main_trigger_desc,
+            "round_count": 1,
+            "cold_hot_type": "hot_start",
+            "agility_factor": 1.0,
+            "time_kind": "main"
         },
-        # 10: Distractor 2 (X-1 混合诉求一办一拒)
-        {
-            "tag": "dist_mixed",
-            "template_id": "X-1",
-            "role": "distractor_session",
-            "source": dist_02,
-            "type": "distractor_mixed",
-            "dur": "60min",
-            "env": "午休个人时间",
-            "action": "mixed_in_out_domain",
-            "ood_goal": "手机话费充值与账单查询",
-            "time_kind": "dist_mixed"
-        },
-        # 11: Experiential Proactive Suggestion (T2-9 ReasoningBank 主动经验提议 - 3轮深度协商)
+        # 9: Experiential Proactive Suggestion (T2-9 ReasoningBank 主动经验提议 - 3轮深度协商)
         {
             "tag": "exp_proactive",
             "template_id": "T2-9",
+            "memory_tier": "experiential_memory",
             "role": "reuse_session",
             "source": main_mt,
             "type": "proactive_experience",
@@ -359,24 +367,15 @@ def get_session_blueprints(
             "env": "奥林匹克体育中心主场馆",
             "action": "proactive_experience_suggestion",
             "round_count": 3,
+            "cold_hot_type": None,
+            "agility_factor": None,
             "time_kind": "main"
         },
-        # 12: Sub 1 Reuse (T2-1 支线隔离验证)
-        {
-            "tag": "sub1_reuse",
-            "template_id": "T2-1",
-            "role": "reuse_session",
-            "source": sub_01,
-            "type": "sub_01",
-            "dur": "60min",
-            "env": "转场大巴途中",
-            "action": "sub_memory_unaffected",
-            "time_kind": "sub1"
-        },
-        # 13: Event Correction (T2-3 恶劣天气临时纠正覆盖)
+        # 10: Event Correction (T2-3 恶劣天气临时纠正覆盖 - 作用域仅限于当前任务)
         {
             "tag": "evt_correct",
             "template_id": "T2-3",
+            "memory_tier": "factual_memory",
             "role": "correction_session",
             "source": main_mt,
             "type": "event_override",
@@ -384,36 +383,48 @@ def get_session_blueprints(
             "env": "沿海暴雨强对流前沿现场",
             "action": "override_temporary_preference",
             "override": evt_01.get("preference_override", {"resolution": "720p", "rtt_max": "30ms"}),
+            "round_count": 2,
+            "cold_hot_type": "hot_start",
+            "agility_factor": 0.5,
             "time_kind": "main"
         },
-        # 14: Event Reuse & Scope Isolation (T2-1 恢复长期事实记忆验证)
+        # 11: Event Reuse & Scope Isolation (T2-1 事实记忆长期老规矩自动恢复 - 隔离检验 α=0.5 - 2轮)
         {
             "tag": "evt_reuse",
             "template_id": "T2-1",
+            "memory_tier": "factual_memory",
             "role": "reuse_session",
             "source": main_mt,
             "type": "event_reuse",
             "dur": base_dur,
             "env": main_env_desc,
             "action": "reuse_long_term_rule_after_correction",
+            "round_count": 2,
+            "cold_hot_type": "hot_start",
+            "agility_factor": 0.5,
             "time_kind": "main"
         },
-        # 15: Experiential Recall (T2-10 经验回溯与恶劣天气加固方案)
+        # 12: Experiential Recall (T2-10 经验回溯与恶劣天气加固方案 - 2轮)
         {
             "tag": "exp_recall",
             "template_id": "T2-10",
+            "memory_tier": "experiential_memory",
             "role": "reuse_session",
             "source": main_mt,
             "type": "empirical_recall",
             "dur": base_dur,
             "env": "野外高山强风雨观测区",
             "action": "empirical_recall_or_boundary_check",
+            "round_count": 2,
+            "cold_hot_type": None,
+            "agility_factor": None,
             "time_kind": "main"
         },
-        # 16: Experiential Counterexample (T2-9 ReasoningBank 负向反例边界对抗测试)
+        # 13: Experiential Counterexample (T2-9 ReasoningBank 负向反例边界对抗测试 - 2轮)
         {
             "tag": "exp_counterexample",
             "template_id": "T2-9",
+            "memory_tier": "experiential_memory",
             "role": "reuse_session",
             "source": main_mt,
             "type": "proactive_experience",
@@ -422,36 +433,31 @@ def get_session_blueprints(
             "action": "proactive_experience_suggestion",
             "is_counterexample": True,
             "round_count": 2,
+            "cold_hot_type": None,
+            "agility_factor": None,
             "time_kind": "main"
         },
-        # 17: Working Memory Long-horizon Reuse (T2-6 超长跨期工单复用)
-        {
-            "tag": "wm_long_reuse",
-            "template_id": "T2-6",
-            "role": "reuse_session",
-            "source": main_mt,
-            "type": "working_record_reuse",
-            "dur": base_dur,
-            "env": main_env_desc,
-            "action": "retrieve_working_record_reuse",
-            "time_kind": "main"
-        },
-        # 18: Working Memory Reschedule 2 (T2-7 第二次预约变更 - 提前30分钟)
+        # 14: Working Memory Reschedule Advance (T2-7 第二次预约变更 - 提前开始)
         {
             "tag": "wm_reschedule_2",
             "template_id": "T2-7",
+            "memory_tier": "working_memory",
             "role": "reuse_session",
             "source": main_mt,
             "type": "working_record_reschedule",
             "dur": base_dur,
             "env": main_env_desc,
             "action": "reschedule_working_record",
+            "round_count": 2,
+            "cold_hot_type": None,
+            "agility_factor": None,
             "time_kind": "main"
         },
-        # 19: Sub 2 Evidence (T2-1 支线2微信视频复盘建联)
+        # 15: Sub 2 Evidence (T2-1 支线2冷启动建联 - 3轮)
         {
             "tag": "sub2",
             "template_id": "T2-1",
+            "memory_tier": "factual_memory",
             "role": "evidence_session",
             "source": sub_02,
             "type": "sub_02",
@@ -461,36 +467,16 @@ def get_session_blueprints(
             "declaration_mode": "implicit_induction",
             "storyline_trigger_type": "location_environment",
             "trigger_condition": "驻地酒店商务中心",
+            "round_count": 3,
+            "cold_hot_type": "cold_start",
+            "agility_factor": 0.0,
             "time_kind": "sub2"
         },
-        # 20: Working Memory Month-end Reconcile (T2-8 全月总工单流水结算对账)
-        {
-            "tag": "wm_reconcile_month",
-            "template_id": "T2-8",
-            "role": "distractor_session",
-            "source": main_mt,
-            "type": "working_record_reconcile",
-            "dur": "15min",
-            "env": "工单系统对账窗口",
-            "action": "reconcile_working_records",
-            "time_kind": "dist_normal"
-        },
-        # 21: Distractor 3 (T1-1 单轮普通业务咨询)
-        {
-            "tag": "dist_normal",
-            "template_id": "T1-1",
-            "role": "distractor_session",
-            "source": dist_01,
-            "type": "distractor",
-            "dur": "30min",
-            "env": "阶段工作总结交流会",
-            "action": "distractor_no_memory",
-            "time_kind": "dist_normal"
-        },
-        # 22: Main Recovery & Final Verification (T2-1 终局长期事实记忆持久性终检)
+        # 16: Main Final Verification (T2-1 终局极致敏捷终检 α=1.0 - 1轮极速闭环)
         {
             "tag": "main_final",
             "template_id": "T2-1",
+            "memory_tier": "factual_memory",
             "role": "reuse_session",
             "source": main_mt,
             "type": "main_recovery",
@@ -499,18 +485,14 @@ def get_session_blueprints(
             "action": "recover_long_term_rule",
             "storyline_trigger_type": storyline_trigger_type,
             "trigger_condition": main_trigger_desc,
+            "round_count": 1,
+            "cold_hot_type": "hot_start",
+            "agility_factor": 1.0,
             "time_kind": "main"
         }
     ]
 
-    selected = []
-    for slot in candidate_slots:
-        tag = slot["tag"]
-        if target_count <= 20 and tag in ["dist_normal", "main_final"]:
-            continue
-        elif target_count == 21 and tag in ["main_final"]:
-            continue
-        selected.append(dict(slot))
+    selected = [dict(slot) for slot in candidate_slots]
 
     # 生成严格匹配数量的日期列表
     dates = _generate_timeline_dates(storyline_trigger_type, period_type, days, count=len(selected))

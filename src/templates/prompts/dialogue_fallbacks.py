@@ -181,6 +181,8 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
         elif role == "evidence_session":
             return f"你好，需要给{app}{srv}做一个网络保障，时间是今天{tp['start_timestamp'].split('日')[-1]}开始。"
         elif role in ["reinforcement_session", "reuse_session"]:
+            if s_plan.get("agility_factor") == 1.0:
+                return "老规矩开保障，别掉链子。"
             memory_hints = {
                 "application_alias": f"用{small_alias}做{srv}",
                 "service_default_app": f"做{small_alias}，应用按默认的",
@@ -194,7 +196,9 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
         else:
             return f"你好，需要给{app_alias}{srv_alias}做一个网络保障，时间是今天{tp['start_timestamp'].split('日')[-1]}开始。"
     else:
-        if role == "evidence_session" and (decl_mode == "explicit_declaration" or b_type in ["sub_01", "sub_02"]):
+        if role == "evidence_session" and turn_idx == 3:
+            return "对，确认直接开通。"
+        elif role == "evidence_session" and (decl_mode == "explicit_declaration" or b_type in ["sub_01", "sub_02"]):
             dur_text = f"，预计持续{dur_alias}（到{tp['end_timestamp'].split('日')[-1]}）"
             alias_intro = f"{small_declaration}" if small_declaration else ""
             trig_desc = env if len(trig_cond) > 10 else (trig_cond or env)
@@ -340,7 +344,9 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
     elif tid == "T1-1" or b_type == "distractor":
         return f"收到，已为您开通{app}{srv}网络保障：画质{res}，时延上限{rtt}，保障时间{tp['start_timestamp']}至{tp['end_timestamp']}（共{tp['duration']}）。祝您使用顺利！"
     elif is_last:
-        if role == "evidence_session" and decl_mode == "explicit_declaration":
+        if s_plan.get("agility_factor") == 1.0 and role in ["reinforcement_session", "reuse_session"]:
+            return f"好的，已为您直接按老规矩开通{app}{srv}保障（{res} / 时延≤{rtt}），祝您使用愉快！"
+        elif role == "evidence_session" and decl_mode == "explicit_declaration":
             return f"好的，已为您成功受理本次保障，并已为您将该配置记录为长期老规矩，祝您使用愉快！"
         elif role == "reinforcement_session" and decl_mode == "implicit_induction" and s_plan.get("session_id", "").endswith("-03"):
             return f"好的，已按您刚才的表达记录这个使用习惯，并为您开通本次保障。祝您使用愉快！"
@@ -348,7 +354,10 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
             return f"好的，已为您成功受理{app}{srv}网络保障（{res} / 时延≤{rtt}），祝您使用愉快！"
     else:
         if role == "evidence_session":
-            return f"收到，已为您锁定{app}{srv}保障，时间从{tp['start_timestamp'].split('日')[-1]}开始。请问您需要保障的清晰度、时延上限和预计持续时长分别是多少呢？"
+            if turn_idx == 1:
+                return f"收到，已为您锁定{app}{srv}保障，时间从{tp['start_timestamp'].split('日')[-1]}开始。请问您需要保障的清晰度、时延上限和预计持续时长分别是多少呢？"
+            else:
+                return f"收到，已为您登记老规矩习惯。确认按{res}、{rtt}以内立即为您开通本次保障吗？"
         elif role == "reinforcement_session" and decl_mode == "implicit_induction" and s_plan.get("session_id", "").endswith("-03"):
             start_text = tp['start_timestamp'].split('日')[-1]
             end_text = tp['end_timestamp'].split('日')[-1]
@@ -435,6 +444,16 @@ def get_normalized_action_types(s_plan: dict, turn_idx: int, role: str, is_last:
         else:
             return ["Correct_Previous_Input", "Inform_Slot"], ["Acknowledge"]
     else:
+        if role == "evidence_session" and s_plan.get("round_count") == 3:
+            if turn_idx == 1:
+                return ["Create_Intent_Request", "Inform_Slot"], ["Request_Slot"]
+            elif turn_idx == 2:
+                return ["Inform_Slot"], ["Confirm_Slot"]
+            else:
+                return ["Confirm_Slot"], ["Acknowledge"]
+        elif s_plan.get("agility_factor") == 1.0 and s_plan.get("round_count") == 1:
+            return ["Create_Intent_Request", "Inform_Slot"], ["Acknowledge"]
+
         u_acts = raw_u_acts
         if turn_idx == 1:
             if is_implicit_reinf:

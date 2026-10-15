@@ -28,13 +28,15 @@ def test_file(jsonl_path: Path):
         assert "agent" in last_turn and last_turn["agent"]["utterance"], f"Session {sid} does not end with Agent utterance!"
         assert any(act in last_turn["agent"]["action_types"] for act in ["Acknowledge", "Reject_Request"]), f"Session {sid} last agent utterance action should be Acknowledge or Reject_Request!"
         
-        # 2. 验证记忆强化/复用会话必须 ≥ 2 轮，且后续轮次必须有用户确认
+        # 2. 验证记忆强化/复用会话：常规(α<=0.5)必须 ≥ 2 轮确认；极致敏捷(α=1.0)支持 1 轮极速闭环
         if role in ["reinforcement_session", "reuse_session"]:
-            assert len(events) >= 2, f"Reinforcement/Reuse session {sid} has only {len(events)} turns! Must be >= 2!"
-            t1_agent = events[0]["agent"]
-            assert any(act in t1_agent["action_types"] for act in ["Confirm_Slot", "Request_Slot", "Request_Disambiguation"]), f"Session {sid} turn 1 agent should ask confirmation or disambiguation!"
-            has_user_confirm = any("Confirm_Slot" in ev["user"]["action_types"] for ev in events[1:])
-            assert has_user_confirm, f"Session {sid} user should confirm slot in subsequent turns!"
+            is_agile_1 = (session.get("session_meta", {}).get("agility_factor") == 1.0)
+            if not is_agile_1:
+                assert len(events) >= 2, f"Reinforcement/Reuse session {sid} has only {len(events)} turns! Must be >= 2!"
+                t1_agent = events[0]["agent"]
+                assert any(act in t1_agent["action_types"] for act in ["Confirm_Slot", "Request_Slot", "Request_Disambiguation"]), f"Session {sid} turn 1 agent should ask confirmation or disambiguation!"
+                has_user_confirm = any("Confirm_Slot" in ev["user"]["action_types"] for ev in events[1:])
+                assert has_user_confirm, f"Session {sid} user should confirm slot in subsequent turns!"
             
         # 3. 验证必需字段与纯对话解耦（避免冗余存储记忆快照）
         required_keys = ['session_id', 'user_id', 'reference_time', 'session_meta', 'event_sequence', 'intents', 'relations', 'slot_updates']

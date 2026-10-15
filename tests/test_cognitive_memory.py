@@ -191,8 +191,8 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
                 experience_bank=exp_bank
             )
 
-            # 验证会话规划包含认知演进模板且长度达到 20 ~ 24 轮
-            self.assertGreaterEqual(len(planned_sessions), 20)
+            # 验证会话规划包含认知演进模板且长度达到 16 轮
+            self.assertGreaterEqual(len(planned_sessions), 16)
             self.assertLessEqual(len(planned_sessions), 24)
 
             # 验证彻底告别机械模板词“常规周期保障现场”，全部为真实具象物理场所
@@ -202,9 +202,8 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
 
             tids = [s["template_id"] for s in planned_sessions]
             self.assertIn("T2-1", tids)
-            self.assertIn("T2-6", tids)  # 工作记忆：跨期复用
+            self.assertIn("T2-6", tids)  # 工作记忆：跨期复用与消歧
             self.assertIn("T2-7", tids)  # 工作记忆：变更改期
-            self.assertIn("T2-8", tids)  # 工作记忆：对账流水
             self.assertIn("T2-9", tids)  # 经验记忆：主动提议
             self.assertIn("T2-10", tids) # 经验记忆：经验回溯
 

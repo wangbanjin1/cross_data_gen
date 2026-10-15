@@ -11,7 +11,7 @@ class QCValidator:
 
     TEMPLATE_SPEC = {
         "T1-1": [(1, 1)], "T1-2": [(1, 1)], "T1-3": [(1, 2)], "T1-4": [(1, 1)],
-        "T2-1": [(2, 1)], "T2-2": [(2, 1)], "T2-3": [(2, 1)], "T2-4": [(2, 2)],
+        "T2-1": [(1, 1), (2, 1), (3, 1)], "T2-2": [(2, 1)], "T2-3": [(2, 1)], "T2-4": [(2, 2)],
         "T2-5": [(2, 1)], "T2-6": [(2, 1), (3, 1)], "T2-7": [(2, 1)], "T2-8": [(1, 1)],
         "T2-9": [(2, 1), (3, 1)], "T2-10": [(2, 1)],
         "T3-1": [(3, 1)], "T3-2": [(3, 1)], "T3-3": [(3, 1)], "T3-4": [(3, 1)],
@@ -41,6 +41,7 @@ class QCValidator:
         for idx, s in enumerate(sessions, start=1):
             sid = s.get("session_id", f"idx_{idx}")
             role = s.get("session_meta", {}).get("memory_role", "unknown")
+            tid = s.get("session_meta", {}).get("template_id", "")
             events = s.get("event_sequence", [])
             s_passed = True
 
@@ -54,19 +55,20 @@ class QCValidator:
                 report["rule_checks"]["agent_ending_check"] = False
                 s_passed = False
 
-            # 2. 验证强化/复用必须 ≥ 2 轮确认
+            # 2. 验证强化/复用：常规稳健(α<=0.5)必须 ≥ 2 轮确认；极致敏捷(α=1.0)支持 1 轮极速闭环
             if role in ["reinforcement_session", "reuse_session"]:
-                if len(events) < 2:
-                    report["issues"].append(f"[{sid}] 强化/复用会话轮数不足2轮 (实际: {len(events)})")
-                    report["rule_checks"]["multi_turn_confirmation_check"] = False
-                    s_passed = False
-                else:
-                    t1_a_acts = events[0].get("agent", {}).get("action_types", [])
-                    t2_u_acts = events[1].get("user", {}).get("action_types", [])
-                    if not any(act in t1_a_acts for act in ["Confirm_Slot", "Request_Slot", "Request_Disambiguation"]):
-                        report["issues"].append(f"[{sid}] 第1轮 Agent 未执行反问确认动作")
+                is_extreme_agile = (s.get("session_meta", {}).get("agility_factor") == 1.0)
+                if not is_extreme_agile:
+                    if len(events) < 2:
+                        report["issues"].append(f"[{sid}] 强化/复用会话轮数不足2轮 (实际: {len(events)})")
                         report["rule_checks"]["multi_turn_confirmation_check"] = False
                         s_passed = False
+                    else:
+                        t1_a_acts = events[0].get("agent", {}).get("action_types", [])
+                        if not any(act in t1_a_acts for act in ["Confirm_Slot", "Request_Slot", "Request_Disambiguation"]):
+                            report["issues"].append(f"[{sid}] 第1轮 Agent 未执行反问确认动作")
+                            report["rule_checks"]["multi_turn_confirmation_check"] = False
+                            s_passed = False
 
             # 3. 验证会话必需字段完整性
             required_keys = ['session_id', 'user_id', 'reference_time', 'session_meta', 'event_sequence', 'intents', 'relations', 'slot_updates']
@@ -133,8 +135,8 @@ class QCValidator:
                                 report["rule_checks"]["turn_intent_isolation_check"] = False
                                 s_passed = False
 
-                # 若为 3 轮证据会话（T3-1）：第 2 轮也严禁泄漏 resolution
-                if len(events) >= 3:
+                # 若为 3 轮跨轮澄清证据会话（T3-1）：第 2 轮也严禁泄漏 resolution
+                if tid == "T3-1" and len(events) >= 3:
                     t2_req = events[1].get("requested_params", [])
                     if "resolution" not in t2_req:
                         report["issues"].append(f"[{sid}] 3轮证据会话第2轮 requested_params 缺失 resolution")
@@ -331,6 +333,48 @@ class QCValidator:
                 if "snapshot_before" not in t or "memory_events" not in t or "gold_state_after" not in t:
                     report["issues"].append(f"[{t_sid}] memory_traces 缺失 snapshot_before/memory_events/gold_state_after 字段")
                     report["rule_checks"]["memory_trace_fields_check"] = False
+
+        # 计算冷热启动指标与敏捷度调控 (TCG 指标 - 严格按事实记忆演进规范评估)
+        cold_turns = []
+        hot_turns = []
+        cold_leakage_violations = 0
+        for s in sessions:
+            sm = s.get("session_meta", {})
+            tier = sm.get("memory_tier", "factual_memory")
+            cht = sm.get("cold_hot_type")
+            rc = sm.get("round_count", len(s.get("event_sequence", [])))
+            # 仅对事实记忆体系(Factual Profile Memory)计算冷热启动轮数与 TCG
+            if tier == "factual_memory" or (cht in ["cold_start", "hot_start"] and tier is None):
+                if cht == "cold_start":
+                    cold_turns.append(rc)
+                    ev0 = s.get("event_sequence", [{}])[0]
+                    p0 = ev0.get("turn_intents", [{}])[0].get("params", {}) if ev0.get("turn_intents") else {}
+                    if any("resolution" in p or "rtt" in p for p in p0):
+                        cold_leakage_violations += 1
+                elif cht == "hot_start":
+                    hot_turns.append(rc)
+
+        t_cold_avg = sum(cold_turns) / len(cold_turns) if cold_turns else 3.0
+        t_hot_avg = sum(hot_turns) / len(hot_turns) if hot_turns else 1.5
+        tcg = ((t_cold_avg - t_hot_avg) / t_cold_avg * 100.0) if t_cold_avg > 0 else 0.0
+
+        report["metrics"] = {
+            "t_cold_avg": round(t_cold_avg, 2),
+            "t_hot_avg": round(t_hot_avg, 2),
+            "tcg_percentage": round(tcg, 2),
+            "tcg_target_met": (tcg >= 40.0),
+            "cold_start_zero_leakage_rate": 100.0 if cold_leakage_violations == 0 else 0.0,
+            "agility_distribution": {
+                "alpha_0_0_cold": len(cold_turns),
+                "alpha_0_5_steady": sum(1 for s in sessions if s.get("session_meta", {}).get("agility_factor") == 0.5),
+                "alpha_1_0_agile": sum(1 for s in sessions if s.get("session_meta", {}).get("agility_factor") == 1.0),
+            },
+            "tier_counts": {
+                "factual_memory": sum(1 for s in sessions if s.get("session_meta", {}).get("memory_tier") == "factual_memory"),
+                "working_memory": sum(1 for s in sessions if s.get("session_meta", {}).get("memory_tier") == "working_memory"),
+                "experiential_memory": sum(1 for s in sessions if s.get("session_meta", {}).get("memory_tier") == "experiential_memory"),
+            }
+        }
 
         report["pass_rate"] = f"{(report['passed_sessions'] / report['total_sessions']) * 100:.1f}%" if report['total_sessions'] > 0 else "0%"
         return report

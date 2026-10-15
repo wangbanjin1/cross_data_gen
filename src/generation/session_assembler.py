@@ -35,25 +35,25 @@ class SessionAssembler:
         dur_val = tp["duration"]
 
         if tid == "T1-2":
-            return cls._assemble_t1_2(
+            res = cls._assemble_t1_2(
                 sid, uid, ref_time, tid, role, b_type, env, act, ood_goal,
                 event_sequence, snapshot_before, memory_events, gold_after
             )
         elif tid == "X-1":
-            return cls._assemble_x_1(
+            res = cls._assemble_x_1(
                 sid, uid, ref_time, tid, role, b_type, env, act, ood_goal,
                 app_name, srv_name, res_val, rtt_val, start_ts, end_ts, dur_val,
                 event_sequence, snapshot_before, memory_events, gold_after
             )
         elif tid in ["T2-2", "T3-1"]:
-            return cls._assemble_t2_2(
+            res = cls._assemble_t2_2(
                 sid, uid, ref_time, tid, role, b_type, env, act,
                 app_name, srv_name, res_val, rtt_val, start_ts, end_ts, dur_val,
                 event_sequence, snapshot_before, memory_events, gold_after,
                 evidence_mode=s_plan.get("small_memory_evidence_mode", "explicit_declaration"),
             )
         elif tid == "T2-5":
-            return cls._assemble_t2_5(
+            res = cls._assemble_t2_5(
                 sid, uid, ref_time, tid, role, b_type, env, act,
                 app_name, srv_name, res_val, rtt_val, start_ts, end_ts, dur_val,
                 event_sequence, snapshot_before, memory_events, gold_after,
@@ -61,53 +61,59 @@ class SessionAssembler:
                 base_dur=s_plan.get("base_duration")
             )
         elif tid == "T2-3":
-            return cls._assemble_t2_3(
+            res = cls._assemble_t2_3(
                 sid, uid, ref_time, tid, role, b_type, env, act,
                 app_name, srv_name, res_val, rtt_val, start_ts, end_ts, dur_val,
                 event_sequence, snapshot_before, memory_events, gold_after
             )
         elif tid == "T2-6":
-            return cls._assemble_t2_6(
+            res = cls._assemble_t2_6(
                 sid, uid, ref_time, tid, role, b_type, env, act,
                 app_name, srv_name, res_val, rtt_val, start_ts, end_ts, dur_val,
                 event_sequence, snapshot_before, memory_events, gold_after,
                 working_memory_pointer=s_plan.get("working_memory_pointer", {})
             )
         elif tid == "T2-7":
-            return cls._assemble_t2_7(
+            res = cls._assemble_t2_7(
                 sid, uid, ref_time, tid, role, b_type, env, act,
                 app_name, srv_name, res_val, rtt_val, start_ts, end_ts, dur_val,
                 event_sequence, snapshot_before, memory_events, gold_after,
                 working_memory_pointer=s_plan.get("working_memory_pointer", {})
             )
         elif tid == "T2-8":
-            return cls._assemble_t2_8(
+            res = cls._assemble_t2_8(
                 sid, uid, ref_time, tid, role, b_type, env, act,
                 event_sequence, snapshot_before, memory_events, gold_after,
                 working_memory_query=s_plan.get("working_memory_query", {})
             )
         elif tid == "T2-9":
-            return cls._assemble_t2_9(
+            res = cls._assemble_t2_9(
                 sid, uid, ref_time, tid, role, b_type, env, act,
                 app_name, srv_name, res_val, rtt_val, start_ts, end_ts, dur_val,
                 event_sequence, snapshot_before, memory_events, gold_after,
                 experience_citation=s_plan.get("experience_citation", {})
             )
         elif tid == "T2-10":
-            return cls._assemble_t2_10(
+            res = cls._assemble_t2_10(
                 sid, uid, ref_time, tid, role, b_type, env, act,
                 app_name, srv_name, res_val, rtt_val, start_ts, end_ts, dur_val,
                 event_sequence, snapshot_before, memory_events, gold_after,
                 experience_citation=s_plan.get("experience_citation", {})
             )
         else:
-            return cls._assemble_standard(
+            res = cls._assemble_standard(
                 sid, uid, ref_time, tid, role, b_type, env, act,
                 app_name, srv_name, res_val, rtt_val, start_ts, end_ts, dur_val,
                 event_sequence, snapshot_before, memory_events, gold_after,
                 round_count=s_plan["round_count"],
                 small_memory_type=(s_plan.get("small_memory") or {}).get("type"),
             )
+
+        if isinstance(res, dict) and "session_meta" in res:
+            res["session_meta"]["memory_tier"] = s_plan.get("memory_tier", "factual_memory")
+            res["session_meta"]["cold_hot_type"] = s_plan.get("cold_hot_type")
+            res["session_meta"]["agility_factor"] = s_plan.get("agility_factor")
+        return res
 
     @classmethod
     def _assemble_t1_2(cls, sid, uid, ref_time, tid, role, b_type, env, act, ood_goal, events, snap, mems, gold):
@@ -668,6 +674,8 @@ class SessionAssembler:
                             "duration": {"value": dur, "source_type": "Turn", "source_ref": "U2"},
                         }
                 slot_updates_turn.append({"turn": 2, "params": t_params})
+            elif t_idx >= 3:
+                slot_updates_turn.append({"turn": t_idx, "params": {}})
 
         sig = f"{tid}|{len(events)}|1|I1:{app}/{srv}/1/{closure_path}/resolved|none"
         if role == "evidence_session":
@@ -716,8 +724,33 @@ class SessionAssembler:
                         },
                     }
                 ]
-                events[1]["requested_params"] = []
-                events[1]["turn_intents"] = intents
+                if len(events) >= 3:
+                    events[1]["requested_params"] = []
+                    events[1]["turn_intents"] = [
+                        {
+                            "intent_id": "I1",
+                            "status": "in_progress",
+                            "closure_path": "clarify",
+                            "expression_level": 1,
+                            "intent": f"{app}{srv}保障",
+                            "params": {
+                                "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
+                                "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
+                                "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U2"}},
+                                "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U2"}},
+                                "timestamp": {
+                                    "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
+                                    "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U2"},
+                                    "duration": {"value": dur, "source_type": "Turn", "source_ref": "U2"},
+                                },
+                            },
+                        }
+                    ]
+                    events[2]["requested_params"] = []
+                    events[2]["turn_intents"] = intents
+                else:
+                    events[1]["requested_params"] = []
+                    events[1]["turn_intents"] = intents
             else:
                 events[0]["requested_params"] = []
                 events[0]["turn_intents"] = [
@@ -740,8 +773,33 @@ class SessionAssembler:
                         },
                     }
                 ]
-                events[1]["requested_params"] = []
-                events[1]["turn_intents"] = intents
+                if len(events) >= 3:
+                    events[1]["requested_params"] = []
+                    events[1]["turn_intents"] = [
+                        {
+                            "intent_id": "I1",
+                            "status": "in_progress",
+                            "closure_path": closure_path,
+                            "expression_level": 1,
+                            "intent": f"{app}{srv}保障",
+                            "params": {
+                                "application_name": {"value": app, "source_type": app_src, "source_ref": app_ref},
+                                "service_name": {"value": srv, "source_type": srv_src, "source_ref": srv_ref},
+                                "resolution": {"min_value": {"value": res, "source_type": res_src, "source_ref": res_ref}},
+                                "rtt": {"max_value": {"value": rtt, "source_type": rtt_src, "source_ref": rtt_ref}},
+                                "timestamp": {
+                                    "start_timestamp": {"value": start, "source_type": start_src, "source_ref": start_ref},
+                                    "end_timestamp": {"value": end, "source_type": end_src, "source_ref": end_ref},
+                                    "duration": {"value": dur, "source_type": dur_src, "source_ref": dur_ref},
+                                },
+                            },
+                        }
+                    ]
+                    events[2]["requested_params"] = []
+                    events[2]["turn_intents"] = intents
+                else:
+                    events[1]["requested_params"] = []
+                    events[1]["turn_intents"] = intents
 
         return {
             "session_id": sid,

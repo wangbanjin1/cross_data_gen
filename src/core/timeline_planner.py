@@ -191,8 +191,8 @@ class DynamicTimelinePlanner:
         main_env_desc = cls._determine_concrete_venue(persona, main_mt, storyline_trigger_type, llm=llm)
         main_trigger_desc = raw_trig_cond if raw_trig_cond else f"在【{main_env_desc}】例行开展业务"
 
-        # 会话数量支持根据画像与业务情境自然浮动（20 ~ 24 轮深层认知演化）
-        target_count = 20 + (uid_num % 3)
+        # 会话数量支持根据画像与业务情境自然排期（16 轮深度认知演化）
+        target_count = 16
 
         blueprint_configs = get_session_blueprints(
             main_mt=main_mt,
@@ -355,6 +355,9 @@ class DynamicTimelinePlanner:
                 "blueprint_type": cfg["type"],
                 "scenario_env": cfg["env"],
                 "memory_action": cfg["action"],
+                "memory_tier": cfg.get("memory_tier", "factual_memory"),
+                "cold_hot_type": cfg.get("cold_hot_type") if "cold_hot_type" in cfg else ("hot_start" if cfg["role"] in ["reinforcement_session", "reuse_session"] and cfg.get("memory_tier", "factual_memory") == "factual_memory" else ("cold_start" if cfg.get("memory_tier", "factual_memory") == "factual_memory" else None)),
+                "agility_factor": cfg.get("agility_factor") if "agility_factor" in cfg else (0.5 if cfg["role"] in ["reinforcement_session", "reuse_session"] and cfg.get("memory_tier", "factual_memory") == "factual_memory" else (0.0 if cfg.get("memory_tier", "factual_memory") == "factual_memory" else None)),
                 "declaration_mode": cfg.get("declaration_mode", decl_mode),
                 "storyline_trigger_type": cfg.get("storyline_trigger_type", storyline_trigger_type if cfg["type"].startswith("main") else "time_periodic"),
                 "trigger_condition": cfg.get("trigger_condition", main_trigger_desc if cfg["type"].startswith("main") else ""),
