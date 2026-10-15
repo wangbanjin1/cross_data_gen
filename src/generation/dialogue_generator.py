@@ -1,5 +1,6 @@
 import json
 import re
+from src.config.settings import Config
 from src.generation.llm_client import LLMClient
 from src.generation.session_assembler import SessionAssembler
 from src.templates.prompts.small_memory_prompt import co_occurrence_example, declaration_example
@@ -20,6 +21,7 @@ class DialogueGenerator:
 
     def __init__(self, llm_client: LLMClient = None):
         self.llm = llm_client or LLMClient()
+        self.llm_circuit_breaker = not getattr(Config, "use_llm", True)
 
     def generate_sessions_batch(self, session_items: list[tuple], persona: dict, batch_size: int = 5) -> list[dict]:
         """
@@ -30,19 +32,19 @@ class DialogueGenerator:
 
         for i in range(0, len(session_items), batch_size):
             chunk = session_items[i : i + batch_size]
-            try:
-                # 批量调用 DeepSeek 渲染该组会话台词
-                batch_turns_map = self._render_batch_dialogue_turns(chunk, persona)
-            except Exception as e:
-                print(f"    [Warning] Batch LLM render failed: {e}. Falling back to single session rendering.")
-                batch_turns_map = {}
+            batch_turns_map = {}
+            if not self.llm_circuit_breaker:
+                try:
+                    # 批量调用 DeepSeek 渲染该组会话台词
+                    batch_turns_map = self._render_batch_dialogue_turns(chunk, persona)
+                except Exception as e:
+                    print(f"    [Circuit Breaker] Batch LLM render failed: {e}. Switching to standard dialogue engine for remaining batches.")
+                    self.llm_circuit_breaker = True
+                    batch_turns_map = {}
 
             for s_plan, snap_before, mem_events, gold_after in chunk:
                 sid = s_plan["session_id"]
-                raw_turns = batch_turns_map.get(sid)
-                if not raw_turns:
-                    # 单会话兜底
-                    raw_turns = self._render_dialogue_turns(s_plan, persona, snap_before)
+                raw_turns = batch_turns_map.get(sid, [])
                 session_obj = self._assemble_session(s_plan, persona, snap_before, mem_events, gold_after, raw_turns)
                 rendered_sessions.append(session_obj)
 
@@ -212,7 +214,7 @@ class DialogueGenerator:
             {"role": "system", "content": "You are a professional natural language dialogue generator for network assistant datasets. Output valid JSON only."},
             {"role": "user", "content": prompt}
         ]
-        res = self.llm.chat_json(messages, enable_thinking=False)
+        res = self.llm.chat_json(messages, max_retries=1, enable_thinking=False)
         output_map = {}
         if isinstance(res, dict) and "sessions" in res and isinstance(res["sessions"], list):
             for s_entry in res["sessions"]:
@@ -335,6 +337,11 @@ class DialogueGenerator:
                 if tp.get("duration", "") not in u_text and "延长" not in u_text and "时长" not in u_text:
                     u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
 
+        # 经验记忆负反例边界：必须坚持 1080p，严禁降画质
+        if s_plan.get("is_counterexample"):
+            if "1080p" not in u_text:
+                u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+
         # 证据会话首轮必须与规划的精确开始时间一致，避免模糊改写造成 turn-level 泄漏。
         if turn_idx == 1 and role == "evidence_session":
             u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
@@ -415,6 +422,12 @@ class DialogueGenerator:
                     a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
         if turn_idx == 2 and role == "reinforcement_session" and s_plan.get("small_memory_evidence_mode") == "co_occurrence" and s_plan.get("session_id", "").endswith("-03"):
             a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
+        if s_plan.get("is_counterexample"):
+            if "降" in a_text or ("原画" not in a_text and "1080p" not in a_text):
+                a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
+        if s_plan.get("is_disambiguation") and turn_idx == 1:
+            if "哪" not in a_text and "工单" not in a_text and "记录" not in a_text:
+                a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
         if turn_idx == 1 and role in ["reinforcement_session", "reuse_session"] and tid not in ["T2-3", "T2-5", "T2-6", "T2-7", "T2-8", "T2-9", "T2-10"]:
             u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
             # 执行前必须把记忆补全出的时间与参数完整回显，不能让结构化时间凭空出现。

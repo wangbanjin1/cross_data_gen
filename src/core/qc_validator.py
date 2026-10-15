@@ -10,12 +10,12 @@ class QCValidator:
     """
 
     TEMPLATE_SPEC = {
-        "T1-1": (1, 1), "T1-2": (1, 1), "T1-3": (1, 2), "T1-4": (1, 1),
-        "T2-1": (2, 1), "T2-2": (2, 1), "T2-3": (2, 1), "T2-4": (2, 2),
-        "T2-5": (2, 1), "T2-6": (2, 1), "T2-7": (2, 1), "T2-8": (1, 1),
-        "T2-9": (2, 1), "T2-10": (2, 1),
-        "T3-1": (3, 1), "T3-2": (3, 1), "T3-3": (3, 1), "T3-4": (3, 1),
-        "X-1": (1, 2), "X-2": (3, 3),
+        "T1-1": [(1, 1)], "T1-2": [(1, 1)], "T1-3": [(1, 2)], "T1-4": [(1, 1)],
+        "T2-1": [(2, 1)], "T2-2": [(2, 1)], "T2-3": [(2, 1)], "T2-4": [(2, 2)],
+        "T2-5": [(2, 1)], "T2-6": [(2, 1), (3, 1)], "T2-7": [(2, 1)], "T2-8": [(1, 1)],
+        "T2-9": [(2, 1), (3, 1)], "T2-10": [(2, 1)],
+        "T3-1": [(3, 1)], "T3-2": [(3, 1)], "T3-3": [(3, 1)], "T3-4": [(3, 1)],
+        "X-1": [(1, 2)], "X-2": [(3, 3)],
     }
 
     @classmethod
@@ -178,17 +178,14 @@ class QCValidator:
             rc = meta.get("round_count")
             ic = meta.get("intent_count")
             if tid in cls.TEMPLATE_SPEC:
-                exp_rc, exp_ic = cls.TEMPLATE_SPEC[tid]
-                if rc != exp_rc or len(events) != exp_rc:
-                    report["issues"].append(f"[{sid}] 模板 {tid} 轮数不匹配: meta.round_count={rc}, 实际轮数={len(events)}, 规范应为={exp_rc}")
-                    report["rule_checks"]["template_spec_check"] = False
-                    s_passed = False
-                if ic != exp_ic or len(s.get("intents", [])) != exp_ic:
-                    report["issues"].append(f"[{sid}] 模板 {tid} 意图个数不匹配: meta.intent_count={ic}, 实际意图数={len(s.get('intents', []))}, 规范应为={exp_ic}")
+                allowed_specs = cls.TEMPLATE_SPEC[tid]
+                valid = any(rc == exp_rc and len(events) == exp_rc and ic == exp_ic and len(s.get("intents", [])) == exp_ic for exp_rc, exp_ic in allowed_specs)
+                if not valid:
+                    report["issues"].append(f"[{sid}] 模板 {tid} 轮数或意图数不匹配: meta.round_count={rc}, 实际轮数={len(events)}, meta.intent_count={ic}")
                     report["rule_checks"]["template_spec_check"] = False
                     s_passed = False
                 sig = meta.get("skeleton_signature", "")
-                if not sig.startswith(f"{tid}|{exp_rc}|{exp_ic}|"):
+                if not any(sig.startswith(f"{tid}|{exp_rc}|{exp_ic}|") for exp_rc, exp_ic in allowed_specs):
                     report["issues"].append(f"[{sid}] skeleton_signature 前缀与模板规范不符: '{sig}'")
                     report["rule_checks"]["template_spec_check"] = False
                     s_passed = False

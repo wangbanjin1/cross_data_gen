@@ -191,20 +191,36 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
                 experience_bank=exp_bank
             )
 
-            # 验证会话规划包含认知演进模板
+            # 验证会话规划包含认知演进模板且长度达到 20 ~ 24 轮
+            self.assertGreaterEqual(len(planned_sessions), 20)
+            self.assertLessEqual(len(planned_sessions), 24)
+
+            # 验证彻底告别机械模板词“常规周期保障现场”，全部为真实具象物理场所
+            for s in planned_sessions:
+                self.assertNotEqual(s.get("scenario_env"), "常规周期保障现场")
+                self.assertTrue(len(s.get("scenario_env", "")) > 1)
+
             tids = [s["template_id"] for s in planned_sessions]
             self.assertIn("T2-1", tids)
             self.assertIn("T2-6", tids)  # 工作记忆：跨期复用
             self.assertIn("T2-7", tids)  # 工作记忆：变更改期
+            self.assertIn("T2-8", tids)  # 工作记忆：对账流水
             self.assertIn("T2-9", tids)  # 经验记忆：主动提议
+            self.assertIn("T2-10", tids) # 经验记忆：经验回溯
 
-            # 验证 T2-6 包含轻量级工单指针
-            s_t2_6 = next(s for s in planned_sessions if s["template_id"] == "T2-6")
-            self.assertIn("working_memory_pointer", s_t2_6)
-            self.assertTrue(bool(s_t2_6["working_memory_pointer"]))
+            # 验证 T2-6 包含消歧会话 (3 轮)
+            s_disambig = next((s for s in planned_sessions if s.get("is_disambiguation")), None)
+            self.assertIsNotNone(s_disambig)
+            self.assertEqual(s_disambig["round_count"], 3)
+            self.assertIn("candidate_record_ids", s_disambig.get("working_memory_pointer", {}))
 
-            # 验证 T2-9 包含 ReasoningBank 经验引文
-            s_t2_9 = next(s for s in planned_sessions if s["template_id"] == "T2-9")
+            # 验证包含负反例边界会话 (is_counterexample)
+            s_counter = next((s for s in planned_sessions if s.get("is_counterexample")), None)
+            self.assertIsNotNone(s_counter)
+            self.assertEqual(s_counter["target_params"]["resolution"], "1080p")
+
+            # 验证 T2-9 包含主动经验引文
+            s_t2_9 = next(s for s in planned_sessions if s["template_id"] == "T2-9" and not s.get("is_counterexample"))
             self.assertIn("experience_citation", s_t2_9)
             self.assertEqual(s_t2_9["target_params"]["resolution"], "720p")
 

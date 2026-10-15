@@ -1,6 +1,6 @@
 import hashlib
 import re
-from src.templates.timeline_blueprints import get_15_session_blueprints
+from src.templates.timeline_blueprints import get_session_blueprints, get_15_session_blueprints
 from src.core.small_memory_selector import build_small_memory_candidates
 from src.core.working_records_ledger import WorkingRecordsLedger
 from src.core.experience_bank import ExperienceBank
@@ -31,25 +31,77 @@ class DynamicTimelinePlanner:
         digest = hashlib.sha256(f"{user_id}:{blueprint_type}".encode("utf-8")).digest()
         return candidates[int.from_bytes(digest[:4], "big") % len(candidates)]
 
+    CATEGORY_VENUE_MAP = {
+        "体育训练与赛事保障": ["露天高山滑雪训练基地", "体育公园综合集训场", "奥体中心多功能馆"],
+        "交通运输与移动出行": ["智慧交通综合调度中心", "公路客运中转服务区", "高铁物流综合集散站"],
+        "公共事务与外勤协作": ["高新区政企服务示范中心", "政务便民综合服务大厅", "行政审批服务综合大厅"],
+        "公共安全与移动执勤": ["沿海治安综合巡逻站", "城市综合执勤前沿站点", "应急联动调度指挥站"],
+        "医疗健康与移动服务": ["社区巡回流动诊疗大厅", "公共卫生移动保障中心", "康复医疗巡诊服务站"],
+        "技术研发与现场支持": ["软件产业园创新中心", "智能制造现场工程指挥部", "高新试验测试基地"],
+        "文化创作与移动演出": ["文创园数字演播中心", "大剧院户外彩排中心", "影视传媒数字创作基地"],
+        "科研调查与移动协作": ["野外生态科考大本营", "地质勘查巡回工作站", "综合科学实验工作站"],
+        "移动学习与教育协作": ["智慧教育研修示范中心", "青年公益活动交流中心", "高校实训教学研讨厅"],
+        "移动生活与现场协作": ["社区综合文化活动中心", "青年创客交流示范基地", "市民文化生活多功能厅"],
+        "移动经营与客户服务": ["金融街财富管理中心", "国际会展商务交流中心", "商贸中心数字展销大厅"],
+        "移动采编与内容生产": ["全媒体新闻采编演播中心", "新媒体户外直播工作站", "融媒体外景采编演播厅"],
+        "野外科研与农业作业": ["现代农业试验示范园区", "生态农业科研实验区", "林业生态野外观测站"],
+    }
+
+    @classmethod
+    def _determine_concrete_venue(cls, persona: dict, main_mt: dict, storyline_trigger_type: str, llm=None) -> str:
+        """从用户画像职业、类别及任务中提炼具象化真实场所（严禁出现'常规周期保障现场'等抽象研发用语）。"""
+        task_name = main_mt.get("name", "")
+        raw_trig_cond = main_mt.get("trigger_condition", "")
+        identity = persona.get("static_profile", {}).get("identity", "")
+        category = persona.get("category", "")
+        user_id = persona.get("static_profile", {}).get("user_id", "")
+        num_match = re.search(r'\d+', user_id)
+        uid_num = int(num_match.group()) if num_match else 1
+
+
+        patterns = [
+            (r'滑雪|雪道|赛道|高山', "露天高山滑雪训练基地"),
+            (r'体育馆|球场|田径|训练场', "体育公园综合集训场"),
+            (r'金融|顾问|理财|路演', "金融街财富管理中心"),
+            (r'文创|新媒体|短视频|演播', "文创园数字演播中心"),
+            (r'影视|剧组|拍摄|采风', "影视传媒数字创作基地"),
+            (r'公益|志愿|社区|社群', "市青年公益服务中心"),
+            (r'申报|政务|行政|园区', "高新技术产业园示范中心"),
+            (r'巡逻|执勤|治安|港口', "沿海治安综合巡逻站"),
+            (r'医疗|急救|诊疗|康复', "社区巡回医疗健康中心"),
+            (r'农田|科研|地质|勘查', "生态农业科研示范园区"),
+            (r'物流|交通|枢纽|调度', "智慧交通综合调度中心"),
+        ]
+        combined_text = f"{identity} {raw_trig_cond} {task_name}"
+        for pat, loc in patterns:
+            if re.search(pat, combined_text):
+                return loc
+
+        venue_options = cls.CATEGORY_VENUE_MAP.get(category)
+        if venue_options:
+            return venue_options[uid_num % len(venue_options)]
+
+        return "企业总部多功能路演大厅"
+
     @staticmethod
     def _extract_clean_location(raw_cond: str, task_name: str) -> str:
         """从 trigger_condition 中提炼简短自然的地点环境名称（4-8字），避免规则长句混入台词。"""
         if not raw_cond:
-            return "执勤活动现场"
+            return "企业总部多功能路演大厅"
         
         patterns = [
-            (r'道路巡逻|巡逻线|事故现场|移动执勤', "道路巡逻现场"),
-            (r'社区走访|走访点|临时会议', "社区走访现场"),
-            (r'户外现场|晚间户外|临时停留点|等候区', "晚间户外活动现场"),
-            (r'街区采访|拍摄地|遮挡区域', "街区采访现场"),
-            (r'沿海公路|巡逻岸线|集结区', "沿海巡逻岸线"),
-            (r'高山|登山口|露天训练|偏远山区', "高山露天训练场"),
+            (r'道路巡逻|巡逻线|事故现场|移动执勤', "道路综合执勤现场"),
+            (r'社区走访|走访点|临时会议', "社区综合走访现场"),
+            (r'户外现场|晚间户外|临时停留点|等候区', "户外巡查工作现场"),
+            (r'街区采访|拍摄地|遮挡区域', "街区新闻采访现场"),
+            (r'沿海公路|巡逻岸线|集结区', "沿海综合巡逻岸线"),
+            (r'高山|登山口|露天训练|偏远山区', "高山露天训练基地"),
         ]
         for pat, loc in patterns:
             if re.search(pat, raw_cond):
                 return loc
 
-        m = re.search(r'(?:身处|在|进入)([^，,。、\s]{2,8}(?:走访点|现场|岸线|训练场|营区|路线|区域|停留点))', raw_cond)
+        m = re.search(r'(?:身处|在|进入)([^，,。、\s]{2,8}(?:走访点|现场|岸线|训练场|营区|路线|区域|停留点|大厅|中心|基地))', raw_cond)
         if m:
             clean = m.group(1).replace("等", "")
             return clean if len(clean) <= 8 else f"{clean[:6]}现场"
@@ -58,7 +110,7 @@ class DynamicTimelinePlanner:
         if clean_task and 2 <= len(clean_task) <= 8:
             return f"{clean_task}现场"
 
-        return "外勤保障现场"
+        return "企业总部多功能路演大厅"
 
     @classmethod
     def _extract_location_with_llm(cls, llm, raw_trig_cond: str, task_name: str, identity: str = "") -> str:
@@ -136,26 +188,13 @@ class DynamicTimelinePlanner:
 
         task_name = main_mt.get("name", "业务现场任务")
         raw_trig_cond = main_mt.get("trigger_condition")
-        if storyline_trigger_type == "task_activity":
-            clean_task = re.sub(r'(?:任务|保障|协同|即时调度|回传|上传)', '', task_name or '')
-            main_env_desc = f"{clean_task}现场" if clean_task else f"{task_name}现场"
-            main_trigger_desc = raw_trig_cond if raw_trig_cond else f"执行【{task_name}】任务"
-        elif storyline_trigger_type == "location_environment":
-            identity_desc = persona.get("static_profile", {}).get("identity", "")
-            if llm:
-                main_env_desc = cls._extract_location_with_llm(llm, raw_trig_cond, task_name, identity_desc)
-            else:
-                main_env_desc = cls._extract_clean_location(raw_trig_cond, task_name)
-            main_trigger_desc = f"处于【{main_env_desc}】"
-        else:
-            main_env_desc = "常规周期保障现场"
-            main_trigger_desc = raw_trig_cond if raw_trig_cond else "每周常规周期时段"
+        main_env_desc = cls._determine_concrete_venue(persona, main_mt, storyline_trigger_type, llm=llm)
+        main_trigger_desc = raw_trig_cond if raw_trig_cond else f"在【{main_env_desc}】例行开展业务"
 
-        # 会话数量支持根据画像与业务情境自然浮动（12 ~ 16 轮）
-        # 彻底破除强制 15 轮限制
-        target_count = 12 + (uid_num % 5)
+        # 会话数量支持根据画像与业务情境自然浮动（20 ~ 24 轮深层认知演化）
+        target_count = 20 + (uid_num % 3)
 
-        blueprint_configs = get_15_session_blueprints(
+        blueprint_configs = get_session_blueprints(
             main_mt=main_mt,
             sub_01=sub_01,
             sub_02=sub_02,
@@ -195,7 +234,12 @@ class DynamicTimelinePlanner:
                 "sub_01": "cross_turn_clarification",
                 "sub_02": "explicit_declaration",
             }.get(cfg["type"], "explicit_declaration") if small_memory else "none"
-            round_count = 1 if (cfg["template_id"].startswith("T1") or cfg["template_id"].startswith("X-1") or cfg["template_id"] == "T2-8") else 2
+
+            if cfg.get("round_count"):
+                round_count = cfg["round_count"]
+            else:
+                round_count = 1 if (cfg["template_id"].startswith("T1") or cfg["template_id"].startswith("X-1") or cfg["template_id"] == "T2-8") else 2
+
             template_id = cfg["template_id"]
             if cfg["role"] == "evidence_session" and evidence_mode == "cross_turn_clarification":
                 round_count = 3
@@ -204,23 +248,39 @@ class DynamicTimelinePlanner:
             working_memory_pointer = {}
             working_memory_query = {}
             experience_citation = {}
+            is_counterexample = cfg.get("is_counterexample", False)
+            is_disambig = (cfg.get("tag") == "wm_disambig")
 
             if template_id == "T2-6":
-                # 跨期单据复用：检索历史工单
+                is_long_reuse = (cfg.get("tag") == "wm_long_reuse")
                 prior_recs = working_ledger.query_prior_records(cfg["ref_time"])
-                target_rec = next((r for r in prior_recs if r.get("application_name") == src["application_name"]), prior_recs[0] if prior_recs else None)
+                if is_long_reuse and prior_recs:
+                    target_rec = prior_recs[0]
+                elif prior_recs:
+                    target_rec = next((r for r in prior_recs if r.get("application_name") == src["application_name"]), prior_recs[-1])
+                else:
+                    target_rec = None
+
+                cand_ids = [r["record_id"] for r in prior_recs[:2]] if len(prior_recs) >= 2 else (
+                    [target_rec["record_id"]] if target_rec else [f"REC_{user_id}_20261010_01", f"REC_{user_id}_20261013_02"]
+                )
                 if target_rec:
                     working_memory_pointer = working_ledger.generate_session_pointer(target_rec, cfg["ref_time"])
+                    if is_disambig:
+                        working_memory_pointer["candidate_record_ids"] = cand_ids
+                        working_memory_pointer["is_disambiguation"] = True
                 else:
                     working_memory_pointer = {
                         "target_record_id": f"REC_{user_id}_20261005_01",
-                        "inferred_delta_days": 7,
+                        "candidate_record_ids": cand_ids if is_disambig else [],
+                        "inferred_delta_days": 30 if is_long_reuse else 7,
                         "matched_application": src["application_name"],
                         "matched_service": src["service_name"],
-                        "inherited_slots": {"resolution": res, "rtt_max": rtt, "duration": cfg["dur"]}
+                        "inherited_slots": {"resolution": res, "rtt_max": rtt, "duration": cfg["dur"]},
+                        "is_disambiguation": is_disambig
                     }
             elif template_id == "T2-7":
-                # 延期变更改期：定位此前预约工单
+                is_advance = (cfg.get("tag") == "wm_reschedule_2")
                 prior_recs = working_ledger.query_prior_records(cfg["ref_time"])
                 target_rec = prior_recs[-1] if prior_recs else None
                 if target_rec:
@@ -230,7 +290,8 @@ class DynamicTimelinePlanner:
                         "inferred_delta_days": d_days,
                         "matched_application": target_rec.get("application_name"),
                         "matched_service": target_rec.get("service_name"),
-                        "modified_slots": {"start_timestamp": cfg["start"], "end_timestamp": cfg["end"]}
+                        "modified_slots": {"start_timestamp": cfg["start"], "end_timestamp": cfg["end"]},
+                        "reschedule_direction": "advance" if is_advance else "delay"
                     }
                 else:
                     working_memory_pointer = {
@@ -238,29 +299,42 @@ class DynamicTimelinePlanner:
                         "inferred_delta_days": 1,
                         "matched_application": src["application_name"],
                         "matched_service": src["service_name"],
-                        "modified_slots": {"start_timestamp": cfg["start"], "end_timestamp": cfg["end"]}
+                        "modified_slots": {"start_timestamp": cfg["start"], "end_timestamp": cfg["end"]},
+                        "reschedule_direction": "advance" if is_advance else "delay"
                     }
             elif template_id == "T2-8":
-                # 对账核查：统计本周流水
                 all_recs = working_ledger.get_all_records()
+                is_month_end = (cfg.get("tag") == "wm_reconcile_month")
+                subset_recs = all_recs if is_month_end else all_recs[:min(7, len(all_recs))]
                 working_memory_query = {
-                    "reconciled_record_ids": [r["record_id"] for r in all_recs],
-                    "total_orders": len(all_recs) if all_recs else 3,
-                    "total_duration_minutes": sum(int(re.search(r'\d+', r.get("duration", "60")).group()) for r in all_recs if re.search(r'\d+', r.get("duration", ""))) or 360
+                    "reconciled_record_ids": [r["record_id"] for r in subset_recs],
+                    "total_orders": len(subset_recs) if subset_recs else 3,
+                    "total_duration_minutes": sum(int(re.search(r'\d+', r.get("duration", "60")).group()) for r in subset_recs if re.search(r'\d+', r.get("duration", ""))) or 360,
+                    "reconcile_scope": "全月总对账" if is_month_end else "半月阶段对账"
                 }
             elif template_id == "T2-9":
-                # 主动经验提议：高密人流场景
                 exp = experience_bank.match_proactive_experience(cfg["env"], task_name) or experience_bank.find_by_id("EXP_STADIUM_CONGESTION_01")
-                experience_citation = {
-                    "experience_id": exp["experience_id"],
-                    "title": exp["title"],
-                    "strategy_type": exp["strategy_type"],
-                    "suggested_adjustments": exp.get("recommended_adjustments", {})
-                }
-                res = exp.get("recommended_adjustments", {}).get("resolution", "720p")
-                rtt = exp.get("recommended_adjustments", {}).get("rtt_max", "30ms")
+                if is_counterexample:
+                    experience_citation = {
+                        "experience_id": exp["experience_id"],
+                        "title": exp["title"],
+                        "strategy_type": "negative_counterexample",
+                        "negative_counterexamples": exp.get("negative_counterexamples", ""),
+                        "counterexample_applied": True
+                    }
+                    res = "1080p"
+                    rtt = "50ms"
+                else:
+                    experience_citation = {
+                        "experience_id": exp["experience_id"],
+                        "title": exp["title"],
+                        "strategy_type": exp["strategy_type"],
+                        "suggested_adjustments": exp.get("recommended_adjustments", {}),
+                        "negotiation_required": (round_count == 3)
+                    }
+                    res = exp.get("recommended_adjustments", {}).get("resolution", "720p")
+                    rtt = exp.get("recommended_adjustments", {}).get("rtt_max", "30ms")
             elif template_id == "T2-10":
-                # 经验回溯：恶劣天气加固
                 exp = experience_bank.find_by_id("EXP_SEVERE_WEATHER_01")
                 experience_citation = {
                     "experience_id": exp["experience_id"],
@@ -303,6 +377,8 @@ class DynamicTimelinePlanner:
                 "working_memory_pointer": working_memory_pointer,
                 "working_memory_query": working_memory_query,
                 "experience_citation": experience_citation,
+                "is_counterexample": is_counterexample,
+                "is_disambiguation": is_disambig,
             }
 
             # 若为真实开通的保障业务（非纯域外拒绝与对账），将单据记入工单账本

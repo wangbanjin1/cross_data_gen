@@ -15,11 +15,14 @@ def main():
     parser.add_argument("--start", "-s", type=int, default=None, help="Start persona index (0-based, overrides config)")
     parser.add_argument("--count", "-n", type=int, default=None, help="Number of personas to generate (overrides config)")
     parser.add_argument("--verify", "-v", action="store_true", help="Run verification across output folder")
+    parser.add_argument("--offline", action="store_true", help="Generate offline using deterministic standard dialogue engine without LLM calls")
     args = parser.parse_args()
 
     # 如果指定了配置文件，重新加载全局配置
     if args.config:
         Config.load_all(args.config)
+    if args.offline:
+        Config.use_llm = False
 
     target_output = args.output or Config.output_dir
 

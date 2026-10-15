@@ -18,12 +18,7 @@ DEFAULT_KEY = "sk-" + "64eb2c33b048436aac67a7cb5cf315d4"
 DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY", DEFAULT_KEY)
 DEEPSEEK_BASE_URL = os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
 
-# 确保直连国内 DeepSeek API，避免被本地全局/HTTP 代理拦截导致 SSL 连接异常
-if "api.deepseek.com" in DEEPSEEK_BASE_URL:
-    _np = os.environ.get("no_proxy", "")
-    if "api.deepseek.com" not in _np:
-        os.environ["no_proxy"] = f"{_np},api.deepseek.com".strip(",")
-        os.environ["NO_PROXY"] = os.environ["no_proxy"]
+
 
 
 class LLMClient:
@@ -36,7 +31,7 @@ class LLMClient:
         self.api_key = api_key or DEEPSEEK_API_KEY
         self.base_url = base_url or DEEPSEEK_BASE_URL
         self.model = model
-        self.client = OpenAI(api_key=self.api_key, base_url=self.base_url, timeout=60.0)
+        self.client = OpenAI(api_key=self.api_key, base_url=self.base_url, timeout=15.0)
 
         # Token 与费用统计
         self.prompt_cache_miss_tokens = 0

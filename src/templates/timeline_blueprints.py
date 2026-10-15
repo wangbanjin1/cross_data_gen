@@ -102,40 +102,44 @@ def _extract_clean_event_env(evt: dict, time_range: str = "") -> str:
     return extracted
 
 
-def _generate_timeline_dates(storyline_trigger_type: str, period_type: str, days: list, count: int = 16) -> list[str]:
+def _generate_timeline_dates(storyline_trigger_type: str, period_type: str, days: list, count: int = 22) -> list[str]:
     """
-    根据触发类型、周期粒度与设定日子生成严格单调递增的时间线日期列表（最多支持 20 个节点）。
+    根据触发类型、周期粒度与设定日子生成严格单调递增的时间线日期列表（支持 30 个节点）。
     """
     days_str = " ".join(days or []).lower()
 
     if storyline_trigger_type == "time_periodic":
         if period_type == "daily":
-            # 日级别：连续 20 天覆盖完整生命周期
             dates = [
                 "2026年10月10日", "2026年10月11日", "2026年10月12日", "2026年10月13日",
                 "2026年10月14日", "2026年10月15日", "2026年10月16日", "2026年10月17日",
                 "2026年10月18日", "2026年10月19日", "2026年10月20日", "2026年10月21日",
                 "2026年10月22日", "2026年10月23日", "2026年10月24日", "2026年10月25日",
-                "2026年10月26日", "2026年10月27日", "2026年10月28日", "2026年10月29日"
+                "2026年10月26日", "2026年10月27日", "2026年10月28日", "2026年10月29日",
+                "2026年10月30日", "2026年10月31日", "2026年11月01日", "2026年11月02日",
+                "2026年11月03日", "2026年11月04日", "2026年11月05日", "2026年11月06日",
+                "2026年11月07日", "2026年11月08日"
             ]
         elif period_type == "monthly":
-            # 月级别：跨 10月、11月、12月 的月度节点
             dates = [
-                "2026年10月01日", "2026年10月02日", "2026年10月03日", "2026年10月08日",
-                "2026年10月15日", "2026年10月22日", "2026年11月01日", "2026年11月02日",
-                "2026年11月08日", "2026年11月12日", "2026年11月15日", "2026年11月18日",
-                "2026年11月22日", "2026年11月26日", "2026年12月01日", "2026年12月05日",
-                "2026年12月08日", "2026年12月12日", "2026年12月15日", "2026年12月20日"
+                "2026年10月01日", "2026年10月02日", "2026年10月03日", "2026年10月05日",
+                "2026年10月08日", "2026年10月11日", "2026年10月15日", "2026年10月18日",
+                "2026年10月22日", "2026年10月26日", "2026年10月29日", "2026年11月01日",
+                "2026年11月02日", "2026年11月05日", "2026年11月08日", "2026年11月12日",
+                "2026年11月15日", "2026年11月18日", "2026年11月22日", "2026年11月26日",
+                "2026年12月01日", "2026年12月05日", "2026年12月08日", "2026年12月12日",
+                "2026年12月15日", "2026年12月18日", "2026年12月20日", "2026年12月25日"
             ]
         else:
-            # 周级别：根据设定星期灵活分布
             if "monday" in days_str or "friday" in days_str:
                 dates = [
                     "2026年10月05日", "2026年10月07日", "2026年10月09日", "2026年10月11日",
                     "2026年10月13日", "2026年10月14日", "2026年10月16日", "2026年10月19日",
                     "2026年10月21日", "2026年10月25日", "2026年10月30日", "2026年11月02日",
                     "2026年11月04日", "2026年11月05日", "2026年11月06日", "2026年11月09日",
-                    "2026年11月11日", "2026年11月13日", "2026年11月16日", "2026年11月20日"
+                    "2026年11月11日", "2026年11月13日", "2026年11月16日", "2026年11月20日",
+                    "2026年11月23日", "2026年11月25日", "2026年11月27日", "2026年11月30日",
+                    "2026年12月02日", "2026年12月04日", "2026年12月07日", "2026年12月11日"
                 ]
             elif "tuesday" in days_str or "thursday" in days_str:
                 dates = [
@@ -143,7 +147,9 @@ def _generate_timeline_dates(storyline_trigger_type: str, period_type: str, days
                     "2026年10月12日", "2026年10月14日", "2026年10月15日", "2026年10月20日",
                     "2026年10月21日", "2026年10月25日", "2026年10月27日", "2026年10月29日",
                     "2026年11月01日", "2026年11月02日", "2026年11月03日", "2026年11月05日",
-                    "2026年11月07日", "2026年11月10日", "2026年11月12日", "2026年11月17日"
+                    "2026年11月07日", "2026年11月10日", "2026年11月12日", "2026年11月17日",
+                    "2026年11月19日", "2026年11月24日", "2026年11月26日", "2026年12月01日",
+                    "2026年12月03日", "2026年12月08日", "2026年12月10日", "2026年12月15日"
                 ]
             elif "saturday" in days_str or "sunday" in days_str:
                 dates = [
@@ -151,7 +157,9 @@ def _generate_timeline_dates(storyline_trigger_type: str, period_type: str, days
                     "2026年10月20日", "2026年10月21日", "2026年10月24日", "2026年10月25日",
                     "2026年10月28日", "2026年10月29日", "2026年10月31日", "2026年11月01日",
                     "2026年11月04日", "2026年11月05日", "2026年11月07日", "2026年11月08日",
-                    "2026年11月14日", "2026年11月15日", "2026年11月21日", "2026年11月22日"
+                    "2026年11月14日", "2026年11月15日", "2026年11月21日", "2026年11月22日",
+                    "2026年11月28日", "2026年11月29日", "2026年12月05日", "2026年12月06日",
+                    "2026年12月12日", "2026年12月13日", "2026年12月19日", "2026年12月20日"
                 ]
             else:
                 dates = [
@@ -159,16 +167,19 @@ def _generate_timeline_dates(storyline_trigger_type: str, period_type: str, days
                     "2026年10月18日", "2026年10月21日", "2026年10月24日", "2026年10月28日",
                     "2026年10月29日", "2026年11月01日", "2026年11月04日", "2026年11月07日",
                     "2026年11月11日", "2026年11月15日", "2026年11月18日", "2026年11月20日",
-                    "2026年11月22日", "2026年11月25日", "2026年11月28日", "2026年11月30日"
+                    "2026年11月22日", "2026年11月25日", "2026年11月28日", "2026年11月30日",
+                    "2026年12月02日", "2026年12月05日", "2026年12月08日", "2026年12月12日",
+                    "2026年12月15日", "2026年12月18日", "2026年12月20日", "2026年12月25日"
                 ]
     else:
-        # task_activity 或 location_environment
         dates = [
             "2026年10月07日", "2026年10月11日", "2026年10月14日", "2026年10月15日",
             "2026年10月18日", "2026年10月21日", "2026年10月24日", "2026年10月28日",
             "2026年10月29日", "2026年11月01日", "2026年11月04日", "2026年11月07日",
             "2026年11月11日", "2026年11月15日", "2026年11月18日", "2026年11月20日",
-            "2026年11月22日", "2026年11月25日", "2026年11月28日", "2026年11月30日"
+            "2026年11月22日", "2026年11月25日", "2026年11月28日", "2026年11月30日",
+            "2026年12月02日", "2026年12月05日", "2026年12月08日", "2026年12月12日",
+            "2026年12月15日", "2026年12月18日", "2026年12月20日", "2026年12月25日"
         ]
 
     return dates[:count]
@@ -185,10 +196,10 @@ def get_session_blueprints(
     storyline_trigger_type: str,
     main_env_desc: str,
     main_trigger_desc: str,
-    target_count: int = 15,
+    target_count: int = 22,
 ) -> list[dict]:
     """
-    根据目标数量（支持 12 ~ 16 轮动态浮动）生成自然时间线蓝图配置。
+    根据目标数量（支持 20 ~ 24 轮深层认知演进）生成自然时间线蓝图配置。
     动态结合主线设定的时间区间 (time_range) 与周期粒度 (period_type, days) 输出排期。
     """
     period_type = main_mt.get("period_type", "weekly")
@@ -197,14 +208,12 @@ def get_session_blueprints(
 
     sh_str, eh_str, ref_str, base_dur, ext_eh_str, ext_dur = _parse_time_range(time_range)
 
-    # 格式化起止时间辅助函数
     def _m_time(d_str, t_str):
         parts = t_str.split(":")
         return f"{d_str}{parts[0]}时{parts[1]}分"
 
-    # 全量 16 个候选骨架槽位
     candidate_slots = [
-        # 1: Main Evidence (T2-1 首次建联证据 / 参数反问补全) - 核心必须
+        # 1: Main Evidence (T2-1 首次建联证据 / 参数反问补全)
         {
             "tag": "main_evidence",
             "template_id": "T2-1",
@@ -219,10 +228,10 @@ def get_session_blueprints(
             "trigger_condition": main_trigger_desc,
             "time_kind": "main"
         },
-        # 2: Sub 1 Evidence (T2-2 歧义消解) - 核心必须
+        # 2: Sub 1 Evidence (T3-1 支线1跨轮澄清消歧)
         {
             "tag": "sub1_evidence",
-            "template_id": "T2-2",
+            "template_id": "T3-1",
             "role": "evidence_session",
             "source": sub_01,
             "type": "sub_01",
@@ -234,7 +243,7 @@ def get_session_blueprints(
             "trigger_condition": "大巴转场弱网环境",
             "time_kind": "sub1"
         },
-        # 3: Main Reinforcement (T2-1 主线强化/固化契机) - 核心必须
+        # 3: Main Reinforcement (T2-1 主线事实记忆热启动)
         {
             "tag": "main_reinf_1",
             "template_id": "T2-1",
@@ -249,7 +258,7 @@ def get_session_blueprints(
             "trigger_condition": main_trigger_desc,
             "time_kind": "main"
         },
-        # 4: Working Memory Reuse (T2-6 历史工单跨期复用) - 工作记忆核心
+        # 4: Working Memory Reuse 1 (T2-6 历史工单跨期复用 - 单工单精准匹配)
         {
             "tag": "wm_reuse",
             "template_id": "T2-6",
@@ -261,7 +270,7 @@ def get_session_blueprints(
             "action": "retrieve_working_record_reuse",
             "time_kind": "main"
         },
-        # 5: Distractor 1 (T1-2 纯域外拒绝，如宽带光纤报修) - 核心必须
+        # 5: Distractor 1 (T1-2 纯域外拒绝，如宽带光纤报修)
         {
             "tag": "dist_ood",
             "template_id": "T1-2",
@@ -269,12 +278,12 @@ def get_session_blueprints(
             "source": dist_01,
             "type": "distractor_ood",
             "dur": "30min",
-            "env": "酒店临时办公区网络故障",
+            "env": "驻地酒店临时办公区",
             "action": "reject_out_of_domain",
             "ood_goal": "宽带光纤装维报修",
             "time_kind": "dist_ood"
         },
-        # 6: Working Memory Reschedule (T2-7 历史工单延期变更) - 工作记忆核心
+        # 6: Working Memory Reschedule 1 (T2-7 历史工单延期变更)
         {
             "tag": "wm_reschedule",
             "template_id": "T2-7",
@@ -286,7 +295,7 @@ def get_session_blueprints(
             "action": "reschedule_working_record",
             "time_kind": "main"
         },
-        # 7: Main Reuse (T2-5 变更延长时长) - 核心必须
+        # 7: Main Reuse (T2-5 变更延长时长)
         {
             "tag": "main_amend",
             "template_id": "T2-5",
@@ -301,7 +310,20 @@ def get_session_blueprints(
             "trigger_condition": main_trigger_desc,
             "time_kind": "main_amend"
         },
-        # 8: Working Memory Reconcile (T2-8 历史工单流水对账核查) - 工作记忆核查
+        # 8: Working Memory Disambiguation (T2-6 工作记忆多候选消歧 - 3轮深度交互)
+        {
+            "tag": "wm_disambig",
+            "template_id": "T2-6",
+            "role": "reuse_session",
+            "source": main_mt,
+            "type": "working_record_disambig",
+            "dur": base_dur,
+            "env": main_env_desc,
+            "action": "disambiguate_working_record",
+            "round_count": 3,
+            "time_kind": "main"
+        },
+        # 9: Working Memory Reconcile 1 (T2-8 历史工单半月阶段流水对账核查)
         {
             "tag": "wm_reconcile",
             "template_id": "T2-8",
@@ -313,19 +335,7 @@ def get_session_blueprints(
             "action": "reconcile_working_records",
             "time_kind": "dist_normal"
         },
-        # 9: Experiential Proactive Suggestion (T2-9 ReasoningBank 主动经验提议) - 经验记忆核心
-        {
-            "tag": "exp_proactive",
-            "template_id": "T2-9",
-            "role": "reuse_session",
-            "source": main_mt,
-            "type": "proactive_experience",
-            "dur": base_dur,
-            "env": "奥体中心大型集结现场",
-            "action": "proactive_experience_suggestion",
-            "time_kind": "main"
-        },
-        # 10: Distractor 2 (X-1 混合诉求一办一拒) - 核心必须
+        # 10: Distractor 2 (X-1 混合诉求一办一拒)
         {
             "tag": "dist_mixed",
             "template_id": "X-1",
@@ -338,44 +348,20 @@ def get_session_blueprints(
             "ood_goal": "手机话费充值与账单查询",
             "time_kind": "dist_mixed"
         },
-        # 11: Event Correction (T2-3 恶劣天气临时纠正覆盖) - 核心必须
+        # 11: Experiential Proactive Suggestion (T2-9 ReasoningBank 主动经验提议 - 3轮深度协商)
         {
-            "tag": "evt_correct",
-            "template_id": "T2-3",
-            "role": "correction_session",
-            "source": main_mt,
-            "type": "event_override",
-            "dur": base_dur,
-            "env": _extract_clean_event_env(evt_01, time_range),
-            "action": "override_temporary_preference",
-            "override": evt_01.get("preference_override", {}),
-            "time_kind": "main"
-        },
-        # 12: Experiential Recall (T2-10 经验回溯与边界确认) - 经验记忆核心
-        {
-            "tag": "exp_recall",
-            "template_id": "T2-10",
+            "tag": "exp_proactive",
+            "template_id": "T2-9",
             "role": "reuse_session",
             "source": main_mt,
-            "type": "empirical_recall",
+            "type": "proactive_experience",
             "dur": base_dur,
-            "env": _extract_clean_event_env(evt_01, time_range),
-            "action": "empirical_recall_or_boundary_check",
+            "env": "奥林匹克体育中心主场馆",
+            "action": "proactive_experience_suggestion",
+            "round_count": 3,
             "time_kind": "main"
         },
-        # 13: Event Reuse (T2-1 临时纠正后恢复主线复用) - 核心必须
-        {
-            "tag": "evt_reuse",
-            "template_id": "T2-1",
-            "role": "reuse_session",
-            "source": main_mt,
-            "type": "event_reuse",
-            "dur": base_dur,
-            "env": _extract_clean_event_env(evt_01, time_range),
-            "action": "reuse_long_term_rule_after_correction",
-            "time_kind": "main"
-        },
-        # 14: Sub 1 Reuse (T2-1 支线隔离验证) - 核心必须
+        # 12: Sub 1 Reuse (T2-1 支线隔离验证)
         {
             "tag": "sub1_reuse",
             "template_id": "T2-1",
@@ -387,9 +373,123 @@ def get_session_blueprints(
             "action": "sub_memory_unaffected",
             "time_kind": "sub1"
         },
-        # 15: Event Expiry & Main Recovery (T2-1 临时失效主线恢复) - 核心必须
+        # 13: Event Correction (T2-3 恶劣天气临时纠正覆盖)
         {
-            "tag": "main_recovery",
+            "tag": "evt_correct",
+            "template_id": "T2-3",
+            "role": "correction_session",
+            "source": main_mt,
+            "type": "event_override",
+            "dur": base_dur,
+            "env": "沿海暴雨强对流前沿现场",
+            "action": "override_temporary_preference",
+            "override": evt_01.get("preference_override", {"resolution": "720p", "rtt_max": "30ms"}),
+            "time_kind": "main"
+        },
+        # 14: Event Reuse & Scope Isolation (T2-1 恢复长期事实记忆验证)
+        {
+            "tag": "evt_reuse",
+            "template_id": "T2-1",
+            "role": "reuse_session",
+            "source": main_mt,
+            "type": "event_reuse",
+            "dur": base_dur,
+            "env": main_env_desc,
+            "action": "reuse_long_term_rule_after_correction",
+            "time_kind": "main"
+        },
+        # 15: Experiential Recall (T2-10 经验回溯与恶劣天气加固方案)
+        {
+            "tag": "exp_recall",
+            "template_id": "T2-10",
+            "role": "reuse_session",
+            "source": main_mt,
+            "type": "empirical_recall",
+            "dur": base_dur,
+            "env": "野外高山强风雨观测区",
+            "action": "empirical_recall_or_boundary_check",
+            "time_kind": "main"
+        },
+        # 16: Experiential Counterexample (T2-9 ReasoningBank 负向反例边界对抗测试)
+        {
+            "tag": "exp_counterexample",
+            "template_id": "T2-9",
+            "role": "reuse_session",
+            "source": main_mt,
+            "type": "proactive_experience",
+            "dur": base_dur,
+            "env": "文体展馆万人盛典现场",
+            "action": "proactive_experience_suggestion",
+            "is_counterexample": True,
+            "round_count": 2,
+            "time_kind": "main"
+        },
+        # 17: Working Memory Long-horizon Reuse (T2-6 超长跨期工单复用)
+        {
+            "tag": "wm_long_reuse",
+            "template_id": "T2-6",
+            "role": "reuse_session",
+            "source": main_mt,
+            "type": "working_record_reuse",
+            "dur": base_dur,
+            "env": main_env_desc,
+            "action": "retrieve_working_record_reuse",
+            "time_kind": "main"
+        },
+        # 18: Working Memory Reschedule 2 (T2-7 第二次预约变更 - 提前30分钟)
+        {
+            "tag": "wm_reschedule_2",
+            "template_id": "T2-7",
+            "role": "reuse_session",
+            "source": main_mt,
+            "type": "working_record_reschedule",
+            "dur": base_dur,
+            "env": main_env_desc,
+            "action": "reschedule_working_record",
+            "time_kind": "main"
+        },
+        # 19: Sub 2 Evidence (T2-1 支线2微信视频复盘建联)
+        {
+            "tag": "sub2",
+            "template_id": "T2-1",
+            "role": "evidence_session",
+            "source": sub_02,
+            "type": "sub_02",
+            "dur": "90min",
+            "env": "驻地酒店商务中心",
+            "action": "establish_sub_storyline_2",
+            "declaration_mode": "implicit_induction",
+            "storyline_trigger_type": "location_environment",
+            "trigger_condition": "驻地酒店商务中心",
+            "time_kind": "sub2"
+        },
+        # 20: Working Memory Month-end Reconcile (T2-8 全月总工单流水结算对账)
+        {
+            "tag": "wm_reconcile_month",
+            "template_id": "T2-8",
+            "role": "distractor_session",
+            "source": main_mt,
+            "type": "working_record_reconcile",
+            "dur": "15min",
+            "env": "工单系统对账窗口",
+            "action": "reconcile_working_records",
+            "time_kind": "dist_normal"
+        },
+        # 21: Distractor 3 (T1-1 单轮普通业务咨询)
+        {
+            "tag": "dist_normal",
+            "template_id": "T1-1",
+            "role": "distractor_session",
+            "source": dist_01,
+            "type": "distractor",
+            "dur": "30min",
+            "env": "阶段工作总结交流会",
+            "action": "distractor_no_memory",
+            "time_kind": "dist_normal"
+        },
+        # 22: Main Recovery & Final Verification (T2-1 终局长期事实记忆持久性终检)
+        {
+            "tag": "main_final",
             "template_id": "T2-1",
             "role": "reuse_session",
             "source": main_mt,
@@ -400,72 +500,16 @@ def get_session_blueprints(
             "storyline_trigger_type": storyline_trigger_type,
             "trigger_condition": main_trigger_desc,
             "time_kind": "main"
-        },
-        # 16: Sub 2 Evidence (T2-1 支线2建联) - 可选支线
-        {
-            "tag": "sub2",
-            "template_id": "T2-1",
-            "role": "evidence_session",
-            "source": sub_02,
-            "type": "sub_02",
-            "dur": "90min",
-            "env": "驻地酒店休息区",
-            "action": "establish_sub_storyline_2",
-            "declaration_mode": "implicit_induction",
-            "storyline_trigger_type": "location_environment",
-            "trigger_condition": "驻地酒店休息区",
-            "time_kind": "sub2"
-        },
-        # 17: Distractor 3 (T1-1 单轮单次业务) - 可选单轮干扰
-        {
-            "tag": "dist_normal",
-            "template_id": "T1-1",
-            "role": "distractor_session",
-            "source": dist_01,
-            "type": "distractor",
-            "dur": "30min",
-            "env": "阶段工作总结会",
-            "action": "distractor_no_memory",
-            "time_kind": "dist_normal"
-        },
-        # 18: Extra Main Reuse (T2-1 主线后续持续生效) - 可选第18轮
-        {
-            "tag": "extra_reuse",
-            "template_id": "T2-1",
-            "role": "reuse_session",
-            "source": main_mt,
-            "type": "main",
-            "dur": base_dur,
-            "env": main_env_desc,
-            "action": "continuous_main_reuse",
-            "storyline_trigger_type": storyline_trigger_type,
-            "trigger_condition": main_trigger_desc,
-            "time_kind": "main"
         }
     ]
 
-    # 根据 target_count 精确过滤，保持结构合法与记忆因果完整性
     selected = []
     for slot in candidate_slots:
         tag = slot["tag"]
-        if target_count <= 12:
-            if tag in ["wm_reconcile", "exp_recall", "sub2", "dist_normal", "extra_reuse", "wm_reschedule"]:
-                continue
-        elif target_count == 13:
-            if tag in ["wm_reconcile", "exp_recall", "sub2", "dist_normal", "extra_reuse"]:
-                continue
-        elif target_count == 14:
-            if tag in ["wm_reconcile", "sub2", "dist_normal", "extra_reuse"]:
-                continue
-        elif target_count == 15:
-            if tag in ["sub2", "dist_normal", "extra_reuse"]:
-                continue
-        elif target_count == 16:
-            if tag in ["dist_normal", "extra_reuse"]:
-                continue
-        elif target_count == 17:
-            if tag in ["extra_reuse"]:
-                continue
+        if target_count <= 20 and tag in ["dist_normal", "main_final"]:
+            continue
+        elif target_count == 21 and tag in ["main_final"]:
+            continue
         selected.append(dict(slot))
 
     # 生成严格匹配数量的日期列表
