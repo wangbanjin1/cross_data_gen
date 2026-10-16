@@ -151,21 +151,21 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
             if turn_idx == 1:
                 return f"今天在{env}有重要活动，开{app}{srv}保障，时间从{start_t}到{end_t}，画质要求1080p。"
             elif turn_idx == 2:
-                return "降到720p画质够清晰吗？如果能大幅降低卡顿丢包，可以考虑。"
+                return "降到720p够清晰吗？只要不卡不转圈就行。"
             else:
-                return "行，听你的专业建议，按720p和时延加固开通吧。"
+                return "行，听你的，就按720p保流畅开通吧。"
         else:
             if turn_idx == 1:
                 return f"今天在{env}有大型活动，需要开{app}{srv}保障，时间从{start_t}到{end_t}。"
             else:
-                return "好的，按你的专业建议来，就用这个加固方案。"
+                return "好的，听你的，就按这个开通吧。"
     elif tid == "T2-10":
         start_t = tp['start_timestamp'].split('日')[-1]
         end_t = tp['end_timestamp'].split('日')[-1]
         if turn_idx == 1:
-            return f"今天在{env}现场天气很恶劣，按上次恶劣天气的抗衰落加固方案配{app}{srv}，从{start_t}开始。"
+            return f"今天在{env}狂风暴雨天气很差，按上次恶劣天气的方案配{app}{srv}，从{start_t}开始。"
         else:
-            return "对，直接按这套加固方案开通。"
+            return "对，直接按这套方案开通。"
     elif tid == "T2-3":
         if turn_idx == 1:
             return f"今天在{env}，老规矩，用{app}做{srv}，帮我把保障开上。"
@@ -316,32 +316,28 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
             return f"已为您生成全月历史工单总对账报表：本月您累计成功办理了 {total_orders} 次移动网络保障，累计保障总时长达 {total_mins} 分钟，涵盖各类重点场景，所有工单全部履约闭环。"
         return f"已为您查询到本周历史工单流水账：本周您共成功办理了 {total_orders} 次移动网络保障，累计保障时长达 {total_mins} 分钟，涵盖{app}{srv}等场景，所有工单均已按期履约。"
     elif tid == "T2-9":
-        exp = s_plan.get("experience_citation", {})
-        exp_title = exp.get("title", "极值与高密环境主动降画质保抗丢包平稳度")
         if s_plan.get("is_counterexample"):
             if turn_idx == 1:
-                return f"收到，根据专家经验库【{exp_title}】，虽然高密拥塞推荐降画质保平稳，但经验库反例规则明确指出：当用户明确要求原画采录/强画质优先时，不得强制降级。为您保持画质{res}、时延{rtt}以内，确认直接开通吗？"
+                return f"收到，{env}现场人比较多，一般建议优先保流畅；不过既然您明确需要原画采录，已按您的要求保持{res}画质、时延{rtt}以内，确认直接开通吗？"
             else:
-                return f"好的，已按经验反例边界为您保留原画规格，开通{app}{srv}保障（{res} / 时延≤{rtt}）。祝您采录顺利！"
+                return f"好的，已按原画要求为您开通{app}{srv}保障（{res} / 时延≤{rtt}），祝您录制顺利！"
         elif s_plan.get("round_count") == 3:
             if turn_idx == 1:
-                return f"收到，注意到{env}属于超高密度人流聚集现场。根据专家经验库【{exp_title}】，极度拥塞环境下盲目开超清易引发上行信道争抢与丢包，建议将画质微调为{res}、时延锁定在{rtt}以内以稳定性优先。请问是否考虑采纳该建议？"
+                return f"收到，{env}现场人特别多容易网络拥挤，建议将画质调为{res}、时延控制在{rtt}以内，优先保证不卡顿。您看这样行吗？"
             elif turn_idx == 2:
-                return f"720p在移动端清晰度完全满足日常巡检与直播，且能将信道丢包率降低80%以上，时延稳定在{rtt}。确认按此加固规格开通吗？"
+                return f"在手机上看清晰度完全够用，关键是人多时不会卡住转圈，时延稳定在{rtt}。确认按这个开通吗？"
             else:
-                return f"好的，已采纳高密防拥塞加固经验，为您成功开通{app}{srv}稳定性保障（{res} / 时延≤{rtt}）。祝您现场活动顺利！"
+                return f"好的，已为您按人多防卡方案开通{app}{srv}保障（{res} / 时延≤{rtt}），祝您现场活动顺利！"
         else:
             if turn_idx == 1:
-                return f"收到，注意到{env}属于超高密度人流聚集现场。根据专家经验库【{exp_title}】，极度拥塞环境下盲目开超清易引发上行信道争抢与丢包，建议将画质微调为{res}、时延锁定在{rtt}以内以稳定性优先。请问是否同意采纳该优化建议？"
+                return f"收到，{env}现场人比较多容易卡顿，建议把画质调为{res}、时延控制在{rtt}以内，优先保流畅。您看按这个开通合适吗？"
             else:
-                return f"好的，已采纳高密防拥塞加固经验，为您成功开通{app}{srv}稳定性保障（{res} / 时延≤{rtt}）。祝您现场活动顺利！"
+                return f"好的，已为您开通{app}{srv}保障（{res} / 时延≤{rtt}），祝您现场活动顺利！"
     elif tid == "T2-10":
-        exp = s_plan.get("experience_citation", {})
-        exp_title = exp.get("title", "恶劣天气高衰减环境增强抗丢包加固策略")
         if turn_idx == 1:
-            return f"收到，已为您调取应对极端恶劣天气的抗衰落加固方案【{exp_title}】：画质微降至{res}、时延收紧至{rtt}以内（持续{tp['duration']}），以抗丢包连续性优先。确认按此方案启动保障吗？"
+            return f"收到，狂风暴雨天气信号容易波动，已按上次恶劣天气的方案设置：画质微调为{res}、时延控制在{rtt}以内（持续{tp['duration']}），保证音画不中断。确认直接开通吗？"
         else:
-            return f"好的，已为您启动恶劣天气加固网络保障（{res} / 时延≤{rtt}）。祝您外勤平安顺利！"
+            return f"好的，已为您开通恶劣天气保障（{res} / 时延≤{rtt}）。风雨天气，祝您外勤平安顺利！"
     elif tid == "T2-3":
         start_t = tp['start_timestamp'].split('日')[-1]
         end_t = tp['end_timestamp'].split('日')[-1]
