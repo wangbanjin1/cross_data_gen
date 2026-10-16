@@ -1,5 +1,33 @@
 [
   {
+    "experience_id": "EXP_PREWARM_BUFFER_01",
+    "title": "重大活动与大型赛事提前30分钟网络预热起保经验",
+    "description": "大型体育赛事、关键峰会开幕或重点主旨演讲直播，设备启动与信道加固需要提前建立稳定无线链路，直接按活动开始时间起保容易导致开场丢包或准备期断流。",
+    "content": "识别到大型赛事、峰会直播等重大现场时，主动应用前置预热经验，将起保时间提前30分钟（例如14:00活动提前至13:30起保），保障时长相应延长30分钟，实现1轮极速闭环。",
+    "trigger_conditions": {
+      "keywords": [
+        "赛事直播",
+        "重大活动",
+        "开幕式",
+        "主旨演讲",
+        "奥体中心",
+        "峰会"
+      ],
+      "risk_factors": [
+        "开场网络拥塞",
+        "推流设备预热断流"
+      ]
+    },
+    "recommended_adjustments": {
+      "start_offset_minutes": -30,
+      "duration_add_minutes": 30,
+      "strategy": "前置预热加固"
+    },
+    "applicable_boundaries": "适用于大型外场直播、开幕式、峰会论坛等重大集聚活动；普通单人日常视频通话不适用此预热规则。",
+    "negative_counterexamples": "若用户明确声明“必须精准从14:00开始扣费，不要提前开通”，则遵从用户指令。",
+    "strategy_type": "prewarm_buffer"
+  },
+  {
     "experience_id": "EXP_STADIUM_CONGESTION_01",
     "title": "极值与高密环境主动降画质保抗丢包平稳度",
     "description": "大型体育场馆、漫展或演唱会万人集聚场景下，上行空口资源严重争抢，盲目开高画质易引发频繁卡顿掉帧。",

@@ -1302,6 +1302,25 @@ class SessionAssembler:
                 events[0]["turn_intents"] = intents
                 events[0]["experience_citation"] = exp_c
 
+        branching_info = {
+            "experience_id": exp_id,
+            "rule_title": exp_c.get("title") or "经验加固与时序/属性推理规则",
+            "fast_path": {
+                "round_count": 1,
+                "closure_path": "fast_experience_closed_loop",
+                "trigger_condition": "Agent自主应用经验记忆，在首轮直接完成目标经验槽位推理与闭环受理",
+                "resolved_turn": 1,
+                "key_params_source": {"source_type": "Experience", "source_ref": exp_id}
+            },
+            "slow_path": {
+                "round_count": 3,
+                "closure_path": "clarification_after_correction",
+                "trigger_condition": "Agent缺乏经验记忆按字面直接办理，用户发起纠偏提醒，经历多轮确认后闭环",
+                "resolved_turn": 3,
+                "redundant_rounds": 2
+            }
+        }
+
         return {
             "session_id": sid,
             "user_id": uid,
@@ -1314,6 +1333,7 @@ class SessionAssembler:
                 "skeleton_signature": sig,
                 "scenario": {"environment": env, "blueprint_type": b_type, "memory_action": act},
                 "experience_citation": exp_c,
+                "experience_branching": branching_info,
             },
             "experience_citation": exp_c,
             "event_sequence": events,
@@ -1396,6 +1416,25 @@ class SessionAssembler:
             events[0]["turn_intents"] = intents
             events[0]["experience_citation"] = exp_c
 
+        branching_info = {
+            "experience_id": exp_id,
+            "rule_title": exp_c.get("title") or "经验加固与时序/属性推理规则",
+            "fast_path": {
+                "round_count": 1,
+                "closure_path": "fast_experience_closed_loop",
+                "trigger_condition": "Agent自主应用经验记忆，在首轮直接完成目标经验槽位推理与闭环受理",
+                "resolved_turn": 1,
+                "key_params_source": {"source_type": "Experience", "source_ref": exp_id}
+            },
+            "slow_path": {
+                "round_count": 3,
+                "closure_path": "clarification_after_correction",
+                "trigger_condition": "Agent缺乏经验记忆按字面直接办理，用户发起纠偏提醒，经历多轮确认后闭环",
+                "resolved_turn": 3,
+                "redundant_rounds": 2
+            }
+        }
+
         return {
             "session_id": sid,
             "user_id": uid,
@@ -1408,6 +1447,7 @@ class SessionAssembler:
                 "skeleton_signature": sig,
                 "scenario": {"environment": env, "blueprint_type": b_type, "memory_action": act},
                 "experience_citation": exp_c,
+                "experience_branching": branching_info,
             },
             "experience_citation": exp_c,
             "event_sequence": events,

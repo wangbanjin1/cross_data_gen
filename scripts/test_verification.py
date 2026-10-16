@@ -20,6 +20,7 @@ def test_file(jsonl_path: Path):
         session = json.loads(line)
         sid = session["session_id"]
         role = session["session_meta"]["memory_role"]
+        tid = session["session_meta"].get("template_id", "")
         ref_time = session["reference_time"]
         events = session["event_sequence"]
         
@@ -69,7 +70,7 @@ def test_file(jsonl_path: Path):
                         assert "end_timestamp" not in p_ts, f"Session {sid} Turn 1 slot_updates leaked end_timestamp!"
                         assert "duration" not in p_ts, f"Session {sid} Turn 1 slot_updates leaked duration!"
 
-            if len(events) >= 3:
+            if tid == "T3-1" and len(events) >= 3:
                 assert "resolution" in events[1].get("requested_params", []), f"Session {sid} Turn 2 requested_params missing resolution!"
                 t2_params = events[1]["turn_intents"][0].get("params", {})
                 assert "resolution" not in t2_params, f"Session {sid} Turn 2 intent answers leaked resolution!"

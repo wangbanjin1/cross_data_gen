@@ -5,15 +5,18 @@
     "reference_time": "2026年10月07日13时45分",
     "session_meta": {
       "template_id": "T2-1",
-      "round_count": 2,
+      "round_count": 3,
       "intent_count": 1,
       "memory_role": "evidence_session",
-      "skeleton_signature": "T2-1|2|1|I1:腾讯会议/会议/1/clarified/resolved|none",
+      "skeleton_signature": "T2-1|3|1|I1:腾讯会议/会议/1/clarified/resolved|none",
       "scenario": {
         "environment": "市青年公益服务中心",
         "blueprint_type": "main",
         "memory_action": "declare_explicit_rule"
-      }
+      },
+      "memory_tier": "factual_memory",
+      "cold_hot_type": "cold_start",
+      "agility_factor": 0.0
     },
     "event_sequence": [
       {
@@ -72,6 +75,77 @@
         "turn": 2,
         "user": {
           "utterance": "好的，画质用1080p，时延50ms以内，预计持续俩小时（到16时00分）。我说‘顺滑一点’，就是时延控制在50ms以内。以后只要我处于【市青年公益服务中心】，就按老规矩来：腾讯会议会议、1080p、50ms以内，帮我把这个习惯记好，别掉链子。",
+          "action_types": [
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，已为您登记老规矩习惯。确认按1080p、50ms以内立即为您开通本次保障吗？",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "clarify",
+            "expression_level": 1,
+            "intent": "腾讯会议会议保障",
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月07日14时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月07日16时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 3,
+        "user": {
+          "utterance": "对，确认直接开通。",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -249,6 +323,10 @@
                 }
               }
             }
+          },
+          {
+            "turn": 3,
+            "params": {}
           }
         ]
       }
@@ -268,7 +346,10 @@
         "environment": "大巴跨城转场高速公路",
         "blueprint_type": "sub_01",
         "memory_action": "disambiguate_sub_storyline_1"
-      }
+      },
+      "memory_tier": "factual_memory",
+      "cold_hot_type": "cold_start",
+      "agility_factor": 0.0
     },
     "event_sequence": [
       {
@@ -326,13 +407,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "画质按‘糊弄不过去就行’来，时延控制在100ms以内，预计持续60min。",
+          "utterance": "画质标准按‘糊弄不过去就行’，时延控制在100ms以内，预计持续60min。",
           "action_types": [
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "确认一下，您说的‘糊弄不过去就行’具体指哪个画质档位？以后也按这个理解吗？",
+          "utterance": "问一下，您说的‘糊弄不过去就行’具体是指哪种画质档位？往后也按这套标准来吗？",
           "action_types": [
             "Request_Disambiguation"
           ]
@@ -392,7 +473,7 @@
       {
         "turn": 3,
         "user": {
-          "utterance": "就是画质档位720p，以后就按这个理解，直接开通吧。",
+          "utterance": "指的就是画质档位720p，以后默认按这个来，直接保上吧。",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -594,7 +675,10 @@
         "environment": "市青年公益服务中心",
         "blueprint_type": "main",
         "memory_action": "reinforce_explicit_memory"
-      }
+      },
+      "memory_tier": "factual_memory",
+      "cold_hot_type": "hot_start",
+      "agility_factor": 0.5
     },
     "event_sequence": [
       {
@@ -877,7 +961,10 @@
           "rtt_max": "50ms",
           "duration": "120min"
         }
-      }
+      },
+      "memory_tier": "working_memory",
+      "cold_hot_type": null,
+      "agility_factor": null
     },
     "working_memory_pointer": {
       "target_record_id": "REC_mobile_persona_003_20261007_01",
@@ -1148,68 +1235,7 @@
   {
     "session_id": "S-USER_003-05",
     "user_id": "USER_003",
-    "reference_time": "2026年10月18日10时00分",
-    "session_meta": {
-      "template_id": "T1-2",
-      "round_count": 1,
-      "intent_count": 1,
-      "memory_role": "distractor_session",
-      "skeleton_signature": "T1-2|1|1|I1:宽带光纤装维报修/0/rejected/rejected|none|none|out_of_domain",
-      "scenario": {
-        "environment": "驻地酒店临时办公区",
-        "blueprint_type": "distractor_ood",
-        "memory_action": "reject_out_of_domain",
-        "request_type": "life_service"
-      }
-    },
-    "event_sequence": [
-      {
-        "turn": 1,
-        "user": {
-          "utterance": "你好，现场这边网络好像有问题，能帮我安排师傅处理一下宽带光纤装维报修吗？",
-          "action_types": [
-            "Create_Intent_Request"
-          ]
-        },
-        "agent": {
-          "utterance": "抱歉，本智能助手仅提供手机移动网络加速与保障服务，暂不支持办理宽带光纤装维报修业务，建议您联系宽带专线处理。",
-          "action_types": [
-            "Reject_Request"
-          ]
-        },
-        "related_intent_ids": [
-          "I1"
-        ],
-        "requested_params": [],
-        "turn_intents": [
-          {
-            "intent_id": "I1",
-            "status": "rejected",
-            "closure_path": "rejected",
-            "expression_level": 0,
-            "intent": "宽带光纤装维报修",
-            "params": {}
-          }
-        ]
-      }
-    ],
-    "intents": [
-      {
-        "intent_id": "I1",
-        "status": "rejected",
-        "closure_path": "rejected",
-        "expression_level": 0,
-        "intent": "宽带光纤装维报修",
-        "params": {}
-      }
-    ],
-    "relations": [],
-    "slot_updates": []
-  },
-  {
-    "session_id": "S-USER_003-06",
-    "user_id": "USER_003",
-    "reference_time": "2026年10月21日13时45分",
+    "reference_time": "2026年10月18日13时45分",
     "session_meta": {
       "template_id": "T2-7",
       "round_count": 2,
@@ -1222,25 +1248,28 @@
         "memory_action": "reschedule_working_record"
       },
       "working_memory_pointer": {
-        "target_record_id": "REC_mobile_persona_003_20261015_04",
-        "inferred_delta_days": 6,
+        "target_record_id": "REC_mobile_persona_003_20261015_37",
+        "inferred_delta_days": 3,
         "matched_application": "腾讯会议",
         "matched_service": "会议",
         "modified_slots": {
-          "start_timestamp": "2026年10月21日14时00分",
-          "end_timestamp": "2026年10月21日16时00分"
+          "start_timestamp": "2026年10月18日14时00分",
+          "end_timestamp": "2026年10月18日16时00分"
         },
         "reschedule_direction": "delay"
-      }
+      },
+      "memory_tier": "working_memory",
+      "cold_hot_type": null,
+      "agility_factor": null
     },
     "working_memory_pointer": {
-      "target_record_id": "REC_mobile_persona_003_20261015_04",
-      "inferred_delta_days": 6,
+      "target_record_id": "REC_mobile_persona_003_20261015_37",
+      "inferred_delta_days": 3,
       "matched_application": "腾讯会议",
       "matched_service": "会议",
       "modified_slots": {
-        "start_timestamp": "2026年10月21日14时00分",
-        "end_timestamp": "2026年10月21日16时00分"
+        "start_timestamp": "2026年10月18日14时00分",
+        "end_timestamp": "2026年10月18日16时00分"
       },
       "reschedule_direction": "delay"
     },
@@ -1275,55 +1304,55 @@
               "application_name": {
                 "value": "腾讯会议",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_003_20261015_04"
+                "source_ref": "REC_mobile_persona_003_20261015_37"
               },
               "service_name": {
                 "value": "会议",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_003_20261015_04"
+                "source_ref": "REC_mobile_persona_003_20261015_37"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261015_04"
+                  "source_ref": "REC_mobile_persona_003_20261015_37"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261015_04"
+                  "source_ref": "REC_mobile_persona_003_20261015_37"
                 }
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年10月21日14时00分",
+                  "value": "2026年10月18日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年10月21日16时00分",
+                  "value": "2026年10月18日16时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "duration": {
                   "value": "120min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261015_04"
+                  "source_ref": "REC_mobile_persona_003_20261015_37"
                 }
               }
             }
           }
         ],
         "working_memory_pointer": {
-          "target_record_id": "REC_mobile_persona_003_20261015_04",
-          "inferred_delta_days": 6,
+          "target_record_id": "REC_mobile_persona_003_20261015_37",
+          "inferred_delta_days": 3,
           "matched_application": "腾讯会议",
           "matched_service": "会议",
           "modified_slots": {
-            "start_timestamp": "2026年10月21日14时00分",
-            "end_timestamp": "2026年10月21日16时00分"
+            "start_timestamp": "2026年10月18日14时00分",
+            "end_timestamp": "2026年10月18日16时00分"
           },
           "reschedule_direction": "delay"
         }
@@ -1357,42 +1386,42 @@
               "application_name": {
                 "value": "腾讯会议",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_003_20261015_04"
+                "source_ref": "REC_mobile_persona_003_20261015_37"
               },
               "service_name": {
                 "value": "会议",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_003_20261015_04"
+                "source_ref": "REC_mobile_persona_003_20261015_37"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261015_04"
+                  "source_ref": "REC_mobile_persona_003_20261015_37"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261015_04"
+                  "source_ref": "REC_mobile_persona_003_20261015_37"
                 }
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年10月21日14时00分",
+                  "value": "2026年10月18日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年10月21日16时00分",
+                  "value": "2026年10月18日16时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "duration": {
                   "value": "120min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261015_04"
+                  "source_ref": "REC_mobile_persona_003_20261015_37"
                 }
               }
             }
@@ -1411,42 +1440,42 @@
           "application_name": {
             "value": "腾讯会议",
             "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_003_20261015_04"
+            "source_ref": "REC_mobile_persona_003_20261015_37"
           },
           "service_name": {
             "value": "会议",
             "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_003_20261015_04"
+            "source_ref": "REC_mobile_persona_003_20261015_37"
           },
           "resolution": {
             "min_value": {
               "value": "1080p",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_003_20261015_04"
+              "source_ref": "REC_mobile_persona_003_20261015_37"
             }
           },
           "rtt": {
             "max_value": {
               "value": "50ms",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_003_20261015_04"
+              "source_ref": "REC_mobile_persona_003_20261015_37"
             }
           },
           "timestamp": {
             "start_timestamp": {
-              "value": "2026年10月21日14时00分",
+              "value": "2026年10月18日14时00分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
             "end_timestamp": {
-              "value": "2026年10月21日16时00分",
+              "value": "2026年10月18日16时00分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
             "duration": {
               "value": "120min",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_003_20261015_04"
+              "source_ref": "REC_mobile_persona_003_20261015_37"
             }
           }
         }
@@ -1463,42 +1492,42 @@
               "application_name": {
                 "value": "腾讯会议",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_003_20261015_04"
+                "source_ref": "REC_mobile_persona_003_20261015_37"
               },
               "service_name": {
                 "value": "会议",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_003_20261015_04"
+                "source_ref": "REC_mobile_persona_003_20261015_37"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261015_04"
+                  "source_ref": "REC_mobile_persona_003_20261015_37"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261015_04"
+                  "source_ref": "REC_mobile_persona_003_20261015_37"
                 }
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年10月21日14时00分",
+                  "value": "2026年10月18日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年10月21日16时00分",
+                  "value": "2026年10月18日16时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "duration": {
                   "value": "120min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261015_04"
+                  "source_ref": "REC_mobile_persona_003_20261015_37"
                 }
               }
             }
@@ -1512,9 +1541,9 @@
     ]
   },
   {
-    "session_id": "S-USER_003-07",
+    "session_id": "S-USER_003-06",
     "user_id": "USER_003",
-    "reference_time": "2026年10月24日13时45分",
+    "reference_time": "2026年10月21日13时45分",
     "session_meta": {
       "template_id": "T2-5",
       "round_count": 2,
@@ -1525,7 +1554,10 @@
         "environment": "市青年公益服务中心",
         "blueprint_type": "main",
         "memory_action": "extend_duration_amend"
-      }
+      },
+      "memory_tier": "factual_memory",
+      "cold_hot_type": "hot_start",
+      "agility_factor": 0.5
     },
     "event_sequence": [
       {
@@ -1581,12 +1613,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年10月24日14时00分",
+                  "value": "2026年10月21日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年10月24日16时00分",
+                  "value": "2026年10月21日16时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -1653,12 +1685,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年10月24日14时00分",
+                  "value": "2026年10月21日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年10月24日17时00分",
+                  "value": "2026年10月21日17时00分",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 },
@@ -1707,12 +1739,12 @@
           },
           "timestamp": {
             "start_timestamp": {
-              "value": "2026年10月24日14时00分",
+              "value": "2026年10月21日14时00分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
             "end_timestamp": {
-              "value": "2026年10月24日17时00分",
+              "value": "2026年10月21日17时00分",
               "source_type": "Turn",
               "source_ref": "U2"
             },
@@ -1759,12 +1791,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年10月24日14时00分",
+                  "value": "2026年10月21日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年10月24日16时00分",
+                  "value": "2026年10月21日16时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -1781,7 +1813,7 @@
             "params": {
               "timestamp": {
                 "end_timestamp": {
-                  "value": "2026年10月24日17时00分",
+                  "value": "2026年10月21日17时00分",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 },
@@ -1798,9 +1830,9 @@
     ]
   },
   {
-    "session_id": "S-USER_003-08",
+    "session_id": "S-USER_003-07",
     "user_id": "USER_003",
-    "reference_time": "2026年10月28日13时45分",
+    "reference_time": "2026年10月24日13时45分",
     "session_meta": {
       "template_id": "T2-6",
       "round_count": 3,
@@ -1814,7 +1846,7 @@
       },
       "working_memory_pointer": {
         "target_record_id": "REC_mobile_persona_003_20261007_01",
-        "inferred_delta_days": 21,
+        "inferred_delta_days": 17,
         "matched_application": "腾讯会议",
         "matched_service": "会议",
         "inherited_slots": {
@@ -1827,11 +1859,14 @@
           "REC_mobile_persona_003_20261011_02"
         ],
         "is_disambiguation": true
-      }
+      },
+      "memory_tier": "working_memory",
+      "cold_hot_type": null,
+      "agility_factor": null
     },
     "working_memory_pointer": {
       "target_record_id": "REC_mobile_persona_003_20261007_01",
-      "inferred_delta_days": 21,
+      "inferred_delta_days": 17,
       "matched_application": "腾讯会议",
       "matched_service": "会议",
       "inherited_slots": {
@@ -1887,12 +1922,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年10月28日14时00分",
+                  "value": "2026年10月24日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年10月28日16时00分",
+                  "value": "2026年10月24日16时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -1907,7 +1942,7 @@
         ],
         "working_memory_pointer": {
           "target_record_id": "REC_mobile_persona_003_20261007_01",
-          "inferred_delta_days": 21,
+          "inferred_delta_days": 17,
           "matched_application": "腾讯会议",
           "matched_service": "会议",
           "inherited_slots": {
@@ -1975,12 +2010,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年10月28日14时00分",
+                  "value": "2026年10月24日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年10月28日16时00分",
+                  "value": "2026年10月24日16时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -2046,12 +2081,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年10月28日14时00分",
+                  "value": "2026年10月24日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年10月28日16时00分",
+                  "value": "2026年10月24日16时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -2100,12 +2135,12 @@
           },
           "timestamp": {
             "start_timestamp": {
-              "value": "2026年10月28日14时00分",
+              "value": "2026年10月24日14时00分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
             "end_timestamp": {
-              "value": "2026年10月28日16时00分",
+              "value": "2026年10月24日16时00分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
@@ -2138,12 +2173,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年10月28日14时00分",
+                  "value": "2026年10月24日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年10月28日16时00分",
+                  "value": "2026年10月24日16时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -2193,60 +2228,36 @@
     ]
   },
   {
-    "session_id": "S-USER_003-09",
+    "session_id": "S-USER_003-08",
     "user_id": "USER_003",
-    "reference_time": "2026年10月29日10时00分",
+    "reference_time": "2026年10月28日13时45分",
     "session_meta": {
-      "template_id": "T2-8",
+      "template_id": "T2-1",
       "round_count": 1,
       "intent_count": 1,
-      "memory_role": "distractor_session",
-      "skeleton_signature": "T2-8|1|1|I1:历史工单流水对账核查/0/direct/resolved|none",
+      "memory_role": "reuse_session",
+      "skeleton_signature": "T2-1|1|1|I1:腾讯会议/会议/1/memory_filled/resolved|none",
       "scenario": {
-        "environment": "工单系统对账窗口",
-        "blueprint_type": "working_record_reconcile",
-        "memory_action": "reconcile_working_records"
+        "environment": "市青年公益服务中心",
+        "blueprint_type": "main",
+        "memory_action": "continuous_main_reuse"
       },
-      "working_memory_query": {
-        "reconciled_record_ids": [
-          "REC_mobile_persona_003_20261007_01",
-          "REC_mobile_persona_003_20261011_02",
-          "REC_mobile_persona_003_20261014_03",
-          "REC_mobile_persona_003_20261015_04",
-          "REC_mobile_persona_003_20261021_05",
-          "REC_mobile_persona_003_20261024_06",
-          "REC_mobile_persona_003_20261028_07"
-        ],
-        "total_orders": 7,
-        "total_duration_minutes": 840,
-        "reconcile_scope": "半月阶段对账"
-      }
-    },
-    "working_memory_query": {
-      "reconciled_record_ids": [
-        "REC_mobile_persona_003_20261007_01",
-        "REC_mobile_persona_003_20261011_02",
-        "REC_mobile_persona_003_20261014_03",
-        "REC_mobile_persona_003_20261015_04",
-        "REC_mobile_persona_003_20261021_05",
-        "REC_mobile_persona_003_20261024_06",
-        "REC_mobile_persona_003_20261028_07"
-      ],
-      "total_orders": 7,
-      "total_duration_minutes": 840,
-      "reconcile_scope": "半月阶段对账"
+      "memory_tier": "factual_memory",
+      "cold_hot_type": "hot_start",
+      "agility_factor": 1.0
     },
     "event_sequence": [
       {
         "turn": 1,
         "user": {
-          "utterance": "帮我查下这周总共开了几次保障，一共多长时间？",
+          "utterance": "老规矩开保障，别掉链子。",
           "action_types": [
-            "Create_Intent_Request"
+            "Create_Intent_Request",
+            "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "已为您查询到本周历史工单流水账：本周您共成功办理了 7 次移动网络保障，累计保障时长达 840 分钟，涵盖腾讯会议会议等场景，所有工单均已按期履约。",
+          "utterance": "好的，已为您直接按老规矩开通腾讯会议会议保障（1080p / 时延≤50ms），祝您使用愉快！",
           "action_types": [
             "Acknowledge"
           ]
@@ -2259,137 +2270,52 @@
           {
             "intent_id": "I1",
             "status": "resolved",
-            "closure_path": "direct",
-            "expression_level": 0,
-            "intent": "历史工单流水对账核查",
-            "params": {}
-          }
-        ],
-        "working_memory_query": {
-          "reconciled_record_ids": [
-            "REC_mobile_persona_003_20261007_01",
-            "REC_mobile_persona_003_20261011_02",
-            "REC_mobile_persona_003_20261014_03",
-            "REC_mobile_persona_003_20261015_04",
-            "REC_mobile_persona_003_20261021_05",
-            "REC_mobile_persona_003_20261024_06",
-            "REC_mobile_persona_003_20261028_07"
-          ],
-          "total_orders": 7,
-          "total_duration_minutes": 840,
-          "reconcile_scope": "半月阶段对账"
-        }
-      }
-    ],
-    "intents": [
-      {
-        "intent_id": "I1",
-        "status": "resolved",
-        "closure_path": "direct",
-        "expression_level": 0,
-        "intent": "历史工单流水对账核查",
-        "params": {}
-      }
-    ],
-    "relations": [],
-    "slot_updates": []
-  },
-  {
-    "session_id": "S-USER_003-10",
-    "user_id": "USER_003",
-    "reference_time": "2026年11月01日12时30分",
-    "session_meta": {
-      "template_id": "X-1",
-      "round_count": 1,
-      "intent_count": 2,
-      "memory_role": "distractor_session",
-      "skeleton_signature": "X-1|1|2|I1:抖音/短视频/1/direct/resolved;I2:手机话费充值与账单查询/0/rejected/rejected|none|none|mixed_reject",
-      "scenario": {
-        "environment": "周末午休个人时间",
-        "blueprint_type": "distractor_mixed",
-        "memory_action": "mixed_in_out_domain"
-      }
-    },
-    "event_sequence": [
-      {
-        "turn": 1,
-        "user": {
-          "utterance": "帮我办理一下今天12时30分的抖音短视频网络保障，另外顺便帮我查询一下手机话费充值与账单查询。",
-          "action_types": [
-            "Create_Intent_Request",
-            "Inform_Slot"
-          ]
-        },
-        "agent": {
-          "utterance": "好的，已为您成功受理抖音短视频网络保障（720p / 时延≤80ms）；另外关于手机话费充值与账单查询，目前暂不支持在线代办，请前往掌上营业厅查看。",
-          "action_types": [
-            "Acknowledge",
-            "Reject_Request"
-          ]
-        },
-        "related_intent_ids": [
-          "I1",
-          "I2"
-        ],
-        "requested_params": [],
-        "turn_intents": [
-          {
-            "intent_id": "I1",
-            "status": "resolved",
-            "closure_path": "direct",
+            "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "抖音短视频保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "短视频",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "resolution": {
                 "min_value": {
-                  "value": "720p",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
                 }
               },
               "rtt": {
                 "max_value": {
-                  "value": "80ms",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
                 }
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月01日12时30分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "value": "2026年10月28日14时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月01日13时30分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "value": "2026年10月28日16时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
                 },
                 "duration": {
-                  "value": "60min",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "value": "120min",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
                 }
               }
             }
-          },
-          {
-            "intent_id": "I2",
-            "status": "rejected",
-            "closure_path": "rejected",
-            "expression_level": 0,
-            "intent": "手机话费充值与账单查询",
-            "params": {}
           }
         ]
       }
@@ -2398,60 +2324,52 @@
       {
         "intent_id": "I1",
         "status": "resolved",
-        "closure_path": "direct",
+        "closure_path": "memory_filled",
         "expression_level": 1,
-        "intent": "抖音短视频保障",
+        "intent": "腾讯会议会议保障",
         "params": {
           "application_name": {
-            "value": "抖音",
+            "value": "腾讯会议",
             "source_type": "Turn",
             "source_ref": "U1"
           },
           "service_name": {
-            "value": "短视频",
+            "value": "会议",
             "source_type": "Turn",
             "source_ref": "U1"
           },
           "resolution": {
             "min_value": {
-              "value": "720p",
-              "source_type": "Turn",
-              "source_ref": "U1"
+              "value": "1080p",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
             }
           },
           "rtt": {
             "max_value": {
-              "value": "80ms",
-              "source_type": "Turn",
-              "source_ref": "U1"
+              "value": "50ms",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
             }
           },
           "timestamp": {
             "start_timestamp": {
-              "value": "2026年11月01日12时30分",
-              "source_type": "Turn",
-              "source_ref": "U1"
+              "value": "2026年10月28日14时00分",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
             },
             "end_timestamp": {
-              "value": "2026年11月01日13时30分",
-              "source_type": "Turn",
-              "source_ref": "U1"
+              "value": "2026年10月28日16时00分",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
             },
             "duration": {
-              "value": "60min",
-              "source_type": "Turn",
-              "source_ref": "U1"
+              "value": "120min",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
             }
           }
         }
-      },
-      {
-        "intent_id": "I2",
-        "status": "rejected",
-        "closure_path": "rejected",
-        "expression_level": 0,
-        "intent": "手机话费充值与账单查询",
-        "params": {}
       }
     ],
     "relations": [],
@@ -2463,44 +2381,44 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "短视频",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月28日14时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月28日16时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
               "resolution": {
                 "min_value": {
-                  "value": "720p",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
                 }
               },
               "rtt": {
                 "max_value": {
-                  "value": "80ms",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
-                }
-              },
-              "timestamp": {
-                "start_timestamp": {
-                  "value": "2026年11月01日12时30分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
-                },
-                "end_timestamp": {
-                  "value": "2026年11月01日13时30分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
-                },
-                "duration": {
-                  "value": "60min",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
                 }
               }
             }
@@ -2510,9 +2428,9 @@
     ]
   },
   {
-    "session_id": "S-USER_003-11",
+    "session_id": "S-USER_003-09",
     "user_id": "USER_003",
-    "reference_time": "2026年11月04日13时45分",
+    "reference_time": "2026年10月29日13时45分",
     "session_meta": {
       "template_id": "T2-9",
       "round_count": 3,
@@ -2534,7 +2452,31 @@
           "strategy": "稳定性优先"
         },
         "negotiation_required": true
-      }
+      },
+      "experience_branching": {
+        "experience_id": "EXP_STADIUM_CONGESTION_01",
+        "rule_title": "极值与高密环境主动降画质保抗丢包平稳度",
+        "fast_path": {
+          "round_count": 1,
+          "closure_path": "fast_experience_closed_loop",
+          "trigger_condition": "Agent自主应用经验记忆，在首轮直接完成目标经验槽位推理与闭环受理",
+          "resolved_turn": 1,
+          "key_params_source": {
+            "source_type": "Experience",
+            "source_ref": "EXP_STADIUM_CONGESTION_01"
+          }
+        },
+        "slow_path": {
+          "round_count": 3,
+          "closure_path": "clarification_after_correction",
+          "trigger_condition": "Agent缺乏经验记忆按字面直接办理，用户发起纠偏提醒，经历多轮确认后闭环",
+          "resolved_turn": 3,
+          "redundant_rounds": 2
+        }
+      },
+      "memory_tier": "experiential_memory",
+      "cold_hot_type": null,
+      "agility_factor": null
     },
     "experience_citation": {
       "experience_id": "EXP_STADIUM_CONGESTION_01",
@@ -2594,12 +2536,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月04日14时00分",
+                  "value": "2026年10月29日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月04日16时00分",
+                  "value": "2026年10月29日16时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -2676,12 +2618,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月04日14时00分",
+                  "value": "2026年10月29日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月04日16时00分",
+                  "value": "2026年10月29日16时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -2747,12 +2689,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月04日14时00分",
+                  "value": "2026年10月29日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月04日16时00分",
+                  "value": "2026年10月29日16时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -2801,12 +2743,12 @@
           },
           "timestamp": {
             "start_timestamp": {
-              "value": "2026年11月04日14时00分",
+              "value": "2026年10月29日14时00分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
             "end_timestamp": {
-              "value": "2026年11月04日16时00分",
+              "value": "2026年10月29日16时00分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
@@ -2846,12 +2788,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月04日14时00分",
+                  "value": "2026年10月29日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月04日16时00分",
+                  "value": "2026年10月29日16时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -2891,281 +2833,9 @@
     ]
   },
   {
-    "session_id": "S-USER_003-12",
+    "session_id": "S-USER_003-10",
     "user_id": "USER_003",
-    "reference_time": "2026年11月07日18时30分",
-    "session_meta": {
-      "template_id": "T2-1",
-      "round_count": 2,
-      "intent_count": 1,
-      "memory_role": "reuse_session",
-      "skeleton_signature": "T2-1|2|1|I1:微信/视频通话/1/memory_filled/resolved|none",
-      "scenario": {
-        "environment": "转场大巴途中",
-        "blueprint_type": "sub_01",
-        "memory_action": "sub_memory_unaffected"
-      }
-    },
-    "event_sequence": [
-      {
-        "turn": 1,
-        "user": {
-          "utterance": "老规矩，在大巴转场途中，用微信做视频通话，画质按‘糊弄不过去就行’，帮我把保障开上。",
-          "action_types": [
-            "Create_Intent_Request",
-            "Inform_Slot"
-          ]
-        },
-        "agent": {
-          "utterance": "收到，我调取到之前登记的微信视频通话配置：720p、时延100ms以内，18时45分开始、19时45分结束，持续60min。确认按这套配置开通吗？",
-          "action_types": [
-            "Confirm_Slot"
-          ]
-        },
-        "related_intent_ids": [
-          "I1"
-        ],
-        "requested_params": [],
-        "turn_intents": [
-          {
-            "intent_id": "I1",
-            "status": "in_progress",
-            "closure_path": "memory_filled",
-            "expression_level": 1,
-            "intent": "微信视频通话保障",
-            "params": {
-              "application_name": {
-                "value": "微信",
-                "source_type": "Turn",
-                "source_ref": "U1"
-              },
-              "service_name": {
-                "value": "视频通话",
-                "source_type": "Turn",
-                "source_ref": "U1"
-              },
-              "resolution": {
-                "min_value": {
-                  "value": "720p",
-                  "source_type": "Memory",
-                  "source_ref": "SUB_001"
-                }
-              },
-              "rtt": {
-                "max_value": {
-                  "value": "100ms",
-                  "source_type": "Memory",
-                  "source_ref": "SUB_001"
-                }
-              },
-              "timestamp": {
-                "start_timestamp": {
-                  "value": "2026年11月07日18时45分",
-                  "source_type": "Memory",
-                  "source_ref": "SUB_001"
-                },
-                "end_timestamp": {
-                  "value": "2026年11月07日19时45分",
-                  "source_type": "Context",
-                  "source_ref": "SUB_001"
-                },
-                "duration": {
-                  "value": "60min",
-                  "source_type": "Memory",
-                  "source_ref": "SUB_001"
-                }
-              }
-            }
-          }
-        ]
-      },
-      {
-        "turn": 2,
-        "user": {
-          "utterance": "好的，确认按这个配置直接开通。",
-          "action_types": [
-            "Confirm_Slot"
-          ]
-        },
-        "agent": {
-          "utterance": "好的，已为您成功受理微信视频通话网络保障（720p / 时延≤100ms），祝您使用愉快！",
-          "action_types": [
-            "Acknowledge"
-          ]
-        },
-        "related_intent_ids": [
-          "I1"
-        ],
-        "requested_params": [],
-        "turn_intents": [
-          {
-            "intent_id": "I1",
-            "status": "resolved",
-            "closure_path": "memory_filled",
-            "expression_level": 1,
-            "intent": "微信视频通话保障",
-            "params": {
-              "application_name": {
-                "value": "微信",
-                "source_type": "Turn",
-                "source_ref": "U1"
-              },
-              "service_name": {
-                "value": "视频通话",
-                "source_type": "Turn",
-                "source_ref": "U1"
-              },
-              "resolution": {
-                "min_value": {
-                  "value": "720p",
-                  "source_type": "Memory",
-                  "source_ref": "SUB_001"
-                }
-              },
-              "rtt": {
-                "max_value": {
-                  "value": "100ms",
-                  "source_type": "Memory",
-                  "source_ref": "SUB_001"
-                }
-              },
-              "timestamp": {
-                "start_timestamp": {
-                  "value": "2026年11月07日18时45分",
-                  "source_type": "Memory",
-                  "source_ref": "SUB_001"
-                },
-                "end_timestamp": {
-                  "value": "2026年11月07日19时45分",
-                  "source_type": "Context",
-                  "source_ref": "SUB_001"
-                },
-                "duration": {
-                  "value": "60min",
-                  "source_type": "Memory",
-                  "source_ref": "SUB_001"
-                }
-              }
-            }
-          }
-        ]
-      }
-    ],
-    "intents": [
-      {
-        "intent_id": "I1",
-        "status": "resolved",
-        "closure_path": "memory_filled",
-        "expression_level": 1,
-        "intent": "微信视频通话保障",
-        "params": {
-          "application_name": {
-            "value": "微信",
-            "source_type": "Turn",
-            "source_ref": "U1"
-          },
-          "service_name": {
-            "value": "视频通话",
-            "source_type": "Turn",
-            "source_ref": "U1"
-          },
-          "resolution": {
-            "min_value": {
-              "value": "720p",
-              "source_type": "Memory",
-              "source_ref": "SUB_001"
-            }
-          },
-          "rtt": {
-            "max_value": {
-              "value": "100ms",
-              "source_type": "Memory",
-              "source_ref": "SUB_001"
-            }
-          },
-          "timestamp": {
-            "start_timestamp": {
-              "value": "2026年11月07日18时45分",
-              "source_type": "Memory",
-              "source_ref": "SUB_001"
-            },
-            "end_timestamp": {
-              "value": "2026年11月07日19时45分",
-              "source_type": "Context",
-              "source_ref": "SUB_001"
-            },
-            "duration": {
-              "value": "60min",
-              "source_type": "Memory",
-              "source_ref": "SUB_001"
-            }
-          }
-        }
-      }
-    ],
-    "relations": [],
-    "slot_updates": [
-      {
-        "intent_id": "I1",
-        "turn_updates": [
-          {
-            "turn": 1,
-            "params": {
-              "application_name": {
-                "value": "微信",
-                "source_type": "Turn",
-                "source_ref": "U1"
-              },
-              "service_name": {
-                "value": "视频通话",
-                "source_type": "Turn",
-                "source_ref": "U1"
-              },
-              "timestamp": {
-                "start_timestamp": {
-                  "value": "2026年11月07日18时45分",
-                  "source_type": "Memory",
-                  "source_ref": "SUB_001"
-                },
-                "end_timestamp": {
-                  "value": "2026年11月07日19时45分",
-                  "source_type": "Context",
-                  "source_ref": "SUB_001"
-                },
-                "duration": {
-                  "value": "60min",
-                  "source_type": "Memory",
-                  "source_ref": "SUB_001"
-                }
-              },
-              "resolution": {
-                "min_value": {
-                  "value": "720p",
-                  "source_type": "Memory",
-                  "source_ref": "SUB_001"
-                }
-              },
-              "rtt": {
-                "max_value": {
-                  "value": "100ms",
-                  "source_type": "Memory",
-                  "source_ref": "SUB_001"
-                }
-              }
-            }
-          },
-          {
-            "turn": 2,
-            "params": {}
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "session_id": "S-USER_003-13",
-    "user_id": "USER_003",
-    "reference_time": "2026年11月11日13时45分",
+    "reference_time": "2026年11月01日13时45分",
     "session_meta": {
       "template_id": "T2-3",
       "round_count": 2,
@@ -3176,7 +2846,10 @@
         "environment": "沿海暴雨强对流前沿现场",
         "blueprint_type": "event_override",
         "memory_action": "override_temporary_preference"
-      }
+      },
+      "memory_tier": "factual_memory",
+      "cold_hot_type": "hot_start",
+      "agility_factor": 0.5
     },
     "event_sequence": [
       {
@@ -3232,12 +2905,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月11日14时00分",
+                  "value": "2026年11月01日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月11日16时00分",
+                  "value": "2026年11月01日16时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -3304,12 +2977,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月11日14时00分",
+                  "value": "2026年11月01日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月11日16时00分",
+                  "value": "2026年11月01日16时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -3358,12 +3031,12 @@
           },
           "timestamp": {
             "start_timestamp": {
-              "value": "2026年11月11日14时00分",
+              "value": "2026年11月01日14时00分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
             "end_timestamp": {
-              "value": "2026年11月11日16时00分",
+              "value": "2026年11月01日16时00分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
@@ -3410,12 +3083,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月11日14时00分",
+                  "value": "2026年11月01日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月11日16时00分",
+                  "value": "2026年11月01日16时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -3451,9 +3124,9 @@
     ]
   },
   {
-    "session_id": "S-USER_003-14",
+    "session_id": "S-USER_003-11",
     "user_id": "USER_003",
-    "reference_time": "2026年11月15日13时45分",
+    "reference_time": "2026年11月04日13时45分",
     "session_meta": {
       "template_id": "T2-1",
       "round_count": 2,
@@ -3464,7 +3137,10 @@
         "environment": "市青年公益服务中心",
         "blueprint_type": "event_reuse",
         "memory_action": "reuse_long_term_rule_after_correction"
-      }
+      },
+      "memory_tier": "factual_memory",
+      "cold_hot_type": "hot_start",
+      "agility_factor": 0.5
     },
     "event_sequence": [
       {
@@ -3520,12 +3196,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月15日14时00分",
+                  "value": "2026年11月04日14时00分",
                   "source_type": "Memory",
                   "source_ref": "MF_001"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月15日16时00分",
+                  "value": "2026年11月04日16时00分",
                   "source_type": "Memory",
                   "source_ref": "MF_001"
                 },
@@ -3591,12 +3267,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月15日14时00分",
+                  "value": "2026年11月04日14时00分",
                   "source_type": "Memory",
                   "source_ref": "MF_001"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月15日16时00分",
+                  "value": "2026年11月04日16时00分",
                   "source_type": "Memory",
                   "source_ref": "MF_001"
                 },
@@ -3645,12 +3321,12 @@
           },
           "timestamp": {
             "start_timestamp": {
-              "value": "2026年11月15日14时00分",
+              "value": "2026年11月04日14时00分",
               "source_type": "Memory",
               "source_ref": "MF_001"
             },
             "end_timestamp": {
-              "value": "2026年11月15日16时00分",
+              "value": "2026年11月04日16时00分",
               "source_type": "Memory",
               "source_ref": "MF_001"
             },
@@ -3683,12 +3359,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月15日14时00分",
+                  "value": "2026年11月04日14时00分",
                   "source_type": "Memory",
                   "source_ref": "MF_001"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月15日16时00分",
+                  "value": "2026年11月04日16时00分",
                   "source_type": "Memory",
                   "source_ref": "MF_001"
                 },
@@ -3723,9 +3399,9 @@
     ]
   },
   {
-    "session_id": "S-USER_003-15",
+    "session_id": "S-USER_003-12",
     "user_id": "USER_003",
-    "reference_time": "2026年11月18日13时45分",
+    "reference_time": "2026年11月07日13时45分",
     "session_meta": {
       "template_id": "T2-10",
       "round_count": 2,
@@ -3746,7 +3422,31 @@
           "rtt_max": "30ms",
           "strategy": "抗衰落连续性优先"
         }
-      }
+      },
+      "experience_branching": {
+        "experience_id": "EXP_SEVERE_WEATHER_01",
+        "rule_title": "恶劣天气高衰减环境增强抗丢包加固策略",
+        "fast_path": {
+          "round_count": 1,
+          "closure_path": "fast_experience_closed_loop",
+          "trigger_condition": "Agent自主应用经验记忆，在首轮直接完成目标经验槽位推理与闭环受理",
+          "resolved_turn": 1,
+          "key_params_source": {
+            "source_type": "Experience",
+            "source_ref": "EXP_SEVERE_WEATHER_01"
+          }
+        },
+        "slow_path": {
+          "round_count": 3,
+          "closure_path": "clarification_after_correction",
+          "trigger_condition": "Agent缺乏经验记忆按字面直接办理，用户发起纠偏提醒，经历多轮确认后闭环",
+          "resolved_turn": 3,
+          "redundant_rounds": 2
+        }
+      },
+      "memory_tier": "experiential_memory",
+      "cold_hot_type": null,
+      "agility_factor": null
     },
     "experience_citation": {
       "experience_id": "EXP_SEVERE_WEATHER_01",
@@ -3812,12 +3512,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月18日14时00分",
+                  "value": "2026年11月07日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月18日16时00分",
+                  "value": "2026年11月07日16时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -3893,12 +3593,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月18日14时00分",
+                  "value": "2026年11月07日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月18日16时00分",
+                  "value": "2026年11月07日16时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -3947,12 +3647,12 @@
           },
           "timestamp": {
             "start_timestamp": {
-              "value": "2026年11月18日14时00分",
+              "value": "2026年11月07日14时00分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
             "end_timestamp": {
-              "value": "2026年11月18日16时00分",
+              "value": "2026年11月07日16时00分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
@@ -3999,12 +3699,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月18日14时00分",
+                  "value": "2026年11月07日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月18日16时00分",
+                  "value": "2026年11月07日16时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -4025,9 +3725,9 @@
     ]
   },
   {
-    "session_id": "S-USER_003-16",
+    "session_id": "S-USER_003-13",
     "user_id": "USER_003",
-    "reference_time": "2026年11月20日13时45分",
+    "reference_time": "2026年11月11日13时45分",
     "session_meta": {
       "template_id": "T2-9",
       "round_count": 2,
@@ -4045,7 +3745,31 @@
         "strategy_type": "negative_counterexample",
         "negative_counterexamples": "用户明确声明“无论多卡都必须保留 1080p 或 4K 原画录制”时，智能体不得强行覆盖，应提示风险后遵从用户指令。",
         "counterexample_applied": true
-      }
+      },
+      "experience_branching": {
+        "experience_id": "EXP_STADIUM_CONGESTION_01",
+        "rule_title": "极值与高密环境主动降画质保抗丢包平稳度",
+        "fast_path": {
+          "round_count": 1,
+          "closure_path": "fast_experience_closed_loop",
+          "trigger_condition": "Agent自主应用经验记忆，在首轮直接完成目标经验槽位推理与闭环受理",
+          "resolved_turn": 1,
+          "key_params_source": {
+            "source_type": "Experience",
+            "source_ref": "EXP_STADIUM_CONGESTION_01"
+          }
+        },
+        "slow_path": {
+          "round_count": 3,
+          "closure_path": "clarification_after_correction",
+          "trigger_condition": "Agent缺乏经验记忆按字面直接办理，用户发起纠偏提醒，经历多轮确认后闭环",
+          "resolved_turn": 3,
+          "redundant_rounds": 2
+        }
+      },
+      "memory_tier": "experiential_memory",
+      "cold_hot_type": null,
+      "agility_factor": null
     },
     "experience_citation": {
       "experience_id": "EXP_STADIUM_CONGESTION_01",
@@ -4108,12 +3832,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月20日14时00分",
+                  "value": "2026年11月11日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月20日16时00分",
+                  "value": "2026年11月11日16时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -4186,12 +3910,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月20日14时00分",
+                  "value": "2026年11月11日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月20日16时00分",
+                  "value": "2026年11月11日16时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -4240,12 +3964,12 @@
           },
           "timestamp": {
             "start_timestamp": {
-              "value": "2026年11月20日14时00分",
+              "value": "2026年11月11日14时00分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
             "end_timestamp": {
-              "value": "2026年11月20日16时00分",
+              "value": "2026年11月11日16时00分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
@@ -4292,12 +4016,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月20日14时00分",
+                  "value": "2026年11月11日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月20日16时00分",
+                  "value": "2026年11月11日16时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -4318,302 +4042,9 @@
     ]
   },
   {
-    "session_id": "S-USER_003-17",
+    "session_id": "S-USER_003-14",
     "user_id": "USER_003",
-    "reference_time": "2026年11月22日13时45分",
-    "session_meta": {
-      "template_id": "T2-6",
-      "round_count": 2,
-      "intent_count": 1,
-      "memory_role": "reuse_session",
-      "skeleton_signature": "T2-6|2|1|I1:腾讯会议/会议/1/working_record_reuse/resolved|none",
-      "scenario": {
-        "environment": "市青年公益服务中心",
-        "blueprint_type": "working_record_reuse",
-        "memory_action": "retrieve_working_record_reuse"
-      },
-      "working_memory_pointer": {
-        "target_record_id": "REC_mobile_persona_003_20261007_01",
-        "inferred_delta_days": 46,
-        "matched_application": "腾讯会议",
-        "matched_service": "会议",
-        "inherited_slots": {
-          "resolution": "1080p",
-          "rtt_max": "50ms",
-          "duration": "120min"
-        }
-      }
-    },
-    "working_memory_pointer": {
-      "target_record_id": "REC_mobile_persona_003_20261007_01",
-      "inferred_delta_days": 46,
-      "matched_application": "腾讯会议",
-      "matched_service": "会议",
-      "inherited_slots": {
-        "resolution": "1080p",
-        "rtt_max": "50ms",
-        "duration": "120min"
-      }
-    },
-    "event_sequence": [
-      {
-        "turn": 1,
-        "user": {
-          "utterance": "今天在市青年公益服务中心，调一下上个月初在市青年公益服务中心办的那个工单规格，今天也按那套来。",
-          "action_types": [
-            "Create_Intent_Request",
-            "Inform_Slot"
-          ]
-        },
-        "agent": {
-          "utterance": "收到，已为您跨期调取到上个月在市青年公益服务中心的腾讯会议会议历史工单（画质1080p、时延≤50ms）。请问今天具体的保障时间是几点到几点呢？",
-          "action_types": [
-            "Confirm_Slot",
-            "Request_Slot"
-          ]
-        },
-        "related_intent_ids": [
-          "I1"
-        ],
-        "requested_params": [
-          "timestamp"
-        ],
-        "turn_intents": [
-          {
-            "intent_id": "I1",
-            "status": "in_progress",
-            "closure_path": "working_record_reuse",
-            "expression_level": 1,
-            "intent": "腾讯会议会议保障",
-            "params": {
-              "application_name": {
-                "value": "腾讯会议",
-                "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_003_20261007_01"
-              },
-              "service_name": {
-                "value": "会议",
-                "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_003_20261007_01"
-              },
-              "resolution": {
-                "min_value": {
-                  "value": "1080p",
-                  "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261007_01"
-                }
-              },
-              "rtt": {
-                "max_value": {
-                  "value": "50ms",
-                  "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261007_01"
-                }
-              }
-            }
-          }
-        ],
-        "working_memory_pointer": {
-          "target_record_id": "REC_mobile_persona_003_20261007_01",
-          "inferred_delta_days": 46,
-          "matched_application": "腾讯会议",
-          "matched_service": "会议",
-          "inherited_slots": {
-            "resolution": "1080p",
-            "rtt_max": "50ms",
-            "duration": "120min"
-          }
-        }
-      },
-      {
-        "turn": 2,
-        "user": {
-          "utterance": "今天是从14时00分到16时00分，持续120min。",
-          "action_types": [
-            "Confirm_Slot",
-            "Inform_Slot"
-          ]
-        },
-        "agent": {
-          "utterance": "好的，已按一个月前历史工单规格为您开通今日腾讯会议会议保障（1080p / 时延≤50ms，时段14时00分至16时00分）。祝您工作顺利！",
-          "action_types": [
-            "Acknowledge"
-          ]
-        },
-        "related_intent_ids": [
-          "I1"
-        ],
-        "requested_params": [],
-        "turn_intents": [
-          {
-            "intent_id": "I1",
-            "status": "resolved",
-            "closure_path": "working_record_reuse",
-            "expression_level": 1,
-            "intent": "腾讯会议会议保障",
-            "params": {
-              "application_name": {
-                "value": "腾讯会议",
-                "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_003_20261007_01"
-              },
-              "service_name": {
-                "value": "会议",
-                "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_003_20261007_01"
-              },
-              "resolution": {
-                "min_value": {
-                  "value": "1080p",
-                  "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261007_01"
-                }
-              },
-              "rtt": {
-                "max_value": {
-                  "value": "50ms",
-                  "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261007_01"
-                }
-              },
-              "timestamp": {
-                "start_timestamp": {
-                  "value": "2026年11月22日14时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U2"
-                },
-                "end_timestamp": {
-                  "value": "2026年11月22日16时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U2"
-                },
-                "duration": {
-                  "value": "120min",
-                  "source_type": "Turn",
-                  "source_ref": "U2"
-                }
-              }
-            }
-          }
-        ]
-      }
-    ],
-    "intents": [
-      {
-        "intent_id": "I1",
-        "status": "resolved",
-        "closure_path": "working_record_reuse",
-        "expression_level": 1,
-        "intent": "腾讯会议会议保障",
-        "params": {
-          "application_name": {
-            "value": "腾讯会议",
-            "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_003_20261007_01"
-          },
-          "service_name": {
-            "value": "会议",
-            "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_003_20261007_01"
-          },
-          "resolution": {
-            "min_value": {
-              "value": "1080p",
-              "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_003_20261007_01"
-            }
-          },
-          "rtt": {
-            "max_value": {
-              "value": "50ms",
-              "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_003_20261007_01"
-            }
-          },
-          "timestamp": {
-            "start_timestamp": {
-              "value": "2026年11月22日14时00分",
-              "source_type": "Turn",
-              "source_ref": "U2"
-            },
-            "end_timestamp": {
-              "value": "2026年11月22日16时00分",
-              "source_type": "Turn",
-              "source_ref": "U2"
-            },
-            "duration": {
-              "value": "120min",
-              "source_type": "Turn",
-              "source_ref": "U2"
-            }
-          }
-        }
-      }
-    ],
-    "relations": [],
-    "slot_updates": [
-      {
-        "intent_id": "I1",
-        "turn_updates": [
-          {
-            "turn": 1,
-            "params": {
-              "application_name": {
-                "value": "腾讯会议",
-                "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_003_20261007_01"
-              },
-              "service_name": {
-                "value": "会议",
-                "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_003_20261007_01"
-              },
-              "resolution": {
-                "min_value": {
-                  "value": "1080p",
-                  "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261007_01"
-                }
-              },
-              "rtt": {
-                "max_value": {
-                  "value": "50ms",
-                  "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261007_01"
-                }
-              }
-            }
-          },
-          {
-            "turn": 2,
-            "params": {
-              "timestamp": {
-                "start_timestamp": {
-                  "value": "2026年11月22日14时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U2"
-                },
-                "end_timestamp": {
-                  "value": "2026年11月22日16时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U2"
-                },
-                "duration": {
-                  "value": "120min",
-                  "source_type": "Turn",
-                  "source_ref": "U2"
-                }
-              }
-            }
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "session_id": "S-USER_003-18",
-    "user_id": "USER_003",
-    "reference_time": "2026年11月25日13时45分",
+    "reference_time": "2026年11月15日13时45分",
     "session_meta": {
       "template_id": "T2-7",
       "round_count": 2,
@@ -4626,25 +4057,28 @@
         "memory_action": "reschedule_working_record"
       },
       "working_memory_pointer": {
-        "target_record_id": "REC_mobile_persona_003_20261122_15",
-        "inferred_delta_days": 3,
+        "target_record_id": "REC_mobile_persona_003_20261111_46",
+        "inferred_delta_days": 4,
         "matched_application": "腾讯会议",
         "matched_service": "会议",
         "modified_slots": {
-          "start_timestamp": "2026年11月25日14时00分",
-          "end_timestamp": "2026年11月25日16时00分"
+          "start_timestamp": "2026年11月15日14时00分",
+          "end_timestamp": "2026年11月15日16时00分"
         },
         "reschedule_direction": "advance"
-      }
+      },
+      "memory_tier": "working_memory",
+      "cold_hot_type": null,
+      "agility_factor": null
     },
     "working_memory_pointer": {
-      "target_record_id": "REC_mobile_persona_003_20261122_15",
-      "inferred_delta_days": 3,
+      "target_record_id": "REC_mobile_persona_003_20261111_46",
+      "inferred_delta_days": 4,
       "matched_application": "腾讯会议",
       "matched_service": "会议",
       "modified_slots": {
-        "start_timestamp": "2026年11月25日14时00分",
-        "end_timestamp": "2026年11月25日16时00分"
+        "start_timestamp": "2026年11月15日14时00分",
+        "end_timestamp": "2026年11月15日16时00分"
       },
       "reschedule_direction": "advance"
     },
@@ -4679,55 +4113,55 @@
               "application_name": {
                 "value": "腾讯会议",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_003_20261122_15"
+                "source_ref": "REC_mobile_persona_003_20261111_46"
               },
               "service_name": {
                 "value": "会议",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_003_20261122_15"
+                "source_ref": "REC_mobile_persona_003_20261111_46"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261122_15"
+                  "source_ref": "REC_mobile_persona_003_20261111_46"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261122_15"
+                  "source_ref": "REC_mobile_persona_003_20261111_46"
                 }
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月25日14时00分",
+                  "value": "2026年11月15日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月25日16时00分",
+                  "value": "2026年11月15日16时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "duration": {
                   "value": "120min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261122_15"
+                  "source_ref": "REC_mobile_persona_003_20261111_46"
                 }
               }
             }
           }
         ],
         "working_memory_pointer": {
-          "target_record_id": "REC_mobile_persona_003_20261122_15",
-          "inferred_delta_days": 3,
+          "target_record_id": "REC_mobile_persona_003_20261111_46",
+          "inferred_delta_days": 4,
           "matched_application": "腾讯会议",
           "matched_service": "会议",
           "modified_slots": {
-            "start_timestamp": "2026年11月25日14时00分",
-            "end_timestamp": "2026年11月25日16时00分"
+            "start_timestamp": "2026年11月15日14时00分",
+            "end_timestamp": "2026年11月15日16时00分"
           },
           "reschedule_direction": "advance"
         }
@@ -4761,42 +4195,42 @@
               "application_name": {
                 "value": "腾讯会议",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_003_20261122_15"
+                "source_ref": "REC_mobile_persona_003_20261111_46"
               },
               "service_name": {
                 "value": "会议",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_003_20261122_15"
+                "source_ref": "REC_mobile_persona_003_20261111_46"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261122_15"
+                  "source_ref": "REC_mobile_persona_003_20261111_46"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261122_15"
+                  "source_ref": "REC_mobile_persona_003_20261111_46"
                 }
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月25日14时00分",
+                  "value": "2026年11月15日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月25日16时00分",
+                  "value": "2026年11月15日16时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "duration": {
                   "value": "120min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261122_15"
+                  "source_ref": "REC_mobile_persona_003_20261111_46"
                 }
               }
             }
@@ -4815,42 +4249,42 @@
           "application_name": {
             "value": "腾讯会议",
             "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_003_20261122_15"
+            "source_ref": "REC_mobile_persona_003_20261111_46"
           },
           "service_name": {
             "value": "会议",
             "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_003_20261122_15"
+            "source_ref": "REC_mobile_persona_003_20261111_46"
           },
           "resolution": {
             "min_value": {
               "value": "1080p",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_003_20261122_15"
+              "source_ref": "REC_mobile_persona_003_20261111_46"
             }
           },
           "rtt": {
             "max_value": {
               "value": "50ms",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_003_20261122_15"
+              "source_ref": "REC_mobile_persona_003_20261111_46"
             }
           },
           "timestamp": {
             "start_timestamp": {
-              "value": "2026年11月25日14时00分",
+              "value": "2026年11月15日14时00分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
             "end_timestamp": {
-              "value": "2026年11月25日16时00分",
+              "value": "2026年11月15日16时00分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
             "duration": {
               "value": "120min",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_003_20261122_15"
+              "source_ref": "REC_mobile_persona_003_20261111_46"
             }
           }
         }
@@ -4867,42 +4301,42 @@
               "application_name": {
                 "value": "腾讯会议",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_003_20261122_15"
+                "source_ref": "REC_mobile_persona_003_20261111_46"
               },
               "service_name": {
                 "value": "会议",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_003_20261122_15"
+                "source_ref": "REC_mobile_persona_003_20261111_46"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261122_15"
+                  "source_ref": "REC_mobile_persona_003_20261111_46"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261122_15"
+                  "source_ref": "REC_mobile_persona_003_20261111_46"
                 }
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月25日14时00分",
+                  "value": "2026年11月15日14时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月25日16时00分",
+                  "value": "2026年11月15日16时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "duration": {
                   "value": "120min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261122_15"
+                  "source_ref": "REC_mobile_persona_003_20261111_46"
                 }
               }
             }
@@ -4916,20 +4350,23 @@
     ]
   },
   {
-    "session_id": "S-USER_003-19",
+    "session_id": "S-USER_003-15",
     "user_id": "USER_003",
-    "reference_time": "2026年11月28日20时00分",
+    "reference_time": "2026年11月18日20时00分",
     "session_meta": {
       "template_id": "T2-1",
-      "round_count": 2,
+      "round_count": 3,
       "intent_count": 1,
       "memory_role": "evidence_session",
-      "skeleton_signature": "T2-1|2|1|I1:哔哩哔哩/开直播/1/clarified/resolved|none",
+      "skeleton_signature": "T2-1|3|1|I1:哔哩哔哩/开直播/1/clarified/resolved|none",
       "scenario": {
         "environment": "驻地酒店商务中心",
         "blueprint_type": "sub_02",
         "memory_action": "establish_sub_storyline_2"
-      }
+      },
+      "memory_tier": "factual_memory",
+      "cold_hot_type": "cold_start",
+      "agility_factor": 0.0
     },
     "event_sequence": [
       {
@@ -4975,7 +4412,7 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月28日20时15分",
+                  "value": "2026年11月18日20时15分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
@@ -4988,6 +4425,77 @@
         "turn": 2,
         "user": {
           "utterance": "好的，画质用1080p，时延80ms以内，预计持续90min（到21时45分）。以后我说‘画面通透’，画质就是1080p。以后只要我处于【驻地酒店休息区】，就按老规矩来：哔哩哔哩开直播、1080p、80ms以内，帮我把这个习惯记好，别掉链子。",
+          "action_types": [
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，已为您登记老规矩习惯。确认按1080p、80ms以内立即为您开通本次保障吗？",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "clarify",
+            "expression_level": 1,
+            "intent": "哔哩哔哩开直播保障",
+            "params": {
+              "application_name": {
+                "value": "哔哩哔哩",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "开直播",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "80ms",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月18日20时15分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月18日21时45分",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                },
+                "duration": {
+                  "value": "90min",
+                  "source_type": "Turn",
+                  "source_ref": "U2"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 3,
+        "user": {
+          "utterance": "对，确认直接开通。",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -5036,12 +4544,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月28日20时15分",
+                  "value": "2026年11月18日20时15分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月28日21时45分",
+                  "value": "2026年11月18日21时45分",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 },
@@ -5090,12 +4598,12 @@
           },
           "timestamp": {
             "start_timestamp": {
-              "value": "2026年11月28日20时15分",
+              "value": "2026年11月18日20时15分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
             "end_timestamp": {
-              "value": "2026年11月28日21时45分",
+              "value": "2026年11月18日21时45分",
               "source_type": "Turn",
               "source_ref": "U2"
             },
@@ -5128,7 +4636,7 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月28日20时15分",
+                  "value": "2026年11月18日20时15分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
@@ -5154,7 +4662,7 @@
               },
               "timestamp": {
                 "end_timestamp": {
-                  "value": "2026年11月28日21时45分",
+                  "value": "2026年11月18日21时45分",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 },
@@ -5165,86 +4673,46 @@
                 }
               }
             }
+          },
+          {
+            "turn": 3,
+            "params": {}
           }
         ]
       }
     ]
   },
   {
-    "session_id": "S-USER_003-20",
+    "session_id": "S-USER_003-16",
     "user_id": "USER_003",
-    "reference_time": "2026年11月30日10时00分",
+    "reference_time": "2026年11月20日13时45分",
     "session_meta": {
-      "template_id": "T2-8",
+      "template_id": "T2-1",
       "round_count": 1,
       "intent_count": 1,
-      "memory_role": "distractor_session",
-      "skeleton_signature": "T2-8|1|1|I1:历史工单流水对账核查/0/direct/resolved|none",
+      "memory_role": "reuse_session",
+      "skeleton_signature": "T2-1|1|1|I1:腾讯会议/会议/1/memory_filled/resolved|none",
       "scenario": {
-        "environment": "工单系统对账窗口",
-        "blueprint_type": "working_record_reconcile",
-        "memory_action": "reconcile_working_records"
+        "environment": "市青年公益服务中心",
+        "blueprint_type": "main_recovery",
+        "memory_action": "recover_long_term_rule"
       },
-      "working_memory_query": {
-        "reconciled_record_ids": [
-          "REC_mobile_persona_003_20261007_01",
-          "REC_mobile_persona_003_20261011_02",
-          "REC_mobile_persona_003_20261014_03",
-          "REC_mobile_persona_003_20261015_04",
-          "REC_mobile_persona_003_20261021_05",
-          "REC_mobile_persona_003_20261024_06",
-          "REC_mobile_persona_003_20261028_07",
-          "REC_mobile_persona_003_20261101_08",
-          "REC_mobile_persona_003_20261104_09",
-          "REC_mobile_persona_003_20261107_10",
-          "REC_mobile_persona_003_20261111_11",
-          "REC_mobile_persona_003_20261115_12",
-          "REC_mobile_persona_003_20261118_13",
-          "REC_mobile_persona_003_20261120_14",
-          "REC_mobile_persona_003_20261122_15",
-          "REC_mobile_persona_003_20261125_16",
-          "REC_mobile_persona_003_20261128_17"
-        ],
-        "total_orders": 17,
-        "total_duration_minutes": 1890,
-        "reconcile_scope": "全月总对账"
-      }
-    },
-    "working_memory_query": {
-      "reconciled_record_ids": [
-        "REC_mobile_persona_003_20261007_01",
-        "REC_mobile_persona_003_20261011_02",
-        "REC_mobile_persona_003_20261014_03",
-        "REC_mobile_persona_003_20261015_04",
-        "REC_mobile_persona_003_20261021_05",
-        "REC_mobile_persona_003_20261024_06",
-        "REC_mobile_persona_003_20261028_07",
-        "REC_mobile_persona_003_20261101_08",
-        "REC_mobile_persona_003_20261104_09",
-        "REC_mobile_persona_003_20261107_10",
-        "REC_mobile_persona_003_20261111_11",
-        "REC_mobile_persona_003_20261115_12",
-        "REC_mobile_persona_003_20261118_13",
-        "REC_mobile_persona_003_20261120_14",
-        "REC_mobile_persona_003_20261122_15",
-        "REC_mobile_persona_003_20261125_16",
-        "REC_mobile_persona_003_20261128_17"
-      ],
-      "total_orders": 17,
-      "total_duration_minutes": 1890,
-      "reconcile_scope": "全月总对账"
+      "memory_tier": "factual_memory",
+      "cold_hot_type": "hot_start",
+      "agility_factor": 1.0
     },
     "event_sequence": [
       {
         "turn": 1,
         "user": {
-          "utterance": "帮我做个全月保障总对账，查下这一个月总共开了几次保障，累计多长时间？",
+          "utterance": "老规矩开保障，别掉链子。",
           "action_types": [
-            "Create_Intent_Request"
+            "Create_Intent_Request",
+            "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "已为您生成全月历史工单总对账报表：本月您累计成功办理了 17 次移动网络保障，累计保障总时长达 1890 分钟，涵盖各类重点场景，所有工单全部履约闭环。",
+          "utterance": "好的，已为您直接按老规矩开通腾讯会议会议保障（1080p / 时延≤50ms），祝您使用愉快！",
           "action_types": [
             "Acknowledge"
           ]
@@ -5257,49 +4725,161 @@
           {
             "intent_id": "I1",
             "status": "resolved",
-            "closure_path": "direct",
-            "expression_level": 0,
-            "intent": "历史工单流水对账核查",
-            "params": {}
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "腾讯会议会议保障",
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月20日14时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月20日16时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
           }
-        ],
-        "working_memory_query": {
-          "reconciled_record_ids": [
-            "REC_mobile_persona_003_20261007_01",
-            "REC_mobile_persona_003_20261011_02",
-            "REC_mobile_persona_003_20261014_03",
-            "REC_mobile_persona_003_20261015_04",
-            "REC_mobile_persona_003_20261021_05",
-            "REC_mobile_persona_003_20261024_06",
-            "REC_mobile_persona_003_20261028_07",
-            "REC_mobile_persona_003_20261101_08",
-            "REC_mobile_persona_003_20261104_09",
-            "REC_mobile_persona_003_20261107_10",
-            "REC_mobile_persona_003_20261111_11",
-            "REC_mobile_persona_003_20261115_12",
-            "REC_mobile_persona_003_20261118_13",
-            "REC_mobile_persona_003_20261120_14",
-            "REC_mobile_persona_003_20261122_15",
-            "REC_mobile_persona_003_20261125_16",
-            "REC_mobile_persona_003_20261128_17"
-          ],
-          "total_orders": 17,
-          "total_duration_minutes": 1890,
-          "reconcile_scope": "全月总对账"
-        }
+        ]
       }
     ],
     "intents": [
       {
         "intent_id": "I1",
         "status": "resolved",
-        "closure_path": "direct",
-        "expression_level": 0,
-        "intent": "历史工单流水对账核查",
-        "params": {}
+        "closure_path": "memory_filled",
+        "expression_level": 1,
+        "intent": "腾讯会议会议保障",
+        "params": {
+          "application_name": {
+            "value": "腾讯会议",
+            "source_type": "Memory",
+            "source_ref": "MF_001"
+          },
+          "service_name": {
+            "value": "会议",
+            "source_type": "Memory",
+            "source_ref": "MF_001"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "1080p",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "50ms",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年11月20日14时00分",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            },
+            "end_timestamp": {
+              "value": "2026年11月20日16时00分",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            },
+            "duration": {
+              "value": "120min",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          }
+        }
       }
     ],
     "relations": [],
-    "slot_updates": []
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月20日14时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月20日16时00分",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
   }
 ]
