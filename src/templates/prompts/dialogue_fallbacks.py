@@ -182,7 +182,11 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
             return f"你好，需要给{app}{srv}做一个网络保障，时间是今天{tp['start_timestamp'].split('日')[-1]}开始。"
         elif role in ["reinforcement_session", "reuse_session"]:
             if s_plan.get("agility_factor") == 1.0:
-                return "老规矩开保障，别掉链子。"
+                if trig_type == "time_periodic":
+                    time_prompt = "午间例行这个时候" if period_type == "daily" else ("每月例会这个时候" if period_type == "monthly" else "每周例行这个时候")
+                    return f"老规矩，{time_prompt}，用{app}做{srv}，帮我把保障开上，别掉链子。"
+                else:
+                    return f"老规矩，在{env}，用{app}做{srv}，帮我把保障开上，别掉链子。"
             memory_hints = {
                 "application_alias": f"用{small_alias}做{srv}",
                 "service_default_app": f"做{small_alias}，应用按默认的",
@@ -192,7 +196,11 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
                 "period_alias": f"按‘{small_alias}’的时间，用{app}做{srv}",
             }
             memory_hint = memory_hints.get(small_memory.get("type"), f"用{app}做{srv}")
-            return f"老规矩，在{env}，{memory_hint}，帮我把保障开上。"
+            if trig_type == "time_periodic":
+                p_text = "午间例行" if period_type == "daily" else ("每月例会" if period_type == "monthly" else "每周例行")
+                return f"老规矩，{p_text}，在{env}，{memory_hint}，帮我把保障开上。"
+            else:
+                return f"老规矩，在{env}，{memory_hint}，帮我把保障开上。"
         else:
             return f"你好，需要给{app_alias}{srv_alias}做一个网络保障，时间是今天{tp['start_timestamp'].split('日')[-1]}开始。"
     else:
@@ -345,7 +353,9 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
         return f"收到，已为您开通{app}{srv}网络保障：画质{res}，时延上限{rtt}，保障时间{tp['start_timestamp']}至{tp['end_timestamp']}（共{tp['duration']}）。祝您使用顺利！"
     elif is_last:
         if s_plan.get("agility_factor") == 1.0 and role in ["reinforcement_session", "reuse_session"]:
-            return f"好的，已为您直接按老规矩开通{app}{srv}保障（{res} / 时延≤{rtt}），祝您使用愉快！"
+            start_t = tp['start_timestamp'].split('日')[-1]
+            end_t = tp['end_timestamp'].split('日')[-1]
+            return f"好的，已按老规矩为您开通{app}{srv}网络保障（{res} / 时延≤{rtt}，时段{start_t}至{end_t}），祝您使用愉快！"
         elif role == "evidence_session" and decl_mode == "explicit_declaration":
             return f"好的，已为您成功受理本次保障，并已为您将该配置记录为长期老规矩，祝您使用愉快！"
         elif role == "reinforcement_session" and decl_mode == "implicit_induction" and s_plan.get("session_id", "").endswith("-03"):
