@@ -277,6 +277,21 @@ class MemoryTracker:
                 "description": f"用户发起工单流水账对账核查，Agent 检索统计已开通的 {total_orders} 次保障记录并输出清单明细。",
             })
 
+        elif b_type == "experience_learning":
+            exp_id = s_plan.get("experience_id") or s_plan.get("experience_citation", {}).get("experience_id", "EXP_01")
+            exp_title = s_plan.get("experience_citation", {}).get("title", "专家避坑经验")
+            memory_events.append({
+                "event_type": "crystallize_experience",
+                "experience_id": exp_id,
+                "description": f"用户针对历史踩坑故障进行严肃反馈与经验指示，Agent 深刻反思并沉淀【{exp_title}】({exp_id})入经验库。",
+                "crystallized_slots": ["experience_policy", "trigger_conditions"]
+            })
+            if "active_experiences" not in self.active_memories:
+                self.active_memories["active_experiences"] = []
+            if exp_id not in self.active_memories["active_experiences"]:
+                self.active_memories["active_experiences"].append(exp_id)
+
+
         elif b_type == "proactive_experience":
             exp = s_plan.get("experience_citation", {})
             exp_id = exp.get("experience_id", "EXP_STADIUM_CONGESTION_01")

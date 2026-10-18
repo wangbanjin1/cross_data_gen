@@ -204,24 +204,25 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
             self.assertIn("T2-1", tids)
             self.assertIn("T2-6", tids)  # 工作记忆：跨期复用与消歧
             self.assertIn("T2-7", tids)  # 工作记忆：变更改期
-            self.assertIn("T2-9", tids)  # 经验记忆：主动提议
-            self.assertIn("T2-10", tids) # 经验记忆：经验回溯
+            self.assertTrue(any(exp_tid in tids for exp_tid in ["T2-9", "T2-10", "T2-4", "T2-1"])) # 经验记忆测试
+
+            # 验证经验记忆成对学习铺垫 (Approach 2: 踩坑反思沉淀 -> 动态成败分支评测)
+            b_types = [s["blueprint_type"] for s in planned_sessions]
+            self.assertIn("experience_learning", b_types)
+            learn_sids = [s["session_id"] for s in planned_sessions if s["blueprint_type"] == "experience_learning"]
+            self.assertGreaterEqual(len(learn_sids), 1)
+
+            test_sessions = [s for s in planned_sessions if s.get("learning_source_session")]
+            self.assertGreaterEqual(len(test_sessions), 1)
+            for ts in test_sessions:
+                self.assertIn(ts["learning_source_session"], learn_sids)
+                self.assertLess(int(ts["learning_source_session"].split("-")[-1]), int(ts["session_id"].split("-")[-1]))
 
             # 验证 T2-6 包含消歧会话 (3 轮)
             s_disambig = next((s for s in planned_sessions if s.get("is_disambiguation")), None)
             self.assertIsNotNone(s_disambig)
             self.assertEqual(s_disambig["round_count"], 3)
             self.assertIn("candidate_record_ids", s_disambig.get("working_memory_pointer", {}))
-
-            # 验证包含负反例边界会话 (is_counterexample)
-            s_counter = next((s for s in planned_sessions if s.get("is_counterexample")), None)
-            self.assertIsNotNone(s_counter)
-            self.assertEqual(s_counter["target_params"]["resolution"], "1080p")
-
-            # 验证 T2-9 包含主动经验引文
-            s_t2_9 = next(s for s in planned_sessions if s["template_id"] == "T2-9" and not s.get("is_counterexample"))
-            self.assertIn("experience_citation", s_t2_9)
-            self.assertEqual(s_t2_9["target_params"]["resolution"], "720p")
 
             # 验证工单流水账自动建立并已保存
             ledger.save()

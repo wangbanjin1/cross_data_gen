@@ -191,8 +191,11 @@ class DynamicTimelinePlanner:
         main_env_desc = cls._determine_concrete_venue(persona, main_mt, storyline_trigger_type, llm=llm)
         main_trigger_desc = raw_trig_cond if raw_trig_cond else f"在【{main_env_desc}】例行开展业务"
 
-        # 会话数量支持根据画像与业务情境自然排期（16 轮深度认知演化）
-        target_count = 16
+        # 会话数量支持根据画像与业务情境自然排期（16 ~ 20 轮深度认知演化）
+        target_count = 16 + (uid_num % 5)
+
+        # 动态筛选最适配当前画像的 1~2 个经验记忆场景（其余经验插槽自然降级为常规事实/工作记忆）
+        selected_exp_ids = experience_bank.select_persona_experiences(persona, target_count=2)
 
         blueprint_configs = get_session_blueprints(
             main_mt=main_mt,
@@ -206,10 +209,14 @@ class DynamicTimelinePlanner:
             main_env_desc=main_env_desc,
             main_trigger_desc=main_trigger_desc,
             target_count=target_count,
+            selected_exp_ids=selected_exp_ids,
         )
+
+        tag_to_sid = {cfg["tag"]: f"S-{user_id}-{cfg['idx']:02d}" for cfg in blueprint_configs}
 
         sessions = []
         for cfg in blueprint_configs:
+            learning_source_session = tag_to_sid.get(cfg.get("learning_source_session_tag"))
             src = cfg["source"]
             is_override = "override" in cfg and cfg["type"] == "event_override"
             res = cfg["override"].get("resolution", "720p") if is_override else (
@@ -251,7 +258,55 @@ class DynamicTimelinePlanner:
             is_counterexample = cfg.get("is_counterexample", False)
             is_disambig = (cfg.get("tag") == "wm_disambig")
 
-            if template_id == "T2-6":
+            if cfg.get("experience_id"):
+                exp_id = cfg["experience_id"]
+                exp = experience_bank.find_by_id(exp_id) or {}
+                experience_citation = {
+                    "experience_id": exp.get("experience_id", exp_id),
+                    "title": exp.get("title", "ReasoningBank经验策略"),
+                    "strategy_type": exp.get("strategy_type", "proactive_suggestion"),
+                    "suggested_adjustments": exp.get("recommended_adjustments", {})
+                }
+                if exp_id == "EXP_PREWARM_BUFFER_01":
+                    res = src.get("preferred_params", {}).get("resolution") or "1080p"
+                    rtt = src.get("preferred_params", {}).get("rtt_max") or "50ms"
+                elif exp_id == "EXP_ORDER_QUALITY_DISAMBIGUATION_01":
+                    prior_recs = working_ledger.query_prior_records(cfg["ref_time"])
+                    target_rec = next((r for r in prior_recs if r.get("notes") != "network_jitter"), prior_recs[0] if prior_recs else None)
+                    if target_rec:
+                        working_memory_pointer = working_ledger.generate_session_pointer(target_rec, cfg["ref_time"])
+                        working_memory_pointer["quality_filtered"] = True
+                        working_memory_pointer["selected_order_quality"] = "flawless_zero_packet_loss"
+                    else:
+                        working_memory_pointer = {
+                            "target_record_id": f"REC_{user_id}_20261010_01",
+                            "candidate_record_ids": [f"REC_{user_id}_20261010_01", f"REC_{user_id}_20261013_02"],
+                            "inferred_delta_days": 7,
+                            "matched_application": src["application_name"],
+                            "matched_service": src["service_name"],
+                            "inherited_slots": {"resolution": res, "rtt_max": rtt, "duration": cfg["dur"]},
+                            "quality_filtered": True,
+                            "selected_order_quality": "flawless_zero_packet_loss"
+                        }
+                elif exp_id == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
+                    prior_recs = working_ledger.query_prior_records(cfg["ref_time"])
+                    if prior_recs:
+                        target_rec = prior_recs[-1]
+                        working_memory_pointer = {
+                            "target_record_id": target_rec["record_id"],
+                            "arbitration_type": "handover_early_termination",
+                            "handover_timestamp": cfg["start"],
+                            "original_scheduled_end": target_rec.get("end_timestamp"),
+                            "conflict_resolved": True
+                        }
+                    else:
+                        working_memory_pointer = {
+                            "target_record_id": f"REC_{user_id}_PRIOR",
+                            "arbitration_type": "handover_early_termination",
+                            "handover_timestamp": cfg["start"],
+                            "conflict_resolved": True
+                        }
+            elif template_id == "T2-6":
                 is_long_reuse = (cfg.get("tag") == "wm_long_reuse")
                 prior_recs = working_ledger.query_prior_records(cfg["ref_time"])
                 if is_long_reuse and prior_recs:
@@ -313,7 +368,7 @@ class DynamicTimelinePlanner:
                     "reconcile_scope": "全月总对账" if is_month_end else "半月阶段对账"
                 }
             elif template_id == "T2-9":
-                exp = experience_bank.match_proactive_experience(cfg["env"], task_name) or experience_bank.find_by_id("EXP_STADIUM_CONGESTION_01")
+                exp = experience_bank.find_by_id("EXP_PREWARM_BUFFER_01") or experience_bank.match_proactive_experience(cfg["env"], task_name) or experience_bank.find_by_id("EXP_STADIUM_CONGESTION_01")
                 if is_counterexample:
                     experience_citation = {
                         "experience_id": exp["experience_id"],
@@ -332,18 +387,16 @@ class DynamicTimelinePlanner:
                         "suggested_adjustments": exp.get("recommended_adjustments", {}),
                         "negotiation_required": (round_count == 3)
                     }
-                    res = exp.get("recommended_adjustments", {}).get("resolution", "720p")
-                    rtt = exp.get("recommended_adjustments", {}).get("rtt_max", "30ms")
+                    res = exp.get("recommended_adjustments", {}).get("resolution", "1080p")
+                    rtt = exp.get("recommended_adjustments", {}).get("rtt_max", "50ms")
             elif template_id == "T2-10":
-                exp = experience_bank.find_by_id("EXP_SEVERE_WEATHER_01")
+                exp = experience_bank.find_by_id("EXP_OVERLAPPING_ORDER_RESOLUTION_01") or experience_bank.find_by_id("EXP_SEVERE_WEATHER_01")
                 experience_citation = {
                     "experience_id": exp["experience_id"],
                     "title": exp["title"],
                     "strategy_type": exp["strategy_type"],
                     "suggested_adjustments": exp.get("recommended_adjustments", {})
                 }
-                res = exp.get("recommended_adjustments", {}).get("resolution", "720p")
-                rtt = exp.get("recommended_adjustments", {}).get("rtt_max", "30ms")
 
             s_obj = {
                 "session_id": f"S-{user_id}-{cfg['idx']:02d}",
@@ -382,6 +435,12 @@ class DynamicTimelinePlanner:
                 "experience_citation": experience_citation,
                 "is_counterexample": is_counterexample,
                 "is_disambiguation": is_disambig,
+                "second_source": cfg.get("second_source"),
+                "nominal_start": cfg.get("nominal_start"),
+                "nominal_dur": cfg.get("nominal_dur"),
+                "holiday_defer_date": cfg.get("holiday_defer_date"),
+                "learning_source_session": learning_source_session,
+                "experience_id": cfg.get("experience_id"),
             }
 
             # 若为真实开通的保障业务（非纯域外拒绝与对账），将单据记入工单账本

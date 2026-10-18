@@ -43,14 +43,14 @@ class BatchPipeline:
         with open(self.ckpt_path, "w", encoding="utf-8") as f:
             json.dump(self.checkpoint, f, ensure_ascii=False, indent=2)
 
-    def process_single_persona(self, raw_persona: dict) -> bool:
+    def process_single_persona(self, raw_persona: dict, force: bool = False) -> bool:
         pid = raw_persona.get("persona_id")
 
         # 每个样本独立文件夹
         sample_dir = self.output_dir / pid
         sample_dir.mkdir(parents=True, exist_ok=True)
 
-        if pid in self.checkpoint["completed_personas"] and (sample_dir / "sessions.jsonl").exists():
+        if not force and pid in self.checkpoint["completed_personas"] and (sample_dir / "sessions.jsonl").exists():
             print(f"[-] Persona {pid} already completed in {sample_dir}, skipping.")
             return True
 
@@ -146,7 +146,7 @@ class BatchPipeline:
         print(f"    [SUCCESS] {pid} finished in {elapsed:.1f}s -> {sample_dir}")
         return True
 
-    def run_batch(self, start_idx: int = None, count: int = None, raw_persona_path: str = None):
+    def run_batch(self, start_idx: int = None, count: int = None, raw_persona_path: str = None, force: bool = False):
         start_idx = start_idx if start_idx is not None else Config.default_start_idx
         count = count if count is not None else Config.default_count
         raw_path = Path(raw_persona_path or self.raw_persona_path)
@@ -173,7 +173,7 @@ class BatchPipeline:
 
         for idx, p in enumerate(target_personas, start=start_idx + 1):
             try:
-                self.process_single_persona(p)
+                self.process_single_persona(p, force=force)
                 u = self.llm.get_usage()
                 total_tokens += u["total_tokens"]
                 total_cost += u["cost_rmb"]

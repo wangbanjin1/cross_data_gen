@@ -343,9 +343,9 @@
   },
   {
     "session_id": "S-USER_004-05",
-    "reference_time": "2026年10月12日10时00分",
-    "memory_role": "distractor_session",
-    "blueprint_type": "distractor_ood",
+    "reference_time": "2026年10月12日19时45分",
+    "memory_role": "learning_session",
+    "blueprint_type": "experience_learning",
     "snapshot_before": {
       "MF_001": {
         "memory_id": "MF_001",
@@ -394,116 +394,12 @@
     },
     "memory_events": [
       {
-        "event_type": "no_memory_change",
-        "description": "单次任务业务或域外诉求，与长期偏好无关，不发生记忆变更。"
-      }
-    ],
-    "gold_state_after": {
-      "MF_001": {
-        "memory_id": "MF_001",
-        "category": "periodic_main_storyline",
-        "storyline_trigger_type": "time_periodic",
-        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
-        "declaration_mode": "implicit_induction",
-        "application_name": "抖音",
-        "service_name": "开直播",
-        "resolution": "1080p",
-        "rtt_max": "50ms",
-        "start_time": "20时00分",
-        "end_time": "22时00分",
-        "duration": "120min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "特写清晰"
-          ]
-        },
-        "scope": "weekly_cycle",
-        "status": "active",
-        "evidence_count": 2,
-        "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年10月08日19时45分"
-      },
-      "SUB_001": {
-        "memory_id": "SUB_001",
-        "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
-        "resolution": "720p",
-        "rtt_max": "100ms",
-        "start_time": "18时45分",
-        "duration": "60min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "能认清人脸"
-          ]
-        },
-        "scope": "transit_evening",
-        "status": "active",
-        "evidence_count": 1,
-        "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月07日18时30分"
-      }
-    }
-  },
-  {
-    "session_id": "S-USER_004-06",
-    "reference_time": "2026年10月14日19时45分",
-    "memory_role": "reuse_session",
-    "blueprint_type": "working_record_reschedule",
-    "snapshot_before": {
-      "MF_001": {
-        "memory_id": "MF_001",
-        "category": "periodic_main_storyline",
-        "storyline_trigger_type": "time_periodic",
-        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
-        "declaration_mode": "implicit_induction",
-        "application_name": "抖音",
-        "service_name": "开直播",
-        "resolution": "1080p",
-        "rtt_max": "50ms",
-        "start_time": "20时00分",
-        "end_time": "22时00分",
-        "duration": "120min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "特写清晰"
-          ]
-        },
-        "scope": "weekly_cycle",
-        "status": "active",
-        "evidence_count": 2,
-        "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年10月08日19时45分"
-      },
-      "SUB_001": {
-        "memory_id": "SUB_001",
-        "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
-        "resolution": "720p",
-        "rtt_max": "100ms",
-        "start_time": "18时45分",
-        "duration": "60min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "能认清人脸"
-          ]
-        },
-        "scope": "transit_evening",
-        "status": "active",
-        "evidence_count": 1,
-        "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月07日18时30分"
-      }
-    },
-    "memory_events": [
-      {
-        "event_type": "reschedule_working_record",
-        "record_id": "REC_mobile_persona_004_20261010_04",
-        "description": "用户申请对历史预约工单 REC_mobile_persona_004_20261010_04 变更改期，Agent 定位工单并将新时段（2026年10月14日20时00分 至 2026年10月14日22时00分）更新生效。",
-        "modified_slots": [
-          "start_timestamp",
-          "end_timestamp"
+        "event_type": "crystallize_experience",
+        "experience_id": "EXP_MULTI_INTENT_PARTITION_01",
+        "description": "用户针对历史踩坑故障进行严肃反馈与经验指示，Agent 深刻反思并沉淀【多任务并行局部调整与时序因果隔离经验】(EXP_MULTI_INTENT_PARTITION_01)入经验库。",
+        "crystallized_slots": [
+          "experience_policy",
+          "trigger_conditions"
         ]
       }
     ],
@@ -551,7 +447,126 @@
         "evidence_count": 1,
         "first_declared_at": "2026年10月07日18时30分",
         "last_reinforced_at": "2026年10月07日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01"
+      ]
+    }
+  },
+  {
+    "session_id": "S-USER_004-06",
+    "reference_time": "2026年10月14日19时45分",
+    "memory_role": "learning_session",
+    "blueprint_type": "experience_learning",
+    "snapshot_before": {
+      "MF_001": {
+        "memory_id": "MF_001",
+        "category": "periodic_main_storyline",
+        "storyline_trigger_type": "time_periodic",
+        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
+        "declaration_mode": "implicit_induction",
+        "application_name": "抖音",
+        "service_name": "开直播",
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "特写清晰"
+          ]
+        },
+        "scope": "weekly_cycle",
+        "status": "active",
+        "evidence_count": 2,
+        "first_declared_at": "2026年10月06日19时45分",
+        "last_reinforced_at": "2026年10月08日19时45分"
+      },
+      "SUB_001": {
+        "memory_id": "SUB_001",
+        "category": "sub_storyline_transit",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "resolution": "720p",
+        "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "能认清人脸"
+          ]
+        },
+        "scope": "transit_evening",
+        "status": "active",
+        "evidence_count": 1,
+        "first_declared_at": "2026年10月07日18时30分",
+        "last_reinforced_at": "2026年10月07日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01"
+      ]
+    },
+    "memory_events": [
+      {
+        "event_type": "crystallize_experience",
+        "experience_id": "EXP_OVERLAPPING_ORDER_RESOLUTION_01",
+        "description": "用户针对历史踩坑故障进行严肃反馈与经验指示，Agent 深刻反思并沉淀【新旧工单时段撞车无缝让路与时序重叠仲裁经验】(EXP_OVERLAPPING_ORDER_RESOLUTION_01)入经验库。",
+        "crystallized_slots": [
+          "experience_policy",
+          "trigger_conditions"
+        ]
       }
+    ],
+    "gold_state_after": {
+      "MF_001": {
+        "memory_id": "MF_001",
+        "category": "periodic_main_storyline",
+        "storyline_trigger_type": "time_periodic",
+        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
+        "declaration_mode": "implicit_induction",
+        "application_name": "抖音",
+        "service_name": "开直播",
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "特写清晰"
+          ]
+        },
+        "scope": "weekly_cycle",
+        "status": "active",
+        "evidence_count": 2,
+        "first_declared_at": "2026年10月06日19时45分",
+        "last_reinforced_at": "2026年10月08日19时45分"
+      },
+      "SUB_001": {
+        "memory_id": "SUB_001",
+        "category": "sub_storyline_transit",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "resolution": "720p",
+        "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "能认清人脸"
+          ]
+        },
+        "scope": "transit_evening",
+        "status": "active",
+        "evidence_count": 1,
+        "first_declared_at": "2026年10月07日18时30分",
+        "last_reinforced_at": "2026年10月07日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     }
   },
   {
@@ -603,7 +618,11 @@
         "evidence_count": 1,
         "first_declared_at": "2026年10月07日18时30分",
         "last_reinforced_at": "2026年10月07日18时30分"
-      }
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     },
     "memory_events": [
       {
@@ -662,14 +681,18 @@
         "evidence_count": 1,
         "first_declared_at": "2026年10月07日18时30分",
         "last_reinforced_at": "2026年10月07日18时30分"
-      }
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     }
   },
   {
     "session_id": "S-USER_004-08",
     "reference_time": "2026年10月20日19时45分",
-    "memory_role": "reuse_session",
-    "blueprint_type": "working_record_disambig",
+    "memory_role": "reinforcement_session",
+    "blueprint_type": "main",
     "snapshot_before": {
       "MF_001": {
         "memory_id": "MF_001",
@@ -714,430 +737,17 @@
         "evidence_count": 1,
         "first_declared_at": "2026年10月07日18时30分",
         "last_reinforced_at": "2026年10月07日18时30分"
-      }
-    },
-    "memory_events": [],
-    "gold_state_after": {
-      "MF_001": {
-        "memory_id": "MF_001",
-        "category": "periodic_main_storyline",
-        "storyline_trigger_type": "time_periodic",
-        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
-        "declaration_mode": "implicit_induction",
-        "application_name": "抖音",
-        "service_name": "开直播",
-        "resolution": "1080p",
-        "rtt_max": "50ms",
-        "start_time": "20时00分",
-        "end_time": "22时00分",
-        "duration": "120min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "特写清晰"
-          ]
-        },
-        "scope": "weekly_cycle",
-        "status": "active",
-        "evidence_count": 3,
-        "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年10月15日19时45分"
       },
-      "SUB_001": {
-        "memory_id": "SUB_001",
-        "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
-        "resolution": "720p",
-        "rtt_max": "100ms",
-        "start_time": "18时45分",
-        "duration": "60min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "能认清人脸"
-          ]
-        },
-        "scope": "transit_evening",
-        "status": "active",
-        "evidence_count": 1,
-        "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月07日18时30分"
-      }
-    }
-  },
-  {
-    "session_id": "S-USER_004-09",
-    "reference_time": "2026年10月21日10时00分",
-    "memory_role": "distractor_session",
-    "blueprint_type": "working_record_reconcile",
-    "snapshot_before": {
-      "MF_001": {
-        "memory_id": "MF_001",
-        "category": "periodic_main_storyline",
-        "storyline_trigger_type": "time_periodic",
-        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
-        "declaration_mode": "implicit_induction",
-        "application_name": "抖音",
-        "service_name": "开直播",
-        "resolution": "1080p",
-        "rtt_max": "50ms",
-        "start_time": "20时00分",
-        "end_time": "22时00分",
-        "duration": "120min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "特写清晰"
-          ]
-        },
-        "scope": "weekly_cycle",
-        "status": "active",
-        "evidence_count": 3,
-        "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年10月15日19时45分"
-      },
-      "SUB_001": {
-        "memory_id": "SUB_001",
-        "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
-        "resolution": "720p",
-        "rtt_max": "100ms",
-        "start_time": "18时45分",
-        "duration": "60min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "能认清人脸"
-          ]
-        },
-        "scope": "transit_evening",
-        "status": "active",
-        "evidence_count": 1,
-        "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月07日18时30分"
-      }
-    },
-    "memory_events": [
-      {
-        "event_type": "reconcile_working_records",
-        "total_orders": 7,
-        "description": "用户发起工单流水账对账核查，Agent 检索统计已开通的 7 次保障记录并输出清单明细。"
-      }
-    ],
-    "gold_state_after": {
-      "MF_001": {
-        "memory_id": "MF_001",
-        "category": "periodic_main_storyline",
-        "storyline_trigger_type": "time_periodic",
-        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
-        "declaration_mode": "implicit_induction",
-        "application_name": "抖音",
-        "service_name": "开直播",
-        "resolution": "1080p",
-        "rtt_max": "50ms",
-        "start_time": "20时00分",
-        "end_time": "22时00分",
-        "duration": "120min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "特写清晰"
-          ]
-        },
-        "scope": "weekly_cycle",
-        "status": "active",
-        "evidence_count": 3,
-        "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年10月15日19时45分"
-      },
-      "SUB_001": {
-        "memory_id": "SUB_001",
-        "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
-        "resolution": "720p",
-        "rtt_max": "100ms",
-        "start_time": "18时45分",
-        "duration": "60min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "能认清人脸"
-          ]
-        },
-        "scope": "transit_evening",
-        "status": "active",
-        "evidence_count": 1,
-        "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月07日18时30分"
-      }
-    }
-  },
-  {
-    "session_id": "S-USER_004-10",
-    "reference_time": "2026年10月25日12时30分",
-    "memory_role": "distractor_session",
-    "blueprint_type": "distractor_mixed",
-    "snapshot_before": {
-      "MF_001": {
-        "memory_id": "MF_001",
-        "category": "periodic_main_storyline",
-        "storyline_trigger_type": "time_periodic",
-        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
-        "declaration_mode": "implicit_induction",
-        "application_name": "抖音",
-        "service_name": "开直播",
-        "resolution": "1080p",
-        "rtt_max": "50ms",
-        "start_time": "20时00分",
-        "end_time": "22时00分",
-        "duration": "120min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "特写清晰"
-          ]
-        },
-        "scope": "weekly_cycle",
-        "status": "active",
-        "evidence_count": 3,
-        "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年10月15日19时45分"
-      },
-      "SUB_001": {
-        "memory_id": "SUB_001",
-        "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
-        "resolution": "720p",
-        "rtt_max": "100ms",
-        "start_time": "18时45分",
-        "duration": "60min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "能认清人脸"
-          ]
-        },
-        "scope": "transit_evening",
-        "status": "active",
-        "evidence_count": 1,
-        "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月07日18时30分"
-      }
-    },
-    "memory_events": [
-      {
-        "event_type": "no_memory_change",
-        "description": "单次任务业务或域外诉求，与长期偏好无关，不发生记忆变更。"
-      }
-    ],
-    "gold_state_after": {
-      "MF_001": {
-        "memory_id": "MF_001",
-        "category": "periodic_main_storyline",
-        "storyline_trigger_type": "time_periodic",
-        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
-        "declaration_mode": "implicit_induction",
-        "application_name": "抖音",
-        "service_name": "开直播",
-        "resolution": "1080p",
-        "rtt_max": "50ms",
-        "start_time": "20时00分",
-        "end_time": "22时00分",
-        "duration": "120min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "特写清晰"
-          ]
-        },
-        "scope": "weekly_cycle",
-        "status": "active",
-        "evidence_count": 3,
-        "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年10月15日19时45分"
-      },
-      "SUB_001": {
-        "memory_id": "SUB_001",
-        "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
-        "resolution": "720p",
-        "rtt_max": "100ms",
-        "start_time": "18时45分",
-        "duration": "60min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "能认清人脸"
-          ]
-        },
-        "scope": "transit_evening",
-        "status": "active",
-        "evidence_count": 1,
-        "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月07日18时30分"
-      }
-    }
-  },
-  {
-    "session_id": "S-USER_004-11",
-    "reference_time": "2026年10月27日19时45分",
-    "memory_role": "reuse_session",
-    "blueprint_type": "proactive_experience",
-    "snapshot_before": {
-      "MF_001": {
-        "memory_id": "MF_001",
-        "category": "periodic_main_storyline",
-        "storyline_trigger_type": "time_periodic",
-        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
-        "declaration_mode": "implicit_induction",
-        "application_name": "抖音",
-        "service_name": "开直播",
-        "resolution": "1080p",
-        "rtt_max": "50ms",
-        "start_time": "20时00分",
-        "end_time": "22时00分",
-        "duration": "120min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "特写清晰"
-          ]
-        },
-        "scope": "weekly_cycle",
-        "status": "active",
-        "evidence_count": 3,
-        "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年10月15日19时45分"
-      },
-      "SUB_001": {
-        "memory_id": "SUB_001",
-        "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
-        "resolution": "720p",
-        "rtt_max": "100ms",
-        "start_time": "18时45分",
-        "duration": "60min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "能认清人脸"
-          ]
-        },
-        "scope": "transit_evening",
-        "status": "active",
-        "evidence_count": 1,
-        "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月07日18时30分"
-      }
-    },
-    "memory_events": [
-      {
-        "event_type": "proactive_experience_suggestion",
-        "experience_id": "EXP_STADIUM_CONGESTION_01",
-        "description": "Agent 识别到高密人流现场风险，主动调取 ReasoningBank 经验卡片 EXP_STADIUM_CONGESTION_01 提议稳定性优先方案（720p, 30ms），用户采纳闭环。",
-        "suggested_slots": [
-          "resolution",
-          "rtt_max"
-        ]
-      }
-    ],
-    "gold_state_after": {
-      "MF_001": {
-        "memory_id": "MF_001",
-        "category": "periodic_main_storyline",
-        "storyline_trigger_type": "time_periodic",
-        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
-        "declaration_mode": "implicit_induction",
-        "application_name": "抖音",
-        "service_name": "开直播",
-        "resolution": "1080p",
-        "rtt_max": "50ms",
-        "start_time": "20时00分",
-        "end_time": "22时00分",
-        "duration": "120min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "特写清晰"
-          ]
-        },
-        "scope": "weekly_cycle",
-        "status": "active",
-        "evidence_count": 3,
-        "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年10月15日19时45分"
-      },
-      "SUB_001": {
-        "memory_id": "SUB_001",
-        "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
-        "resolution": "720p",
-        "rtt_max": "100ms",
-        "start_time": "18时45分",
-        "duration": "60min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "能认清人脸"
-          ]
-        },
-        "scope": "transit_evening",
-        "status": "active",
-        "evidence_count": 1,
-        "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月07日18时30分"
-      }
-    }
-  },
-  {
-    "session_id": "S-USER_004-12",
-    "reference_time": "2026年10月29日18时30分",
-    "memory_role": "reuse_session",
-    "blueprint_type": "sub_01",
-    "snapshot_before": {
-      "MF_001": {
-        "memory_id": "MF_001",
-        "category": "periodic_main_storyline",
-        "storyline_trigger_type": "time_periodic",
-        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
-        "declaration_mode": "implicit_induction",
-        "application_name": "抖音",
-        "service_name": "开直播",
-        "resolution": "1080p",
-        "rtt_max": "50ms",
-        "start_time": "20时00分",
-        "end_time": "22时00分",
-        "duration": "120min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "特写清晰"
-          ]
-        },
-        "scope": "weekly_cycle",
-        "status": "active",
-        "evidence_count": 3,
-        "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年10月15日19时45分"
-      },
-      "SUB_001": {
-        "memory_id": "SUB_001",
-        "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
-        "resolution": "720p",
-        "rtt_max": "100ms",
-        "start_time": "18时45分",
-        "duration": "60min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "能认清人脸"
-          ]
-        },
-        "scope": "transit_evening",
-        "status": "active",
-        "evidence_count": 1,
-        "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月07日18时30分"
-      }
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     },
     "memory_events": [
       {
         "event_type": "reinforce_memory",
-        "memory_id": "SUB_001",
-        "description": "支线1转场视频调度记忆复用成功，证据次数达 2 次。",
+        "memory_id": "MF_001",
+        "description": "用户在（每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材）省略参数复用主线记忆，Agent 成功补全并经用户确认，证据强度增至 4 次。",
         "retrieved_slots": [
           "application_name",
           "service_name",
@@ -1167,9 +777,9 @@
         },
         "scope": "weekly_cycle",
         "status": "active",
-        "evidence_count": 3,
+        "evidence_count": 4,
         "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年10月15日19时45分"
+        "last_reinforced_at": "2026年10月20日19时45分"
       },
       "SUB_001": {
         "memory_id": "SUB_001",
@@ -1187,15 +797,19 @@
         },
         "scope": "transit_evening",
         "status": "active",
-        "evidence_count": 2,
+        "evidence_count": 1,
         "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月29日18时30分"
-      }
+        "last_reinforced_at": "2026年10月07日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     }
   },
   {
-    "session_id": "S-USER_004-13",
-    "reference_time": "2026年11月01日19时45分",
+    "session_id": "S-USER_004-09",
+    "reference_time": "2026年10月21日19时45分",
     "memory_role": "correction_session",
     "blueprint_type": "event_override",
     "snapshot_before": {
@@ -1219,9 +833,9 @@
         },
         "scope": "weekly_cycle",
         "status": "active",
-        "evidence_count": 3,
+        "evidence_count": 4,
         "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年10月15日19时45分"
+        "last_reinforced_at": "2026年10月20日19时45分"
       },
       "SUB_001": {
         "memory_id": "SUB_001",
@@ -1239,10 +853,14 @@
         },
         "scope": "transit_evening",
         "status": "active",
-        "evidence_count": 2,
+        "evidence_count": 1,
         "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月29日18时30分"
-      }
+        "last_reinforced_at": "2026年10月07日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     },
     "memory_events": [
       {
@@ -1275,9 +893,9 @@
         },
         "scope": "weekly_cycle",
         "status": "active",
-        "evidence_count": 3,
+        "evidence_count": 4,
         "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年10月15日19时45分"
+        "last_reinforced_at": "2026年10月20日19时45分"
       },
       "SUB_001": {
         "memory_id": "SUB_001",
@@ -1295,15 +913,126 @@
         },
         "scope": "transit_evening",
         "status": "active",
-        "evidence_count": 2,
+        "evidence_count": 1,
         "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月29日18时30分"
-      }
+        "last_reinforced_at": "2026年10月07日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     }
   },
   {
-    "session_id": "S-USER_004-14",
-    "reference_time": "2026年11月02日19时45分",
+    "session_id": "S-USER_004-10",
+    "reference_time": "2026年10月25日19时45分",
+    "memory_role": "reuse_session",
+    "blueprint_type": "multi_intent_experience",
+    "snapshot_before": {
+      "MF_001": {
+        "memory_id": "MF_001",
+        "category": "periodic_main_storyline",
+        "storyline_trigger_type": "time_periodic",
+        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
+        "declaration_mode": "implicit_induction",
+        "application_name": "抖音",
+        "service_name": "开直播",
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "特写清晰"
+          ]
+        },
+        "scope": "weekly_cycle",
+        "status": "active",
+        "evidence_count": 4,
+        "first_declared_at": "2026年10月06日19时45分",
+        "last_reinforced_at": "2026年10月20日19时45分"
+      },
+      "SUB_001": {
+        "memory_id": "SUB_001",
+        "category": "sub_storyline_transit",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "resolution": "720p",
+        "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "能认清人脸"
+          ]
+        },
+        "scope": "transit_evening",
+        "status": "active",
+        "evidence_count": 1,
+        "first_declared_at": "2026年10月07日18时30分",
+        "last_reinforced_at": "2026年10月07日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
+    },
+    "memory_events": [],
+    "gold_state_after": {
+      "MF_001": {
+        "memory_id": "MF_001",
+        "category": "periodic_main_storyline",
+        "storyline_trigger_type": "time_periodic",
+        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
+        "declaration_mode": "implicit_induction",
+        "application_name": "抖音",
+        "service_name": "开直播",
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "特写清晰"
+          ]
+        },
+        "scope": "weekly_cycle",
+        "status": "active",
+        "evidence_count": 4,
+        "first_declared_at": "2026年10月06日19时45分",
+        "last_reinforced_at": "2026年10月20日19时45分"
+      },
+      "SUB_001": {
+        "memory_id": "SUB_001",
+        "category": "sub_storyline_transit",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "resolution": "720p",
+        "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "能认清人脸"
+          ]
+        },
+        "scope": "transit_evening",
+        "status": "active",
+        "evidence_count": 1,
+        "first_declared_at": "2026年10月07日18时30分",
+        "last_reinforced_at": "2026年10月07日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
+    }
+  },
+  {
+    "session_id": "S-USER_004-11",
+    "reference_time": "2026年10月27日19时45分",
     "memory_role": "reuse_session",
     "blueprint_type": "event_reuse",
     "snapshot_before": {
@@ -1327,9 +1056,9 @@
         },
         "scope": "weekly_cycle",
         "status": "active",
-        "evidence_count": 3,
+        "evidence_count": 4,
         "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年10月15日19时45分"
+        "last_reinforced_at": "2026年10月20日19时45分"
       },
       "SUB_001": {
         "memory_id": "SUB_001",
@@ -1347,10 +1076,14 @@
         },
         "scope": "transit_evening",
         "status": "active",
-        "evidence_count": 2,
+        "evidence_count": 1,
         "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月29日18时30分"
-      }
+        "last_reinforced_at": "2026年10月07日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     },
     "memory_events": [
       {
@@ -1386,9 +1119,9 @@
         },
         "scope": "weekly_cycle",
         "status": "active",
-        "evidence_count": 4,
+        "evidence_count": 5,
         "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年11月02日19时45分"
+        "last_reinforced_at": "2026年10月27日19时45分"
       },
       "SUB_001": {
         "memory_id": "SUB_001",
@@ -1406,233 +1139,19 @@
         },
         "scope": "transit_evening",
         "status": "active",
-        "evidence_count": 2,
+        "evidence_count": 1,
         "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月29日18时30分"
-      }
+        "last_reinforced_at": "2026年10月07日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     }
   },
   {
-    "session_id": "S-USER_004-15",
-    "reference_time": "2026年11月03日19时45分",
-    "memory_role": "reuse_session",
-    "blueprint_type": "empirical_recall",
-    "snapshot_before": {
-      "MF_001": {
-        "memory_id": "MF_001",
-        "category": "periodic_main_storyline",
-        "storyline_trigger_type": "time_periodic",
-        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
-        "declaration_mode": "implicit_induction",
-        "application_name": "抖音",
-        "service_name": "开直播",
-        "resolution": "1080p",
-        "rtt_max": "50ms",
-        "start_time": "20时00分",
-        "end_time": "22时00分",
-        "duration": "120min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "特写清晰"
-          ]
-        },
-        "scope": "weekly_cycle",
-        "status": "active",
-        "evidence_count": 4,
-        "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年11月02日19时45分"
-      },
-      "SUB_001": {
-        "memory_id": "SUB_001",
-        "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
-        "resolution": "720p",
-        "rtt_max": "100ms",
-        "start_time": "18时45分",
-        "duration": "60min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "能认清人脸"
-          ]
-        },
-        "scope": "transit_evening",
-        "status": "active",
-        "evidence_count": 2,
-        "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月29日18时30分"
-      }
-    },
-    "memory_events": [
-      {
-        "event_type": "empirical_recall",
-        "experience_id": "EXP_SEVERE_WEATHER_01",
-        "description": "用户在恶劣天气下调取既往抗衰落经验方案 EXP_SEVERE_WEATHER_01，Agent 调取经验卡片并向用户反问确认加固参数（720p, 30ms）。",
-        "retrieved_slots": [
-          "resolution",
-          "rtt_max"
-        ]
-      }
-    ],
-    "gold_state_after": {
-      "MF_001": {
-        "memory_id": "MF_001",
-        "category": "periodic_main_storyline",
-        "storyline_trigger_type": "time_periodic",
-        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
-        "declaration_mode": "implicit_induction",
-        "application_name": "抖音",
-        "service_name": "开直播",
-        "resolution": "1080p",
-        "rtt_max": "50ms",
-        "start_time": "20时00分",
-        "end_time": "22时00分",
-        "duration": "120min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "特写清晰"
-          ]
-        },
-        "scope": "weekly_cycle",
-        "status": "active",
-        "evidence_count": 4,
-        "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年11月02日19时45分"
-      },
-      "SUB_001": {
-        "memory_id": "SUB_001",
-        "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
-        "resolution": "720p",
-        "rtt_max": "100ms",
-        "start_time": "18时45分",
-        "duration": "60min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "能认清人脸"
-          ]
-        },
-        "scope": "transit_evening",
-        "status": "active",
-        "evidence_count": 2,
-        "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月29日18时30分"
-      }
-    }
-  },
-  {
-    "session_id": "S-USER_004-16",
-    "reference_time": "2026年11月05日19时45分",
-    "memory_role": "reuse_session",
-    "blueprint_type": "proactive_experience",
-    "snapshot_before": {
-      "MF_001": {
-        "memory_id": "MF_001",
-        "category": "periodic_main_storyline",
-        "storyline_trigger_type": "time_periodic",
-        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
-        "declaration_mode": "implicit_induction",
-        "application_name": "抖音",
-        "service_name": "开直播",
-        "resolution": "1080p",
-        "rtt_max": "50ms",
-        "start_time": "20时00分",
-        "end_time": "22时00分",
-        "duration": "120min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "特写清晰"
-          ]
-        },
-        "scope": "weekly_cycle",
-        "status": "active",
-        "evidence_count": 4,
-        "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年11月02日19时45分"
-      },
-      "SUB_001": {
-        "memory_id": "SUB_001",
-        "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
-        "resolution": "720p",
-        "rtt_max": "100ms",
-        "start_time": "18时45分",
-        "duration": "60min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "能认清人脸"
-          ]
-        },
-        "scope": "transit_evening",
-        "status": "active",
-        "evidence_count": 2,
-        "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月29日18时30分"
-      }
-    },
-    "memory_events": [
-      {
-        "event_type": "proactive_experience_suggestion",
-        "experience_id": "EXP_STADIUM_CONGESTION_01",
-        "description": "Agent 识别到高密人流现场风险，主动调取 ReasoningBank 经验卡片 EXP_STADIUM_CONGESTION_01 提议稳定性优先方案（1080p, 50ms），用户采纳闭环。",
-        "suggested_slots": [
-          "resolution",
-          "rtt_max"
-        ]
-      }
-    ],
-    "gold_state_after": {
-      "MF_001": {
-        "memory_id": "MF_001",
-        "category": "periodic_main_storyline",
-        "storyline_trigger_type": "time_periodic",
-        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
-        "declaration_mode": "implicit_induction",
-        "application_name": "抖音",
-        "service_name": "开直播",
-        "resolution": "1080p",
-        "rtt_max": "50ms",
-        "start_time": "20时00分",
-        "end_time": "22时00分",
-        "duration": "120min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "特写清晰"
-          ]
-        },
-        "scope": "weekly_cycle",
-        "status": "active",
-        "evidence_count": 4,
-        "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年11月02日19时45分"
-      },
-      "SUB_001": {
-        "memory_id": "SUB_001",
-        "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
-        "resolution": "720p",
-        "rtt_max": "100ms",
-        "start_time": "18时45分",
-        "duration": "60min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "能认清人脸"
-          ]
-        },
-        "scope": "transit_evening",
-        "status": "active",
-        "evidence_count": 2,
-        "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月29日18时30分"
-      }
-    }
-  },
-  {
-    "session_id": "S-USER_004-17",
-    "reference_time": "2026年11月07日19时45分",
+    "session_id": "S-USER_004-12",
+    "reference_time": "2026年10月29日19时45分",
     "memory_role": "reuse_session",
     "blueprint_type": "working_record_reuse",
     "snapshot_before": {
@@ -1656,9 +1175,9 @@
         },
         "scope": "weekly_cycle",
         "status": "active",
-        "evidence_count": 4,
+        "evidence_count": 5,
         "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年11月02日19时45分"
+        "last_reinforced_at": "2026年10月27日19时45分"
       },
       "SUB_001": {
         "memory_id": "SUB_001",
@@ -1676,17 +1195,21 @@
         },
         "scope": "transit_evening",
         "status": "active",
-        "evidence_count": 2,
+        "evidence_count": 1,
         "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月29日18时30分"
-      }
+        "last_reinforced_at": "2026年10月07日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     },
     "memory_events": [
       {
         "event_type": "retrieve_working_record",
         "record_id": "REC_mobile_persona_004_20261006_01",
-        "delta_days": 32,
-        "description": "用户使用相对时态引用历史工单 REC_mobile_persona_004_20261006_01（距今约 32 天），Agent 成功定位工单并继承体验规格（1080p, 50ms），反问今日起止时段。",
+        "delta_days": 23,
+        "description": "用户使用相对时态引用历史工单 REC_mobile_persona_004_20261006_01（距今约 23 天），Agent 成功定位工单并继承体验规格（1080p, 50ms），反问今日起止时段。",
         "retrieved_slots": [
           "resolution",
           "rtt_max"
@@ -1714,9 +1237,9 @@
         },
         "scope": "weekly_cycle",
         "status": "active",
-        "evidence_count": 4,
+        "evidence_count": 5,
         "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年11月02日19时45分"
+        "last_reinforced_at": "2026年10月27日19时45分"
       },
       "SUB_001": {
         "memory_id": "SUB_001",
@@ -1734,15 +1257,126 @@
         },
         "scope": "transit_evening",
         "status": "active",
-        "evidence_count": 2,
+        "evidence_count": 1,
         "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月29日18时30分"
-      }
+        "last_reinforced_at": "2026年10月07日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     }
   },
   {
-    "session_id": "S-USER_004-18",
-    "reference_time": "2026年11月10日19时45分",
+    "session_id": "S-USER_004-13",
+    "reference_time": "2026年11月01日14时45分",
+    "memory_role": "reuse_session",
+    "blueprint_type": "overlapping_experience",
+    "snapshot_before": {
+      "MF_001": {
+        "memory_id": "MF_001",
+        "category": "periodic_main_storyline",
+        "storyline_trigger_type": "time_periodic",
+        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
+        "declaration_mode": "implicit_induction",
+        "application_name": "抖音",
+        "service_name": "开直播",
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "特写清晰"
+          ]
+        },
+        "scope": "weekly_cycle",
+        "status": "active",
+        "evidence_count": 5,
+        "first_declared_at": "2026年10月06日19时45分",
+        "last_reinforced_at": "2026年10月27日19时45分"
+      },
+      "SUB_001": {
+        "memory_id": "SUB_001",
+        "category": "sub_storyline_transit",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "resolution": "720p",
+        "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "能认清人脸"
+          ]
+        },
+        "scope": "transit_evening",
+        "status": "active",
+        "evidence_count": 1,
+        "first_declared_at": "2026年10月07日18时30分",
+        "last_reinforced_at": "2026年10月07日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
+    },
+    "memory_events": [],
+    "gold_state_after": {
+      "MF_001": {
+        "memory_id": "MF_001",
+        "category": "periodic_main_storyline",
+        "storyline_trigger_type": "time_periodic",
+        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
+        "declaration_mode": "implicit_induction",
+        "application_name": "抖音",
+        "service_name": "开直播",
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "特写清晰"
+          ]
+        },
+        "scope": "weekly_cycle",
+        "status": "active",
+        "evidence_count": 5,
+        "first_declared_at": "2026年10月06日19时45分",
+        "last_reinforced_at": "2026年10月27日19时45分"
+      },
+      "SUB_001": {
+        "memory_id": "SUB_001",
+        "category": "sub_storyline_transit",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "resolution": "720p",
+        "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "能认清人脸"
+          ]
+        },
+        "scope": "transit_evening",
+        "status": "active",
+        "evidence_count": 1,
+        "first_declared_at": "2026年10月07日18时30分",
+        "last_reinforced_at": "2026年10月07日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
+    }
+  },
+  {
+    "session_id": "S-USER_004-14",
+    "reference_time": "2026年11月02日19时45分",
     "memory_role": "reuse_session",
     "blueprint_type": "working_record_reschedule",
     "snapshot_before": {
@@ -1766,9 +1400,9 @@
         },
         "scope": "weekly_cycle",
         "status": "active",
-        "evidence_count": 4,
+        "evidence_count": 5,
         "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年11月02日19时45分"
+        "last_reinforced_at": "2026年10月27日19时45分"
       },
       "SUB_001": {
         "memory_id": "SUB_001",
@@ -1786,16 +1420,20 @@
         },
         "scope": "transit_evening",
         "status": "active",
-        "evidence_count": 2,
+        "evidence_count": 1,
         "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月29日18时30分"
-      }
+        "last_reinforced_at": "2026年10月07日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     },
     "memory_events": [
       {
         "event_type": "reschedule_working_record",
-        "record_id": "REC_mobile_persona_004_20261107_15",
-        "description": "用户申请对历史预约工单 REC_mobile_persona_004_20261107_15 变更改期，Agent 定位工单并将新时段（2026年11月10日20时00分 至 2026年11月10日22时00分）更新生效。",
+        "record_id": "REC_mobile_persona_004_20261101_50",
+        "description": "用户申请对历史预约工单 REC_mobile_persona_004_20261101_50 变更改期，Agent 定位工单并将新时段（2026年11月02日20时00分 至 2026年11月02日22时00分）更新生效。",
         "modified_slots": [
           "start_timestamp",
           "end_timestamp"
@@ -1823,9 +1461,9 @@
         },
         "scope": "weekly_cycle",
         "status": "active",
-        "evidence_count": 4,
+        "evidence_count": 5,
         "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年11月02日19时45分"
+        "last_reinforced_at": "2026年10月27日19时45分"
       },
       "SUB_001": {
         "memory_id": "SUB_001",
@@ -1843,15 +1481,238 @@
         },
         "scope": "transit_evening",
         "status": "active",
-        "evidence_count": 2,
+        "evidence_count": 1,
         "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月29日18时30分"
-      }
+        "last_reinforced_at": "2026年10月07日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     }
   },
   {
-    "session_id": "S-USER_004-19",
-    "reference_time": "2026年11月12日20时00分",
+    "session_id": "S-USER_004-15",
+    "reference_time": "2026年11月03日10时00分",
+    "memory_role": "distractor_session",
+    "blueprint_type": "distractor_ood",
+    "snapshot_before": {
+      "MF_001": {
+        "memory_id": "MF_001",
+        "category": "periodic_main_storyline",
+        "storyline_trigger_type": "time_periodic",
+        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
+        "declaration_mode": "implicit_induction",
+        "application_name": "抖音",
+        "service_name": "开直播",
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "特写清晰"
+          ]
+        },
+        "scope": "weekly_cycle",
+        "status": "active",
+        "evidence_count": 5,
+        "first_declared_at": "2026年10月06日19时45分",
+        "last_reinforced_at": "2026年10月27日19时45分"
+      },
+      "SUB_001": {
+        "memory_id": "SUB_001",
+        "category": "sub_storyline_transit",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "resolution": "720p",
+        "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "能认清人脸"
+          ]
+        },
+        "scope": "transit_evening",
+        "status": "active",
+        "evidence_count": 1,
+        "first_declared_at": "2026年10月07日18时30分",
+        "last_reinforced_at": "2026年10月07日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
+    },
+    "memory_events": [
+      {
+        "event_type": "no_memory_change",
+        "description": "单次任务业务或域外诉求，与长期偏好无关，不发生记忆变更。"
+      }
+    ],
+    "gold_state_after": {
+      "MF_001": {
+        "memory_id": "MF_001",
+        "category": "periodic_main_storyline",
+        "storyline_trigger_type": "time_periodic",
+        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
+        "declaration_mode": "implicit_induction",
+        "application_name": "抖音",
+        "service_name": "开直播",
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "特写清晰"
+          ]
+        },
+        "scope": "weekly_cycle",
+        "status": "active",
+        "evidence_count": 5,
+        "first_declared_at": "2026年10月06日19时45分",
+        "last_reinforced_at": "2026年10月27日19时45分"
+      },
+      "SUB_001": {
+        "memory_id": "SUB_001",
+        "category": "sub_storyline_transit",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "resolution": "720p",
+        "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "能认清人脸"
+          ]
+        },
+        "scope": "transit_evening",
+        "status": "active",
+        "evidence_count": 1,
+        "first_declared_at": "2026年10月07日18时30分",
+        "last_reinforced_at": "2026年10月07日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
+    }
+  },
+  {
+    "session_id": "S-USER_004-16",
+    "reference_time": "2026年11月05日19时45分",
+    "memory_role": "reuse_session",
+    "blueprint_type": "working_record_disambig",
+    "snapshot_before": {
+      "MF_001": {
+        "memory_id": "MF_001",
+        "category": "periodic_main_storyline",
+        "storyline_trigger_type": "time_periodic",
+        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
+        "declaration_mode": "implicit_induction",
+        "application_name": "抖音",
+        "service_name": "开直播",
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "特写清晰"
+          ]
+        },
+        "scope": "weekly_cycle",
+        "status": "active",
+        "evidence_count": 5,
+        "first_declared_at": "2026年10月06日19时45分",
+        "last_reinforced_at": "2026年10月27日19时45分"
+      },
+      "SUB_001": {
+        "memory_id": "SUB_001",
+        "category": "sub_storyline_transit",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "resolution": "720p",
+        "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "能认清人脸"
+          ]
+        },
+        "scope": "transit_evening",
+        "status": "active",
+        "evidence_count": 1,
+        "first_declared_at": "2026年10月07日18时30分",
+        "last_reinforced_at": "2026年10月07日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
+    },
+    "memory_events": [],
+    "gold_state_after": {
+      "MF_001": {
+        "memory_id": "MF_001",
+        "category": "periodic_main_storyline",
+        "storyline_trigger_type": "time_periodic",
+        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
+        "declaration_mode": "implicit_induction",
+        "application_name": "抖音",
+        "service_name": "开直播",
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "特写清晰"
+          ]
+        },
+        "scope": "weekly_cycle",
+        "status": "active",
+        "evidence_count": 5,
+        "first_declared_at": "2026年10月06日19时45分",
+        "last_reinforced_at": "2026年10月27日19时45分"
+      },
+      "SUB_001": {
+        "memory_id": "SUB_001",
+        "category": "sub_storyline_transit",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "resolution": "720p",
+        "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "能认清人脸"
+          ]
+        },
+        "scope": "transit_evening",
+        "status": "active",
+        "evidence_count": 1,
+        "first_declared_at": "2026年10月07日18时30分",
+        "last_reinforced_at": "2026年10月07日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
+    }
+  },
+  {
+    "session_id": "S-USER_004-17",
+    "reference_time": "2026年11月07日20时00分",
     "memory_role": "evidence_session",
     "blueprint_type": "sub_02",
     "snapshot_before": {
@@ -1875,9 +1736,9 @@
         },
         "scope": "weekly_cycle",
         "status": "active",
-        "evidence_count": 4,
+        "evidence_count": 5,
         "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年11月02日19时45分"
+        "last_reinforced_at": "2026年10月27日19时45分"
       },
       "SUB_001": {
         "memory_id": "SUB_001",
@@ -1895,10 +1756,14 @@
         },
         "scope": "transit_evening",
         "status": "active",
-        "evidence_count": 2,
+        "evidence_count": 1,
         "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月29日18时30分"
-      }
+        "last_reinforced_at": "2026年10月07日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     },
     "memory_events": [
       {
@@ -1934,9 +1799,9 @@
         },
         "scope": "weekly_cycle",
         "status": "active",
-        "evidence_count": 4,
+        "evidence_count": 5,
         "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年11月02日19时45分"
+        "last_reinforced_at": "2026年10月27日19时45分"
       },
       "SUB_001": {
         "memory_id": "SUB_001",
@@ -1954,10 +1819,14 @@
         },
         "scope": "transit_evening",
         "status": "active",
-        "evidence_count": 2,
+        "evidence_count": 1,
         "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月29日18时30分"
+        "last_reinforced_at": "2026年10月07日18时30分"
       },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ],
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
@@ -1975,16 +1844,322 @@
         "scope": "hotel_evening_review",
         "status": "active",
         "evidence_count": 1,
-        "first_declared_at": "2026年11月12日20时00分",
-        "last_reinforced_at": "2026年11月12日20时00分"
+        "first_declared_at": "2026年11月07日20时00分",
+        "last_reinforced_at": "2026年11月07日20时00分"
+      }
+    }
+  },
+  {
+    "session_id": "S-USER_004-18",
+    "reference_time": "2026年11月10日20时00分",
+    "memory_role": "reuse_session",
+    "blueprint_type": "sub_02",
+    "snapshot_before": {
+      "MF_001": {
+        "memory_id": "MF_001",
+        "category": "periodic_main_storyline",
+        "storyline_trigger_type": "time_periodic",
+        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
+        "declaration_mode": "implicit_induction",
+        "application_name": "抖音",
+        "service_name": "开直播",
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "特写清晰"
+          ]
+        },
+        "scope": "weekly_cycle",
+        "status": "active",
+        "evidence_count": 5,
+        "first_declared_at": "2026年10月06日19时45分",
+        "last_reinforced_at": "2026年10月27日19时45分"
+      },
+      "SUB_001": {
+        "memory_id": "SUB_001",
+        "category": "sub_storyline_transit",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "resolution": "720p",
+        "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "能认清人脸"
+          ]
+        },
+        "scope": "transit_evening",
+        "status": "active",
+        "evidence_count": 1,
+        "first_declared_at": "2026年10月07日18时30分",
+        "last_reinforced_at": "2026年10月07日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ],
+      "SUB_002": {
+        "memory_id": "SUB_002",
+        "category": "sub_storyline_hotel",
+        "application_name": "飞书",
+        "service_name": "视频通话",
+        "resolution": "1080p",
+        "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "大屏看清楚"
+          ]
+        },
+        "scope": "hotel_evening_review",
+        "status": "active",
+        "evidence_count": 1,
+        "first_declared_at": "2026年11月07日20时00分",
+        "last_reinforced_at": "2026年11月07日20时00分"
+      }
+    },
+    "memory_events": [
+      {
+        "event_type": "reinforce_memory",
+        "memory_id": "SUB_002",
+        "description": "支线2酒店复盘记忆复用成功，证据次数达 2 次。",
+        "retrieved_slots": [
+          "application_name",
+          "service_name",
+          "resolution",
+          "rtt_max"
+        ]
+      }
+    ],
+    "gold_state_after": {
+      "MF_001": {
+        "memory_id": "MF_001",
+        "category": "periodic_main_storyline",
+        "storyline_trigger_type": "time_periodic",
+        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
+        "declaration_mode": "implicit_induction",
+        "application_name": "抖音",
+        "service_name": "开直播",
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "特写清晰"
+          ]
+        },
+        "scope": "weekly_cycle",
+        "status": "active",
+        "evidence_count": 5,
+        "first_declared_at": "2026年10月06日19时45分",
+        "last_reinforced_at": "2026年10月27日19时45分"
+      },
+      "SUB_001": {
+        "memory_id": "SUB_001",
+        "category": "sub_storyline_transit",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "resolution": "720p",
+        "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "能认清人脸"
+          ]
+        },
+        "scope": "transit_evening",
+        "status": "active",
+        "evidence_count": 1,
+        "first_declared_at": "2026年10月07日18时30分",
+        "last_reinforced_at": "2026年10月07日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ],
+      "SUB_002": {
+        "memory_id": "SUB_002",
+        "category": "sub_storyline_hotel",
+        "application_name": "飞书",
+        "service_name": "视频通话",
+        "resolution": "1080p",
+        "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "大屏看清楚"
+          ]
+        },
+        "scope": "hotel_evening_review",
+        "status": "active",
+        "evidence_count": 2,
+        "first_declared_at": "2026年11月07日20时00分",
+        "last_reinforced_at": "2026年11月10日20时00分"
+      }
+    }
+  },
+  {
+    "session_id": "S-USER_004-19",
+    "reference_time": "2026年11月12日10时00分",
+    "memory_role": "distractor_session",
+    "blueprint_type": "distractor_normal",
+    "snapshot_before": {
+      "MF_001": {
+        "memory_id": "MF_001",
+        "category": "periodic_main_storyline",
+        "storyline_trigger_type": "time_periodic",
+        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
+        "declaration_mode": "implicit_induction",
+        "application_name": "抖音",
+        "service_name": "开直播",
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "特写清晰"
+          ]
+        },
+        "scope": "weekly_cycle",
+        "status": "active",
+        "evidence_count": 5,
+        "first_declared_at": "2026年10月06日19时45分",
+        "last_reinforced_at": "2026年10月27日19时45分"
+      },
+      "SUB_001": {
+        "memory_id": "SUB_001",
+        "category": "sub_storyline_transit",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "resolution": "720p",
+        "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "能认清人脸"
+          ]
+        },
+        "scope": "transit_evening",
+        "status": "active",
+        "evidence_count": 1,
+        "first_declared_at": "2026年10月07日18时30分",
+        "last_reinforced_at": "2026年10月07日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ],
+      "SUB_002": {
+        "memory_id": "SUB_002",
+        "category": "sub_storyline_hotel",
+        "application_name": "飞书",
+        "service_name": "视频通话",
+        "resolution": "1080p",
+        "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "大屏看清楚"
+          ]
+        },
+        "scope": "hotel_evening_review",
+        "status": "active",
+        "evidence_count": 2,
+        "first_declared_at": "2026年11月07日20时00分",
+        "last_reinforced_at": "2026年11月10日20时00分"
+      }
+    },
+    "memory_events": [],
+    "gold_state_after": {
+      "MF_001": {
+        "memory_id": "MF_001",
+        "category": "periodic_main_storyline",
+        "storyline_trigger_type": "time_periodic",
+        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
+        "declaration_mode": "implicit_induction",
+        "application_name": "抖音",
+        "service_name": "开直播",
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "start_time": "20时00分",
+        "end_time": "22时00分",
+        "duration": "120min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "特写清晰"
+          ]
+        },
+        "scope": "weekly_cycle",
+        "status": "active",
+        "evidence_count": 5,
+        "first_declared_at": "2026年10月06日19时45分",
+        "last_reinforced_at": "2026年10月27日19时45分"
+      },
+      "SUB_001": {
+        "memory_id": "SUB_001",
+        "category": "sub_storyline_transit",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "resolution": "720p",
+        "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "能认清人脸"
+          ]
+        },
+        "scope": "transit_evening",
+        "status": "active",
+        "evidence_count": 1,
+        "first_declared_at": "2026年10月07日18时30分",
+        "last_reinforced_at": "2026年10月07日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ],
+      "SUB_002": {
+        "memory_id": "SUB_002",
+        "category": "sub_storyline_hotel",
+        "application_name": "飞书",
+        "service_name": "视频通话",
+        "resolution": "1080p",
+        "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "大屏看清楚"
+          ]
+        },
+        "scope": "hotel_evening_review",
+        "status": "active",
+        "evidence_count": 2,
+        "first_declared_at": "2026年11月07日20时00分",
+        "last_reinforced_at": "2026年11月10日20时00分"
       }
     }
   },
   {
     "session_id": "S-USER_004-20",
-    "reference_time": "2026年11月17日10时00分",
-    "memory_role": "distractor_session",
-    "blueprint_type": "working_record_reconcile",
+    "reference_time": "2026年11月17日19时45分",
+    "memory_role": "reuse_session",
+    "blueprint_type": "main_recovery",
     "snapshot_before": {
       "MF_001": {
         "memory_id": "MF_001",
@@ -2006,9 +2181,9 @@
         },
         "scope": "weekly_cycle",
         "status": "active",
-        "evidence_count": 4,
+        "evidence_count": 5,
         "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年11月02日19时45分"
+        "last_reinforced_at": "2026年10月27日19时45分"
       },
       "SUB_001": {
         "memory_id": "SUB_001",
@@ -2026,10 +2201,14 @@
         },
         "scope": "transit_evening",
         "status": "active",
-        "evidence_count": 2,
+        "evidence_count": 1,
         "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月29日18时30分"
+        "last_reinforced_at": "2026年10月07日18时30分"
       },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ],
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
@@ -2046,16 +2225,16 @@
         },
         "scope": "hotel_evening_review",
         "status": "active",
-        "evidence_count": 1,
-        "first_declared_at": "2026年11月12日20时00分",
-        "last_reinforced_at": "2026年11月12日20时00分"
+        "evidence_count": 2,
+        "first_declared_at": "2026年11月07日20时00分",
+        "last_reinforced_at": "2026年11月10日20时00分"
       }
     },
     "memory_events": [
       {
-        "event_type": "reconcile_working_records",
-        "total_orders": 17,
-        "description": "用户发起工单流水账对账核查，Agent 检索统计已开通的 17 次保障记录并输出清单明细。"
+        "event_type": "reinforce_memory",
+        "memory_id": "MF_001",
+        "description": "成功复用原长期主线偏好配置。"
       }
     ],
     "gold_state_after": {
@@ -2079,9 +2258,9 @@
         },
         "scope": "weekly_cycle",
         "status": "active",
-        "evidence_count": 4,
+        "evidence_count": 6,
         "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年11月02日19时45分"
+        "last_reinforced_at": "2026年11月17日19时45分"
       },
       "SUB_001": {
         "memory_id": "SUB_001",
@@ -2099,10 +2278,14 @@
         },
         "scope": "transit_evening",
         "status": "active",
-        "evidence_count": 2,
+        "evidence_count": 1,
         "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月29日18时30分"
+        "last_reinforced_at": "2026年10月07日18时30分"
       },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ],
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
@@ -2119,153 +2302,9 @@
         },
         "scope": "hotel_evening_review",
         "status": "active",
-        "evidence_count": 1,
-        "first_declared_at": "2026年11月12日20时00分",
-        "last_reinforced_at": "2026年11月12日20时00分"
-      }
-    }
-  },
-  {
-    "session_id": "S-USER_004-21",
-    "reference_time": "2026年11月19日10时00分",
-    "memory_role": "distractor_session",
-    "blueprint_type": "distractor",
-    "snapshot_before": {
-      "MF_001": {
-        "memory_id": "MF_001",
-        "category": "periodic_main_storyline",
-        "storyline_trigger_type": "time_periodic",
-        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
-        "declaration_mode": "implicit_induction",
-        "application_name": "抖音",
-        "service_name": "开直播",
-        "resolution": "1080p",
-        "rtt_max": "50ms",
-        "start_time": "20时00分",
-        "end_time": "22时00分",
-        "duration": "120min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "特写清晰"
-          ]
-        },
-        "scope": "weekly_cycle",
-        "status": "active",
-        "evidence_count": 4,
-        "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年11月02日19时45分"
-      },
-      "SUB_001": {
-        "memory_id": "SUB_001",
-        "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
-        "resolution": "720p",
-        "rtt_max": "100ms",
-        "start_time": "18时45分",
-        "duration": "60min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "能认清人脸"
-          ]
-        },
-        "scope": "transit_evening",
-        "status": "active",
         "evidence_count": 2,
-        "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月29日18时30分"
-      },
-      "SUB_002": {
-        "memory_id": "SUB_002",
-        "category": "sub_storyline_hotel",
-        "application_name": "飞书",
-        "service_name": "视频通话",
-        "resolution": "1080p",
-        "rtt_max": "80ms",
-        "start_time": "20时15分",
-        "duration": "90min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "大屏看清楚"
-          ]
-        },
-        "scope": "hotel_evening_review",
-        "status": "active",
-        "evidence_count": 1,
-        "first_declared_at": "2026年11月12日20时00分",
-        "last_reinforced_at": "2026年11月12日20时00分"
-      }
-    },
-    "memory_events": [
-      {
-        "event_type": "no_memory_change",
-        "description": "单次任务业务或域外诉求，与长期偏好无关，不发生记忆变更。"
-      }
-    ],
-    "gold_state_after": {
-      "MF_001": {
-        "memory_id": "MF_001",
-        "category": "periodic_main_storyline",
-        "storyline_trigger_type": "time_periodic",
-        "trigger_condition": "每周二与周六晚间20:00-22:00的行业直播时段，在活动现场或临时拍摄地开启公益项目申报直播并同步回传佐证素材",
-        "declaration_mode": "implicit_induction",
-        "application_name": "抖音",
-        "service_name": "开直播",
-        "resolution": "1080p",
-        "rtt_max": "50ms",
-        "start_time": "20时00分",
-        "end_time": "22时00分",
-        "duration": "120min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "特写清晰"
-          ]
-        },
-        "scope": "weekly_cycle",
-        "status": "active",
-        "evidence_count": 4,
-        "first_declared_at": "2026年10月06日19时45分",
-        "last_reinforced_at": "2026年11月02日19时45分"
-      },
-      "SUB_001": {
-        "memory_id": "SUB_001",
-        "category": "sub_storyline_transit",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
-        "resolution": "720p",
-        "rtt_max": "100ms",
-        "start_time": "18时45分",
-        "duration": "60min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "能认清人脸"
-          ]
-        },
-        "scope": "transit_evening",
-        "status": "active",
-        "evidence_count": 2,
-        "first_declared_at": "2026年10月07日18时30分",
-        "last_reinforced_at": "2026年10月29日18时30分"
-      },
-      "SUB_002": {
-        "memory_id": "SUB_002",
-        "category": "sub_storyline_hotel",
-        "application_name": "飞书",
-        "service_name": "视频通话",
-        "resolution": "1080p",
-        "rtt_max": "80ms",
-        "start_time": "20时15分",
-        "duration": "90min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "大屏看清楚"
-          ]
-        },
-        "scope": "hotel_evening_review",
-        "status": "active",
-        "evidence_count": 1,
-        "first_declared_at": "2026年11月12日20时00分",
-        "last_reinforced_at": "2026年11月12日20时00分"
+        "first_declared_at": "2026年11月07日20时00分",
+        "last_reinforced_at": "2026年11月10日20时00分"
       }
     }
   }

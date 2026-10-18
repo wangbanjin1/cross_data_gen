@@ -407,13 +407,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "清晰度按‘能认清人脸’开，时延控制在100ms以内，预计持续60min。",
+          "utterance": "画质按‘能认清人脸’来，时延控制在100ms以内，预计持续60min。",
           "action_types": [
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "问一下，您说的‘能认清人脸’具体是指哪种画质档位？往后也按这套标准来吗？",
+          "utterance": "请教一下，您提到的‘能认清人脸’具体对应哪档画质档位？以后也帮您按这个记吗？",
           "action_types": [
             "Request_Disambiguation"
           ]
@@ -1236,56 +1236,44 @@
     "user_id": "USER_002",
     "reference_time": "2026年10月18日14时45分",
     "session_meta": {
-      "template_id": "T2-7",
+      "template_id": "T2-1",
       "round_count": 2,
       "intent_count": 1,
-      "memory_role": "reuse_session",
-      "skeleton_signature": "T2-7|2|1|I1:微信/视频通话/1/working_record_reschedule/resolved|none",
+      "memory_role": "learning_session",
+      "skeleton_signature": "T2-1|2|1|I1:微信/视频通话/1/experience_crystallized/resolved|none",
       "scenario": {
         "environment": "金融街财富管理中心",
-        "blueprint_type": "working_record_reschedule",
-        "memory_action": "reschedule_working_record"
+        "blueprint_type": "experience_learning",
+        "memory_action": "crystallize_experience_pitfall"
       },
-      "working_memory_pointer": {
-        "target_record_id": "REC_mobile_persona_002_20261015_71",
-        "inferred_delta_days": 3,
-        "matched_application": "微信",
-        "matched_service": "视频通话",
-        "modified_slots": {
-          "start_timestamp": "2026年10月18日15时00分",
-          "end_timestamp": "2026年10月18日17时00分"
-        },
-        "reschedule_direction": "delay"
+      "experience_citation": {
+        "experience_id": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01",
+        "title": "周期例行排期遇法定节假日自动顺延经验",
+        "strategy_type": "holiday_avoidance",
+        "suggested_adjustments": {
+          "action": "顺延至节后首个工作日",
+          "strategy": "节假日排期避让"
+        }
       },
-      "memory_tier": "working_memory",
+      "memory_tier": "experiential_memory",
       "cold_hot_type": null,
       "agility_factor": null
-    },
-    "working_memory_pointer": {
-      "target_record_id": "REC_mobile_persona_002_20261015_71",
-      "inferred_delta_days": 3,
-      "matched_application": "微信",
-      "matched_service": "视频通话",
-      "modified_slots": {
-        "start_timestamp": "2026年10月18日15时00分",
-        "end_timestamp": "2026年10月18日17时00分"
-      },
-      "reschedule_direction": "delay"
     },
     "event_sequence": [
       {
         "turn": 1,
         "user": {
-          "utterance": "把昨天预约的微信视频通话保障往后推迟一个小时。",
+          "utterance": "今天在金融街财富管理中心，帮我安排下周例行的微信视频通话保障。对了，上次中秋放假，系统还在空荡荡的办公室空跑保障扣费，太浪费了！这次千万别再搞出节假日空跑这种事！",
           "action_types": [
-            "Modify_Request",
+            "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，已找到您此前预约的微信视频通话保障工单。往后推迟一小时后，新的保障时段为15时00分至17时00分，确认进行改期吗？",
+          "utterance": "非常抱歉上次放假期间未能智能识别法定假日，导致例行保障空跑！我们已深刻复盘并沉淀【节假日与调休避让经验】。今后遇到法定假日，系统将主动提醒并顺延至节后首个工作日办理，绝不让您承担空跑费用。当前例行保障已为您配置就绪，确认直接开通吗？",
           "action_types": [
-            "Confirm_Slot"
+            "Confirm_Slot",
+            "Request_Slot"
           ]
         },
         "related_intent_ids": [
@@ -1296,32 +1284,32 @@
           {
             "intent_id": "I1",
             "status": "in_progress",
-            "closure_path": "working_record_reschedule",
+            "closure_path": "experience_crystallized",
             "expression_level": 1,
             "intent": "微信视频通话保障",
             "params": {
               "application_name": {
                 "value": "微信",
-                "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261015_71"
+                "source_type": "Turn",
+                "source_ref": "U1"
               },
               "service_name": {
                 "value": "视频通话",
-                "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261015_71"
+                "source_type": "Turn",
+                "source_ref": "U1"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
-                  "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261015_71"
+                  "source_type": "Turn",
+                  "source_ref": "U1"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
-                  "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261015_71"
+                  "source_type": "Turn",
+                  "source_ref": "U1"
                 }
               },
               "timestamp": {
@@ -1337,35 +1325,33 @@
                 },
                 "duration": {
                   "value": "120min",
-                  "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261015_71"
+                  "source_type": "Turn",
+                  "source_ref": "U1"
                 }
               }
             }
           }
         ],
-        "working_memory_pointer": {
-          "target_record_id": "REC_mobile_persona_002_20261015_71",
-          "inferred_delta_days": 3,
-          "matched_application": "微信",
-          "matched_service": "视频通话",
-          "modified_slots": {
-            "start_timestamp": "2026年10月18日15时00分",
-            "end_timestamp": "2026年10月18日17时00分"
-          },
-          "reschedule_direction": "delay"
+        "experience_citation": {
+          "experience_id": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01",
+          "title": "周期例行排期遇法定节假日自动顺延经验",
+          "strategy_type": "holiday_avoidance",
+          "suggested_adjustments": {
+            "action": "顺延至节后首个工作日",
+            "strategy": "节假日排期避让"
+          }
         }
       },
       {
         "turn": 2,
         "user": {
-          "utterance": "对，确认修改。",
+          "utterance": "好的，有这个避让经验就好，这次直接开通吧。",
           "action_types": [
             "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您成功办理工单延期变更，保障时段已更新为15时00分至17时00分生效。祝您使用顺利！",
+          "utterance": "好的，已为您开通本次例行网络保障（1080p / 时延≤50ms），同时已将节假日避让规则沉淀至经验记忆库中，祝您工作顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -1378,32 +1364,32 @@
           {
             "intent_id": "I1",
             "status": "resolved",
-            "closure_path": "working_record_reschedule",
+            "closure_path": "experience_crystallized",
             "expression_level": 1,
             "intent": "微信视频通话保障",
             "params": {
               "application_name": {
                 "value": "微信",
-                "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261015_71"
+                "source_type": "Turn",
+                "source_ref": "U1"
               },
               "service_name": {
                 "value": "视频通话",
-                "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261015_71"
+                "source_type": "Turn",
+                "source_ref": "U1"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
-                  "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261015_71"
+                  "source_type": "Turn",
+                  "source_ref": "U1"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
-                  "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261015_71"
+                  "source_type": "Turn",
+                  "source_ref": "U1"
                 }
               },
               "timestamp": {
@@ -1419,8 +1405,8 @@
                 },
                 "duration": {
                   "value": "120min",
-                  "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261015_71"
+                  "source_type": "Turn",
+                  "source_ref": "U1"
                 }
               }
             }
@@ -1432,32 +1418,32 @@
       {
         "intent_id": "I1",
         "status": "resolved",
-        "closure_path": "working_record_reschedule",
+        "closure_path": "experience_crystallized",
         "expression_level": 1,
         "intent": "微信视频通话保障",
         "params": {
           "application_name": {
             "value": "微信",
-            "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_002_20261015_71"
+            "source_type": "Turn",
+            "source_ref": "U1"
           },
           "service_name": {
             "value": "视频通话",
-            "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_002_20261015_71"
+            "source_type": "Turn",
+            "source_ref": "U1"
           },
           "resolution": {
             "min_value": {
               "value": "1080p",
-              "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_002_20261015_71"
+              "source_type": "Turn",
+              "source_ref": "U1"
             }
           },
           "rtt": {
             "max_value": {
               "value": "50ms",
-              "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_002_20261015_71"
+              "source_type": "Turn",
+              "source_ref": "U1"
             }
           },
           "timestamp": {
@@ -1473,8 +1459,8 @@
             },
             "duration": {
               "value": "120min",
-              "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_002_20261015_71"
+              "source_type": "Turn",
+              "source_ref": "U1"
             }
           }
         }
@@ -1490,27 +1476,13 @@
             "params": {
               "application_name": {
                 "value": "微信",
-                "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261015_71"
+                "source_type": "Turn",
+                "source_ref": "U1"
               },
               "service_name": {
                 "value": "视频通话",
-                "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261015_71"
-              },
-              "resolution": {
-                "min_value": {
-                  "value": "1080p",
-                  "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261015_71"
-                }
-              },
-              "rtt": {
-                "max_value": {
-                  "value": "50ms",
-                  "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261015_71"
-                }
+                "source_type": "Turn",
+                "source_ref": "U1"
               },
               "timestamp": {
                 "start_timestamp": {
@@ -1525,8 +1497,22 @@
                 },
                 "duration": {
                   "value": "120min",
-                  "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261015_71"
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
                 }
               }
             }
@@ -1537,12 +1523,395 @@
           }
         ]
       }
-    ]
+    ],
+    "experience_citation": {
+      "experience_id": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01",
+      "title": "周期例行排期遇法定节假日自动顺延经验",
+      "strategy_type": "holiday_avoidance",
+      "suggested_adjustments": {
+        "action": "顺延至节后首个工作日",
+        "strategy": "节假日排期避让"
+      }
+    }
   },
   {
     "session_id": "S-USER_002-06",
     "user_id": "USER_002",
     "reference_time": "2026年10月21日14时45分",
+    "session_meta": {
+      "template_id": "T2-1",
+      "round_count": 2,
+      "intent_count": 1,
+      "memory_role": "reuse_session",
+      "skeleton_signature": "T2-1|2|1|I1:微信/视频通话/1/holiday_avoidance_deferral/resolved|none",
+      "scenario": {
+        "environment": "金融街财富管理中心",
+        "blueprint_type": "proactive_experience",
+        "memory_action": "holiday_avoidance_reschedule"
+      },
+      "experience_citation": {
+        "experience_id": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01",
+        "title": "周期例行排期遇法定节假日自动顺延经验",
+        "strategy_type": "holiday_avoidance",
+        "suggested_adjustments": {
+          "action": "顺延至节后首个工作日",
+          "strategy": "节假日排期避让"
+        }
+      },
+      "experience_branching": {
+        "learning_source_session": "S-USER_002-05",
+        "experience_id": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01",
+        "rule_title": "周期例行排期遇法定节假日自动顺延经验",
+        "fast_path": {
+          "round_count": 2,
+          "closure_path": "fast_experience_closed_loop",
+          "trigger_condition": "日历引擎识别国庆假期冲突，主动在大白话回复中顺延至节后首个工作日，2轮优雅出单",
+          "resolved_turn": 2,
+          "key_params_source": {
+            "source_type": "Experience",
+            "source_ref": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01"
+          }
+        },
+        "slow_path": {
+          "round_count": 4,
+          "closure_path": "clarification_after_correction",
+          "trigger_condition": "Agent缺乏节假日经验，机械按放假当天开通导致白白扣费，用户投诉退单，经历取消、重算、改期4轮拉扯",
+          "resolved_turn": 4,
+          "redundant_rounds": 2,
+          "simulator_dialogue_tree": [
+            {
+              "turn": 1,
+              "agent_hypothesis": "Agent未识别法定假期，直接在10月1日国庆长假当天预约保障",
+              "simulator_user_prompt": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月1号？",
+              "expected_agent_correction": "抱歉！识别到10月1日为法定假日，已为您将例行保障顺延至节后首个工作日（10月8日）同时段办理，避免空跑产生费用，您看可以吗？"
+            },
+            {
+              "turn": 2,
+              "agent_hypothesis": "Agent未主动核实节后时段",
+              "simulator_user_prompt": "对，放假千万别空跑，就顺延到10月8日开通吧。",
+              "expected_agent_correction": "好的，已成功将保障顺延至10月8日办理（1080p / 时延≤50ms），祝您假期愉快！"
+            }
+          ]
+        }
+      },
+      "memory_tier": "experiential_memory",
+      "cold_hot_type": null,
+      "agility_factor": null
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "今天在金融街财富管理中心，帮我把例行周会的微信视频通话保障开上，时间是下周一。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，识别到下周一恰逢国庆节法定长假第一天，办公区全员放假。根据此前在 S-USER_002-05 总结沉淀的节假日避让经验，为您将保障顺延至节后首个工作日（10月8日）同时段办理，避免放假期间空跑产生费用，确认按此顺延办理吗？",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "holiday_avoidance_deferral",
+            "expression_level": 1,
+            "intent": "微信视频通话保障",
+            "params": {
+              "application_name": {
+                "value": "微信",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "视频通话",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月08日15时00分",
+                  "source_type": "Experience",
+                  "source_ref": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月08日17时00分",
+                  "source_type": "Experience",
+                  "source_ref": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          }
+        ],
+        "experience_citation": {
+          "experience_id": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01",
+          "title": "周期例行排期遇法定节假日自动顺延经验",
+          "strategy_type": "holiday_avoidance",
+          "suggested_adjustments": {
+            "action": "顺延至节后首个工作日",
+            "strategy": "节假日排期避让"
+          }
+        }
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "好的，太周到了，就顺延到10月8日开通吧。",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已为您将例行周会网络保障顺延至10月8日办理（1080p / 时延≤50ms），祝您假期愉快！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "holiday_avoidance_deferral",
+            "expression_level": 1,
+            "intent": "微信视频通话保障",
+            "params": {
+              "application_name": {
+                "value": "微信",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "视频通话",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月08日15时00分",
+                  "source_type": "Experience",
+                  "source_ref": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月08日17时00分",
+                  "source_type": "Experience",
+                  "source_ref": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "holiday_avoidance_deferral",
+        "expression_level": 1,
+        "intent": "微信视频通话保障",
+        "params": {
+          "application_name": {
+            "value": "微信",
+            "source_type": "Memory",
+            "source_ref": "MF_001"
+          },
+          "service_name": {
+            "value": "视频通话",
+            "source_type": "Memory",
+            "source_ref": "MF_001"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "1080p",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "50ms",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年10月08日15时00分",
+              "source_type": "Experience",
+              "source_ref": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01"
+            },
+            "end_timestamp": {
+              "value": "2026年10月08日17时00分",
+              "source_type": "Experience",
+              "source_ref": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01"
+            },
+            "duration": {
+              "value": "120min",
+              "source_type": "Memory",
+              "source_ref": "MF_001"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "微信",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "service_name": {
+                "value": "视频通话",
+                "source_type": "Memory",
+                "source_ref": "MF_001"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年10月08日15时00分",
+                  "source_type": "Experience",
+                  "source_ref": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01"
+                },
+                "end_timestamp": {
+                  "value": "2026年10月08日17时00分",
+                  "source_type": "Experience",
+                  "source_ref": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Memory",
+                  "source_ref": "MF_001"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {}
+          }
+        ]
+      }
+    ],
+    "experience_citation": {
+      "experience_id": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01",
+      "title": "周期例行排期遇法定节假日自动顺延经验",
+      "strategy_type": "holiday_avoidance",
+      "suggested_adjustments": {
+        "action": "顺延至节后首个工作日",
+        "strategy": "节假日排期避让"
+      }
+    },
+    "experience_branching": {
+      "learning_source_session": "S-USER_002-05",
+      "experience_id": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01",
+      "rule_title": "周期例行排期遇法定节假日自动顺延经验",
+      "fast_path": {
+        "round_count": 2,
+        "closure_path": "fast_experience_closed_loop",
+        "trigger_condition": "日历引擎识别国庆假期冲突，主动在大白话回复中顺延至节后首个工作日，2轮优雅出单",
+        "resolved_turn": 2,
+        "key_params_source": {
+          "source_type": "Experience",
+          "source_ref": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01"
+        }
+      },
+      "slow_path": {
+        "round_count": 4,
+        "closure_path": "clarification_after_correction",
+        "trigger_condition": "Agent缺乏节假日经验，机械按放假当天开通导致白白扣费，用户投诉退单，经历取消、重算、改期4轮拉扯",
+        "resolved_turn": 4,
+        "redundant_rounds": 2,
+        "simulator_dialogue_tree": [
+          {
+            "turn": 1,
+            "agent_hypothesis": "Agent未识别法定假期，直接在10月1日国庆长假当天预约保障",
+            "simulator_user_prompt": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月1号？",
+            "expected_agent_correction": "抱歉！识别到10月1日为法定假日，已为您将例行保障顺延至节后首个工作日（10月8日）同时段办理，避免空跑产生费用，您看可以吗？"
+          },
+          {
+            "turn": 2,
+            "agent_hypothesis": "Agent未主动核实节后时段",
+            "simulator_user_prompt": "对，放假千万别空跑，就顺延到10月8日开通吧。",
+            "expected_agent_correction": "好的，已成功将保障顺延至10月8日办理（1080p / 时延≤50ms），祝您假期愉快！"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "session_id": "S-USER_002-07",
+    "user_id": "USER_002",
+    "reference_time": "2026年10月24日14时45分",
     "session_meta": {
       "template_id": "T2-5",
       "round_count": 2,
@@ -1612,12 +1981,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年10月21日15时00分",
+                  "value": "2026年10月24日15时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年10月21日17时00分",
+                  "value": "2026年10月24日17时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -1684,12 +2053,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年10月21日15时00分",
+                  "value": "2026年10月24日15时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年10月21日18时00分",
+                  "value": "2026年10月24日18时00分",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 },
@@ -1738,12 +2107,12 @@
           },
           "timestamp": {
             "start_timestamp": {
-              "value": "2026年10月21日15时00分",
+              "value": "2026年10月24日15时00分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
             "end_timestamp": {
-              "value": "2026年10月21日18时00分",
+              "value": "2026年10月24日18时00分",
               "source_type": "Turn",
               "source_ref": "U2"
             },
@@ -1790,12 +2159,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年10月21日15时00分",
+                  "value": "2026年10月24日15时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年10月21日17时00分",
+                  "value": "2026年10月24日17时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -1812,7 +2181,7 @@
             "params": {
               "timestamp": {
                 "end_timestamp": {
-                  "value": "2026年10月21日18时00分",
+                  "value": "2026年10月24日18时00分",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 },
@@ -1829,679 +2198,47 @@
     ]
   },
   {
-    "session_id": "S-USER_002-07",
-    "user_id": "USER_002",
-    "reference_time": "2026年10月24日14时45分",
-    "session_meta": {
-      "template_id": "T2-6",
-      "round_count": 3,
-      "intent_count": 1,
-      "memory_role": "reuse_session",
-      "skeleton_signature": "T2-6|3|1|I1:微信/视频通话/1/working_record_reuse/resolved|none",
-      "scenario": {
-        "environment": "金融街财富管理中心",
-        "blueprint_type": "working_record_disambig",
-        "memory_action": "disambiguate_working_record"
-      },
-      "working_memory_pointer": {
-        "target_record_id": "REC_mobile_persona_002_20261007_01",
-        "inferred_delta_days": 17,
-        "matched_application": "微信",
-        "matched_service": "视频通话",
-        "inherited_slots": {
-          "resolution": "1080p",
-          "rtt_max": "50ms",
-          "duration": "120min"
-        },
-        "candidate_record_ids": [
-          "REC_mobile_persona_002_20261007_01",
-          "REC_mobile_persona_002_20261011_02"
-        ],
-        "is_disambiguation": true
-      },
-      "memory_tier": "working_memory",
-      "cold_hot_type": null,
-      "agility_factor": null
-    },
-    "working_memory_pointer": {
-      "target_record_id": "REC_mobile_persona_002_20261007_01",
-      "inferred_delta_days": 17,
-      "matched_application": "微信",
-      "matched_service": "视频通话",
-      "inherited_slots": {
-        "resolution": "1080p",
-        "rtt_max": "50ms",
-        "duration": "120min"
-      },
-      "candidate_record_ids": [
-        "REC_mobile_persona_002_20261007_01",
-        "REC_mobile_persona_002_20261011_02"
-      ],
-      "is_disambiguation": true
-    },
-    "event_sequence": [
-      {
-        "turn": 1,
-        "user": {
-          "utterance": "今天在金融街财富管理中心，想按之前的工单规格开微信视频通话保障，时间从15时00分到17时00分。",
-          "action_types": [
-            "Create_Intent_Request",
-            "Inform_Slot"
-          ]
-        },
-        "agent": {
-          "utterance": "收到，查询到您此前在金融街财富管理中心有多次微信视频通话保障工单（包括 REC_mobile_persona_002_20261007_01、REC_mobile_persona_002_20261011_02），配置规格略有差异。请问您今天是指按哪一次的规格来开通呢？",
-          "action_types": [
-            "Request_Disambiguation"
-          ]
-        },
-        "related_intent_ids": [
-          "I1"
-        ],
-        "requested_params": [
-          "target_record_id"
-        ],
-        "turn_intents": [
-          {
-            "intent_id": "I1",
-            "status": "in_progress",
-            "closure_path": "working_record_disambig",
-            "expression_level": 1,
-            "intent": "微信视频通话保障",
-            "params": {
-              "application_name": {
-                "value": "微信",
-                "source_type": "Turn",
-                "source_ref": "U1"
-              },
-              "service_name": {
-                "value": "视频通话",
-                "source_type": "Turn",
-                "source_ref": "U1"
-              },
-              "timestamp": {
-                "start_timestamp": {
-                  "value": "2026年10月24日15时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
-                },
-                "end_timestamp": {
-                  "value": "2026年10月24日17时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
-                },
-                "duration": {
-                  "value": "120min",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
-                }
-              }
-            }
-          }
-        ],
-        "working_memory_pointer": {
-          "target_record_id": "REC_mobile_persona_002_20261007_01",
-          "inferred_delta_days": 17,
-          "matched_application": "微信",
-          "matched_service": "视频通话",
-          "inherited_slots": {
-            "resolution": "1080p",
-            "rtt_max": "50ms",
-            "duration": "120min"
-          },
-          "candidate_record_ids": [
-            "REC_mobile_persona_002_20261007_01",
-            "REC_mobile_persona_002_20261011_02"
-          ],
-          "is_disambiguation": true
-        }
-      },
-      {
-        "turn": 2,
-        "user": {
-          "utterance": "按最近那次开通的规格来就行。",
-          "action_types": [
-            "Confirm_Slot",
-            "Inform_Slot"
-          ]
-        },
-        "agent": {
-          "utterance": "明白，已精准锁定最近一次工单规格（1080p / 时延≤50ms），时段为15时00分至17时00分，确认直接开通吗？",
-          "action_types": [
-            "Confirm_Slot"
-          ]
-        },
-        "related_intent_ids": [
-          "I1"
-        ],
-        "requested_params": [],
-        "turn_intents": [
-          {
-            "intent_id": "I1",
-            "status": "resolved",
-            "closure_path": "working_record_reuse",
-            "expression_level": 1,
-            "intent": "微信视频通话保障",
-            "params": {
-              "application_name": {
-                "value": "微信",
-                "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261007_01"
-              },
-              "service_name": {
-                "value": "视频通话",
-                "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261007_01"
-              },
-              "resolution": {
-                "min_value": {
-                  "value": "1080p",
-                  "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261007_01"
-                }
-              },
-              "rtt": {
-                "max_value": {
-                  "value": "50ms",
-                  "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261007_01"
-                }
-              },
-              "timestamp": {
-                "start_timestamp": {
-                  "value": "2026年10月24日15时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
-                },
-                "end_timestamp": {
-                  "value": "2026年10月24日17时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
-                },
-                "duration": {
-                  "value": "120min",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
-                }
-              }
-            }
-          }
-        ]
-      },
-      {
-        "turn": 3,
-        "user": {
-          "utterance": "对，确认按这个规格开通。",
-          "action_types": [
-            "Confirm_Slot"
-          ]
-        },
-        "agent": {
-          "utterance": "好的，已按您确认的历史工单规格成功开通今日微信视频通话保障（1080p / 时延≤50ms，时段15时00分至17时00分）。祝您工作顺利！",
-          "action_types": [
-            "Acknowledge"
-          ]
-        },
-        "related_intent_ids": [
-          "I1"
-        ],
-        "requested_params": [],
-        "turn_intents": [
-          {
-            "intent_id": "I1",
-            "status": "resolved",
-            "closure_path": "working_record_reuse",
-            "expression_level": 1,
-            "intent": "微信视频通话保障",
-            "params": {
-              "application_name": {
-                "value": "微信",
-                "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261007_01"
-              },
-              "service_name": {
-                "value": "视频通话",
-                "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261007_01"
-              },
-              "resolution": {
-                "min_value": {
-                  "value": "1080p",
-                  "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261007_01"
-                }
-              },
-              "rtt": {
-                "max_value": {
-                  "value": "50ms",
-                  "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261007_01"
-                }
-              },
-              "timestamp": {
-                "start_timestamp": {
-                  "value": "2026年10月24日15时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
-                },
-                "end_timestamp": {
-                  "value": "2026年10月24日17时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
-                },
-                "duration": {
-                  "value": "120min",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
-                }
-              }
-            }
-          }
-        ]
-      }
-    ],
-    "intents": [
-      {
-        "intent_id": "I1",
-        "status": "resolved",
-        "closure_path": "working_record_reuse",
-        "expression_level": 1,
-        "intent": "微信视频通话保障",
-        "params": {
-          "application_name": {
-            "value": "微信",
-            "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_002_20261007_01"
-          },
-          "service_name": {
-            "value": "视频通话",
-            "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_002_20261007_01"
-          },
-          "resolution": {
-            "min_value": {
-              "value": "1080p",
-              "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_002_20261007_01"
-            }
-          },
-          "rtt": {
-            "max_value": {
-              "value": "50ms",
-              "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_002_20261007_01"
-            }
-          },
-          "timestamp": {
-            "start_timestamp": {
-              "value": "2026年10月24日15时00分",
-              "source_type": "Turn",
-              "source_ref": "U1"
-            },
-            "end_timestamp": {
-              "value": "2026年10月24日17时00分",
-              "source_type": "Turn",
-              "source_ref": "U1"
-            },
-            "duration": {
-              "value": "120min",
-              "source_type": "Turn",
-              "source_ref": "U1"
-            }
-          }
-        }
-      }
-    ],
-    "relations": [],
-    "slot_updates": [
-      {
-        "intent_id": "I1",
-        "turn_updates": [
-          {
-            "turn": 1,
-            "params": {
-              "application_name": {
-                "value": "微信",
-                "source_type": "Turn",
-                "source_ref": "U1"
-              },
-              "service_name": {
-                "value": "视频通话",
-                "source_type": "Turn",
-                "source_ref": "U1"
-              },
-              "timestamp": {
-                "start_timestamp": {
-                  "value": "2026年10月24日15时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
-                },
-                "end_timestamp": {
-                  "value": "2026年10月24日17时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
-                },
-                "duration": {
-                  "value": "120min",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
-                }
-              }
-            }
-          },
-          {
-            "turn": 2,
-            "params": {
-              "application_name": {
-                "value": "微信",
-                "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261007_01"
-              },
-              "service_name": {
-                "value": "视频通话",
-                "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261007_01"
-              },
-              "resolution": {
-                "min_value": {
-                  "value": "1080p",
-                  "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261007_01"
-                }
-              },
-              "rtt": {
-                "max_value": {
-                  "value": "50ms",
-                  "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261007_01"
-                }
-              }
-            }
-          },
-          {
-            "turn": 3,
-            "params": {}
-          }
-        ]
-      }
-    ]
-  },
-  {
     "session_id": "S-USER_002-08",
     "user_id": "USER_002",
     "reference_time": "2026年10月28日14时45分",
     "session_meta": {
       "template_id": "T2-1",
-      "round_count": 1,
+      "round_count": 2,
       "intent_count": 1,
-      "memory_role": "reuse_session",
-      "skeleton_signature": "T2-1|1|1|I1:微信/视频通话/1/memory_filled/resolved|none",
+      "memory_role": "learning_session",
+      "skeleton_signature": "T2-1|2|1|I1:微信/视频通话/1/experience_crystallized/resolved|none",
       "scenario": {
         "environment": "金融街财富管理中心",
-        "blueprint_type": "main",
-        "memory_action": "continuous_main_reuse"
-      },
-      "memory_tier": "factual_memory",
-      "cold_hot_type": "hot_start",
-      "agility_factor": 1.0
-    },
-    "event_sequence": [
-      {
-        "turn": 1,
-        "user": {
-          "utterance": "老规矩，在金融街财富管理中心，用微信做视频通话，帮我把保障开上，别掉链子。",
-          "action_types": [
-            "Create_Intent_Request",
-            "Inform_Slot"
-          ]
-        },
-        "agent": {
-          "utterance": "好的，已按老规矩为您开通微信视频通话网络保障（1080p / 时延≤50ms，时段15时00分至17时00分），祝您使用愉快！",
-          "action_types": [
-            "Acknowledge"
-          ]
-        },
-        "related_intent_ids": [
-          "I1"
-        ],
-        "requested_params": [],
-        "turn_intents": [
-          {
-            "intent_id": "I1",
-            "status": "resolved",
-            "closure_path": "memory_filled",
-            "expression_level": 1,
-            "intent": "微信视频通话保障",
-            "params": {
-              "application_name": {
-                "value": "微信",
-                "source_type": "Turn",
-                "source_ref": "U1"
-              },
-              "service_name": {
-                "value": "视频通话",
-                "source_type": "Turn",
-                "source_ref": "U1"
-              },
-              "resolution": {
-                "min_value": {
-                  "value": "1080p",
-                  "source_type": "Memory",
-                  "source_ref": "MF_001"
-                }
-              },
-              "rtt": {
-                "max_value": {
-                  "value": "50ms",
-                  "source_type": "Memory",
-                  "source_ref": "MF_001"
-                }
-              },
-              "timestamp": {
-                "start_timestamp": {
-                  "value": "2026年10月28日15时00分",
-                  "source_type": "Memory",
-                  "source_ref": "MF_001"
-                },
-                "end_timestamp": {
-                  "value": "2026年10月28日17时00分",
-                  "source_type": "Memory",
-                  "source_ref": "MF_001"
-                },
-                "duration": {
-                  "value": "120min",
-                  "source_type": "Memory",
-                  "source_ref": "MF_001"
-                }
-              }
-            }
-          }
-        ]
-      }
-    ],
-    "intents": [
-      {
-        "intent_id": "I1",
-        "status": "resolved",
-        "closure_path": "memory_filled",
-        "expression_level": 1,
-        "intent": "微信视频通话保障",
-        "params": {
-          "application_name": {
-            "value": "微信",
-            "source_type": "Turn",
-            "source_ref": "U1"
-          },
-          "service_name": {
-            "value": "视频通话",
-            "source_type": "Turn",
-            "source_ref": "U1"
-          },
-          "resolution": {
-            "min_value": {
-              "value": "1080p",
-              "source_type": "Memory",
-              "source_ref": "MF_001"
-            }
-          },
-          "rtt": {
-            "max_value": {
-              "value": "50ms",
-              "source_type": "Memory",
-              "source_ref": "MF_001"
-            }
-          },
-          "timestamp": {
-            "start_timestamp": {
-              "value": "2026年10月28日15时00分",
-              "source_type": "Memory",
-              "source_ref": "MF_001"
-            },
-            "end_timestamp": {
-              "value": "2026年10月28日17时00分",
-              "source_type": "Memory",
-              "source_ref": "MF_001"
-            },
-            "duration": {
-              "value": "120min",
-              "source_type": "Memory",
-              "source_ref": "MF_001"
-            }
-          }
-        }
-      }
-    ],
-    "relations": [],
-    "slot_updates": [
-      {
-        "intent_id": "I1",
-        "turn_updates": [
-          {
-            "turn": 1,
-            "params": {
-              "application_name": {
-                "value": "微信",
-                "source_type": "Turn",
-                "source_ref": "U1"
-              },
-              "service_name": {
-                "value": "视频通话",
-                "source_type": "Turn",
-                "source_ref": "U1"
-              },
-              "timestamp": {
-                "start_timestamp": {
-                  "value": "2026年10月28日15时00分",
-                  "source_type": "Memory",
-                  "source_ref": "MF_001"
-                },
-                "end_timestamp": {
-                  "value": "2026年10月28日17时00分",
-                  "source_type": "Memory",
-                  "source_ref": "MF_001"
-                },
-                "duration": {
-                  "value": "120min",
-                  "source_type": "Memory",
-                  "source_ref": "MF_001"
-                }
-              },
-              "resolution": {
-                "min_value": {
-                  "value": "1080p",
-                  "source_type": "Memory",
-                  "source_ref": "MF_001"
-                }
-              },
-              "rtt": {
-                "max_value": {
-                  "value": "50ms",
-                  "source_type": "Memory",
-                  "source_ref": "MF_001"
-                }
-              }
-            }
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "session_id": "S-USER_002-09",
-    "user_id": "USER_002",
-    "reference_time": "2026年10月29日14时45分",
-    "session_meta": {
-      "template_id": "T2-9",
-      "round_count": 3,
-      "intent_count": 1,
-      "memory_role": "reuse_session",
-      "skeleton_signature": "T2-9|3|1|I1:微信/视频通话/1/proactive_experience/resolved|none",
-      "scenario": {
-        "environment": "奥林匹克体育中心主场馆",
-        "blueprint_type": "proactive_experience",
-        "memory_action": "proactive_experience_suggestion"
+        "blueprint_type": "experience_learning",
+        "memory_action": "crystallize_experience_pitfall"
       },
       "experience_citation": {
-        "experience_id": "EXP_STADIUM_CONGESTION_01",
-        "title": "极值与高密环境主动降画质保抗丢包平稳度",
-        "strategy_type": "proactive_suggestion",
+        "experience_id": "EXP_ORDER_QUALITY_DISAMBIGUATION_01",
+        "title": "基于历史工单网络质量日志的智能消歧经验",
+        "strategy_type": "quality_disambiguation",
         "suggested_adjustments": {
-          "resolution": "720p",
-          "rtt_max": "30ms",
-          "strategy": "稳定性优先"
-        },
-        "negotiation_required": true
-      },
-      "experience_branching": {
-        "experience_id": "EXP_STADIUM_CONGESTION_01",
-        "rule_title": "极值与高密环境主动降画质保抗丢包平稳度",
-        "fast_path": {
-          "round_count": 1,
-          "closure_path": "fast_experience_closed_loop",
-          "trigger_condition": "Agent自主应用经验记忆，在首轮直接完成目标经验槽位推理与闭环受理",
-          "resolved_turn": 1,
-          "key_params_source": {
-            "source_type": "Experience",
-            "source_ref": "EXP_STADIUM_CONGESTION_01"
-          }
-        },
-        "slow_path": {
-          "round_count": 3,
-          "closure_path": "clarification_after_correction",
-          "trigger_condition": "Agent缺乏经验记忆按字面直接办理，用户发起纠偏提醒，经历多轮确认后闭环",
-          "resolved_turn": 3,
-          "redundant_rounds": 2
+          "rule": "基于质量日志过滤异常工单并锁定优质工单"
         }
       },
       "memory_tier": "experiential_memory",
       "cold_hot_type": null,
       "agility_factor": null
     },
-    "experience_citation": {
-      "experience_id": "EXP_STADIUM_CONGESTION_01",
-      "title": "极值与高密环境主动降画质保抗丢包平稳度",
-      "strategy_type": "proactive_suggestion",
-      "suggested_adjustments": {
-        "resolution": "720p",
-        "rtt_max": "30ms",
-        "strategy": "稳定性优先"
-      },
-      "negotiation_required": true
-    },
     "event_sequence": [
       {
         "turn": 1,
         "user": {
-          "utterance": "今天在外勤保障现场有重要活动，开微信视频通话保障，时间从15时00分到17时00分，画质要求1080p。",
+          "utterance": "今天在金融街财富管理中心，帮我按之前的配置开通微信视频通话保障。上次调了有丢包抖动的异常工单来复用，导致推流也跟着受影响，这次可别乱复用有问题的单据！",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，外勤保障现场现场人特别多容易网络拥挤，建议将画质调为720p、时延控制在30ms以内，优先保证不卡顿。您看这样行吗？",
+          "utterance": "非常抱歉！上次盲目复用了存在抖动隐患的工单。我们已汲取教训并建立【历史工单网络质量评估经验】，今后复用时将自动调取质差分析日志，仅锁定全程无丢包的最优质量工单。本次配置已为您准备就绪，确认开通吗？",
           "action_types": [
-            "Confirm_Slot"
+            "Confirm_Slot",
+            "Request_Slot"
           ]
         },
         "related_intent_ids": [
@@ -2512,7 +2249,7 @@
           {
             "intent_id": "I1",
             "status": "in_progress",
-            "closure_path": "proactive_experience",
+            "closure_path": "experience_crystallized",
             "expression_level": 1,
             "intent": "微信视频通话保障",
             "params": {
@@ -2533,14 +2270,21 @@
                   "source_ref": "U1"
                 }
               },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年10月29日15时00分",
+                  "value": "2026年10月28日15时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年10月29日17时00分",
+                  "value": "2026年10月28日17时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -2554,98 +2298,24 @@
           }
         ],
         "experience_citation": {
-          "experience_id": "EXP_STADIUM_CONGESTION_01",
-          "title": "极值与高密环境主动降画质保抗丢包平稳度",
-          "strategy_type": "proactive_suggestion",
+          "experience_id": "EXP_ORDER_QUALITY_DISAMBIGUATION_01",
+          "title": "基于历史工单网络质量日志的智能消歧经验",
+          "strategy_type": "quality_disambiguation",
           "suggested_adjustments": {
-            "resolution": "720p",
-            "rtt_max": "30ms",
-            "strategy": "稳定性优先"
-          },
-          "negotiation_required": true
+            "rule": "基于质量日志过滤异常工单并锁定优质工单"
+          }
         }
       },
       {
         "turn": 2,
         "user": {
-          "utterance": "降到720p够清晰吗？只要不卡不转圈就行。",
-          "action_types": [
-            "Inform_Slot"
-          ]
-        },
-        "agent": {
-          "utterance": "在手机上看清晰度完全够用，关键是人多时不会卡住转圈，时延稳定在30ms。确认按这个开通吗？",
-          "action_types": [
-            "Confirm_Slot"
-          ]
-        },
-        "related_intent_ids": [
-          "I1"
-        ],
-        "requested_params": [],
-        "turn_intents": [
-          {
-            "intent_id": "I1",
-            "status": "resolved",
-            "closure_path": "proactive_experience",
-            "expression_level": 1,
-            "intent": "微信视频通话保障",
-            "params": {
-              "application_name": {
-                "value": "微信",
-                "source_type": "Turn",
-                "source_ref": "U1"
-              },
-              "service_name": {
-                "value": "视频通话",
-                "source_type": "Turn",
-                "source_ref": "U1"
-              },
-              "resolution": {
-                "min_value": {
-                  "value": "720p",
-                  "source_type": "Experience",
-                  "source_ref": "EXP_STADIUM_CONGESTION_01"
-                }
-              },
-              "rtt": {
-                "max_value": {
-                  "value": "30ms",
-                  "source_type": "Experience",
-                  "source_ref": "EXP_STADIUM_CONGESTION_01"
-                }
-              },
-              "timestamp": {
-                "start_timestamp": {
-                  "value": "2026年10月29日15时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
-                },
-                "end_timestamp": {
-                  "value": "2026年10月29日17时00分",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
-                },
-                "duration": {
-                  "value": "120min",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
-                }
-              }
-            }
-          }
-        ]
-      },
-      {
-        "turn": 3,
-        "user": {
-          "utterance": "行，听你的，就按720p保流畅开通吧。",
+          "utterance": "好的，能自动甄别高质量工单就行，开通吧。",
           "action_types": [
             "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您按人多防卡方案开通微信视频通话保障（720p / 时延≤30ms），祝您现场活动顺利！",
+          "utterance": "好的，已按优质标准为您开通本次保障（1080p / 时延≤50ms），质量甄选经验已正式写入经验库，祝您使用顺畅！",
           "action_types": [
             "Acknowledge"
           ]
@@ -2658,7 +2328,7 @@
           {
             "intent_id": "I1",
             "status": "resolved",
-            "closure_path": "proactive_experience",
+            "closure_path": "experience_crystallized",
             "expression_level": 1,
             "intent": "微信视频通话保障",
             "params": {
@@ -2674,26 +2344,26 @@
               },
               "resolution": {
                 "min_value": {
-                  "value": "720p",
-                  "source_type": "Experience",
-                  "source_ref": "EXP_STADIUM_CONGESTION_01"
+                  "value": "1080p",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
                 }
               },
               "rtt": {
                 "max_value": {
-                  "value": "30ms",
-                  "source_type": "Experience",
-                  "source_ref": "EXP_STADIUM_CONGESTION_01"
+                  "value": "50ms",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
                 }
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年10月29日15时00分",
+                  "value": "2026年10月28日15时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年10月29日17时00分",
+                  "value": "2026年10月28日17时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -2712,7 +2382,7 @@
       {
         "intent_id": "I1",
         "status": "resolved",
-        "closure_path": "proactive_experience",
+        "closure_path": "experience_crystallized",
         "expression_level": 1,
         "intent": "微信视频通话保障",
         "params": {
@@ -2728,26 +2398,26 @@
           },
           "resolution": {
             "min_value": {
-              "value": "720p",
-              "source_type": "Experience",
-              "source_ref": "EXP_STADIUM_CONGESTION_01"
+              "value": "1080p",
+              "source_type": "Turn",
+              "source_ref": "U1"
             }
           },
           "rtt": {
             "max_value": {
-              "value": "30ms",
-              "source_type": "Experience",
-              "source_ref": "EXP_STADIUM_CONGESTION_01"
+              "value": "50ms",
+              "source_type": "Turn",
+              "source_ref": "U1"
             }
           },
           "timestamp": {
             "start_timestamp": {
-              "value": "2026年10月29日15时00分",
+              "value": "2026年10月28日15时00分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
             "end_timestamp": {
-              "value": "2026年10月29日17时00分",
+              "value": "2026年10月28日17时00分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
@@ -2778,21 +2448,14 @@
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
-              "resolution": {
-                "min_value": {
-                  "value": "1080p",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
-                }
-              },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年10月29日15时00分",
+                  "value": "2026年10月28日15时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年10月29日17时00分",
+                  "value": "2026年10月28日17时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -2801,40 +2464,43 @@
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
               }
             }
           },
           {
             "turn": 2,
-            "params": {
-              "resolution": {
-                "min_value": {
-                  "value": "720p",
-                  "source_type": "Experience",
-                  "source_ref": "EXP_STADIUM_CONGESTION_01"
-                }
-              },
-              "rtt": {
-                "max_value": {
-                  "value": "30ms",
-                  "source_type": "Experience",
-                  "source_ref": "EXP_STADIUM_CONGESTION_01"
-                }
-              }
-            }
-          },
-          {
-            "turn": 3,
             "params": {}
           }
         ]
       }
-    ]
+    ],
+    "experience_citation": {
+      "experience_id": "EXP_ORDER_QUALITY_DISAMBIGUATION_01",
+      "title": "基于历史工单网络质量日志的智能消歧经验",
+      "strategy_type": "quality_disambiguation",
+      "suggested_adjustments": {
+        "rule": "基于质量日志过滤异常工单并锁定优质工单"
+      }
+    }
   },
   {
-    "session_id": "S-USER_002-10",
+    "session_id": "S-USER_002-09",
     "user_id": "USER_002",
-    "reference_time": "2026年11月01日14时45分",
+    "reference_time": "2026年10月29日14时45分",
     "session_meta": {
       "template_id": "T2-3",
       "round_count": 2,
@@ -2904,12 +2570,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月01日15时00分",
+                  "value": "2026年10月29日15时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月01日17时00分",
+                  "value": "2026年10月29日17时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -2976,12 +2642,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月01日15时00分",
+                  "value": "2026年10月29日15时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月01日17时00分",
+                  "value": "2026年10月29日17时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -3030,12 +2696,12 @@
           },
           "timestamp": {
             "start_timestamp": {
-              "value": "2026年11月01日15时00分",
+              "value": "2026年10月29日15时00分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
             "end_timestamp": {
-              "value": "2026年11月01日17时00分",
+              "value": "2026年10月29日17时00分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
@@ -3082,12 +2748,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月01日15时00分",
+                  "value": "2026年10月29日15时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月01日17时00分",
+                  "value": "2026年10月29日17时00分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
@@ -3117,6 +2783,281 @@
                 }
               }
             }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_002-10",
+    "user_id": "USER_002",
+    "reference_time": "2026年11月01日18时30分",
+    "session_meta": {
+      "template_id": "T2-1",
+      "round_count": 2,
+      "intent_count": 1,
+      "memory_role": "reuse_session",
+      "skeleton_signature": "T2-1|2|1|I1:腾讯会议/会议/1/memory_filled/resolved|none",
+      "scenario": {
+        "environment": "大巴跨城转场高速公路",
+        "blueprint_type": "sub_01",
+        "memory_action": "reuse_sub_storyline_1"
+      },
+      "memory_tier": "factual_memory",
+      "cold_hot_type": "hot_start",
+      "agility_factor": 0.5
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "老规矩，每周例行，在大巴转场途中，用腾讯会议做会议，画质按‘能认清人脸’，帮我把保障开上。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，我调取到之前登记的腾讯会议会议配置：720p、时延100ms以内，18时45分开始、19时45分结束，持续60min。确认按这套配置开通吗？",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "腾讯会议会议保障",
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "100ms",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月01日18时45分",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月01日19时45分",
+                  "source_type": "Context",
+                  "source_ref": "SUB_001"
+                },
+                "duration": {
+                  "value": "60min",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "好的，确认按这个配置直接开通。",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已为您成功受理腾讯会议会议网络保障（720p / 时延≤100ms），祝您使用愉快！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "腾讯会议会议保障",
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "100ms",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月01日18时45分",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月01日19时45分",
+                  "source_type": "Context",
+                  "source_ref": "SUB_001"
+                },
+                "duration": {
+                  "value": "60min",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "memory_filled",
+        "expression_level": 1,
+        "intent": "腾讯会议会议保障",
+        "params": {
+          "application_name": {
+            "value": "腾讯会议",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "service_name": {
+            "value": "会议",
+            "source_type": "Turn",
+            "source_ref": "U1"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "720p",
+              "source_type": "Memory",
+              "source_ref": "SUB_001"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "100ms",
+              "source_type": "Memory",
+              "source_ref": "SUB_001"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年11月01日18时45分",
+              "source_type": "Memory",
+              "source_ref": "SUB_001"
+            },
+            "end_timestamp": {
+              "value": "2026年11月01日19时45分",
+              "source_type": "Context",
+              "source_ref": "SUB_001"
+            },
+            "duration": {
+              "value": "60min",
+              "source_type": "Memory",
+              "source_ref": "SUB_001"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "腾讯会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "会议",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月01日18时45分",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月01日19时45分",
+                  "source_type": "Context",
+                  "source_ref": "SUB_001"
+                },
+                "duration": {
+                  "value": "60min",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "720p",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "100ms",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_001"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {}
           }
         ]
       }
@@ -3402,75 +3343,105 @@
     "user_id": "USER_002",
     "reference_time": "2026年11月07日14时45分",
     "session_meta": {
-      "template_id": "T2-10",
+      "template_id": "T2-6",
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "reuse_session",
-      "skeleton_signature": "T2-10|2|1|I1:微信/视频通话/1/empirical_recall/resolved|none",
+      "skeleton_signature": "T2-6|2|1|I1:微信/视频通话/1/quality_disambiguated_reuse/resolved|none",
       "scenario": {
-        "environment": "野外高山强风雨观测区",
-        "blueprint_type": "empirical_recall",
-        "memory_action": "empirical_recall_or_boundary_check"
+        "environment": "金融街财富管理中心",
+        "blueprint_type": "working_record_disambig",
+        "memory_action": "quality_log_disambiguation"
+      },
+      "working_memory_pointer": {
+        "target_record_id": "REC_mobile_persona_002_20261007_01",
+        "inferred_delta_days": 31,
+        "matched_application": "微信",
+        "matched_service": "视频通话",
+        "inherited_slots": {
+          "resolution": "1080p",
+          "rtt_max": "50ms",
+          "duration": "120min"
+        },
+        "quality_filtered": true,
+        "selected_order_quality": "flawless_zero_packet_loss"
       },
       "experience_citation": {
-        "experience_id": "EXP_SEVERE_WEATHER_01",
-        "title": "恶劣天气高衰减环境增强抗丢包加固策略",
-        "strategy_type": "empirical_recall",
+        "experience_id": "EXP_ORDER_QUALITY_DISAMBIGUATION_01",
+        "title": "基于历史工单网络质量日志的智能消歧经验",
+        "strategy_type": "quality_disambiguation",
         "suggested_adjustments": {
-          "resolution": "720p",
-          "rtt_max": "30ms",
-          "strategy": "抗衰落连续性优先"
+          "rule": "基于质量日志过滤异常工单并锁定优质工单"
         }
       },
       "experience_branching": {
-        "experience_id": "EXP_SEVERE_WEATHER_01",
-        "rule_title": "恶劣天气高衰减环境增强抗丢包加固策略",
+        "learning_source_session": "S-USER_002-08",
+        "experience_id": "EXP_ORDER_QUALITY_DISAMBIGUATION_01",
+        "rule_title": "基于历史工单网络质量日志的智能消歧经验",
         "fast_path": {
-          "round_count": 1,
+          "round_count": 2,
           "closure_path": "fast_experience_closed_loop",
-          "trigger_condition": "Agent自主应用经验记忆，在首轮直接完成目标经验槽位推理与闭环受理",
-          "resolved_turn": 1,
+          "trigger_condition": "调取工单质量运行日志，过滤掉网络波动单据，精准锁定历史无丢包优质工单并直接调取规格，2轮完成参数继承与闭环",
+          "resolved_turn": 2,
           "key_params_source": {
             "source_type": "Experience",
-            "source_ref": "EXP_SEVERE_WEATHER_01"
+            "source_ref": "EXP_ORDER_QUALITY_DISAMBIGUATION_01"
           }
         },
         "slow_path": {
-          "round_count": 3,
+          "round_count": 4,
           "closure_path": "clarification_after_correction",
-          "trigger_condition": "Agent缺乏经验记忆按字面直接办理，用户发起纠偏提醒，经历多轮确认后闭环",
-          "resolved_turn": 3,
-          "redundant_rounds": 2
+          "trigger_condition": "Agent缺乏经验按盲猜选错单据或向用户全盘追问报菜名，用户严厉纠偏，拉扯4轮才办妥",
+          "resolved_turn": 4,
+          "redundant_rounds": 2,
+          "simulator_dialogue_tree": [
+            {
+              "turn": 1,
+              "agent_hypothesis": "Agent盲猜复用了上周四发生丢包抖动的异常工单",
+              "simulator_user_prompt": "你复用的这是哪天的工单？上周四那单网络有抖动丢包，千万别按那天的参数配，要按无丢包最好的那次配！",
+              "expected_agent_correction": "抱歉！已重新调取质量日志，过滤掉存在抖动的工单，已为您切换并锁定全程无丢包的高质量工单配置，确认按此生效吗？"
+            },
+            {
+              "turn": 2,
+              "agent_hypothesis": "Agent追问具体是哪一天",
+              "simulator_user_prompt": "没错，就按无丢包的那单开通。",
+              "expected_agent_correction": "好的，已按优质历史工单为您成功受理保障，祝您网络体验顺畅！"
+            }
+          ]
         }
       },
       "memory_tier": "experiential_memory",
       "cold_hot_type": null,
       "agility_factor": null
     },
-    "experience_citation": {
-      "experience_id": "EXP_SEVERE_WEATHER_01",
-      "title": "恶劣天气高衰减环境增强抗丢包加固策略",
-      "strategy_type": "empirical_recall",
-      "suggested_adjustments": {
-        "resolution": "720p",
-        "rtt_max": "30ms",
-        "strategy": "抗衰落连续性优先"
-      }
+    "working_memory_pointer": {
+      "target_record_id": "REC_mobile_persona_002_20261007_01",
+      "inferred_delta_days": 31,
+      "matched_application": "微信",
+      "matched_service": "视频通话",
+      "inherited_slots": {
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "duration": "120min"
+      },
+      "quality_filtered": true,
+      "selected_order_quality": "flawless_zero_packet_loss"
     },
     "event_sequence": [
       {
         "turn": 1,
         "user": {
-          "utterance": "今天在高山露天训练场狂风暴雨天气很差，按上次恶劣天气的方案配微信视频通话，从15时00分开始。",
+          "utterance": "今天在金融街财富管理中心，帮我开个微信视频通话保障，就按上周办得好的那次规格来办。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，狂风暴雨天气信号容易波动，已按上次恶劣天气的方案设置：画质微调为720p、时延控制在30ms以内（持续120min），保证音画不中断。确认直接开通吗？",
+          "utterance": "已为您调取历史工单网络质量评估日志，查到上周存在多次记录，其中周四单据曾有时延波动，而周二工单全程无丢包、质量最优。根据此前在 S-USER_002-08 总结沉淀的高质量工单甄选经验，已为您锁定该高质量工单（1080p / 时延≤50ms），确认直接开通吗？",
           "action_types": [
-            "Confirm_Slot"
+            "Confirm_Slot",
+            "Request_Slot"
           ]
         },
         "related_intent_ids": [
@@ -3481,32 +3452,32 @@
           {
             "intent_id": "I1",
             "status": "in_progress",
-            "closure_path": "empirical_recall",
+            "closure_path": "quality_disambiguated_reuse",
             "expression_level": 1,
             "intent": "微信视频通话保障",
             "params": {
               "application_name": {
                 "value": "微信",
-                "source_type": "Turn",
-                "source_ref": "U1"
+                "source_type": "WorkingRecord",
+                "source_ref": "REC_mobile_persona_002_20261007_01"
               },
               "service_name": {
                 "value": "视频通话",
-                "source_type": "Turn",
-                "source_ref": "U1"
+                "source_type": "WorkingRecord",
+                "source_ref": "REC_mobile_persona_002_20261007_01"
               },
               "resolution": {
                 "min_value": {
-                  "value": "720p",
+                  "value": "1080p",
                   "source_type": "Experience",
-                  "source_ref": "EXP_SEVERE_WEATHER_01"
+                  "source_ref": "EXP_ORDER_QUALITY_DISAMBIGUATION_01"
                 }
               },
               "rtt": {
                 "max_value": {
-                  "value": "30ms",
+                  "value": "50ms",
                   "source_type": "Experience",
-                  "source_ref": "EXP_SEVERE_WEATHER_01"
+                  "source_ref": "EXP_ORDER_QUALITY_DISAMBIGUATION_01"
                 }
               },
               "timestamp": {
@@ -3529,27 +3500,39 @@
             }
           }
         ],
+        "working_memory_pointer": {
+          "target_record_id": "REC_mobile_persona_002_20261007_01",
+          "inferred_delta_days": 31,
+          "matched_application": "微信",
+          "matched_service": "视频通话",
+          "inherited_slots": {
+            "resolution": "1080p",
+            "rtt_max": "50ms",
+            "duration": "120min"
+          },
+          "quality_filtered": true,
+          "selected_order_quality": "flawless_zero_packet_loss"
+        },
         "experience_citation": {
-          "experience_id": "EXP_SEVERE_WEATHER_01",
-          "title": "恶劣天气高衰减环境增强抗丢包加固策略",
-          "strategy_type": "empirical_recall",
+          "experience_id": "EXP_ORDER_QUALITY_DISAMBIGUATION_01",
+          "title": "基于历史工单网络质量日志的智能消歧经验",
+          "strategy_type": "quality_disambiguation",
           "suggested_adjustments": {
-            "resolution": "720p",
-            "rtt_max": "30ms",
-            "strategy": "抗衰落连续性优先"
+            "rule": "基于质量日志过滤异常工单并锁定优质工单"
           }
         }
       },
       {
         "turn": 2,
         "user": {
-          "utterance": "对，直接按这套方案开通。",
+          "utterance": "对，就按那次办，直接开通。",
           "action_types": [
-            "Confirm_Slot"
+            "Confirm_Slot",
+            "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通恶劣天气保障（720p / 时延≤30ms）。风雨天气，祝您外勤平安顺利！",
+          "utterance": "好的，已按优质历史工单为您成功受理微信视频通话网络保障，祝您使用顺畅！",
           "action_types": [
             "Acknowledge"
           ]
@@ -3562,32 +3545,32 @@
           {
             "intent_id": "I1",
             "status": "resolved",
-            "closure_path": "empirical_recall",
+            "closure_path": "quality_disambiguated_reuse",
             "expression_level": 1,
             "intent": "微信视频通话保障",
             "params": {
               "application_name": {
                 "value": "微信",
-                "source_type": "Turn",
-                "source_ref": "U1"
+                "source_type": "WorkingRecord",
+                "source_ref": "REC_mobile_persona_002_20261007_01"
               },
               "service_name": {
                 "value": "视频通话",
-                "source_type": "Turn",
-                "source_ref": "U1"
+                "source_type": "WorkingRecord",
+                "source_ref": "REC_mobile_persona_002_20261007_01"
               },
               "resolution": {
                 "min_value": {
-                  "value": "720p",
+                  "value": "1080p",
                   "source_type": "Experience",
-                  "source_ref": "EXP_SEVERE_WEATHER_01"
+                  "source_ref": "EXP_ORDER_QUALITY_DISAMBIGUATION_01"
                 }
               },
               "rtt": {
                 "max_value": {
-                  "value": "30ms",
+                  "value": "50ms",
                   "source_type": "Experience",
-                  "source_ref": "EXP_SEVERE_WEATHER_01"
+                  "source_ref": "EXP_ORDER_QUALITY_DISAMBIGUATION_01"
                 }
               },
               "timestamp": {
@@ -3616,32 +3599,32 @@
       {
         "intent_id": "I1",
         "status": "resolved",
-        "closure_path": "empirical_recall",
+        "closure_path": "quality_disambiguated_reuse",
         "expression_level": 1,
         "intent": "微信视频通话保障",
         "params": {
           "application_name": {
             "value": "微信",
-            "source_type": "Turn",
-            "source_ref": "U1"
+            "source_type": "WorkingRecord",
+            "source_ref": "REC_mobile_persona_002_20261007_01"
           },
           "service_name": {
             "value": "视频通话",
-            "source_type": "Turn",
-            "source_ref": "U1"
+            "source_type": "WorkingRecord",
+            "source_ref": "REC_mobile_persona_002_20261007_01"
           },
           "resolution": {
             "min_value": {
-              "value": "720p",
+              "value": "1080p",
               "source_type": "Experience",
-              "source_ref": "EXP_SEVERE_WEATHER_01"
+              "source_ref": "EXP_ORDER_QUALITY_DISAMBIGUATION_01"
             }
           },
           "rtt": {
             "max_value": {
-              "value": "30ms",
+              "value": "50ms",
               "source_type": "Experience",
-              "source_ref": "EXP_SEVERE_WEATHER_01"
+              "source_ref": "EXP_ORDER_QUALITY_DISAMBIGUATION_01"
             }
           },
           "timestamp": {
@@ -3674,26 +3657,26 @@
             "params": {
               "application_name": {
                 "value": "微信",
-                "source_type": "Turn",
-                "source_ref": "U1"
+                "source_type": "WorkingRecord",
+                "source_ref": "REC_mobile_persona_002_20261007_01"
               },
               "service_name": {
                 "value": "视频通话",
-                "source_type": "Turn",
-                "source_ref": "U1"
+                "source_type": "WorkingRecord",
+                "source_ref": "REC_mobile_persona_002_20261007_01"
               },
               "resolution": {
                 "min_value": {
-                  "value": "720p",
+                  "value": "1080p",
                   "source_type": "Experience",
-                  "source_ref": "EXP_SEVERE_WEATHER_01"
+                  "source_ref": "EXP_ORDER_QUALITY_DISAMBIGUATION_01"
                 }
               },
               "rtt": {
                 "max_value": {
-                  "value": "30ms",
+                  "value": "50ms",
                   "source_type": "Experience",
-                  "source_ref": "EXP_SEVERE_WEATHER_01"
+                  "source_ref": "EXP_ORDER_QUALITY_DISAMBIGUATION_01"
                 }
               },
               "timestamp": {
@@ -3721,74 +3704,105 @@
           }
         ]
       }
-    ]
+    ],
+    "experience_citation": {
+      "experience_id": "EXP_ORDER_QUALITY_DISAMBIGUATION_01",
+      "title": "基于历史工单网络质量日志的智能消歧经验",
+      "strategy_type": "quality_disambiguation",
+      "suggested_adjustments": {
+        "rule": "基于质量日志过滤异常工单并锁定优质工单"
+      }
+    },
+    "experience_branching": {
+      "learning_source_session": "S-USER_002-08",
+      "experience_id": "EXP_ORDER_QUALITY_DISAMBIGUATION_01",
+      "rule_title": "基于历史工单网络质量日志的智能消歧经验",
+      "fast_path": {
+        "round_count": 2,
+        "closure_path": "fast_experience_closed_loop",
+        "trigger_condition": "调取工单质量运行日志，过滤掉网络波动单据，精准锁定历史无丢包优质工单并直接调取规格，2轮完成参数继承与闭环",
+        "resolved_turn": 2,
+        "key_params_source": {
+          "source_type": "Experience",
+          "source_ref": "EXP_ORDER_QUALITY_DISAMBIGUATION_01"
+        }
+      },
+      "slow_path": {
+        "round_count": 4,
+        "closure_path": "clarification_after_correction",
+        "trigger_condition": "Agent缺乏经验按盲猜选错单据或向用户全盘追问报菜名，用户严厉纠偏，拉扯4轮才办妥",
+        "resolved_turn": 4,
+        "redundant_rounds": 2,
+        "simulator_dialogue_tree": [
+          {
+            "turn": 1,
+            "agent_hypothesis": "Agent盲猜复用了上周四发生丢包抖动的异常工单",
+            "simulator_user_prompt": "你复用的这是哪天的工单？上周四那单网络有抖动丢包，千万别按那天的参数配，要按无丢包最好的那次配！",
+            "expected_agent_correction": "抱歉！已重新调取质量日志，过滤掉存在抖动的工单，已为您切换并锁定全程无丢包的高质量工单配置，确认按此生效吗？"
+          },
+          {
+            "turn": 2,
+            "agent_hypothesis": "Agent追问具体是哪一天",
+            "simulator_user_prompt": "没错，就按无丢包的那单开通。",
+            "expected_agent_correction": "好的，已按优质历史工单为您成功受理保障，祝您网络体验顺畅！"
+          }
+        ]
+      }
+    }
   },
   {
     "session_id": "S-USER_002-13",
     "user_id": "USER_002",
     "reference_time": "2026年11月11日14时45分",
     "session_meta": {
-      "template_id": "T2-9",
+      "template_id": "T2-7",
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "reuse_session",
-      "skeleton_signature": "T2-9|2|1|I1:微信/视频通话/1/proactive_experience/resolved|none",
+      "skeleton_signature": "T2-7|2|1|I1:微信/视频通话/1/working_record_reschedule/resolved|none",
       "scenario": {
-        "environment": "文体展馆万人盛典现场",
-        "blueprint_type": "proactive_experience",
-        "memory_action": "proactive_experience_suggestion"
+        "environment": "金融街财富管理中心",
+        "blueprint_type": "working_record_reschedule",
+        "memory_action": "reschedule_working_record"
       },
-      "experience_citation": {
-        "experience_id": "EXP_STADIUM_CONGESTION_01",
-        "title": "极值与高密环境主动降画质保抗丢包平稳度",
-        "strategy_type": "negative_counterexample",
-        "negative_counterexamples": "用户明确声明“无论多卡都必须保留 1080p 或 4K 原画录制”时，智能体不得强行覆盖，应提示风险后遵从用户指令。",
-        "counterexample_applied": true
-      },
-      "experience_branching": {
-        "experience_id": "EXP_STADIUM_CONGESTION_01",
-        "rule_title": "极值与高密环境主动降画质保抗丢包平稳度",
-        "fast_path": {
-          "round_count": 1,
-          "closure_path": "fast_experience_closed_loop",
-          "trigger_condition": "Agent自主应用经验记忆，在首轮直接完成目标经验槽位推理与闭环受理",
-          "resolved_turn": 1,
-          "key_params_source": {
-            "source_type": "Experience",
-            "source_ref": "EXP_STADIUM_CONGESTION_01"
-          }
+      "working_memory_pointer": {
+        "target_record_id": "REC_mobile_persona_002_20261107_180",
+        "inferred_delta_days": 4,
+        "matched_application": "微信",
+        "matched_service": "视频通话",
+        "modified_slots": {
+          "start_timestamp": "2026年11月11日15时00分",
+          "end_timestamp": "2026年11月11日17时00分"
         },
-        "slow_path": {
-          "round_count": 3,
-          "closure_path": "clarification_after_correction",
-          "trigger_condition": "Agent缺乏经验记忆按字面直接办理，用户发起纠偏提醒，经历多轮确认后闭环",
-          "resolved_turn": 3,
-          "redundant_rounds": 2
-        }
+        "reschedule_direction": "delay"
       },
-      "memory_tier": "experiential_memory",
+      "memory_tier": "working_memory",
       "cold_hot_type": null,
       "agility_factor": null
     },
-    "experience_citation": {
-      "experience_id": "EXP_STADIUM_CONGESTION_01",
-      "title": "极值与高密环境主动降画质保抗丢包平稳度",
-      "strategy_type": "negative_counterexample",
-      "negative_counterexamples": "用户明确声明“无论多卡都必须保留 1080p 或 4K 原画录制”时，智能体不得强行覆盖，应提示风险后遵从用户指令。",
-      "counterexample_applied": true
+    "working_memory_pointer": {
+      "target_record_id": "REC_mobile_persona_002_20261107_180",
+      "inferred_delta_days": 4,
+      "matched_application": "微信",
+      "matched_service": "视频通话",
+      "modified_slots": {
+        "start_timestamp": "2026年11月11日15时00分",
+        "end_timestamp": "2026年11月11日17时00分"
+      },
+      "reschedule_direction": "delay"
     },
     "event_sequence": [
       {
         "turn": 1,
         "user": {
-          "utterance": "今天在文体展馆万人盛典现场做原画级视频采录，必须保持1080p高清，哪怕网络有波动也不能降画质，时间从15时00分到17时00分，帮我开微信视频通话保障。",
+          "utterance": "把昨天预约的微信视频通话保障往后推迟一个小时。",
           "action_types": [
-            "Create_Intent_Request",
+            "Modify_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，文体展馆万人盛典现场现场人比较多，一般建议优先保流畅；不过既然您明确需要原画采录，已按您的要求保持1080p画质、时延50ms以内，确认直接开通吗？",
+          "utterance": "收到，已找到您此前预约的微信视频通话保障工单。往后推迟一小时后，新的保障时段为15时00分至17时00分，确认进行改期吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -3801,32 +3815,32 @@
           {
             "intent_id": "I1",
             "status": "in_progress",
-            "closure_path": "proactive_experience",
+            "closure_path": "working_record_reschedule",
             "expression_level": 1,
             "intent": "微信视频通话保障",
             "params": {
               "application_name": {
                 "value": "微信",
-                "source_type": "Turn",
-                "source_ref": "U1"
+                "source_type": "WorkingRecord",
+                "source_ref": "REC_mobile_persona_002_20261107_180"
               },
               "service_name": {
                 "value": "视频通话",
-                "source_type": "Turn",
-                "source_ref": "U1"
+                "source_type": "WorkingRecord",
+                "source_ref": "REC_mobile_persona_002_20261107_180"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "source_type": "WorkingRecord",
+                  "source_ref": "REC_mobile_persona_002_20261107_180"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "source_type": "WorkingRecord",
+                  "source_ref": "REC_mobile_persona_002_20261107_180"
                 }
               },
               "timestamp": {
@@ -3842,31 +3856,35 @@
                 },
                 "duration": {
                   "value": "120min",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "source_type": "WorkingRecord",
+                  "source_ref": "REC_mobile_persona_002_20261107_180"
                 }
               }
             }
           }
         ],
-        "experience_citation": {
-          "experience_id": "EXP_STADIUM_CONGESTION_01",
-          "title": "极值与高密环境主动降画质保抗丢包平稳度",
-          "strategy_type": "negative_counterexample",
-          "negative_counterexamples": "用户明确声明“无论多卡都必须保留 1080p 或 4K 原画录制”时，智能体不得强行覆盖，应提示风险后遵从用户指令。",
-          "counterexample_applied": true
+        "working_memory_pointer": {
+          "target_record_id": "REC_mobile_persona_002_20261107_180",
+          "inferred_delta_days": 4,
+          "matched_application": "微信",
+          "matched_service": "视频通话",
+          "modified_slots": {
+            "start_timestamp": "2026年11月11日15时00分",
+            "end_timestamp": "2026年11月11日17时00分"
+          },
+          "reschedule_direction": "delay"
         }
       },
       {
         "turn": 2,
         "user": {
-          "utterance": "确认不降画质，我就需要1080p，直接开通。",
+          "utterance": "对，确认修改。",
           "action_types": [
             "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已按原画要求为您开通微信视频通话保障（1080p / 时延≤50ms），祝您录制顺利！",
+          "utterance": "好的，已为您成功办理工单延期变更，保障时段已更新为15时00分至17时00分生效。祝您使用顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -3879,32 +3897,32 @@
           {
             "intent_id": "I1",
             "status": "resolved",
-            "closure_path": "proactive_experience",
+            "closure_path": "working_record_reschedule",
             "expression_level": 1,
             "intent": "微信视频通话保障",
             "params": {
               "application_name": {
                 "value": "微信",
-                "source_type": "Turn",
-                "source_ref": "U1"
+                "source_type": "WorkingRecord",
+                "source_ref": "REC_mobile_persona_002_20261107_180"
               },
               "service_name": {
                 "value": "视频通话",
-                "source_type": "Turn",
-                "source_ref": "U1"
+                "source_type": "WorkingRecord",
+                "source_ref": "REC_mobile_persona_002_20261107_180"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "source_type": "WorkingRecord",
+                  "source_ref": "REC_mobile_persona_002_20261107_180"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "source_type": "WorkingRecord",
+                  "source_ref": "REC_mobile_persona_002_20261107_180"
                 }
               },
               "timestamp": {
@@ -3920,8 +3938,8 @@
                 },
                 "duration": {
                   "value": "120min",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "source_type": "WorkingRecord",
+                  "source_ref": "REC_mobile_persona_002_20261107_180"
                 }
               }
             }
@@ -3933,32 +3951,32 @@
       {
         "intent_id": "I1",
         "status": "resolved",
-        "closure_path": "proactive_experience",
+        "closure_path": "working_record_reschedule",
         "expression_level": 1,
         "intent": "微信视频通话保障",
         "params": {
           "application_name": {
             "value": "微信",
-            "source_type": "Turn",
-            "source_ref": "U1"
+            "source_type": "WorkingRecord",
+            "source_ref": "REC_mobile_persona_002_20261107_180"
           },
           "service_name": {
             "value": "视频通话",
-            "source_type": "Turn",
-            "source_ref": "U1"
+            "source_type": "WorkingRecord",
+            "source_ref": "REC_mobile_persona_002_20261107_180"
           },
           "resolution": {
             "min_value": {
               "value": "1080p",
-              "source_type": "Turn",
-              "source_ref": "U1"
+              "source_type": "WorkingRecord",
+              "source_ref": "REC_mobile_persona_002_20261107_180"
             }
           },
           "rtt": {
             "max_value": {
               "value": "50ms",
-              "source_type": "Turn",
-              "source_ref": "U1"
+              "source_type": "WorkingRecord",
+              "source_ref": "REC_mobile_persona_002_20261107_180"
             }
           },
           "timestamp": {
@@ -3974,8 +3992,8 @@
             },
             "duration": {
               "value": "120min",
-              "source_type": "Turn",
-              "source_ref": "U1"
+              "source_type": "WorkingRecord",
+              "source_ref": "REC_mobile_persona_002_20261107_180"
             }
           }
         }
@@ -3991,26 +4009,26 @@
             "params": {
               "application_name": {
                 "value": "微信",
-                "source_type": "Turn",
-                "source_ref": "U1"
+                "source_type": "WorkingRecord",
+                "source_ref": "REC_mobile_persona_002_20261107_180"
               },
               "service_name": {
                 "value": "视频通话",
-                "source_type": "Turn",
-                "source_ref": "U1"
+                "source_type": "WorkingRecord",
+                "source_ref": "REC_mobile_persona_002_20261107_180"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "source_type": "WorkingRecord",
+                  "source_ref": "REC_mobile_persona_002_20261107_180"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "source_type": "WorkingRecord",
+                  "source_ref": "REC_mobile_persona_002_20261107_180"
                 }
               },
               "timestamp": {
@@ -4026,8 +4044,8 @@
                 },
                 "duration": {
                   "value": "120min",
-                  "source_type": "Turn",
-                  "source_ref": "U1"
+                  "source_type": "WorkingRecord",
+                  "source_ref": "REC_mobile_persona_002_20261107_180"
                 }
               }
             }
@@ -4056,7 +4074,7 @@
         "memory_action": "reschedule_working_record"
       },
       "working_memory_pointer": {
-        "target_record_id": "REC_mobile_persona_002_20261111_80",
+        "target_record_id": "REC_mobile_persona_002_20261111_181",
         "inferred_delta_days": 4,
         "matched_application": "微信",
         "matched_service": "视频通话",
@@ -4071,7 +4089,7 @@
       "agility_factor": null
     },
     "working_memory_pointer": {
-      "target_record_id": "REC_mobile_persona_002_20261111_80",
+      "target_record_id": "REC_mobile_persona_002_20261111_181",
       "inferred_delta_days": 4,
       "matched_application": "微信",
       "matched_service": "视频通话",
@@ -4112,25 +4130,25 @@
               "application_name": {
                 "value": "微信",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261111_80"
+                "source_ref": "REC_mobile_persona_002_20261111_181"
               },
               "service_name": {
                 "value": "视频通话",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261111_80"
+                "source_ref": "REC_mobile_persona_002_20261111_181"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261111_80"
+                  "source_ref": "REC_mobile_persona_002_20261111_181"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261111_80"
+                  "source_ref": "REC_mobile_persona_002_20261111_181"
                 }
               },
               "timestamp": {
@@ -4147,14 +4165,14 @@
                 "duration": {
                   "value": "120min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261111_80"
+                  "source_ref": "REC_mobile_persona_002_20261111_181"
                 }
               }
             }
           }
         ],
         "working_memory_pointer": {
-          "target_record_id": "REC_mobile_persona_002_20261111_80",
+          "target_record_id": "REC_mobile_persona_002_20261111_181",
           "inferred_delta_days": 4,
           "matched_application": "微信",
           "matched_service": "视频通话",
@@ -4194,25 +4212,25 @@
               "application_name": {
                 "value": "微信",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261111_80"
+                "source_ref": "REC_mobile_persona_002_20261111_181"
               },
               "service_name": {
                 "value": "视频通话",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261111_80"
+                "source_ref": "REC_mobile_persona_002_20261111_181"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261111_80"
+                  "source_ref": "REC_mobile_persona_002_20261111_181"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261111_80"
+                  "source_ref": "REC_mobile_persona_002_20261111_181"
                 }
               },
               "timestamp": {
@@ -4229,7 +4247,7 @@
                 "duration": {
                   "value": "120min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261111_80"
+                  "source_ref": "REC_mobile_persona_002_20261111_181"
                 }
               }
             }
@@ -4248,25 +4266,25 @@
           "application_name": {
             "value": "微信",
             "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_002_20261111_80"
+            "source_ref": "REC_mobile_persona_002_20261111_181"
           },
           "service_name": {
             "value": "视频通话",
             "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_002_20261111_80"
+            "source_ref": "REC_mobile_persona_002_20261111_181"
           },
           "resolution": {
             "min_value": {
               "value": "1080p",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_002_20261111_80"
+              "source_ref": "REC_mobile_persona_002_20261111_181"
             }
           },
           "rtt": {
             "max_value": {
               "value": "50ms",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_002_20261111_80"
+              "source_ref": "REC_mobile_persona_002_20261111_181"
             }
           },
           "timestamp": {
@@ -4283,7 +4301,7 @@
             "duration": {
               "value": "120min",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_002_20261111_80"
+              "source_ref": "REC_mobile_persona_002_20261111_181"
             }
           }
         }
@@ -4300,25 +4318,25 @@
               "application_name": {
                 "value": "微信",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261111_80"
+                "source_ref": "REC_mobile_persona_002_20261111_181"
               },
               "service_name": {
                 "value": "视频通话",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261111_80"
+                "source_ref": "REC_mobile_persona_002_20261111_181"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261111_80"
+                  "source_ref": "REC_mobile_persona_002_20261111_181"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261111_80"
+                  "source_ref": "REC_mobile_persona_002_20261111_181"
                 }
               },
               "timestamp": {
@@ -4335,7 +4353,7 @@
                 "duration": {
                   "value": "120min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261111_80"
+                  "source_ref": "REC_mobile_persona_002_20261111_181"
                 }
               }
             }
@@ -4351,7 +4369,469 @@
   {
     "session_id": "S-USER_002-15",
     "user_id": "USER_002",
-    "reference_time": "2026年11月18日20时00分",
+    "reference_time": "2026年11月18日10时00分",
+    "session_meta": {
+      "template_id": "T1-2",
+      "round_count": 1,
+      "intent_count": 1,
+      "memory_role": "distractor_session",
+      "skeleton_signature": "T1-2|1|1|I1:宽带光纤装维报修/0/rejected/rejected|none|none|out_of_domain",
+      "scenario": {
+        "environment": "市政政务便民大厅",
+        "blueprint_type": "distractor_ood",
+        "memory_action": "reject_out_of_domain",
+        "request_type": "life_service"
+      },
+      "memory_tier": "factual_memory",
+      "cold_hot_type": null,
+      "agility_factor": null
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "你好，现场这边网络好像有问题，能帮我安排师傅处理一下宽带光纤装维报修吗？",
+          "action_types": [
+            "Create_Intent_Request"
+          ]
+        },
+        "agent": {
+          "utterance": "抱歉，本智能助手仅提供手机移动网络加速与保障服务，暂不支持办理宽带光纤装维报修业务，建议您联系宽带专线处理。",
+          "action_types": [
+            "Reject_Request"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "rejected",
+            "closure_path": "rejected",
+            "expression_level": 0,
+            "intent": "宽带光纤装维报修",
+            "params": {}
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "rejected",
+        "closure_path": "rejected",
+        "expression_level": 0,
+        "intent": "宽带光纤装维报修",
+        "params": {}
+      }
+    ],
+    "relations": [],
+    "slot_updates": []
+  },
+  {
+    "session_id": "S-USER_002-16",
+    "user_id": "USER_002",
+    "reference_time": "2026年11月20日14时45分",
+    "session_meta": {
+      "template_id": "T2-6",
+      "round_count": 3,
+      "intent_count": 1,
+      "memory_role": "reuse_session",
+      "skeleton_signature": "T2-6|3|1|I1:微信/视频通话/1/working_record_reuse/resolved|none",
+      "scenario": {
+        "environment": "金融街财富管理中心",
+        "blueprint_type": "working_record_disambig",
+        "memory_action": "disambiguate_working_record"
+      },
+      "working_memory_pointer": {
+        "target_record_id": "REC_mobile_persona_002_20261007_01",
+        "inferred_delta_days": 44,
+        "matched_application": "微信",
+        "matched_service": "视频通话",
+        "inherited_slots": {
+          "resolution": "1080p",
+          "rtt_max": "50ms",
+          "duration": "120min"
+        },
+        "candidate_record_ids": [
+          "REC_mobile_persona_002_20261007_01",
+          "REC_mobile_persona_002_20261011_02"
+        ],
+        "is_disambiguation": true
+      },
+      "memory_tier": "working_memory",
+      "cold_hot_type": null,
+      "agility_factor": null
+    },
+    "working_memory_pointer": {
+      "target_record_id": "REC_mobile_persona_002_20261007_01",
+      "inferred_delta_days": 44,
+      "matched_application": "微信",
+      "matched_service": "视频通话",
+      "inherited_slots": {
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "duration": "120min"
+      },
+      "candidate_record_ids": [
+        "REC_mobile_persona_002_20261007_01",
+        "REC_mobile_persona_002_20261011_02"
+      ],
+      "is_disambiguation": true
+    },
+    "event_sequence": [
+      {
+        "turn": 1,
+        "user": {
+          "utterance": "今天在金融街财富管理中心，想按之前的工单规格开微信视频通话保障，时间从15时00分到17时00分。",
+          "action_types": [
+            "Create_Intent_Request",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "收到，查询到您此前在金融街财富管理中心有多次微信视频通话保障工单（包括 REC_mobile_persona_002_20261007_01、REC_mobile_persona_002_20261011_02），配置规格略有差异。请问您今天是指按哪一次的规格来开通呢？",
+          "action_types": [
+            "Request_Disambiguation"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [
+          "target_record_id"
+        ],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "working_record_disambig",
+            "expression_level": 1,
+            "intent": "微信视频通话保障",
+            "params": {
+              "application_name": {
+                "value": "微信",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "视频通话",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月20日15时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月20日17时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          }
+        ],
+        "working_memory_pointer": {
+          "target_record_id": "REC_mobile_persona_002_20261007_01",
+          "inferred_delta_days": 44,
+          "matched_application": "微信",
+          "matched_service": "视频通话",
+          "inherited_slots": {
+            "resolution": "1080p",
+            "rtt_max": "50ms",
+            "duration": "120min"
+          },
+          "candidate_record_ids": [
+            "REC_mobile_persona_002_20261007_01",
+            "REC_mobile_persona_002_20261011_02"
+          ],
+          "is_disambiguation": true
+        }
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "按最近那次开通的规格来就行。",
+          "action_types": [
+            "Confirm_Slot",
+            "Inform_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "明白，已精准锁定最近一次工单规格（1080p / 时延≤50ms），时段为15时00分至17时00分，确认直接开通吗？",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "working_record_reuse",
+            "expression_level": 1,
+            "intent": "微信视频通话保障",
+            "params": {
+              "application_name": {
+                "value": "微信",
+                "source_type": "WorkingRecord",
+                "source_ref": "REC_mobile_persona_002_20261007_01"
+              },
+              "service_name": {
+                "value": "视频通话",
+                "source_type": "WorkingRecord",
+                "source_ref": "REC_mobile_persona_002_20261007_01"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "WorkingRecord",
+                  "source_ref": "REC_mobile_persona_002_20261007_01"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "WorkingRecord",
+                  "source_ref": "REC_mobile_persona_002_20261007_01"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月20日15时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月20日17时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 3,
+        "user": {
+          "utterance": "对，确认按这个规格开通。",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已按您确认的历史工单规格成功开通今日微信视频通话保障（1080p / 时延≤50ms，时段15时00分至17时00分）。祝您工作顺利！",
+          "action_types": [
+            "Acknowledge"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "resolved",
+            "closure_path": "working_record_reuse",
+            "expression_level": 1,
+            "intent": "微信视频通话保障",
+            "params": {
+              "application_name": {
+                "value": "微信",
+                "source_type": "WorkingRecord",
+                "source_ref": "REC_mobile_persona_002_20261007_01"
+              },
+              "service_name": {
+                "value": "视频通话",
+                "source_type": "WorkingRecord",
+                "source_ref": "REC_mobile_persona_002_20261007_01"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "WorkingRecord",
+                  "source_ref": "REC_mobile_persona_002_20261007_01"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "WorkingRecord",
+                  "source_ref": "REC_mobile_persona_002_20261007_01"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月20日15时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月20日17时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "intent_id": "I1",
+        "status": "resolved",
+        "closure_path": "working_record_reuse",
+        "expression_level": 1,
+        "intent": "微信视频通话保障",
+        "params": {
+          "application_name": {
+            "value": "微信",
+            "source_type": "WorkingRecord",
+            "source_ref": "REC_mobile_persona_002_20261007_01"
+          },
+          "service_name": {
+            "value": "视频通话",
+            "source_type": "WorkingRecord",
+            "source_ref": "REC_mobile_persona_002_20261007_01"
+          },
+          "resolution": {
+            "min_value": {
+              "value": "1080p",
+              "source_type": "WorkingRecord",
+              "source_ref": "REC_mobile_persona_002_20261007_01"
+            }
+          },
+          "rtt": {
+            "max_value": {
+              "value": "50ms",
+              "source_type": "WorkingRecord",
+              "source_ref": "REC_mobile_persona_002_20261007_01"
+            }
+          },
+          "timestamp": {
+            "start_timestamp": {
+              "value": "2026年11月20日15时00分",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            },
+            "end_timestamp": {
+              "value": "2026年11月20日17时00分",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            },
+            "duration": {
+              "value": "120min",
+              "source_type": "Turn",
+              "source_ref": "U1"
+            }
+          }
+        }
+      }
+    ],
+    "relations": [],
+    "slot_updates": [
+      {
+        "intent_id": "I1",
+        "turn_updates": [
+          {
+            "turn": 1,
+            "params": {
+              "application_name": {
+                "value": "微信",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "service_name": {
+                "value": "视频通话",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月20日15时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月20日17时00分",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                },
+                "duration": {
+                  "value": "120min",
+                  "source_type": "Turn",
+                  "source_ref": "U1"
+                }
+              }
+            }
+          },
+          {
+            "turn": 2,
+            "params": {
+              "application_name": {
+                "value": "微信",
+                "source_type": "WorkingRecord",
+                "source_ref": "REC_mobile_persona_002_20261007_01"
+              },
+              "service_name": {
+                "value": "视频通话",
+                "source_type": "WorkingRecord",
+                "source_ref": "REC_mobile_persona_002_20261007_01"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "WorkingRecord",
+                  "source_ref": "REC_mobile_persona_002_20261007_01"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "50ms",
+                  "source_type": "WorkingRecord",
+                  "source_ref": "REC_mobile_persona_002_20261007_01"
+                }
+              }
+            }
+          },
+          {
+            "turn": 3,
+            "params": {}
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "session_id": "S-USER_002-17",
+    "user_id": "USER_002",
+    "reference_time": "2026年11月22日20时00分",
     "session_meta": {
       "template_id": "T2-1",
       "round_count": 3,
@@ -4411,7 +4891,7 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月18日20时15分",
+                  "value": "2026年11月22日20时15分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
@@ -4472,12 +4952,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月18日20时15分",
+                  "value": "2026年11月22日20时15分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月18日21时45分",
+                  "value": "2026年11月22日21时45分",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 },
@@ -4543,12 +5023,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月18日20时15分",
+                  "value": "2026年11月22日20时15分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月18日21时45分",
+                  "value": "2026年11月22日21时45分",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 },
@@ -4597,12 +5077,12 @@
           },
           "timestamp": {
             "start_timestamp": {
-              "value": "2026年11月18日20时15分",
+              "value": "2026年11月22日20时15分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
             "end_timestamp": {
-              "value": "2026年11月18日21时45分",
+              "value": "2026年11月22日21时45分",
               "source_type": "Turn",
               "source_ref": "U2"
             },
@@ -4635,7 +5115,7 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月18日20时15分",
+                  "value": "2026年11月22日20时15分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
@@ -4661,7 +5141,7 @@
               },
               "timestamp": {
                 "end_timestamp": {
-                  "value": "2026年11月18日21时45分",
+                  "value": "2026年11月22日21时45分",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 },
@@ -4682,36 +5162,107 @@
     ]
   },
   {
-    "session_id": "S-USER_002-16",
+    "session_id": "S-USER_002-18",
     "user_id": "USER_002",
-    "reference_time": "2026年11月20日14时45分",
+    "reference_time": "2026年11月25日20时00分",
     "session_meta": {
       "template_id": "T2-1",
-      "round_count": 1,
+      "round_count": 2,
       "intent_count": 1,
       "memory_role": "reuse_session",
-      "skeleton_signature": "T2-1|1|1|I1:微信/视频通话/1/memory_filled/resolved|none",
+      "skeleton_signature": "T2-1|2|1|I1:抖音/短视频/1/memory_filled/resolved|none",
       "scenario": {
-        "environment": "金融街财富管理中心",
-        "blueprint_type": "main_recovery",
-        "memory_action": "recover_long_term_rule"
+        "environment": "驻地酒店商务中心",
+        "blueprint_type": "sub_02",
+        "memory_action": "reuse_sub_storyline_2"
       },
       "memory_tier": "factual_memory",
       "cold_hot_type": "hot_start",
-      "agility_factor": 1.0
+      "agility_factor": 0.5
     },
     "event_sequence": [
       {
         "turn": 1,
         "user": {
-          "utterance": "老规矩，在金融街财富管理中心，用微信做视频通话，帮我把保障开上，别掉链子。",
+          "utterance": "老规矩，每周例行，在驻地酒店休息区，用阿抖做短视频，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已按老规矩为您开通微信视频通话网络保障（1080p / 时延≤50ms，时段15时00分至17时00分），祝您使用愉快！",
+          "utterance": "收到，我调取到之前登记的抖音短视频配置：1080p、时延80ms以内，20时15分开始、21时45分结束，持续90min。确认按这套配置开通吗？",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "related_intent_ids": [
+          "I1"
+        ],
+        "requested_params": [],
+        "turn_intents": [
+          {
+            "intent_id": "I1",
+            "status": "in_progress",
+            "closure_path": "memory_filled",
+            "expression_level": 1,
+            "intent": "抖音短视频保障",
+            "params": {
+              "application_name": {
+                "value": "抖音",
+                "source_type": "Memory",
+                "source_ref": "SUB_002"
+              },
+              "service_name": {
+                "value": "短视频",
+                "source_type": "Turn",
+                "source_ref": "U1"
+              },
+              "resolution": {
+                "min_value": {
+                  "value": "1080p",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_002"
+                }
+              },
+              "rtt": {
+                "max_value": {
+                  "value": "80ms",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_002"
+                }
+              },
+              "timestamp": {
+                "start_timestamp": {
+                  "value": "2026年11月25日20时15分",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_002"
+                },
+                "end_timestamp": {
+                  "value": "2026年11月25日21时45分",
+                  "source_type": "Context",
+                  "source_ref": "SUB_002"
+                },
+                "duration": {
+                  "value": "90min",
+                  "source_type": "Memory",
+                  "source_ref": "SUB_002"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "user": {
+          "utterance": "好的，确认按这个配置直接开通。",
+          "action_types": [
+            "Confirm_Slot"
+          ]
+        },
+        "agent": {
+          "utterance": "好的，已为您成功受理抖音短视频网络保障（1080p / 时延≤80ms），祝您使用愉快！",
           "action_types": [
             "Acknowledge"
           ]
@@ -4726,47 +5277,47 @@
             "status": "resolved",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "微信视频通话保障",
+            "intent": "抖音短视频保障",
             "params": {
               "application_name": {
-                "value": "微信",
+                "value": "抖音",
                 "source_type": "Memory",
-                "source_ref": "MF_001"
+                "source_ref": "SUB_002"
               },
               "service_name": {
-                "value": "视频通话",
-                "source_type": "Memory",
-                "source_ref": "MF_001"
+                "value": "短视频",
+                "source_type": "Turn",
+                "source_ref": "U1"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "Memory",
-                  "source_ref": "MF_001"
+                  "source_ref": "SUB_002"
                 }
               },
               "rtt": {
                 "max_value": {
-                  "value": "50ms",
+                  "value": "80ms",
                   "source_type": "Memory",
-                  "source_ref": "MF_001"
+                  "source_ref": "SUB_002"
                 }
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月20日15时00分",
+                  "value": "2026年11月25日20时15分",
                   "source_type": "Memory",
-                  "source_ref": "MF_001"
+                  "source_ref": "SUB_002"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月20日17时00分",
-                  "source_type": "Memory",
-                  "source_ref": "MF_001"
+                  "value": "2026年11月25日21时45分",
+                  "source_type": "Context",
+                  "source_ref": "SUB_002"
                 },
                 "duration": {
-                  "value": "120min",
+                  "value": "90min",
                   "source_type": "Memory",
-                  "source_ref": "MF_001"
+                  "source_ref": "SUB_002"
                 }
               }
             }
@@ -4780,47 +5331,47 @@
         "status": "resolved",
         "closure_path": "memory_filled",
         "expression_level": 1,
-        "intent": "微信视频通话保障",
+        "intent": "抖音短视频保障",
         "params": {
           "application_name": {
-            "value": "微信",
+            "value": "抖音",
             "source_type": "Memory",
-            "source_ref": "MF_001"
+            "source_ref": "SUB_002"
           },
           "service_name": {
-            "value": "视频通话",
-            "source_type": "Memory",
-            "source_ref": "MF_001"
+            "value": "短视频",
+            "source_type": "Turn",
+            "source_ref": "U1"
           },
           "resolution": {
             "min_value": {
               "value": "1080p",
               "source_type": "Memory",
-              "source_ref": "MF_001"
+              "source_ref": "SUB_002"
             }
           },
           "rtt": {
             "max_value": {
-              "value": "50ms",
+              "value": "80ms",
               "source_type": "Memory",
-              "source_ref": "MF_001"
+              "source_ref": "SUB_002"
             }
           },
           "timestamp": {
             "start_timestamp": {
-              "value": "2026年11月20日15时00分",
+              "value": "2026年11月25日20时15分",
               "source_type": "Memory",
-              "source_ref": "MF_001"
+              "source_ref": "SUB_002"
             },
             "end_timestamp": {
-              "value": "2026年11月20日17时00分",
-              "source_type": "Memory",
-              "source_ref": "MF_001"
+              "value": "2026年11月25日21时45分",
+              "source_type": "Context",
+              "source_ref": "SUB_002"
             },
             "duration": {
-              "value": "120min",
+              "value": "90min",
               "source_type": "Memory",
-              "source_ref": "MF_001"
+              "source_ref": "SUB_002"
             }
           }
         }
@@ -4835,47 +5386,51 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "微信",
+                "value": "抖音",
                 "source_type": "Memory",
-                "source_ref": "MF_001"
+                "source_ref": "SUB_002"
               },
               "service_name": {
-                "value": "视频通话",
-                "source_type": "Memory",
-                "source_ref": "MF_001"
+                "value": "短视频",
+                "source_type": "Turn",
+                "source_ref": "U1"
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月20日15时00分",
+                  "value": "2026年11月25日20时15分",
                   "source_type": "Memory",
-                  "source_ref": "MF_001"
+                  "source_ref": "SUB_002"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月20日17时00分",
-                  "source_type": "Memory",
-                  "source_ref": "MF_001"
+                  "value": "2026年11月25日21时45分",
+                  "source_type": "Context",
+                  "source_ref": "SUB_002"
                 },
                 "duration": {
-                  "value": "120min",
+                  "value": "90min",
                   "source_type": "Memory",
-                  "source_ref": "MF_001"
+                  "source_ref": "SUB_002"
                 }
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "Memory",
-                  "source_ref": "MF_001"
+                  "source_ref": "SUB_002"
                 }
               },
               "rtt": {
                 "max_value": {
-                  "value": "50ms",
+                  "value": "80ms",
                   "source_type": "Memory",
-                  "source_ref": "MF_001"
+                  "source_ref": "SUB_002"
                 }
               }
             }
+          },
+          {
+            "turn": 2,
+            "params": {}
           }
         ]
       }

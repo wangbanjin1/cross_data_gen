@@ -360,8 +360,8 @@
   {
     "session_id": "S-USER_003-05",
     "reference_time": "2026年10月18日13时45分",
-    "memory_role": "reuse_session",
-    "blueprint_type": "working_record_reschedule",
+    "memory_role": "learning_session",
+    "blueprint_type": "experience_learning",
     "snapshot_before": {
       "MF_001": {
         "memory_id": "MF_001",
@@ -410,12 +410,12 @@
     },
     "memory_events": [
       {
-        "event_type": "reschedule_working_record",
-        "record_id": "REC_mobile_persona_003_20261015_69",
-        "description": "用户申请对历史预约工单 REC_mobile_persona_003_20261015_69 变更改期，Agent 定位工单并将新时段（2026年10月18日14时00分 至 2026年10月18日16时00分）更新生效。",
-        "modified_slots": [
-          "start_timestamp",
-          "end_timestamp"
+        "event_type": "crystallize_experience",
+        "experience_id": "EXP_MULTI_INTENT_PARTITION_01",
+        "description": "用户针对历史踩坑故障进行严肃反馈与经验指示，Agent 深刻反思并沉淀【多任务并行局部调整与时序因果隔离经验】(EXP_MULTI_INTENT_PARTITION_01)入经验库。",
+        "crystallized_slots": [
+          "experience_policy",
+          "trigger_conditions"
         ]
       }
     ],
@@ -463,12 +463,131 @@
         "evidence_count": 1,
         "first_declared_at": "2026年10月11日18时30分",
         "last_reinforced_at": "2026年10月11日18时30分"
-      }
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01"
+      ]
     }
   },
   {
     "session_id": "S-USER_003-06",
     "reference_time": "2026年10月21日13时45分",
+    "memory_role": "learning_session",
+    "blueprint_type": "experience_learning",
+    "snapshot_before": {
+      "MF_001": {
+        "memory_id": "MF_001",
+        "category": "periodic_main_storyline",
+        "storyline_trigger_type": "location_environment",
+        "trigger_condition": "当身处利兹社区走访点、公共活动现场或临时会议区，且时间为14:00-16:00的固定外勤时段，需要面向志愿者和社区居民进行公益直播并同步召开协调会议时触发。",
+        "declaration_mode": "explicit_declaration",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "start_time": "14时00分",
+        "end_time": "16时00分",
+        "duration": "120min",
+        "alias_mapping": {
+          "rtt_aliases": [
+            "顺滑一点"
+          ]
+        },
+        "scope": "location_boundary",
+        "status": "active",
+        "evidence_count": 2,
+        "first_declared_at": "2026年10月07日13时45分",
+        "last_reinforced_at": "2026年10月14日13时45分"
+      },
+      "SUB_001": {
+        "memory_id": "SUB_001",
+        "category": "sub_storyline_transit",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "resolution": "720p",
+        "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "糊弄不过去就行"
+          ]
+        },
+        "scope": "transit_evening",
+        "status": "active",
+        "evidence_count": 1,
+        "first_declared_at": "2026年10月11日18时30分",
+        "last_reinforced_at": "2026年10月11日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01"
+      ]
+    },
+    "memory_events": [
+      {
+        "event_type": "crystallize_experience",
+        "experience_id": "EXP_OVERLAPPING_ORDER_RESOLUTION_01",
+        "description": "用户针对历史踩坑故障进行严肃反馈与经验指示，Agent 深刻反思并沉淀【新旧工单时段撞车无缝让路与时序重叠仲裁经验】(EXP_OVERLAPPING_ORDER_RESOLUTION_01)入经验库。",
+        "crystallized_slots": [
+          "experience_policy",
+          "trigger_conditions"
+        ]
+      }
+    ],
+    "gold_state_after": {
+      "MF_001": {
+        "memory_id": "MF_001",
+        "category": "periodic_main_storyline",
+        "storyline_trigger_type": "location_environment",
+        "trigger_condition": "当身处利兹社区走访点、公共活动现场或临时会议区，且时间为14:00-16:00的固定外勤时段，需要面向志愿者和社区居民进行公益直播并同步召开协调会议时触发。",
+        "declaration_mode": "explicit_declaration",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "start_time": "14时00分",
+        "end_time": "16时00分",
+        "duration": "120min",
+        "alias_mapping": {
+          "rtt_aliases": [
+            "顺滑一点"
+          ]
+        },
+        "scope": "location_boundary",
+        "status": "active",
+        "evidence_count": 2,
+        "first_declared_at": "2026年10月07日13时45分",
+        "last_reinforced_at": "2026年10月14日13时45分"
+      },
+      "SUB_001": {
+        "memory_id": "SUB_001",
+        "category": "sub_storyline_transit",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "resolution": "720p",
+        "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "糊弄不过去就行"
+          ]
+        },
+        "scope": "transit_evening",
+        "status": "active",
+        "evidence_count": 1,
+        "first_declared_at": "2026年10月11日18时30分",
+        "last_reinforced_at": "2026年10月11日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
+    }
+  },
+  {
+    "session_id": "S-USER_003-07",
+    "reference_time": "2026年10月24日13时45分",
     "memory_role": "reuse_session",
     "blueprint_type": "main",
     "snapshot_before": {
@@ -515,7 +634,11 @@
         "evidence_count": 1,
         "first_declared_at": "2026年10月11日18时30分",
         "last_reinforced_at": "2026年10月11日18时30分"
-      }
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     },
     "memory_events": [
       {
@@ -553,7 +676,7 @@
         "status": "active",
         "evidence_count": 3,
         "first_declared_at": "2026年10月07日13时45分",
-        "last_reinforced_at": "2026年10月21日13时45分"
+        "last_reinforced_at": "2026年10月24日13时45分"
       },
       "SUB_001": {
         "memory_id": "SUB_001",
@@ -574,112 +697,17 @@
         "evidence_count": 1,
         "first_declared_at": "2026年10月11日18时30分",
         "last_reinforced_at": "2026年10月11日18时30分"
-      }
-    }
-  },
-  {
-    "session_id": "S-USER_003-07",
-    "reference_time": "2026年10月24日13时45分",
-    "memory_role": "reuse_session",
-    "blueprint_type": "working_record_disambig",
-    "snapshot_before": {
-      "MF_001": {
-        "memory_id": "MF_001",
-        "category": "periodic_main_storyline",
-        "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当身处利兹社区走访点、公共活动现场或临时会议区，且时间为14:00-16:00的固定外勤时段，需要面向志愿者和社区居民进行公益直播并同步召开协调会议时触发。",
-        "declaration_mode": "explicit_declaration",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
-        "resolution": "1080p",
-        "rtt_max": "50ms",
-        "start_time": "14时00分",
-        "end_time": "16时00分",
-        "duration": "120min",
-        "alias_mapping": {
-          "rtt_aliases": [
-            "顺滑一点"
-          ]
-        },
-        "scope": "location_boundary",
-        "status": "active",
-        "evidence_count": 3,
-        "first_declared_at": "2026年10月07日13时45分",
-        "last_reinforced_at": "2026年10月21日13时45分"
       },
-      "SUB_001": {
-        "memory_id": "SUB_001",
-        "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
-        "resolution": "720p",
-        "rtt_max": "100ms",
-        "start_time": "18时45分",
-        "duration": "60min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "糊弄不过去就行"
-          ]
-        },
-        "scope": "transit_evening",
-        "status": "active",
-        "evidence_count": 1,
-        "first_declared_at": "2026年10月11日18时30分",
-        "last_reinforced_at": "2026年10月11日18时30分"
-      }
-    },
-    "memory_events": [],
-    "gold_state_after": {
-      "MF_001": {
-        "memory_id": "MF_001",
-        "category": "periodic_main_storyline",
-        "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当身处利兹社区走访点、公共活动现场或临时会议区，且时间为14:00-16:00的固定外勤时段，需要面向志愿者和社区居民进行公益直播并同步召开协调会议时触发。",
-        "declaration_mode": "explicit_declaration",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
-        "resolution": "1080p",
-        "rtt_max": "50ms",
-        "start_time": "14时00分",
-        "end_time": "16时00分",
-        "duration": "120min",
-        "alias_mapping": {
-          "rtt_aliases": [
-            "顺滑一点"
-          ]
-        },
-        "scope": "location_boundary",
-        "status": "active",
-        "evidence_count": 3,
-        "first_declared_at": "2026年10月07日13时45分",
-        "last_reinforced_at": "2026年10月21日13时45分"
-      },
-      "SUB_001": {
-        "memory_id": "SUB_001",
-        "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
-        "resolution": "720p",
-        "rtt_max": "100ms",
-        "start_time": "18时45分",
-        "duration": "60min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "糊弄不过去就行"
-          ]
-        },
-        "scope": "transit_evening",
-        "status": "active",
-        "evidence_count": 1,
-        "first_declared_at": "2026年10月11日18时30分",
-        "last_reinforced_at": "2026年10月11日18时30分"
-      }
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     }
   },
   {
     "session_id": "S-USER_003-08",
     "reference_time": "2026年10月28日13时45分",
-    "memory_role": "reuse_session",
+    "memory_role": "reinforcement_session",
     "blueprint_type": "main",
     "snapshot_before": {
       "MF_001": {
@@ -704,7 +732,7 @@
         "status": "active",
         "evidence_count": 3,
         "first_declared_at": "2026年10月07日13时45分",
-        "last_reinforced_at": "2026年10月21日13时45分"
+        "last_reinforced_at": "2026年10月24日13时45分"
       },
       "SUB_001": {
         "memory_id": "SUB_001",
@@ -725,7 +753,11 @@
         "evidence_count": 1,
         "first_declared_at": "2026年10月11日18时30分",
         "last_reinforced_at": "2026年10月11日18时30分"
-      }
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     },
     "memory_events": [
       {
@@ -784,121 +816,16 @@
         "evidence_count": 1,
         "first_declared_at": "2026年10月11日18时30分",
         "last_reinforced_at": "2026年10月11日18时30分"
-      }
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     }
   },
   {
     "session_id": "S-USER_003-09",
     "reference_time": "2026年10月29日13时45分",
-    "memory_role": "reuse_session",
-    "blueprint_type": "proactive_experience",
-    "snapshot_before": {
-      "MF_001": {
-        "memory_id": "MF_001",
-        "category": "periodic_main_storyline",
-        "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当身处利兹社区走访点、公共活动现场或临时会议区，且时间为14:00-16:00的固定外勤时段，需要面向志愿者和社区居民进行公益直播并同步召开协调会议时触发。",
-        "declaration_mode": "explicit_declaration",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
-        "resolution": "1080p",
-        "rtt_max": "50ms",
-        "start_time": "14时00分",
-        "end_time": "16时00分",
-        "duration": "120min",
-        "alias_mapping": {
-          "rtt_aliases": [
-            "顺滑一点"
-          ]
-        },
-        "scope": "location_boundary",
-        "status": "active",
-        "evidence_count": 4,
-        "first_declared_at": "2026年10月07日13时45分",
-        "last_reinforced_at": "2026年10月28日13时45分"
-      },
-      "SUB_001": {
-        "memory_id": "SUB_001",
-        "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
-        "resolution": "720p",
-        "rtt_max": "100ms",
-        "start_time": "18时45分",
-        "duration": "60min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "糊弄不过去就行"
-          ]
-        },
-        "scope": "transit_evening",
-        "status": "active",
-        "evidence_count": 1,
-        "first_declared_at": "2026年10月11日18时30分",
-        "last_reinforced_at": "2026年10月11日18时30分"
-      }
-    },
-    "memory_events": [
-      {
-        "event_type": "proactive_experience_suggestion",
-        "experience_id": "EXP_STADIUM_CONGESTION_01",
-        "description": "Agent 识别到高密人流现场风险，主动调取 ReasoningBank 经验卡片 EXP_STADIUM_CONGESTION_01 提议稳定性优先方案（720p, 30ms），用户采纳闭环。",
-        "suggested_slots": [
-          "resolution",
-          "rtt_max"
-        ]
-      }
-    ],
-    "gold_state_after": {
-      "MF_001": {
-        "memory_id": "MF_001",
-        "category": "periodic_main_storyline",
-        "storyline_trigger_type": "location_environment",
-        "trigger_condition": "当身处利兹社区走访点、公共活动现场或临时会议区，且时间为14:00-16:00的固定外勤时段，需要面向志愿者和社区居民进行公益直播并同步召开协调会议时触发。",
-        "declaration_mode": "explicit_declaration",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
-        "resolution": "1080p",
-        "rtt_max": "50ms",
-        "start_time": "14时00分",
-        "end_time": "16时00分",
-        "duration": "120min",
-        "alias_mapping": {
-          "rtt_aliases": [
-            "顺滑一点"
-          ]
-        },
-        "scope": "location_boundary",
-        "status": "active",
-        "evidence_count": 4,
-        "first_declared_at": "2026年10月07日13时45分",
-        "last_reinforced_at": "2026年10月28日13时45分"
-      },
-      "SUB_001": {
-        "memory_id": "SUB_001",
-        "category": "sub_storyline_transit",
-        "application_name": "微信",
-        "service_name": "视频通话",
-        "resolution": "720p",
-        "rtt_max": "100ms",
-        "start_time": "18时45分",
-        "duration": "60min",
-        "alias_mapping": {
-          "resolution_aliases": [
-            "糊弄不过去就行"
-          ]
-        },
-        "scope": "transit_evening",
-        "status": "active",
-        "evidence_count": 1,
-        "first_declared_at": "2026年10月11日18时30分",
-        "last_reinforced_at": "2026年10月11日18时30分"
-      }
-    }
-  },
-  {
-    "session_id": "S-USER_003-10",
-    "reference_time": "2026年11月01日13时45分",
     "memory_role": "correction_session",
     "blueprint_type": "event_override",
     "snapshot_before": {
@@ -945,7 +872,11 @@
         "evidence_count": 1,
         "first_declared_at": "2026年10月11日18时30分",
         "last_reinforced_at": "2026年10月11日18时30分"
-      }
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     },
     "memory_events": [
       {
@@ -1001,7 +932,118 @@
         "evidence_count": 1,
         "first_declared_at": "2026年10月11日18时30分",
         "last_reinforced_at": "2026年10月11日18时30分"
-      }
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
+    }
+  },
+  {
+    "session_id": "S-USER_003-10",
+    "reference_time": "2026年11月01日13时45分",
+    "memory_role": "reuse_session",
+    "blueprint_type": "multi_intent_experience",
+    "snapshot_before": {
+      "MF_001": {
+        "memory_id": "MF_001",
+        "category": "periodic_main_storyline",
+        "storyline_trigger_type": "location_environment",
+        "trigger_condition": "当身处利兹社区走访点、公共活动现场或临时会议区，且时间为14:00-16:00的固定外勤时段，需要面向志愿者和社区居民进行公益直播并同步召开协调会议时触发。",
+        "declaration_mode": "explicit_declaration",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "start_time": "14时00分",
+        "end_time": "16时00分",
+        "duration": "120min",
+        "alias_mapping": {
+          "rtt_aliases": [
+            "顺滑一点"
+          ]
+        },
+        "scope": "location_boundary",
+        "status": "active",
+        "evidence_count": 4,
+        "first_declared_at": "2026年10月07日13时45分",
+        "last_reinforced_at": "2026年10月28日13时45分"
+      },
+      "SUB_001": {
+        "memory_id": "SUB_001",
+        "category": "sub_storyline_transit",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "resolution": "720p",
+        "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "糊弄不过去就行"
+          ]
+        },
+        "scope": "transit_evening",
+        "status": "active",
+        "evidence_count": 1,
+        "first_declared_at": "2026年10月11日18时30分",
+        "last_reinforced_at": "2026年10月11日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
+    },
+    "memory_events": [],
+    "gold_state_after": {
+      "MF_001": {
+        "memory_id": "MF_001",
+        "category": "periodic_main_storyline",
+        "storyline_trigger_type": "location_environment",
+        "trigger_condition": "当身处利兹社区走访点、公共活动现场或临时会议区，且时间为14:00-16:00的固定外勤时段，需要面向志愿者和社区居民进行公益直播并同步召开协调会议时触发。",
+        "declaration_mode": "explicit_declaration",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "start_time": "14时00分",
+        "end_time": "16时00分",
+        "duration": "120min",
+        "alias_mapping": {
+          "rtt_aliases": [
+            "顺滑一点"
+          ]
+        },
+        "scope": "location_boundary",
+        "status": "active",
+        "evidence_count": 4,
+        "first_declared_at": "2026年10月07日13时45分",
+        "last_reinforced_at": "2026年10月28日13时45分"
+      },
+      "SUB_001": {
+        "memory_id": "SUB_001",
+        "category": "sub_storyline_transit",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "resolution": "720p",
+        "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "糊弄不过去就行"
+          ]
+        },
+        "scope": "transit_evening",
+        "status": "active",
+        "evidence_count": 1,
+        "first_declared_at": "2026年10月11日18时30分",
+        "last_reinforced_at": "2026年10月11日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     }
   },
   {
@@ -1053,7 +1095,11 @@
         "evidence_count": 1,
         "first_declared_at": "2026年10月11日18时30分",
         "last_reinforced_at": "2026年10月11日18时30分"
-      }
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     },
     "memory_events": [
       {
@@ -1112,14 +1158,18 @@
         "evidence_count": 1,
         "first_declared_at": "2026年10月11日18时30分",
         "last_reinforced_at": "2026年10月11日18时30分"
-      }
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     }
   },
   {
     "session_id": "S-USER_003-12",
     "reference_time": "2026年11月07日13时45分",
     "memory_role": "reuse_session",
-    "blueprint_type": "empirical_recall",
+    "blueprint_type": "working_record_reuse",
     "snapshot_before": {
       "MF_001": {
         "memory_id": "MF_001",
@@ -1164,13 +1214,18 @@
         "evidence_count": 1,
         "first_declared_at": "2026年10月11日18时30分",
         "last_reinforced_at": "2026年10月11日18时30分"
-      }
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     },
     "memory_events": [
       {
-        "event_type": "empirical_recall",
-        "experience_id": "EXP_SEVERE_WEATHER_01",
-        "description": "用户在恶劣天气下调取既往抗衰落经验方案 EXP_SEVERE_WEATHER_01，Agent 调取经验卡片并向用户反问确认加固参数（720p, 30ms）。",
+        "event_type": "retrieve_working_record",
+        "record_id": "REC_mobile_persona_003_20261007_01",
+        "delta_days": 31,
+        "description": "用户使用相对时态引用历史工单 REC_mobile_persona_003_20261007_01（距今约 31 天），Agent 成功定位工单并继承体验规格（1080p, 50ms），反问今日起止时段。",
         "retrieved_slots": [
           "resolution",
           "rtt_max"
@@ -1221,14 +1276,18 @@
         "evidence_count": 1,
         "first_declared_at": "2026年10月11日18时30分",
         "last_reinforced_at": "2026年10月11日18时30分"
-      }
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     }
   },
   {
     "session_id": "S-USER_003-13",
-    "reference_time": "2026年11月11日13时45分",
+    "reference_time": "2026年11月11日14时45分",
     "memory_role": "reuse_session",
-    "blueprint_type": "proactive_experience",
+    "blueprint_type": "overlapping_experience",
     "snapshot_before": {
       "MF_001": {
         "memory_id": "MF_001",
@@ -1273,19 +1332,13 @@
         "evidence_count": 1,
         "first_declared_at": "2026年10月11日18时30分",
         "last_reinforced_at": "2026年10月11日18时30分"
-      }
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     },
-    "memory_events": [
-      {
-        "event_type": "proactive_experience_suggestion",
-        "experience_id": "EXP_STADIUM_CONGESTION_01",
-        "description": "Agent 识别到高密人流现场风险，主动调取 ReasoningBank 经验卡片 EXP_STADIUM_CONGESTION_01 提议稳定性优先方案（1080p, 50ms），用户采纳闭环。",
-        "suggested_slots": [
-          "resolution",
-          "rtt_max"
-        ]
-      }
-    ],
+    "memory_events": [],
     "gold_state_after": {
       "MF_001": {
         "memory_id": "MF_001",
@@ -1330,7 +1383,11 @@
         "evidence_count": 1,
         "first_declared_at": "2026年10月11日18时30分",
         "last_reinforced_at": "2026年10月11日18时30分"
-      }
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     }
   },
   {
@@ -1382,13 +1439,17 @@
         "evidence_count": 1,
         "first_declared_at": "2026年10月11日18时30分",
         "last_reinforced_at": "2026年10月11日18时30分"
-      }
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     },
     "memory_events": [
       {
         "event_type": "reschedule_working_record",
-        "record_id": "REC_mobile_persona_003_20261111_78",
-        "description": "用户申请对历史预约工单 REC_mobile_persona_003_20261111_78 变更改期，Agent 定位工单并将新时段（2026年11月15日14时00分 至 2026年11月15日16时00分）更新生效。",
+        "record_id": "REC_mobile_persona_003_20261111_184",
+        "description": "用户申请对历史预约工单 REC_mobile_persona_003_20261111_184 变更改期，Agent 定位工单并将新时段（2026年11月15日14时00分 至 2026年11月15日16时00分）更新生效。",
         "modified_slots": [
           "start_timestamp",
           "end_timestamp"
@@ -1439,12 +1500,235 @@
         "evidence_count": 1,
         "first_declared_at": "2026年10月11日18时30分",
         "last_reinforced_at": "2026年10月11日18时30分"
-      }
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     }
   },
   {
     "session_id": "S-USER_003-15",
-    "reference_time": "2026年11月18日20时00分",
+    "reference_time": "2026年11月18日10时00分",
+    "memory_role": "distractor_session",
+    "blueprint_type": "distractor_ood",
+    "snapshot_before": {
+      "MF_001": {
+        "memory_id": "MF_001",
+        "category": "periodic_main_storyline",
+        "storyline_trigger_type": "location_environment",
+        "trigger_condition": "当身处利兹社区走访点、公共活动现场或临时会议区，且时间为14:00-16:00的固定外勤时段，需要面向志愿者和社区居民进行公益直播并同步召开协调会议时触发。",
+        "declaration_mode": "explicit_declaration",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "start_time": "14时00分",
+        "end_time": "16时00分",
+        "duration": "120min",
+        "alias_mapping": {
+          "rtt_aliases": [
+            "顺滑一点"
+          ]
+        },
+        "scope": "location_boundary",
+        "status": "active",
+        "evidence_count": 5,
+        "first_declared_at": "2026年10月07日13时45分",
+        "last_reinforced_at": "2026年11月04日13时45分"
+      },
+      "SUB_001": {
+        "memory_id": "SUB_001",
+        "category": "sub_storyline_transit",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "resolution": "720p",
+        "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "糊弄不过去就行"
+          ]
+        },
+        "scope": "transit_evening",
+        "status": "active",
+        "evidence_count": 1,
+        "first_declared_at": "2026年10月11日18时30分",
+        "last_reinforced_at": "2026年10月11日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
+    },
+    "memory_events": [
+      {
+        "event_type": "no_memory_change",
+        "description": "单次任务业务或域外诉求，与长期偏好无关，不发生记忆变更。"
+      }
+    ],
+    "gold_state_after": {
+      "MF_001": {
+        "memory_id": "MF_001",
+        "category": "periodic_main_storyline",
+        "storyline_trigger_type": "location_environment",
+        "trigger_condition": "当身处利兹社区走访点、公共活动现场或临时会议区，且时间为14:00-16:00的固定外勤时段，需要面向志愿者和社区居民进行公益直播并同步召开协调会议时触发。",
+        "declaration_mode": "explicit_declaration",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "start_time": "14时00分",
+        "end_time": "16时00分",
+        "duration": "120min",
+        "alias_mapping": {
+          "rtt_aliases": [
+            "顺滑一点"
+          ]
+        },
+        "scope": "location_boundary",
+        "status": "active",
+        "evidence_count": 5,
+        "first_declared_at": "2026年10月07日13时45分",
+        "last_reinforced_at": "2026年11月04日13时45分"
+      },
+      "SUB_001": {
+        "memory_id": "SUB_001",
+        "category": "sub_storyline_transit",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "resolution": "720p",
+        "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "糊弄不过去就行"
+          ]
+        },
+        "scope": "transit_evening",
+        "status": "active",
+        "evidence_count": 1,
+        "first_declared_at": "2026年10月11日18时30分",
+        "last_reinforced_at": "2026年10月11日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
+    }
+  },
+  {
+    "session_id": "S-USER_003-16",
+    "reference_time": "2026年11月20日13时45分",
+    "memory_role": "reuse_session",
+    "blueprint_type": "working_record_disambig",
+    "snapshot_before": {
+      "MF_001": {
+        "memory_id": "MF_001",
+        "category": "periodic_main_storyline",
+        "storyline_trigger_type": "location_environment",
+        "trigger_condition": "当身处利兹社区走访点、公共活动现场或临时会议区，且时间为14:00-16:00的固定外勤时段，需要面向志愿者和社区居民进行公益直播并同步召开协调会议时触发。",
+        "declaration_mode": "explicit_declaration",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "start_time": "14时00分",
+        "end_time": "16时00分",
+        "duration": "120min",
+        "alias_mapping": {
+          "rtt_aliases": [
+            "顺滑一点"
+          ]
+        },
+        "scope": "location_boundary",
+        "status": "active",
+        "evidence_count": 5,
+        "first_declared_at": "2026年10月07日13时45分",
+        "last_reinforced_at": "2026年11月04日13时45分"
+      },
+      "SUB_001": {
+        "memory_id": "SUB_001",
+        "category": "sub_storyline_transit",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "resolution": "720p",
+        "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "糊弄不过去就行"
+          ]
+        },
+        "scope": "transit_evening",
+        "status": "active",
+        "evidence_count": 1,
+        "first_declared_at": "2026年10月11日18时30分",
+        "last_reinforced_at": "2026年10月11日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
+    },
+    "memory_events": [],
+    "gold_state_after": {
+      "MF_001": {
+        "memory_id": "MF_001",
+        "category": "periodic_main_storyline",
+        "storyline_trigger_type": "location_environment",
+        "trigger_condition": "当身处利兹社区走访点、公共活动现场或临时会议区，且时间为14:00-16:00的固定外勤时段，需要面向志愿者和社区居民进行公益直播并同步召开协调会议时触发。",
+        "declaration_mode": "explicit_declaration",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "start_time": "14时00分",
+        "end_time": "16时00分",
+        "duration": "120min",
+        "alias_mapping": {
+          "rtt_aliases": [
+            "顺滑一点"
+          ]
+        },
+        "scope": "location_boundary",
+        "status": "active",
+        "evidence_count": 5,
+        "first_declared_at": "2026年10月07日13时45分",
+        "last_reinforced_at": "2026年11月04日13时45分"
+      },
+      "SUB_001": {
+        "memory_id": "SUB_001",
+        "category": "sub_storyline_transit",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "resolution": "720p",
+        "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "糊弄不过去就行"
+          ]
+        },
+        "scope": "transit_evening",
+        "status": "active",
+        "evidence_count": 1,
+        "first_declared_at": "2026年10月11日18时30分",
+        "last_reinforced_at": "2026年10月11日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
+    }
+  },
+  {
+    "session_id": "S-USER_003-17",
+    "reference_time": "2026年11月22日20时00分",
     "memory_role": "evidence_session",
     "blueprint_type": "sub_02",
     "snapshot_before": {
@@ -1491,7 +1775,11 @@
         "evidence_count": 1,
         "first_declared_at": "2026年10月11日18时30分",
         "last_reinforced_at": "2026年10月11日18时30分"
-      }
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ]
     },
     "memory_events": [
       {
@@ -1551,6 +1839,10 @@
         "first_declared_at": "2026年10月11日18时30分",
         "last_reinforced_at": "2026年10月11日18时30分"
       },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ],
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
@@ -1568,16 +1860,16 @@
         "scope": "hotel_evening_review",
         "status": "active",
         "evidence_count": 1,
-        "first_declared_at": "2026年11月18日20时00分",
-        "last_reinforced_at": "2026年11月18日20时00分"
+        "first_declared_at": "2026年11月22日20时00分",
+        "last_reinforced_at": "2026年11月22日20时00分"
       }
     }
   },
   {
-    "session_id": "S-USER_003-16",
-    "reference_time": "2026年11月20日13时45分",
+    "session_id": "S-USER_003-18",
+    "reference_time": "2026年11月25日20时00分",
     "memory_role": "reuse_session",
-    "blueprint_type": "main_recovery",
+    "blueprint_type": "sub_02",
     "snapshot_before": {
       "MF_001": {
         "memory_id": "MF_001",
@@ -1623,6 +1915,10 @@
         "first_declared_at": "2026年10月11日18时30分",
         "last_reinforced_at": "2026年10月11日18时30分"
       },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ],
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
@@ -1640,15 +1936,21 @@
         "scope": "hotel_evening_review",
         "status": "active",
         "evidence_count": 1,
-        "first_declared_at": "2026年11月18日20时00分",
-        "last_reinforced_at": "2026年11月18日20时00分"
+        "first_declared_at": "2026年11月22日20时00分",
+        "last_reinforced_at": "2026年11月22日20时00分"
       }
     },
     "memory_events": [
       {
         "event_type": "reinforce_memory",
-        "memory_id": "MF_001",
-        "description": "成功复用原长期主线偏好配置。"
+        "memory_id": "SUB_002",
+        "description": "支线2酒店复盘记忆复用成功，证据次数达 2 次。",
+        "retrieved_slots": [
+          "application_name",
+          "service_name",
+          "resolution",
+          "rtt_max"
+        ]
       }
     ],
     "gold_state_after": {
@@ -1672,9 +1974,9 @@
         },
         "scope": "location_boundary",
         "status": "active",
-        "evidence_count": 6,
+        "evidence_count": 5,
         "first_declared_at": "2026年10月07日13时45分",
-        "last_reinforced_at": "2026年11月20日13时45分"
+        "last_reinforced_at": "2026年11月04日13时45分"
       },
       "SUB_001": {
         "memory_id": "SUB_001",
@@ -1696,6 +1998,10 @@
         "first_declared_at": "2026年10月11日18时30分",
         "last_reinforced_at": "2026年10月11日18时30分"
       },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ],
       "SUB_002": {
         "memory_id": "SUB_002",
         "category": "sub_storyline_hotel",
@@ -1712,9 +2018,156 @@
         },
         "scope": "hotel_evening_review",
         "status": "active",
+        "evidence_count": 2,
+        "first_declared_at": "2026年11月22日20时00分",
+        "last_reinforced_at": "2026年11月25日20时00分"
+      }
+    }
+  },
+  {
+    "session_id": "S-USER_003-19",
+    "reference_time": "2026年11月28日10时00分",
+    "memory_role": "distractor_session",
+    "blueprint_type": "distractor_normal",
+    "snapshot_before": {
+      "MF_001": {
+        "memory_id": "MF_001",
+        "category": "periodic_main_storyline",
+        "storyline_trigger_type": "location_environment",
+        "trigger_condition": "当身处利兹社区走访点、公共活动现场或临时会议区，且时间为14:00-16:00的固定外勤时段，需要面向志愿者和社区居民进行公益直播并同步召开协调会议时触发。",
+        "declaration_mode": "explicit_declaration",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "start_time": "14时00分",
+        "end_time": "16时00分",
+        "duration": "120min",
+        "alias_mapping": {
+          "rtt_aliases": [
+            "顺滑一点"
+          ]
+        },
+        "scope": "location_boundary",
+        "status": "active",
+        "evidence_count": 5,
+        "first_declared_at": "2026年10月07日13时45分",
+        "last_reinforced_at": "2026年11月04日13时45分"
+      },
+      "SUB_001": {
+        "memory_id": "SUB_001",
+        "category": "sub_storyline_transit",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "resolution": "720p",
+        "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "糊弄不过去就行"
+          ]
+        },
+        "scope": "transit_evening",
+        "status": "active",
         "evidence_count": 1,
-        "first_declared_at": "2026年11月18日20时00分",
-        "last_reinforced_at": "2026年11月18日20时00分"
+        "first_declared_at": "2026年10月11日18时30分",
+        "last_reinforced_at": "2026年10月11日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ],
+      "SUB_002": {
+        "memory_id": "SUB_002",
+        "category": "sub_storyline_hotel",
+        "application_name": "哔哩哔哩",
+        "service_name": "开直播",
+        "resolution": "1080p",
+        "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "画面通透"
+          ]
+        },
+        "scope": "hotel_evening_review",
+        "status": "active",
+        "evidence_count": 2,
+        "first_declared_at": "2026年11月22日20时00分",
+        "last_reinforced_at": "2026年11月25日20时00分"
+      }
+    },
+    "memory_events": [],
+    "gold_state_after": {
+      "MF_001": {
+        "memory_id": "MF_001",
+        "category": "periodic_main_storyline",
+        "storyline_trigger_type": "location_environment",
+        "trigger_condition": "当身处利兹社区走访点、公共活动现场或临时会议区，且时间为14:00-16:00的固定外勤时段，需要面向志愿者和社区居民进行公益直播并同步召开协调会议时触发。",
+        "declaration_mode": "explicit_declaration",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "resolution": "1080p",
+        "rtt_max": "50ms",
+        "start_time": "14时00分",
+        "end_time": "16时00分",
+        "duration": "120min",
+        "alias_mapping": {
+          "rtt_aliases": [
+            "顺滑一点"
+          ]
+        },
+        "scope": "location_boundary",
+        "status": "active",
+        "evidence_count": 5,
+        "first_declared_at": "2026年10月07日13时45分",
+        "last_reinforced_at": "2026年11月04日13时45分"
+      },
+      "SUB_001": {
+        "memory_id": "SUB_001",
+        "category": "sub_storyline_transit",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "resolution": "720p",
+        "rtt_max": "100ms",
+        "start_time": "18时45分",
+        "duration": "60min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "糊弄不过去就行"
+          ]
+        },
+        "scope": "transit_evening",
+        "status": "active",
+        "evidence_count": 1,
+        "first_declared_at": "2026年10月11日18时30分",
+        "last_reinforced_at": "2026年10月11日18时30分"
+      },
+      "active_experiences": [
+        "EXP_MULTI_INTENT_PARTITION_01",
+        "EXP_OVERLAPPING_ORDER_RESOLUTION_01"
+      ],
+      "SUB_002": {
+        "memory_id": "SUB_002",
+        "category": "sub_storyline_hotel",
+        "application_name": "哔哩哔哩",
+        "service_name": "开直播",
+        "resolution": "1080p",
+        "rtt_max": "80ms",
+        "start_time": "20时15分",
+        "duration": "90min",
+        "alias_mapping": {
+          "resolution_aliases": [
+            "画面通透"
+          ]
+        },
+        "scope": "hotel_evening_review",
+        "status": "active",
+        "evidence_count": 2,
+        "first_declared_at": "2026年11月22日20时00分",
+        "last_reinforced_at": "2026年11月25日20时00分"
       }
     }
   }

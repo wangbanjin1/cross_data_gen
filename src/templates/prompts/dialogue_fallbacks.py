@@ -95,6 +95,81 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
         else:
             memory_sentence = f"{small_declaration}帮我记一下。" if small_declaration else ""
             return f"是{srv}业务，画质要{res}，时延控制在{rtt}以内，从今天{tp['start_timestamp'].split('日')[-1]}开始，预计持续{tp['duration']}。{memory_sentence}"
+    elif b_type == "experience_learning":
+        exp_id = s_plan.get("experience_id") or s_plan.get("experience_citation", {}).get("experience_id")
+        if exp_id == "EXP_CALENDAR_HOLIDAY_EXCEPTION_01":
+            if turn_idx == 1:
+                return f"今天在{env}，帮我安排下周例行的{app}{srv}保障。对了，上次中秋放假，系统还在空荡荡的办公室空跑保障扣费，太浪费了！这次千万别再搞出节假日空跑这种事！"
+            else:
+                return "好的，有这个避让经验就好，这次直接开通吧。"
+        elif exp_id == "EXP_MULTI_INTENT_PARTITION_01":
+            if turn_idx == 1:
+                return f"今天在{env}，帮我把上午的{app}{srv}保障开通一下。上次让你们延期上午任务，结果把下午的保障也给顺延搞砸了，这次多任务可千万别互相串扰！"
+            else:
+                return "行，这次分清楚就好，直接开通吧。"
+        elif exp_id == "EXP_PREWARM_BUFFER_01":
+            if turn_idx == 1:
+                return f"今天在{env}有重要活动，开{app}{srv}保障。上次开场掐着点才起保，结果设备调试连线卡了十几分钟差点耽误事！大型现场这次必须吸取教训！"
+            else:
+                return "对，现场提前试机才稳妥，确认开通。"
+        elif exp_id == "EXP_ORDER_QUALITY_DISAMBIGUATION_01":
+            if turn_idx == 1:
+                return f"今天在{env}，帮我按之前的配置开通{app}{srv}保障。上次调了有丢包抖动的异常工单来复用，导致推流也跟着受影响，这次可别乱复用有问题的单据！"
+            else:
+                return "好的，能自动甄别高质量工单就行，开通吧。"
+        elif exp_id == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
+            if turn_idx == 1:
+                return f"今天在{env}需要开个紧急{app}{srv}保障。上次临时加塞任务，和原来的日常保障时间撞车重叠，系统直接报错冲突，这次可得把时间协调好！"
+            else:
+                return "很好，按时序让路衔接就行，开通吧。"
+        else:
+            if turn_idx == 1:
+                return f"今天在{env}开{app}{srv}保障，上次踩坑的教训一定要记牢，严格按经验策略规范执行！"
+            else:
+                return "好的，按经验开通吧。"
+    elif s_plan.get("experience_citation", {}).get("experience_id") == "EXP_CALENDAR_HOLIDAY_EXCEPTION_01":
+        if turn_idx == 1:
+            return f"今天在{env}，帮我把例行周会的{app}{srv}保障开上，时间是下周一。"
+        else:
+            return "好的，太周到了，就顺延到10月8日开通吧。"
+    elif tid == "T2-4" or s_plan.get("experience_citation", {}).get("experience_id") == "EXP_MULTI_INTENT_PARTITION_01":
+        if turn_idx == 1:
+            return f"帮我改一下上午的{app}{srv}保障，临时通知延误了推迟到12:00结束；下午的保障千万别动，保持原样。"
+        else:
+            return "对，确认修改上午保障，下午锁定不动。"
+    elif tid == "T2-9" or s_plan.get("experience_citation", {}).get("experience_id") == "EXP_PREWARM_BUFFER_01":
+        nom_start = s_plan.get("nominal_start")
+        nom_start_t = nom_start.split('日')[-1] if nom_start else tp['start_timestamp'].split('日')[-1]
+        end_t = tp['end_timestamp'].split('日')[-1]
+        if s_plan.get("is_counterexample"):
+            if turn_idx == 1:
+                return f"今天在{env}做原画级视频采录，必须保持1080p高清，哪怕网络有波动也不能降画质，时间从{nom_start_t}到{end_t}，帮我开{app}{srv}保障。"
+            else:
+                return "确认不降画质，我就需要1080p，直接开通。"
+        elif s_plan.get("round_count") == 3:
+            if turn_idx == 1:
+                return f"今天在{env}有重要活动直播，开{app}{srv}保障，时间从{nom_start_t}到{end_t}，画质要求1080p。"
+            elif turn_idx == 2:
+                return "提前半小时试机预热够充分吗？只要开场不卡顿就行。"
+            else:
+                return "行，听你的，就提前半小时预热开通吧。"
+        else:
+            if turn_idx == 1:
+                return f"今天在{env}有重大活动直播，帮我开{app}{srv}保障，时间从{nom_start_t}到{end_t}。"
+            else:
+                return "好的，提前半小时试机预热太重要了，按这个开通！"
+    elif s_plan.get("experience_citation", {}).get("experience_id") == "EXP_ORDER_QUALITY_DISAMBIGUATION_01":
+        if turn_idx == 1:
+            return f"今天在{env}，帮我开个{app}{srv}保障，就按上周办得好的那次规格来办。"
+        else:
+            return "对，就按那次办，直接开通。"
+    elif tid == "T2-10" or s_plan.get("experience_citation", {}).get("experience_id") == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
+        start_t = tp['start_timestamp'].split('日')[-1]
+        end_t = tp['end_timestamp'].split('日')[-1]
+        if turn_idx == 1:
+            return f"下午要在{env}开个紧急{app}{srv}保障，但刚才系统里还有笔日常单子时间重叠撞车了，能直接接上吗？"
+        else:
+            return "太好了，就按这个让路方案开通！"
     elif tid == "T2-5":
         if turn_idx == 1:
             return f"今天在{env}，老规矩，用{app_alias}做{srv_alias}，帮我把保障开上。"
@@ -139,33 +214,6 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
         if "全月" in scope:
             return "帮我做个全月保障总对账，查下这一个月总共开了几次保障，累计多长时间？"
         return f"帮我查下这周总共开了几次保障，一共多长时间？"
-    elif tid == "T2-9":
-        start_t = tp['start_timestamp'].split('日')[-1]
-        end_t = tp['end_timestamp'].split('日')[-1]
-        if s_plan.get("is_counterexample"):
-            if turn_idx == 1:
-                return f"今天在{env}做原画级视频采录，必须保持1080p高清，哪怕网络有波动也不能降画质，时间从{start_t}到{end_t}，帮我开{app}{srv}保障。"
-            else:
-                return "确认不降画质，我就需要1080p，直接开通。"
-        elif s_plan.get("round_count") == 3:
-            if turn_idx == 1:
-                return f"今天在{env}有重要活动，开{app}{srv}保障，时间从{start_t}到{end_t}，画质要求1080p。"
-            elif turn_idx == 2:
-                return "降到720p够清晰吗？只要不卡不转圈就行。"
-            else:
-                return "行，听你的，就按720p保流畅开通吧。"
-        else:
-            if turn_idx == 1:
-                return f"今天在{env}有大型活动，需要开{app}{srv}保障，时间从{start_t}到{end_t}。"
-            else:
-                return "好的，听你的，就按这个开通吧。"
-    elif tid == "T2-10":
-        start_t = tp['start_timestamp'].split('日')[-1]
-        end_t = tp['end_timestamp'].split('日')[-1]
-        if turn_idx == 1:
-            return f"今天在{env}狂风暴雨天气很差，按上次恶劣天气的方案配{app}{srv}，从{start_t}开始。"
-        else:
-            return "对，直接按这套方案开通。"
     elif tid == "T2-3":
         if turn_idx == 1:
             return f"今天在{env}，老规矩，用{app}做{srv}，帮我把保障开上。"
@@ -264,6 +312,88 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
         else:
             memory_ack = f"并已记录您的习惯：{small_declaration}" if small_declaration else ""
             return f"好的，已为您开通{app}{srv}网络保障（{res} / 时延≤{rtt}），{memory_ack}祝您使用愉快！"
+    elif b_type == "experience_learning":
+        exp_id = s_plan.get("experience_id") or s_plan.get("experience_citation", {}).get("experience_id")
+        if exp_id == "EXP_CALENDAR_HOLIDAY_EXCEPTION_01":
+            if turn_idx == 1:
+                return "非常抱歉上次放假期间未能智能识别法定假日，导致例行保障空跑！我们已深刻复盘并沉淀【节假日与调休避让经验】。今后遇到法定假日，系统将主动提醒并顺延至节后首个工作日办理，绝不让您承担空跑费用。当前例行保障已为您配置就绪，确认直接开通吗？"
+            else:
+                return f"好的，已为您开通本次例行网络保障（{res} / 时延≤{rtt}），同时已将节假日避让规则沉淀至经验记忆库中，祝您工作顺利！"
+        elif exp_id == "EXP_MULTI_INTENT_PARTITION_01":
+            if turn_idx == 1:
+                return "非常抱歉上次多任务调整时未能做好因果隔离，导致上午任务的延后误伤了下午的配置！我们已沉淀【多任务因果隔离经验】，对多意图进行原子锁定时序隔离，绝不会交叉污染。本次上午保障已为您配置就绪，确认按此开通吗？"
+            else:
+                return f"好的，已为您成功受理本次保障（{res} / 时延≤{rtt}），多意图因果隔离规则已稳固沉淀至经验库，祝现场一切顺利！"
+        elif exp_id == "EXP_PREWARM_BUFFER_01":
+            if turn_idx == 1:
+                return f"非常抱歉上次掐点起保导致缺少预热缓冲时间！我们已深刻总结并沉淀【重大活动预热试机缓冲经验】。对于大型场馆及展会，系统会智能识别并建议将保障提前30分钟提前起保试机。当前保障已配置就绪，确认直接开通吗？"
+            else:
+                return f"好的，已为您开通本次保障（{res} / 时延≤{rtt}），并已将提前30分钟预热试机策略正式纳入经验记忆库，祝活动圆满成功！"
+        elif exp_id == "EXP_ORDER_QUALITY_DISAMBIGUATION_01":
+            if turn_idx == 1:
+                return "非常抱歉！上次盲目复用了存在抖动隐患的工单。我们已汲取教训并建立【历史工单网络质量评估经验】，今后复用时将自动调取质差分析日志，仅锁定全程无丢包的最优质量工单。本次配置已为您准备就绪，确认开通吗？"
+            else:
+                return f"好的，已按优质标准为您开通本次保障（{res} / 时延≤{rtt}），质量甄选经验已正式写入经验库，祝您使用顺畅！"
+        elif exp_id == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
+            if turn_idx == 1:
+                return "非常抱歉上次工单时段重叠时处理生硬！我们已针对性沉淀【工单时序重叠仲裁经验】。当新旧保障重叠时，系统会自动在冲突节点让原工单提前让路结单、新保障准时接管。当前配置已就绪，确认开通吗？"
+            else:
+                return f"好的，已为您开通本次保障（{res} / 时延≤{rtt}），工单时钟让路仲裁规则已沉淀至经验记忆库，祝您工作顺利！"
+        else:
+            if turn_idx == 1:
+                return f"非常抱歉此前在保障执行中出现偏差！我们已复盘并沉淀经验规则，当前保障已为您配置完毕，确认直接开通吗？"
+            else:
+                return f"好的，已为您成功受理本次保障（{res} / 时延≤{rtt}），经验策略已沉淀至经验库！"
+    elif s_plan.get("experience_citation", {}).get("experience_id") == "EXP_CALENDAR_HOLIDAY_EXCEPTION_01":
+        learn_sid = s_plan.get("learning_source_session")
+        learn_prefix = f"根据此前在 {learn_sid} 总结沉淀的" if learn_sid else "根据此前总结沉淀的"
+        if turn_idx == 1:
+            return f"收到，识别到下周一恰逢国庆节法定长假第一天，办公区全员放假。{learn_prefix}节假日避让经验，为您将保障顺延至节后首个工作日（10月8日）同时段办理，避免放假期间空跑产生费用，确认按此顺延办理吗？"
+        else:
+            return f"好的，已为您将例行周会网络保障顺延至10月8日办理（{res} / 时延≤{rtt}），祝您假期愉快！"
+    elif tid == "T2-4" or s_plan.get("experience_citation", {}).get("experience_id") == "EXP_MULTI_INTENT_PARTITION_01":
+        learn_sid = s_plan.get("learning_source_session")
+        learn_prefix = f"根据此前在 {learn_sid} 总结沉淀的" if learn_sid else "根据此前总结沉淀的"
+        if turn_idx == 1:
+            return f"收到！已针对上午保障任务进行局部调整，结束时间顺延至12:00并重算时长；{learn_prefix}多意图因果隔离经验，下午任务已严格锁定冻结不变，防止相互干扰，确认按此生效吗？"
+        else:
+            return f"好的，已完成多任务时序因果隔离调整，上午保障已延长至12:00，下午任务维持原配置不变！"
+    elif tid == "T2-9" or s_plan.get("experience_citation", {}).get("experience_id") == "EXP_PREWARM_BUFFER_01":
+        pw_start_t = tp['start_timestamp'].split('日')[-1]
+        end_t = tp['end_timestamp'].split('日')[-1]
+        learn_sid = s_plan.get("learning_source_session")
+        learn_prefix = f"根据此前在 {learn_sid} 总结沉淀的" if learn_sid else "根据此前总结沉淀的"
+        if s_plan.get("is_counterexample"):
+            if turn_idx == 1:
+                return f"收到，{env}现场人比较多，一般建议优先保流畅；不过既然您明确需要原画采录，已按您的要求保持{res}画质、时延{rtt}以内，确认直接开通吗？"
+            else:
+                return f"好的，已按原画要求为您开通{app}{srv}保障（{res} / 时延≤{rtt}），祝您录制顺利！"
+        elif s_plan.get("round_count") == 3:
+            if turn_idx == 1:
+                return f"收到，{env}现场人特别多，建议将保障时间提前30分钟推算为{pw_start_t}至{end_t}进行试机预热。您看这样合适吗？"
+            elif turn_idx == 2:
+                return f"预留30分钟试机能够确保开场推流平稳流畅，画质{res}、时延稳定在{rtt}。确认按这个开通吗？"
+            else:
+                return f"好的，已为您开通{app}{srv}保障（{pw_start_t}至{end_t}，{res} / 时延≤{rtt}），祝您现场活动顺利！"
+        else:
+            if turn_idx == 1:
+                return f"收到！大型现场设备调试与连线建议提前预热试机。{learn_prefix}重大活动起保经验，为您将保障时间自动提前30分钟推算为{pw_start_t}至{end_t}（保障时长扩至{tp['duration']}），确认直接开通吗？"
+            else:
+                return f"好的，已为您成功受理{app}{srv}网络保障（{pw_start_t}至{end_t}，{res} / 时延≤{rtt}），预留30分钟预热试机，祝现场顺利！"
+    elif s_plan.get("experience_citation", {}).get("experience_id") == "EXP_ORDER_QUALITY_DISAMBIGUATION_01":
+        learn_sid = s_plan.get("learning_source_session")
+        learn_prefix = f"根据此前在 {learn_sid} 总结沉淀的" if learn_sid else "根据此前总结沉淀的"
+        if turn_idx == 1:
+            return f"已为您调取历史工单网络质量评估日志，查到上周存在多次记录，其中周四单据曾有时延波动，而周二工单全程无丢包、质量最优。{learn_prefix}高质量工单甄选经验，已为您锁定该高质量工单（{res} / 时延≤{rtt}），确认直接开通吗？"
+        else:
+            return f"好的，已按优质历史工单为您成功受理{app}{srv}网络保障，祝您使用顺畅！"
+    elif tid == "T2-10" or s_plan.get("experience_citation", {}).get("experience_id") == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
+        learn_sid = s_plan.get("learning_source_session")
+        learn_prefix = f"根据此前在 {learn_sid} 总结沉淀的" if learn_sid else "根据此前总结沉淀的"
+        if turn_idx == 1:
+            return f"检测到新申请的保障与已预约的日常工单存在时段重叠。{learn_prefix}工单时序仲裁经验，协调原工单在冲突交界点提前结单让路，新保障准时无缝激活接管，避免重复计费，确认按此开通吗？"
+        else:
+            return f"好的，已完成工单时钟让路仲裁，原工单提前结单，新保障将于准时无缝接续生效！"
     elif tid == "T2-5":
         start_t = tp['start_timestamp'].split('日')[-1]
         if turn_idx == 1:
@@ -315,29 +445,6 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
         if "全月" in scope:
             return f"已为您生成全月历史工单总对账报表：本月您累计成功办理了 {total_orders} 次移动网络保障，累计保障总时长达 {total_mins} 分钟，涵盖各类重点场景，所有工单全部履约闭环。"
         return f"已为您查询到本周历史工单流水账：本周您共成功办理了 {total_orders} 次移动网络保障，累计保障时长达 {total_mins} 分钟，涵盖{app}{srv}等场景，所有工单均已按期履约。"
-    elif tid == "T2-9":
-        if s_plan.get("is_counterexample"):
-            if turn_idx == 1:
-                return f"收到，{env}现场人比较多，一般建议优先保流畅；不过既然您明确需要原画采录，已按您的要求保持{res}画质、时延{rtt}以内，确认直接开通吗？"
-            else:
-                return f"好的，已按原画要求为您开通{app}{srv}保障（{res} / 时延≤{rtt}），祝您录制顺利！"
-        elif s_plan.get("round_count") == 3:
-            if turn_idx == 1:
-                return f"收到，{env}现场人特别多容易网络拥挤，建议将画质调为{res}、时延控制在{rtt}以内，优先保证不卡顿。您看这样行吗？"
-            elif turn_idx == 2:
-                return f"在手机上看清晰度完全够用，关键是人多时不会卡住转圈，时延稳定在{rtt}。确认按这个开通吗？"
-            else:
-                return f"好的，已为您按人多防卡方案开通{app}{srv}保障（{res} / 时延≤{rtt}），祝您现场活动顺利！"
-        else:
-            if turn_idx == 1:
-                return f"收到，{env}现场人比较多容易卡顿，建议把画质调为{res}、时延控制在{rtt}以内，优先保流畅。您看按这个开通合适吗？"
-            else:
-                return f"好的，已为您开通{app}{srv}保障（{res} / 时延≤{rtt}），祝您现场活动顺利！"
-    elif tid == "T2-10":
-        if turn_idx == 1:
-            return f"收到，狂风暴雨天气信号容易波动，已按上次恶劣天气的方案设置：画质微调为{res}、时延控制在{rtt}以内（持续{tp['duration']}），保证音画不中断。确认直接开通吗？"
-        else:
-            return f"好的，已为您开通恶劣天气保障（{res} / 时延≤{rtt}）。风雨天气，祝您外勤平安顺利！"
     elif tid == "T2-3":
         start_t = tp['start_timestamp'].split('日')[-1]
         end_t = tp['end_timestamp'].split('日')[-1]
@@ -387,9 +494,15 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
 
 def get_normalized_action_types(s_plan: dict, turn_idx: int, role: str, is_last: bool, raw_u_acts, raw_a_acts) -> tuple[list[str], list[str]]:
     tid = s_plan.get("template_id", "")
+    b_type = s_plan.get("blueprint_type", "")
     is_implicit_reinf = role == "reinforcement_session" and s_plan.get("declaration_mode") == "implicit_induction" and s_plan.get("session_id", "").endswith("-03")
 
-    if tid == "T1-2":
+    if b_type == "experience_learning":
+        if turn_idx == 1:
+            return ["Create_Intent_Request", "Inform_Slot"], ["Confirm_Slot", "Request_Slot"]
+        else:
+            return ["Confirm_Slot"], ["Acknowledge"]
+    elif tid == "T1-2":
         return ["Create_Intent_Request"], ["Reject_Request"]
     elif tid == "X-1":
         return ["Create_Intent_Request", "Inform_Slot"], ["Acknowledge", "Reject_Request"]

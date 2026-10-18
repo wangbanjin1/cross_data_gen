@@ -16,6 +16,7 @@ def main():
     parser.add_argument("--count", "-n", type=int, default=None, help="Number of personas to generate (overrides config)")
     parser.add_argument("--verify", "-v", action="store_true", help="Run verification across output folder")
     parser.add_argument("--offline", action="store_true", help="Generate offline using deterministic standard dialogue engine without LLM calls")
+    parser.add_argument("--force", "-f", action="store_true", help="Force regenerate personas even if already existing")
     args = parser.parse_args()
 
     # 如果指定了配置文件，重新加载全局配置
@@ -38,7 +39,8 @@ def main():
         pipeline.run_batch(
             start_idx=args.start,
             count=args.count,
-            raw_persona_path=args.input
+            raw_persona_path=args.input,
+            force=args.force
         )
 
 if __name__ == "__main__":

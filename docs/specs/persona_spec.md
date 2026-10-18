@@ -6,7 +6,7 @@
 
 画像模板可以通过两种方式获得：
 
-| **方式说明适用场景** |                        |                                          |
+| 生成方式 | 说明 | 适用场景 |
 | ------------ | ---------------------- | ---------------------------------------- |
 | **人工设计**     | 按本规范手动编写 JSON          | 已有画像（如 `corenet_personas.jsonl` 中的 19 个） |
 | **LLM 生成**   | 提供简短的人类角色描述，LLM 补全完整字段 | 需要批量生成新画像                                |
@@ -81,7 +81,7 @@ python persona_generate.py --resource-dir /path/to/dataset_prepare --output /pat
 
 画像模板是 `corenet_personas.jsonl` 中的单条记录，包含两个顶层字段：
 
-| **字段类型说明**        |        |                   |
+| 字段名 | 类型 | 说明 |
 | ----------------- | ------ | ----------------- |
 | `static_profile`  | `dict` | 稳定画像（不变或极少变化）     |
 | `dynamic_profile` | `dict` | 动态画像（随时间/场景/事件变化） |
@@ -90,7 +90,7 @@ python persona_generate.py --resource-dir /path/to/dataset_prepare --output /pat
 
 ## 4 `static_profile` 字段规范
 
-| **字段类型必填说明**   |             |   |                                           |
+| 字段名 | 类型 | 必填 | 说明 |
 | -------------- | ----------- | - | ----------------------------------------- |
 | `identity`     | `str`       | 是 | 用户身份描述。需包含：职业/角色、核心活动特征、频率/时长、考核/目标       |
 | `devices`      | `str`       | 是 | 使用的设备列表。需区分主力设备与备用设备                      |
@@ -119,7 +119,7 @@ python persona_generate.py --resource-dir /path/to/dataset_prepare --output /pat
 
 ### 5.1 `time_based`
 
-| **字段类型说明** |       |                                |
+| 字段名 | 类型 | 说明 |
 | ---------- | ----- | ------------------------------ |
 | key        | `str` | 时间段描述，格式如 "工作日下午（14:00-17:00）" |
 | value      | `str` | 该时间段的典型活动和网络关注点                |
@@ -138,7 +138,7 @@ python persona_generate.py --resource-dir /path/to/dataset_prepare --output /pat
 
 ### 5.2 `scene_switch`
 
-| **字段类型说明** |       |                   |
+| 字段名 | 类型 | 说明 |
 | ---------- | ----- | ----------------- |
 | key        | `str` | 场景描述              |
 | value      | `str` | 该场景下的行为模式 + 网络关注点 |
@@ -157,7 +157,7 @@ python persona_generate.py --resource-dir /path/to/dataset_prepare --output /pat
 
 ### 5.3 `role_change`
 
-| **字段类型说明** |       |              |
+| 字段名 | 类型 | 说明 |
 | ---------- | ----- | ------------ |
 | `from`     | `str` | 角色变化前的状态     |
 | `to`       | `str` | 角色变化后的状态     |
@@ -178,7 +178,7 @@ python persona_generate.py --resource-dir /path/to/dataset_prepare --output /pat
 
 ### 5.4 `event_driven`
 
-| **字段类型说明** |       |               |
+| 字段名 | 类型 | 说明 |
 | ---------- | ----- | ------------- |
 | `event`    | `str` | 事件描述          |
 | `impact`   | `str` | 事件对网络/业务的具体影响 |
@@ -197,7 +197,7 @@ python persona_generate.py --resource-dir /path/to/dataset_prepare --output /pat
 
 ### 5.5 `aliases`
 
-| **字段类型说明**        |                        |              |
+| 字段名 | 类型 | 说明 |
 | ----------------- | ---------------------- | ------------ |
 | `app_aliases`     | `dict[str, list[str]]` | APP 名 → 别名列表 |
 | `service_aliases` | `dict[str, list[str]]` | 业务名 → 别名列表   |
@@ -217,7 +217,7 @@ python persona_generate.py --resource-dir /path/to/dataset_prepare --output /pat
 
 ### 5.6 `time_expressions`
 
-| **字段类型说明** |        |            |
+| 字段名 | 类型 | 说明 |
 | ---------- | ------ | ---------- |
 | key        | `str`  | 模糊时间表达     |
 | value      | `dict` | 解析后的具体时间信息 |
@@ -236,7 +236,7 @@ python persona_generate.py --resource-dir /path/to/dataset_prepare --output /pat
 
 ### 5.7 `param_mappings`
 
-| **字段类型说明** |        |               |
+| 字段名 | 类型 | 说明 |
 | ---------- | ------ | ------------- |
 | key        | `str`  | 模糊质量表达（如"高清"） |
 | value      | `dict` | 映射后的具体参数      |
@@ -256,7 +256,7 @@ python persona_generate.py --resource-dir /path/to/dataset_prepare --output /pat
 
 ### 5.8 `experience_preferences`
 
-| **字段类型说明**              |                 |                                          |
+| 字段名 | 类型 | 说明 |
 | ----------------------- | --------------- | ---------------------------------------- |
 | `app`                   | `str`           | APP 标准名（英文）                              |
 | `service`               | `str`           | 业务标准名（英文）                                |
@@ -292,7 +292,7 @@ python persona_generate.py --resource-dir /path/to/dataset_prepare --output /pat
 
 ### 5.9 `app_service_preferences`
 
-| **字段类型说明**                              |             |                                                    |
+| 字段名 | 类型 | 说明 |
 | --------------------------------------- | ----------- | -------------------------------------------------- |
 | `type`                                  | `str`       | 偏好类型："service_to_app" / "app_to_service" / "combo" |
 | `service` 或 `app`                       | `str`       | 已知的业务名或 APP 名（英文）                                  |
@@ -320,7 +320,7 @@ python persona_generate.py --resource-dir /path/to/dataset_prepare --output /pat
 
 ### 5.10 `conditional_preferences`
 
-| **字段类型说明**      |        |                                       |
+| 字段名 | 类型 | 说明 |
 | --------------- | ------ | ------------------------------------- |
 | `conditions`    | `dict` | 触发条件（location/event/time_period 等）    |
 | `preference`    | `dict` | 条件满足时的偏好参数                            |
@@ -353,7 +353,7 @@ python persona_generate.py --resource-dir /path/to/dataset_prepare --output /pat
 
 生成一个新画像模板时，按以下清单逐项核对：
 
-| **#检查项验证方法** |                                                                              |                           |
+| 序号 | 检查项 | 验证方法 |
 | ------------ | ---------------------------------------------------------------------------- | ------------------------- |
 | 1            | `static_profile.apps` 中至少 3 个 APP 能匹配 `app_config.json`                      | 运行生成器后 `frequent_apps` 非空 |
 | 2            | `static_profile.identity` 包含角色+活动+频率                                         | 正则检查                      |

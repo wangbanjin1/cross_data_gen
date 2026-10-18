@@ -252,7 +252,7 @@ class DialogueGenerator:
             elif turn_idx == 2 and tid == "T3-1":
                 req_params = ["resolution"]
 
-            rel_ids = ["I1", "I2"] if tid == "X-1" else ["I1"]
+            rel_ids = ["I1", "I2"] if tid in ["X-1", "T2-4"] else ["I1"]
             ev_item = {
                 "turn": turn_idx,
                 "user": {
@@ -428,7 +428,7 @@ class DialogueGenerator:
         if s_plan.get("is_disambiguation") and turn_idx == 1:
             if "哪" not in a_text and "工单" not in a_text and "记录" not in a_text:
                 a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
-        if turn_idx == 1 and role in ["reinforcement_session", "reuse_session"] and tid not in ["T2-3", "T2-5", "T2-6", "T2-7", "T2-8", "T2-9", "T2-10"]:
+        if turn_idx == 1 and role in ["reinforcement_session", "reuse_session"] and tid not in ["T2-3", "T2-5", "T2-6", "T2-7", "T2-8", "T2-9", "T2-10", "T2-4"] and not s_plan.get("experience_citation"):
             u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
             # 执行前必须把记忆补全出的时间与参数完整回显，不能让结构化时间凭空出现。
             a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)

@@ -1,6 +1,8 @@
 # 跨会话记忆认知架构演进：指标体系、工作记忆检索与经验记忆构造规划
 
-> **文档定位**：系统规划跨会话长程记忆数据集向多层认知架构演进的技术方案。涵盖事实记忆的冷热启动敏捷度量化体系（TCG 与 α 因子）、工作记忆的独立工单流水账与时态检索架构（`working_records.jsonl`），以及**深度融合 MemoryArena 与 ReasoningBank 的经验记忆构造体系（双真值链、经验卡片三元组与四大提参策略方案）**，构建完整的长程记忆认知工程闭环。
+> **文档性质**：【历史设计提案 / RFC 归档】  
+> **文档定位**：记录三层认知架构演进初期的理论论证、MemoryArena/ReasoningBank 文献启发与 Phase 1~4 敏捷工程路线图。  
+> **权威实现规范**：本项目正式生效的实现设计与评测基准，请全量以 **[“联接”Agent 认知记忆全景演进与双轨评测技术规范](../specs/cognitive_memory_dev_spec.md)** 为准。
 
 ---
 
@@ -12,78 +14,28 @@
 
 ### 1.2 三层认知记忆架构拓扑全景
 
-<!-- 框图 1：三层认知记忆架构拓扑全景图 (支持在此直接修改 SVG 文本、标签或样式，亦可替换为 ```mermaid 代码块) -->
+```mermaid
+graph TD
+    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2.5px,color:#111111;
 
-<div class="diagram-container">
-                        <!-- SVG 框图 1: 三层认知记忆架构拓扑图 -->
-                        <svg viewBox="0 0 880 430" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
-                            <!-- 背景组 -->
-                            <defs>
-                                <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%">
-                                    <feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.08"/>
-                                </filter>
-                                <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                                    <path d="M 0 1 L 8 5 L 0 9 z" fill="var(--diagram-arrow)"/>
-                                </marker>
-                            </defs>
+    User["用户多轮自然语言交互诉求"] --> Dispatcher["认知分发与记忆调度中枢"]
 
-                            <!-- 用户诉求输入框 -->
-                            <rect x="280" y="15" width="320" height="46" rx="8" fill="var(--diagram-box-bg)" stroke="var(--accent-primary)" stroke-width="2" filter="url(#shadow)"/>
-                            <text x="440" y="44" font-size="14" font-weight="bold" fill="var(--text-primary)" text-anchor="middle">用户多轮自然语言交互诉求</text>
-    
-                            <!-- 分发中枢 -->
-                            <path d="M 440 61 L 440 92" stroke="var(--diagram-arrow)" stroke-width="2" marker-end="url(#arrow)"/>
-                            <rect x="330" y="94" width="220" height="40" rx="6" fill="var(--surface-color)" stroke="var(--diagram-box-border)" stroke-width="1.5"/>
-                            <text x="440" y="119" font-size="13" font-weight="600" fill="var(--accent-primary)" text-anchor="middle">认知分发与记忆调度中枢</text>
-    
-                            <!-- 三条支线连接线 -->
-                            <path d="M 330 114 L 140 114 L 140 162" stroke="var(--diagram-arrow)" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
-                            <path d="M 440 134 L 440 162" stroke="var(--diagram-arrow)" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
-                            <path d="M 550 114 L 740 114 L 740 162" stroke="var(--diagram-arrow)" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
-    
-                            <!-- 层次一：事实记忆 -->
-                            <rect x="30" y="165" width="220" height="195" rx="8" fill="var(--diagram-box-bg)" stroke="#709775" stroke-width="2" filter="url(#shadow)"/>
-                            <rect x="30" y="165" width="220" height="34" rx="8" fill="#709775"/>
-                            <text x="140" y="188" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">层次一：事实记忆</text>
-                            <text x="45" y="222" font-size="12" fill="var(--text-primary)">• 长期固有老规矩 (MF_001)</text>
-                            <text x="45" y="246" font-size="12" fill="var(--text-primary)">• 业务默认应用 (service_app)</text>
-                            <text x="45" y="270" font-size="12" fill="var(--text-primary)">• 个性化表达与代称映射</text>
-                            <text x="45" y="294" font-size="12" fill="var(--text-primary)">• 周期触发规则 (daily/weekly)</text>
-                            <rect x="42" y="318" width="196" height="26" rx="4" fill="var(--surface-color)"/>
-                            <text x="140" y="335" font-size="11" fill="var(--text-muted)" text-anchor="middle">状态：跨生命周期持久生效</text>
-    
-                            <!-- 层次二：工作记忆工单流水账 -->
-                            <rect x="330" y="165" width="220" height="195" rx="8" fill="var(--diagram-box-bg)" stroke="#5c7cb6" stroke-width="2" filter="url(#shadow)"/>
-                            <rect x="330" y="165" width="220" height="34" rx="8" fill="#5c7cb6"/>
-                            <text x="440" y="188" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">层次二：工作记忆工单账本</text>
-                            <text x="345" y="222" font-size="12" fill="var(--text-primary)">• 历史履约流水账 (REC_Ledger)</text>
-                            <text x="345" y="246" font-size="12" fill="var(--text-primary)">• 时态相对推断器 (&Delta;t 映射)</text>
-                            <text x="345" y="270" font-size="12" fill="var(--text-primary)">• '这次' / '上周' / '昨天' 索引</text>
-                            <text x="345" y="294" font-size="12" fill="var(--text-primary)">• 历史单据变更与状态核对</text>
-                            <rect x="342" y="318" width="196" height="26" rx="4" fill="var(--surface-color)"/>
-                            <text x="440" y="335" font-size="11" fill="var(--text-muted)" text-anchor="middle">状态：动态增量工单索引</text>
-    
-                            <!-- 层次三：经验记忆情境反思 -->
-                            <rect x="630" y="165" width="220" height="195" rx="8" fill="var(--diagram-box-bg)" stroke="#c48a37" stroke-width="2" filter="url(#shadow)"/>
-                            <rect x="630" y="165" width="220" height="34" rx="8" fill="#c48a37"/>
-                            <text x="740" y="188" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">层次三：经验记忆情境反思</text>
-                            <text x="645" y="222" font-size="12" fill="var(--text-primary)">• 场景情境特征 (Context)</text>
-                            <text x="645" y="246" font-size="12" fill="var(--text-primary)">• 避坑最佳实践 (Rule of Thumb)</text>
-                            <text x="645" y="270" font-size="12" fill="var(--text-primary)">• 智能体主动建议 (Proactive)</text>
-                            <text x="645" y="294" font-size="12" fill="var(--text-primary)">• 用户经验回溯与验证反思</text>
-                            <rect x="642" y="318" width="196" height="26" rx="4" fill="var(--surface-color)"/>
-                            <text x="740" y="335" font-size="11" fill="var(--text-muted)" text-anchor="middle">状态：情境匹配条件反射</text>
-    
-                            <!-- 汇聚到输出 -->
-                            <path d="M 140 360 L 140 385 L 440 385" stroke="var(--diagram-arrow)" stroke-width="1.5" fill="none"/>
-                            <path d="M 440 360 L 440 398" stroke="var(--diagram-arrow)" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
-                            <path d="M 740 360 L 740 385 L 440 385" stroke="var(--diagram-arrow)" stroke-width="1.5" fill="none"/>
-    
-                            <rect x="300" y="400" width="280" height="26" rx="6" fill="var(--surface-color)" stroke="var(--border-color)"/>
-                            <text x="440" y="418" font-size="12" font-weight="600" fill="var(--accent-primary)" text-anchor="middle">下游模型输出：精准闭环与自然台词应答</text>
-                        </svg>
-                        <div class="diagram-caption">图 1：跨会话三层认知记忆架构拓扑全景图</div>
-                    </div>
+    subgraph MemoryTiers ["三层认知记忆架构全景"]
+        FM["【层次一：事实记忆 Factual】<br/>长期老规矩 (MF_001) / 默认业务 / 代称映射 / 周期规则<br/>(状态：跨生命周期持久生效)"]
+        WM["【层次二：工作记忆工单账本 Working】<br/>历史履约流水账 (REC_Ledger) / 时态推断 / 历史改期与核对<br/>(状态：动态增量工单索引)"]
+        EM["【层次三：经验记忆情境反思 Experiential】<br/>场景情境特征 (Context) / 避坑最佳实践 / 智能体主动建议<br/>(状态：情境匹配条件反射)"]
+    end
+
+    Dispatcher --> FM
+    Dispatcher --> WM
+    Dispatcher --> EM
+
+    FM --> Output["下游模型输出：精准闭环与自然台词应答"]
+    WM --> Output
+    EM --> Output
+
+    style MemoryTiers fill:#FFFFFF,stroke:#111111,stroke-width:2.5px;
+```
 
 ### 1.3 三层认知记忆职责划分
 
@@ -99,66 +51,28 @@
 
 ### 2.1 冷热启动交互对照流图
 
-<!-- 框图 2：冷启动 vs 热启动交互流程对照 (支持在此直接修改 SVG 文本、标签或样式，亦可替换为 ```mermaid 代码块) -->
+```mermaid
+graph LR
+    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2.5px,color:#111111;
 
-<div class="diagram-container">
-                        <!-- SVG 框图 2: 冷启动 vs 热启动交互流程对照 -->
-                        <svg viewBox="0 0 880 340" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
-                            <!-- 左侧：冷启动无记忆主线 -->
-                            <rect x="30" y="15" width="390" height="310" rx="10" fill="var(--diagram-bg)" stroke="var(--callout-warn-border)" stroke-width="1.5"/>
-                            <rect x="30" y="15" width="390" height="32" rx="10" fill="var(--callout-warn-border)"/>
-                            <text x="225" y="37" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">主线一：冷启动无记忆（多轮澄清收敛线）</text>
+    subgraph ColdStart ["主线一：冷启动无记忆 (多轮澄清收敛线)"]
+        direction TB
+        C1["Turn 1 用户提出初步意图<br/>(缺失画质/时延/时长等槽位)"] --> C2["Turn 1 客服拒绝脑补<br/>主动反问澄清缺失参数"]
+        C2 --> C3["Turn 2 用户明确 1080p/50ms<br/>建立长期个性化习惯"]
+        C3 --> C4["Turn 2 客服登记记忆<br/>反问确认起止时段"]
+        C4 --> C5["Turn 3 用户确认并完成闭环<br/>(平均交互 2.5 ~ 3.0 轮)"]
+    end
 
-                            <!-- 第 1 轮 -->
-                            <rect x="50" y="60" width="350" height="42" rx="6" fill="var(--diagram-box-bg)" stroke="var(--border-color)"/>
-                            <text x="65" y="86" font-size="12" fill="var(--text-primary)">[User 1] 提出初步意图（缺画质、时延、时长等必要槽位）</text>
-    
-                            <path d="M 225 102 L 225 116" stroke="var(--diagram-arrow)" stroke-width="1.5" marker-end="url(#arrow)"/>
-                            <rect x="50" y="118" width="350" height="42" rx="6" fill="var(--callout-warn-bg)" stroke="var(--callout-warn-border)"/>
-                            <text x="65" y="144" font-size="12" font-weight="600" fill="var(--callout-warn-text)">[Agent 1] 严格拒绝脑补，主动反问澄清缺失的关键参数</text>
-    
-                            <!-- 第 2 轮 -->
-                            <path d="M 225 160 L 225 174" stroke="var(--diagram-arrow)" stroke-width="1.5" marker-end="url(#arrow)"/>
-                            <rect x="50" y="176" width="350" height="42" rx="6" fill="var(--diagram-box-bg)" stroke="var(--border-color)"/>
-                            <text x="65" y="202" font-size="12" fill="var(--text-primary)">[User 2] 明确指定 1080p、50ms，并建立长期个性化习惯</text>
-    
-                            <path d="M 225 218 L 225 232" stroke="var(--diagram-arrow)" stroke-width="1.5" marker-end="url(#arrow)"/>
-                            <rect x="50" y="234" width="350" height="42" rx="6" fill="var(--diagram-box-bg)" stroke="var(--border-color)"/>
-                            <text x="65" y="260" font-size="12" fill="var(--text-primary)">[Agent 2] 登记记忆，并反问确认起止时段与开通</text>
-    
-                            <!-- 第 3 轮闭环 -->
-                            <path d="M 225 276 L 225 288" stroke="var(--diagram-arrow)" stroke-width="1.5" marker-end="url(#arrow)"/>
-                            <rect x="70" y="290" width="310" height="26" rx="4" fill="var(--surface-color)"/>
-                            <text x="225" y="308" font-size="11" font-weight="bold" fill="var(--callout-warn-text)" text-anchor="middle">平均交互轮数：2.5 ~ 3.0 轮（严禁提前泄露）</text>
-    
-                            <!-- 右侧：热启动有记忆主线 -->
-                            <rect x="460" y="15" width="390" height="310" rx="10" fill="var(--diagram-bg)" stroke="var(--callout-note-border)" stroke-width="1.5"/>
-                            <rect x="460" y="15" width="390" height="32" rx="10" fill="var(--callout-note-border)"/>
-                            <text x="655" y="37" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">主线二：热启动有记忆（极速收敛复用线）</text>
-    
-                            <!-- 第 1 轮 -->
-                            <rect x="480" y="60" width="350" height="42" rx="6" fill="var(--diagram-box-bg)" stroke="var(--border-color)"/>
-                            <text x="495" y="86" font-size="12" fill="var(--text-primary)">[User 1] 极简口语触发：“按老规矩开保障” / “按昨天的来”</text>
-    
-                            <path d="M 655 102 L 655 120" stroke="var(--diagram-arrow)" stroke-width="1.5" marker-end="url(#arrow)"/>
-                            <rect x="480" y="122" width="350" height="50" rx="6" fill="var(--callout-note-bg)" stroke="var(--callout-note-border)"/>
-                            <text x="495" y="144" font-size="12" font-weight="600" fill="var(--callout-note-text)">[Agent 1] 秒级命中记忆，提取 1080p/50ms，</text>
-                            <text x="495" y="162" font-size="12" fill="var(--callout-note-text)">结合当前时段直接向用户发起反问确认开通</text>
-    
-                            <!-- 第 2 轮 -->
-                            <path d="M 655 172 L 655 190" stroke="var(--diagram-arrow)" stroke-width="1.5" marker-end="url(#arrow)"/>
-                            <rect x="480" y="192" width="350" height="42" rx="6" fill="var(--diagram-box-bg)" stroke="var(--border-color)"/>
-                            <text x="495" y="218" font-size="12" fill="var(--text-primary)">[User 2] 确认开通：“对，直接开”</text>
-    
-                            <path d="M 655 234 L 655 252" stroke="var(--diagram-arrow)" stroke-width="1.5" marker-end="url(#arrow)"/>
-                            <rect x="480" y="254" width="350" height="30" rx="6" fill="var(--callout-note-bg)" stroke="var(--callout-note-border)"/>
-                            <text x="495" y="274" font-size="12" font-weight="bold" fill="var(--callout-note-text)">[Agent 2] 受理完成闭环，输出祝福语收尾</text>
-    
-                            <rect x="500" y="292" width="310" height="24" rx="4" fill="var(--surface-color)"/>
-                            <text x="655" y="308" font-size="11" font-weight="bold" fill="var(--callout-note-text)" text-anchor="middle">平均交互轮数：1.0 ~ 2.0 轮（轮次压缩率 &ge; 40%）</text>
-                        </svg>
-                        <div class="diagram-caption">图 2：冷启动多轮澄清 vs 热启动极速压缩交互对照流程</div>
-                    </div>
+    subgraph HotStart ["主线二：热启动有记忆 (极速收敛复用线)"]
+        direction TB
+        H1["Turn 1 用户极简口语触发<br/>'按老规矩开保障'"] --> H2["Turn 1 客服秒级命中记忆<br/>直接回显参数并反问确认"]
+        H2 --> H3["Turn 2 用户快速确认<br/>'对，直接开'"]
+        H3 --> H4["Turn 2 客服受理闭环<br/>(平均交互 1.0 ~ 2.0 轮，TCG ≥ 40%)"]
+    end
+
+    style ColdStart fill:#FFFFFF,stroke:#111111,stroke-width:2.5px;
+    style HotStart fill:#FFFFFF,stroke:#111111,stroke-width:2.5px;
+```
 
 ### 2.2 事实记忆核心量化指标：交互轮数压缩增益（TCG）
 
@@ -203,11 +117,13 @@ $$T_{\text{hot}} = \text{round}\big(T_{\text{cold}} \cdot (1 - \alpha)\big)$$
 #### 3. 生成控制到评测指标的因果闭环
 
 ```mermaid
-flowchart LR
-    A["生成端：配置敏捷度因子 α (0.0 ~ 1.0)"] --> B["动态规划器：控制目标轮数 & 台词省略深度"]
+graph LR
+    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2.5px,color:#111111;
+
+    A["生成端：配置敏捷度因子 α (0.0 ~ 1.0)"] --> B["动态规划器：控制目标轮数与台词省略深度"]
     B --> C["批量渲染：生成不同默契梯度的会话数据"]
-    C --> D["评测端：计算模型实际压缩增益 TCG"]
-    D --> E["验证闭环：实测 TCG ≈ α · TCG_max (模型完美对齐)"]
+    C --> D["评测端：计算模型实际轮次压缩增益 TCG"]
+    D --> E["验证闭环：实测 TCG 与期望目标对齐"]
 ```
 
 在生成 150 个画像时，通过配置 $\alpha$ 梯度分布（如 20% 生成 $\alpha=1.0$、60% 生成 $\alpha=0.5$、20% 生成 $\alpha=0.0$），即可系统化构建覆盖从初识到熟客不同默契深度的全阶梯评测基准。
@@ -218,56 +134,27 @@ flowchart LR
 
 ### 3.1 时态推断引擎与工单检索流程
 
-<!-- 框图 3：工作记忆时态推断与历史工单检索流程图 (支持在此直接修改 SVG 文本、标签或样式，亦可替换为 ```mermaid 代码块) -->
+<!-- 框图 3：工作记忆时态推断与历史工单检索流程图 (支持在此直接修改 SVG 文本、标签或样式，亦可替换为 Mermaid 代码块) -->
 
-<div class="diagram-container">
-                        <!-- SVG 框图 3: 工作记忆检索流程 -->
-                        <svg viewBox="0 0 880 260" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
-                            <!-- 用户输入 -->
-                            <rect x="30" y="30" width="230" height="70" rx="8" fill="var(--diagram-box-bg)" stroke="var(--accent-primary)" stroke-width="1.5"/>
-                            <text x="45" y="58" font-size="12" font-weight="bold" fill="var(--accent-primary)">用户相对时态输入</text>
-                            <text x="45" y="80" font-size="12" fill="var(--text-primary)">“这次还按上周在奥体开的规格”</text>
+```mermaid
+graph LR
+    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2.5px,color:#111111;
 
-                            <!-- 当前时间锚点 -->
-                            <rect x="30" y="140" width="230" height="70" rx="8" fill="var(--surface-color)" stroke="var(--border-color)"/>
-                            <text x="45" y="168" font-size="12" font-weight="bold" fill="var(--text-secondary)">当前基准时间锚点 (t_ref)</text>
-                            <text x="45" y="190" font-size="12" fill="var(--text-primary)">2026年10月24日 14:00 (周六)</text>
-    
-                            <!-- 箭头到推断器 -->
-                            <path d="M 260 65 L 320 115" stroke="var(--diagram-arrow)" stroke-width="1.5" marker-end="url(#arrow)"/>
-                            <path d="M 260 175 L 320 135" stroke="var(--diagram-arrow)" stroke-width="1.5" marker-end="url(#arrow)"/>
-    
-                            <!-- 时态推断器引擎 -->
-                            <rect x="325" y="90" width="210" height="75" rx="8" fill="var(--callout-imp-bg)" stroke="var(--callout-imp-border)" stroke-width="1.5"/>
-                            <text x="430" y="118" font-size="13" font-weight="bold" fill="var(--callout-imp-text)" text-anchor="middle">时态推断器 (Temporal Engine)</text>
-                            <text x="430" y="140" font-size="11" fill="var(--callout-imp-text)" text-anchor="middle">推算时间窗：[t_ref - 7d &plusmn; 2d]</text>
-                            <text x="430" y="156" font-size="11" fill="var(--callout-imp-text)" text-anchor="middle">目标时间段：10月17日 周六</text>
-    
-                            <!-- 箭头到账本匹配 -->
-                            <path d="M 535 127 L 590 127" stroke="var(--diagram-arrow)" stroke-width="1.5" marker-end="url(#arrow)"/>
-    
-                            <!-- 历史工单流水账 -->
-                            <rect x="595" y="30" width="255" height="195" rx="8" fill="var(--diagram-box-bg)" stroke="var(--border-color)" stroke-width="1.5"/>
-                            <rect x="595" y="30" width="255" height="28" rx="8" fill="var(--surface-elevated)"/>
-                            <text x="722" y="49" font-size="12" font-weight="bold" fill="var(--text-primary)" text-anchor="middle">历史工单流水账 (Records Ledger)</text>
-    
-                            <!-- 单据卡片 1 (未命中) -->
-                            <rect x="610" y="68" width="225" height="38" rx="4" fill="var(--surface-color)"/>
-                            <text x="620" y="86" font-size="11" fill="var(--text-muted)">REC_1012 (12天前): 抖音直播/720p</text>
-                            <text x="620" y="100" font-size="10" fill="var(--text-muted)">状态：已过期 &times;</text>
-    
-                            <!-- 单据卡片 2 (精确命中) -->
-                            <rect x="610" y="114" width="225" height="48" rx="4" fill="var(--callout-note-bg)" stroke="var(--callout-note-border)" stroke-width="1.5"/>
-                            <text x="620" y="132" font-size="11" font-weight="bold" fill="var(--callout-note-text)">REC_1017_01 (7天前·奥体南门)</text>
-                            <text x="620" y="148" font-size="10" fill="var(--callout-note-text)">快手转播 | 1080p | 50ms | 120min [命中 &radic;]</text>
-    
-                            <!-- 提取输出 -->
-                            <rect x="610" y="170" width="225" height="46" rx="4" fill="var(--surface-color)"/>
-                            <text x="620" y="188" font-size="11" fill="var(--accent-primary)">继承目标参数：1080p / 50ms</text>
-                            <text x="620" y="204" font-size="10" fill="var(--text-muted)">反问确认今日起止时间与开通</text>
-                        </svg>
-                        <div class="diagram-caption">图 3：工作记忆时态推断与历史工单检索流程图</div>
-                    </div>
+    UserInput["用户相对时态输入<br/>“这次还按上周在奥体开的规格”"] --> Engine["时态推断引擎 (Temporal Engine)<br/>推算目标时间窗: 10月17日 周六"]
+    TimeRef["当前基准时间锚点 (t_ref)<br/>2026年10月24日 14:00 (周六)"] --> Engine
+
+    subgraph Ledger ["历史工单流水账 (Working Records Ledger)"]
+        R1["单据 REC_1012 (12天前): 抖音直播/720p<br/>[状态: 已过期 / 不匹配]"]
+        R2["单据 REC_1017_01 (7天前·奥体南门)<br/>快手转播 1080p / 50ms / 120min<br/>★ [精准命中]"]
+    end
+
+    Engine --> R1
+    Engine --> R2
+
+    R2 --> Output["继承目标参数：1080p / 50ms<br/>反问确认今日起止时间与开通"]
+
+    style Ledger fill:#FFFFFF,stroke:#111111,stroke-width:2.5px;
+```
 
 ### 3.2 工作记忆账本与会话流的解耦架构规范（Decoupled Storage Standard）
 
@@ -372,42 +259,19 @@ flowchart LR
 
 #### 经验反思双环流流程图
 
-<!-- 框图 4：经验记忆感知、主动提议与反思闭环流图 (支持在此直接修改 SVG 文本、标签或样式，亦可替换为 ```mermaid 代码块) -->
+<!-- 框图 4：经验记忆感知、主动提议与反思闭环流图 (支持在此直接修改 SVG 文本、标签或样式，亦可替换为 Mermaid 代码块) -->
 
-<div class="diagram-container">
-                        <!-- SVG 框图 4: 经验记忆主动提议与反思双环流 -->
-                        <svg viewBox="0 0 880 270" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
-                            <!-- 外部情境感知 -->
-                            <rect x="30" y="30" width="220" height="85" rx="8" fill="var(--diagram-box-bg)" stroke="var(--callout-warn-border)" stroke-width="1.5"/>
-                            <text x="45" y="58" font-size="12" font-weight="bold" fill="var(--callout-warn-text)">外部情境输入 (Context)</text>
-                            <text x="45" y="80" font-size="11" fill="var(--text-primary)">• 地点：工体万人演唱会 / 漫展</text>
-                            <text x="45" y="98" font-size="11" fill="var(--text-primary)">• 风险：高密人流极端信道拥塞</text>
+```mermaid
+graph LR
+    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2.5px,color:#111111;
 
-                            <!-- 箭头到经验库匹配 -->
-                            <path d="M 250 72 L 310 72" stroke="var(--diagram-arrow)" stroke-width="1.5" marker-end="url(#arrow)"/>
+    Context["外部情境感知 (Context)<br/>地点: 体育场万人集聚现场<br/>风险: 现场人多网络易拥堵"] --> Bank["经验知识库 (Experience Bank)<br/>EXP_01: 高密人流保流畅策略<br/>规则: 主动提议 720p + 30ms 极低时延"]
     
-                            <!-- 经验知识库 -->
-                            <rect x="315" y="30" width="250" height="85" rx="8" fill="var(--surface-color)" stroke="var(--border-color)" stroke-width="1.5"/>
-                            <text x="330" y="58" font-size="12" font-weight="bold" fill="var(--accent-primary)">经验知识库 (Experience Bank)</text>
-                            <text x="330" y="80" font-size="11" fill="var(--text-primary)">EXP_01: 高密场馆人流防拥塞策略</text>
-                            <text x="330" y="98" font-size="11" fill="var(--text-muted)">规则：主动降至 720p + 30ms 极低延时</text>
+    Bank --> AgentAction["“联接”Agent 主动提议 (Proactive)<br/>“现场人流密集易卡顿，<br/>建议调整为 720p/30ms 确保顺畅”"]
     
-                            <!-- 箭头到智能体决策 -->
-                            <path d="M 565 72 L 625 72" stroke="var(--diagram-arrow)" stroke-width="1.5" marker-end="url(#arrow)"/>
-    
-                            <!-- 智能体主动建议 -->
-                            <rect x="630" y="30" width="220" height="85" rx="8" fill="var(--callout-note-bg)" stroke="var(--callout-note-border)" stroke-width="1.5"/>
-                            <text x="645" y="58" font-size="12" font-weight="bold" fill="var(--callout-note-text)">智能体主动提议 (Proactive)</text>
-                            <text x="645" y="78" font-size="11" fill="var(--callout-note-text)">“根据此前漫展拥塞避坑经验，</text>
-                            <text x="645" y="96" font-size="11" fill="var(--callout-note-text)">建议使用 720p/30ms 避开卡顿”</text>
-    
-                            <!-- 反馈与反思环 -->
-                            <path d="M 740 115 L 740 180 L 140 180 L 140 115" stroke="var(--diagram-arrow)" stroke-width="1.5" fill="none" stroke-dasharray="5 5" marker-end="url(#arrow)"/>
-                            <rect x="340" y="165" width="200" height="30" rx="4" fill="var(--surface-elevated)" stroke="var(--border-color)"/>
-                            <text x="440" y="185" font-size="11" fill="var(--text-secondary)" text-anchor="middle">用户采纳并履约 &rarr; 经验反思固化</text>
-                        </svg>
-                        <div class="diagram-caption">图 4：经验记忆感知、主动提议与反思闭环流图</div>
-                    </div>
+    AgentAction --> Feedback["用户采纳并闭环履约<br/>触发经验反思与固化"]
+    Feedback -. 反思固化与策略沉淀 .-> Bank
+```
 
 #### ReasoningBank 标准经验条目卡片规范
 

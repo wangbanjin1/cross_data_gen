@@ -10,7 +10,7 @@
 
 ### 1.1 参考资源
 
-| **资源角色具体怎么用**                               |                      |                                                                                       |
+| 资源名称 | 角色定位 | 具体使用方式 |
 | ------------------------------------------- | -------------------- | ------------------------------------------------------------------------------------- |
 | 思路方案 (`docs/多轮对话含事实记忆数据集构建.md`)             | 方法论 & 层级定义           | 4层GT分层、16种对话模板、4种Session角色、8条结构校验+5条内容校验                                              |
 | 数据建模 (`docs/data_design.md`)                | 记忆建模规范 & 正负样本        | 5大用户事实记忆类别（用户个性化表达、应用-业务选择偏好、时间模式偏好、体验参数偏好、记忆更新与冲突处理）、追问决策（补充类别）、24种MT类型、每个类别的正/负测试样例 |
@@ -21,20 +21,16 @@
 
 ## 2 整体流水线
 
-```
-[A] 加载配置 + 数据源
-     ↓
-[B] 生成 Persona Ground Truth (4层)
-     ↓
-[C] 定义 Memory Targets (评测维度反推)
-     ↓
-[D] 规划时间线 (Session角色 + 时间间隔 + 干扰)
-     ↓
-[E] 逐Session生成对话 + 计算记忆事件 + 更新记忆快照
-     ↓
-[F] 评测标注 + 一致性校验
-     ↓
-[G] 输出: skeleton文件 + sessions文件
+```mermaid
+graph TD
+    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2px,color:#111111;
+
+    A["<b>A. 加载配置与数据源</b>"] --> B["<b>B. 生成 Persona Ground Truth（四层真值）</b>"]
+    B --> C["<b>C. 定义 Memory Targets（评测目标反推）</b>"]
+    C --> D["<b>D. 规划时间线拓扑（Timeline Planner）</b>"]
+    D --> E["<b>E. 逐 Session 对话渲染与演进跟踪</b>"]
+    E --> F["<b>F. 评测标注与双层一致性校验</b>"]
+    F --> G["<b>G. 交付产物（skeleton.json + sessions.jsonl）</b>"]
 ```
 
 ### 2.1 Session 角色 × 模板 × 轮数 硬约束（v4 优化点）
@@ -42,7 +38,7 @@
 下表规定每个 `memory_role`（由 `session_role` 映射而来）允许使用的模板与最少轮数，
 **这是数据质量的红线，验证器 `validators/consistency_validator.py` 的 Rule 23 会逐条检查**：
 
-| **memory_rolesession_role允许模板最少轮数关键要求** |                         |                    |        |                                                               |
+| 记忆角色 (memory_role) | 会话角色 (session_role) | 允许模板 | 最少轮数 | 关键要求 |
 | --------------------------------------- | ----------------------- | ------------------ | ------ | ------------------------------------------------------------- |
 | `evidence`                              | `evidence_session`      | T1-\*/T2-\*/T3-\*  | 1      | **单轮时所有参数必须显式说清**，Agent 不得追问（无第 2 轮机会）；多轮时 Agent 可追问模糊参数      |
 | `distractor`                            | `distractor_session`    | T1-2/X-1/T2-6      | 1      | 独立业务，**所有参数必须说具体值**，不得模糊、不得引用记忆                               |
@@ -98,7 +94,7 @@
 
 ### 3.1 业务配置文件
 
-| **文件内容用途**            |                                             |                           |
+| 配置文件 | 核心内容 | 业务用途 |
 | --------------------- | ------------------------------------------- | ------------------------- |
 | `app_config.json`     | 40个APP × 业务类型 × 画质档位(resolution+latency上下界) | Ground Truth参数采样来源、精准意图校验 |
 | `app_map.json`        | 40个APP的标准名→别名列表                             | 个性化表达真值的数据源               |
@@ -114,7 +110,7 @@
 
 ### 4.1 四层结构
 
-| **层内容来源示例**            |                    |                                         |                                     |
+| GT 层级 | 核心内容 | 数据来源 | 典型示例 |
 | ---------------------- | ------------------ | --------------------------------------- | ----------------------------------- |
 | **static_gt**          | 稳定事实：常用APP列表、合法场景池 | persona描述 + app_config + support_matrix | 抖音+开直播/看直播/短视频, 各业务good档=1080p+80ms |
 | **conditional_gt**     | 条件化事实：仅在特定条件下成立    | persona的time_based/scene_switch         | 工作日晚上→抖音开直播                         |
@@ -168,7 +164,7 @@ corenet_personas.jsonl 第N条
 
 #### 4.2.2 字段映射
 
-| **persona 字段ground_truth 层说明**           |                                                             |                                                                   |
+| Persona 字段 | Ground Truth 字段 | 映射说明 |
 | ---------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------- |
 | static_profile.\*                        | static_gt.\*                                                | identity/devices/subscription 直接复制；apps 通过 \_resolve_app_name 转英文 |
 | dynamic_profile.time_based/scene_switch  | conditional_gt                                              | 条件+场景 → \_llm_choose_scenario 匹配 app+service                      |
@@ -182,13 +178,12 @@ corenet_personas.jsonl 第N条
 #### 4.2.3 GT 层到 MT 的构造流程（两级结构）
 
 > **核心认识**：GT 四层不是互斥事实类别，而是从不同角度描述同一用户事实。
-
-|| GT 层 | 主要作用 | 在 MT/MF 中的位置 |
-|| --- | --- | --- |
-|| `static_gt` | 用户背景、常用 APP、套餐与合法业务场景 | 候选过滤、合法性校验、场景约束 |
-|| `personalization_gt` | 表达映射、应用—业务选择、体验参数偏好 | 记忆核心内容 |
-|| `conditional_gt` | 时间、地点、场景、事件等成立条件 | `memory_fact.conditions` |
-|| `changeable_gt` | 角色变化、事件驱动变化、阶段切换 | `memory_fact.lifecycle_pattern`、`validity` |
+| GT 层 | 主要作用 | 在 MT/MF 中的位置 |
+| --- | --- | --- |
+| `static_gt` | 用户背景、常用 APP、套餐与合法业务场景 | 候选过滤、合法性校验、场景约束 |
+| `personalization_gt` | 表达映射、应用—业务选择、体验参数偏好 | 记忆核心内容 |
+| `conditional_gt` | 时间、地点、场景、事件等成立条件 | `memory_fact.conditions` |
+| `changeable_gt` | 角色变化、事件驱动变化、阶段切换 | `memory_fact.lifecycle_pattern`、`validity` |
 
 四层职责可简化为：
 
@@ -271,15 +266,14 @@ static_gt：该事实是否合法、是否符合人物背景
 #### 4.3.4 多意图 MT
 
 多意图 MT 不是简单把多个单意图放在一起，还需要描述意图间关系：
-
-|| 关系类型 | 含义 | 示例 |
-|| --- | --- | --- |
-|| `independent` | 多个意图相互独立 | 同时保障会议和游戏 |
-|| `shared_params` | 多个意图共享部分参数 | 两个业务共享相同保障时段 |
-|| `partial_override` | 共享默认值，但某个意图局部覆盖 | 两个业务同一时段，其中直播用 1080p |
-|| `sequential` | 意图按时间或任务顺序发生 | 先短视频上传，再开直播 |
-|| `conditional_branch` | 条件不同选择不同意图 | 在公司开会，路上视频通话 |
-|| `mutually_exclusive` | 多个候选互斥，不能同时成立 | 腾讯会议或钉钉会议二选一 |
+| 关系类型 | 含义 | 示例 |
+| --- | --- | --- |
+| `independent` | 多个意图相互独立 | 同时保障会议和游戏 |
+| `shared_params` | 多个意图共享部分参数 | 两个业务共享相同保障时段 |
+| `partial_override` | 共享默认值，但某个意图局部覆盖 | 两个业务同一时段，其中直播用 1080p |
+| `sequential` | 意图按时间或任务顺序发生 | 先短视频上传，再开直播 |
+| `conditional_branch` | 条件不同选择不同意图 | 在公司开会，路上视频通话 |
+| `mutually_exclusive` | 多个候选互斥，不能同时成立 | 腾讯会议或钉钉会议二选一 |
 
 #### 4.3.5 多意图下的原子化原则
 
@@ -315,14 +309,13 @@ MT 资格从 GT 层组合判定，而非简单枚举：
 ```
 
 资格级别：
-
-|| 资格 | 含义 |
-|| --- | --- |
-|| `primary` | 存在稳定且明确的目标答案 |
-|| `conditional` | 在不同条件下分别存在明确答案 |
-|| `changeable` | 答案随时间阶段发生变化 |
-|| `distractor_only` | 无明确答案或候选过多，不应形成唯一记忆 |
-|| `excluded` | 业务不合法、人物不合理或无法生成可靠证据 |
+| 资格 | 含义 |
+| --- | --- |
+| `primary` | 存在稳定且明确的目标答案 |
+| `conditional` | 在不同条件下分别存在明确答案 |
+| `changeable` | 答案随时间阶段发生变化 |
+| `distractor_only` | 无明确答案或候选过多，不应形成唯一记忆 |
+| `excluded` | 业务不合法、人物不合理或无法生成可靠证据 |
 
 > **注意**：`static_gt` 不直接参与 MT 选择，仅作为场景白名单、LLM prompt 上下文等参考信息使用。
 
@@ -341,45 +334,42 @@ MT 资格从 GT 层组合判定，而非简单枚举：
 ### 4.5 Memory Fact 正交属性
 
 每个 Memory Fact 携带一组正交属性，独立描述事实的不同维度：
-
-|| 维度 | 字段 | 作用 | 示例 |
-|| --- | --- | --- | --- |
-|| 记忆内容 | `content_type` | 说明记什么 | `expression_mapping`、`app_business_preference`、`time_pattern`、`experience_param_preference` |
-|| 内容子类型 | `content_subtype` | 细分内容 | `app_alias`、`service_to_app`、`periodic_time` |
-|| 意图引用 | `intent_refs` | 事实适用于哪些意图 | `["I1"]`、`["I1","I2"]` |
-|| 目标字段 | `target_fields` | 事实对应的意图槽位 | `application_name`、`start_time`、`resolution` |
-|| 条件 | `conditions` | 何时、何地、何场景成立 | 工作日、晚上、户外、赛事期间 |
-|| 适用范围 | `scope` | 适用于哪些 APP、业务和场景 | 抖音+开直播+户外 |
-|| 答案确定性 | `answer_determinacy` | 是否存在稳定答案 | `unique`、`conditional`、`ambiguous`、`none` |
-|| 值结构 | `value_structure` | 单值、组合或优先级结构 | `single`、`atomic_bundle`、`preferred_fallback_rejected` |
-|| 有效性 | `validity` | 事实的有效时间 | 长期、临时、起止时间 |
-|| 生命周期 | `lifecycle_pattern` | 稳定、纠正、变化、失效 | `stable`、`correction`、`change`、`expiration` |
-|| 时序证据 | `temporal_evidence_profile` | 跨 Session 出现方式 | 频次、跨度、周期、中断、干扰占比 |
+| 维度 | 字段 | 作用 | 示例 |
+| --- | --- | --- | --- |
+| 记忆内容 | `content_type` | 说明记什么 | `expression_mapping`、`app_business_preference`、`time_pattern`、`experience_param_preference` |
+| 内容子类型 | `content_subtype` | 细分内容 | `app_alias`、`service_to_app`、`periodic_time` |
+| 意图引用 | `intent_refs` | 事实适用于哪些意图 | `["I1"]`、`["I1","I2"]` |
+| 目标字段 | `target_fields` | 事实对应的意图槽位 | `application_name`、`start_time`、`resolution` |
+| 条件 | `conditions` | 何时、何地、何场景成立 | 工作日、晚上、户外、赛事期间 |
+| 适用范围 | `scope` | 适用于哪些 APP、业务和场景 | 抖音+开直播+户外 |
+| 答案确定性 | `answer_determinacy` | 是否存在稳定答案 | `unique`、`conditional`、`ambiguous`、`none` |
+| 值结构 | `value_structure` | 单值、组合或优先级结构 | `single`、`atomic_bundle`、`preferred_fallback_rejected` |
+| 有效性 | `validity` | 事实的有效时间 | 长期、临时、起止时间 |
+| 生命周期 | `lifecycle_pattern` | 稳定、纠正、变化、失效 | `stable`、`correction`、`change`、`expiration` |
+| 时序证据 | `temporal_evidence_profile` | 跨 Session 出现方式 | 频次、跨度、周期、中断、干扰占比 |
 
 #### 4.5.1 顶层内容类型
 
 只保留真正回答"记什么"的类别：
-
-|| `content_type` | 含义 | 常见目标字段 |
-|| --- | --- | --- |
-|| `expression_mapping` | 用户个性化表达与标准值的映射 | APP、业务、时间、体验参数 |
-|| `app_business_preference` | APP 与业务的选择倾向 | `application_name`、`business_type` |
-|| `time_pattern` | 用户行为的时间规律 | 开始时间、结束时间、星期、周期 |
-|| `experience_param_preference` | 分辨率、时延等体验参数偏好 | `resolution`、`latency_ms` 等 |
-|| `cross_intent_pattern` | 多意图之间稳定的共享、顺序或条件规律 | 多个意图及其关系字段 |
+| `content_type` | 含义 | 常见目标字段 |
+| --- | --- | --- |
+| `expression_mapping` | 用户个性化表达与标准值的映射 | APP、业务、时间、体验参数 |
+| `app_business_preference` | APP 与业务的选择倾向 | `application_name`、`business_type` |
+| `time_pattern` | 用户行为的时间规律 | 开始时间、结束时间、星期、周期 |
+| `experience_param_preference` | 分辨率、时延等体验参数偏好 | `resolution`、`latency_ms` 等 |
+| `cross_intent_pattern` | 多意图之间稳定的共享、顺序或条件规律 | 多个意图及其关系字段 |
 
 `scope_restriction`、`temporary_preference`、`memory_correction` 不再作为顶层内容类型，分别归入 `scope`、`validity` 和 `lifecycle_pattern`。
 
 #### 4.5.2 字段状态与答案确定性
-
-|| 状态 | 含义 | 处理方式 |
-|| --- | --- | --- |
-|| `known` | 已有明确稳定答案 | 可进入目标记忆内容 |
-|| `conditional` | 不同条件下答案不同 | 进入目标内容，并绑定条件 |
-|| `changing` | 不同时间阶段答案不同 | 进入生命周期规划 |
-|| `ambiguous` | 存在多个候选，但不能确定唯一答案 | 不进入唯一 Gold 事实，可作为相关干扰 |
-|| `unknown` | 字段适用，但没有足够信息 | 不形成事实，可按合法值生成背景变化 |
-|| `not_applicable` | 对当前意图或事实不适用 | 不参与生成 |
+| 状态 | 含义 | 处理方式 |
+| --- | --- | --- |
+| `known` | 已有明确稳定答案 | 可进入目标记忆内容 |
+| `conditional` | 不同条件下答案不同 | 进入目标内容，并绑定条件 |
+| `changing` | 不同时间阶段答案不同 | 进入生命周期规划 |
+| `ambiguous` | 存在多个候选，但不能确定唯一答案 | 不进入唯一 Gold 事实，可作为相关干扰 |
+| `unknown` | 字段适用，但没有足够信息 | 不形成事实，可按合法值生成背景变化 |
+| `not_applicable` | 对当前意图或事实不适用 | 不参与生成 |
 
 建议将答案确定性做到字段级。例如"每周一上午开会"中，业务和时间明确，但会议 APP 不明确：
 
@@ -445,14 +435,13 @@ MT 资格从 GT 层组合判定，而非简单枚举：
 ```
 
 #### 4.6.1 时间设计的五个层级
-
-|| 时间层级 | 含义 | 示例 |
-|| --- | --- | --- |
-|| `session_interval` | 相邻 Session 之间的时间间隔 | 3天、7天、20天 |
-|| `evidence_span` | 第一条到最后一条目标证据的跨度 | 35天 |
-|| `observation_window` | 整个用户生命周期的观察范围 | 12周 |
-|| `period_unit` | 周期行为的基本粒度 | 天、周、月 |
-|| `lifecycle_phase` | 变化前、变化中、变化后的阶段 | 学生阶段、实习阶段、全职阶段 |
+| 时间层级 | 含义 | 示例 |
+| --- | --- | --- |
+| `session_interval` | 相邻 Session 之间的时间间隔 | 3天、7天、20天 |
+| `evidence_span` | 第一条到最后一条目标证据的跨度 | 35天 |
+| `observation_window` | 整个用户生命周期的观察范围 | 12周 |
+| `period_unit` | 周期行为的基本粒度 | 天、周、月 |
+| `lifecycle_phase` | 变化前、变化中、变化后的阶段 | 学生阶段、实习阶段、全职阶段 |
 
 #### 4.6.2 证据强度
 
@@ -466,36 +455,33 @@ MT 资格从 GT 层组合判定，而非简单枚举：
 - 是否存在反例或临时例外。
 
 证据类型区分：
-
-|| 证据类型 | 形成方式 |
-|| --- | --- |
-|| `explicit_long_term_declaration` | 一次明确声明即可形成强证据 |
-|| `confirmed_agent_summary` | Agent 总结长期规律，用户明确确认 |
-|| `repeated_behavior` | 需要多次、跨周期、一致行为 |
-|| `single_task_choice` | 仅本次有效，不直接形成长期记忆 |
-|| `agent_hypothesis_unconfirmed` | 不形成正式记忆 |
+| 证据类型 | 形成方式 |
+| --- | --- |
+| `explicit_long_term_declaration` | 一次明确声明即可形成强证据 |
+| `confirmed_agent_summary` | Agent 总结长期规律，用户明确确认 |
+| `repeated_behavior` | 需要多次、跨周期、一致行为 |
+| `single_task_choice` | 仅本次有效，不直接形成长期记忆 |
+| `agent_hypothesis_unconfirmed` | 不形成正式记忆 |
 
 #### 4.6.3 周期与非周期模式
-
-|| 模式 | 含义 | 示例 |
-|| --- | --- | --- |
-|| `calendar_periodic` | 按日、周、月重复 | 每周一上午开会 |
-|| `time_conditioned` | 在特定时间条件下成立 | 工作日晚间直播 |
-|| `event_triggered` | 由事件或场景触发 | 外出探店时开直播 |
-|| `sporadic_stable` | 时间不固定，但选择倾向稳定 | 游戏时通常选择王者荣耀 |
-|| `temporary_window` | 只在明确时间窗成立 | 赛事期间低时延优先 |
-|| `evolving_pattern` | 规律随阶段变化 | 实习前后会议时间变化 |
+| 模式 | 含义 | 示例 |
+| --- | --- | --- |
+| `calendar_periodic` | 按日、周、月重复 | 每周一上午开会 |
+| `time_conditioned` | 在特定时间条件下成立 | 工作日晚间直播 |
+| `event_triggered` | 由事件或场景触发 | 外出探店时开直播 |
+| `sporadic_stable` | 时间不固定，但选择倾向稳定 | 游戏时通常选择王者荣耀 |
+| `temporary_window` | 只在明确时间窗成立 | 赛事期间低时延优先 |
+| `evolving_pattern` | 规律随阶段变化 | 实习前后会议时间变化 |
 
 #### 4.6.4 周期中断与恢复
-
-|| 中断类型 | 示例 | Gold 处理 |
-|| --- | --- | --- |
-|| `single_gap` | 偶尔一周未发生 | 不改变长期事实 |
-|| `temporary_gap` | 连续两周中断后恢复 | 不判定失效 |
-|| `explained_gap` | 节假日或请假期间中断 | 不改变长期事实 |
-|| `schedule_shift` | 从周一改到周三 | 形成时间规律变化 |
-|| `permanent_stop` | 用户明确取消周期行为 | 标记失效或停用 |
-|| `unknown_long_gap` | 长期未观察到 | 可降低证据强度，不自动生成新答案 |
+| 中断类型 | 示例 | Gold 处理 |
+| --- | --- | --- |
+| `single_gap` | 偶尔一周未发生 | 不改变长期事实 |
+| `temporary_gap` | 连续两周中断后恢复 | 不判定失效 |
+| `explained_gap` | 节假日或请假期间中断 | 不改变长期事实 |
+| `schedule_shift` | 从周一改到周三 | 形成时间规律变化 |
+| `permanent_stop` | 用户明确取消周期行为 | 标记失效或停用 |
+| `unknown_long_gap` | 长期未观察到 | 可降低证据强度，不自动生成新答案 |
 
 核心原则：
 
@@ -506,17 +492,16 @@ MT 资格从 GT 层组合判定，而非简单枚举：
 ### 4.7 干扰项精细化设计
 
 #### 4.7.1 干扰类型
-
-|| 类型 | 示例 | 难度 |
-|| --- | --- | --- |
-|| `unrelated` | 直播历史中插入视频会议 | 低 |
-|| `same_app_different_service` | 抖音开直播与抖音看短视频 | 中 |
-|| `same_field_different_scope` | 抖音直播 1080p、快手直播 720p | 高 |
-|| `ambiguous_candidates` | 会议 APP 在腾讯会议、钉钉、飞书间变化 | 高 |
-|| `temporary_exception` | 平时 1080p，某次明确临时使用 720p | 高 |
-|| `near_pattern` | 通常周一开会，偶尔周二临时开会 | 高 |
-|| `cross_intent_interference` | 多意图 Session 中将 I1 参数误归到 I2 | 高 |
-|| `stale_value` | 变化后旧值再次作为历史背景出现 | 高 |
+| 类型 | 示例 | 难度 |
+| --- | --- | --- |
+| `unrelated` | 直播历史中插入视频会议 | 低 |
+| `same_app_different_service` | 抖音开直播与抖音看短视频 | 中 |
+| `same_field_different_scope` | 抖音直播 1080p、快手直播 720p | 高 |
+| `ambiguous_candidates` | 会议 APP 在腾讯会议、钉钉、飞书间变化 | 高 |
+| `temporary_exception` | 平时 1080p，某次明确临时使用 720p | 高 |
+| `near_pattern` | 通常周一开会，偶尔周二临时开会 | 高 |
+| `cross_intent_interference` | 多意图 Session 中将 I1 参数误归到 I2 | 高 |
+| `stale_value` | 变化后旧值再次作为历史背景出现 | 高 |
 
 #### 4.7.2 干扰占比
 
@@ -526,12 +511,11 @@ hard_distractor_ratio = 高相关干扰数 / 全部干扰数
 ```
 
 建议分档：
-
-|| 难度 | 干扰占比 | 使用场景 |
-|| --- | ---: | --- |
-|| 低 | 10%～20% | 基础证据链验证 |
-|| 中 | 30%～50% | 常规跨 Session 数据 |
-|| 高 | 60%～75% | 长历史、高干扰数据 |
+| 难度 | 干扰占比 | 使用场景 |
+| --- | ---: | --- |
+| 低 | 10%～20% | 基础证据链验证 |
+| 中 | 30%～50% | 常规跨 Session 数据 |
+| 高 | 60%～75% | 长历史、高干扰数据 |
 
 配置示例：
 
@@ -702,7 +686,7 @@ GT有6个expression_mapping → 全部变成MT → 6个MT都是app_alias → 只
 
 MT类型按data_design的5大用户事实记忆类别+2个补充类别组织，全部定义在`config/mt_type_catalog.json`：
 
-| **偏好类别对应 GT 层MT类型举例子来说** |                                                   |                            |                     |
+| 偏好类别 | 对应 GT 字段 | MT 类型 | 用途说明 |
 | ------------------------ | ------------------------------------------------- | -------------------------- | ------------------- |
 | **用户个性化表达**              | `personalization_gt.expression_mappings`          | app_alias_mapping          | "王者"→王者荣耀           |
 |                          |                                                   | service_alias_mapping      | "开会"→会议             |
@@ -733,7 +717,7 @@ MT类型按data_design的5大用户事实记忆类别+2个补充类别组织，�
 
 每个MT类型标注了`eval_tags`，定义该MT测的是什么能力。标签是两层结构：**主标签**描述评测维度，**子标签**描述具体方面。
 
-| **主标签含义正样本（应该做到）负样本（不应该做）关联类别** |         |               |                |                       |
+| 主标签 | 含义 | 正样本（应该做到） | 负样本（不应该做） | 关联类别 |
 | ------------------------------- | ------- | ------------- | -------------- | --------------------- |
 | **personal_expression_mapping** | 个性化表达理解 | 别名/模糊表达→正确识别  | 一对多映射时需追问，不能猜  | 用户个性化表达               |
 | **parameter_completion**        | 参数缺失补全  | 省略参数→靠记忆/偏好补全 | 多候选接近时需追问，不能盲选 | 应用-业务选择偏好、体验参数偏好      |
@@ -744,7 +728,7 @@ MT类型按data_design的5大用户事实记忆类别+2个补充类别组织，�
 
 子标签进一步区分同一主标签下的不同方面：
 
-| **主标签子标签含义对应MT类型**          |                          |               |                                         |
+| 主标签 | 子标签 | 含义 | 对应 MT 类型 |
 | --------------------------- | ------------------------ | ------------- | --------------------------------------- |
 | personal_expression_mapping | one_to_one_mapping       | 一对一别名映射       | app_alias_mapping                       |
 |                             | service_alias            | 业务别名          | service_alias_mapping                   |
@@ -876,7 +860,7 @@ MT_003: memory_correction (记忆纠正)
 
 ### 6.1 每个MT展开成Session链
 
-| **MT时间线模板Session链** |                |                          |
+| MT | 时间线模板 | Session 链 |
 | ------------------- | -------------- | ------------------------ |
 | MT_001              | template_5(表达) | evidence → reinforcement |
 | MT_002              | template_7(参数) | evidence → reinforcement |
@@ -903,7 +887,7 @@ correction后不再需要单独验证Session：后续如有reinforcement_session
 
 ### 6.3 时间间隔规则
 
-| **前后Session角色间隔(天)原因**     |       |               |
+| 前后 Session 角色 | 间隔 (天) | 原因 |
 | -------------------------- | ----- | ------------- |
 | evidence → reinforcement   | 3-15  | 记忆需经时间间隔验证稳定性 |
 | reinforcement → correction | 15-30 | 长期使用后纠正更有意义   |
@@ -912,7 +896,7 @@ correction后不再需要单独验证Session：后续如有reinforcement_session
 
 ### 6.4 Session角色定义
 
-| **角色功能用户表达方式Agent行为期望** |               |                |                          |
+| 角色 | 功能 | 用户表达方式 | Agent 行为期望 |
 | ----------------------- | ------------- | -------------- | ------------------------ |
 | evidence_session        | 首次暴露用户事实      | 自然表达，可能用别名/模糊词 | 通过Confirm/Request发现并确认事实 |
 | reinforcement_session   | 再次提供一致证据+检验复用 | 省略部分参数，让记忆补全   | 利用已形成记忆高效补全，避免重复追问       |
@@ -961,7 +945,7 @@ correction后不再需要单独验证Session：后续如有reinforcement_session
 
 **① 画质表达 → 分辨率**
 
-| **用户说映射档位实际值(以微信+看直播为例)** |              |       |
+| 用户口语表达 | 映射档位 | 实际值 (以微信+看直播为例) |
 | ------------------------- | ------------ | ----- |
 | 高清 / 高画质 / 画面好 / 超清       | good         | 1080p |
 | 标清 / 普通 / 一般就行            | average      | 720p  |
@@ -969,7 +953,7 @@ correction后不再需要单独验证Session：后续如有reinforcement_session
 
 **② 速度表达 → 时延上限**
 
-| **用户说映射档位实际值(以微信+看直播为例)** |         |       |
+| 用户口语表达 | 映射档位 | 实际值 (以微信+看直播为例) |
 | ------------------------- | ------- | ----- |
 | 不卡 / 流畅 / 别卡 / 快一点        | good    | 80ms  |
 | 差不多就行 / 能忍                | average | 150ms |
@@ -977,7 +961,7 @@ correction后不再需要单独验证Session：后续如有reinforcement_session
 
 **③ 时间表达 → 时段**
 
-| **用户说映射结果** |                               |
+| 用户口语表达 | 映射结果 |
 | ----------- | ----------------------------- |
 | 晚上          | period=evening, hours=(18,22) |
 | 马上          | period=now, delta_minutes=0   |
@@ -988,14 +972,14 @@ correction后不再需要单独验证Session：后续如有reinforcement_session
 
 用户说"开直播"不指定APP时，Agent应优先选择哪个APP：
 
-| **业务首选次选判断** |           |          |                        |
+| 业务场景 | 首选偏好 | 次选偏好 | 决策判断 |
 | ------------ | --------- | -------- | ---------------------- |
 | 开直播          | 抖音(0.6)   | 快手(0.25) | 首选明确，不需消歧              |
 | 会议           | 腾讯会议(0.5) | 钉钉(0.3)  | 候选接近(gap<0.2)，**需要消歧** |
 
 排斥组合（Agent不应自动填充）：
 
-| **不合法组合原因** |           |
+| 不合法组合 | 原因说明 |
 | ----------- | --------- |
 | 微信+开直播      | 微信没有开直播功能 |
 | 钉钉+开直播      | 钉钉没有开直播功能 |
@@ -1003,7 +987,7 @@ correction后不再需要单独验证Session：后续如有reinforcement_session
 
 **⑤ 时间模式偏好**
 
-| **模式ID条件典型时段**  |        |             |
+| 模式 ID | 触发条件 | 典型时段 |
 | --------------- | ------ | ----------- |
 | weekday_evening | 工作日+晚上 | 19:00-22:00 |
 | weekday_morning | 工作日+上午 | 09:00-12:00 |
@@ -1017,7 +1001,7 @@ correction后不再需要单独验证Session：后续如有reinforcement_session
 
 完整偏好不是单一值，是preferred/fallback/rejected三层：
 
-| **层分辨率时延含义** |       |        |            |
+| 偏好类型 | 分辨率档位 | 时延上限 | 适用时段/场景 |
 | ------------ | ----- | ------ | ---------- |
 | preferred    | 1080p | ≤80ms  | 首选：高清+低时延  |
 | fallback     | 720p  | ≤150ms | 备选：标清+一般时延 |
@@ -1029,7 +1013,7 @@ correction后不再需要单独验证Session：后续如有reinforcement_session
 
 区分5种证据来源，记忆强度不同：
 
-| **证据来源示例** |                             |
+| 证据来源 | 典型示例 |
 | ---------- | --------------------------- |
 | 用户明确声明     | "以后我说老业务就是指抖音直播"            |
 | 澄清时确认      | Agent问"您说的开会是指腾讯会议吗?" 用户"对" |
@@ -1106,7 +1090,7 @@ X-2|3|3|I1:网易云游戏/云游戏/3/clarify/resolved;I2:互斥候选26/0/reje
 
 拆解：
 
-| **段值含义** |                                          |                                         |
+| 字段段位 | 具体取值 | 语义含义 |
 | -------- | ---------------------------------------- | --------------------------------------- |
 | 模板       | X-2                                      | 混合/特殊模板                                 |
 | 轮数       | 3                                        | 3轮User-Agent对话                          |
@@ -1159,7 +1143,7 @@ Turn 3:
 
 **骨架 vs 自然语言的分工**:
 
-| **维度规则定（骨架）LLM填（自然语言）** |                                            |                           |
+| 控制维度 | 规则定死 (骨架层) | LLM 发挥 (自然语言层) |
 | ----------------------- | ------------------------------------------ | ------------------------- |
 | 轮数                      | 3轮                                         | —                         |
 | 意图数                     | 3个                                         | —                         |
@@ -1175,7 +1159,7 @@ Turn 3:
 
 #### 7.3.2 16种多轮对话数据库
 
-| **编号轮数/意图意图关系特殊标签场景描述** |       |        |                       |                                          |
+| 模板 ID | 交互轮数 / 意图数 | 意图关系 | 特性标签 | 业务场景说明 |
 | ----------------------- | ----- | ------ | --------------------- | ---------------------------------------- |
 | **T1-1**                | 1轮1意图 | —      | —                     | 直接受理：用户说明APP+业务，Agent直接办理                |
 | **T1-2**                | 1轮1意图 | —      | out_of_domain         | 域外拒绝：用户提了Agent不支持的需求                     |
@@ -1200,7 +1184,7 @@ Turn 3:
 
 映射的判断标准是"Agent需要从哪里取参数"和"对话需要几轮解决"。
 
-| **session_role映射模板映射原因**  |                              |                                                                                                      |
+| 会话角色 (session_role) | 映射模板 | 映射原则与说明 |
 | ------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------- |
 | **evidence_session**      | T1-1, T1-3, T2-1, T2-4, T3-1 | 用户首次暴露事实，需说出APP+业务+参数。单意图选T1-1/T2-1/T3-1（轮数1/2/3对应参数完整/不完整/需确认）；双意图选T1-3（共享参数）或T2-4（并行执行），用户一次暴露两个事实 |
 | **reinforcement_session** | T1-1, T1-3, T2-1             | 再次提供一致证据，交互模式与evidence类似但内容不同。无需3轮（不需要再次确认），所以不映射T3-1；双意图选T1-3                                       |
@@ -1213,7 +1197,7 @@ Turn 3:
 
 每轮 Agent 回复必须标注 `action_types`（1-2 个），**只能从以下六类中选，禁止发明其他动作名**。
 
-| **动作类型动作含义典型话术示例**          |                          |                    |                                         |
+| 动作类别 | 动作名称 | 动作语义 | 典型话术示例 |
 | --------------------------- | ------------------------ | ------------------ | --------------------------------------- |
 | **信息询问类**（Agent 主动追问用户）     | `Request_Slot`           | 询问一个或多个明确缺失的字段     | "请问时延要求是多少？""时间是几点到几点？"                 |
 |                             | `Request_Clarification`  | 当前表达整体模糊，要求用户进一步说明 | "您说的'高清'具体指720P还是1080P？"                |
@@ -1236,7 +1220,7 @@ Turn 3:
 
 ### 7.5 LLM的使用边界
 
-| **环节是否用LLM原因** |   |                                   |
+| 步骤编号 | 是否使用 LLM | 判定原则 |
 | -------------- | - | --------------------------------- |
 | 精准意图构建         | ✗ | 从GT+app_config规则推导                |
 | 槽位表达计划         | ✗ | 从session_role+memory_snapshot规则推导 |
@@ -1294,7 +1278,7 @@ S006后: 高清→1080p(active→superseded), +标清→720p(active)      ← �
 
 5大用户事实记忆类别 × 正/负样本 + 2补充类别：
 
-| **类别来源 GT 层测的主标签正样本本例覆盖** |                                                   |                                          |           |                         |
+| 评测类别 | 来源 GT 层 | 评测主标签 | 正样本期望 | 本例覆盖情况 |
 | ------------------------- | ------------------------------------------------- | ---------------------------------------- | --------- | ----------------------- |
 | 用户个性化表达                   | `personalization_gt.expression_mappings`          | personal_expression_mapping              | 模糊表达正确映射  | ✓ quality_grade_mapping |
 | 应用-业务选择偏好                 | `personalization_gt.app_business_preferences`     | parameter_completion                     | 省略信息靠记忆补全 | ✗ (无service_to_app候选)   |
@@ -1309,7 +1293,7 @@ S006后: 高清→1080p(active→superseded), +标清→720p(active)      ← �
 
 #### 8.2.1 结构校验
 
-| **编号规则检查方法本例** |                                     |                                                                    |             |
+| 规则编号 | 校验规则 | 检查方法 | 本例结果 |
 | -------------- | ----------------------------------- | ------------------------------------------------------------------ | ----------- |
 | R1             | reinforcement必须在evidence之后          | 遍历timeline，检查每个MT的reinforcement_session_idx > evidence_session_idx | ✓           |
 | R2             | 过期记忆不出现于失效后快照                       | 遍历memory_events，对has_validity的MT检查expired后的快照不含该记忆                 | ✓           |
@@ -1322,7 +1306,7 @@ S006后: 高清→1080p(active→superseded), +标清→720p(active)      ← �
 
 #### 8.2.2 内容校验
 
-| **编号断言检查方法失败处理** |                                    |                                               |                           |
+| 断言编号 | 断言内容 | 检查方法 | 失败处理策略 |
 | ---------------- | ---------------------------------- | --------------------------------------------- | ------------------------- |
 | C1               | reinforcement_session中Agent使用了记忆补全 | 从Agent回复中提取参数值，与memory_snapshot对比             | 标记为eval_fail，重新生成该session |
 | C2               | evidence_session中Agent未使用尚未形成的记忆   | 检查Agent回复不含后续才出现的参数值                          | 标记为leak，重新生成              |
@@ -1417,98 +1401,74 @@ def validate_sessions(skeleton: dict, sessions: list[dict]) -> dict:
 
 ## 10 数据流图
 
+```mermaid
+graph TD
+    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2px,color:#111111;
+
+    subgraph LayerInput ["<b>输入层：配置与数据源</b>"]
+        IN1["<b>业务配置 (app_config / app_map / support_matrix)</b>"]
+        IN2["<b>Persona 模板 (corenet_personas.jsonl)</b>"]
+        IN3["<b>参考模板 (ref_data 16种骨架)</b>"]
+        IN4["<b>评测目标库 (mt_type_catalog.json)</b>"]
+    end
+
+    subgraph LayerGT ["<b>B - Persona Ground Truth (四层真值)</b>"]
+        GT1["<b>static_gt: 固定属性</b>"]
+        GT2["<b>conditional_gt: 条件偏好</b>"]
+        GT3["<b>changeable_gt: 可变属性</b>"]
+        GT4["<b>personalization_gt: 表达映射与参数偏好</b>"]
+    end
+
+    subgraph LayerMT ["<b>C - Memory Targets (评测目标反推)</b>"]
+        MT1["<b>优先级 1: 个性化表达 (必选)</b>"]
+        MT2["<b>优先级 2: 参数补全 (必选)</b>"]
+        MT3["<b>优先级 3: 应用-业务选择</b>"]
+        MT4["<b>优先级 4: 时间模式</b>"]
+        MT5["<b>扩展: 记忆纠偏 (memory_correction)</b>"]
+    end
+
+    subgraph LayerTimeline ["<b>D - Timeline 规划 (时间线因果拓扑)</b>"]
+        TL1["<b>角色池编排: evidence / reinforcement / distractor / correction</b>"]
+        TL2["<b>时间戳单调递增与自然间隔规则</b>"]
+    end
+
+    subgraph LayerGen ["<b>E - 逐 Session 生成循环</b>"]
+        E1["<b>计算初始记忆快照 (规则层)</b>"] --> E2["<b>槽位表达计划与意图构建 (规则层)</b>"]
+        E2 --> E3["<b>LLM 生成对话台词 (自然语言层)</b>"]
+        E3 --> E4["<b>计算记忆事件与更新快照 (规则层)</b>"]
+        E4 --> E5["<b>四元 source_type 精准标注 (规则层)</b>"]
+    end
+
+    subgraph LayerVal ["<b>F - 评测与一致性双层校验</b>"]
+        V1["<b>结构校验 R1~R8 (骨架层硬规则)</b>"]
+        V2["<b>内容校验 C1~C5 (台词语义断言)</b>"]
+        V3["<b>校验未通过: 自动标记/重试/熔断</b>"]
+    end
+
+    subgraph LayerOut ["<b>G - 交付产物</b>"]
+        OUT1["<b>skeleton.json: 确定性设计骨架 (应该发生什么)</b>"]
+        OUT2["<b>sessions.jsonl: 多轮对话与记忆演进记录 (实际发生了什么)</b>"]
+    end
+
+    LayerInput --> LayerGT
+    LayerGT --> LayerMT
+    LayerMT --> LayerTimeline
+    LayerTimeline --> LayerGen
+    LayerGen --> LayerVal
+    LayerVal --> LayerOut
+
+    style LayerInput fill:#FFFFFF,stroke:#111111,stroke-width:2px;
+    style LayerGT fill:#FFFFFF,stroke:#111111,stroke-width:2px;
+    style LayerMT fill:#FFFFFF,stroke:#111111,stroke-width:2px;
+    style LayerTimeline fill:#FFFFFF,stroke:#111111,stroke-width:2px;
+    style LayerGen fill:#FFFFFF,stroke:#111111,stroke-width:2px;
+    style LayerVal fill:#FFFFFF,stroke:#111111,stroke-width:2px;
+    style LayerOut fill:#FFFFFF,stroke:#111111,stroke-width:2px;
 ```
-输入层 - 配置与数据源
-```
-
-G - 输出
-
-skeleton.json
-应该发生什么
-
-sessions.jsonl
-实际发生了什么
-
-F - 评测+校验
-
-失败: 标记/重试/人工审核
-
-结构校验 R1-R8
-skeleton生成后
-
-内容校验 C1-C5
-对话生成后
-
-E - 逐Session生成循环
-
-更新记忆快照-规则
-
-计算记忆快照-规则
-
-构建精准意图-规则
-
-槽位表达计划-规则
-
-LLM生成对话
-
-source_type标注-规则
-
-计算记忆事件-规则
-
-D - Timeline
-
-排列+间隔规则
-
-角色池: evidence/reinforcement/distractor/correction
-
-C - Memory Targets
-
-优先级1: 个性化表达-必选
-
-优先级2: 参数补全-必选
-
-优先级3: 应用-业务选择
-
-优先级4: 时间模式
-
-扩展: memory_correction
-
-B - Persona Ground Truth
-
-personalization_gt
-表达映射/参数偏好
-
-static_gt
-固定属性
-
-conditional_gt
-条件偏好
-
-changeable_gt
-可变属性
-
-app_config
-参数值域
-
-app_map
-别名映射
-
-support_matrix
-场景校验
-
-config/ 7个映射JSON
-
-persona模板
-
-ref_data
-452条session/16种骨架
-
-mt_type_catalog.json
-24种MT定义
 
 **依赖关系**：
 
-| **阶段规则层（不用LLM）LLM层** |                      |            |
+| 流水线阶段 | 规则层 (不用 LLM) | LLM 层 (提示词驱动) |
 | -------------------- | -------------------- | ---------- |
 | B-GT构建               | persona模板+映射表推导      | —          |
 | C-MT选择               | 评分函数+优先级+diversity排斥 | —          |
