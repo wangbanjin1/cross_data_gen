@@ -407,13 +407,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "画质按‘糊弄不过去就行’来，时延控制在100ms以内，预计持续60min。",
+          "utterance": "画质标准按‘糊弄不过去就行’，时延控制在100ms以内，预计持续60min。",
           "action_types": [
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "问一下，您说的‘糊弄不过去就行’具体是指哪种画质档位？往后也按这套标准来吗？",
+          "utterance": "确认一下，您说的‘糊弄不过去就行’具体指哪个画质档位？以后也按这个理解吗？",
           "action_types": [
             "Request_Disambiguation"
           ]
@@ -473,7 +473,7 @@
       {
         "turn": 3,
         "user": {
-          "utterance": "就是画质档位720p，以后就按这个理解，直接开通吧。",
+          "utterance": "指的就是画质档位720p，以后默认按这个来，直接保上吧。",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -1263,14 +1263,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "今天在市青年公益服务中心，帮我把上午的腾讯会议会议保障开通一下。上次让你们延期上午任务，结果把下午的保障也给顺延搞砸了，这次多任务可千万别互相串扰！",
+          "utterance": "今天在市青年公益服务中心上午和下午都有安排。上午的腾讯会议会议会议临时通知要延长，帮我把上午的结束时间改到12:00；下午的任务绝对不能动，保持原有时段。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "非常抱歉上次多任务调整时未能做好因果隔离，导致上午任务的延后误伤了下午的配置！我们已沉淀【多任务因果隔离经验】，对多意图进行原子锁定时序隔离，绝不会交叉污染。本次上午保障已为您配置就绪，确认按此开通吗？",
+          "utterance": "收到！已为您将上午任务单独延长至12:00并重算时长；下午任务已严格锁定维持原有时段与配置不变，确认按此生效吗？",
           "action_types": [
             "Confirm_Slot",
             "Request_Slot"
@@ -1344,13 +1344,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "行，这次分清楚就好，直接开通吧。",
+          "utterance": "对，上午单独延长，下午别受任何影响，直接生效吧。",
           "action_types": [
             "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您成功受理本次保障（1080p / 时延≤50ms），多意图因果隔离规则已稳固沉淀至经验库，祝现场一切顺利！",
+          "utterance": "好的，已完成多任务调整，上午保障已延长至12:00（1080p / 时延≤50ms），下午任务维持原有时段不变，祝使用顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -1564,14 +1564,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "今天在市青年公益服务中心需要开个紧急腾讯会议会议保障。上次临时加塞任务，和原来的日常保障时间撞车重叠，系统直接报错冲突，这次可得把时间协调好！",
+          "utterance": "下午要在市青年公益服务中心开个紧急腾讯会议会议保障，但刚才看了下系统里还有笔原有的日常保障，两单时段有部分重叠撞车了，这该怎么处理？",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "非常抱歉上次工单时段重叠时处理生硬！我们已针对性沉淀【工单时序重叠仲裁经验】。当新旧保障重叠时，系统会自动在冲突节点让原工单提前让路结单、新保障准时接管。当前配置已就绪，确认开通吗？",
+          "utterance": "检测到新申请的紧急保障与原日常工单存在时段重叠。建议协调原工单在冲突交界点提前结单让路，新紧急保障准时激活接管通道，避免重复计费，您看这样可以吗？",
           "action_types": [
             "Confirm_Slot",
             "Request_Slot"
@@ -1646,13 +1646,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "很好，按时序让路衔接就行，开通吧。",
+          "utterance": "行，原工单提前让路结单、新保障准时接管，这样衔接很合理，直接办理吧。",
           "action_types": [
             "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次保障（1080p / 时延≤50ms），工单时钟让路仲裁规则已沉淀至经验记忆库，祝您工作顺利！",
+          "utterance": "好的，已为您完成工单时序仲裁办理，原工单提前结单让路，新保障准时接续生效（1080p / 时延≤50ms），祝您工作顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -2808,7 +2808,7 @@
           ]
         },
         "agent": {
-          "utterance": "收到！已针对上午保障任务进行局部调整，结束时间顺延至12:00并重算时长；根据此前在 S-USER_003-05 总结沉淀的多意图因果隔离经验，下午任务已严格锁定冻结不变，防止相互干扰，确认按此生效吗？",
+          "utterance": "收到！已针对上午保障任务进行局部调整，结束时间顺延至12:00并重算时长；参考此前在 S-USER_003-05 的处理做法，下午任务已严格锁定冻结不变，防止相互干扰，确认按此生效吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -3950,7 +3950,7 @@
           ]
         },
         "agent": {
-          "utterance": "检测到新申请的保障与已预约的日常工单存在时段重叠。根据此前在 S-USER_003-06 总结沉淀的工单时序仲裁经验，协调原工单在冲突交界点提前结单让路，新保障准时无缝激活接管，避免重复计费，确认按此开通吗？",
+          "utterance": "检测到新申请的保障与已预约的日常工单存在时段重叠。参考此前在 S-USER_003-06 的处理做法，协调原工单在冲突交界点提前结单让路，新保障准时无缝激活接管，避免重复计费，确认按此开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -4220,7 +4220,7 @@
         "memory_action": "reschedule_working_record"
       },
       "working_memory_pointer": {
-        "target_record_id": "REC_mobile_persona_003_20261111_184",
+        "target_record_id": "REC_mobile_persona_003_20261111_202",
         "inferred_delta_days": 4,
         "matched_application": "腾讯会议",
         "matched_service": "会议",
@@ -4235,7 +4235,7 @@
       "agility_factor": null
     },
     "working_memory_pointer": {
-      "target_record_id": "REC_mobile_persona_003_20261111_184",
+      "target_record_id": "REC_mobile_persona_003_20261111_202",
       "inferred_delta_days": 4,
       "matched_application": "腾讯会议",
       "matched_service": "会议",
@@ -4276,25 +4276,25 @@
               "application_name": {
                 "value": "腾讯会议",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_003_20261111_184"
+                "source_ref": "REC_mobile_persona_003_20261111_202"
               },
               "service_name": {
                 "value": "会议",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_003_20261111_184"
+                "source_ref": "REC_mobile_persona_003_20261111_202"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261111_184"
+                  "source_ref": "REC_mobile_persona_003_20261111_202"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261111_184"
+                  "source_ref": "REC_mobile_persona_003_20261111_202"
                 }
               },
               "timestamp": {
@@ -4311,14 +4311,14 @@
                 "duration": {
                   "value": "120min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261111_184"
+                  "source_ref": "REC_mobile_persona_003_20261111_202"
                 }
               }
             }
           }
         ],
         "working_memory_pointer": {
-          "target_record_id": "REC_mobile_persona_003_20261111_184",
+          "target_record_id": "REC_mobile_persona_003_20261111_202",
           "inferred_delta_days": 4,
           "matched_application": "腾讯会议",
           "matched_service": "会议",
@@ -4358,25 +4358,25 @@
               "application_name": {
                 "value": "腾讯会议",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_003_20261111_184"
+                "source_ref": "REC_mobile_persona_003_20261111_202"
               },
               "service_name": {
                 "value": "会议",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_003_20261111_184"
+                "source_ref": "REC_mobile_persona_003_20261111_202"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261111_184"
+                  "source_ref": "REC_mobile_persona_003_20261111_202"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261111_184"
+                  "source_ref": "REC_mobile_persona_003_20261111_202"
                 }
               },
               "timestamp": {
@@ -4393,7 +4393,7 @@
                 "duration": {
                   "value": "120min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261111_184"
+                  "source_ref": "REC_mobile_persona_003_20261111_202"
                 }
               }
             }
@@ -4412,25 +4412,25 @@
           "application_name": {
             "value": "腾讯会议",
             "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_003_20261111_184"
+            "source_ref": "REC_mobile_persona_003_20261111_202"
           },
           "service_name": {
             "value": "会议",
             "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_003_20261111_184"
+            "source_ref": "REC_mobile_persona_003_20261111_202"
           },
           "resolution": {
             "min_value": {
               "value": "1080p",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_003_20261111_184"
+              "source_ref": "REC_mobile_persona_003_20261111_202"
             }
           },
           "rtt": {
             "max_value": {
               "value": "50ms",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_003_20261111_184"
+              "source_ref": "REC_mobile_persona_003_20261111_202"
             }
           },
           "timestamp": {
@@ -4447,7 +4447,7 @@
             "duration": {
               "value": "120min",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_003_20261111_184"
+              "source_ref": "REC_mobile_persona_003_20261111_202"
             }
           }
         }
@@ -4464,25 +4464,25 @@
               "application_name": {
                 "value": "腾讯会议",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_003_20261111_184"
+                "source_ref": "REC_mobile_persona_003_20261111_202"
               },
               "service_name": {
                 "value": "会议",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_003_20261111_184"
+                "source_ref": "REC_mobile_persona_003_20261111_202"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261111_184"
+                  "source_ref": "REC_mobile_persona_003_20261111_202"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261111_184"
+                  "source_ref": "REC_mobile_persona_003_20261111_202"
                 }
               },
               "timestamp": {
@@ -4499,7 +4499,7 @@
                 "duration": {
                   "value": "120min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_003_20261111_184"
+                  "source_ref": "REC_mobile_persona_003_20261111_202"
                 }
               }
             }
