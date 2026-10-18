@@ -66,6 +66,68 @@ graph TD
 * **工作记忆 (Working Memory)**：管真实发生的历史工单记录。通过独立的 `working_records.jsonl` 账本解耦，支撑跨期单据检索（“上周在奥体开的那单”）、变更改期（延后/提前）与多单消歧。
 * **经验记忆 (Experiential Memory)**：管无需用户交代、由智能体基于通信最佳实践主动推断的参数先验，专用于实现**快速闭环（Fast Path）**与**复杂业务冲突解决**。
 
+### 2.1 事实记忆冷启动多轮澄清机制（$T=3$ 轮）
+
+为杜绝智能体在冷启动初期“擅自脑补通信参数”或“产生参数幻觉”，系统设置了前置质检硬门槛（Hard Gate）：在用户未建立老规矩时，智能体必须发起 3 轮严格的参数反问澄清收敛流：
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as <b>用户</b>
+    participant Agent as <b>“联接”Agent</b>
+
+    User->>Agent: <b>Turn 1 口语发起初步诉求（故意缺失通信参数）</b><br/>“帮我给抖音开直播做一个网络保障，今天12:30开始。”
+    Note over Agent: <b>冷启动零记忆质检硬门槛（Hard Gate）：</b><br/>反问澄清完整率 100%，严禁擅自脑补
+    Agent-->>User: <b>Turn 1 客服反问追问缺失槽位 (Request_Slot)</b><br/>“收到，已锁定抖音开直播保障。请问清晰度、时延上限和预计持续时长分别是多少呢？”
+
+    User->>Agent: <b>Turn 2 补齐参数并交代习惯 (Inform_Slot)</b><br/>“画质要1080p，时延50ms内，持续1小时。<br/>以后每天这个时段我说'老规矩'就按这个来，记住哈。”
+    Agent-->>User: <b>Turn 2 客服登记老规矩并反问确认 (Confirm_Slot)</b><br/>“收到，已为您登记老规矩习惯。确认按1080p、50ms内立即为您开通本次保障吗？”
+
+    User->>Agent: <b>Turn 3 最终闭环确认 (Confirm_Slot)</b><br/>“对，确认直接开通。”
+    Agent-->>User: <b>Turn 3 成功受理出单并固化记忆</b><br/>“好的，已按老规矩为您开通保障，祝您使用顺畅！”
+```
+
+#### 双轨固化机制（显式声明 vs 隐式归纳）：
+1. **显式声明路径 (`explicit_declaration`)**：用户在交互中主动声明规则指令（如“*以后按老规矩办*”），会话办结后触发 `form_memory_explicit`，记忆状态直接置为 **`active`**（`evidence_count = 1`）。
+2. **隐式归纳路径 (`implicit_induction`)**：用户未显式交代长期偏好，首轮澄清办结后触发 `log_task_history`，记忆仅作为单次历史行为记录为 **`provisional`（候选/暂定状态）**；直到后续会话出现第 2 次相同特征行为（$N \ge 2$），经反问确认后才触发 `crystallize_implicit_memory` 固化为 **`active`**。
+
+### 2.2 事实记忆全周期 6 大核心控制因子
+
+```mermaid
+graph TD
+    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2.5px,color:#111111;
+
+    subgraph ControlFactors ["<b>事实记忆全流程控制因子矩阵</b>"]
+        AF["<b>1. 记忆敏捷度因子 (α ∈ [0.0, 1.0])</b><br/>控制目标轮数压缩与默契梯度的总控旋钮"]
+        CH["<b>2. 冷热启动类型 (cold_hot_type)</b><br/>cold_start (无记忆澄清) / hot_start (有记忆复用)"]
+        EC["<b>3. 证据强度与状态阈值 (evidence_count)</b><br/>provisional (N=1 候选) → active (N≥2 固化)"]
+        OI["<b>4. 口语省略深度 (Omission Intensity)</b><br/>低敏捷弱省略暴露缺失槽位 vs 高敏捷深度省略"]
+        DM["<b>5. 记忆声明模式 (declaration_mode)</b><br/>explicit_declaration (显式) vs implicit_induction (隐式)"]
+        TT["<b>6. 场景时序触发类型 (storyline_trigger_type)</b><br/>time_periodic (周期型) / task_activity (任务型) / location_environment (地点型)"]
+    end
+
+    style ControlFactors fill:#FFFFFF,stroke:#111111,stroke-width:2.5px;
+```
+
+1. **记忆敏捷度因子（`agility_factor`, $\alpha \in [0.0, 1.0]$）**：
+   - 目标轮数调制公式：$$T_{\text{target}} = \text{round}\big(T_{\text{cold}} \cdot (1 - \alpha)\big)$$
+   - $\alpha = 0.0$（极端保守 / 冷启动澄清）：逐项追问缺失槽位，保持 $T = 3$ 轮；
+   - $\alpha = 0.5$（常规稳健热启动）：调取记忆反问确认，收敛至 $T = 2$ 轮；
+   - $\alpha = 1.0$（极致敏捷热启动）：秒级命中并默认直接受理出单，达成 $T = 1$ 轮极速闭环。
+2. **冷热启动类型标识（`cold_hot_type`）**：
+   - `cold_start`：冷启动，硬性约束反问澄清完整率 100%，脑补率 0%；
+   - `hot_start`：热启动，基于记忆快速复用槽位。
+3. **证据强度与状态机计数（`evidence_count`）**：
+   - 记录该事实记忆被使用/验证的累计次数；
+   - 状态转移：`provisional` ($N=1$) $\to$ `active` ($N \ge 2$) $\to$ `reinforced` ($N > 2$)。
+4. **台词口语省略深度（`Omission Intensity`）**：
+   - 低敏捷（$\alpha \le 0.3$）：保留部分辅助信息，暴露关键参数缺失；
+   - 高敏捷（$\alpha \ge 0.7$）：深度省略通信参数，倒逼模型必须依赖记忆补全。
+5. **记忆声明模式分流因子（`declaration_mode`）**：
+   - 按用户 ID 奇偶 50/50 分流：奇数用户显式声明，偶数用户隐式归纳。
+6. **场景时序触发因子（`storyline_trigger_type`）**：
+   - `time_periodic`（周期时间型）/ `task_activity`（任务活动型）/ `location_environment`（特定地点型）。
+
 ---
 
 ## 三、 16~20 轮动态生命周期时间线拓扑
