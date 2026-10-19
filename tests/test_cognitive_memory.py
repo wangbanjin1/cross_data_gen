@@ -365,16 +365,25 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
             self.assertIn("intents_status", tgt)
             self.assertIn("I1", tgt["expected_slots_gt"])
 
-        # 重点验证 Turn 1 的 GT 槽位绝对完备（不可遗漏 start_timestamp 或 duration）
+        # 重点验证 Turn 1 的 GT 槽位为真正的标准金标（包含提前预热后的时间 12:00 与时长 90min）
         t1_slots = turn_gt[0]["expected_slots_gt"]["I1"]
         self.assertEqual(t1_slots["application_name"], "抖音")
         self.assertEqual(t1_slots["service_name"], "开直播")
         self.assertEqual(t1_slots["resolution"], "1080p")
         self.assertEqual(t1_slots["rtt"], "50ms")
-        self.assertIn("start_timestamp", t1_slots["timestamp"])
-        self.assertIn("end_timestamp", t1_slots["timestamp"])
-        self.assertIn("duration", t1_slots["timestamp"])
+        self.assertEqual(t1_slots["timestamp"]["start_timestamp"], "2026年10月17日12时00分")
         self.assertEqual(t1_slots["timestamp"]["end_timestamp"], "2026年10月17日13时30分")
+        self.assertEqual(t1_slots["timestamp"]["duration"], "90min")
+
+        # 重点验证 Turn 1 挂载了 baseline_flawed_slots 与 delta_from_gt 差分结构
+        self.assertIn("baseline_flawed_slots", turn_gt[0])
+        flawed_slots = turn_gt[0]["baseline_flawed_slots"]["I1"]
+        self.assertEqual(flawed_slots["timestamp"]["start_timestamp"], "2026年10月17日12时30分")
+        self.assertEqual(flawed_slots["timestamp"]["duration"], "60min")
+
+        self.assertIn("delta_from_gt", turn_gt[0])
+        self.assertTrue(turn_gt[0]["delta_from_gt"]["has_error"])
+        self.assertEqual(turn_gt[0]["delta_from_gt"]["triggered_reaction"], "on_slot_error")
 
         # 6. 验证声明式交互评测契约 (interactive_eval_contract) 完整性
         contract = eb.get("interactive_eval_contract")
@@ -491,6 +500,11 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
                 self.assertIn("expected_agent_action_types", tgt)
                 self.assertIn("intents_status", tgt)
                 self.assertGreater(len(tgt["expected_slots_gt"]), 0)
+
+            # 验证 5 大场景在 Turn 1 均挂载了基线犯错预测槽位与差分反应
+            self.assertIn("baseline_flawed_slots", turn_gt[0], f"Missing baseline_flawed_slots in Turn 1 of {s_type}")
+            self.assertIn("delta_from_gt", turn_gt[0], f"Missing delta_from_gt in Turn 1 of {s_type}")
+            self.assertIn("triggered_reaction", turn_gt[0]["delta_from_gt"])
 
             matrix = c["delta_reaction_matrix"]
             for key in ["on_slot_error", "on_agent_inquiry", "on_slot_missing", "on_goal_matched"]:

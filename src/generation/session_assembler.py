@@ -618,7 +618,16 @@ class SessionAssembler:
                     "agent_action_types": ["Confirm_Slot"],
                     "expected_slots_gt": {
                         "I1": {"application_name": app, "service_name": srv, "resolution": res, "rtt": rtt, "timestamp": {"start_timestamp": start, "end_timestamp": end, "duration": dur}},
+                        "I2": {"application_name": app2, "service_name": srv2, "resolution": res2, "rtt": rtt2, "timestamp": {"start_timestamp": start2, "end_timestamp": end2, "duration": dur2}}
+                    },
+                    "baseline_flawed_slots": {
+                        "I1": {"application_name": app, "service_name": srv, "resolution": res, "rtt": rtt, "timestamp": {"start_timestamp": start, "end_timestamp": end, "duration": dur}},
                         "I2": {"application_name": app2, "service_name": srv2, "resolution": res2, "rtt": rtt2, "timestamp": {"start_timestamp": end, "end_timestamp": end2, "duration": dur2}}
+                    },
+                    "delta_from_gt": {
+                        "has_error": True,
+                        "error_details": [f"I2.timestamp.start_timestamp: expected '{start2}', got '{end}'"],
+                        "triggered_reaction": "on_slot_error"
                     }
                 },
                 {
@@ -631,6 +640,15 @@ class SessionAssembler:
                     "expected_slots_gt": {
                         "I1": {"application_name": app, "service_name": srv, "resolution": res, "rtt": rtt, "timestamp": {"start_timestamp": start, "end_timestamp": end, "duration": dur}},
                         "I2": {"application_name": app2, "service_name": srv2, "resolution": res2, "rtt": rtt2, "timestamp": {"start_timestamp": start2, "end_timestamp": end2, "duration": dur2}}
+                    },
+                    "baseline_flawed_slots": {
+                        "I1": {"application_name": app, "service_name": srv, "resolution": res, "rtt": rtt, "timestamp": {"start_timestamp": start, "end_timestamp": end}},
+                        "I2": {"application_name": app2, "service_name": srv2, "resolution": res2, "rtt": rtt2, "timestamp": {"start_timestamp": start2, "end_timestamp": end2, "duration": dur2}}
+                    },
+                    "delta_from_gt": {
+                        "has_error": False,
+                        "missing_details": ["I1.timestamp.duration"],
+                        "triggered_reaction": "on_slot_missing"
                     }
                 },
                 {
@@ -782,11 +800,32 @@ class SessionAssembler:
                             "resolution": res,
                             "rtt": rtt,
                             "timestamp": {
+                                "start_timestamp": start,
+                                "end_timestamp": end,
+                                "duration": dur
+                            }
+                        }
+                    },
+                    "baseline_flawed_slots": {
+                        "I1": {
+                            "application_name": app,
+                            "service_name": srv,
+                            "resolution": res,
+                            "rtt": rtt,
+                            "timestamp": {
                                 "start_timestamp": nom_start,
                                 "end_timestamp": end,
                                 "duration": nom_dur
                             }
                         }
+                    },
+                    "delta_from_gt": {
+                        "has_error": True,
+                        "error_details": [
+                            f"I1.timestamp.start_timestamp: expected '{start}', got '{nom_start}'",
+                            f"I1.timestamp.duration: expected '{dur}', got '{nom_dur}'"
+                        ],
+                        "triggered_reaction": "on_slot_error"
                     }
                 },
                 {
@@ -898,11 +937,29 @@ class SessionAssembler:
                             "resolution": res,
                             "rtt": rtt,
                             "timestamp": {
+                                "start_timestamp": start,
+                                "end_timestamp": end,
+                                "duration": dur
+                            }
+                        }
+                    },
+                    "baseline_flawed_slots": {
+                        "I1": {
+                            "application_name": app,
+                            "service_name": srv,
+                            "resolution": res,
+                            "rtt": rtt,
+                            "timestamp": {
                                 "start_timestamp": holiday_start,
                                 "end_timestamp": holiday_end,
                                 "duration": holiday_dur
                             }
                         }
+                    },
+                    "delta_from_gt": {
+                        "has_error": True,
+                        "error_details": [f"I1.timestamp.start_timestamp: expected '{start}', got '{holiday_start}'"],
+                        "triggered_reaction": "on_slot_error"
                     }
                 },
                 {
@@ -1012,7 +1069,18 @@ class SessionAssembler:
                     "flaw_description": "未检索运行质量日志，盲目就近复用了存在网络抖动或丢包的历史异常工单",
                     "agent_action_types": ["Confirm_Slot"],
                     "expected_slots_gt": {
+                        "I1": {"application_name": app, "service_name": srv, "resolution": res, "rtt": rtt, "timestamp": {"start_timestamp": start, "end_timestamp": end, "duration": dur}}
+                    },
+                    "baseline_flawed_slots": {
                         "I1": {"application_name": app, "service_name": srv, "resolution": "720p", "rtt": "80ms", "timestamp": {"start_timestamp": start, "end_timestamp": end, "duration": dur}}
+                    },
+                    "delta_from_gt": {
+                        "has_error": True,
+                        "error_details": [
+                            f"I1.resolution: expected '{res}', got '720p'",
+                            f"I1.rtt: expected '{rtt}', got '80ms'"
+                        ],
+                        "triggered_reaction": "on_slot_error"
                     }
                 },
                 {
@@ -1113,6 +1181,14 @@ class SessionAssembler:
                     "agent_action_types": ["Reject_Request"],
                     "expected_slots_gt": {
                         "I1": {"application_name": app, "service_name": srv, "resolution": res, "rtt": rtt, "timestamp": {"start_timestamp": start, "end_timestamp": end, "duration": dur}}
+                    },
+                    "baseline_flawed_slots": {
+                        "I1": {"application_name": app, "service_name": srv, "resolution": res, "rtt": rtt, "timestamp": {"start_timestamp": start, "end_timestamp": end, "duration": dur}, "action": "Reject_Request"}
+                    },
+                    "delta_from_gt": {
+                        "has_error": True,
+                        "error_details": ["I1: Agent triggered Reject_Request instead of clock arbitration yield"],
+                        "triggered_reaction": "on_action_error"
                     }
                 },
                 {
@@ -1404,7 +1480,7 @@ class SessionAssembler:
 
         turn_level_gt = []
         for i, node in enumerate(tree):
-            turn_level_gt.append({
+            item = {
                 "turn": node["turn"],
                 "speaker": node["speaker"],
                 "simulator_user_prompt": node.get("simulator_user_prompt", ""),
@@ -1415,7 +1491,12 @@ class SessionAssembler:
                     tint["intent_id"]: tint["status"]
                     for tint in (full_slow_seq[i].get("turn_intents", []) if i < len(full_slow_seq) else [])
                 }
-            })
+            }
+            if "baseline_flawed_slots" in node:
+                item["baseline_flawed_slots"] = node["baseline_flawed_slots"]
+            if "delta_from_gt" in node:
+                item["delta_from_gt"] = node["delta_from_gt"]
+            turn_level_gt.append(item)
 
         contract = {
             "version": "1.0",
