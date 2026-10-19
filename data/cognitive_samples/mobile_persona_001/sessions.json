@@ -2181,7 +2181,7 @@
               "turn": 1,
               "speaker": "user",
               "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开抖音开直播保障，时间从12时30分到13时30分。",
-              "expected_agent_correction": "收到，已按活动起止时间锁定抖音开直播保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+              "expected_agent_correction": "收到，已按活动起止时间锁定抖音开直播保障（2026年10月17日12时30分至2026年10月17日13时30分，1080p / 时延≤50ms），确认直接为您开通吗？",
               "expected_agent_action_types": [
                 "Confirm_Slot"
               ],
@@ -2192,7 +2192,9 @@
                   "resolution": "1080p",
                   "rtt": "50ms",
                   "timestamp": {
-                    "end_timestamp": "2026年10月17日13时30分"
+                    "start_timestamp": "2026年10月17日12时30分",
+                    "end_timestamp": "2026年10月17日13时30分",
+                    "duration": "60min"
                   }
                 }
               },
@@ -2379,7 +2381,7 @@
                 "turn": 1,
                 "speaker": "user",
                 "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开抖音开直播保障，时间从12时30分到13时30分。",
-                "expected_agent_correction": "收到，已按活动起止时间锁定抖音开直播保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+                "expected_agent_correction": "收到，已按活动起止时间锁定抖音开直播保障（2026年10月17日12时30分至2026年10月17日13时30分，1080p / 时延≤50ms），确认直接为您开通吗？",
                 "expected_agent_action_types": [
                   "Confirm_Slot"
                 ],
@@ -2390,7 +2392,9 @@
                     "resolution": "1080p",
                     "rtt": "50ms",
                     "timestamp": {
-                      "end_timestamp": "2026年10月17日13时30分"
+                      "start_timestamp": "2026年10月17日12时30分",
+                      "end_timestamp": "2026年10月17日13时30分",
+                      "duration": "60min"
                     }
                   }
                 },
@@ -2528,7 +2532,7 @@
               "turn": 1,
               "speaker": "user",
               "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开抖音开直播保障，时间从12时30分到13时30分。",
-              "expected_agent_correction": "收到，已按活动起止时间锁定抖音开直播保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+              "expected_agent_correction": "收到，已按活动起止时间锁定抖音开直播保障（2026年10月17日12时30分至2026年10月17日13时30分，1080p / 时延≤50ms），确认直接为您开通吗？",
               "expected_agent_action_types": [
                 "Confirm_Slot"
               ],
@@ -2539,7 +2543,9 @@
                   "resolution": "1080p",
                   "rtt": "50ms",
                   "timestamp": {
-                    "end_timestamp": "2026年10月17日13时30分"
+                    "start_timestamp": "2026年10月17日12时30分",
+                    "end_timestamp": "2026年10月17日13时30分",
+                    "duration": "60min"
                   }
                 }
               },
@@ -2629,8 +2635,8 @@
               "speaker": "user",
               "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开抖音开直播保障，时间从12时30分到13时30分。",
               "agent_hypothesis": "Agent按活动开始时间掐点预约，未做提前30分钟预热试机推算",
-              "baseline_agent_flawed_response": "收到，已按活动起止时间锁定抖音开直播保障（1080p / 时延≤50ms），确认直接为您开通吗？",
-              "expected_agent_correction": "收到，已按活动起止时间锁定抖音开直播保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+              "baseline_agent_flawed_response": "收到，已按活动起止时间锁定抖音开直播保障（2026年10月17日12时30分至2026年10月17日13时30分，1080p / 时延≤50ms），确认直接为您开通吗？",
+              "expected_agent_correction": "收到，已按活动起止时间锁定抖音开直播保障（2026年10月17日12时30分至2026年10月17日13时30分，1080p / 时延≤50ms），确认直接为您开通吗？",
               "flaw_type": "missing_prewarm_buffer",
               "flaw_description": "未对重大活动外场设备调试推流进行前置时间差推算",
               "agent_action_types": [
@@ -2643,7 +2649,9 @@
                   "resolution": "1080p",
                   "rtt": "50ms",
                   "timestamp": {
-                    "end_timestamp": "2026年10月17日13时30分"
+                    "start_timestamp": "2026年10月17日12时30分",
+                    "end_timestamp": "2026年10月17日13时30分",
+                    "duration": "60min"
                   }
                 }
               }
@@ -2729,7 +2737,7 @@
                 ]
               },
               "agent": {
-                "utterance": "收到，已按活动起止时间锁定抖音开直播保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+                "utterance": "收到，已按活动起止时间锁定抖音开直播保障（2026年10月17日12时30分至2026年10月17日13时30分，1080p / 时延≤50ms），确认直接为您开通吗？",
                 "action_types": [
                   "Confirm_Slot"
                 ]
@@ -2771,8 +2779,18 @@
                       }
                     },
                     "timestamp": {
+                      "start_timestamp": {
+                        "value": "2026年10月17日12时30分",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
+                      },
                       "end_timestamp": {
                         "value": "2026年10月17日13时30分",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
+                      },
+                      "duration": {
+                        "value": "60min",
                         "source_type": "Turn",
                         "source_ref": "U1"
                       }
@@ -3041,7 +3059,7 @@
             "turn": 1,
             "speaker": "user",
             "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开抖音开直播保障，时间从12时30分到13时30分。",
-            "expected_agent_correction": "收到，已按活动起止时间锁定抖音开直播保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+            "expected_agent_correction": "收到，已按活动起止时间锁定抖音开直播保障（2026年10月17日12时30分至2026年10月17日13时30分，1080p / 时延≤50ms），确认直接为您开通吗？",
             "expected_agent_action_types": [
               "Confirm_Slot"
             ],
@@ -3052,7 +3070,9 @@
                 "resolution": "1080p",
                 "rtt": "50ms",
                 "timestamp": {
-                  "end_timestamp": "2026年10月17日13时30分"
+                  "start_timestamp": "2026年10月17日12时30分",
+                  "end_timestamp": "2026年10月17日13时30分",
+                  "duration": "60min"
                 }
               }
             },
@@ -3239,7 +3259,7 @@
               "turn": 1,
               "speaker": "user",
               "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开抖音开直播保障，时间从12时30分到13时30分。",
-              "expected_agent_correction": "收到，已按活动起止时间锁定抖音开直播保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+              "expected_agent_correction": "收到，已按活动起止时间锁定抖音开直播保障（2026年10月17日12时30分至2026年10月17日13时30分，1080p / 时延≤50ms），确认直接为您开通吗？",
               "expected_agent_action_types": [
                 "Confirm_Slot"
               ],
@@ -3250,7 +3270,9 @@
                   "resolution": "1080p",
                   "rtt": "50ms",
                   "timestamp": {
-                    "end_timestamp": "2026年10月17日13时30分"
+                    "start_timestamp": "2026年10月17日12时30分",
+                    "end_timestamp": "2026年10月17日13时30分",
+                    "duration": "60min"
                   }
                 }
               },
@@ -3388,7 +3410,7 @@
             "turn": 1,
             "speaker": "user",
             "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开抖音开直播保障，时间从12时30分到13时30分。",
-            "expected_agent_correction": "收到，已按活动起止时间锁定抖音开直播保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+            "expected_agent_correction": "收到，已按活动起止时间锁定抖音开直播保障（2026年10月17日12时30分至2026年10月17日13时30分，1080p / 时延≤50ms），确认直接为您开通吗？",
             "expected_agent_action_types": [
               "Confirm_Slot"
             ],
@@ -3399,7 +3421,9 @@
                 "resolution": "1080p",
                 "rtt": "50ms",
                 "timestamp": {
-                  "end_timestamp": "2026年10月17日13时30分"
+                  "start_timestamp": "2026年10月17日12时30分",
+                  "end_timestamp": "2026年10月17日13时30分",
+                  "duration": "60min"
                 }
               }
             },
@@ -3489,8 +3513,8 @@
             "speaker": "user",
             "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开抖音开直播保障，时间从12时30分到13时30分。",
             "agent_hypothesis": "Agent按活动开始时间掐点预约，未做提前30分钟预热试机推算",
-            "baseline_agent_flawed_response": "收到，已按活动起止时间锁定抖音开直播保障（1080p / 时延≤50ms），确认直接为您开通吗？",
-            "expected_agent_correction": "收到，已按活动起止时间锁定抖音开直播保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+            "baseline_agent_flawed_response": "收到，已按活动起止时间锁定抖音开直播保障（2026年10月17日12时30分至2026年10月17日13时30分，1080p / 时延≤50ms），确认直接为您开通吗？",
+            "expected_agent_correction": "收到，已按活动起止时间锁定抖音开直播保障（2026年10月17日12时30分至2026年10月17日13时30分，1080p / 时延≤50ms），确认直接为您开通吗？",
             "flaw_type": "missing_prewarm_buffer",
             "flaw_description": "未对重大活动外场设备调试推流进行前置时间差推算",
             "agent_action_types": [
@@ -3503,7 +3527,9 @@
                 "resolution": "1080p",
                 "rtt": "50ms",
                 "timestamp": {
-                  "end_timestamp": "2026年10月17日13时30分"
+                  "start_timestamp": "2026年10月17日12时30分",
+                  "end_timestamp": "2026年10月17日13时30分",
+                  "duration": "60min"
                 }
               }
             }
@@ -3589,7 +3615,7 @@
               ]
             },
             "agent": {
-              "utterance": "收到，已按活动起止时间锁定抖音开直播保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+              "utterance": "收到，已按活动起止时间锁定抖音开直播保障（2026年10月17日12时30分至2026年10月17日13时30分，1080p / 时延≤50ms），确认直接为您开通吗？",
               "action_types": [
                 "Confirm_Slot"
               ]
@@ -3631,8 +3657,18 @@
                     }
                   },
                   "timestamp": {
+                    "start_timestamp": {
+                      "value": "2026年10月17日12时30分",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
                     "end_timestamp": {
                       "value": "2026年10月17日13时30分",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "duration": {
+                      "value": "60min",
                       "source_type": "Turn",
                       "source_ref": "U1"
                     }
@@ -4494,7 +4530,8 @@
                   "rtt": "50ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月19日12时30分",
-                    "end_timestamp": "2026年10月19日13时30分"
+                    "end_timestamp": "2026年10月19日13时30分",
+                    "duration": "120min"
                   }
                 },
                 "I2": {
@@ -4530,7 +4567,8 @@
                   "rtt": "50ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月19日12时30分",
-                    "end_timestamp": "2026年10月19日13时30分"
+                    "end_timestamp": "2026年10月19日13时30分",
+                    "duration": "120min"
                   }
                 },
                 "I2": {
@@ -4795,7 +4833,8 @@
                     "rtt": "50ms",
                     "timestamp": {
                       "start_timestamp": "2026年10月19日12时30分",
-                      "end_timestamp": "2026年10月19日13时30分"
+                      "end_timestamp": "2026年10月19日13时30分",
+                      "duration": "120min"
                     }
                   },
                   "I2": {
@@ -4831,7 +4870,8 @@
                     "rtt": "50ms",
                     "timestamp": {
                       "start_timestamp": "2026年10月19日12时30分",
-                      "end_timestamp": "2026年10月19日13时30分"
+                      "end_timestamp": "2026年10月19日13时30分",
+                      "duration": "120min"
                     }
                   },
                   "I2": {
@@ -5030,7 +5070,8 @@
                   "rtt": "50ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月19日12时30分",
-                    "end_timestamp": "2026年10月19日13时30分"
+                    "end_timestamp": "2026年10月19日13时30分",
+                    "duration": "120min"
                   }
                 },
                 "I2": {
@@ -5066,7 +5107,8 @@
                   "rtt": "50ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月19日12时30分",
-                    "end_timestamp": "2026年10月19日13时30分"
+                    "end_timestamp": "2026年10月19日13时30分",
+                    "duration": "120min"
                   }
                 },
                 "I2": {
@@ -5219,7 +5261,8 @@
                   "rtt": "50ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月19日12时30分",
-                    "end_timestamp": "2026年10月19日13时30分"
+                    "end_timestamp": "2026年10月19日13时30分",
+                    "duration": "120min"
                   }
                 },
                 "I2": {
@@ -5252,7 +5295,8 @@
                   "rtt": "50ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月19日12时30分",
-                    "end_timestamp": "2026年10月19日13时30分"
+                    "end_timestamp": "2026年10月19日13时30分",
+                    "duration": "120min"
                   }
                 },
                 "I2": {
@@ -5434,6 +5478,11 @@
                         "value": "2026年10月19日13时30分",
                         "source_type": "Turn",
                         "source_ref": "U1"
+                      },
+                      "duration": {
+                        "value": "120min",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
                       }
                     }
                   }
@@ -5552,6 +5601,11 @@
                         "value": "2026年10月19日13时30分",
                         "source_type": "Turn",
                         "source_ref": "U1"
+                      },
+                      "duration": {
+                        "value": "120min",
+                        "source_type": "Correction",
+                        "source_ref": "Agent"
                       }
                     }
                   }
@@ -6043,7 +6097,8 @@
                 "rtt": "50ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月19日12时30分",
-                  "end_timestamp": "2026年10月19日13时30分"
+                  "end_timestamp": "2026年10月19日13时30分",
+                  "duration": "120min"
                 }
               },
               "I2": {
@@ -6079,7 +6134,8 @@
                 "rtt": "50ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月19日12时30分",
-                  "end_timestamp": "2026年10月19日13时30分"
+                  "end_timestamp": "2026年10月19日13时30分",
+                  "duration": "120min"
                 }
               },
               "I2": {
@@ -6344,7 +6400,8 @@
                   "rtt": "50ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月19日12时30分",
-                    "end_timestamp": "2026年10月19日13时30分"
+                    "end_timestamp": "2026年10月19日13时30分",
+                    "duration": "120min"
                   }
                 },
                 "I2": {
@@ -6380,7 +6437,8 @@
                   "rtt": "50ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月19日12时30分",
-                    "end_timestamp": "2026年10月19日13时30分"
+                    "end_timestamp": "2026年10月19日13时30分",
+                    "duration": "120min"
                   }
                 },
                 "I2": {
@@ -6579,7 +6637,8 @@
                 "rtt": "50ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月19日12时30分",
-                  "end_timestamp": "2026年10月19日13时30分"
+                  "end_timestamp": "2026年10月19日13时30分",
+                  "duration": "120min"
                 }
               },
               "I2": {
@@ -6615,7 +6674,8 @@
                 "rtt": "50ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月19日12时30分",
-                  "end_timestamp": "2026年10月19日13时30分"
+                  "end_timestamp": "2026年10月19日13时30分",
+                  "duration": "120min"
                 }
               },
               "I2": {
@@ -6768,7 +6828,8 @@
                 "rtt": "50ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月19日12时30分",
-                  "end_timestamp": "2026年10月19日13时30分"
+                  "end_timestamp": "2026年10月19日13时30分",
+                  "duration": "120min"
                 }
               },
               "I2": {
@@ -6801,7 +6862,8 @@
                 "rtt": "50ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月19日12时30分",
-                  "end_timestamp": "2026年10月19日13时30分"
+                  "end_timestamp": "2026年10月19日13时30分",
+                  "duration": "120min"
                 }
               },
               "I2": {
@@ -6983,6 +7045,11 @@
                       "value": "2026年10月19日13时30分",
                       "source_type": "Turn",
                       "source_ref": "U1"
+                    },
+                    "duration": {
+                      "value": "120min",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
                     }
                   }
                 }
@@ -7101,6 +7168,11 @@
                       "value": "2026年10月19日13时30分",
                       "source_type": "Turn",
                       "source_ref": "U1"
+                    },
+                    "duration": {
+                      "value": "120min",
+                      "source_type": "Correction",
+                      "source_ref": "Agent"
                     }
                   }
                 }

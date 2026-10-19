@@ -355,7 +355,7 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
         self.assertIn("Acknowledge", tree[3]["agent_action_types"])
         self.assertIn("expected_slots_gt", tree[3])
 
-        # 5. 验证逐轮标准金标 (turn_level_ground_truth) 完备性
+        # 5. 验证逐轮标准金标 (turn_level_ground_truth) 完备性（包括 Turn 1 全量完整槽位）
         turn_gt = slow.get("turn_level_ground_truth", [])
         self.assertEqual(len(turn_gt), 4)
         for i, tgt in enumerate(turn_gt):
@@ -364,6 +364,17 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
             self.assertIn("expected_agent_action_types", tgt)
             self.assertIn("intents_status", tgt)
             self.assertIn("I1", tgt["expected_slots_gt"])
+
+        # 重点验证 Turn 1 的 GT 槽位绝对完备（不可遗漏 start_timestamp 或 duration）
+        t1_slots = turn_gt[0]["expected_slots_gt"]["I1"]
+        self.assertEqual(t1_slots["application_name"], "抖音")
+        self.assertEqual(t1_slots["service_name"], "开直播")
+        self.assertEqual(t1_slots["resolution"], "1080p")
+        self.assertEqual(t1_slots["rtt"], "50ms")
+        self.assertIn("start_timestamp", t1_slots["timestamp"])
+        self.assertIn("end_timestamp", t1_slots["timestamp"])
+        self.assertIn("duration", t1_slots["timestamp"])
+        self.assertEqual(t1_slots["timestamp"]["end_timestamp"], "2026年10月17日13时30分")
 
         # 6. 验证声明式交互评测契约 (interactive_eval_contract) 完整性
         contract = eb.get("interactive_eval_contract")
@@ -422,6 +433,8 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
         # 4. 验证逐轮标准金标 (turn_level_ground_truth) 覆盖 5 轮且每轮槽位完整
         turn_gt = eb["slow_path"]["turn_level_ground_truth"]
         self.assertEqual(len(turn_gt), 5)
+        self.assertIn("duration", turn_gt[0]["expected_slots_gt"]["I1"]["timestamp"])
+        self.assertIn("duration", turn_gt[0]["expected_slots_gt"]["I2"]["timestamp"])
         self.assertEqual(turn_gt[-1]["intents_status"]["I1"], "resolved")
         self.assertEqual(turn_gt[-1]["intents_status"]["I2"], "resolved")
 

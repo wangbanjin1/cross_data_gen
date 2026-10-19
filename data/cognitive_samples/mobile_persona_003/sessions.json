@@ -2184,7 +2184,7 @@
               "turn": 1,
               "speaker": "user",
               "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开腾讯会议会议保障，时间从14时00分到16时00分。",
-              "expected_agent_correction": "收到，已按活动起止时间锁定腾讯会议会议保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+              "expected_agent_correction": "收到，已按活动起止时间锁定腾讯会议会议保障（2026年10月28日14时00分至2026年10月28日16时00分，1080p / 时延≤50ms），确认直接为您开通吗？",
               "expected_agent_action_types": [
                 "Confirm_Slot"
               ],
@@ -2195,7 +2195,9 @@
                   "resolution": "1080p",
                   "rtt": "50ms",
                   "timestamp": {
-                    "end_timestamp": "2026年10月28日16时00分"
+                    "start_timestamp": "2026年10月28日14时00分",
+                    "end_timestamp": "2026年10月28日16时00分",
+                    "duration": "120min"
                   }
                 }
               },
@@ -2382,7 +2384,7 @@
                 "turn": 1,
                 "speaker": "user",
                 "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开腾讯会议会议保障，时间从14时00分到16时00分。",
-                "expected_agent_correction": "收到，已按活动起止时间锁定腾讯会议会议保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+                "expected_agent_correction": "收到，已按活动起止时间锁定腾讯会议会议保障（2026年10月28日14时00分至2026年10月28日16时00分，1080p / 时延≤50ms），确认直接为您开通吗？",
                 "expected_agent_action_types": [
                   "Confirm_Slot"
                 ],
@@ -2393,7 +2395,9 @@
                     "resolution": "1080p",
                     "rtt": "50ms",
                     "timestamp": {
-                      "end_timestamp": "2026年10月28日16时00分"
+                      "start_timestamp": "2026年10月28日14时00分",
+                      "end_timestamp": "2026年10月28日16时00分",
+                      "duration": "120min"
                     }
                   }
                 },
@@ -2531,7 +2535,7 @@
               "turn": 1,
               "speaker": "user",
               "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开腾讯会议会议保障，时间从14时00分到16时00分。",
-              "expected_agent_correction": "收到，已按活动起止时间锁定腾讯会议会议保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+              "expected_agent_correction": "收到，已按活动起止时间锁定腾讯会议会议保障（2026年10月28日14时00分至2026年10月28日16时00分，1080p / 时延≤50ms），确认直接为您开通吗？",
               "expected_agent_action_types": [
                 "Confirm_Slot"
               ],
@@ -2542,7 +2546,9 @@
                   "resolution": "1080p",
                   "rtt": "50ms",
                   "timestamp": {
-                    "end_timestamp": "2026年10月28日16时00分"
+                    "start_timestamp": "2026年10月28日14时00分",
+                    "end_timestamp": "2026年10月28日16时00分",
+                    "duration": "120min"
                   }
                 }
               },
@@ -2632,8 +2638,8 @@
               "speaker": "user",
               "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开腾讯会议会议保障，时间从14时00分到16时00分。",
               "agent_hypothesis": "Agent按活动开始时间掐点预约，未做提前30分钟预热试机推算",
-              "baseline_agent_flawed_response": "收到，已按活动起止时间锁定腾讯会议会议保障（1080p / 时延≤50ms），确认直接为您开通吗？",
-              "expected_agent_correction": "收到，已按活动起止时间锁定腾讯会议会议保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+              "baseline_agent_flawed_response": "收到，已按活动起止时间锁定腾讯会议会议保障（2026年10月28日14时00分至2026年10月28日16时00分，1080p / 时延≤50ms），确认直接为您开通吗？",
+              "expected_agent_correction": "收到，已按活动起止时间锁定腾讯会议会议保障（2026年10月28日14时00分至2026年10月28日16时00分，1080p / 时延≤50ms），确认直接为您开通吗？",
               "flaw_type": "missing_prewarm_buffer",
               "flaw_description": "未对重大活动外场设备调试推流进行前置时间差推算",
               "agent_action_types": [
@@ -2646,7 +2652,9 @@
                   "resolution": "1080p",
                   "rtt": "50ms",
                   "timestamp": {
-                    "end_timestamp": "2026年10月28日16时00分"
+                    "start_timestamp": "2026年10月28日14时00分",
+                    "end_timestamp": "2026年10月28日16时00分",
+                    "duration": "120min"
                   }
                 }
               }
@@ -2732,7 +2740,7 @@
                 ]
               },
               "agent": {
-                "utterance": "收到，已按活动起止时间锁定腾讯会议会议保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+                "utterance": "收到，已按活动起止时间锁定腾讯会议会议保障（2026年10月28日14时00分至2026年10月28日16时00分，1080p / 时延≤50ms），确认直接为您开通吗？",
                 "action_types": [
                   "Confirm_Slot"
                 ]
@@ -2774,8 +2782,18 @@
                       }
                     },
                     "timestamp": {
+                      "start_timestamp": {
+                        "value": "2026年10月28日14时00分",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
+                      },
                       "end_timestamp": {
                         "value": "2026年10月28日16时00分",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
+                      },
+                      "duration": {
+                        "value": "120min",
                         "source_type": "Turn",
                         "source_ref": "U1"
                       }
@@ -3044,7 +3062,7 @@
             "turn": 1,
             "speaker": "user",
             "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开腾讯会议会议保障，时间从14时00分到16时00分。",
-            "expected_agent_correction": "收到，已按活动起止时间锁定腾讯会议会议保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+            "expected_agent_correction": "收到，已按活动起止时间锁定腾讯会议会议保障（2026年10月28日14时00分至2026年10月28日16时00分，1080p / 时延≤50ms），确认直接为您开通吗？",
             "expected_agent_action_types": [
               "Confirm_Slot"
             ],
@@ -3055,7 +3073,9 @@
                 "resolution": "1080p",
                 "rtt": "50ms",
                 "timestamp": {
-                  "end_timestamp": "2026年10月28日16时00分"
+                  "start_timestamp": "2026年10月28日14时00分",
+                  "end_timestamp": "2026年10月28日16时00分",
+                  "duration": "120min"
                 }
               }
             },
@@ -3242,7 +3262,7 @@
               "turn": 1,
               "speaker": "user",
               "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开腾讯会议会议保障，时间从14时00分到16时00分。",
-              "expected_agent_correction": "收到，已按活动起止时间锁定腾讯会议会议保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+              "expected_agent_correction": "收到，已按活动起止时间锁定腾讯会议会议保障（2026年10月28日14时00分至2026年10月28日16时00分，1080p / 时延≤50ms），确认直接为您开通吗？",
               "expected_agent_action_types": [
                 "Confirm_Slot"
               ],
@@ -3253,7 +3273,9 @@
                   "resolution": "1080p",
                   "rtt": "50ms",
                   "timestamp": {
-                    "end_timestamp": "2026年10月28日16时00分"
+                    "start_timestamp": "2026年10月28日14时00分",
+                    "end_timestamp": "2026年10月28日16时00分",
+                    "duration": "120min"
                   }
                 }
               },
@@ -3391,7 +3413,7 @@
             "turn": 1,
             "speaker": "user",
             "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开腾讯会议会议保障，时间从14时00分到16时00分。",
-            "expected_agent_correction": "收到，已按活动起止时间锁定腾讯会议会议保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+            "expected_agent_correction": "收到，已按活动起止时间锁定腾讯会议会议保障（2026年10月28日14时00分至2026年10月28日16时00分，1080p / 时延≤50ms），确认直接为您开通吗？",
             "expected_agent_action_types": [
               "Confirm_Slot"
             ],
@@ -3402,7 +3424,9 @@
                 "resolution": "1080p",
                 "rtt": "50ms",
                 "timestamp": {
-                  "end_timestamp": "2026年10月28日16时00分"
+                  "start_timestamp": "2026年10月28日14时00分",
+                  "end_timestamp": "2026年10月28日16时00分",
+                  "duration": "120min"
                 }
               }
             },
@@ -3492,8 +3516,8 @@
             "speaker": "user",
             "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开腾讯会议会议保障，时间从14时00分到16时00分。",
             "agent_hypothesis": "Agent按活动开始时间掐点预约，未做提前30分钟预热试机推算",
-            "baseline_agent_flawed_response": "收到，已按活动起止时间锁定腾讯会议会议保障（1080p / 时延≤50ms），确认直接为您开通吗？",
-            "expected_agent_correction": "收到，已按活动起止时间锁定腾讯会议会议保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+            "baseline_agent_flawed_response": "收到，已按活动起止时间锁定腾讯会议会议保障（2026年10月28日14时00分至2026年10月28日16时00分，1080p / 时延≤50ms），确认直接为您开通吗？",
+            "expected_agent_correction": "收到，已按活动起止时间锁定腾讯会议会议保障（2026年10月28日14时00分至2026年10月28日16时00分，1080p / 时延≤50ms），确认直接为您开通吗？",
             "flaw_type": "missing_prewarm_buffer",
             "flaw_description": "未对重大活动外场设备调试推流进行前置时间差推算",
             "agent_action_types": [
@@ -3506,7 +3530,9 @@
                 "resolution": "1080p",
                 "rtt": "50ms",
                 "timestamp": {
-                  "end_timestamp": "2026年10月28日16时00分"
+                  "start_timestamp": "2026年10月28日14时00分",
+                  "end_timestamp": "2026年10月28日16时00分",
+                  "duration": "120min"
                 }
               }
             }
@@ -3592,7 +3618,7 @@
               ]
             },
             "agent": {
-              "utterance": "收到，已按活动起止时间锁定腾讯会议会议保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+              "utterance": "收到，已按活动起止时间锁定腾讯会议会议保障（2026年10月28日14时00分至2026年10月28日16时00分，1080p / 时延≤50ms），确认直接为您开通吗？",
               "action_types": [
                 "Confirm_Slot"
               ]
@@ -3634,8 +3660,18 @@
                     }
                   },
                   "timestamp": {
+                    "start_timestamp": {
+                      "value": "2026年10月28日14时00分",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
                     "end_timestamp": {
                       "value": "2026年10月28日16时00分",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "duration": {
+                      "value": "120min",
                       "source_type": "Turn",
                       "source_ref": "U1"
                     }
