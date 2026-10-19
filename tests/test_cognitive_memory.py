@@ -315,6 +315,86 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
         t_expected_mid = round(t_cold * (1 - alpha_mid))
         self.assertEqual(t_expected_mid, 2)
 
+    def test_07_experience_slow_path_branching(self):
+        """测试经验记忆双轨成败分支测试体系中的完整 4 轮 Slow Path 交互树与仲裁门"""
+        eb = SessionAssembler._build_experience_branching(
+            scenario_type="prewarm_buffer",
+            exp_id="EXP_PREWARM_BUFFER_01",
+            rule_title="重大活动提前30分钟网络预热起保经验",
+            learning_source_session="S-USER_001-05",
+            user_prompt="今天在奥体有重大活动直播，帮我开抖音开直播保障，时间从12点30分到13点30分。",
+            ctx={"app": "抖音", "srv": "开直播", "res": "1080p", "rtt": "50ms", "start": "2026年10月17日12时00分", "end": "2026年10月17日13时30分", "dur": "90min"}
+        )
+
+        # 1. 验证 Fast Path 极速出单元数据
+        self.assertEqual(eb["fast_path"]["round_count"], 2)
+        self.assertEqual(eb["fast_path"]["key_params_source"]["source_type"], "Experience")
+
+        # 2. 验证 Slow Path 评测仲裁门 (Branch Decision Gate)
+        slow = eb["slow_path"]
+        self.assertEqual(slow["round_count"], 4)
+        gate = slow.get("branch_decision_gate", {})
+        self.assertEqual(gate.get("eval_turn"), 1)
+        self.assertEqual(gate.get("pass_route"), "fast_path")
+        self.assertEqual(gate.get("fail_route"), "slow_path")
+        self.assertIn("key_slot_assertions", gate)
+
+        # 3. 验证 4 轮引导交互树结构完整性 (Turn 1~4 逐轮对齐)
+        tree = slow.get("simulator_dialogue_tree", [])
+        self.assertEqual(len(tree), 4)
+        turns = [t["turn"] for t in tree]
+        self.assertEqual(turns, [1, 2, 3, 4])
+        self.assertEqual(tree[0]["speaker"], "user")
+        self.assertIn("baseline_agent_flawed_response", tree[0])
+        self.assertIn("flaw_type", tree[0])
+        self.assertEqual(tree[1]["speaker"], "user_simulator")
+        self.assertIn("expected_agent_correction", tree[1])
+        self.assertEqual(tree[3]["expected_agent_correction"], tree[3].get("expected_agent_correction"))
+        self.assertIn("Acknowledge", tree[3]["agent_action_types"])
+
+        # 4. 验证 4 轮完整数据流 (full_slow_event_sequence) 具备标准事件标注
+        full_seq = slow.get("full_slow_event_sequence", [])
+        self.assertEqual(len(full_seq), 4)
+        self.assertEqual(full_seq[0]["turn_intents"][0]["closure_path"], "flawed_baseline_attempt")
+        self.assertEqual(full_seq[-1]["turn_intents"][0]["closure_path"], "clarification_after_correction")
+
+    def test_08_multi_intent_5_turn_slow_path(self):
+        """测试多意图局部突发延误隔离场景符合设计规范的 5 轮 Slow Path 深度交互树与密集累积追踪"""
+        eb = SessionAssembler._build_experience_branching(
+            scenario_type="multi_intent_partition",
+            exp_id="EXP_MULTI_INTENT_PARTITION_01",
+            rule_title="多任务并行局部调整与时序因果隔离经验",
+            learning_source_session="S-USER_001-06",
+            user_prompt="帮我改一下上午的微信视频通话保障，延后到12点结束；下午的保障千万别动，保持原样。",
+            ctx={
+                "app": "微信", "srv": "视频通话", "res": "1080p", "rtt": "50ms", "start": "09:00", "end": "12:00", "dur": "180min",
+                "app2": "抖音", "srv2": "直播", "res2": "1080p", "rtt2": "50ms", "start2": "14:00", "end2": "16:00", "dur2": "120min"
+            }
+        )
+
+        # 1. 验证 Fast Path 为 3 轮，Slow Path 为 5 轮
+        self.assertEqual(eb["fast_path"]["round_count"], 3)
+        self.assertEqual(eb["slow_path"]["round_count"], 5)
+        self.assertEqual(eb["slow_path"]["redundant_rounds"], 2)
+
+        # 2. 验证 5 轮对话树完整性
+        tree = eb["slow_path"]["simulator_dialogue_tree"]
+        self.assertEqual(len(tree), 5)
+        self.assertEqual([t["turn"] for t in tree], [1, 2, 3, 4, 5])
+        self.assertIn("Acknowledge", tree[-1]["agent_action_types"])
+
+        # 3. 验证 Dense Cumulative Tracking 累积槽位完备性
+        full_seq = eb["slow_path"]["full_slow_event_sequence"]
+        self.assertEqual(len(full_seq), 5)
+        for t in full_seq:
+            self.assertEqual(len(t["turn_intents"]), 2)
+            self.assertEqual(t["turn_intents"][0]["params"]["application_name"]["value"], "微信")
+            self.assertEqual(t["turn_intents"][1]["params"]["application_name"]["value"], "抖音")
+
+        # 4. 验证终态双闭环
+        self.assertEqual(full_seq[-1]["turn_intents"][0]["status"], "resolved")
+        self.assertEqual(full_seq[-1]["turn_intents"][1]["status"], "resolved")
+
 
 if __name__ == "__main__":
     unittest.main()

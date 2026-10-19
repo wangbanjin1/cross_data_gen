@@ -216,8 +216,9 @@ class DialogueGenerator:
         ]
         res = self.llm.chat_json(messages, max_retries=1, enable_thinking=False)
         output_map = {}
-        if isinstance(res, dict) and "sessions" in res and isinstance(res["sessions"], list):
-            for s_entry in res["sessions"]:
+        s_list = res.get("sessions", []) if isinstance(res, dict) else (res if isinstance(res, list) else [])
+        if isinstance(s_list, list):
+            for s_entry in s_list:
                 if isinstance(s_entry, dict) and "session_id" in s_entry:
                     output_map[s_entry["session_id"]] = s_entry.get("turns", [])
         return output_map

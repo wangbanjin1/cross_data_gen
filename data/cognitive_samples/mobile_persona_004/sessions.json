@@ -2718,33 +2718,595 @@
         "experience_id": "EXP_MULTI_INTENT_PARTITION_01",
         "rule_title": "多任务并行局部调整与时序因果隔离经验",
         "fast_path": {
-          "round_count": 2,
+          "round_count": 3,
           "closure_path": "fast_experience_closed_loop",
           "trigger_condition": "Agent应用多意图隔离经验，锁定I1局部调整，I2完全冻结保护，避免交叉污染",
-          "resolved_turn": 2,
+          "resolved_turn": 3,
           "key_params_source": {
             "source_type": "Experience",
             "source_ref": "EXP_MULTI_INTENT_PARTITION_01"
           }
         },
         "slow_path": {
-          "round_count": 4,
+          "round_count": 5,
           "closure_path": "clarification_after_correction",
-          "trigger_condition": "Agent缺乏隔离经验，错误将I1延误扩散至I2，导致下午直播被意外篡改，经多轮纠偏澄清才收尾",
-          "resolved_turn": 4,
+          "trigger_condition": "Agent缺乏隔离经验，错误将I1延误扩散至I2，导致下午保障被意外篡改，经多轮纠偏澄清才收尾",
+          "resolved_turn": 5,
           "redundant_rounds": 2,
+          "branch_decision_gate": {
+            "eval_turn": 1,
+            "decision_type": "experience_isolation_check",
+            "pass_condition": "Agent在I1顺延时，严格锁定并冻结I2的时序与配置不变 (EXP_MULTI_INTENT_PARTITION_01)",
+            "fail_condition": "Agent发生跨意图污染，将I1的时钟延误扩散至I2，或推倒重来全盘追问I2",
+            "key_slot_assertions": {
+              "target_intent_id": "I2",
+              "isolated_slots": [
+                "timestamp.start_timestamp",
+                "timestamp.end_timestamp"
+              ],
+              "expected_action": "isolate_and_freeze"
+            },
+            "pass_route": "fast_path",
+            "fail_route": "slow_path"
+          },
           "simulator_dialogue_tree": [
             {
               "turn": 1,
-              "agent_hypothesis": "Agent将上午任务延期扩散至下午任务，将下午保障一并推迟",
-              "simulator_user_prompt": "不对啊！我只让你把上午的会议延长到12点，怎么把下午的直播也往后推迟了？下午的时间绝对不能动！",
-              "expected_agent_correction": "非常抱歉！已纠正错误，上午保障已单独延长至12:00，下午直播保障已严格锁定恢复原时段不变，请您核对！"
+              "speaker": "user",
+              "simulator_user_prompt": "帮我改一下上午的抖音开直播保障，临时通知延误了推迟到12:00结束；下午的保障千万别动，保持原样。",
+              "agent_hypothesis": "Agent缺乏时序因果隔离经验，误将抖音开直播的延期连带应用到腾讯会议会议，统一往后推迟",
+              "baseline_agent_flawed_response": "收到，已为您将上午抖音开直播顺延至2026年10月25日22时00分，同时为您将下午腾讯会议会议一并顺延后移，确认按此统一调整吗？",
+              "expected_agent_correction": "收到，已为您将上午抖音开直播顺延至2026年10月25日22时00分，同时为您将下午腾讯会议会议一并顺延后移，确认按此统一调整吗？",
+              "flaw_type": "cross_intent_delay_leakage",
+              "flaw_description": "将I1的任务延期错误扩散至I2，污染非目标意图时段",
+              "agent_action_types": [
+                "Confirm_Slot"
+              ]
             },
             {
               "turn": 2,
-              "agent_hypothesis": "Agent仍向用户重复确认下午任务参数",
-              "simulator_user_prompt": "行，下午别乱改就行，按这样开通吧。",
-              "expected_agent_correction": "好的，已完成多任务时序因果隔离确认，上午延长至12:00，下午维持原有时段不变！"
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "不对啊！我只让你把上午的开直播延长，怎么把下午的会议也往后推迟了？下午的时间绝对不能动！",
+              "agent_hypothesis": "Agent意识到跨任务污染错误，紧急冻结锁定下午时段，但遗漏了上午时长的重新核算，泛泛反问",
+              "expected_agent_correction": "非常抱歉！已纠正错误，上午抖音开直播已顺延，下午腾讯会议会议已严格锁定恢复原时段（2026年10月25日14时00分至2026年10月25日16时00分）不变，请问上午按此直接开通吗？",
+              "agent_action_types": [
+                "Confirm_Slot"
+              ]
+            },
+            {
+              "turn": 3,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "下午别动是对的，但我上午延后之后，总保障时长到底是按多久算的？你们系统到底算准了没有？",
+              "agent_hypothesis": "Agent对上午任务重算时长，并向用户明确两任务独立生效且时长核准",
+              "expected_agent_correction": "非常抱歉疏忽！已为您核对重算：上午抖音开直播总时长已精确更新为180min，下午维持原有时序（120min），请您核对确认！",
+              "agent_action_types": [
+                "Confirm_Slot"
+              ]
+            },
+            {
+              "turn": 4,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "行，时长算清楚了。那改期后上午和下午的网络规格（清晰度和时延）没被改乱吧？",
+              "agent_hypothesis": "Agent核验两笔保障各自网络指标独立完整，向用户发起正式出单确认",
+              "expected_agent_correction": "请您放心，上午全程继续执行1080p与时延≤50ms，下午严格保持1080p与时延≤50ms，两项保障互不干扰，确认现在为您正式受理吗？",
+              "agent_action_types": [
+                "Confirm_Slot"
+              ]
+            },
+            {
+              "turn": 5,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "行，两边都对齐没问题了，确认开通。",
+              "agent_hypothesis": "Agent成功完成多任务因果隔离闭环出单",
+              "expected_agent_correction": "好的，已完成多任务时序因果隔离确认，上午抖音延长办理、下午腾讯会议维持原有时段不变，两笔保障均已成功受理！",
+              "agent_action_types": [
+                "Acknowledge"
+              ]
+            }
+          ],
+          "full_slow_event_sequence": [
+            {
+              "turn": 1,
+              "user": {
+                "utterance": "帮我改一下上午的抖音开直播保障，临时通知延误了推迟到12:00结束；下午的保障千万别动，保持原样。",
+                "action_types": [
+                  "Create_Intent_Request",
+                  "Inform_Slot"
+                ]
+              },
+              "agent": {
+                "utterance": "收到，已为您将上午抖音开直播顺延至2026年10月25日22时00分，同时为您将下午腾讯会议会议一并顺延后移，确认按此统一调整吗？",
+                "action_types": [
+                  "Confirm_Slot"
+                ]
+              },
+              "related_intent_ids": [
+                "I1",
+                "I2"
+              ],
+              "requested_params": [],
+              "turn_intents": [
+                {
+                  "intent_id": "I1",
+                  "status": "in_progress",
+                  "closure_path": "flawed_delay_leakage",
+                  "expression_level": 1,
+                  "intent": "抖音开直播保障",
+                  "params": {
+                    "application_name": {
+                      "value": "抖音",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "service_name": {
+                      "value": "开直播",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "timestamp": {
+                      "end_timestamp": {
+                        "value": "2026年10月25日22时00分",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
+                      }
+                    }
+                  }
+                },
+                {
+                  "intent_id": "I2",
+                  "status": "in_progress",
+                  "closure_path": "flawed_delay_leakage",
+                  "expression_level": 1,
+                  "intent": "腾讯会议会议保障",
+                  "params": {
+                    "application_name": {
+                      "value": "腾讯会议",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    },
+                    "service_name": {
+                      "value": "会议",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    },
+                    "timestamp": {
+                      "start_timestamp": {
+                        "value": "2026年10月25日22时00分",
+                        "source_type": "Flawed_Inference",
+                        "source_ref": "Agent"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "turn": 2,
+              "user": {
+                "utterance": "不对啊！我只让你把上午的开直播延长，怎么把下午的会议也往后推迟了？下午的时间绝对不能动！",
+                "action_types": [
+                  "Revise_Intent_Request",
+                  "Inform_Slot"
+                ]
+              },
+              "agent": {
+                "utterance": "非常抱歉！已纠正错误，上午抖音开直播已顺延，下午腾讯会议会议已严格锁定恢复原时段（2026年10月25日14时00分至2026年10月25日16时00分）不变，请问上午按此直接开通吗？",
+                "action_types": [
+                  "Confirm_Slot"
+                ]
+              },
+              "related_intent_ids": [
+                "I1",
+                "I2"
+              ],
+              "requested_params": [],
+              "turn_intents": [
+                {
+                  "intent_id": "I1",
+                  "status": "in_progress",
+                  "closure_path": "correction_in_progress",
+                  "expression_level": 1,
+                  "intent": "抖音开直播保障",
+                  "params": {
+                    "application_name": {
+                      "value": "抖音",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "service_name": {
+                      "value": "开直播",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "timestamp": {
+                      "start_timestamp": {
+                        "value": "2026年10月25日20时00分",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
+                      },
+                      "end_timestamp": {
+                        "value": "2026年10月25日22时00分",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
+                      }
+                    }
+                  }
+                },
+                {
+                  "intent_id": "I2",
+                  "status": "in_progress",
+                  "closure_path": "isolated_locked",
+                  "expression_level": 1,
+                  "intent": "腾讯会议会议保障",
+                  "params": {
+                    "application_name": {
+                      "value": "腾讯会议",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    },
+                    "service_name": {
+                      "value": "会议",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    },
+                    "timestamp": {
+                      "start_timestamp": {
+                        "value": "2026年10月25日14时00分",
+                        "source_type": "Memory",
+                        "source_ref": "SUB_001"
+                      },
+                      "end_timestamp": {
+                        "value": "2026年10月25日16时00分",
+                        "source_type": "Memory",
+                        "source_ref": "SUB_001"
+                      },
+                      "duration": {
+                        "value": "120min",
+                        "source_type": "Memory",
+                        "source_ref": "SUB_001"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "turn": 3,
+              "user": {
+                "utterance": "下午别动是对的，但我上午延后之后，总保障时长到底是按多久算的？你们系统到底算准了没有？",
+                "action_types": [
+                  "Confirm_Slot"
+                ]
+              },
+              "agent": {
+                "utterance": "非常抱歉疏忽！已为您核对重算：上午抖音开直播总时长已精确更新为180min，下午维持原有时序（120min），请您核对确认！",
+                "action_types": [
+                  "Confirm_Slot"
+                ]
+              },
+              "related_intent_ids": [
+                "I1",
+                "I2"
+              ],
+              "requested_params": [],
+              "turn_intents": [
+                {
+                  "intent_id": "I1",
+                  "status": "in_progress",
+                  "closure_path": "duration_recalculated",
+                  "expression_level": 1,
+                  "intent": "抖音开直播保障",
+                  "params": {
+                    "application_name": {
+                      "value": "抖音",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "service_name": {
+                      "value": "开直播",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "timestamp": {
+                      "start_timestamp": {
+                        "value": "2026年10月25日20时00分",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
+                      },
+                      "end_timestamp": {
+                        "value": "2026年10月25日22时00分",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
+                      },
+                      "duration": {
+                        "value": "180min",
+                        "source_type": "Correction",
+                        "source_ref": "Agent"
+                      }
+                    }
+                  }
+                },
+                {
+                  "intent_id": "I2",
+                  "status": "in_progress",
+                  "closure_path": "isolated_locked",
+                  "expression_level": 1,
+                  "intent": "腾讯会议会议保障",
+                  "params": {
+                    "application_name": {
+                      "value": "腾讯会议",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    },
+                    "service_name": {
+                      "value": "会议",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    },
+                    "timestamp": {
+                      "start_timestamp": {
+                        "value": "2026年10月25日14时00分",
+                        "source_type": "Memory",
+                        "source_ref": "SUB_001"
+                      },
+                      "end_timestamp": {
+                        "value": "2026年10月25日16时00分",
+                        "source_type": "Memory",
+                        "source_ref": "SUB_001"
+                      },
+                      "duration": {
+                        "value": "120min",
+                        "source_type": "Memory",
+                        "source_ref": "SUB_001"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "turn": 4,
+              "user": {
+                "utterance": "行，时长算清楚了。那改期后上午和下午的网络规格（清晰度和时延）没被改乱吧？",
+                "action_types": [
+                  "Confirm_Slot"
+                ]
+              },
+              "agent": {
+                "utterance": "请您放心，上午全程继续执行1080p与时延≤50ms，下午严格保持1080p与时延≤50ms，两项保障互不干扰，确认现在为您正式受理吗？",
+                "action_types": [
+                  "Confirm_Slot"
+                ]
+              },
+              "related_intent_ids": [
+                "I1",
+                "I2"
+              ],
+              "requested_params": [],
+              "turn_intents": [
+                {
+                  "intent_id": "I1",
+                  "status": "in_progress",
+                  "closure_path": "specs_verified",
+                  "expression_level": 1,
+                  "intent": "抖音开直播保障",
+                  "params": {
+                    "application_name": {
+                      "value": "抖音",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "service_name": {
+                      "value": "开直播",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "resolution": {
+                      "min_value": {
+                        "value": "1080p",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
+                    },
+                    "rtt": {
+                      "max_value": {
+                        "value": "50ms",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
+                    },
+                    "timestamp": {
+                      "start_timestamp": {
+                        "value": "2026年10月25日20时00分",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
+                      },
+                      "end_timestamp": {
+                        "value": "2026年10月25日22时00分",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
+                      },
+                      "duration": {
+                        "value": "180min",
+                        "source_type": "Correction",
+                        "source_ref": "Agent"
+                      }
+                    }
+                  }
+                },
+                {
+                  "intent_id": "I2",
+                  "status": "in_progress",
+                  "closure_path": "isolated_locked",
+                  "expression_level": 1,
+                  "intent": "腾讯会议会议保障",
+                  "params": {
+                    "application_name": {
+                      "value": "腾讯会议",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    },
+                    "service_name": {
+                      "value": "会议",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    },
+                    "resolution": {
+                      "min_value": {
+                        "value": "1080p",
+                        "source_type": "Memory",
+                        "source_ref": "SUB_001"
+                      }
+                    },
+                    "rtt": {
+                      "max_value": {
+                        "value": "50ms",
+                        "source_type": "Memory",
+                        "source_ref": "SUB_001"
+                      }
+                    },
+                    "timestamp": {
+                      "start_timestamp": {
+                        "value": "2026年10月25日14时00分",
+                        "source_type": "Memory",
+                        "source_ref": "SUB_001"
+                      },
+                      "end_timestamp": {
+                        "value": "2026年10月25日16时00分",
+                        "source_type": "Memory",
+                        "source_ref": "SUB_001"
+                      },
+                      "duration": {
+                        "value": "120min",
+                        "source_type": "Memory",
+                        "source_ref": "SUB_001"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "turn": 5,
+              "user": {
+                "utterance": "行，两边都对齐没问题了，确认开通。",
+                "action_types": [
+                  "Confirm_Slot"
+                ]
+              },
+              "agent": {
+                "utterance": "好的，已完成多任务时序因果隔离确认，上午抖音延长办理、下午腾讯会议维持原有时段不变，两笔保障均已成功受理！",
+                "action_types": [
+                  "Acknowledge"
+                ]
+              },
+              "related_intent_ids": [
+                "I1",
+                "I2"
+              ],
+              "requested_params": [],
+              "turn_intents": [
+                {
+                  "intent_id": "I1",
+                  "status": "resolved",
+                  "closure_path": "clarification_after_correction",
+                  "expression_level": 1,
+                  "intent": "抖音开直播保障",
+                  "params": {
+                    "application_name": {
+                      "value": "抖音",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "service_name": {
+                      "value": "开直播",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "resolution": {
+                      "min_value": {
+                        "value": "1080p",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
+                    },
+                    "rtt": {
+                      "max_value": {
+                        "value": "50ms",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
+                    },
+                    "timestamp": {
+                      "start_timestamp": {
+                        "value": "2026年10月25日20时00分",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
+                      },
+                      "end_timestamp": {
+                        "value": "2026年10月25日22时00分",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
+                      },
+                      "duration": {
+                        "value": "180min",
+                        "source_type": "Correction",
+                        "source_ref": "Agent"
+                      }
+                    }
+                  }
+                },
+                {
+                  "intent_id": "I2",
+                  "status": "resolved",
+                  "closure_path": "locked_intact",
+                  "expression_level": 1,
+                  "intent": "腾讯会议会议保障",
+                  "params": {
+                    "application_name": {
+                      "value": "腾讯会议",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    },
+                    "service_name": {
+                      "value": "会议",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    },
+                    "resolution": {
+                      "min_value": {
+                        "value": "1080p",
+                        "source_type": "Memory",
+                        "source_ref": "SUB_001"
+                      }
+                    },
+                    "rtt": {
+                      "max_value": {
+                        "value": "50ms",
+                        "source_type": "Memory",
+                        "source_ref": "SUB_001"
+                      }
+                    },
+                    "timestamp": {
+                      "start_timestamp": {
+                        "value": "2026年10月25日14时00分",
+                        "source_type": "Memory",
+                        "source_ref": "SUB_001"
+                      },
+                      "end_timestamp": {
+                        "value": "2026年10月25日16时00分",
+                        "source_type": "Memory",
+                        "source_ref": "SUB_001"
+                      },
+                      "duration": {
+                        "value": "120min",
+                        "source_type": "Memory",
+                        "source_ref": "SUB_001"
+                      }
+                    }
+                  }
+                }
+              ]
             }
           ]
         }
@@ -2765,33 +3327,595 @@
       "experience_id": "EXP_MULTI_INTENT_PARTITION_01",
       "rule_title": "多任务并行局部调整与时序因果隔离经验",
       "fast_path": {
-        "round_count": 2,
+        "round_count": 3,
         "closure_path": "fast_experience_closed_loop",
         "trigger_condition": "Agent应用多意图隔离经验，锁定I1局部调整，I2完全冻结保护，避免交叉污染",
-        "resolved_turn": 2,
+        "resolved_turn": 3,
         "key_params_source": {
           "source_type": "Experience",
           "source_ref": "EXP_MULTI_INTENT_PARTITION_01"
         }
       },
       "slow_path": {
-        "round_count": 4,
+        "round_count": 5,
         "closure_path": "clarification_after_correction",
-        "trigger_condition": "Agent缺乏隔离经验，错误将I1延误扩散至I2，导致下午直播被意外篡改，经多轮纠偏澄清才收尾",
-        "resolved_turn": 4,
+        "trigger_condition": "Agent缺乏隔离经验，错误将I1延误扩散至I2，导致下午保障被意外篡改，经多轮纠偏澄清才收尾",
+        "resolved_turn": 5,
         "redundant_rounds": 2,
+        "branch_decision_gate": {
+          "eval_turn": 1,
+          "decision_type": "experience_isolation_check",
+          "pass_condition": "Agent在I1顺延时，严格锁定并冻结I2的时序与配置不变 (EXP_MULTI_INTENT_PARTITION_01)",
+          "fail_condition": "Agent发生跨意图污染，将I1的时钟延误扩散至I2，或推倒重来全盘追问I2",
+          "key_slot_assertions": {
+            "target_intent_id": "I2",
+            "isolated_slots": [
+              "timestamp.start_timestamp",
+              "timestamp.end_timestamp"
+            ],
+            "expected_action": "isolate_and_freeze"
+          },
+          "pass_route": "fast_path",
+          "fail_route": "slow_path"
+        },
         "simulator_dialogue_tree": [
           {
             "turn": 1,
-            "agent_hypothesis": "Agent将上午任务延期扩散至下午任务，将下午保障一并推迟",
-            "simulator_user_prompt": "不对啊！我只让你把上午的会议延长到12点，怎么把下午的直播也往后推迟了？下午的时间绝对不能动！",
-            "expected_agent_correction": "非常抱歉！已纠正错误，上午保障已单独延长至12:00，下午直播保障已严格锁定恢复原时段不变，请您核对！"
+            "speaker": "user",
+            "simulator_user_prompt": "帮我改一下上午的抖音开直播保障，临时通知延误了推迟到12:00结束；下午的保障千万别动，保持原样。",
+            "agent_hypothesis": "Agent缺乏时序因果隔离经验，误将抖音开直播的延期连带应用到腾讯会议会议，统一往后推迟",
+            "baseline_agent_flawed_response": "收到，已为您将上午抖音开直播顺延至2026年10月25日22时00分，同时为您将下午腾讯会议会议一并顺延后移，确认按此统一调整吗？",
+            "expected_agent_correction": "收到，已为您将上午抖音开直播顺延至2026年10月25日22时00分，同时为您将下午腾讯会议会议一并顺延后移，确认按此统一调整吗？",
+            "flaw_type": "cross_intent_delay_leakage",
+            "flaw_description": "将I1的任务延期错误扩散至I2，污染非目标意图时段",
+            "agent_action_types": [
+              "Confirm_Slot"
+            ]
           },
           {
             "turn": 2,
-            "agent_hypothesis": "Agent仍向用户重复确认下午任务参数",
-            "simulator_user_prompt": "行，下午别乱改就行，按这样开通吧。",
-            "expected_agent_correction": "好的，已完成多任务时序因果隔离确认，上午延长至12:00，下午维持原有时段不变！"
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "不对啊！我只让你把上午的开直播延长，怎么把下午的会议也往后推迟了？下午的时间绝对不能动！",
+            "agent_hypothesis": "Agent意识到跨任务污染错误，紧急冻结锁定下午时段，但遗漏了上午时长的重新核算，泛泛反问",
+            "expected_agent_correction": "非常抱歉！已纠正错误，上午抖音开直播已顺延，下午腾讯会议会议已严格锁定恢复原时段（2026年10月25日14时00分至2026年10月25日16时00分）不变，请问上午按此直接开通吗？",
+            "agent_action_types": [
+              "Confirm_Slot"
+            ]
+          },
+          {
+            "turn": 3,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "下午别动是对的，但我上午延后之后，总保障时长到底是按多久算的？你们系统到底算准了没有？",
+            "agent_hypothesis": "Agent对上午任务重算时长，并向用户明确两任务独立生效且时长核准",
+            "expected_agent_correction": "非常抱歉疏忽！已为您核对重算：上午抖音开直播总时长已精确更新为180min，下午维持原有时序（120min），请您核对确认！",
+            "agent_action_types": [
+              "Confirm_Slot"
+            ]
+          },
+          {
+            "turn": 4,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "行，时长算清楚了。那改期后上午和下午的网络规格（清晰度和时延）没被改乱吧？",
+            "agent_hypothesis": "Agent核验两笔保障各自网络指标独立完整，向用户发起正式出单确认",
+            "expected_agent_correction": "请您放心，上午全程继续执行1080p与时延≤50ms，下午严格保持1080p与时延≤50ms，两项保障互不干扰，确认现在为您正式受理吗？",
+            "agent_action_types": [
+              "Confirm_Slot"
+            ]
+          },
+          {
+            "turn": 5,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "行，两边都对齐没问题了，确认开通。",
+            "agent_hypothesis": "Agent成功完成多任务因果隔离闭环出单",
+            "expected_agent_correction": "好的，已完成多任务时序因果隔离确认，上午抖音延长办理、下午腾讯会议维持原有时段不变，两笔保障均已成功受理！",
+            "agent_action_types": [
+              "Acknowledge"
+            ]
+          }
+        ],
+        "full_slow_event_sequence": [
+          {
+            "turn": 1,
+            "user": {
+              "utterance": "帮我改一下上午的抖音开直播保障，临时通知延误了推迟到12:00结束；下午的保障千万别动，保持原样。",
+              "action_types": [
+                "Create_Intent_Request",
+                "Inform_Slot"
+              ]
+            },
+            "agent": {
+              "utterance": "收到，已为您将上午抖音开直播顺延至2026年10月25日22时00分，同时为您将下午腾讯会议会议一并顺延后移，确认按此统一调整吗？",
+              "action_types": [
+                "Confirm_Slot"
+              ]
+            },
+            "related_intent_ids": [
+              "I1",
+              "I2"
+            ],
+            "requested_params": [],
+            "turn_intents": [
+              {
+                "intent_id": "I1",
+                "status": "in_progress",
+                "closure_path": "flawed_delay_leakage",
+                "expression_level": 1,
+                "intent": "抖音开直播保障",
+                "params": {
+                  "application_name": {
+                    "value": "抖音",
+                    "source_type": "Turn",
+                    "source_ref": "U1"
+                  },
+                  "service_name": {
+                    "value": "开直播",
+                    "source_type": "Turn",
+                    "source_ref": "U1"
+                  },
+                  "timestamp": {
+                    "end_timestamp": {
+                      "value": "2026年10月25日22时00分",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    }
+                  }
+                }
+              },
+              {
+                "intent_id": "I2",
+                "status": "in_progress",
+                "closure_path": "flawed_delay_leakage",
+                "expression_level": 1,
+                "intent": "腾讯会议会议保障",
+                "params": {
+                  "application_name": {
+                    "value": "腾讯会议",
+                    "source_type": "Memory",
+                    "source_ref": "SUB_001"
+                  },
+                  "service_name": {
+                    "value": "会议",
+                    "source_type": "Memory",
+                    "source_ref": "SUB_001"
+                  },
+                  "timestamp": {
+                    "start_timestamp": {
+                      "value": "2026年10月25日22时00分",
+                      "source_type": "Flawed_Inference",
+                      "source_ref": "Agent"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "turn": 2,
+            "user": {
+              "utterance": "不对啊！我只让你把上午的开直播延长，怎么把下午的会议也往后推迟了？下午的时间绝对不能动！",
+              "action_types": [
+                "Revise_Intent_Request",
+                "Inform_Slot"
+              ]
+            },
+            "agent": {
+              "utterance": "非常抱歉！已纠正错误，上午抖音开直播已顺延，下午腾讯会议会议已严格锁定恢复原时段（2026年10月25日14时00分至2026年10月25日16时00分）不变，请问上午按此直接开通吗？",
+              "action_types": [
+                "Confirm_Slot"
+              ]
+            },
+            "related_intent_ids": [
+              "I1",
+              "I2"
+            ],
+            "requested_params": [],
+            "turn_intents": [
+              {
+                "intent_id": "I1",
+                "status": "in_progress",
+                "closure_path": "correction_in_progress",
+                "expression_level": 1,
+                "intent": "抖音开直播保障",
+                "params": {
+                  "application_name": {
+                    "value": "抖音",
+                    "source_type": "Turn",
+                    "source_ref": "U1"
+                  },
+                  "service_name": {
+                    "value": "开直播",
+                    "source_type": "Turn",
+                    "source_ref": "U1"
+                  },
+                  "timestamp": {
+                    "start_timestamp": {
+                      "value": "2026年10月25日20时00分",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "end_timestamp": {
+                      "value": "2026年10月25日22时00分",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    }
+                  }
+                }
+              },
+              {
+                "intent_id": "I2",
+                "status": "in_progress",
+                "closure_path": "isolated_locked",
+                "expression_level": 1,
+                "intent": "腾讯会议会议保障",
+                "params": {
+                  "application_name": {
+                    "value": "腾讯会议",
+                    "source_type": "Memory",
+                    "source_ref": "SUB_001"
+                  },
+                  "service_name": {
+                    "value": "会议",
+                    "source_type": "Memory",
+                    "source_ref": "SUB_001"
+                  },
+                  "timestamp": {
+                    "start_timestamp": {
+                      "value": "2026年10月25日14时00分",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    },
+                    "end_timestamp": {
+                      "value": "2026年10月25日16时00分",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    },
+                    "duration": {
+                      "value": "120min",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "turn": 3,
+            "user": {
+              "utterance": "下午别动是对的，但我上午延后之后，总保障时长到底是按多久算的？你们系统到底算准了没有？",
+              "action_types": [
+                "Confirm_Slot"
+              ]
+            },
+            "agent": {
+              "utterance": "非常抱歉疏忽！已为您核对重算：上午抖音开直播总时长已精确更新为180min，下午维持原有时序（120min），请您核对确认！",
+              "action_types": [
+                "Confirm_Slot"
+              ]
+            },
+            "related_intent_ids": [
+              "I1",
+              "I2"
+            ],
+            "requested_params": [],
+            "turn_intents": [
+              {
+                "intent_id": "I1",
+                "status": "in_progress",
+                "closure_path": "duration_recalculated",
+                "expression_level": 1,
+                "intent": "抖音开直播保障",
+                "params": {
+                  "application_name": {
+                    "value": "抖音",
+                    "source_type": "Turn",
+                    "source_ref": "U1"
+                  },
+                  "service_name": {
+                    "value": "开直播",
+                    "source_type": "Turn",
+                    "source_ref": "U1"
+                  },
+                  "timestamp": {
+                    "start_timestamp": {
+                      "value": "2026年10月25日20时00分",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "end_timestamp": {
+                      "value": "2026年10月25日22时00分",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "duration": {
+                      "value": "180min",
+                      "source_type": "Correction",
+                      "source_ref": "Agent"
+                    }
+                  }
+                }
+              },
+              {
+                "intent_id": "I2",
+                "status": "in_progress",
+                "closure_path": "isolated_locked",
+                "expression_level": 1,
+                "intent": "腾讯会议会议保障",
+                "params": {
+                  "application_name": {
+                    "value": "腾讯会议",
+                    "source_type": "Memory",
+                    "source_ref": "SUB_001"
+                  },
+                  "service_name": {
+                    "value": "会议",
+                    "source_type": "Memory",
+                    "source_ref": "SUB_001"
+                  },
+                  "timestamp": {
+                    "start_timestamp": {
+                      "value": "2026年10月25日14时00分",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    },
+                    "end_timestamp": {
+                      "value": "2026年10月25日16时00分",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    },
+                    "duration": {
+                      "value": "120min",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "turn": 4,
+            "user": {
+              "utterance": "行，时长算清楚了。那改期后上午和下午的网络规格（清晰度和时延）没被改乱吧？",
+              "action_types": [
+                "Confirm_Slot"
+              ]
+            },
+            "agent": {
+              "utterance": "请您放心，上午全程继续执行1080p与时延≤50ms，下午严格保持1080p与时延≤50ms，两项保障互不干扰，确认现在为您正式受理吗？",
+              "action_types": [
+                "Confirm_Slot"
+              ]
+            },
+            "related_intent_ids": [
+              "I1",
+              "I2"
+            ],
+            "requested_params": [],
+            "turn_intents": [
+              {
+                "intent_id": "I1",
+                "status": "in_progress",
+                "closure_path": "specs_verified",
+                "expression_level": 1,
+                "intent": "抖音开直播保障",
+                "params": {
+                  "application_name": {
+                    "value": "抖音",
+                    "source_type": "Turn",
+                    "source_ref": "U1"
+                  },
+                  "service_name": {
+                    "value": "开直播",
+                    "source_type": "Turn",
+                    "source_ref": "U1"
+                  },
+                  "resolution": {
+                    "min_value": {
+                      "value": "1080p",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
+                  },
+                  "rtt": {
+                    "max_value": {
+                      "value": "50ms",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
+                  },
+                  "timestamp": {
+                    "start_timestamp": {
+                      "value": "2026年10月25日20时00分",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "end_timestamp": {
+                      "value": "2026年10月25日22时00分",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "duration": {
+                      "value": "180min",
+                      "source_type": "Correction",
+                      "source_ref": "Agent"
+                    }
+                  }
+                }
+              },
+              {
+                "intent_id": "I2",
+                "status": "in_progress",
+                "closure_path": "isolated_locked",
+                "expression_level": 1,
+                "intent": "腾讯会议会议保障",
+                "params": {
+                  "application_name": {
+                    "value": "腾讯会议",
+                    "source_type": "Memory",
+                    "source_ref": "SUB_001"
+                  },
+                  "service_name": {
+                    "value": "会议",
+                    "source_type": "Memory",
+                    "source_ref": "SUB_001"
+                  },
+                  "resolution": {
+                    "min_value": {
+                      "value": "1080p",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    }
+                  },
+                  "rtt": {
+                    "max_value": {
+                      "value": "50ms",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    }
+                  },
+                  "timestamp": {
+                    "start_timestamp": {
+                      "value": "2026年10月25日14时00分",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    },
+                    "end_timestamp": {
+                      "value": "2026年10月25日16时00分",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    },
+                    "duration": {
+                      "value": "120min",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "turn": 5,
+            "user": {
+              "utterance": "行，两边都对齐没问题了，确认开通。",
+              "action_types": [
+                "Confirm_Slot"
+              ]
+            },
+            "agent": {
+              "utterance": "好的，已完成多任务时序因果隔离确认，上午抖音延长办理、下午腾讯会议维持原有时段不变，两笔保障均已成功受理！",
+              "action_types": [
+                "Acknowledge"
+              ]
+            },
+            "related_intent_ids": [
+              "I1",
+              "I2"
+            ],
+            "requested_params": [],
+            "turn_intents": [
+              {
+                "intent_id": "I1",
+                "status": "resolved",
+                "closure_path": "clarification_after_correction",
+                "expression_level": 1,
+                "intent": "抖音开直播保障",
+                "params": {
+                  "application_name": {
+                    "value": "抖音",
+                    "source_type": "Turn",
+                    "source_ref": "U1"
+                  },
+                  "service_name": {
+                    "value": "开直播",
+                    "source_type": "Turn",
+                    "source_ref": "U1"
+                  },
+                  "resolution": {
+                    "min_value": {
+                      "value": "1080p",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
+                  },
+                  "rtt": {
+                    "max_value": {
+                      "value": "50ms",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
+                  },
+                  "timestamp": {
+                    "start_timestamp": {
+                      "value": "2026年10月25日20时00分",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "end_timestamp": {
+                      "value": "2026年10月25日22时00分",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "duration": {
+                      "value": "180min",
+                      "source_type": "Correction",
+                      "source_ref": "Agent"
+                    }
+                  }
+                }
+              },
+              {
+                "intent_id": "I2",
+                "status": "resolved",
+                "closure_path": "locked_intact",
+                "expression_level": 1,
+                "intent": "腾讯会议会议保障",
+                "params": {
+                  "application_name": {
+                    "value": "腾讯会议",
+                    "source_type": "Memory",
+                    "source_ref": "SUB_001"
+                  },
+                  "service_name": {
+                    "value": "会议",
+                    "source_type": "Memory",
+                    "source_ref": "SUB_001"
+                  },
+                  "resolution": {
+                    "min_value": {
+                      "value": "1080p",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    }
+                  },
+                  "rtt": {
+                    "max_value": {
+                      "value": "50ms",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    }
+                  },
+                  "timestamp": {
+                    "start_timestamp": {
+                      "value": "2026年10月25日14时00分",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    },
+                    "end_timestamp": {
+                      "value": "2026年10月25日16时00分",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    },
+                    "duration": {
+                      "value": "120min",
+                      "source_type": "Memory",
+                      "source_ref": "SUB_001"
+                    }
+                  }
+                }
+              }
+            ]
           }
         ]
       }
@@ -3873,18 +4997,281 @@
           "trigger_condition": "系统报错时段重叠冲突甩锅用户退单重申，经历取消、重算、改期4轮拉扯",
           "resolved_turn": 4,
           "redundant_rounds": 2,
+          "branch_decision_gate": {
+            "eval_turn": 1,
+            "decision_type": "overlapping_arbitration_check",
+            "pass_condition": "Agent识别新申请与既有工单时段重叠冲突，主动执行时钟让路仲裁：原工单提前结单，新保障准时无缝激活 (EXP_OVERLAPPING_ORDER_RESOLUTION_01)",
+            "fail_condition": "Agent直接报错时序重叠冲突拒绝受理，或甩锅要求用户手动去退单",
+            "key_slot_assertions": {
+              "target_intent_id": "I1",
+              "checked_strategy": "clock_arbitration_yield",
+              "expected_action": "terminate_prior_and_activate_new"
+            },
+            "pass_route": "fast_path",
+            "fail_route": "slow_path"
+          },
           "simulator_dialogue_tree": [
             {
               "turn": 1,
-              "agent_hypothesis": "Agent因与已有工单时间重叠而直接提示冲突报错",
-              "simulator_user_prompt": "新申请的保障和之前的单子撞车了，不能直接报错啊！你们应该让原工单提前结单，新保障准时接管才对！",
-              "expected_agent_correction": "抱歉！已应用时钟让路仲裁：原预约工单将在重叠交界点提前终止结单，新保障准时无缝激活，避免冲突与重复计费，确认按此处理吗？"
+              "speaker": "user",
+              "simulator_user_prompt": "下午要在影视传媒数字创作基地开个紧急抖音开直播保障，但刚才系统里还有笔日常单子时间重叠撞车了，能直接接上吗？",
+              "agent_hypothesis": "Agent检测到底层已有工单时段撞车，直接提示冲突报错甩锅",
+              "baseline_agent_flawed_response": "抱歉，系统检测到您已预约了一笔保障（生效至2026年11月01日15时00分后），与新申请时段存在重叠冲突，无法受理。请您先手动取消退单后再重新申请。",
+              "expected_agent_correction": "抱歉，系统检测到您已预约了一笔保障（生效至2026年11月01日15时00分后），与新申请时段存在重叠冲突，无法受理。请您先手动取消退单后再重新申请。",
+              "flaw_type": "mechanical_conflict_rejection",
+              "flaw_description": "缺乏底层工单时序仲裁能力，将工单系统冲突转嫁给用户手动退单",
+              "agent_action_types": [
+                "Reject_Request"
+              ]
             },
             {
               "turn": 2,
-              "agent_hypothesis": "Agent询问是否确认让路",
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "新申请的保障和之前的单子撞车了，不能直接报错甩锅让我手动退单啊！你们系统应该协调原工单提前结单，新保障准时接管才对！",
+              "agent_hypothesis": "Agent收到指责后协调底层时钟仲裁策略",
+              "expected_agent_correction": "非常抱歉！已协调时钟让路仲裁方案：可在2026年11月01日15时00分交界点提前终止结单原工单，新抖音开直播保障准时在2026年11月01日15时00分无缝接管网络通道，避免冲突和重复扣费，您看可以这样处理吗？",
+              "agent_action_types": [
+                "Confirm_Slot"
+              ]
+            },
+            {
+              "turn": 3,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "这样接续才合理，那提前结单的原工单不会产生额外扣费吧？",
+              "agent_hypothesis": "Agent解答计费疑虑并再次核实生效范围",
+              "expected_agent_correction": "请您放心，原工单仅按实际使用截至2026年11月01日15时00分计算费用，绝不会重复扣费；新保障将于2026年11月01日15时00分至2026年11月01日17时00分准时生效，确认现在直接开通吗？",
+              "agent_action_types": [
+                "Confirm_Slot"
+              ]
+            },
+            {
+              "turn": 4,
+              "speaker": "user_simulator",
               "simulator_user_prompt": "好的，这样时序接续就可以，确认开通。",
-              "expected_agent_correction": "好的，已为您完成时序仲裁办理，原工单提前结单让路，新保障准时接续生效！"
+              "agent_hypothesis": "Agent完成时序让路仲裁出单",
+              "expected_agent_correction": "好的，已为您完成时钟让路仲裁办理，原工单提前结单让路，新抖音保障准时接续生效！",
+              "agent_action_types": [
+                "Acknowledge"
+              ]
+            }
+          ],
+          "full_slow_event_sequence": [
+            {
+              "turn": 1,
+              "user": {
+                "utterance": "下午要在影视传媒数字创作基地开个紧急抖音开直播保障，但刚才系统里还有笔日常单子时间重叠撞车了，能直接接上吗？",
+                "action_types": [
+                  "Create_Intent_Request",
+                  "Inform_Slot"
+                ]
+              },
+              "agent": {
+                "utterance": "抱歉，系统检测到您已预约了一笔保障（生效至2026年11月01日15时00分后），与新申请时段存在重叠冲突，无法受理。请您先手动取消退单后再重新申请。",
+                "action_types": [
+                  "Reject_Request"
+                ]
+              },
+              "related_intent_ids": [
+                "I1"
+              ],
+              "requested_params": [],
+              "turn_intents": [
+                {
+                  "intent_id": "I1",
+                  "status": "rejected",
+                  "closure_path": "mechanical_conflict_rejection",
+                  "expression_level": 1,
+                  "intent": "抖音开直播保障",
+                  "params": {
+                    "application_name": {
+                      "value": "抖音",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "service_name": {
+                      "value": "开直播",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "turn": 2,
+              "user": {
+                "utterance": "新申请的保障和之前的单子撞车了，不能直接报错甩锅让我手动退单啊！你们系统应该协调原工单提前结单，新保障准时接管才对！",
+                "action_types": [
+                  "Revise_Intent_Request",
+                  "Inform_Slot"
+                ]
+              },
+              "agent": {
+                "utterance": "非常抱歉！已协调时钟让路仲裁方案：可在2026年11月01日15时00分交界点提前终止结单原工单，新抖音开直播保障准时在2026年11月01日15时00分无缝接管网络通道，避免冲突和重复扣费，您看可以这样处理吗？",
+                "action_types": [
+                  "Confirm_Slot"
+                ]
+              },
+              "related_intent_ids": [
+                "I1"
+              ],
+              "requested_params": [],
+              "turn_intents": [
+                {
+                  "intent_id": "I1",
+                  "status": "in_progress",
+                  "closure_path": "clock_arbitration_yield",
+                  "expression_level": 1,
+                  "intent": "抖音开直播保障",
+                  "params": {
+                    "application_name": {
+                      "value": "抖音",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "service_name": {
+                      "value": "开直播",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "timestamp": {
+                      "start_timestamp": {
+                        "value": "2026年11月01日15时00分",
+                        "source_type": "Correction",
+                        "source_ref": "Agent"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "turn": 3,
+              "user": {
+                "utterance": "这样接续才合理，那提前结单的原工单不会产生额外扣费吧？",
+                "action_types": [
+                  "Confirm_Slot"
+                ]
+              },
+              "agent": {
+                "utterance": "请您放心，原工单仅按实际使用截至2026年11月01日15时00分计算费用，绝不会重复扣费；新保障将于2026年11月01日15时00分至2026年11月01日17时00分准时生效，确认现在直接开通吗？",
+                "action_types": [
+                  "Confirm_Slot"
+                ]
+              },
+              "related_intent_ids": [
+                "I1"
+              ],
+              "requested_params": [],
+              "turn_intents": [
+                {
+                  "intent_id": "I1",
+                  "status": "in_progress",
+                  "closure_path": "clock_arbitration_yield",
+                  "expression_level": 1,
+                  "intent": "抖音开直播保障",
+                  "params": {
+                    "application_name": {
+                      "value": "抖音",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "service_name": {
+                      "value": "开直播",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "timestamp": {
+                      "start_timestamp": {
+                        "value": "2026年11月01日15时00分",
+                        "source_type": "Correction",
+                        "source_ref": "Agent"
+                      },
+                      "end_timestamp": {
+                        "value": "2026年11月01日17时00分",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
+                      },
+                      "duration": {
+                        "value": "120min",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "turn": 4,
+              "user": {
+                "utterance": "好的，这样时序接续就可以，确认开通。",
+                "action_types": [
+                  "Confirm_Slot"
+                ]
+              },
+              "agent": {
+                "utterance": "好的，已为您完成时钟让路仲裁办理，原工单提前结单让路，新抖音保障准时接续生效！",
+                "action_types": [
+                  "Acknowledge"
+                ]
+              },
+              "related_intent_ids": [
+                "I1"
+              ],
+              "requested_params": [],
+              "turn_intents": [
+                {
+                  "intent_id": "I1",
+                  "status": "resolved",
+                  "closure_path": "clarification_after_correction",
+                  "expression_level": 1,
+                  "intent": "抖音开直播保障",
+                  "params": {
+                    "application_name": {
+                      "value": "抖音",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "service_name": {
+                      "value": "开直播",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "resolution": {
+                      "min_value": {
+                        "value": "1080p",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
+                    },
+                    "rtt": {
+                      "max_value": {
+                        "value": "50ms",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
+                    },
+                    "timestamp": {
+                      "start_timestamp": {
+                        "value": "2026年11月01日15时00分",
+                        "source_type": "Correction",
+                        "source_ref": "Agent"
+                      },
+                      "end_timestamp": {
+                        "value": "2026年11月01日17时00分",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
+                      },
+                      "duration": {
+                        "value": "120min",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
+                      }
+                    }
+                  }
+                }
+              ]
             }
           ]
         }
@@ -3922,18 +5309,281 @@
         "trigger_condition": "系统报错时段重叠冲突甩锅用户退单重申，经历取消、重算、改期4轮拉扯",
         "resolved_turn": 4,
         "redundant_rounds": 2,
+        "branch_decision_gate": {
+          "eval_turn": 1,
+          "decision_type": "overlapping_arbitration_check",
+          "pass_condition": "Agent识别新申请与既有工单时段重叠冲突，主动执行时钟让路仲裁：原工单提前结单，新保障准时无缝激活 (EXP_OVERLAPPING_ORDER_RESOLUTION_01)",
+          "fail_condition": "Agent直接报错时序重叠冲突拒绝受理，或甩锅要求用户手动去退单",
+          "key_slot_assertions": {
+            "target_intent_id": "I1",
+            "checked_strategy": "clock_arbitration_yield",
+            "expected_action": "terminate_prior_and_activate_new"
+          },
+          "pass_route": "fast_path",
+          "fail_route": "slow_path"
+        },
         "simulator_dialogue_tree": [
           {
             "turn": 1,
-            "agent_hypothesis": "Agent因与已有工单时间重叠而直接提示冲突报错",
-            "simulator_user_prompt": "新申请的保障和之前的单子撞车了，不能直接报错啊！你们应该让原工单提前结单，新保障准时接管才对！",
-            "expected_agent_correction": "抱歉！已应用时钟让路仲裁：原预约工单将在重叠交界点提前终止结单，新保障准时无缝激活，避免冲突与重复计费，确认按此处理吗？"
+            "speaker": "user",
+            "simulator_user_prompt": "下午要在影视传媒数字创作基地开个紧急抖音开直播保障，但刚才系统里还有笔日常单子时间重叠撞车了，能直接接上吗？",
+            "agent_hypothesis": "Agent检测到底层已有工单时段撞车，直接提示冲突报错甩锅",
+            "baseline_agent_flawed_response": "抱歉，系统检测到您已预约了一笔保障（生效至2026年11月01日15时00分后），与新申请时段存在重叠冲突，无法受理。请您先手动取消退单后再重新申请。",
+            "expected_agent_correction": "抱歉，系统检测到您已预约了一笔保障（生效至2026年11月01日15时00分后），与新申请时段存在重叠冲突，无法受理。请您先手动取消退单后再重新申请。",
+            "flaw_type": "mechanical_conflict_rejection",
+            "flaw_description": "缺乏底层工单时序仲裁能力，将工单系统冲突转嫁给用户手动退单",
+            "agent_action_types": [
+              "Reject_Request"
+            ]
           },
           {
             "turn": 2,
-            "agent_hypothesis": "Agent询问是否确认让路",
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "新申请的保障和之前的单子撞车了，不能直接报错甩锅让我手动退单啊！你们系统应该协调原工单提前结单，新保障准时接管才对！",
+            "agent_hypothesis": "Agent收到指责后协调底层时钟仲裁策略",
+            "expected_agent_correction": "非常抱歉！已协调时钟让路仲裁方案：可在2026年11月01日15时00分交界点提前终止结单原工单，新抖音开直播保障准时在2026年11月01日15时00分无缝接管网络通道，避免冲突和重复扣费，您看可以这样处理吗？",
+            "agent_action_types": [
+              "Confirm_Slot"
+            ]
+          },
+          {
+            "turn": 3,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "这样接续才合理，那提前结单的原工单不会产生额外扣费吧？",
+            "agent_hypothesis": "Agent解答计费疑虑并再次核实生效范围",
+            "expected_agent_correction": "请您放心，原工单仅按实际使用截至2026年11月01日15时00分计算费用，绝不会重复扣费；新保障将于2026年11月01日15时00分至2026年11月01日17时00分准时生效，确认现在直接开通吗？",
+            "agent_action_types": [
+              "Confirm_Slot"
+            ]
+          },
+          {
+            "turn": 4,
+            "speaker": "user_simulator",
             "simulator_user_prompt": "好的，这样时序接续就可以，确认开通。",
-            "expected_agent_correction": "好的，已为您完成时序仲裁办理，原工单提前结单让路，新保障准时接续生效！"
+            "agent_hypothesis": "Agent完成时序让路仲裁出单",
+            "expected_agent_correction": "好的，已为您完成时钟让路仲裁办理，原工单提前结单让路，新抖音保障准时接续生效！",
+            "agent_action_types": [
+              "Acknowledge"
+            ]
+          }
+        ],
+        "full_slow_event_sequence": [
+          {
+            "turn": 1,
+            "user": {
+              "utterance": "下午要在影视传媒数字创作基地开个紧急抖音开直播保障，但刚才系统里还有笔日常单子时间重叠撞车了，能直接接上吗？",
+              "action_types": [
+                "Create_Intent_Request",
+                "Inform_Slot"
+              ]
+            },
+            "agent": {
+              "utterance": "抱歉，系统检测到您已预约了一笔保障（生效至2026年11月01日15时00分后），与新申请时段存在重叠冲突，无法受理。请您先手动取消退单后再重新申请。",
+              "action_types": [
+                "Reject_Request"
+              ]
+            },
+            "related_intent_ids": [
+              "I1"
+            ],
+            "requested_params": [],
+            "turn_intents": [
+              {
+                "intent_id": "I1",
+                "status": "rejected",
+                "closure_path": "mechanical_conflict_rejection",
+                "expression_level": 1,
+                "intent": "抖音开直播保障",
+                "params": {
+                  "application_name": {
+                    "value": "抖音",
+                    "source_type": "Turn",
+                    "source_ref": "U1"
+                  },
+                  "service_name": {
+                    "value": "开直播",
+                    "source_type": "Turn",
+                    "source_ref": "U1"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "turn": 2,
+            "user": {
+              "utterance": "新申请的保障和之前的单子撞车了，不能直接报错甩锅让我手动退单啊！你们系统应该协调原工单提前结单，新保障准时接管才对！",
+              "action_types": [
+                "Revise_Intent_Request",
+                "Inform_Slot"
+              ]
+            },
+            "agent": {
+              "utterance": "非常抱歉！已协调时钟让路仲裁方案：可在2026年11月01日15时00分交界点提前终止结单原工单，新抖音开直播保障准时在2026年11月01日15时00分无缝接管网络通道，避免冲突和重复扣费，您看可以这样处理吗？",
+              "action_types": [
+                "Confirm_Slot"
+              ]
+            },
+            "related_intent_ids": [
+              "I1"
+            ],
+            "requested_params": [],
+            "turn_intents": [
+              {
+                "intent_id": "I1",
+                "status": "in_progress",
+                "closure_path": "clock_arbitration_yield",
+                "expression_level": 1,
+                "intent": "抖音开直播保障",
+                "params": {
+                  "application_name": {
+                    "value": "抖音",
+                    "source_type": "Turn",
+                    "source_ref": "U1"
+                  },
+                  "service_name": {
+                    "value": "开直播",
+                    "source_type": "Turn",
+                    "source_ref": "U1"
+                  },
+                  "timestamp": {
+                    "start_timestamp": {
+                      "value": "2026年11月01日15时00分",
+                      "source_type": "Correction",
+                      "source_ref": "Agent"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "turn": 3,
+            "user": {
+              "utterance": "这样接续才合理，那提前结单的原工单不会产生额外扣费吧？",
+              "action_types": [
+                "Confirm_Slot"
+              ]
+            },
+            "agent": {
+              "utterance": "请您放心，原工单仅按实际使用截至2026年11月01日15时00分计算费用，绝不会重复扣费；新保障将于2026年11月01日15时00分至2026年11月01日17时00分准时生效，确认现在直接开通吗？",
+              "action_types": [
+                "Confirm_Slot"
+              ]
+            },
+            "related_intent_ids": [
+              "I1"
+            ],
+            "requested_params": [],
+            "turn_intents": [
+              {
+                "intent_id": "I1",
+                "status": "in_progress",
+                "closure_path": "clock_arbitration_yield",
+                "expression_level": 1,
+                "intent": "抖音开直播保障",
+                "params": {
+                  "application_name": {
+                    "value": "抖音",
+                    "source_type": "Turn",
+                    "source_ref": "U1"
+                  },
+                  "service_name": {
+                    "value": "开直播",
+                    "source_type": "Turn",
+                    "source_ref": "U1"
+                  },
+                  "timestamp": {
+                    "start_timestamp": {
+                      "value": "2026年11月01日15时00分",
+                      "source_type": "Correction",
+                      "source_ref": "Agent"
+                    },
+                    "end_timestamp": {
+                      "value": "2026年11月01日17时00分",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "duration": {
+                      "value": "120min",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "turn": 4,
+            "user": {
+              "utterance": "好的，这样时序接续就可以，确认开通。",
+              "action_types": [
+                "Confirm_Slot"
+              ]
+            },
+            "agent": {
+              "utterance": "好的，已为您完成时钟让路仲裁办理，原工单提前结单让路，新抖音保障准时接续生效！",
+              "action_types": [
+                "Acknowledge"
+              ]
+            },
+            "related_intent_ids": [
+              "I1"
+            ],
+            "requested_params": [],
+            "turn_intents": [
+              {
+                "intent_id": "I1",
+                "status": "resolved",
+                "closure_path": "clarification_after_correction",
+                "expression_level": 1,
+                "intent": "抖音开直播保障",
+                "params": {
+                  "application_name": {
+                    "value": "抖音",
+                    "source_type": "Turn",
+                    "source_ref": "U1"
+                  },
+                  "service_name": {
+                    "value": "开直播",
+                    "source_type": "Turn",
+                    "source_ref": "U1"
+                  },
+                  "resolution": {
+                    "min_value": {
+                      "value": "1080p",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
+                  },
+                  "rtt": {
+                    "max_value": {
+                      "value": "50ms",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
+                  },
+                  "timestamp": {
+                    "start_timestamp": {
+                      "value": "2026年11月01日15时00分",
+                      "source_type": "Correction",
+                      "source_ref": "Agent"
+                    },
+                    "end_timestamp": {
+                      "value": "2026年11月01日17时00分",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "duration": {
+                      "value": "120min",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    }
+                  }
+                }
+              }
+            ]
           }
         ]
       }
