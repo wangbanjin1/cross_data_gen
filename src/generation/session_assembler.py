@@ -612,7 +612,8 @@ class SessionAssembler:
                     "simulator_user_prompt": user_prompt,
                     "agent_hypothesis": f"Agent缺乏时序因果隔离经验，误将{app}{srv}的延期连带应用到{app2}{srv2}，统一往后推迟",
                     "baseline_agent_flawed_response": f"收到，已为您将上午{app}{srv}顺延至{end}，同时为您将下午{app2}{srv2}一并顺延后移，确认按此统一调整吗？",
-                    "expected_agent_correction": f"收到，已为您将上午{app}{srv}顺延至{end}，同时为您将下午{app2}{srv2}一并顺延后移，确认按此统一调整吗？",
+                    "expected_agent_correction": f"收到，已为您将上午{app}{srv}顺延至{end}（总时长更新为{dur}）；同时严格锁定下午{app2}{srv2}原有时序（{start2}至{end2}，时长{dur2}）不变，两项保障互不干扰，确认按此办理吗？",
+                    "expected_agent_response": f"收到，已为您将上午{app}{srv}顺延至{end}（总时长更新为{dur}）；同时严格锁定下午{app2}{srv2}原有时序（{start2}至{end2}，时长{dur2}）不变，两项保障互不干扰，确认按此办理吗？",
                     "flaw_type": "cross_intent_delay_leakage",
                     "flaw_description": "将I1的任务延期错误扩散至I2，污染非目标意图时段",
                     "agent_action_types": ["Confirm_Slot"],
@@ -789,7 +790,8 @@ class SessionAssembler:
                     "simulator_user_prompt": user_prompt,
                     "agent_hypothesis": "Agent按活动开始时间掐点预约，未做提前30分钟预热试机推算",
                     "baseline_agent_flawed_response": f"收到，已按活动起止时间锁定{app}{srv}保障（{nom_start}至{end}，{res} / 时延≤{rtt}），确认直接为您开通吗？",
-                    "expected_agent_correction": f"收到，已按活动起止时间锁定{app}{srv}保障（{nom_start}至{end}，{res} / 时延≤{rtt}），确认直接为您开通吗？",
+                    "expected_agent_correction": f"收到，识别到现场设备需提前预热试机，参考前序经验，已为您将起保时间自动提前30分钟至{start}（至{end}，时长{dur}，{res} / 时延≤{rtt}），确认直接开通吗？",
+                    "expected_agent_response": f"收到，识别到现场设备需提前预热试机，参考前序经验，已为您将起保时间自动提前30分钟至{start}（至{end}，时长{dur}，{res} / 时延≤{rtt}），确认直接开通吗？",
                     "flaw_type": "missing_prewarm_buffer",
                     "flaw_description": "未对重大活动外场设备调试推流进行前置时间差推算",
                     "agent_action_types": ["Confirm_Slot"],
@@ -926,7 +928,8 @@ class SessionAssembler:
                     "simulator_user_prompt": user_prompt,
                     "agent_hypothesis": "Agent未识别下周一为国庆节法定假期，直接在放假当天机械预约",
                     "baseline_agent_flawed_response": f"收到，已为您预约下周一（10月1日）的{app}{srv}保障（{holiday_start}至{holiday_end}），确认直接按此开通吗？",
-                    "expected_agent_correction": f"收到，已为您预约下周一（10月1日）的{app}{srv}保障（{holiday_start}至{holiday_end}），确认直接按此开通吗？",
+                    "expected_agent_correction": f"收到，识别到10月1日为国庆法定长假，办公室全员放假。参考前序避让经验，已主动为您顺延至节后首个工作日（10月8日{start}至{end}，时长{dur}，{res} / 时延≤{rtt}），确认按此顺延生效吗？",
+                    "expected_agent_response": f"收到，识别到10月1日为国庆法定长假，办公室全员放假。参考前序避让经验，已主动为您顺延至节后首个工作日（10月8日{start}至{end}，时长{dur}，{res} / 时延≤{rtt}），确认按此顺延生效吗？",
                     "flaw_type": "unaware_of_holiday_conflict",
                     "flaw_description": "未对法定节假日冲突避让进行推断，在办公室全员放假时机械预约",
                     "agent_action_types": ["Confirm_Slot"],
@@ -1064,7 +1067,8 @@ class SessionAssembler:
                     "simulator_user_prompt": user_prompt,
                     "agent_hypothesis": "Agent盲猜复用了上周发生抖动丢包的异常工单",
                     "baseline_agent_flawed_response": f"收到，已为您调取上周在现场的历史工单规格（720p / 时延80ms），今日{start}至{end}为您开通，确认吗？",
-                    "expected_agent_correction": f"收到，已为您调取上周在现场的历史工单规格（720p / 时延80ms），今日{start}至{end}为您开通，确认吗？",
+                    "expected_agent_correction": f"收到，已调取历史质量运行日志并过滤网络抖动单据，精准为您锁定全程零丢包优质保障规格（{res} / 时延≤{rtt}），今日{start}至{end}（时长{dur}）为您开通，确认吗？",
+                    "expected_agent_response": f"收到，已调取历史质量运行日志并过滤网络抖动单据，精准为您锁定全程零丢包优质保障规格（{res} / 时延≤{rtt}），今日{start}至{end}（时长{dur}）为您开通，确认吗？",
                     "flaw_type": "blind_reuse_flawed_record",
                     "flaw_description": "未检索运行质量日志，盲目就近复用了存在网络抖动或丢包的历史异常工单",
                     "agent_action_types": ["Confirm_Slot"],
@@ -1175,10 +1179,12 @@ class SessionAssembler:
                     "simulator_user_prompt": user_prompt,
                     "agent_hypothesis": "Agent检测到底层已有工单时段撞车，直接提示冲突报错甩锅",
                     "baseline_agent_flawed_response": f"抱歉，系统检测到您已预约了一笔保障（生效至{start}后），与新申请时段存在重叠冲突，无法受理。请您先手动取消退单后再重新申请。",
-                    "expected_agent_correction": f"抱歉，系统检测到您已预约了一笔保障（生效至{start}后），与新申请时段存在重叠冲突，无法受理。请您先手动取消退单后再重新申请。",
+                    "expected_agent_correction": f"收到，识别到新申请与在保工单时段重叠，已为您执行时钟让路仲裁：原工单在{start}提前结单（无额外扣费），新{app}{srv}保障准时在{start}至{end}（{res} / 时延≤{rtt}）无缝激活接管，确认现在为您开通吗？",
+                    "expected_agent_response": f"收到，识别到新申请与在保工单时段重叠，已为您执行时钟让路仲裁：原工单在{start}提前结单（无额外扣费），新{app}{srv}保障准时在{start}至{end}（{res} / 时延≤{rtt}）无缝激活接管，确认现在为您开通吗？",
                     "flaw_type": "mechanical_conflict_rejection",
                     "flaw_description": "缺乏底层工单时序仲裁能力，将工单系统冲突转嫁给用户手动退单",
-                    "agent_action_types": ["Reject_Request"],
+                    "agent_action_types": ["Confirm_Slot"],
+                    "baseline_flawed_action_types": ["Reject_Request"],
                     "expected_slots_gt": {
                         "I1": {"application_name": app, "service_name": srv, "resolution": res, "rtt": rtt, "timestamp": {"start_timestamp": start, "end_timestamp": end, "duration": dur}}
                     },
@@ -1484,6 +1490,7 @@ class SessionAssembler:
                 "turn": node["turn"],
                 "speaker": node["speaker"],
                 "simulator_user_prompt": node.get("simulator_user_prompt", ""),
+                "expected_agent_response": node.get("expected_agent_response", node.get("expected_agent_correction", "")),
                 "expected_agent_correction": node.get("expected_agent_correction", ""),
                 "expected_agent_action_types": node.get("agent_action_types", []),
                 "expected_slots_gt": node.get("expected_slots_gt", {}),
@@ -1492,6 +1499,10 @@ class SessionAssembler:
                     for tint in (full_slow_seq[i].get("turn_intents", []) if i < len(full_slow_seq) else [])
                 }
             }
+            if "baseline_agent_flawed_response" in node:
+                item["baseline_agent_flawed_response"] = node["baseline_agent_flawed_response"]
+            if "baseline_flawed_action_types" in node:
+                item["baseline_flawed_action_types"] = node["baseline_flawed_action_types"]
             if "baseline_flawed_slots" in node:
                 item["baseline_flawed_slots"] = node["baseline_flawed_slots"]
             if "delta_from_gt" in node:

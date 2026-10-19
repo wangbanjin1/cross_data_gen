@@ -375,6 +375,11 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
         self.assertEqual(t1_slots["timestamp"]["end_timestamp"], "2026年10月17日13时30分")
         self.assertEqual(t1_slots["timestamp"]["duration"], "90min")
 
+        # 重点验证 Turn 1 的期望回答（expected_agent_response / expected_agent_correction）也是标准金标回复
+        self.assertIn("12时00分", turn_gt[0]["expected_agent_response"])
+        self.assertIn("提前30分钟", turn_gt[0]["expected_agent_response"])
+        self.assertIn("12时30分", turn_gt[0]["baseline_agent_flawed_response"])
+
         # 重点验证 Turn 1 挂载了 baseline_flawed_slots 与 delta_from_gt 差分结构
         self.assertIn("baseline_flawed_slots", turn_gt[0])
         flawed_slots = turn_gt[0]["baseline_flawed_slots"]["I1"]
