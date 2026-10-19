@@ -339,7 +339,7 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
         self.assertEqual(gate.get("fail_route"), "slow_path")
         self.assertIn("key_slot_assertions", gate)
 
-        # 3. 验证 4 轮引导交互树结构完整性 (Turn 1~4 逐轮对齐)
+        # 4. 验证 4 轮引导交互树结构完整性与逐轮 GT (Turn 1~4 逐轮对齐)
         tree = slow.get("simulator_dialogue_tree", [])
         self.assertEqual(len(tree), 4)
         turns = [t["turn"] for t in tree]
@@ -347,17 +347,32 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
         self.assertEqual(tree[0]["speaker"], "user")
         self.assertIn("baseline_agent_flawed_response", tree[0])
         self.assertIn("flaw_type", tree[0])
+        self.assertIn("expected_slots_gt", tree[0])
         self.assertEqual(tree[1]["speaker"], "user_simulator")
         self.assertIn("expected_agent_correction", tree[1])
+        self.assertIn("expected_slots_gt", tree[1])
         self.assertEqual(tree[3]["expected_agent_correction"], tree[3].get("expected_agent_correction"))
         self.assertIn("Acknowledge", tree[3]["agent_action_types"])
+        self.assertIn("expected_slots_gt", tree[3])
 
-        # 5. 验证声明式交互评测契约 (interactive_eval_contract) 完整性
+        # 5. 验证逐轮标准金标 (turn_level_ground_truth) 完备性
+        turn_gt = slow.get("turn_level_ground_truth", [])
+        self.assertEqual(len(turn_gt), 4)
+        for i, tgt in enumerate(turn_gt):
+            self.assertEqual(tgt["turn"], i + 1)
+            self.assertIn("expected_slots_gt", tgt)
+            self.assertIn("expected_agent_action_types", tgt)
+            self.assertIn("intents_status", tgt)
+            self.assertIn("I1", tgt["expected_slots_gt"])
+
+        # 6. 验证声明式交互评测契约 (interactive_eval_contract) 完整性
         contract = eb.get("interactive_eval_contract")
         self.assertIsNotNone(contract)
         self.assertEqual(contract["version"], "1.0")
         self.assertEqual(contract["scenario_type"], "prewarm_buffer")
         self.assertIn("target_ground_truth", contract)
+        self.assertIn("turn_level_ground_truth", contract)
+        self.assertEqual(len(contract["turn_level_ground_truth"]), 4)
         self.assertEqual(contract["target_ground_truth"]["I1"]["slots"]["application_name"], "抖音")
         self.assertEqual(contract["target_ground_truth"]["I1"]["slots"]["timestamp"]["start_timestamp"], "2026年10月17日12时00分")
         self.assertIn("delta_reaction_matrix", contract)
@@ -386,11 +401,15 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
         self.assertEqual(eb["slow_path"]["round_count"], 5)
         self.assertEqual(eb["slow_path"]["redundant_rounds"], 2)
 
-        # 2. 验证 5 轮对话树完整性
+        # 2. 验证 5 轮对话树完整性与每轮 expected_slots_gt
         tree = eb["slow_path"]["simulator_dialogue_tree"]
         self.assertEqual(len(tree), 5)
         self.assertEqual([t["turn"] for t in tree], [1, 2, 3, 4, 5])
         self.assertIn("Acknowledge", tree[-1]["agent_action_types"])
+        for node in tree:
+            self.assertIn("expected_slots_gt", node)
+            self.assertIn("I1", node["expected_slots_gt"])
+            self.assertIn("I2", node["expected_slots_gt"])
 
         # 3. 验证 Dense Cumulative Tracking 累积槽位完备性
         full_seq = eb["slow_path"]["full_slow_event_sequence"]
@@ -400,11 +419,17 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
             self.assertEqual(t["turn_intents"][0]["params"]["application_name"]["value"], "微信")
             self.assertEqual(t["turn_intents"][1]["params"]["application_name"]["value"], "抖音")
 
-        # 4. 验证终态双闭环
+        # 4. 验证逐轮标准金标 (turn_level_ground_truth) 覆盖 5 轮且每轮槽位完整
+        turn_gt = eb["slow_path"]["turn_level_ground_truth"]
+        self.assertEqual(len(turn_gt), 5)
+        self.assertEqual(turn_gt[-1]["intents_status"]["I1"], "resolved")
+        self.assertEqual(turn_gt[-1]["intents_status"]["I2"], "resolved")
+
+        # 5. 验证终态双闭环
         self.assertEqual(full_seq[-1]["turn_intents"][0]["status"], "resolved")
         self.assertEqual(full_seq[-1]["turn_intents"][1]["status"], "resolved")
 
-        # 5. 验证多意图双轨评测契约
+        # 6. 验证多意图双轨评测契约
         c = eb["interactive_eval_contract"]
         self.assertIn("I1", c["target_ground_truth"])
         self.assertIn("I2", c["target_ground_truth"])
@@ -412,7 +437,7 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
         self.assertIn("I2.timestamp.start_timestamp", c["delta_reaction_matrix"]["on_slot_error"]["monitored_slots"])
 
     def test_09_all_scenarios_interactive_eval_contract(self):
-        """测试 5 大经验场景的声明式交互评测契约 (interactive_eval_contract) 完备性"""
+        """测试 5 大经验场景的声明式交互评测契约 (interactive_eval_contract) 与逐轮 GT 完备性"""
         scenarios = [
             ("multi_intent_partition", "EXP_MULTI_INTENT_PARTITION_01"),
             ("prewarm_buffer", "EXP_PREWARM_BUFFER_01"),
@@ -439,8 +464,21 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
             self.assertIsNotNone(c, f"Contract missing for {s_type}")
             self.assertEqual(c["scenario_type"], s_type)
             self.assertIn("target_ground_truth", c)
+            self.assertIn("turn_level_ground_truth", c)
             self.assertIn("delta_reaction_matrix", c)
             self.assertIn("termination_conditions", c)
+
+            # 验证逐轮 GT 的轮数和字段完备性
+            turn_gt = c["turn_level_ground_truth"]
+            expected_turns = 5 if s_type == "multi_intent_partition" else 4
+            self.assertEqual(len(turn_gt), expected_turns, f"Turn GT length mismatch for {s_type}")
+            for tgt in turn_gt:
+                self.assertIn("turn", tgt)
+                self.assertIn("expected_slots_gt", tgt)
+                self.assertIn("expected_agent_action_types", tgt)
+                self.assertIn("intents_status", tgt)
+                self.assertGreater(len(tgt["expected_slots_gt"]), 0)
+
             matrix = c["delta_reaction_matrix"]
             for key in ["on_slot_error", "on_agent_inquiry", "on_slot_missing", "on_goal_matched"]:
                 self.assertIn(key, matrix, f"Matrix missing key {key} in {s_type}")

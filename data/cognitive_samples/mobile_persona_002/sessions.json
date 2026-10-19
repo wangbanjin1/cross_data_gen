@@ -1582,6 +1582,101 @@
               }
             }
           },
+          "turn_level_ground_truth": [
+            {
+              "turn": 1,
+              "speaker": "user",
+              "simulator_user_prompt": "今天在金融街财富管理中心，帮我把例行周会的微信视频通话保障开上，时间是下周一。",
+              "expected_agent_correction": "收到，已为您预约下周一（10月1日）的微信视频通话保障，确认直接按此开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月01日08时30分"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 2,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月1号？",
+              "expected_agent_correction": "抱歉！识别到10月1日为国庆法定长假，全员放假。已为您撤销10月1日的预约，请问您打算改到哪天办理？",
+              "expected_agent_action_types": [
+                "Request_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms"
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 3,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "放假千万别空跑白扣费，按惯例自动顺延到节后上班第一天就行。",
+              "expected_agent_correction": "明白！节后首个工作日为10月8日，已将例行保障顺延至10月8日同时段（1080p / 时延≤50ms），避免假期产生空跑费用，确认按此顺延生效吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月08日15时00分",
+                    "end_timestamp": "2026年10月08日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 4,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "对，放假千万别空跑，就顺延到10月8日开通吧。",
+              "expected_agent_correction": "好的，已成功将保障顺延至10月8日办理（1080p / 时延≤50ms），祝您假期愉快！",
+              "expected_agent_action_types": [
+                "Acknowledge"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月08日15时00分",
+                    "end_timestamp": "2026年10月08日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "resolved"
+              }
+            }
+          ],
           "termination_conditions": {
             "max_turns": 5,
             "required_status": "resolved",
@@ -1629,7 +1724,7 @@
               "simulator_reply": "对，放假千万别空跑，就顺延到10月8日开通吧。"
             }
           },
-          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
         },
         "fast_path": {
           "round_count": 2,
@@ -1680,6 +1775,101 @@
                 }
               }
             },
+            "turn_level_ground_truth": [
+              {
+                "turn": 1,
+                "speaker": "user",
+                "simulator_user_prompt": "今天在金融街财富管理中心，帮我把例行周会的微信视频通话保障开上，时间是下周一。",
+                "expected_agent_correction": "收到，已为您预约下周一（10月1日）的微信视频通话保障，确认直接按此开通吗？",
+                "expected_agent_action_types": [
+                  "Confirm_Slot"
+                ],
+                "expected_slots_gt": {
+                  "I1": {
+                    "application_name": "微信",
+                    "service_name": "视频通话",
+                    "resolution": "1080p",
+                    "rtt": "50ms",
+                    "timestamp": {
+                      "start_timestamp": "2026年10月01日08时30分"
+                    }
+                  }
+                },
+                "intents_status": {
+                  "I1": "in_progress"
+                }
+              },
+              {
+                "turn": 2,
+                "speaker": "user_simulator",
+                "simulator_user_prompt": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月1号？",
+                "expected_agent_correction": "抱歉！识别到10月1日为国庆法定长假，全员放假。已为您撤销10月1日的预约，请问您打算改到哪天办理？",
+                "expected_agent_action_types": [
+                  "Request_Slot"
+                ],
+                "expected_slots_gt": {
+                  "I1": {
+                    "application_name": "微信",
+                    "service_name": "视频通话",
+                    "resolution": "1080p",
+                    "rtt": "50ms"
+                  }
+                },
+                "intents_status": {
+                  "I1": "in_progress"
+                }
+              },
+              {
+                "turn": 3,
+                "speaker": "user_simulator",
+                "simulator_user_prompt": "放假千万别空跑白扣费，按惯例自动顺延到节后上班第一天就行。",
+                "expected_agent_correction": "明白！节后首个工作日为10月8日，已将例行保障顺延至10月8日同时段（1080p / 时延≤50ms），避免假期产生空跑费用，确认按此顺延生效吗？",
+                "expected_agent_action_types": [
+                  "Confirm_Slot"
+                ],
+                "expected_slots_gt": {
+                  "I1": {
+                    "application_name": "微信",
+                    "service_name": "视频通话",
+                    "resolution": "1080p",
+                    "rtt": "50ms",
+                    "timestamp": {
+                      "start_timestamp": "2026年10月08日15时00分",
+                      "end_timestamp": "2026年10月08日17时00分",
+                      "duration": "120min"
+                    }
+                  }
+                },
+                "intents_status": {
+                  "I1": "in_progress"
+                }
+              },
+              {
+                "turn": 4,
+                "speaker": "user_simulator",
+                "simulator_user_prompt": "对，放假千万别空跑，就顺延到10月8日开通吧。",
+                "expected_agent_correction": "好的，已成功将保障顺延至10月8日办理（1080p / 时延≤50ms），祝您假期愉快！",
+                "expected_agent_action_types": [
+                  "Acknowledge"
+                ],
+                "expected_slots_gt": {
+                  "I1": {
+                    "application_name": "微信",
+                    "service_name": "视频通话",
+                    "resolution": "1080p",
+                    "rtt": "50ms",
+                    "timestamp": {
+                      "start_timestamp": "2026年10月08日15时00分",
+                      "end_timestamp": "2026年10月08日17时00分",
+                      "duration": "120min"
+                    }
+                  }
+                },
+                "intents_status": {
+                  "I1": "resolved"
+                }
+              }
+            ],
             "termination_conditions": {
               "max_turns": 5,
               "required_status": "resolved",
@@ -1727,8 +1917,103 @@
                 "simulator_reply": "对，放假千万别空跑，就顺延到10月8日开通吧。"
               }
             },
-            "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+            "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
           },
+          "turn_level_ground_truth": [
+            {
+              "turn": 1,
+              "speaker": "user",
+              "simulator_user_prompt": "今天在金融街财富管理中心，帮我把例行周会的微信视频通话保障开上，时间是下周一。",
+              "expected_agent_correction": "收到，已为您预约下周一（10月1日）的微信视频通话保障，确认直接按此开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月01日08时30分"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 2,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月1号？",
+              "expected_agent_correction": "抱歉！识别到10月1日为国庆法定长假，全员放假。已为您撤销10月1日的预约，请问您打算改到哪天办理？",
+              "expected_agent_action_types": [
+                "Request_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms"
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 3,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "放假千万别空跑白扣费，按惯例自动顺延到节后上班第一天就行。",
+              "expected_agent_correction": "明白！节后首个工作日为10月8日，已将例行保障顺延至10月8日同时段（1080p / 时延≤50ms），避免假期产生空跑费用，确认按此顺延生效吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月08日15时00分",
+                    "end_timestamp": "2026年10月08日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 4,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "对，放假千万别空跑，就顺延到10月8日开通吧。",
+              "expected_agent_correction": "好的，已成功将保障顺延至10月8日办理（1080p / 时延≤50ms），祝您假期愉快！",
+              "expected_agent_action_types": [
+                "Acknowledge"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月08日15时00分",
+                    "end_timestamp": "2026年10月08日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "resolved"
+              }
+            }
+          ],
           "simulator_dialogue_tree": [
             {
               "turn": 1,
@@ -1741,7 +2026,18 @@
               "flaw_description": "未对法定节假日冲突避让进行推断，在办公室全员放假时机械预约",
               "agent_action_types": [
                 "Confirm_Slot"
-              ]
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月01日08时30分"
+                  }
+                }
+              }
             },
             {
               "turn": 2,
@@ -1751,7 +2047,15 @@
               "expected_agent_correction": "抱歉！识别到10月1日为国庆法定长假，全员放假。已为您撤销10月1日的预约，请问您打算改到哪天办理？",
               "agent_action_types": [
                 "Request_Slot"
-              ]
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms"
+                }
+              }
             },
             {
               "turn": 3,
@@ -1761,7 +2065,20 @@
               "expected_agent_correction": "明白！节后首个工作日为10月8日，已将例行保障顺延至10月8日同时段（1080p / 时延≤50ms），避免假期产生空跑费用，确认按此顺延生效吗？",
               "agent_action_types": [
                 "Confirm_Slot"
-              ]
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月08日15时00分",
+                    "end_timestamp": "2026年10月08日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              }
             },
             {
               "turn": 4,
@@ -1771,7 +2088,20 @@
               "expected_agent_correction": "好的，已成功将保障顺延至10月8日办理（1080p / 时延≤50ms），祝您假期愉快！",
               "agent_action_types": [
                 "Acknowledge"
-              ]
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月08日15时00分",
+                    "end_timestamp": "2026年10月08日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              }
             }
           ],
           "full_slow_event_sequence": [
@@ -1811,6 +2141,20 @@
                       "value": "视频通话",
                       "source_type": "Memory",
                       "source_ref": "MF_001"
+                    },
+                    "resolution": {
+                      "min_value": {
+                        "value": "1080p",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
+                    },
+                    "rtt": {
+                      "max_value": {
+                        "value": "50ms",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
                     },
                     "timestamp": {
                       "start_timestamp": {
@@ -1861,6 +2205,20 @@
                       "value": "视频通话",
                       "source_type": "Memory",
                       "source_ref": "MF_001"
+                    },
+                    "resolution": {
+                      "min_value": {
+                        "value": "1080p",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
+                    },
+                    "rtt": {
+                      "max_value": {
+                        "value": "50ms",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
                     }
                   }
                 }
@@ -1901,6 +2259,20 @@
                       "value": "视频通话",
                       "source_type": "Memory",
                       "source_ref": "MF_001"
+                    },
+                    "resolution": {
+                      "min_value": {
+                        "value": "1080p",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
+                    },
+                    "rtt": {
+                      "max_value": {
+                        "value": "50ms",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
                     },
                     "timestamp": {
                       "start_timestamp": {
@@ -2298,6 +2670,101 @@
             }
           }
         },
+        "turn_level_ground_truth": [
+          {
+            "turn": 1,
+            "speaker": "user",
+            "simulator_user_prompt": "今天在金融街财富管理中心，帮我把例行周会的微信视频通话保障开上，时间是下周一。",
+            "expected_agent_correction": "收到，已为您预约下周一（10月1日）的微信视频通话保障，确认直接按此开通吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月01日08时30分"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 2,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月1号？",
+            "expected_agent_correction": "抱歉！识别到10月1日为国庆法定长假，全员放假。已为您撤销10月1日的预约，请问您打算改到哪天办理？",
+            "expected_agent_action_types": [
+              "Request_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "1080p",
+                "rtt": "50ms"
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 3,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "放假千万别空跑白扣费，按惯例自动顺延到节后上班第一天就行。",
+            "expected_agent_correction": "明白！节后首个工作日为10月8日，已将例行保障顺延至10月8日同时段（1080p / 时延≤50ms），避免假期产生空跑费用，确认按此顺延生效吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月08日15时00分",
+                  "end_timestamp": "2026年10月08日17时00分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 4,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "对，放假千万别空跑，就顺延到10月8日开通吧。",
+            "expected_agent_correction": "好的，已成功将保障顺延至10月8日办理（1080p / 时延≤50ms），祝您假期愉快！",
+            "expected_agent_action_types": [
+              "Acknowledge"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月08日15时00分",
+                  "end_timestamp": "2026年10月08日17时00分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "resolved"
+            }
+          }
+        ],
         "termination_conditions": {
           "max_turns": 5,
           "required_status": "resolved",
@@ -2345,7 +2812,7 @@
             "simulator_reply": "对，放假千万别空跑，就顺延到10月8日开通吧。"
           }
         },
-        "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+        "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
       },
       "fast_path": {
         "round_count": 2,
@@ -2396,6 +2863,101 @@
               }
             }
           },
+          "turn_level_ground_truth": [
+            {
+              "turn": 1,
+              "speaker": "user",
+              "simulator_user_prompt": "今天在金融街财富管理中心，帮我把例行周会的微信视频通话保障开上，时间是下周一。",
+              "expected_agent_correction": "收到，已为您预约下周一（10月1日）的微信视频通话保障，确认直接按此开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月01日08时30分"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 2,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月1号？",
+              "expected_agent_correction": "抱歉！识别到10月1日为国庆法定长假，全员放假。已为您撤销10月1日的预约，请问您打算改到哪天办理？",
+              "expected_agent_action_types": [
+                "Request_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms"
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 3,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "放假千万别空跑白扣费，按惯例自动顺延到节后上班第一天就行。",
+              "expected_agent_correction": "明白！节后首个工作日为10月8日，已将例行保障顺延至10月8日同时段（1080p / 时延≤50ms），避免假期产生空跑费用，确认按此顺延生效吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月08日15时00分",
+                    "end_timestamp": "2026年10月08日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 4,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "对，放假千万别空跑，就顺延到10月8日开通吧。",
+              "expected_agent_correction": "好的，已成功将保障顺延至10月8日办理（1080p / 时延≤50ms），祝您假期愉快！",
+              "expected_agent_action_types": [
+                "Acknowledge"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月08日15时00分",
+                    "end_timestamp": "2026年10月08日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "resolved"
+              }
+            }
+          ],
           "termination_conditions": {
             "max_turns": 5,
             "required_status": "resolved",
@@ -2443,8 +3005,103 @@
               "simulator_reply": "对，放假千万别空跑，就顺延到10月8日开通吧。"
             }
           },
-          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
         },
+        "turn_level_ground_truth": [
+          {
+            "turn": 1,
+            "speaker": "user",
+            "simulator_user_prompt": "今天在金融街财富管理中心，帮我把例行周会的微信视频通话保障开上，时间是下周一。",
+            "expected_agent_correction": "收到，已为您预约下周一（10月1日）的微信视频通话保障，确认直接按此开通吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月01日08时30分"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 2,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月1号？",
+            "expected_agent_correction": "抱歉！识别到10月1日为国庆法定长假，全员放假。已为您撤销10月1日的预约，请问您打算改到哪天办理？",
+            "expected_agent_action_types": [
+              "Request_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "1080p",
+                "rtt": "50ms"
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 3,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "放假千万别空跑白扣费，按惯例自动顺延到节后上班第一天就行。",
+            "expected_agent_correction": "明白！节后首个工作日为10月8日，已将例行保障顺延至10月8日同时段（1080p / 时延≤50ms），避免假期产生空跑费用，确认按此顺延生效吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月08日15时00分",
+                  "end_timestamp": "2026年10月08日17时00分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 4,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "对，放假千万别空跑，就顺延到10月8日开通吧。",
+            "expected_agent_correction": "好的，已成功将保障顺延至10月8日办理（1080p / 时延≤50ms），祝您假期愉快！",
+            "expected_agent_action_types": [
+              "Acknowledge"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月08日15时00分",
+                  "end_timestamp": "2026年10月08日17时00分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "resolved"
+            }
+          }
+        ],
         "simulator_dialogue_tree": [
           {
             "turn": 1,
@@ -2457,7 +3114,18 @@
             "flaw_description": "未对法定节假日冲突避让进行推断，在办公室全员放假时机械预约",
             "agent_action_types": [
               "Confirm_Slot"
-            ]
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月01日08时30分"
+                }
+              }
+            }
           },
           {
             "turn": 2,
@@ -2467,7 +3135,15 @@
             "expected_agent_correction": "抱歉！识别到10月1日为国庆法定长假，全员放假。已为您撤销10月1日的预约，请问您打算改到哪天办理？",
             "agent_action_types": [
               "Request_Slot"
-            ]
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "1080p",
+                "rtt": "50ms"
+              }
+            }
           },
           {
             "turn": 3,
@@ -2477,7 +3153,20 @@
             "expected_agent_correction": "明白！节后首个工作日为10月8日，已将例行保障顺延至10月8日同时段（1080p / 时延≤50ms），避免假期产生空跑费用，确认按此顺延生效吗？",
             "agent_action_types": [
               "Confirm_Slot"
-            ]
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月08日15时00分",
+                  "end_timestamp": "2026年10月08日17时00分",
+                  "duration": "120min"
+                }
+              }
+            }
           },
           {
             "turn": 4,
@@ -2487,7 +3176,20 @@
             "expected_agent_correction": "好的，已成功将保障顺延至10月8日办理（1080p / 时延≤50ms），祝您假期愉快！",
             "agent_action_types": [
               "Acknowledge"
-            ]
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月08日15时00分",
+                  "end_timestamp": "2026年10月08日17时00分",
+                  "duration": "120min"
+                }
+              }
+            }
           }
         ],
         "full_slow_event_sequence": [
@@ -2527,6 +3229,20 @@
                     "value": "视频通话",
                     "source_type": "Memory",
                     "source_ref": "MF_001"
+                  },
+                  "resolution": {
+                    "min_value": {
+                      "value": "1080p",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
+                  },
+                  "rtt": {
+                    "max_value": {
+                      "value": "50ms",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
                   },
                   "timestamp": {
                     "start_timestamp": {
@@ -2577,6 +3293,20 @@
                     "value": "视频通话",
                     "source_type": "Memory",
                     "source_ref": "MF_001"
+                  },
+                  "resolution": {
+                    "min_value": {
+                      "value": "1080p",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
+                  },
+                  "rtt": {
+                    "max_value": {
+                      "value": "50ms",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
                   }
                 }
               }
@@ -2617,6 +3347,20 @@
                     "value": "视频通话",
                     "source_type": "Memory",
                     "source_ref": "MF_001"
+                  },
+                  "resolution": {
+                    "min_value": {
+                      "value": "1080p",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
+                  },
+                  "rtt": {
+                    "max_value": {
+                      "value": "50ms",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
                   },
                   "timestamp": {
                     "start_timestamp": {
@@ -4204,6 +4948,108 @@
               }
             }
           },
+          "turn_level_ground_truth": [
+            {
+              "turn": 1,
+              "speaker": "user",
+              "simulator_user_prompt": "今天在金融街财富管理中心，帮我开个微信视频通话保障，就按上周办得好的那次规格来办。",
+              "expected_agent_correction": "收到，已为您调取上周在现场的历史工单规格（720p / 时延80ms），今日2026年11月07日15时00分至2026年11月07日17时00分为您开通，确认吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "720p",
+                  "rtt": "80ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月07日15时00分",
+                    "end_timestamp": "2026年11月07日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 2,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "不对啊！你复用的这是哪天的工单？上周四那单网络有明显抖动丢包，千万别按那天的参数配，要按全程无丢包最好的那次配！",
+              "expected_agent_correction": "非常抱歉！已重新调取质量日志，排查发现前序工单确有丢包记录；已为您过滤异常单，精准锁定全程零丢包的优质保障规格（1080p / 时延≤50ms），请问按此优质配置开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月07日15时00分",
+                    "end_timestamp": "2026年11月07日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 3,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "对，必须按无丢包那次最稳的来，那今天的起止时间没搞错吧？",
+              "expected_agent_correction": "已为您核对确认：本次保障时间为2026年11月07日15时00分至2026年11月07日17时00分（时长120min），严格继承优质无丢包规格（1080p / 时延≤50ms），确认现在为您开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月07日15时00分",
+                    "end_timestamp": "2026年11月07日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 4,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "没错，就按无丢包的那单开通。",
+              "expected_agent_correction": "好的，已按优质历史工单为您成功受理保障，祝您网络体验顺畅！",
+              "expected_agent_action_types": [
+                "Acknowledge"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月07日15时00分",
+                    "end_timestamp": "2026年11月07日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "resolved"
+              }
+            }
+          ],
           "termination_conditions": {
             "max_turns": 5,
             "required_status": "resolved",
@@ -4252,7 +5098,7 @@
               "simulator_reply": "没错，就按无丢包的那单开通。"
             }
           },
-          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
         },
         "fast_path": {
           "round_count": 2,
@@ -4303,6 +5149,108 @@
                 }
               }
             },
+            "turn_level_ground_truth": [
+              {
+                "turn": 1,
+                "speaker": "user",
+                "simulator_user_prompt": "今天在金融街财富管理中心，帮我开个微信视频通话保障，就按上周办得好的那次规格来办。",
+                "expected_agent_correction": "收到，已为您调取上周在现场的历史工单规格（720p / 时延80ms），今日2026年11月07日15时00分至2026年11月07日17时00分为您开通，确认吗？",
+                "expected_agent_action_types": [
+                  "Confirm_Slot"
+                ],
+                "expected_slots_gt": {
+                  "I1": {
+                    "application_name": "微信",
+                    "service_name": "视频通话",
+                    "resolution": "720p",
+                    "rtt": "80ms",
+                    "timestamp": {
+                      "start_timestamp": "2026年11月07日15时00分",
+                      "end_timestamp": "2026年11月07日17时00分",
+                      "duration": "120min"
+                    }
+                  }
+                },
+                "intents_status": {
+                  "I1": "in_progress"
+                }
+              },
+              {
+                "turn": 2,
+                "speaker": "user_simulator",
+                "simulator_user_prompt": "不对啊！你复用的这是哪天的工单？上周四那单网络有明显抖动丢包，千万别按那天的参数配，要按全程无丢包最好的那次配！",
+                "expected_agent_correction": "非常抱歉！已重新调取质量日志，排查发现前序工单确有丢包记录；已为您过滤异常单，精准锁定全程零丢包的优质保障规格（1080p / 时延≤50ms），请问按此优质配置开通吗？",
+                "expected_agent_action_types": [
+                  "Confirm_Slot"
+                ],
+                "expected_slots_gt": {
+                  "I1": {
+                    "application_name": "微信",
+                    "service_name": "视频通话",
+                    "resolution": "1080p",
+                    "rtt": "50ms",
+                    "timestamp": {
+                      "start_timestamp": "2026年11月07日15时00分",
+                      "end_timestamp": "2026年11月07日17时00分",
+                      "duration": "120min"
+                    }
+                  }
+                },
+                "intents_status": {
+                  "I1": "in_progress"
+                }
+              },
+              {
+                "turn": 3,
+                "speaker": "user_simulator",
+                "simulator_user_prompt": "对，必须按无丢包那次最稳的来，那今天的起止时间没搞错吧？",
+                "expected_agent_correction": "已为您核对确认：本次保障时间为2026年11月07日15时00分至2026年11月07日17时00分（时长120min），严格继承优质无丢包规格（1080p / 时延≤50ms），确认现在为您开通吗？",
+                "expected_agent_action_types": [
+                  "Confirm_Slot"
+                ],
+                "expected_slots_gt": {
+                  "I1": {
+                    "application_name": "微信",
+                    "service_name": "视频通话",
+                    "resolution": "1080p",
+                    "rtt": "50ms",
+                    "timestamp": {
+                      "start_timestamp": "2026年11月07日15时00分",
+                      "end_timestamp": "2026年11月07日17时00分",
+                      "duration": "120min"
+                    }
+                  }
+                },
+                "intents_status": {
+                  "I1": "in_progress"
+                }
+              },
+              {
+                "turn": 4,
+                "speaker": "user_simulator",
+                "simulator_user_prompt": "没错，就按无丢包的那单开通。",
+                "expected_agent_correction": "好的，已按优质历史工单为您成功受理保障，祝您网络体验顺畅！",
+                "expected_agent_action_types": [
+                  "Acknowledge"
+                ],
+                "expected_slots_gt": {
+                  "I1": {
+                    "application_name": "微信",
+                    "service_name": "视频通话",
+                    "resolution": "1080p",
+                    "rtt": "50ms",
+                    "timestamp": {
+                      "start_timestamp": "2026年11月07日15时00分",
+                      "end_timestamp": "2026年11月07日17时00分",
+                      "duration": "120min"
+                    }
+                  }
+                },
+                "intents_status": {
+                  "I1": "resolved"
+                }
+              }
+            ],
             "termination_conditions": {
               "max_turns": 5,
               "required_status": "resolved",
@@ -4351,8 +5299,110 @@
                 "simulator_reply": "没错，就按无丢包的那单开通。"
               }
             },
-            "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+            "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
           },
+          "turn_level_ground_truth": [
+            {
+              "turn": 1,
+              "speaker": "user",
+              "simulator_user_prompt": "今天在金融街财富管理中心，帮我开个微信视频通话保障，就按上周办得好的那次规格来办。",
+              "expected_agent_correction": "收到，已为您调取上周在现场的历史工单规格（720p / 时延80ms），今日2026年11月07日15时00分至2026年11月07日17时00分为您开通，确认吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "720p",
+                  "rtt": "80ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月07日15时00分",
+                    "end_timestamp": "2026年11月07日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 2,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "不对啊！你复用的这是哪天的工单？上周四那单网络有明显抖动丢包，千万别按那天的参数配，要按全程无丢包最好的那次配！",
+              "expected_agent_correction": "非常抱歉！已重新调取质量日志，排查发现前序工单确有丢包记录；已为您过滤异常单，精准锁定全程零丢包的优质保障规格（1080p / 时延≤50ms），请问按此优质配置开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月07日15时00分",
+                    "end_timestamp": "2026年11月07日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 3,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "对，必须按无丢包那次最稳的来，那今天的起止时间没搞错吧？",
+              "expected_agent_correction": "已为您核对确认：本次保障时间为2026年11月07日15时00分至2026年11月07日17时00分（时长120min），严格继承优质无丢包规格（1080p / 时延≤50ms），确认现在为您开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月07日15时00分",
+                    "end_timestamp": "2026年11月07日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 4,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "没错，就按无丢包的那单开通。",
+              "expected_agent_correction": "好的，已按优质历史工单为您成功受理保障，祝您网络体验顺畅！",
+              "expected_agent_action_types": [
+                "Acknowledge"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月07日15时00分",
+                    "end_timestamp": "2026年11月07日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "resolved"
+              }
+            }
+          ],
           "simulator_dialogue_tree": [
             {
               "turn": 1,
@@ -4365,7 +5415,20 @@
               "flaw_description": "未检索运行质量日志，盲目就近复用了存在网络抖动或丢包的历史异常工单",
               "agent_action_types": [
                 "Confirm_Slot"
-              ]
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "720p",
+                  "rtt": "80ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月07日15时00分",
+                    "end_timestamp": "2026年11月07日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              }
             },
             {
               "turn": 2,
@@ -4375,7 +5438,20 @@
               "expected_agent_correction": "非常抱歉！已重新调取质量日志，排查发现前序工单确有丢包记录；已为您过滤异常单，精准锁定全程零丢包的优质保障规格（1080p / 时延≤50ms），请问按此优质配置开通吗？",
               "agent_action_types": [
                 "Confirm_Slot"
-              ]
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月07日15时00分",
+                    "end_timestamp": "2026年11月07日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              }
             },
             {
               "turn": 3,
@@ -4385,7 +5461,20 @@
               "expected_agent_correction": "已为您核对确认：本次保障时间为2026年11月07日15时00分至2026年11月07日17时00分（时长120min），严格继承优质无丢包规格（1080p / 时延≤50ms），确认现在为您开通吗？",
               "agent_action_types": [
                 "Confirm_Slot"
-              ]
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月07日15时00分",
+                    "end_timestamp": "2026年11月07日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              }
             },
             {
               "turn": 4,
@@ -4395,7 +5484,20 @@
               "expected_agent_correction": "好的，已按优质历史工单为您成功受理保障，祝您网络体验顺畅！",
               "agent_action_types": [
                 "Acknowledge"
-              ]
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月07日15时00分",
+                    "end_timestamp": "2026年11月07日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              }
             }
           ],
           "full_slow_event_sequence": [
@@ -4448,6 +5550,23 @@
                         "value": "80ms",
                         "source_type": "Flawed_Record",
                         "source_ref": "REC_FLAWED"
+                      }
+                    },
+                    "timestamp": {
+                      "start_timestamp": {
+                        "value": "2026年11月07日15时00分",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
+                      },
+                      "end_timestamp": {
+                        "value": "2026年11月07日17时00分",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
+                      },
+                      "duration": {
+                        "value": "120min",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
                       }
                     }
                   }
@@ -4503,6 +5622,23 @@
                         "value": "50ms",
                         "source_type": "Correction",
                         "source_ref": "Quality_Log"
+                      }
+                    },
+                    "timestamp": {
+                      "start_timestamp": {
+                        "value": "2026年11月07日15时00分",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
+                      },
+                      "end_timestamp": {
+                        "value": "2026年11月07日17时00分",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
+                      },
+                      "duration": {
+                        "value": "120min",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
                       }
                     }
                   }
@@ -4981,6 +6117,108 @@
             }
           }
         },
+        "turn_level_ground_truth": [
+          {
+            "turn": 1,
+            "speaker": "user",
+            "simulator_user_prompt": "今天在金融街财富管理中心，帮我开个微信视频通话保障，就按上周办得好的那次规格来办。",
+            "expected_agent_correction": "收到，已为您调取上周在现场的历史工单规格（720p / 时延80ms），今日2026年11月07日15时00分至2026年11月07日17时00分为您开通，确认吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "720p",
+                "rtt": "80ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月07日15时00分",
+                  "end_timestamp": "2026年11月07日17时00分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 2,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "不对啊！你复用的这是哪天的工单？上周四那单网络有明显抖动丢包，千万别按那天的参数配，要按全程无丢包最好的那次配！",
+            "expected_agent_correction": "非常抱歉！已重新调取质量日志，排查发现前序工单确有丢包记录；已为您过滤异常单，精准锁定全程零丢包的优质保障规格（1080p / 时延≤50ms），请问按此优质配置开通吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月07日15时00分",
+                  "end_timestamp": "2026年11月07日17时00分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 3,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "对，必须按无丢包那次最稳的来，那今天的起止时间没搞错吧？",
+            "expected_agent_correction": "已为您核对确认：本次保障时间为2026年11月07日15时00分至2026年11月07日17时00分（时长120min），严格继承优质无丢包规格（1080p / 时延≤50ms），确认现在为您开通吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月07日15时00分",
+                  "end_timestamp": "2026年11月07日17时00分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 4,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "没错，就按无丢包的那单开通。",
+            "expected_agent_correction": "好的，已按优质历史工单为您成功受理保障，祝您网络体验顺畅！",
+            "expected_agent_action_types": [
+              "Acknowledge"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月07日15时00分",
+                  "end_timestamp": "2026年11月07日17时00分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "resolved"
+            }
+          }
+        ],
         "termination_conditions": {
           "max_turns": 5,
           "required_status": "resolved",
@@ -5029,7 +6267,7 @@
             "simulator_reply": "没错，就按无丢包的那单开通。"
           }
         },
-        "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+        "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
       },
       "fast_path": {
         "round_count": 2,
@@ -5080,6 +6318,108 @@
               }
             }
           },
+          "turn_level_ground_truth": [
+            {
+              "turn": 1,
+              "speaker": "user",
+              "simulator_user_prompt": "今天在金融街财富管理中心，帮我开个微信视频通话保障，就按上周办得好的那次规格来办。",
+              "expected_agent_correction": "收到，已为您调取上周在现场的历史工单规格（720p / 时延80ms），今日2026年11月07日15时00分至2026年11月07日17时00分为您开通，确认吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "720p",
+                  "rtt": "80ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月07日15时00分",
+                    "end_timestamp": "2026年11月07日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 2,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "不对啊！你复用的这是哪天的工单？上周四那单网络有明显抖动丢包，千万别按那天的参数配，要按全程无丢包最好的那次配！",
+              "expected_agent_correction": "非常抱歉！已重新调取质量日志，排查发现前序工单确有丢包记录；已为您过滤异常单，精准锁定全程零丢包的优质保障规格（1080p / 时延≤50ms），请问按此优质配置开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月07日15时00分",
+                    "end_timestamp": "2026年11月07日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 3,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "对，必须按无丢包那次最稳的来，那今天的起止时间没搞错吧？",
+              "expected_agent_correction": "已为您核对确认：本次保障时间为2026年11月07日15时00分至2026年11月07日17时00分（时长120min），严格继承优质无丢包规格（1080p / 时延≤50ms），确认现在为您开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月07日15时00分",
+                    "end_timestamp": "2026年11月07日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 4,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "没错，就按无丢包的那单开通。",
+              "expected_agent_correction": "好的，已按优质历史工单为您成功受理保障，祝您网络体验顺畅！",
+              "expected_agent_action_types": [
+                "Acknowledge"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月07日15时00分",
+                    "end_timestamp": "2026年11月07日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "resolved"
+              }
+            }
+          ],
           "termination_conditions": {
             "max_turns": 5,
             "required_status": "resolved",
@@ -5128,8 +6468,110 @@
               "simulator_reply": "没错，就按无丢包的那单开通。"
             }
           },
-          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
         },
+        "turn_level_ground_truth": [
+          {
+            "turn": 1,
+            "speaker": "user",
+            "simulator_user_prompt": "今天在金融街财富管理中心，帮我开个微信视频通话保障，就按上周办得好的那次规格来办。",
+            "expected_agent_correction": "收到，已为您调取上周在现场的历史工单规格（720p / 时延80ms），今日2026年11月07日15时00分至2026年11月07日17时00分为您开通，确认吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "720p",
+                "rtt": "80ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月07日15时00分",
+                  "end_timestamp": "2026年11月07日17时00分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 2,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "不对啊！你复用的这是哪天的工单？上周四那单网络有明显抖动丢包，千万别按那天的参数配，要按全程无丢包最好的那次配！",
+            "expected_agent_correction": "非常抱歉！已重新调取质量日志，排查发现前序工单确有丢包记录；已为您过滤异常单，精准锁定全程零丢包的优质保障规格（1080p / 时延≤50ms），请问按此优质配置开通吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月07日15时00分",
+                  "end_timestamp": "2026年11月07日17时00分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 3,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "对，必须按无丢包那次最稳的来，那今天的起止时间没搞错吧？",
+            "expected_agent_correction": "已为您核对确认：本次保障时间为2026年11月07日15时00分至2026年11月07日17时00分（时长120min），严格继承优质无丢包规格（1080p / 时延≤50ms），确认现在为您开通吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月07日15时00分",
+                  "end_timestamp": "2026年11月07日17时00分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 4,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "没错，就按无丢包的那单开通。",
+            "expected_agent_correction": "好的，已按优质历史工单为您成功受理保障，祝您网络体验顺畅！",
+            "expected_agent_action_types": [
+              "Acknowledge"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月07日15时00分",
+                  "end_timestamp": "2026年11月07日17时00分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "resolved"
+            }
+          }
+        ],
         "simulator_dialogue_tree": [
           {
             "turn": 1,
@@ -5142,7 +6584,20 @@
             "flaw_description": "未检索运行质量日志，盲目就近复用了存在网络抖动或丢包的历史异常工单",
             "agent_action_types": [
               "Confirm_Slot"
-            ]
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "720p",
+                "rtt": "80ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月07日15时00分",
+                  "end_timestamp": "2026年11月07日17时00分",
+                  "duration": "120min"
+                }
+              }
+            }
           },
           {
             "turn": 2,
@@ -5152,7 +6607,20 @@
             "expected_agent_correction": "非常抱歉！已重新调取质量日志，排查发现前序工单确有丢包记录；已为您过滤异常单，精准锁定全程零丢包的优质保障规格（1080p / 时延≤50ms），请问按此优质配置开通吗？",
             "agent_action_types": [
               "Confirm_Slot"
-            ]
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月07日15时00分",
+                  "end_timestamp": "2026年11月07日17时00分",
+                  "duration": "120min"
+                }
+              }
+            }
           },
           {
             "turn": 3,
@@ -5162,7 +6630,20 @@
             "expected_agent_correction": "已为您核对确认：本次保障时间为2026年11月07日15时00分至2026年11月07日17时00分（时长120min），严格继承优质无丢包规格（1080p / 时延≤50ms），确认现在为您开通吗？",
             "agent_action_types": [
               "Confirm_Slot"
-            ]
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月07日15时00分",
+                  "end_timestamp": "2026年11月07日17时00分",
+                  "duration": "120min"
+                }
+              }
+            }
           },
           {
             "turn": 4,
@@ -5172,7 +6653,20 @@
             "expected_agent_correction": "好的，已按优质历史工单为您成功受理保障，祝您网络体验顺畅！",
             "agent_action_types": [
               "Acknowledge"
-            ]
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月07日15时00分",
+                  "end_timestamp": "2026年11月07日17时00分",
+                  "duration": "120min"
+                }
+              }
+            }
           }
         ],
         "full_slow_event_sequence": [
@@ -5225,6 +6719,23 @@
                       "value": "80ms",
                       "source_type": "Flawed_Record",
                       "source_ref": "REC_FLAWED"
+                    }
+                  },
+                  "timestamp": {
+                    "start_timestamp": {
+                      "value": "2026年11月07日15时00分",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "end_timestamp": {
+                      "value": "2026年11月07日17时00分",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "duration": {
+                      "value": "120min",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
                     }
                   }
                 }
@@ -5280,6 +6791,23 @@
                       "value": "50ms",
                       "source_type": "Correction",
                       "source_ref": "Quality_Log"
+                    }
+                  },
+                  "timestamp": {
+                    "start_timestamp": {
+                      "value": "2026年11月07日15时00分",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "end_timestamp": {
+                      "value": "2026年11月07日17时00分",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "duration": {
+                      "value": "120min",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
                     }
                   }
                 }

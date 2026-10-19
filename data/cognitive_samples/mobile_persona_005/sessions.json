@@ -1593,6 +1593,101 @@
               }
             }
           },
+          "turn_level_ground_truth": [
+            {
+              "turn": 1,
+              "speaker": "user",
+              "simulator_user_prompt": "今天在影视传媒数字创作基地，帮我把例行周会的抖音开直播保障开上，时间是下周一。",
+              "expected_agent_correction": "收到，已为您预约下周一（10月1日）的抖音开直播保障，确认直接按此开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月01日08时30分"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 2,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月1号？",
+              "expected_agent_correction": "抱歉！识别到10月1日为国庆法定长假，全员放假。已为您撤销10月1日的预约，请问您打算改到哪天办理？",
+              "expected_agent_action_types": [
+                "Request_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms"
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 3,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "放假千万别空跑白扣费，按惯例自动顺延到节后上班第一天就行。",
+              "expected_agent_correction": "明白！节后首个工作日为10月8日，已将例行保障顺延至10月8日同时段（1080p / 时延≤50ms），避免假期产生空跑费用，确认按此顺延生效吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月08日08时30分",
+                    "end_timestamp": "2026年10月08日10时30分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 4,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "对，放假千万别空跑，就顺延到10月8日开通吧。",
+              "expected_agent_correction": "好的，已成功将保障顺延至10月8日办理（1080p / 时延≤50ms），祝您假期愉快！",
+              "expected_agent_action_types": [
+                "Acknowledge"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月08日08时30分",
+                    "end_timestamp": "2026年10月08日10时30分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "resolved"
+              }
+            }
+          ],
           "termination_conditions": {
             "max_turns": 5,
             "required_status": "resolved",
@@ -1640,7 +1735,7 @@
               "simulator_reply": "对，放假千万别空跑，就顺延到10月8日开通吧。"
             }
           },
-          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
         },
         "fast_path": {
           "round_count": 2,
@@ -1691,6 +1786,101 @@
                 }
               }
             },
+            "turn_level_ground_truth": [
+              {
+                "turn": 1,
+                "speaker": "user",
+                "simulator_user_prompt": "今天在影视传媒数字创作基地，帮我把例行周会的抖音开直播保障开上，时间是下周一。",
+                "expected_agent_correction": "收到，已为您预约下周一（10月1日）的抖音开直播保障，确认直接按此开通吗？",
+                "expected_agent_action_types": [
+                  "Confirm_Slot"
+                ],
+                "expected_slots_gt": {
+                  "I1": {
+                    "application_name": "抖音",
+                    "service_name": "开直播",
+                    "resolution": "1080p",
+                    "rtt": "50ms",
+                    "timestamp": {
+                      "start_timestamp": "2026年10月01日08时30分"
+                    }
+                  }
+                },
+                "intents_status": {
+                  "I1": "in_progress"
+                }
+              },
+              {
+                "turn": 2,
+                "speaker": "user_simulator",
+                "simulator_user_prompt": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月1号？",
+                "expected_agent_correction": "抱歉！识别到10月1日为国庆法定长假，全员放假。已为您撤销10月1日的预约，请问您打算改到哪天办理？",
+                "expected_agent_action_types": [
+                  "Request_Slot"
+                ],
+                "expected_slots_gt": {
+                  "I1": {
+                    "application_name": "抖音",
+                    "service_name": "开直播",
+                    "resolution": "1080p",
+                    "rtt": "50ms"
+                  }
+                },
+                "intents_status": {
+                  "I1": "in_progress"
+                }
+              },
+              {
+                "turn": 3,
+                "speaker": "user_simulator",
+                "simulator_user_prompt": "放假千万别空跑白扣费，按惯例自动顺延到节后上班第一天就行。",
+                "expected_agent_correction": "明白！节后首个工作日为10月8日，已将例行保障顺延至10月8日同时段（1080p / 时延≤50ms），避免假期产生空跑费用，确认按此顺延生效吗？",
+                "expected_agent_action_types": [
+                  "Confirm_Slot"
+                ],
+                "expected_slots_gt": {
+                  "I1": {
+                    "application_name": "抖音",
+                    "service_name": "开直播",
+                    "resolution": "1080p",
+                    "rtt": "50ms",
+                    "timestamp": {
+                      "start_timestamp": "2026年10月08日08时30分",
+                      "end_timestamp": "2026年10月08日10时30分",
+                      "duration": "120min"
+                    }
+                  }
+                },
+                "intents_status": {
+                  "I1": "in_progress"
+                }
+              },
+              {
+                "turn": 4,
+                "speaker": "user_simulator",
+                "simulator_user_prompt": "对，放假千万别空跑，就顺延到10月8日开通吧。",
+                "expected_agent_correction": "好的，已成功将保障顺延至10月8日办理（1080p / 时延≤50ms），祝您假期愉快！",
+                "expected_agent_action_types": [
+                  "Acknowledge"
+                ],
+                "expected_slots_gt": {
+                  "I1": {
+                    "application_name": "抖音",
+                    "service_name": "开直播",
+                    "resolution": "1080p",
+                    "rtt": "50ms",
+                    "timestamp": {
+                      "start_timestamp": "2026年10月08日08时30分",
+                      "end_timestamp": "2026年10月08日10时30分",
+                      "duration": "120min"
+                    }
+                  }
+                },
+                "intents_status": {
+                  "I1": "resolved"
+                }
+              }
+            ],
             "termination_conditions": {
               "max_turns": 5,
               "required_status": "resolved",
@@ -1738,8 +1928,103 @@
                 "simulator_reply": "对，放假千万别空跑，就顺延到10月8日开通吧。"
               }
             },
-            "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+            "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
           },
+          "turn_level_ground_truth": [
+            {
+              "turn": 1,
+              "speaker": "user",
+              "simulator_user_prompt": "今天在影视传媒数字创作基地，帮我把例行周会的抖音开直播保障开上，时间是下周一。",
+              "expected_agent_correction": "收到，已为您预约下周一（10月1日）的抖音开直播保障，确认直接按此开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月01日08时30分"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 2,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月1号？",
+              "expected_agent_correction": "抱歉！识别到10月1日为国庆法定长假，全员放假。已为您撤销10月1日的预约，请问您打算改到哪天办理？",
+              "expected_agent_action_types": [
+                "Request_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms"
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 3,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "放假千万别空跑白扣费，按惯例自动顺延到节后上班第一天就行。",
+              "expected_agent_correction": "明白！节后首个工作日为10月8日，已将例行保障顺延至10月8日同时段（1080p / 时延≤50ms），避免假期产生空跑费用，确认按此顺延生效吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月08日08时30分",
+                    "end_timestamp": "2026年10月08日10时30分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 4,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "对，放假千万别空跑，就顺延到10月8日开通吧。",
+              "expected_agent_correction": "好的，已成功将保障顺延至10月8日办理（1080p / 时延≤50ms），祝您假期愉快！",
+              "expected_agent_action_types": [
+                "Acknowledge"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月08日08时30分",
+                    "end_timestamp": "2026年10月08日10时30分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "resolved"
+              }
+            }
+          ],
           "simulator_dialogue_tree": [
             {
               "turn": 1,
@@ -1752,7 +2037,18 @@
               "flaw_description": "未对法定节假日冲突避让进行推断，在办公室全员放假时机械预约",
               "agent_action_types": [
                 "Confirm_Slot"
-              ]
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月01日08时30分"
+                  }
+                }
+              }
             },
             {
               "turn": 2,
@@ -1762,7 +2058,15 @@
               "expected_agent_correction": "抱歉！识别到10月1日为国庆法定长假，全员放假。已为您撤销10月1日的预约，请问您打算改到哪天办理？",
               "agent_action_types": [
                 "Request_Slot"
-              ]
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms"
+                }
+              }
             },
             {
               "turn": 3,
@@ -1772,7 +2076,20 @@
               "expected_agent_correction": "明白！节后首个工作日为10月8日，已将例行保障顺延至10月8日同时段（1080p / 时延≤50ms），避免假期产生空跑费用，确认按此顺延生效吗？",
               "agent_action_types": [
                 "Confirm_Slot"
-              ]
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月08日08时30分",
+                    "end_timestamp": "2026年10月08日10时30分",
+                    "duration": "120min"
+                  }
+                }
+              }
             },
             {
               "turn": 4,
@@ -1782,7 +2099,20 @@
               "expected_agent_correction": "好的，已成功将保障顺延至10月8日办理（1080p / 时延≤50ms），祝您假期愉快！",
               "agent_action_types": [
                 "Acknowledge"
-              ]
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月08日08时30分",
+                    "end_timestamp": "2026年10月08日10时30分",
+                    "duration": "120min"
+                  }
+                }
+              }
             }
           ],
           "full_slow_event_sequence": [
@@ -1822,6 +2152,20 @@
                       "value": "开直播",
                       "source_type": "Memory",
                       "source_ref": "MF_001"
+                    },
+                    "resolution": {
+                      "min_value": {
+                        "value": "1080p",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
+                    },
+                    "rtt": {
+                      "max_value": {
+                        "value": "50ms",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
                     },
                     "timestamp": {
                       "start_timestamp": {
@@ -1872,6 +2216,20 @@
                       "value": "开直播",
                       "source_type": "Memory",
                       "source_ref": "MF_001"
+                    },
+                    "resolution": {
+                      "min_value": {
+                        "value": "1080p",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
+                    },
+                    "rtt": {
+                      "max_value": {
+                        "value": "50ms",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
                     }
                   }
                 }
@@ -1912,6 +2270,20 @@
                       "value": "开直播",
                       "source_type": "Memory",
                       "source_ref": "MF_001"
+                    },
+                    "resolution": {
+                      "min_value": {
+                        "value": "1080p",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
+                    },
+                    "rtt": {
+                      "max_value": {
+                        "value": "50ms",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
                     },
                     "timestamp": {
                       "start_timestamp": {
@@ -2309,6 +2681,101 @@
             }
           }
         },
+        "turn_level_ground_truth": [
+          {
+            "turn": 1,
+            "speaker": "user",
+            "simulator_user_prompt": "今天在影视传媒数字创作基地，帮我把例行周会的抖音开直播保障开上，时间是下周一。",
+            "expected_agent_correction": "收到，已为您预约下周一（10月1日）的抖音开直播保障，确认直接按此开通吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月01日08时30分"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 2,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月1号？",
+            "expected_agent_correction": "抱歉！识别到10月1日为国庆法定长假，全员放假。已为您撤销10月1日的预约，请问您打算改到哪天办理？",
+            "expected_agent_action_types": [
+              "Request_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms"
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 3,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "放假千万别空跑白扣费，按惯例自动顺延到节后上班第一天就行。",
+            "expected_agent_correction": "明白！节后首个工作日为10月8日，已将例行保障顺延至10月8日同时段（1080p / 时延≤50ms），避免假期产生空跑费用，确认按此顺延生效吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月08日08时30分",
+                  "end_timestamp": "2026年10月08日10时30分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 4,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "对，放假千万别空跑，就顺延到10月8日开通吧。",
+            "expected_agent_correction": "好的，已成功将保障顺延至10月8日办理（1080p / 时延≤50ms），祝您假期愉快！",
+            "expected_agent_action_types": [
+              "Acknowledge"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月08日08时30分",
+                  "end_timestamp": "2026年10月08日10时30分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "resolved"
+            }
+          }
+        ],
         "termination_conditions": {
           "max_turns": 5,
           "required_status": "resolved",
@@ -2356,7 +2823,7 @@
             "simulator_reply": "对，放假千万别空跑，就顺延到10月8日开通吧。"
           }
         },
-        "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+        "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
       },
       "fast_path": {
         "round_count": 2,
@@ -2407,6 +2874,101 @@
               }
             }
           },
+          "turn_level_ground_truth": [
+            {
+              "turn": 1,
+              "speaker": "user",
+              "simulator_user_prompt": "今天在影视传媒数字创作基地，帮我把例行周会的抖音开直播保障开上，时间是下周一。",
+              "expected_agent_correction": "收到，已为您预约下周一（10月1日）的抖音开直播保障，确认直接按此开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月01日08时30分"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 2,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月1号？",
+              "expected_agent_correction": "抱歉！识别到10月1日为国庆法定长假，全员放假。已为您撤销10月1日的预约，请问您打算改到哪天办理？",
+              "expected_agent_action_types": [
+                "Request_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms"
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 3,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "放假千万别空跑白扣费，按惯例自动顺延到节后上班第一天就行。",
+              "expected_agent_correction": "明白！节后首个工作日为10月8日，已将例行保障顺延至10月8日同时段（1080p / 时延≤50ms），避免假期产生空跑费用，确认按此顺延生效吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月08日08时30分",
+                    "end_timestamp": "2026年10月08日10时30分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 4,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "对，放假千万别空跑，就顺延到10月8日开通吧。",
+              "expected_agent_correction": "好的，已成功将保障顺延至10月8日办理（1080p / 时延≤50ms），祝您假期愉快！",
+              "expected_agent_action_types": [
+                "Acknowledge"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月08日08时30分",
+                    "end_timestamp": "2026年10月08日10时30分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "resolved"
+              }
+            }
+          ],
           "termination_conditions": {
             "max_turns": 5,
             "required_status": "resolved",
@@ -2454,8 +3016,103 @@
               "simulator_reply": "对，放假千万别空跑，就顺延到10月8日开通吧。"
             }
           },
-          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
         },
+        "turn_level_ground_truth": [
+          {
+            "turn": 1,
+            "speaker": "user",
+            "simulator_user_prompt": "今天在影视传媒数字创作基地，帮我把例行周会的抖音开直播保障开上，时间是下周一。",
+            "expected_agent_correction": "收到，已为您预约下周一（10月1日）的抖音开直播保障，确认直接按此开通吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月01日08时30分"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 2,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月1号？",
+            "expected_agent_correction": "抱歉！识别到10月1日为国庆法定长假，全员放假。已为您撤销10月1日的预约，请问您打算改到哪天办理？",
+            "expected_agent_action_types": [
+              "Request_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms"
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 3,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "放假千万别空跑白扣费，按惯例自动顺延到节后上班第一天就行。",
+            "expected_agent_correction": "明白！节后首个工作日为10月8日，已将例行保障顺延至10月8日同时段（1080p / 时延≤50ms），避免假期产生空跑费用，确认按此顺延生效吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月08日08时30分",
+                  "end_timestamp": "2026年10月08日10时30分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 4,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "对，放假千万别空跑，就顺延到10月8日开通吧。",
+            "expected_agent_correction": "好的，已成功将保障顺延至10月8日办理（1080p / 时延≤50ms），祝您假期愉快！",
+            "expected_agent_action_types": [
+              "Acknowledge"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月08日08时30分",
+                  "end_timestamp": "2026年10月08日10时30分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "resolved"
+            }
+          }
+        ],
         "simulator_dialogue_tree": [
           {
             "turn": 1,
@@ -2468,7 +3125,18 @@
             "flaw_description": "未对法定节假日冲突避让进行推断，在办公室全员放假时机械预约",
             "agent_action_types": [
               "Confirm_Slot"
-            ]
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月01日08时30分"
+                }
+              }
+            }
           },
           {
             "turn": 2,
@@ -2478,7 +3146,15 @@
             "expected_agent_correction": "抱歉！识别到10月1日为国庆法定长假，全员放假。已为您撤销10月1日的预约，请问您打算改到哪天办理？",
             "agent_action_types": [
               "Request_Slot"
-            ]
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms"
+              }
+            }
           },
           {
             "turn": 3,
@@ -2488,7 +3164,20 @@
             "expected_agent_correction": "明白！节后首个工作日为10月8日，已将例行保障顺延至10月8日同时段（1080p / 时延≤50ms），避免假期产生空跑费用，确认按此顺延生效吗？",
             "agent_action_types": [
               "Confirm_Slot"
-            ]
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月08日08时30分",
+                  "end_timestamp": "2026年10月08日10时30分",
+                  "duration": "120min"
+                }
+              }
+            }
           },
           {
             "turn": 4,
@@ -2498,7 +3187,20 @@
             "expected_agent_correction": "好的，已成功将保障顺延至10月8日办理（1080p / 时延≤50ms），祝您假期愉快！",
             "agent_action_types": [
               "Acknowledge"
-            ]
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月08日08时30分",
+                  "end_timestamp": "2026年10月08日10时30分",
+                  "duration": "120min"
+                }
+              }
+            }
           }
         ],
         "full_slow_event_sequence": [
@@ -2538,6 +3240,20 @@
                     "value": "开直播",
                     "source_type": "Memory",
                     "source_ref": "MF_001"
+                  },
+                  "resolution": {
+                    "min_value": {
+                      "value": "1080p",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
+                  },
+                  "rtt": {
+                    "max_value": {
+                      "value": "50ms",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
                   },
                   "timestamp": {
                     "start_timestamp": {
@@ -2588,6 +3304,20 @@
                     "value": "开直播",
                     "source_type": "Memory",
                     "source_ref": "MF_001"
+                  },
+                  "resolution": {
+                    "min_value": {
+                      "value": "1080p",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
+                  },
+                  "rtt": {
+                    "max_value": {
+                      "value": "50ms",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
                   }
                 }
               }
@@ -2628,6 +3358,20 @@
                     "value": "开直播",
                     "source_type": "Memory",
                     "source_ref": "MF_001"
+                  },
+                  "resolution": {
+                    "min_value": {
+                      "value": "1080p",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
+                  },
+                  "rtt": {
+                    "max_value": {
+                      "value": "50ms",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
                   },
                   "timestamp": {
                     "start_timestamp": {
@@ -3063,6 +3807,106 @@
               }
             }
           },
+          "turn_level_ground_truth": [
+            {
+              "turn": 1,
+              "speaker": "user",
+              "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开抖音开直播保障，时间从08时30分到10时30分。",
+              "expected_agent_correction": "收到，已按活动起止时间锁定抖音开直播保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "end_timestamp": "2026年10月28日10时30分"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 2,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "等等，这是大型场馆活动，现场设备调试很多，掐着点开通根本来不及试机！必须提前半小时起保！",
+              "expected_agent_correction": "抱歉！已为您重新推算时间，将保障开始时间自动提前30分钟推算为2026年10月28日08时00分至2026年10月28日10时30分（总时长扩至150min），确认按此提前开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月28日08时00分",
+                    "end_timestamp": "2026年10月28日10时30分",
+                    "duration": "150min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 3,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "对，必须提前半小时试机才稳妥，那预热调试期间的网络指标还是保持高规格吧？",
+              "expected_agent_correction": "是的，提前预热试机全程同样执行1080p与时延≤50ms的高规格保障，确认现在为您提交办理吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月28日08时00分",
+                    "end_timestamp": "2026年10月28日10时30分",
+                    "duration": "150min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 4,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "好的，这就稳妥了，确认开通。",
+              "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机网络保障（起保时间：2026年10月28日08时00分），预祝大型活动圆满顺利！",
+              "expected_agent_action_types": [
+                "Acknowledge"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月28日08时00分",
+                    "end_timestamp": "2026年10月28日10时30分",
+                    "duration": "150min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "resolved"
+              }
+            }
+          ],
           "termination_conditions": {
             "max_turns": 5,
             "required_status": "resolved",
@@ -3110,7 +3954,7 @@
               "simulator_reply": "好的，这就稳妥了，确认开通。"
             }
           },
-          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
         },
         "fast_path": {
           "round_count": 2,
@@ -3161,6 +4005,106 @@
                 }
               }
             },
+            "turn_level_ground_truth": [
+              {
+                "turn": 1,
+                "speaker": "user",
+                "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开抖音开直播保障，时间从08时30分到10时30分。",
+                "expected_agent_correction": "收到，已按活动起止时间锁定抖音开直播保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+                "expected_agent_action_types": [
+                  "Confirm_Slot"
+                ],
+                "expected_slots_gt": {
+                  "I1": {
+                    "application_name": "抖音",
+                    "service_name": "开直播",
+                    "resolution": "1080p",
+                    "rtt": "50ms",
+                    "timestamp": {
+                      "end_timestamp": "2026年10月28日10时30分"
+                    }
+                  }
+                },
+                "intents_status": {
+                  "I1": "in_progress"
+                }
+              },
+              {
+                "turn": 2,
+                "speaker": "user_simulator",
+                "simulator_user_prompt": "等等，这是大型场馆活动，现场设备调试很多，掐着点开通根本来不及试机！必须提前半小时起保！",
+                "expected_agent_correction": "抱歉！已为您重新推算时间，将保障开始时间自动提前30分钟推算为2026年10月28日08时00分至2026年10月28日10时30分（总时长扩至150min），确认按此提前开通吗？",
+                "expected_agent_action_types": [
+                  "Confirm_Slot"
+                ],
+                "expected_slots_gt": {
+                  "I1": {
+                    "application_name": "抖音",
+                    "service_name": "开直播",
+                    "resolution": "1080p",
+                    "rtt": "50ms",
+                    "timestamp": {
+                      "start_timestamp": "2026年10月28日08时00分",
+                      "end_timestamp": "2026年10月28日10时30分",
+                      "duration": "150min"
+                    }
+                  }
+                },
+                "intents_status": {
+                  "I1": "in_progress"
+                }
+              },
+              {
+                "turn": 3,
+                "speaker": "user_simulator",
+                "simulator_user_prompt": "对，必须提前半小时试机才稳妥，那预热调试期间的网络指标还是保持高规格吧？",
+                "expected_agent_correction": "是的，提前预热试机全程同样执行1080p与时延≤50ms的高规格保障，确认现在为您提交办理吗？",
+                "expected_agent_action_types": [
+                  "Confirm_Slot"
+                ],
+                "expected_slots_gt": {
+                  "I1": {
+                    "application_name": "抖音",
+                    "service_name": "开直播",
+                    "resolution": "1080p",
+                    "rtt": "50ms",
+                    "timestamp": {
+                      "start_timestamp": "2026年10月28日08时00分",
+                      "end_timestamp": "2026年10月28日10时30分",
+                      "duration": "150min"
+                    }
+                  }
+                },
+                "intents_status": {
+                  "I1": "in_progress"
+                }
+              },
+              {
+                "turn": 4,
+                "speaker": "user_simulator",
+                "simulator_user_prompt": "好的，这就稳妥了，确认开通。",
+                "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机网络保障（起保时间：2026年10月28日08时00分），预祝大型活动圆满顺利！",
+                "expected_agent_action_types": [
+                  "Acknowledge"
+                ],
+                "expected_slots_gt": {
+                  "I1": {
+                    "application_name": "抖音",
+                    "service_name": "开直播",
+                    "resolution": "1080p",
+                    "rtt": "50ms",
+                    "timestamp": {
+                      "start_timestamp": "2026年10月28日08时00分",
+                      "end_timestamp": "2026年10月28日10时30分",
+                      "duration": "150min"
+                    }
+                  }
+                },
+                "intents_status": {
+                  "I1": "resolved"
+                }
+              }
+            ],
             "termination_conditions": {
               "max_turns": 5,
               "required_status": "resolved",
@@ -3208,8 +4152,108 @@
                 "simulator_reply": "好的，这就稳妥了，确认开通。"
               }
             },
-            "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+            "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
           },
+          "turn_level_ground_truth": [
+            {
+              "turn": 1,
+              "speaker": "user",
+              "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开抖音开直播保障，时间从08时30分到10时30分。",
+              "expected_agent_correction": "收到，已按活动起止时间锁定抖音开直播保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "end_timestamp": "2026年10月28日10时30分"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 2,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "等等，这是大型场馆活动，现场设备调试很多，掐着点开通根本来不及试机！必须提前半小时起保！",
+              "expected_agent_correction": "抱歉！已为您重新推算时间，将保障开始时间自动提前30分钟推算为2026年10月28日08时00分至2026年10月28日10时30分（总时长扩至150min），确认按此提前开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月28日08时00分",
+                    "end_timestamp": "2026年10月28日10时30分",
+                    "duration": "150min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 3,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "对，必须提前半小时试机才稳妥，那预热调试期间的网络指标还是保持高规格吧？",
+              "expected_agent_correction": "是的，提前预热试机全程同样执行1080p与时延≤50ms的高规格保障，确认现在为您提交办理吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月28日08时00分",
+                    "end_timestamp": "2026年10月28日10时30分",
+                    "duration": "150min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 4,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "好的，这就稳妥了，确认开通。",
+              "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机网络保障（起保时间：2026年10月28日08时00分），预祝大型活动圆满顺利！",
+              "expected_agent_action_types": [
+                "Acknowledge"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月28日08时00分",
+                    "end_timestamp": "2026年10月28日10时30分",
+                    "duration": "150min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "resolved"
+              }
+            }
+          ],
           "simulator_dialogue_tree": [
             {
               "turn": 1,
@@ -3222,7 +4266,18 @@
               "flaw_description": "未对重大活动外场设备调试推流进行前置时间差推算",
               "agent_action_types": [
                 "Confirm_Slot"
-              ]
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "end_timestamp": "2026年10月28日10时30分"
+                  }
+                }
+              }
             },
             {
               "turn": 2,
@@ -3232,7 +4287,20 @@
               "expected_agent_correction": "抱歉！已为您重新推算时间，将保障开始时间自动提前30分钟推算为2026年10月28日08时00分至2026年10月28日10时30分（总时长扩至150min），确认按此提前开通吗？",
               "agent_action_types": [
                 "Confirm_Slot"
-              ]
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月28日08时00分",
+                    "end_timestamp": "2026年10月28日10时30分",
+                    "duration": "150min"
+                  }
+                }
+              }
             },
             {
               "turn": 3,
@@ -3242,7 +4310,20 @@
               "expected_agent_correction": "是的，提前预热试机全程同样执行1080p与时延≤50ms的高规格保障，确认现在为您提交办理吗？",
               "agent_action_types": [
                 "Confirm_Slot"
-              ]
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月28日08时00分",
+                    "end_timestamp": "2026年10月28日10时30分",
+                    "duration": "150min"
+                  }
+                }
+              }
             },
             {
               "turn": 4,
@@ -3252,7 +4333,20 @@
               "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机网络保障（起保时间：2026年10月28日08时00分），预祝大型活动圆满顺利！",
               "agent_action_types": [
                 "Acknowledge"
-              ]
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月28日08时00分",
+                    "end_timestamp": "2026年10月28日10时30分",
+                    "duration": "150min"
+                  }
+                }
+              }
             }
           ],
           "full_slow_event_sequence": [
@@ -3292,6 +4386,20 @@
                       "value": "开直播",
                       "source_type": "Turn",
                       "source_ref": "U1"
+                    },
+                    "resolution": {
+                      "min_value": {
+                        "value": "1080p",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
+                    },
+                    "rtt": {
+                      "max_value": {
+                        "value": "50ms",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
                     },
                     "timestamp": {
                       "end_timestamp": {
@@ -3340,6 +4448,20 @@
                       "value": "开直播",
                       "source_type": "Turn",
                       "source_ref": "U1"
+                    },
+                    "resolution": {
+                      "min_value": {
+                        "value": "1080p",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
+                    },
+                    "rtt": {
+                      "max_value": {
+                        "value": "50ms",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
                     },
                     "timestamp": {
                       "start_timestamp": {
@@ -3545,6 +4667,106 @@
             }
           }
         },
+        "turn_level_ground_truth": [
+          {
+            "turn": 1,
+            "speaker": "user",
+            "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开抖音开直播保障，时间从08时30分到10时30分。",
+            "expected_agent_correction": "收到，已按活动起止时间锁定抖音开直播保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "end_timestamp": "2026年10月28日10时30分"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 2,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "等等，这是大型场馆活动，现场设备调试很多，掐着点开通根本来不及试机！必须提前半小时起保！",
+            "expected_agent_correction": "抱歉！已为您重新推算时间，将保障开始时间自动提前30分钟推算为2026年10月28日08时00分至2026年10月28日10时30分（总时长扩至150min），确认按此提前开通吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月28日08时00分",
+                  "end_timestamp": "2026年10月28日10时30分",
+                  "duration": "150min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 3,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "对，必须提前半小时试机才稳妥，那预热调试期间的网络指标还是保持高规格吧？",
+            "expected_agent_correction": "是的，提前预热试机全程同样执行1080p与时延≤50ms的高规格保障，确认现在为您提交办理吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月28日08时00分",
+                  "end_timestamp": "2026年10月28日10时30分",
+                  "duration": "150min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 4,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "好的，这就稳妥了，确认开通。",
+            "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机网络保障（起保时间：2026年10月28日08时00分），预祝大型活动圆满顺利！",
+            "expected_agent_action_types": [
+              "Acknowledge"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月28日08时00分",
+                  "end_timestamp": "2026年10月28日10时30分",
+                  "duration": "150min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "resolved"
+            }
+          }
+        ],
         "termination_conditions": {
           "max_turns": 5,
           "required_status": "resolved",
@@ -3592,7 +4814,7 @@
             "simulator_reply": "好的，这就稳妥了，确认开通。"
           }
         },
-        "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+        "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
       },
       "fast_path": {
         "round_count": 2,
@@ -3643,6 +4865,106 @@
               }
             }
           },
+          "turn_level_ground_truth": [
+            {
+              "turn": 1,
+              "speaker": "user",
+              "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开抖音开直播保障，时间从08时30分到10时30分。",
+              "expected_agent_correction": "收到，已按活动起止时间锁定抖音开直播保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "end_timestamp": "2026年10月28日10时30分"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 2,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "等等，这是大型场馆活动，现场设备调试很多，掐着点开通根本来不及试机！必须提前半小时起保！",
+              "expected_agent_correction": "抱歉！已为您重新推算时间，将保障开始时间自动提前30分钟推算为2026年10月28日08时00分至2026年10月28日10时30分（总时长扩至150min），确认按此提前开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月28日08时00分",
+                    "end_timestamp": "2026年10月28日10时30分",
+                    "duration": "150min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 3,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "对，必须提前半小时试机才稳妥，那预热调试期间的网络指标还是保持高规格吧？",
+              "expected_agent_correction": "是的，提前预热试机全程同样执行1080p与时延≤50ms的高规格保障，确认现在为您提交办理吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月28日08时00分",
+                    "end_timestamp": "2026年10月28日10时30分",
+                    "duration": "150min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 4,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "好的，这就稳妥了，确认开通。",
+              "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机网络保障（起保时间：2026年10月28日08时00分），预祝大型活动圆满顺利！",
+              "expected_agent_action_types": [
+                "Acknowledge"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月28日08时00分",
+                    "end_timestamp": "2026年10月28日10时30分",
+                    "duration": "150min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "resolved"
+              }
+            }
+          ],
           "termination_conditions": {
             "max_turns": 5,
             "required_status": "resolved",
@@ -3690,8 +5012,108 @@
               "simulator_reply": "好的，这就稳妥了，确认开通。"
             }
           },
-          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
         },
+        "turn_level_ground_truth": [
+          {
+            "turn": 1,
+            "speaker": "user",
+            "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开抖音开直播保障，时间从08时30分到10时30分。",
+            "expected_agent_correction": "收到，已按活动起止时间锁定抖音开直播保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "end_timestamp": "2026年10月28日10时30分"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 2,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "等等，这是大型场馆活动，现场设备调试很多，掐着点开通根本来不及试机！必须提前半小时起保！",
+            "expected_agent_correction": "抱歉！已为您重新推算时间，将保障开始时间自动提前30分钟推算为2026年10月28日08时00分至2026年10月28日10时30分（总时长扩至150min），确认按此提前开通吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月28日08时00分",
+                  "end_timestamp": "2026年10月28日10时30分",
+                  "duration": "150min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 3,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "对，必须提前半小时试机才稳妥，那预热调试期间的网络指标还是保持高规格吧？",
+            "expected_agent_correction": "是的，提前预热试机全程同样执行1080p与时延≤50ms的高规格保障，确认现在为您提交办理吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月28日08时00分",
+                  "end_timestamp": "2026年10月28日10时30分",
+                  "duration": "150min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 4,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "好的，这就稳妥了，确认开通。",
+            "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机网络保障（起保时间：2026年10月28日08时00分），预祝大型活动圆满顺利！",
+            "expected_agent_action_types": [
+              "Acknowledge"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月28日08时00分",
+                  "end_timestamp": "2026年10月28日10时30分",
+                  "duration": "150min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "resolved"
+            }
+          }
+        ],
         "simulator_dialogue_tree": [
           {
             "turn": 1,
@@ -3704,7 +5126,18 @@
             "flaw_description": "未对重大活动外场设备调试推流进行前置时间差推算",
             "agent_action_types": [
               "Confirm_Slot"
-            ]
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "end_timestamp": "2026年10月28日10时30分"
+                }
+              }
+            }
           },
           {
             "turn": 2,
@@ -3714,7 +5147,20 @@
             "expected_agent_correction": "抱歉！已为您重新推算时间，将保障开始时间自动提前30分钟推算为2026年10月28日08时00分至2026年10月28日10时30分（总时长扩至150min），确认按此提前开通吗？",
             "agent_action_types": [
               "Confirm_Slot"
-            ]
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月28日08时00分",
+                  "end_timestamp": "2026年10月28日10时30分",
+                  "duration": "150min"
+                }
+              }
+            }
           },
           {
             "turn": 3,
@@ -3724,7 +5170,20 @@
             "expected_agent_correction": "是的，提前预热试机全程同样执行1080p与时延≤50ms的高规格保障，确认现在为您提交办理吗？",
             "agent_action_types": [
               "Confirm_Slot"
-            ]
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月28日08时00分",
+                  "end_timestamp": "2026年10月28日10时30分",
+                  "duration": "150min"
+                }
+              }
+            }
           },
           {
             "turn": 4,
@@ -3734,7 +5193,20 @@
             "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机网络保障（起保时间：2026年10月28日08时00分），预祝大型活动圆满顺利！",
             "agent_action_types": [
               "Acknowledge"
-            ]
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月28日08时00分",
+                  "end_timestamp": "2026年10月28日10时30分",
+                  "duration": "150min"
+                }
+              }
+            }
           }
         ],
         "full_slow_event_sequence": [
@@ -3774,6 +5246,20 @@
                     "value": "开直播",
                     "source_type": "Turn",
                     "source_ref": "U1"
+                  },
+                  "resolution": {
+                    "min_value": {
+                      "value": "1080p",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
+                  },
+                  "rtt": {
+                    "max_value": {
+                      "value": "50ms",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
                   },
                   "timestamp": {
                     "end_timestamp": {
@@ -3822,6 +5308,20 @@
                     "value": "开直播",
                     "source_type": "Turn",
                     "source_ref": "U1"
+                  },
+                  "resolution": {
+                    "min_value": {
+                      "value": "1080p",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
+                  },
+                  "rtt": {
+                    "max_value": {
+                      "value": "50ms",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
                   },
                   "timestamp": {
                     "start_timestamp": {

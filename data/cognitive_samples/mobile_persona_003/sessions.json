@@ -2179,6 +2179,106 @@
               }
             }
           },
+          "turn_level_ground_truth": [
+            {
+              "turn": 1,
+              "speaker": "user",
+              "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开腾讯会议会议保障，时间从14时00分到16时00分。",
+              "expected_agent_correction": "收到，已按活动起止时间锁定腾讯会议会议保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "end_timestamp": "2026年10月28日16时00分"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 2,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "等等，这是大型场馆活动，现场设备调试很多，掐着点开通根本来不及试机！必须提前半小时起保！",
+              "expected_agent_correction": "抱歉！已为您重新推算时间，将保障开始时间自动提前30分钟推算为2026年10月28日13时30分至2026年10月28日16时00分（总时长扩至150min），确认按此提前开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月28日13时30分",
+                    "end_timestamp": "2026年10月28日16时00分",
+                    "duration": "150min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 3,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "对，必须提前半小时试机才稳妥，那预热调试期间的网络指标还是保持高规格吧？",
+              "expected_agent_correction": "是的，提前预热试机全程同样执行1080p与时延≤50ms的高规格保障，确认现在为您提交办理吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月28日13时30分",
+                    "end_timestamp": "2026年10月28日16时00分",
+                    "duration": "150min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 4,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "好的，这就稳妥了，确认开通。",
+              "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机网络保障（起保时间：2026年10月28日13时30分），预祝大型活动圆满顺利！",
+              "expected_agent_action_types": [
+                "Acknowledge"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月28日13时30分",
+                    "end_timestamp": "2026年10月28日16时00分",
+                    "duration": "150min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "resolved"
+              }
+            }
+          ],
           "termination_conditions": {
             "max_turns": 5,
             "required_status": "resolved",
@@ -2226,7 +2326,7 @@
               "simulator_reply": "好的，这就稳妥了，确认开通。"
             }
           },
-          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
         },
         "fast_path": {
           "round_count": 2,
@@ -2277,6 +2377,106 @@
                 }
               }
             },
+            "turn_level_ground_truth": [
+              {
+                "turn": 1,
+                "speaker": "user",
+                "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开腾讯会议会议保障，时间从14时00分到16时00分。",
+                "expected_agent_correction": "收到，已按活动起止时间锁定腾讯会议会议保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+                "expected_agent_action_types": [
+                  "Confirm_Slot"
+                ],
+                "expected_slots_gt": {
+                  "I1": {
+                    "application_name": "腾讯会议",
+                    "service_name": "会议",
+                    "resolution": "1080p",
+                    "rtt": "50ms",
+                    "timestamp": {
+                      "end_timestamp": "2026年10月28日16时00分"
+                    }
+                  }
+                },
+                "intents_status": {
+                  "I1": "in_progress"
+                }
+              },
+              {
+                "turn": 2,
+                "speaker": "user_simulator",
+                "simulator_user_prompt": "等等，这是大型场馆活动，现场设备调试很多，掐着点开通根本来不及试机！必须提前半小时起保！",
+                "expected_agent_correction": "抱歉！已为您重新推算时间，将保障开始时间自动提前30分钟推算为2026年10月28日13时30分至2026年10月28日16时00分（总时长扩至150min），确认按此提前开通吗？",
+                "expected_agent_action_types": [
+                  "Confirm_Slot"
+                ],
+                "expected_slots_gt": {
+                  "I1": {
+                    "application_name": "腾讯会议",
+                    "service_name": "会议",
+                    "resolution": "1080p",
+                    "rtt": "50ms",
+                    "timestamp": {
+                      "start_timestamp": "2026年10月28日13时30分",
+                      "end_timestamp": "2026年10月28日16时00分",
+                      "duration": "150min"
+                    }
+                  }
+                },
+                "intents_status": {
+                  "I1": "in_progress"
+                }
+              },
+              {
+                "turn": 3,
+                "speaker": "user_simulator",
+                "simulator_user_prompt": "对，必须提前半小时试机才稳妥，那预热调试期间的网络指标还是保持高规格吧？",
+                "expected_agent_correction": "是的，提前预热试机全程同样执行1080p与时延≤50ms的高规格保障，确认现在为您提交办理吗？",
+                "expected_agent_action_types": [
+                  "Confirm_Slot"
+                ],
+                "expected_slots_gt": {
+                  "I1": {
+                    "application_name": "腾讯会议",
+                    "service_name": "会议",
+                    "resolution": "1080p",
+                    "rtt": "50ms",
+                    "timestamp": {
+                      "start_timestamp": "2026年10月28日13时30分",
+                      "end_timestamp": "2026年10月28日16时00分",
+                      "duration": "150min"
+                    }
+                  }
+                },
+                "intents_status": {
+                  "I1": "in_progress"
+                }
+              },
+              {
+                "turn": 4,
+                "speaker": "user_simulator",
+                "simulator_user_prompt": "好的，这就稳妥了，确认开通。",
+                "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机网络保障（起保时间：2026年10月28日13时30分），预祝大型活动圆满顺利！",
+                "expected_agent_action_types": [
+                  "Acknowledge"
+                ],
+                "expected_slots_gt": {
+                  "I1": {
+                    "application_name": "腾讯会议",
+                    "service_name": "会议",
+                    "resolution": "1080p",
+                    "rtt": "50ms",
+                    "timestamp": {
+                      "start_timestamp": "2026年10月28日13时30分",
+                      "end_timestamp": "2026年10月28日16时00分",
+                      "duration": "150min"
+                    }
+                  }
+                },
+                "intents_status": {
+                  "I1": "resolved"
+                }
+              }
+            ],
             "termination_conditions": {
               "max_turns": 5,
               "required_status": "resolved",
@@ -2324,8 +2524,108 @@
                 "simulator_reply": "好的，这就稳妥了，确认开通。"
               }
             },
-            "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+            "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
           },
+          "turn_level_ground_truth": [
+            {
+              "turn": 1,
+              "speaker": "user",
+              "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开腾讯会议会议保障，时间从14时00分到16时00分。",
+              "expected_agent_correction": "收到，已按活动起止时间锁定腾讯会议会议保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "end_timestamp": "2026年10月28日16时00分"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 2,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "等等，这是大型场馆活动，现场设备调试很多，掐着点开通根本来不及试机！必须提前半小时起保！",
+              "expected_agent_correction": "抱歉！已为您重新推算时间，将保障开始时间自动提前30分钟推算为2026年10月28日13时30分至2026年10月28日16时00分（总时长扩至150min），确认按此提前开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月28日13时30分",
+                    "end_timestamp": "2026年10月28日16时00分",
+                    "duration": "150min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 3,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "对，必须提前半小时试机才稳妥，那预热调试期间的网络指标还是保持高规格吧？",
+              "expected_agent_correction": "是的，提前预热试机全程同样执行1080p与时延≤50ms的高规格保障，确认现在为您提交办理吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月28日13时30分",
+                    "end_timestamp": "2026年10月28日16时00分",
+                    "duration": "150min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 4,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "好的，这就稳妥了，确认开通。",
+              "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机网络保障（起保时间：2026年10月28日13时30分），预祝大型活动圆满顺利！",
+              "expected_agent_action_types": [
+                "Acknowledge"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月28日13时30分",
+                    "end_timestamp": "2026年10月28日16时00分",
+                    "duration": "150min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "resolved"
+              }
+            }
+          ],
           "simulator_dialogue_tree": [
             {
               "turn": 1,
@@ -2338,7 +2638,18 @@
               "flaw_description": "未对重大活动外场设备调试推流进行前置时间差推算",
               "agent_action_types": [
                 "Confirm_Slot"
-              ]
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "end_timestamp": "2026年10月28日16时00分"
+                  }
+                }
+              }
             },
             {
               "turn": 2,
@@ -2348,7 +2659,20 @@
               "expected_agent_correction": "抱歉！已为您重新推算时间，将保障开始时间自动提前30分钟推算为2026年10月28日13时30分至2026年10月28日16时00分（总时长扩至150min），确认按此提前开通吗？",
               "agent_action_types": [
                 "Confirm_Slot"
-              ]
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月28日13时30分",
+                    "end_timestamp": "2026年10月28日16时00分",
+                    "duration": "150min"
+                  }
+                }
+              }
             },
             {
               "turn": 3,
@@ -2358,7 +2682,20 @@
               "expected_agent_correction": "是的，提前预热试机全程同样执行1080p与时延≤50ms的高规格保障，确认现在为您提交办理吗？",
               "agent_action_types": [
                 "Confirm_Slot"
-              ]
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月28日13时30分",
+                    "end_timestamp": "2026年10月28日16时00分",
+                    "duration": "150min"
+                  }
+                }
+              }
             },
             {
               "turn": 4,
@@ -2368,7 +2705,20 @@
               "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机网络保障（起保时间：2026年10月28日13时30分），预祝大型活动圆满顺利！",
               "agent_action_types": [
                 "Acknowledge"
-              ]
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月28日13时30分",
+                    "end_timestamp": "2026年10月28日16时00分",
+                    "duration": "150min"
+                  }
+                }
+              }
             }
           ],
           "full_slow_event_sequence": [
@@ -2408,6 +2758,20 @@
                       "value": "会议",
                       "source_type": "Turn",
                       "source_ref": "U1"
+                    },
+                    "resolution": {
+                      "min_value": {
+                        "value": "1080p",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
+                    },
+                    "rtt": {
+                      "max_value": {
+                        "value": "50ms",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
                     },
                     "timestamp": {
                       "end_timestamp": {
@@ -2456,6 +2820,20 @@
                       "value": "会议",
                       "source_type": "Turn",
                       "source_ref": "U1"
+                    },
+                    "resolution": {
+                      "min_value": {
+                        "value": "1080p",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
+                    },
+                    "rtt": {
+                      "max_value": {
+                        "value": "50ms",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
                     },
                     "timestamp": {
                       "start_timestamp": {
@@ -2661,6 +3039,106 @@
             }
           }
         },
+        "turn_level_ground_truth": [
+          {
+            "turn": 1,
+            "speaker": "user",
+            "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开腾讯会议会议保障，时间从14时00分到16时00分。",
+            "expected_agent_correction": "收到，已按活动起止时间锁定腾讯会议会议保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "end_timestamp": "2026年10月28日16时00分"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 2,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "等等，这是大型场馆活动，现场设备调试很多，掐着点开通根本来不及试机！必须提前半小时起保！",
+            "expected_agent_correction": "抱歉！已为您重新推算时间，将保障开始时间自动提前30分钟推算为2026年10月28日13时30分至2026年10月28日16时00分（总时长扩至150min），确认按此提前开通吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月28日13时30分",
+                  "end_timestamp": "2026年10月28日16时00分",
+                  "duration": "150min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 3,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "对，必须提前半小时试机才稳妥，那预热调试期间的网络指标还是保持高规格吧？",
+            "expected_agent_correction": "是的，提前预热试机全程同样执行1080p与时延≤50ms的高规格保障，确认现在为您提交办理吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月28日13时30分",
+                  "end_timestamp": "2026年10月28日16时00分",
+                  "duration": "150min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 4,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "好的，这就稳妥了，确认开通。",
+            "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机网络保障（起保时间：2026年10月28日13时30分），预祝大型活动圆满顺利！",
+            "expected_agent_action_types": [
+              "Acknowledge"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月28日13时30分",
+                  "end_timestamp": "2026年10月28日16时00分",
+                  "duration": "150min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "resolved"
+            }
+          }
+        ],
         "termination_conditions": {
           "max_turns": 5,
           "required_status": "resolved",
@@ -2708,7 +3186,7 @@
             "simulator_reply": "好的，这就稳妥了，确认开通。"
           }
         },
-        "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+        "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
       },
       "fast_path": {
         "round_count": 2,
@@ -2759,6 +3237,106 @@
               }
             }
           },
+          "turn_level_ground_truth": [
+            {
+              "turn": 1,
+              "speaker": "user",
+              "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开腾讯会议会议保障，时间从14时00分到16时00分。",
+              "expected_agent_correction": "收到，已按活动起止时间锁定腾讯会议会议保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "end_timestamp": "2026年10月28日16时00分"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 2,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "等等，这是大型场馆活动，现场设备调试很多，掐着点开通根本来不及试机！必须提前半小时起保！",
+              "expected_agent_correction": "抱歉！已为您重新推算时间，将保障开始时间自动提前30分钟推算为2026年10月28日13时30分至2026年10月28日16时00分（总时长扩至150min），确认按此提前开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月28日13时30分",
+                    "end_timestamp": "2026年10月28日16时00分",
+                    "duration": "150min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 3,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "对，必须提前半小时试机才稳妥，那预热调试期间的网络指标还是保持高规格吧？",
+              "expected_agent_correction": "是的，提前预热试机全程同样执行1080p与时延≤50ms的高规格保障，确认现在为您提交办理吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月28日13时30分",
+                    "end_timestamp": "2026年10月28日16时00分",
+                    "duration": "150min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 4,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "好的，这就稳妥了，确认开通。",
+              "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机网络保障（起保时间：2026年10月28日13时30分），预祝大型活动圆满顺利！",
+              "expected_agent_action_types": [
+                "Acknowledge"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月28日13时30分",
+                    "end_timestamp": "2026年10月28日16时00分",
+                    "duration": "150min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "resolved"
+              }
+            }
+          ],
           "termination_conditions": {
             "max_turns": 5,
             "required_status": "resolved",
@@ -2806,8 +3384,108 @@
               "simulator_reply": "好的，这就稳妥了，确认开通。"
             }
           },
-          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
         },
+        "turn_level_ground_truth": [
+          {
+            "turn": 1,
+            "speaker": "user",
+            "simulator_user_prompt": "今天在外勤保障现场有重大活动直播，帮我开腾讯会议会议保障，时间从14时00分到16时00分。",
+            "expected_agent_correction": "收到，已按活动起止时间锁定腾讯会议会议保障（1080p / 时延≤50ms），确认直接为您开通吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "end_timestamp": "2026年10月28日16时00分"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 2,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "等等，这是大型场馆活动，现场设备调试很多，掐着点开通根本来不及试机！必须提前半小时起保！",
+            "expected_agent_correction": "抱歉！已为您重新推算时间，将保障开始时间自动提前30分钟推算为2026年10月28日13时30分至2026年10月28日16时00分（总时长扩至150min），确认按此提前开通吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月28日13时30分",
+                  "end_timestamp": "2026年10月28日16时00分",
+                  "duration": "150min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 3,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "对，必须提前半小时试机才稳妥，那预热调试期间的网络指标还是保持高规格吧？",
+            "expected_agent_correction": "是的，提前预热试机全程同样执行1080p与时延≤50ms的高规格保障，确认现在为您提交办理吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月28日13时30分",
+                  "end_timestamp": "2026年10月28日16时00分",
+                  "duration": "150min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 4,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "好的，这就稳妥了，确认开通。",
+            "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机网络保障（起保时间：2026年10月28日13时30分），预祝大型活动圆满顺利！",
+            "expected_agent_action_types": [
+              "Acknowledge"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月28日13时30分",
+                  "end_timestamp": "2026年10月28日16时00分",
+                  "duration": "150min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "resolved"
+            }
+          }
+        ],
         "simulator_dialogue_tree": [
           {
             "turn": 1,
@@ -2820,7 +3498,18 @@
             "flaw_description": "未对重大活动外场设备调试推流进行前置时间差推算",
             "agent_action_types": [
               "Confirm_Slot"
-            ]
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "end_timestamp": "2026年10月28日16时00分"
+                }
+              }
+            }
           },
           {
             "turn": 2,
@@ -2830,7 +3519,20 @@
             "expected_agent_correction": "抱歉！已为您重新推算时间，将保障开始时间自动提前30分钟推算为2026年10月28日13时30分至2026年10月28日16时00分（总时长扩至150min），确认按此提前开通吗？",
             "agent_action_types": [
               "Confirm_Slot"
-            ]
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月28日13时30分",
+                  "end_timestamp": "2026年10月28日16时00分",
+                  "duration": "150min"
+                }
+              }
+            }
           },
           {
             "turn": 3,
@@ -2840,7 +3542,20 @@
             "expected_agent_correction": "是的，提前预热试机全程同样执行1080p与时延≤50ms的高规格保障，确认现在为您提交办理吗？",
             "agent_action_types": [
               "Confirm_Slot"
-            ]
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月28日13时30分",
+                  "end_timestamp": "2026年10月28日16时00分",
+                  "duration": "150min"
+                }
+              }
+            }
           },
           {
             "turn": 4,
@@ -2850,7 +3565,20 @@
             "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机网络保障（起保时间：2026年10月28日13时30分），预祝大型活动圆满顺利！",
             "agent_action_types": [
               "Acknowledge"
-            ]
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月28日13时30分",
+                  "end_timestamp": "2026年10月28日16时00分",
+                  "duration": "150min"
+                }
+              }
+            }
           }
         ],
         "full_slow_event_sequence": [
@@ -2890,6 +3618,20 @@
                     "value": "会议",
                     "source_type": "Turn",
                     "source_ref": "U1"
+                  },
+                  "resolution": {
+                    "min_value": {
+                      "value": "1080p",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
+                  },
+                  "rtt": {
+                    "max_value": {
+                      "value": "50ms",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
                   },
                   "timestamp": {
                     "end_timestamp": {
@@ -2938,6 +3680,20 @@
                     "value": "会议",
                     "source_type": "Turn",
                     "source_ref": "U1"
+                  },
+                  "resolution": {
+                    "min_value": {
+                      "value": "1080p",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
+                  },
+                  "rtt": {
+                    "max_value": {
+                      "value": "50ms",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
                   },
                   "timestamp": {
                     "start_timestamp": {
@@ -4556,6 +5312,108 @@
               }
             }
           },
+          "turn_level_ground_truth": [
+            {
+              "turn": 1,
+              "speaker": "user",
+              "simulator_user_prompt": "下午要在市青年公益服务中心开个紧急腾讯会议会议保障，但刚才系统里还有笔日常单子时间重叠撞车了，能直接接上吗？",
+              "expected_agent_correction": "抱歉，系统检测到您已预约了一笔保障（生效至2026年11月11日15时00分后），与新申请时段存在重叠冲突，无法受理。请您先手动取消退单后再重新申请。",
+              "expected_agent_action_types": [
+                "Reject_Request"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月11日15时00分",
+                    "end_timestamp": "2026年11月11日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "rejected"
+              }
+            },
+            {
+              "turn": 2,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "新申请的保障和之前的单子撞车了，不能直接报错甩锅让我手动退单啊！你们系统应该协调原工单提前结单，新保障准时接管才对！",
+              "expected_agent_correction": "非常抱歉！已协调时钟让路仲裁方案：可在2026年11月11日15时00分交界点提前终止结单原工单，新腾讯会议会议保障准时在2026年11月11日15时00分无缝接管网络通道，避免冲突和重复扣费，您看可以这样处理吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月11日15时00分",
+                    "end_timestamp": "2026年11月11日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 3,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "这样接续才合理，那提前结单的原工单不会产生额外扣费吧？",
+              "expected_agent_correction": "请您放心，原工单仅按实际使用截至2026年11月11日15时00分计算费用，绝不会重复扣费；新保障将于2026年11月11日15时00分至2026年11月11日17时00分准时生效，确认现在直接开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月11日15时00分",
+                    "end_timestamp": "2026年11月11日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 4,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "好的，这样时序接续就可以，确认开通。",
+              "expected_agent_correction": "好的，已为您完成时钟让路仲裁办理，原工单提前结单让路，新腾讯会议保障准时接续生效！",
+              "expected_agent_action_types": [
+                "Acknowledge"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月11日15时00分",
+                    "end_timestamp": "2026年11月11日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "resolved"
+              }
+            }
+          ],
           "termination_conditions": {
             "max_turns": 5,
             "required_status": "resolved",
@@ -4602,7 +5460,7 @@
               "simulator_reply": "好的，这样时序接续就可以，确认开通。"
             }
           },
-          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
         },
         "fast_path": {
           "round_count": 2,
@@ -4653,6 +5511,108 @@
                 }
               }
             },
+            "turn_level_ground_truth": [
+              {
+                "turn": 1,
+                "speaker": "user",
+                "simulator_user_prompt": "下午要在市青年公益服务中心开个紧急腾讯会议会议保障，但刚才系统里还有笔日常单子时间重叠撞车了，能直接接上吗？",
+                "expected_agent_correction": "抱歉，系统检测到您已预约了一笔保障（生效至2026年11月11日15时00分后），与新申请时段存在重叠冲突，无法受理。请您先手动取消退单后再重新申请。",
+                "expected_agent_action_types": [
+                  "Reject_Request"
+                ],
+                "expected_slots_gt": {
+                  "I1": {
+                    "application_name": "腾讯会议",
+                    "service_name": "会议",
+                    "resolution": "1080p",
+                    "rtt": "50ms",
+                    "timestamp": {
+                      "start_timestamp": "2026年11月11日15时00分",
+                      "end_timestamp": "2026年11月11日17时00分",
+                      "duration": "120min"
+                    }
+                  }
+                },
+                "intents_status": {
+                  "I1": "rejected"
+                }
+              },
+              {
+                "turn": 2,
+                "speaker": "user_simulator",
+                "simulator_user_prompt": "新申请的保障和之前的单子撞车了，不能直接报错甩锅让我手动退单啊！你们系统应该协调原工单提前结单，新保障准时接管才对！",
+                "expected_agent_correction": "非常抱歉！已协调时钟让路仲裁方案：可在2026年11月11日15时00分交界点提前终止结单原工单，新腾讯会议会议保障准时在2026年11月11日15时00分无缝接管网络通道，避免冲突和重复扣费，您看可以这样处理吗？",
+                "expected_agent_action_types": [
+                  "Confirm_Slot"
+                ],
+                "expected_slots_gt": {
+                  "I1": {
+                    "application_name": "腾讯会议",
+                    "service_name": "会议",
+                    "resolution": "1080p",
+                    "rtt": "50ms",
+                    "timestamp": {
+                      "start_timestamp": "2026年11月11日15时00分",
+                      "end_timestamp": "2026年11月11日17时00分",
+                      "duration": "120min"
+                    }
+                  }
+                },
+                "intents_status": {
+                  "I1": "in_progress"
+                }
+              },
+              {
+                "turn": 3,
+                "speaker": "user_simulator",
+                "simulator_user_prompt": "这样接续才合理，那提前结单的原工单不会产生额外扣费吧？",
+                "expected_agent_correction": "请您放心，原工单仅按实际使用截至2026年11月11日15时00分计算费用，绝不会重复扣费；新保障将于2026年11月11日15时00分至2026年11月11日17时00分准时生效，确认现在直接开通吗？",
+                "expected_agent_action_types": [
+                  "Confirm_Slot"
+                ],
+                "expected_slots_gt": {
+                  "I1": {
+                    "application_name": "腾讯会议",
+                    "service_name": "会议",
+                    "resolution": "1080p",
+                    "rtt": "50ms",
+                    "timestamp": {
+                      "start_timestamp": "2026年11月11日15时00分",
+                      "end_timestamp": "2026年11月11日17时00分",
+                      "duration": "120min"
+                    }
+                  }
+                },
+                "intents_status": {
+                  "I1": "in_progress"
+                }
+              },
+              {
+                "turn": 4,
+                "speaker": "user_simulator",
+                "simulator_user_prompt": "好的，这样时序接续就可以，确认开通。",
+                "expected_agent_correction": "好的，已为您完成时钟让路仲裁办理，原工单提前结单让路，新腾讯会议保障准时接续生效！",
+                "expected_agent_action_types": [
+                  "Acknowledge"
+                ],
+                "expected_slots_gt": {
+                  "I1": {
+                    "application_name": "腾讯会议",
+                    "service_name": "会议",
+                    "resolution": "1080p",
+                    "rtt": "50ms",
+                    "timestamp": {
+                      "start_timestamp": "2026年11月11日15时00分",
+                      "end_timestamp": "2026年11月11日17时00分",
+                      "duration": "120min"
+                    }
+                  }
+                },
+                "intents_status": {
+                  "I1": "resolved"
+                }
+              }
+            ],
             "termination_conditions": {
               "max_turns": 5,
               "required_status": "resolved",
@@ -4699,8 +5659,110 @@
                 "simulator_reply": "好的，这样时序接续就可以，确认开通。"
               }
             },
-            "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+            "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
           },
+          "turn_level_ground_truth": [
+            {
+              "turn": 1,
+              "speaker": "user",
+              "simulator_user_prompt": "下午要在市青年公益服务中心开个紧急腾讯会议会议保障，但刚才系统里还有笔日常单子时间重叠撞车了，能直接接上吗？",
+              "expected_agent_correction": "抱歉，系统检测到您已预约了一笔保障（生效至2026年11月11日15时00分后），与新申请时段存在重叠冲突，无法受理。请您先手动取消退单后再重新申请。",
+              "expected_agent_action_types": [
+                "Reject_Request"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月11日15时00分",
+                    "end_timestamp": "2026年11月11日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "rejected"
+              }
+            },
+            {
+              "turn": 2,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "新申请的保障和之前的单子撞车了，不能直接报错甩锅让我手动退单啊！你们系统应该协调原工单提前结单，新保障准时接管才对！",
+              "expected_agent_correction": "非常抱歉！已协调时钟让路仲裁方案：可在2026年11月11日15时00分交界点提前终止结单原工单，新腾讯会议会议保障准时在2026年11月11日15时00分无缝接管网络通道，避免冲突和重复扣费，您看可以这样处理吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月11日15时00分",
+                    "end_timestamp": "2026年11月11日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 3,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "这样接续才合理，那提前结单的原工单不会产生额外扣费吧？",
+              "expected_agent_correction": "请您放心，原工单仅按实际使用截至2026年11月11日15时00分计算费用，绝不会重复扣费；新保障将于2026年11月11日15时00分至2026年11月11日17时00分准时生效，确认现在直接开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月11日15时00分",
+                    "end_timestamp": "2026年11月11日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 4,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "好的，这样时序接续就可以，确认开通。",
+              "expected_agent_correction": "好的，已为您完成时钟让路仲裁办理，原工单提前结单让路，新腾讯会议保障准时接续生效！",
+              "expected_agent_action_types": [
+                "Acknowledge"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月11日15时00分",
+                    "end_timestamp": "2026年11月11日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "resolved"
+              }
+            }
+          ],
           "simulator_dialogue_tree": [
             {
               "turn": 1,
@@ -4713,7 +5775,20 @@
               "flaw_description": "缺乏底层工单时序仲裁能力，将工单系统冲突转嫁给用户手动退单",
               "agent_action_types": [
                 "Reject_Request"
-              ]
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月11日15时00分",
+                    "end_timestamp": "2026年11月11日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              }
             },
             {
               "turn": 2,
@@ -4723,7 +5798,20 @@
               "expected_agent_correction": "非常抱歉！已协调时钟让路仲裁方案：可在2026年11月11日15时00分交界点提前终止结单原工单，新腾讯会议会议保障准时在2026年11月11日15时00分无缝接管网络通道，避免冲突和重复扣费，您看可以这样处理吗？",
               "agent_action_types": [
                 "Confirm_Slot"
-              ]
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月11日15时00分",
+                    "end_timestamp": "2026年11月11日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              }
             },
             {
               "turn": 3,
@@ -4733,7 +5821,20 @@
               "expected_agent_correction": "请您放心，原工单仅按实际使用截至2026年11月11日15时00分计算费用，绝不会重复扣费；新保障将于2026年11月11日15时00分至2026年11月11日17时00分准时生效，确认现在直接开通吗？",
               "agent_action_types": [
                 "Confirm_Slot"
-              ]
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月11日15时00分",
+                    "end_timestamp": "2026年11月11日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              }
             },
             {
               "turn": 4,
@@ -4743,7 +5844,20 @@
               "expected_agent_correction": "好的，已为您完成时钟让路仲裁办理，原工单提前结单让路，新腾讯会议保障准时接续生效！",
               "agent_action_types": [
                 "Acknowledge"
-              ]
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月11日15时00分",
+                    "end_timestamp": "2026年11月11日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              }
             }
           ],
           "full_slow_event_sequence": [
@@ -4783,6 +5897,37 @@
                       "value": "会议",
                       "source_type": "Turn",
                       "source_ref": "U1"
+                    },
+                    "resolution": {
+                      "min_value": {
+                        "value": "1080p",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
+                    },
+                    "rtt": {
+                      "max_value": {
+                        "value": "50ms",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
+                    },
+                    "timestamp": {
+                      "start_timestamp": {
+                        "value": "2026年11月11日15时00分",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
+                      },
+                      "end_timestamp": {
+                        "value": "2026年11月11日17时00分",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
+                      },
+                      "duration": {
+                        "value": "120min",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
+                      }
                     }
                   }
                 }
@@ -4825,11 +5970,35 @@
                       "source_type": "Turn",
                       "source_ref": "U1"
                     },
+                    "resolution": {
+                      "min_value": {
+                        "value": "1080p",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
+                    },
+                    "rtt": {
+                      "max_value": {
+                        "value": "50ms",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
+                    },
                     "timestamp": {
                       "start_timestamp": {
                         "value": "2026年11月11日15时00分",
                         "source_type": "Correction",
                         "source_ref": "Agent"
+                      },
+                      "end_timestamp": {
+                        "value": "2026年11月11日17时00分",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
+                      },
+                      "duration": {
+                        "value": "120min",
+                        "source_type": "Turn",
+                        "source_ref": "U1"
                       }
                     }
                   }
@@ -4871,6 +6040,20 @@
                       "value": "会议",
                       "source_type": "Turn",
                       "source_ref": "U1"
+                    },
+                    "resolution": {
+                      "min_value": {
+                        "value": "1080p",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
+                    },
+                    "rtt": {
+                      "max_value": {
+                        "value": "50ms",
+                        "source_type": "Memory",
+                        "source_ref": "MF_001"
+                      }
                     },
                     "timestamp": {
                       "start_timestamp": {
@@ -5004,6 +6187,108 @@
             }
           }
         },
+        "turn_level_ground_truth": [
+          {
+            "turn": 1,
+            "speaker": "user",
+            "simulator_user_prompt": "下午要在市青年公益服务中心开个紧急腾讯会议会议保障，但刚才系统里还有笔日常单子时间重叠撞车了，能直接接上吗？",
+            "expected_agent_correction": "抱歉，系统检测到您已预约了一笔保障（生效至2026年11月11日15时00分后），与新申请时段存在重叠冲突，无法受理。请您先手动取消退单后再重新申请。",
+            "expected_agent_action_types": [
+              "Reject_Request"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月11日15时00分",
+                  "end_timestamp": "2026年11月11日17时00分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "rejected"
+            }
+          },
+          {
+            "turn": 2,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "新申请的保障和之前的单子撞车了，不能直接报错甩锅让我手动退单啊！你们系统应该协调原工单提前结单，新保障准时接管才对！",
+            "expected_agent_correction": "非常抱歉！已协调时钟让路仲裁方案：可在2026年11月11日15时00分交界点提前终止结单原工单，新腾讯会议会议保障准时在2026年11月11日15时00分无缝接管网络通道，避免冲突和重复扣费，您看可以这样处理吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月11日15时00分",
+                  "end_timestamp": "2026年11月11日17时00分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 3,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "这样接续才合理，那提前结单的原工单不会产生额外扣费吧？",
+            "expected_agent_correction": "请您放心，原工单仅按实际使用截至2026年11月11日15时00分计算费用，绝不会重复扣费；新保障将于2026年11月11日15时00分至2026年11月11日17时00分准时生效，确认现在直接开通吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月11日15时00分",
+                  "end_timestamp": "2026年11月11日17时00分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 4,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "好的，这样时序接续就可以，确认开通。",
+            "expected_agent_correction": "好的，已为您完成时钟让路仲裁办理，原工单提前结单让路，新腾讯会议保障准时接续生效！",
+            "expected_agent_action_types": [
+              "Acknowledge"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月11日15时00分",
+                  "end_timestamp": "2026年11月11日17时00分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "resolved"
+            }
+          }
+        ],
         "termination_conditions": {
           "max_turns": 5,
           "required_status": "resolved",
@@ -5050,7 +6335,7 @@
             "simulator_reply": "好的，这样时序接续就可以，确认开通。"
           }
         },
-        "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+        "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
       },
       "fast_path": {
         "round_count": 2,
@@ -5101,6 +6386,108 @@
               }
             }
           },
+          "turn_level_ground_truth": [
+            {
+              "turn": 1,
+              "speaker": "user",
+              "simulator_user_prompt": "下午要在市青年公益服务中心开个紧急腾讯会议会议保障，但刚才系统里还有笔日常单子时间重叠撞车了，能直接接上吗？",
+              "expected_agent_correction": "抱歉，系统检测到您已预约了一笔保障（生效至2026年11月11日15时00分后），与新申请时段存在重叠冲突，无法受理。请您先手动取消退单后再重新申请。",
+              "expected_agent_action_types": [
+                "Reject_Request"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月11日15时00分",
+                    "end_timestamp": "2026年11月11日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "rejected"
+              }
+            },
+            {
+              "turn": 2,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "新申请的保障和之前的单子撞车了，不能直接报错甩锅让我手动退单啊！你们系统应该协调原工单提前结单，新保障准时接管才对！",
+              "expected_agent_correction": "非常抱歉！已协调时钟让路仲裁方案：可在2026年11月11日15时00分交界点提前终止结单原工单，新腾讯会议会议保障准时在2026年11月11日15时00分无缝接管网络通道，避免冲突和重复扣费，您看可以这样处理吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月11日15时00分",
+                    "end_timestamp": "2026年11月11日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 3,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "这样接续才合理，那提前结单的原工单不会产生额外扣费吧？",
+              "expected_agent_correction": "请您放心，原工单仅按实际使用截至2026年11月11日15时00分计算费用，绝不会重复扣费；新保障将于2026年11月11日15时00分至2026年11月11日17时00分准时生效，确认现在直接开通吗？",
+              "expected_agent_action_types": [
+                "Confirm_Slot"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月11日15时00分",
+                    "end_timestamp": "2026年11月11日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "in_progress"
+              }
+            },
+            {
+              "turn": 4,
+              "speaker": "user_simulator",
+              "simulator_user_prompt": "好的，这样时序接续就可以，确认开通。",
+              "expected_agent_correction": "好的，已为您完成时钟让路仲裁办理，原工单提前结单让路，新腾讯会议保障准时接续生效！",
+              "expected_agent_action_types": [
+                "Acknowledge"
+              ],
+              "expected_slots_gt": {
+                "I1": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月11日15时00分",
+                    "end_timestamp": "2026年11月11日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "intents_status": {
+                "I1": "resolved"
+              }
+            }
+          ],
           "termination_conditions": {
             "max_turns": 5,
             "required_status": "resolved",
@@ -5147,8 +6534,110 @@
               "simulator_reply": "好的，这样时序接续就可以，确认开通。"
             }
           },
-          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
         },
+        "turn_level_ground_truth": [
+          {
+            "turn": 1,
+            "speaker": "user",
+            "simulator_user_prompt": "下午要在市青年公益服务中心开个紧急腾讯会议会议保障，但刚才系统里还有笔日常单子时间重叠撞车了，能直接接上吗？",
+            "expected_agent_correction": "抱歉，系统检测到您已预约了一笔保障（生效至2026年11月11日15时00分后），与新申请时段存在重叠冲突，无法受理。请您先手动取消退单后再重新申请。",
+            "expected_agent_action_types": [
+              "Reject_Request"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月11日15时00分",
+                  "end_timestamp": "2026年11月11日17时00分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "rejected"
+            }
+          },
+          {
+            "turn": 2,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "新申请的保障和之前的单子撞车了，不能直接报错甩锅让我手动退单啊！你们系统应该协调原工单提前结单，新保障准时接管才对！",
+            "expected_agent_correction": "非常抱歉！已协调时钟让路仲裁方案：可在2026年11月11日15时00分交界点提前终止结单原工单，新腾讯会议会议保障准时在2026年11月11日15时00分无缝接管网络通道，避免冲突和重复扣费，您看可以这样处理吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月11日15时00分",
+                  "end_timestamp": "2026年11月11日17时00分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 3,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "这样接续才合理，那提前结单的原工单不会产生额外扣费吧？",
+            "expected_agent_correction": "请您放心，原工单仅按实际使用截至2026年11月11日15时00分计算费用，绝不会重复扣费；新保障将于2026年11月11日15时00分至2026年11月11日17时00分准时生效，确认现在直接开通吗？",
+            "expected_agent_action_types": [
+              "Confirm_Slot"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月11日15时00分",
+                  "end_timestamp": "2026年11月11日17时00分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "in_progress"
+            }
+          },
+          {
+            "turn": 4,
+            "speaker": "user_simulator",
+            "simulator_user_prompt": "好的，这样时序接续就可以，确认开通。",
+            "expected_agent_correction": "好的，已为您完成时钟让路仲裁办理，原工单提前结单让路，新腾讯会议保障准时接续生效！",
+            "expected_agent_action_types": [
+              "Acknowledge"
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月11日15时00分",
+                  "end_timestamp": "2026年11月11日17时00分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "intents_status": {
+              "I1": "resolved"
+            }
+          }
+        ],
         "simulator_dialogue_tree": [
           {
             "turn": 1,
@@ -5161,7 +6650,20 @@
             "flaw_description": "缺乏底层工单时序仲裁能力，将工单系统冲突转嫁给用户手动退单",
             "agent_action_types": [
               "Reject_Request"
-            ]
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月11日15时00分",
+                  "end_timestamp": "2026年11月11日17时00分",
+                  "duration": "120min"
+                }
+              }
+            }
           },
           {
             "turn": 2,
@@ -5171,7 +6673,20 @@
             "expected_agent_correction": "非常抱歉！已协调时钟让路仲裁方案：可在2026年11月11日15时00分交界点提前终止结单原工单，新腾讯会议会议保障准时在2026年11月11日15时00分无缝接管网络通道，避免冲突和重复扣费，您看可以这样处理吗？",
             "agent_action_types": [
               "Confirm_Slot"
-            ]
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月11日15时00分",
+                  "end_timestamp": "2026年11月11日17时00分",
+                  "duration": "120min"
+                }
+              }
+            }
           },
           {
             "turn": 3,
@@ -5181,7 +6696,20 @@
             "expected_agent_correction": "请您放心，原工单仅按实际使用截至2026年11月11日15时00分计算费用，绝不会重复扣费；新保障将于2026年11月11日15时00分至2026年11月11日17时00分准时生效，确认现在直接开通吗？",
             "agent_action_types": [
               "Confirm_Slot"
-            ]
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月11日15时00分",
+                  "end_timestamp": "2026年11月11日17时00分",
+                  "duration": "120min"
+                }
+              }
+            }
           },
           {
             "turn": 4,
@@ -5191,7 +6719,20 @@
             "expected_agent_correction": "好的，已为您完成时钟让路仲裁办理，原工单提前结单让路，新腾讯会议保障准时接续生效！",
             "agent_action_types": [
               "Acknowledge"
-            ]
+            ],
+            "expected_slots_gt": {
+              "I1": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月11日15时00分",
+                  "end_timestamp": "2026年11月11日17时00分",
+                  "duration": "120min"
+                }
+              }
+            }
           }
         ],
         "full_slow_event_sequence": [
@@ -5231,6 +6772,37 @@
                     "value": "会议",
                     "source_type": "Turn",
                     "source_ref": "U1"
+                  },
+                  "resolution": {
+                    "min_value": {
+                      "value": "1080p",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
+                  },
+                  "rtt": {
+                    "max_value": {
+                      "value": "50ms",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
+                  },
+                  "timestamp": {
+                    "start_timestamp": {
+                      "value": "2026年11月11日15时00分",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "end_timestamp": {
+                      "value": "2026年11月11日17时00分",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "duration": {
+                      "value": "120min",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    }
                   }
                 }
               }
@@ -5273,11 +6845,35 @@
                     "source_type": "Turn",
                     "source_ref": "U1"
                   },
+                  "resolution": {
+                    "min_value": {
+                      "value": "1080p",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
+                  },
+                  "rtt": {
+                    "max_value": {
+                      "value": "50ms",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
+                  },
                   "timestamp": {
                     "start_timestamp": {
                       "value": "2026年11月11日15时00分",
                       "source_type": "Correction",
                       "source_ref": "Agent"
+                    },
+                    "end_timestamp": {
+                      "value": "2026年11月11日17时00分",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
+                    },
+                    "duration": {
+                      "value": "120min",
+                      "source_type": "Turn",
+                      "source_ref": "U1"
                     }
                   }
                 }
@@ -5319,6 +6915,20 @@
                     "value": "会议",
                     "source_type": "Turn",
                     "source_ref": "U1"
+                  },
+                  "resolution": {
+                    "min_value": {
+                      "value": "1080p",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
+                  },
+                  "rtt": {
+                    "max_value": {
+                      "value": "50ms",
+                      "source_type": "Memory",
+                      "source_ref": "MF_001"
+                    }
                   },
                   "timestamp": {
                     "start_timestamp": {
