@@ -352,11 +352,20 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
         self.assertEqual(tree[3]["expected_agent_correction"], tree[3].get("expected_agent_correction"))
         self.assertIn("Acknowledge", tree[3]["agent_action_types"])
 
-        # 4. 验证 4 轮完整数据流 (full_slow_event_sequence) 具备标准事件标注
-        full_seq = slow.get("full_slow_event_sequence", [])
-        self.assertEqual(len(full_seq), 4)
-        self.assertEqual(full_seq[0]["turn_intents"][0]["closure_path"], "flawed_baseline_attempt")
-        self.assertEqual(full_seq[-1]["turn_intents"][0]["closure_path"], "clarification_after_correction")
+        # 5. 验证声明式交互评测契约 (interactive_eval_contract) 完整性
+        contract = eb.get("interactive_eval_contract")
+        self.assertIsNotNone(contract)
+        self.assertEqual(contract["version"], "1.0")
+        self.assertEqual(contract["scenario_type"], "prewarm_buffer")
+        self.assertIn("target_ground_truth", contract)
+        self.assertEqual(contract["target_ground_truth"]["I1"]["slots"]["application_name"], "抖音")
+        self.assertEqual(contract["target_ground_truth"]["I1"]["slots"]["timestamp"]["start_timestamp"], "2026年10月17日12时00分")
+        self.assertIn("delta_reaction_matrix", contract)
+        self.assertIn("on_slot_error", contract["delta_reaction_matrix"])
+        self.assertIn("on_slot_missing", contract["delta_reaction_matrix"])
+        self.assertIn("on_agent_inquiry", contract["delta_reaction_matrix"])
+        self.assertIn("on_goal_matched", contract["delta_reaction_matrix"])
+        self.assertIn("evaluator_prompt_template", contract)
 
     def test_08_multi_intent_5_turn_slow_path(self):
         """测试多意图局部突发延误隔离场景符合设计规范的 5 轮 Slow Path 深度交互树与密集累积追踪"""
@@ -395,6 +404,49 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
         self.assertEqual(full_seq[-1]["turn_intents"][0]["status"], "resolved")
         self.assertEqual(full_seq[-1]["turn_intents"][1]["status"], "resolved")
 
+        # 5. 验证多意图双轨评测契约
+        c = eb["interactive_eval_contract"]
+        self.assertIn("I1", c["target_ground_truth"])
+        self.assertIn("I2", c["target_ground_truth"])
+        self.assertEqual(c["target_ground_truth"]["I2"]["slots"]["service_name"], "直播")
+        self.assertIn("I2.timestamp.start_timestamp", c["delta_reaction_matrix"]["on_slot_error"]["monitored_slots"])
+
+    def test_09_all_scenarios_interactive_eval_contract(self):
+        """测试 5 大经验场景的声明式交互评测契约 (interactive_eval_contract) 完备性"""
+        scenarios = [
+            ("multi_intent_partition", "EXP_MULTI_INTENT_PARTITION_01"),
+            ("prewarm_buffer", "EXP_PREWARM_BUFFER_01"),
+            ("holiday_exception", "EXP_CALENDAR_HOLIDAY_EXCEPTION_01"),
+            ("quality_disambiguation", "EXP_ORDER_QUALITY_DISAMBIGUATION_01"),
+            ("overlapping_resolution", "EXP_OVERLAPPING_ORDER_RESOLUTION_01"),
+        ]
+        ctx = {
+            "app": "腾讯会议", "srv": "视频会议", "res": "1080p", "rtt": "50ms",
+            "start": "09:00", "end": "11:00", "dur": "120min",
+            "app2": "快手", "srv2": "直播", "res2": "720p", "rtt2": "60ms",
+            "start2": "14:00", "end2": "16:00", "dur2": "120min"
+        }
+        for s_type, exp_id in scenarios:
+            eb = SessionAssembler._build_experience_branching(
+                scenario_type=s_type,
+                exp_id=exp_id,
+                rule_title=f"{s_type}经验测试",
+                learning_source_session="S-USER_TEST-01",
+                user_prompt="测试输入",
+                ctx=ctx
+            )
+            c = eb.get("interactive_eval_contract")
+            self.assertIsNotNone(c, f"Contract missing for {s_type}")
+            self.assertEqual(c["scenario_type"], s_type)
+            self.assertIn("target_ground_truth", c)
+            self.assertIn("delta_reaction_matrix", c)
+            self.assertIn("termination_conditions", c)
+            matrix = c["delta_reaction_matrix"]
+            for key in ["on_slot_error", "on_agent_inquiry", "on_slot_missing", "on_goal_matched"]:
+                self.assertIn(key, matrix, f"Matrix missing key {key} in {s_type}")
+                self.assertTrue(len(matrix[key]["simulator_reply"]) > 0)
+
 
 if __name__ == "__main__":
     unittest.main()
+

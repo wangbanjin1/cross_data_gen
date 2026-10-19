@@ -407,13 +407,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "画质标准按‘能认清人脸’，时延控制在100ms以内，预计持续60min。",
+          "utterance": "画质只要‘能认清人脸’，时延控制在100ms以内，预计持续60min。",
           "action_types": [
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "请教一下，您提到的‘能认清人脸’具体对应哪档画质档位？以后也帮您按这个记吗？",
+          "utterance": "确认一下，您说的‘能认清人脸’具体指哪个画质档位？以后也按这个理解吗？",
           "action_types": [
             "Request_Disambiguation"
           ]
@@ -473,7 +473,7 @@
       {
         "turn": 3,
         "user": {
-          "utterance": "指的就是画质档位720p，以后默认按这个来，直接保上吧。",
+          "utterance": "对，就是画质档位720p，往后都照这个标准记，开通吧。",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -1562,6 +1562,75 @@
         "learning_source_session": "S-USER_002-05",
         "experience_id": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01",
         "rule_title": "周期例行排期遇法定节假日自动顺延经验",
+        "interactive_eval_contract": {
+          "version": "1.0",
+          "contract_name": "DynamicGoalDeltaReactionContract",
+          "scenario_type": "holiday_exception",
+          "target_ground_truth": {
+            "I1": {
+              "intent": "微信视频通话保障",
+              "slots": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月08日15时00分",
+                  "end_timestamp": "2026年10月08日17时00分",
+                  "duration": "120min"
+                }
+              }
+            }
+          },
+          "termination_conditions": {
+            "max_turns": 5,
+            "required_status": "resolved",
+            "early_stop_on_match": true
+          },
+          "delta_reaction_matrix": {
+            "on_slot_error": {
+              "description": "Agent未识别国庆长假，机械在办公室全员放假当天预约",
+              "trigger_condition": "agent_slots.get('timestamp.start_timestamp') == '2026年10月01日08时30分'",
+              "monitored_slots": [
+                "I1.timestamp.start_timestamp"
+              ],
+              "user_action_types": [
+                "Revise_Intent_Request",
+                "Inform_Slot"
+              ],
+              "simulator_reply": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月1号？"
+            },
+            "on_agent_inquiry": {
+              "description": "Agent识别假期冲突并撤销放假当天预约后，反问改期意图",
+              "trigger_condition": "agent_action in ['Request_Slot']",
+              "user_action_types": [
+                "Inform_Slot"
+              ],
+              "simulator_reply": "放假千万别空跑白扣费，按惯例自动顺延到节后上班第一天就行。"
+            },
+            "on_slot_missing": {
+              "description": "Agent顺延了日期但遗漏明确节后规格或扣费说明",
+              "trigger_condition": "not agent_slots.get('timestamp.duration')",
+              "monitored_slots": [
+                "I1.timestamp.duration",
+                "I1.resolution"
+              ],
+              "user_action_types": [
+                "Confirm_Slot"
+              ],
+              "simulator_reply": "顺延到节后的话，时长还是120min，清晰度规格没变吧？"
+            },
+            "on_goal_matched": {
+              "description": "节后首个工作日顺延时序与规格核准，用户确认办理",
+              "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+              "user_action_types": [
+                "Confirm_Slot"
+              ],
+              "simulator_reply": "对，放假千万别空跑，就顺延到10月8日开通吧。"
+            }
+          },
+          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+        },
         "fast_path": {
           "round_count": 2,
           "closure_path": "fast_experience_closed_loop",
@@ -1590,6 +1659,75 @@
             },
             "pass_route": "fast_path",
             "fail_route": "slow_path"
+          },
+          "interactive_eval_contract": {
+            "version": "1.0",
+            "contract_name": "DynamicGoalDeltaReactionContract",
+            "scenario_type": "holiday_exception",
+            "target_ground_truth": {
+              "I1": {
+                "intent": "微信视频通话保障",
+                "slots": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月08日15时00分",
+                    "end_timestamp": "2026年10月08日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              }
+            },
+            "termination_conditions": {
+              "max_turns": 5,
+              "required_status": "resolved",
+              "early_stop_on_match": true
+            },
+            "delta_reaction_matrix": {
+              "on_slot_error": {
+                "description": "Agent未识别国庆长假，机械在办公室全员放假当天预约",
+                "trigger_condition": "agent_slots.get('timestamp.start_timestamp') == '2026年10月01日08时30分'",
+                "monitored_slots": [
+                  "I1.timestamp.start_timestamp"
+                ],
+                "user_action_types": [
+                  "Revise_Intent_Request",
+                  "Inform_Slot"
+                ],
+                "simulator_reply": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月1号？"
+              },
+              "on_agent_inquiry": {
+                "description": "Agent识别假期冲突并撤销放假当天预约后，反问改期意图",
+                "trigger_condition": "agent_action in ['Request_Slot']",
+                "user_action_types": [
+                  "Inform_Slot"
+                ],
+                "simulator_reply": "放假千万别空跑白扣费，按惯例自动顺延到节后上班第一天就行。"
+              },
+              "on_slot_missing": {
+                "description": "Agent顺延了日期但遗漏明确节后规格或扣费说明",
+                "trigger_condition": "not agent_slots.get('timestamp.duration')",
+                "monitored_slots": [
+                  "I1.timestamp.duration",
+                  "I1.resolution"
+                ],
+                "user_action_types": [
+                  "Confirm_Slot"
+                ],
+                "simulator_reply": "顺延到节后的话，时长还是120min，清晰度规格没变吧？"
+              },
+              "on_goal_matched": {
+                "description": "节后首个工作日顺延时序与规格核准，用户确认办理",
+                "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+                "user_action_types": [
+                  "Confirm_Slot"
+                ],
+                "simulator_reply": "对，放假千万别空跑，就顺延到10月8日开通吧。"
+              }
+            },
+            "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
           },
           "simulator_dialogue_tree": [
             {
@@ -2140,6 +2278,75 @@
       "learning_source_session": "S-USER_002-05",
       "experience_id": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01",
       "rule_title": "周期例行排期遇法定节假日自动顺延经验",
+      "interactive_eval_contract": {
+        "version": "1.0",
+        "contract_name": "DynamicGoalDeltaReactionContract",
+        "scenario_type": "holiday_exception",
+        "target_ground_truth": {
+          "I1": {
+            "intent": "微信视频通话保障",
+            "slots": {
+              "application_name": "微信",
+              "service_name": "视频通话",
+              "resolution": "1080p",
+              "rtt": "50ms",
+              "timestamp": {
+                "start_timestamp": "2026年10月08日15时00分",
+                "end_timestamp": "2026年10月08日17时00分",
+                "duration": "120min"
+              }
+            }
+          }
+        },
+        "termination_conditions": {
+          "max_turns": 5,
+          "required_status": "resolved",
+          "early_stop_on_match": true
+        },
+        "delta_reaction_matrix": {
+          "on_slot_error": {
+            "description": "Agent未识别国庆长假，机械在办公室全员放假当天预约",
+            "trigger_condition": "agent_slots.get('timestamp.start_timestamp') == '2026年10月01日08时30分'",
+            "monitored_slots": [
+              "I1.timestamp.start_timestamp"
+            ],
+            "user_action_types": [
+              "Revise_Intent_Request",
+              "Inform_Slot"
+            ],
+            "simulator_reply": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月1号？"
+          },
+          "on_agent_inquiry": {
+            "description": "Agent识别假期冲突并撤销放假当天预约后，反问改期意图",
+            "trigger_condition": "agent_action in ['Request_Slot']",
+            "user_action_types": [
+              "Inform_Slot"
+            ],
+            "simulator_reply": "放假千万别空跑白扣费，按惯例自动顺延到节后上班第一天就行。"
+          },
+          "on_slot_missing": {
+            "description": "Agent顺延了日期但遗漏明确节后规格或扣费说明",
+            "trigger_condition": "not agent_slots.get('timestamp.duration')",
+            "monitored_slots": [
+              "I1.timestamp.duration",
+              "I1.resolution"
+            ],
+            "user_action_types": [
+              "Confirm_Slot"
+            ],
+            "simulator_reply": "顺延到节后的话，时长还是120min，清晰度规格没变吧？"
+          },
+          "on_goal_matched": {
+            "description": "节后首个工作日顺延时序与规格核准，用户确认办理",
+            "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+            "user_action_types": [
+              "Confirm_Slot"
+            ],
+            "simulator_reply": "对，放假千万别空跑，就顺延到10月8日开通吧。"
+          }
+        },
+        "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+      },
       "fast_path": {
         "round_count": 2,
         "closure_path": "fast_experience_closed_loop",
@@ -2168,6 +2375,75 @@
           },
           "pass_route": "fast_path",
           "fail_route": "slow_path"
+        },
+        "interactive_eval_contract": {
+          "version": "1.0",
+          "contract_name": "DynamicGoalDeltaReactionContract",
+          "scenario_type": "holiday_exception",
+          "target_ground_truth": {
+            "I1": {
+              "intent": "微信视频通话保障",
+              "slots": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月08日15时00分",
+                  "end_timestamp": "2026年10月08日17时00分",
+                  "duration": "120min"
+                }
+              }
+            }
+          },
+          "termination_conditions": {
+            "max_turns": 5,
+            "required_status": "resolved",
+            "early_stop_on_match": true
+          },
+          "delta_reaction_matrix": {
+            "on_slot_error": {
+              "description": "Agent未识别国庆长假，机械在办公室全员放假当天预约",
+              "trigger_condition": "agent_slots.get('timestamp.start_timestamp') == '2026年10月01日08时30分'",
+              "monitored_slots": [
+                "I1.timestamp.start_timestamp"
+              ],
+              "user_action_types": [
+                "Revise_Intent_Request",
+                "Inform_Slot"
+              ],
+              "simulator_reply": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月1号？"
+            },
+            "on_agent_inquiry": {
+              "description": "Agent识别假期冲突并撤销放假当天预约后，反问改期意图",
+              "trigger_condition": "agent_action in ['Request_Slot']",
+              "user_action_types": [
+                "Inform_Slot"
+              ],
+              "simulator_reply": "放假千万别空跑白扣费，按惯例自动顺延到节后上班第一天就行。"
+            },
+            "on_slot_missing": {
+              "description": "Agent顺延了日期但遗漏明确节后规格或扣费说明",
+              "trigger_condition": "not agent_slots.get('timestamp.duration')",
+              "monitored_slots": [
+                "I1.timestamp.duration",
+                "I1.resolution"
+              ],
+              "user_action_types": [
+                "Confirm_Slot"
+              ],
+              "simulator_reply": "顺延到节后的话，时长还是120min，清晰度规格没变吧？"
+            },
+            "on_goal_matched": {
+              "description": "节后首个工作日顺延时序与规格核准，用户确认办理",
+              "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+              "user_action_types": [
+                "Confirm_Slot"
+              ],
+              "simulator_reply": "对，放假千万别空跑，就顺延到10月8日开通吧。"
+            }
+          },
+          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
         },
         "simulator_dialogue_tree": [
           {
@@ -3908,6 +4184,76 @@
         "learning_source_session": "S-USER_002-08",
         "experience_id": "EXP_ORDER_QUALITY_DISAMBIGUATION_01",
         "rule_title": "基于历史工单网络质量日志的智能消歧经验",
+        "interactive_eval_contract": {
+          "version": "1.0",
+          "contract_name": "DynamicGoalDeltaReactionContract",
+          "scenario_type": "quality_disambiguation",
+          "target_ground_truth": {
+            "I1": {
+              "intent": "微信视频通话保障",
+              "slots": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月07日15时00分",
+                  "end_timestamp": "2026年11月07日17时00分",
+                  "duration": "120min"
+                }
+              }
+            }
+          },
+          "termination_conditions": {
+            "max_turns": 5,
+            "required_status": "resolved",
+            "early_stop_on_match": true
+          },
+          "delta_reaction_matrix": {
+            "on_slot_error": {
+              "description": "Agent盲目复用了网络异常或丢包的历史工单参数",
+              "trigger_condition": "agent_slots.get('resolution') != ground_truth['I1']['slots']['resolution'] or agent_slots.get('rtt') != ground_truth['I1']['slots']['rtt']",
+              "monitored_slots": [
+                "I1.resolution",
+                "I1.rtt"
+              ],
+              "user_action_types": [
+                "Revise_Intent_Request",
+                "Inform_Slot"
+              ],
+              "simulator_reply": "不对啊！你复用的这是哪天的工单？上周四那单网络有明显抖动丢包，千万别按那天的参数配，要按全程无丢包最好的那次配！"
+            },
+            "on_slot_missing": {
+              "description": "Agent过滤了异常单后，遗漏核对今日保障具体时序",
+              "trigger_condition": "not agent_slots.get('timestamp.start_timestamp')",
+              "monitored_slots": [
+                "I1.timestamp.start_timestamp",
+                "I1.timestamp.end_timestamp"
+              ],
+              "user_action_types": [
+                "Confirm_Slot"
+              ],
+              "simulator_reply": "对，必须按无丢包那次最稳的来，那今天的起止时间没搞错吧？"
+            },
+            "on_agent_inquiry": {
+              "description": "Agent询问历史单据偏好或具体保障规格",
+              "trigger_condition": "agent_action in ['Request_Slot']",
+              "user_action_types": [
+                "Inform_Slot"
+              ],
+              "simulator_reply": "按历史零丢包优质单据执行，规格为1080p，时延≤50ms，今日时段2026年11月07日15时00分至2026年11月07日17时00分。"
+            },
+            "on_goal_matched": {
+              "description": "优质无丢包工单规格继承无误，用户确认受理",
+              "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+              "user_action_types": [
+                "Confirm_Slot"
+              ],
+              "simulator_reply": "没错，就按无丢包的那单开通。"
+            }
+          },
+          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+        },
         "fast_path": {
           "round_count": 2,
           "closure_path": "fast_experience_closed_loop",
@@ -3936,6 +4282,76 @@
             },
             "pass_route": "fast_path",
             "fail_route": "slow_path"
+          },
+          "interactive_eval_contract": {
+            "version": "1.0",
+            "contract_name": "DynamicGoalDeltaReactionContract",
+            "scenario_type": "quality_disambiguation",
+            "target_ground_truth": {
+              "I1": {
+                "intent": "微信视频通话保障",
+                "slots": {
+                  "application_name": "微信",
+                  "service_name": "视频通话",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年11月07日15时00分",
+                    "end_timestamp": "2026年11月07日17时00分",
+                    "duration": "120min"
+                  }
+                }
+              }
+            },
+            "termination_conditions": {
+              "max_turns": 5,
+              "required_status": "resolved",
+              "early_stop_on_match": true
+            },
+            "delta_reaction_matrix": {
+              "on_slot_error": {
+                "description": "Agent盲目复用了网络异常或丢包的历史工单参数",
+                "trigger_condition": "agent_slots.get('resolution') != ground_truth['I1']['slots']['resolution'] or agent_slots.get('rtt') != ground_truth['I1']['slots']['rtt']",
+                "monitored_slots": [
+                  "I1.resolution",
+                  "I1.rtt"
+                ],
+                "user_action_types": [
+                  "Revise_Intent_Request",
+                  "Inform_Slot"
+                ],
+                "simulator_reply": "不对啊！你复用的这是哪天的工单？上周四那单网络有明显抖动丢包，千万别按那天的参数配，要按全程无丢包最好的那次配！"
+              },
+              "on_slot_missing": {
+                "description": "Agent过滤了异常单后，遗漏核对今日保障具体时序",
+                "trigger_condition": "not agent_slots.get('timestamp.start_timestamp')",
+                "monitored_slots": [
+                  "I1.timestamp.start_timestamp",
+                  "I1.timestamp.end_timestamp"
+                ],
+                "user_action_types": [
+                  "Confirm_Slot"
+                ],
+                "simulator_reply": "对，必须按无丢包那次最稳的来，那今天的起止时间没搞错吧？"
+              },
+              "on_agent_inquiry": {
+                "description": "Agent询问历史单据偏好或具体保障规格",
+                "trigger_condition": "agent_action in ['Request_Slot']",
+                "user_action_types": [
+                  "Inform_Slot"
+                ],
+                "simulator_reply": "按历史零丢包优质单据执行，规格为1080p，时延≤50ms，今日时段2026年11月07日15时00分至2026年11月07日17时00分。"
+              },
+              "on_goal_matched": {
+                "description": "优质无丢包工单规格继承无误，用户确认受理",
+                "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+                "user_action_types": [
+                  "Confirm_Slot"
+                ],
+                "simulator_reply": "没错，就按无丢包的那单开通。"
+              }
+            },
+            "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
           },
           "simulator_dialogue_tree": [
             {
@@ -4545,6 +4961,76 @@
       "learning_source_session": "S-USER_002-08",
       "experience_id": "EXP_ORDER_QUALITY_DISAMBIGUATION_01",
       "rule_title": "基于历史工单网络质量日志的智能消歧经验",
+      "interactive_eval_contract": {
+        "version": "1.0",
+        "contract_name": "DynamicGoalDeltaReactionContract",
+        "scenario_type": "quality_disambiguation",
+        "target_ground_truth": {
+          "I1": {
+            "intent": "微信视频通话保障",
+            "slots": {
+              "application_name": "微信",
+              "service_name": "视频通话",
+              "resolution": "1080p",
+              "rtt": "50ms",
+              "timestamp": {
+                "start_timestamp": "2026年11月07日15时00分",
+                "end_timestamp": "2026年11月07日17时00分",
+                "duration": "120min"
+              }
+            }
+          }
+        },
+        "termination_conditions": {
+          "max_turns": 5,
+          "required_status": "resolved",
+          "early_stop_on_match": true
+        },
+        "delta_reaction_matrix": {
+          "on_slot_error": {
+            "description": "Agent盲目复用了网络异常或丢包的历史工单参数",
+            "trigger_condition": "agent_slots.get('resolution') != ground_truth['I1']['slots']['resolution'] or agent_slots.get('rtt') != ground_truth['I1']['slots']['rtt']",
+            "monitored_slots": [
+              "I1.resolution",
+              "I1.rtt"
+            ],
+            "user_action_types": [
+              "Revise_Intent_Request",
+              "Inform_Slot"
+            ],
+            "simulator_reply": "不对啊！你复用的这是哪天的工单？上周四那单网络有明显抖动丢包，千万别按那天的参数配，要按全程无丢包最好的那次配！"
+          },
+          "on_slot_missing": {
+            "description": "Agent过滤了异常单后，遗漏核对今日保障具体时序",
+            "trigger_condition": "not agent_slots.get('timestamp.start_timestamp')",
+            "monitored_slots": [
+              "I1.timestamp.start_timestamp",
+              "I1.timestamp.end_timestamp"
+            ],
+            "user_action_types": [
+              "Confirm_Slot"
+            ],
+            "simulator_reply": "对，必须按无丢包那次最稳的来，那今天的起止时间没搞错吧？"
+          },
+          "on_agent_inquiry": {
+            "description": "Agent询问历史单据偏好或具体保障规格",
+            "trigger_condition": "agent_action in ['Request_Slot']",
+            "user_action_types": [
+              "Inform_Slot"
+            ],
+            "simulator_reply": "按历史零丢包优质单据执行，规格为1080p，时延≤50ms，今日时段2026年11月07日15时00分至2026年11月07日17时00分。"
+          },
+          "on_goal_matched": {
+            "description": "优质无丢包工单规格继承无误，用户确认受理",
+            "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+            "user_action_types": [
+              "Confirm_Slot"
+            ],
+            "simulator_reply": "没错，就按无丢包的那单开通。"
+          }
+        },
+        "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+      },
       "fast_path": {
         "round_count": 2,
         "closure_path": "fast_experience_closed_loop",
@@ -4573,6 +5059,76 @@
           },
           "pass_route": "fast_path",
           "fail_route": "slow_path"
+        },
+        "interactive_eval_contract": {
+          "version": "1.0",
+          "contract_name": "DynamicGoalDeltaReactionContract",
+          "scenario_type": "quality_disambiguation",
+          "target_ground_truth": {
+            "I1": {
+              "intent": "微信视频通话保障",
+              "slots": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年11月07日15时00分",
+                  "end_timestamp": "2026年11月07日17时00分",
+                  "duration": "120min"
+                }
+              }
+            }
+          },
+          "termination_conditions": {
+            "max_turns": 5,
+            "required_status": "resolved",
+            "early_stop_on_match": true
+          },
+          "delta_reaction_matrix": {
+            "on_slot_error": {
+              "description": "Agent盲目复用了网络异常或丢包的历史工单参数",
+              "trigger_condition": "agent_slots.get('resolution') != ground_truth['I1']['slots']['resolution'] or agent_slots.get('rtt') != ground_truth['I1']['slots']['rtt']",
+              "monitored_slots": [
+                "I1.resolution",
+                "I1.rtt"
+              ],
+              "user_action_types": [
+                "Revise_Intent_Request",
+                "Inform_Slot"
+              ],
+              "simulator_reply": "不对啊！你复用的这是哪天的工单？上周四那单网络有明显抖动丢包，千万别按那天的参数配，要按全程无丢包最好的那次配！"
+            },
+            "on_slot_missing": {
+              "description": "Agent过滤了异常单后，遗漏核对今日保障具体时序",
+              "trigger_condition": "not agent_slots.get('timestamp.start_timestamp')",
+              "monitored_slots": [
+                "I1.timestamp.start_timestamp",
+                "I1.timestamp.end_timestamp"
+              ],
+              "user_action_types": [
+                "Confirm_Slot"
+              ],
+              "simulator_reply": "对，必须按无丢包那次最稳的来，那今天的起止时间没搞错吧？"
+            },
+            "on_agent_inquiry": {
+              "description": "Agent询问历史单据偏好或具体保障规格",
+              "trigger_condition": "agent_action in ['Request_Slot']",
+              "user_action_types": [
+                "Inform_Slot"
+              ],
+              "simulator_reply": "按历史零丢包优质单据执行，规格为1080p，时延≤50ms，今日时段2026年11月07日15时00分至2026年11月07日17时00分。"
+            },
+            "on_goal_matched": {
+              "description": "优质无丢包工单规格继承无误，用户确认受理",
+              "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+              "user_action_types": [
+                "Confirm_Slot"
+              ],
+              "simulator_reply": "没错，就按无丢包的那单开通。"
+            }
+          },
+          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
         },
         "simulator_dialogue_tree": [
           {
@@ -4892,7 +5448,7 @@
         "memory_action": "reschedule_working_record"
       },
       "working_memory_pointer": {
-        "target_record_id": "REC_mobile_persona_002_20261107_197",
+        "target_record_id": "REC_mobile_persona_002_20261107_12",
         "inferred_delta_days": 4,
         "matched_application": "微信",
         "matched_service": "视频通话",
@@ -4907,7 +5463,7 @@
       "agility_factor": null
     },
     "working_memory_pointer": {
-      "target_record_id": "REC_mobile_persona_002_20261107_197",
+      "target_record_id": "REC_mobile_persona_002_20261107_12",
       "inferred_delta_days": 4,
       "matched_application": "微信",
       "matched_service": "视频通话",
@@ -4948,25 +5504,25 @@
               "application_name": {
                 "value": "微信",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261107_197"
+                "source_ref": "REC_mobile_persona_002_20261107_12"
               },
               "service_name": {
                 "value": "视频通话",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261107_197"
+                "source_ref": "REC_mobile_persona_002_20261107_12"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261107_197"
+                  "source_ref": "REC_mobile_persona_002_20261107_12"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261107_197"
+                  "source_ref": "REC_mobile_persona_002_20261107_12"
                 }
               },
               "timestamp": {
@@ -4983,14 +5539,14 @@
                 "duration": {
                   "value": "120min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261107_197"
+                  "source_ref": "REC_mobile_persona_002_20261107_12"
                 }
               }
             }
           }
         ],
         "working_memory_pointer": {
-          "target_record_id": "REC_mobile_persona_002_20261107_197",
+          "target_record_id": "REC_mobile_persona_002_20261107_12",
           "inferred_delta_days": 4,
           "matched_application": "微信",
           "matched_service": "视频通话",
@@ -5030,25 +5586,25 @@
               "application_name": {
                 "value": "微信",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261107_197"
+                "source_ref": "REC_mobile_persona_002_20261107_12"
               },
               "service_name": {
                 "value": "视频通话",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261107_197"
+                "source_ref": "REC_mobile_persona_002_20261107_12"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261107_197"
+                  "source_ref": "REC_mobile_persona_002_20261107_12"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261107_197"
+                  "source_ref": "REC_mobile_persona_002_20261107_12"
                 }
               },
               "timestamp": {
@@ -5065,7 +5621,7 @@
                 "duration": {
                   "value": "120min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261107_197"
+                  "source_ref": "REC_mobile_persona_002_20261107_12"
                 }
               }
             }
@@ -5084,25 +5640,25 @@
           "application_name": {
             "value": "微信",
             "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_002_20261107_197"
+            "source_ref": "REC_mobile_persona_002_20261107_12"
           },
           "service_name": {
             "value": "视频通话",
             "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_002_20261107_197"
+            "source_ref": "REC_mobile_persona_002_20261107_12"
           },
           "resolution": {
             "min_value": {
               "value": "1080p",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_002_20261107_197"
+              "source_ref": "REC_mobile_persona_002_20261107_12"
             }
           },
           "rtt": {
             "max_value": {
               "value": "50ms",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_002_20261107_197"
+              "source_ref": "REC_mobile_persona_002_20261107_12"
             }
           },
           "timestamp": {
@@ -5119,7 +5675,7 @@
             "duration": {
               "value": "120min",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_002_20261107_197"
+              "source_ref": "REC_mobile_persona_002_20261107_12"
             }
           }
         }
@@ -5136,25 +5692,25 @@
               "application_name": {
                 "value": "微信",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261107_197"
+                "source_ref": "REC_mobile_persona_002_20261107_12"
               },
               "service_name": {
                 "value": "视频通话",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261107_197"
+                "source_ref": "REC_mobile_persona_002_20261107_12"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261107_197"
+                  "source_ref": "REC_mobile_persona_002_20261107_12"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261107_197"
+                  "source_ref": "REC_mobile_persona_002_20261107_12"
                 }
               },
               "timestamp": {
@@ -5171,7 +5727,7 @@
                 "duration": {
                   "value": "120min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261107_197"
+                  "source_ref": "REC_mobile_persona_002_20261107_12"
                 }
               }
             }
@@ -5200,7 +5756,7 @@
         "memory_action": "reschedule_working_record"
       },
       "working_memory_pointer": {
-        "target_record_id": "REC_mobile_persona_002_20261111_198",
+        "target_record_id": "REC_mobile_persona_002_20261111_13",
         "inferred_delta_days": 4,
         "matched_application": "微信",
         "matched_service": "视频通话",
@@ -5215,7 +5771,7 @@
       "agility_factor": null
     },
     "working_memory_pointer": {
-      "target_record_id": "REC_mobile_persona_002_20261111_198",
+      "target_record_id": "REC_mobile_persona_002_20261111_13",
       "inferred_delta_days": 4,
       "matched_application": "微信",
       "matched_service": "视频通话",
@@ -5256,25 +5812,25 @@
               "application_name": {
                 "value": "微信",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261111_198"
+                "source_ref": "REC_mobile_persona_002_20261111_13"
               },
               "service_name": {
                 "value": "视频通话",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261111_198"
+                "source_ref": "REC_mobile_persona_002_20261111_13"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261111_198"
+                  "source_ref": "REC_mobile_persona_002_20261111_13"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261111_198"
+                  "source_ref": "REC_mobile_persona_002_20261111_13"
                 }
               },
               "timestamp": {
@@ -5291,14 +5847,14 @@
                 "duration": {
                   "value": "120min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261111_198"
+                  "source_ref": "REC_mobile_persona_002_20261111_13"
                 }
               }
             }
           }
         ],
         "working_memory_pointer": {
-          "target_record_id": "REC_mobile_persona_002_20261111_198",
+          "target_record_id": "REC_mobile_persona_002_20261111_13",
           "inferred_delta_days": 4,
           "matched_application": "微信",
           "matched_service": "视频通话",
@@ -5338,25 +5894,25 @@
               "application_name": {
                 "value": "微信",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261111_198"
+                "source_ref": "REC_mobile_persona_002_20261111_13"
               },
               "service_name": {
                 "value": "视频通话",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261111_198"
+                "source_ref": "REC_mobile_persona_002_20261111_13"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261111_198"
+                  "source_ref": "REC_mobile_persona_002_20261111_13"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261111_198"
+                  "source_ref": "REC_mobile_persona_002_20261111_13"
                 }
               },
               "timestamp": {
@@ -5373,7 +5929,7 @@
                 "duration": {
                   "value": "120min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261111_198"
+                  "source_ref": "REC_mobile_persona_002_20261111_13"
                 }
               }
             }
@@ -5392,25 +5948,25 @@
           "application_name": {
             "value": "微信",
             "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_002_20261111_198"
+            "source_ref": "REC_mobile_persona_002_20261111_13"
           },
           "service_name": {
             "value": "视频通话",
             "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_002_20261111_198"
+            "source_ref": "REC_mobile_persona_002_20261111_13"
           },
           "resolution": {
             "min_value": {
               "value": "1080p",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_002_20261111_198"
+              "source_ref": "REC_mobile_persona_002_20261111_13"
             }
           },
           "rtt": {
             "max_value": {
               "value": "50ms",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_002_20261111_198"
+              "source_ref": "REC_mobile_persona_002_20261111_13"
             }
           },
           "timestamp": {
@@ -5427,7 +5983,7 @@
             "duration": {
               "value": "120min",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_002_20261111_198"
+              "source_ref": "REC_mobile_persona_002_20261111_13"
             }
           }
         }
@@ -5444,25 +6000,25 @@
               "application_name": {
                 "value": "微信",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261111_198"
+                "source_ref": "REC_mobile_persona_002_20261111_13"
               },
               "service_name": {
                 "value": "视频通话",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_002_20261111_198"
+                "source_ref": "REC_mobile_persona_002_20261111_13"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261111_198"
+                  "source_ref": "REC_mobile_persona_002_20261111_13"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261111_198"
+                  "source_ref": "REC_mobile_persona_002_20261111_13"
                 }
               },
               "timestamp": {
@@ -5479,7 +6035,7 @@
                 "duration": {
                   "value": "120min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_002_20261111_198"
+                  "source_ref": "REC_mobile_persona_002_20261111_13"
                 }
               }
             }

@@ -4,32 +4,32 @@
   "persona_summary": "户外视觉创作者",
   "static_profile": {
     "user_id": "USER_005",
-    "identity": "退休音乐人，深耕词曲创作与音乐制作，常年活跃于户外演出点、音乐节、街头活动与临时排练现场，以移动终端完成现场音视频采集、直播推流、作品上传与云端素材同步，并乐于向年轻创作者传授经验",
-    "devices": "主力为5G智能手机，辅助为平板电脑，便携终端确需联网时使用手机热点",
+    "identity": "退休音乐人兼户外视觉创作者，擅长词曲创作与制作，长期在户外演出点、展览布置区、城市采风路线及音乐节街头活动现场进行音视频采集、直播推流与作品上传，同时乐于向年轻创作者传授经验、参与现场排练指导",
+    "devices": "主力为5G智能手机，辅助为平板电脑；便携终端确需联网时以手机热点共享，全程不依赖家庭宽带、公司固网或普通Wi-Fi",
     "apps": [
       "抖音",
       "快手",
-      "哔哩哔哩",
-      "微信"
+      "微信",
+      "哔哩哔哩"
     ],
     "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "老练、直接、带点舞台人的节奏感，喜欢用行话和固定口令安排现场",
+      "tone": "老练随性、带点乐手江湖气，讲效率也讲人情，习惯用行话把技术参数说成大白话",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "先推流再说"
+        "推流稳住"
       ],
-      "typical_habits": "开工前先确认上行和时延，习惯用固定口语别名指代APP、业务和画质档位，遇到弱覆盖会立刻要求续传或切回热点"
+      "typical_habits": "开工前先口头把画质、时延、时长交代清楚，遇到弱覆盖路段会反复叮嘱续传和恢复，习惯用'老时间''老规矩'指代固定任务安排"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "户外音乐现场直播与作品上传",
+      "name": "清晨户外采风直播与作品上传",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "在户外演出点、音乐节或街头活动开始前，执行现场音视频采集、直播推流与作品上传任务",
+      "trigger_condition": "在户外演出点、展览布置区或城市采风路线执行现场音视频采集与直播任务，需将高清素材实时推流并同步上传云端给客户与团队",
       "period_type": "task_driven",
       "days": [
         "task_specific"
@@ -44,11 +44,11 @@
       "aliases": {
         "app_aliases": [
           "阿抖",
-          "抖音"
+          "抖家"
         ],
         "service_aliases": [
-          "开播",
-          "推流"
+          "推流",
+          "开播"
         ],
         "resolution_aliases": [
           "1080p原画",
@@ -68,7 +68,7 @@
         "period_aliases": [
           "每天这个时候",
           "老时间",
-          "早场老规矩"
+          "早班这趟老规矩"
         ]
       },
       "declaration_mode": "explicit_declaration",
@@ -80,7 +80,7 @@
         "name": "城市音乐节密集人群直播周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "音乐节现场人群密集、基站负载高，户外演出点与临时排练区之间频繁移动，弱覆盖路段增多，需要优先保障直播互动低时延与音视频上行稳定",
+        "scene_description": "音乐节现场人流密集、基站负载高且部分路段弱覆盖，直播互动需更低时延保障，画质临时下调以保证上行稳定与任务续传",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -90,14 +90,14 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "排练现场视频通话沟通",
+        "name": "采风素材云端同步与团队沟通",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "临时排练现场需要与乐队成员或合作方远程确认编曲与走位时",
+        "trigger_condition": "采风或展览布置间隙与客户、团队核对素材与设计稿，需快速视频沟通确认",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -119,14 +119,14 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "演出素材云端同步与团队沟通",
+        "name": "演出录像复盘与作品发布",
         "application_name": "哔哩哔哩",
         "service_name": "短视频",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "演出结束后整理现场音视频素材并同步给团队或发布短视频时",
+        "trigger_condition": "现场演出或排练结束后回看录像、剪辑片段并发布作品给年轻创作者参考",
         "aliases": {
           "app_aliases": [
             "bilibili",
@@ -150,7 +150,7 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "临时与外地合作方开短会确认曲目授权",
+        "scenario": "临时与外地合作乐手开线上会议沟通编曲",
         "application_name": "腾讯会议",
         "service_name": "会议",
         "params": {
@@ -160,9 +160,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "休息时在街头刷同行演出短视频",
+        "scenario": "休息时刷同行街头演出直播找灵感",
         "application_name": "快手",
-        "service_name": "短视频",
+        "service_name": "看直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

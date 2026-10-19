@@ -1069,10 +1069,242 @@ class SessionAssembler:
 
         slow_rounds = len(tree) if tree else 4
         fast_rounds = 3 if scenario_type == "multi_intent_partition" else 2
+
+        # 构建声明式交互评测契约 (Interactive Evaluation Contract)
+        target_gt = {
+            "I1": {
+                "intent": f"{app}{srv}保障",
+                "slots": {
+                    "application_name": app,
+                    "service_name": srv,
+                    "resolution": res,
+                    "rtt": rtt,
+                    "timestamp": {
+                        "start_timestamp": start,
+                        "end_timestamp": end,
+                        "duration": dur
+                    }
+                }
+            }
+        }
+
+        if scenario_type == "multi_intent_partition":
+            target_gt["I2"] = {
+                "intent": f"{app2}{srv2}保障",
+                "slots": {
+                    "application_name": app2,
+                    "service_name": srv2,
+                    "resolution": res2,
+                    "rtt": rtt2,
+                    "timestamp": {
+                        "start_timestamp": start2,
+                        "end_timestamp": end2,
+                        "duration": dur2
+                    }
+                }
+            }
+            reaction_matrix = {
+                "on_slot_error": {
+                    "description": "Agent发生跨意图污染，误将I1延误扩散至受保护意图I2的时段",
+                    "trigger_condition": "agent_slots.get('I2.timestamp.start_timestamp') != ground_truth['I2']['slots']['timestamp']['start_timestamp']",
+                    "monitored_slots": ["I2.timestamp.start_timestamp", "I2.timestamp.end_timestamp"],
+                    "user_action_types": ["Revise_Intent_Request", "Inform_Slot"],
+                    "simulator_reply": f"不对啊！我只让你把上午的{srv}延长，怎么把下午的{srv2}也往后推迟了？下午的时间绝对不能动！"
+                },
+                "on_slot_missing": {
+                    "description": "Agent虽冻结锁定I2，但遗漏了上午任务延后后的总保障时长核算",
+                    "trigger_condition": "not agent_slots.get('I1.timestamp.duration')",
+                    "monitored_slots": ["I1.timestamp.duration"],
+                    "user_action_types": ["Confirm_Slot"],
+                    "simulator_reply": f"下午别动是对的，但我上午延后之后，总保障时长到底是按多久算的？你们系统到底算准了没有？"
+                },
+                "on_agent_inquiry": {
+                    "description": "Agent向用户核验两笔保障各自网络指标独立完整性",
+                    "trigger_condition": "agent_action in ['Request_Slot', 'Confirm_Slot']",
+                    "user_action_types": ["Confirm_Slot", "Inform_Slot"],
+                    "simulator_reply": f"行，时长算清楚了。那改期后上午和下午的网络规格（清晰度和时延）没被改乱吧？"
+                },
+                "on_goal_matched": {
+                    "description": "两笔保障参数与时序完全核准对齐，用户确认闭环出单",
+                    "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+                    "user_action_types": ["Confirm_Slot"],
+                    "simulator_reply": "行，两边都对齐没问题了，确认开通。"
+                }
+            }
+        elif scenario_type == "prewarm_buffer":
+            reaction_matrix = {
+                "on_slot_error": {
+                    "description": "Agent机械按活动时间掐点预约，未执行提前30分钟试机预热推算",
+                    "trigger_condition": "agent_slots.get('timestamp.start_timestamp') != ground_truth['I1']['slots']['timestamp']['start_timestamp']",
+                    "monitored_slots": ["I1.timestamp.start_timestamp"],
+                    "user_action_types": ["Revise_Intent_Request", "Inform_Slot"],
+                    "simulator_reply": "等等，这是大型场馆活动，现场设备调试很多，掐着点开通根本来不及试机！必须提前半小时起保！"
+                },
+                "on_slot_missing": {
+                    "description": "Agent虽修正了提前起保时间，但未向用户主动确认预热期的网络指标规格",
+                    "trigger_condition": "not agent_slots.get('resolution') or not agent_slots.get('rtt')",
+                    "monitored_slots": ["I1.resolution", "I1.rtt"],
+                    "user_action_types": ["Confirm_Slot"],
+                    "simulator_reply": "对，必须提前半小时试机才稳妥，那预热调试期间的网络指标还是保持高规格吧？"
+                },
+                "on_agent_inquiry": {
+                    "description": "Agent主动询问用户预热起止时段或规格要求",
+                    "trigger_condition": "agent_action in ['Request_Slot']",
+                    "user_action_types": ["Inform_Slot"],
+                    "simulator_reply": f"保障时间要从{start}开始算，提前30分钟起保，规格按{res}和时延≤{rtt}。"
+                },
+                "on_goal_matched": {
+                    "description": "提前预热起保时序与网络指标完全核准对齐，用户确认办理",
+                    "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+                    "user_action_types": ["Confirm_Slot"],
+                    "simulator_reply": "好的，这就稳妥了，确认开通。"
+                }
+            }
+        elif scenario_type == "holiday_exception":
+            reaction_matrix = {
+                "on_slot_error": {
+                    "description": "Agent未识别国庆长假，机械在办公室全员放假当天预约",
+                    "trigger_condition": "agent_slots.get('timestamp.start_timestamp') == '2026年10月01日08时30分'",
+                    "monitored_slots": ["I1.timestamp.start_timestamp"],
+                    "user_action_types": ["Revise_Intent_Request", "Inform_Slot"],
+                    "simulator_reply": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月1号？"
+                },
+                "on_agent_inquiry": {
+                    "description": "Agent识别假期冲突并撤销放假当天预约后，反问改期意图",
+                    "trigger_condition": "agent_action in ['Request_Slot']",
+                    "user_action_types": ["Inform_Slot"],
+                    "simulator_reply": "放假千万别空跑白扣费，按惯例自动顺延到节后上班第一天就行。"
+                },
+                "on_slot_missing": {
+                    "description": "Agent顺延了日期但遗漏明确节后规格或扣费说明",
+                    "trigger_condition": "not agent_slots.get('timestamp.duration')",
+                    "monitored_slots": ["I1.timestamp.duration", "I1.resolution"],
+                    "user_action_types": ["Confirm_Slot"],
+                    "simulator_reply": f"顺延到节后的话，时长还是{dur}，清晰度规格没变吧？"
+                },
+                "on_goal_matched": {
+                    "description": "节后首个工作日顺延时序与规格核准，用户确认办理",
+                    "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+                    "user_action_types": ["Confirm_Slot"],
+                    "simulator_reply": "对，放假千万别空跑，就顺延到10月8日开通吧。"
+                }
+            }
+        elif scenario_type == "quality_disambiguation":
+            reaction_matrix = {
+                "on_slot_error": {
+                    "description": "Agent盲目复用了网络异常或丢包的历史工单参数",
+                    "trigger_condition": "agent_slots.get('resolution') != ground_truth['I1']['slots']['resolution'] or agent_slots.get('rtt') != ground_truth['I1']['slots']['rtt']",
+                    "monitored_slots": ["I1.resolution", "I1.rtt"],
+                    "user_action_types": ["Revise_Intent_Request", "Inform_Slot"],
+                    "simulator_reply": "不对啊！你复用的这是哪天的工单？上周四那单网络有明显抖动丢包，千万别按那天的参数配，要按全程无丢包最好的那次配！"
+                },
+                "on_slot_missing": {
+                    "description": "Agent过滤了异常单后，遗漏核对今日保障具体时序",
+                    "trigger_condition": "not agent_slots.get('timestamp.start_timestamp')",
+                    "monitored_slots": ["I1.timestamp.start_timestamp", "I1.timestamp.end_timestamp"],
+                    "user_action_types": ["Confirm_Slot"],
+                    "simulator_reply": "对，必须按无丢包那次最稳的来，那今天的起止时间没搞错吧？"
+                },
+                "on_agent_inquiry": {
+                    "description": "Agent询问历史单据偏好或具体保障规格",
+                    "trigger_condition": "agent_action in ['Request_Slot']",
+                    "user_action_types": ["Inform_Slot"],
+                    "simulator_reply": f"按历史零丢包优质单据执行，规格为{res}，时延≤{rtt}，今日时段{start}至{end}。"
+                },
+                "on_goal_matched": {
+                    "description": "优质无丢包工单规格继承无误，用户确认受理",
+                    "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+                    "user_action_types": ["Confirm_Slot"],
+                    "simulator_reply": "没错，就按无丢包的那单开通。"
+                }
+            }
+        elif scenario_type == "overlapping_resolution":
+            reaction_matrix = {
+                "on_slot_error": {
+                    "description": "Agent检测到底层已有工单时段撞车，直接提示冲突报错甩锅给用户手动退单",
+                    "trigger_condition": "agent_action in ['Reject_Request']",
+                    "monitored_slots": ["agent_action"],
+                    "user_action_types": ["Revise_Intent_Request", "Inform_Slot"],
+                    "simulator_reply": "新申请的保障和之前的单子撞车了，不能直接报错甩锅让我手动退单啊！你们系统应该协调原工单提前结单，新保障准时接管才对！"
+                },
+                "on_slot_missing": {
+                    "description": "Agent协调让路方案但未向用户澄清计费与提前结单无额外扣费",
+                    "trigger_condition": "not agent_clarified_billing",
+                    "monitored_slots": ["billing_clarification"],
+                    "user_action_types": ["Confirm_Slot"],
+                    "simulator_reply": "这样接续才合理，那提前结单的原工单不会产生额外扣费吧？"
+                },
+                "on_agent_inquiry": {
+                    "description": "Agent询问时钟仲裁方案细节或起止时段",
+                    "trigger_condition": "agent_action in ['Request_Slot']",
+                    "user_action_types": ["Inform_Slot"],
+                    "simulator_reply": f"让原工单在{start}提前结单，新保障准时在{start}至{end}接管。"
+                },
+                "on_goal_matched": {
+                    "description": "时钟让路接续仲裁完成且计费说明明确，用户确认办理",
+                    "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+                    "user_action_types": ["Confirm_Slot"],
+                    "simulator_reply": "好的，这样时序接续就可以，确认开通。"
+                }
+            }
+        else:
+            reaction_matrix = {
+                "on_slot_error": {
+                    "description": "Agent提参错误，用户指正",
+                    "trigger_condition": "agent_slots_mismatch",
+                    "monitored_slots": [],
+                    "user_action_types": ["Revise_Intent_Request"],
+                    "simulator_reply": "参数不对，请重新核实。"
+                },
+                "on_agent_inquiry": {
+                    "description": "Agent询问缺失参数，用户提供",
+                    "trigger_condition": "agent_action == 'Request_Slot'",
+                    "monitored_slots": [],
+                    "user_action_types": ["Inform_Slot"],
+                    "simulator_reply": f"按规格{res}和时延≤{rtt}办理。"
+                },
+                "on_slot_missing": {
+                    "description": "Agent遗漏必要参数",
+                    "trigger_condition": "agent_slot_missing",
+                    "monitored_slots": [],
+                    "user_action_types": ["Confirm_Slot"],
+                    "simulator_reply": "请核对时长和完整保障指标。"
+                },
+                "on_goal_matched": {
+                    "description": "参数对齐闭环",
+                    "trigger_condition": "agent_slots_all_matched",
+                    "monitored_slots": [],
+                    "user_action_types": ["Confirm_Slot"],
+                    "simulator_reply": "确认无误，直接办理吧。"
+                }
+            }
+
+        contract = {
+            "version": "1.0",
+            "contract_name": "DynamicGoalDeltaReactionContract",
+            "scenario_type": scenario_type,
+            "target_ground_truth": target_gt,
+            "termination_conditions": {
+                "max_turns": slow_rounds + 1,
+                "required_status": "resolved",
+                "early_stop_on_match": True
+            },
+            "delta_reaction_matrix": reaction_matrix,
+            "evaluator_prompt_template": (
+                "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。"
+                "每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。"
+                "若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；"
+                "若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；"
+                "若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；"
+                "若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+            )
+        }
+
         return {
             "learning_source_session": learning_source_session,
             "experience_id": exp_id,
             "rule_title": rule_title,
+            "interactive_eval_contract": contract,
             "fast_path": {
                 "round_count": fast_rounds,
                 "closure_path": "fast_experience_closed_loop",
@@ -1087,6 +1319,7 @@ class SessionAssembler:
                 "resolved_turn": slow_rounds,
                 "redundant_rounds": slow_rounds - fast_rounds,
                 "branch_decision_gate": gate,
+                "interactive_eval_contract": contract,
                 "simulator_dialogue_tree": tree,
                 "full_slow_event_sequence": full_slow_seq
             }

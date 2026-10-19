@@ -29,7 +29,7 @@
           ]
         },
         "agent": {
-          "utterance": "收到，您是要在抖音开直播对吧？画质、时延和持续时长这边需要您确认一下。",
+          "utterance": "收到，您是要在抖音开直播对吧？画质、时延和持续时长您想怎么定？",
           "action_types": [
             "Request_Slot"
           ]
@@ -74,13 +74,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "画质1080p，时延要千万别转圈，上限按50ms控制，以后也照这个标准理解，持续60min。",
+          "utterance": "画质1080p，时延要千万别转圈，上限按50ms控制，持续60min。我说‘千万别转圈’，就是时延控制在50ms以内。以后也照这个标准理解，记住这个习惯哈，别掉链子。",
           "action_types": [
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次保障：抖音开直播，1080p画质，时延50ms以内，持续60分钟，从12点30分到13点30分。",
+          "utterance": "好的，已为您开通本次保障：抖音开直播，1080p画质，时延50ms以内，持续60分钟。并已为您将该配置记录为长期老规矩！",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -145,13 +145,13 @@
       {
         "turn": 3,
         "user": {
-          "utterance": "对，我说‘千万别转圈’，就是时延控制在50ms以内，记住这个习惯哈。",
+          "utterance": "对，确认直接开通。",
           "action_types": [
             "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次保障，并已为您将该配置记录为长期老规矩！",
+          "utterance": "好的，已为您成功受理本次保障，并已为您将该配置记录为长期老规矩，祝您使用愉快！",
           "action_types": [
             "Acknowledge"
           ]
@@ -341,7 +341,7 @@
       "round_count": 3,
       "intent_count": 1,
       "memory_role": "evidence_session",
-      "skeleton_signature": "T3-1|3|1|I1:微信/视频通话/1/clarified/resolved|none",
+      "skeleton_signature": "T3-1|3|1|I1:腾讯会议/会议/1/clarified/resolved|none",
       "scenario": {
         "environment": "大巴跨城转场高速公路",
         "blueprint_type": "sub_01",
@@ -355,14 +355,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "在大巴转场途中网络不太稳，帮我给微信视频通话开个保障，时间从今天18时45分开始。",
+          "utterance": "在大巴转场途中网络不太稳，帮我给腾讯会议会议开个保障，时间从今天18时45分开始。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，已确认是微信视频通话保障。请问画质、时延和持续时长有什么具体要求？",
+          "utterance": "收到，已确认是腾讯会议会议保障。请问画质、时延和持续时长有什么具体要求？",
           "action_types": [
             "Request_Slot"
           ]
@@ -381,15 +381,15 @@
             "status": "in_progress",
             "closure_path": "clarify",
             "expression_level": 1,
-            "intent": "微信视频通话保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "微信",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "视频通话",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -413,7 +413,7 @@
           ]
         },
         "agent": {
-          "utterance": "请教一下，您提到的‘保个基本画质’具体对应哪档画质档位？以后也帮您按这个记吗？",
+          "utterance": "问一下，您说的‘保个基本画质’具体是指哪种画质档位？往后也按这套标准来吗？",
           "action_types": [
             "Request_Disambiguation"
           ]
@@ -430,15 +430,15 @@
             "status": "in_progress",
             "closure_path": "clarify",
             "expression_level": 1,
-            "intent": "微信视频通话保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "微信",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "视频通话",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -479,7 +479,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已按您刚确认的含义记录，并为您开通微信视频通话保障（720p / 时延≤100ms）。祝您使用愉快！",
+          "utterance": "好的，已按您刚确认的含义记录，并为您开通腾讯会议会议保障（720p / 时延≤100ms）。祝您使用愉快！",
           "action_types": [
             "Acknowledge"
           ]
@@ -494,15 +494,15 @@
             "status": "resolved",
             "closure_path": "clarified",
             "expression_level": 1,
-            "intent": "微信视频通话保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "微信",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "视频通话",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -548,15 +548,15 @@
         "status": "resolved",
         "closure_path": "clarified",
         "expression_level": 1,
-        "intent": "微信视频通话保障",
+        "intent": "腾讯会议会议保障",
         "params": {
           "application_name": {
-            "value": "微信",
+            "value": "腾讯会议",
             "source_type": "Turn",
             "source_ref": "U1"
           },
           "service_name": {
-            "value": "视频通话",
+            "value": "会议",
             "source_type": "Turn",
             "source_ref": "U1"
           },
@@ -603,12 +603,12 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "微信",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "视频通话",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -988,7 +988,7 @@
           ]
         },
         "agent": {
-          "utterance": "收到，我查到您上周在露天高山滑雪训练基地的保障单：抖音开直播，画质1080p，时延50ms以内。今天具体起止时间是什么时候？",
+          "utterance": "收到，我查到您上周在露天高山滑雪训练基地的工单，规格是抖音开直播，画质1080p，时延50ms以内。今天保障的具体起止时间是什么？",
           "action_types": [
             "Confirm_Slot",
             "Request_Slot"
@@ -1057,7 +1057,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次保障：抖音开直播，1080p画质，时延50ms以内，12点30分到13点30分，持续60分钟。祝顺利！",
+          "utterance": "好的，已为您开通本次保障，祝您直播顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -1265,14 +1265,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "抖音开直播，时延别卡顿，帮我开上。",
+          "utterance": "今天中午12点30分，用抖音开直播，时延别卡顿，帮我开个保障。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，按记忆中的配置：抖音开直播，1080p画质，时延50ms以内，今天12点30分到13点30分，持续60分钟，对吗？",
+          "utterance": "收到，按您说的‘别卡顿’，时延50ms以内，画质1080p，持续60分钟，从12点30分到13点30分，对吗？",
           "action_types": [
             "Confirm_Slot",
             "Request_Slot"
@@ -1354,7 +1354,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您开通本次保障，祝直播顺利！",
+          "utterance": "好的，已为您开通本次保障，祝您直播顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -2156,6 +2156,75 @@
         "learning_source_session": "S-USER_001-05",
         "experience_id": "EXP_PREWARM_BUFFER_01",
         "rule_title": "重大活动与大型现场提前30分钟网络预热起保经验",
+        "interactive_eval_contract": {
+          "version": "1.0",
+          "contract_name": "DynamicGoalDeltaReactionContract",
+          "scenario_type": "prewarm_buffer",
+          "target_ground_truth": {
+            "I1": {
+              "intent": "抖音开直播保障",
+              "slots": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月17日12时00分",
+                  "end_timestamp": "2026年10月17日13时30分",
+                  "duration": "90min"
+                }
+              }
+            }
+          },
+          "termination_conditions": {
+            "max_turns": 5,
+            "required_status": "resolved",
+            "early_stop_on_match": true
+          },
+          "delta_reaction_matrix": {
+            "on_slot_error": {
+              "description": "Agent机械按活动时间掐点预约，未执行提前30分钟试机预热推算",
+              "trigger_condition": "agent_slots.get('timestamp.start_timestamp') != ground_truth['I1']['slots']['timestamp']['start_timestamp']",
+              "monitored_slots": [
+                "I1.timestamp.start_timestamp"
+              ],
+              "user_action_types": [
+                "Revise_Intent_Request",
+                "Inform_Slot"
+              ],
+              "simulator_reply": "等等，这是大型场馆活动，现场设备调试很多，掐着点开通根本来不及试机！必须提前半小时起保！"
+            },
+            "on_slot_missing": {
+              "description": "Agent虽修正了提前起保时间，但未向用户主动确认预热期的网络指标规格",
+              "trigger_condition": "not agent_slots.get('resolution') or not agent_slots.get('rtt')",
+              "monitored_slots": [
+                "I1.resolution",
+                "I1.rtt"
+              ],
+              "user_action_types": [
+                "Confirm_Slot"
+              ],
+              "simulator_reply": "对，必须提前半小时试机才稳妥，那预热调试期间的网络指标还是保持高规格吧？"
+            },
+            "on_agent_inquiry": {
+              "description": "Agent主动询问用户预热起止时段或规格要求",
+              "trigger_condition": "agent_action in ['Request_Slot']",
+              "user_action_types": [
+                "Inform_Slot"
+              ],
+              "simulator_reply": "保障时间要从2026年10月17日12时00分开始算，提前30分钟起保，规格按1080p和时延≤50ms。"
+            },
+            "on_goal_matched": {
+              "description": "提前预热起保时序与网络指标完全核准对齐，用户确认办理",
+              "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+              "user_action_types": [
+                "Confirm_Slot"
+              ],
+              "simulator_reply": "好的，这就稳妥了，确认开通。"
+            }
+          },
+          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+        },
         "fast_path": {
           "round_count": 2,
           "closure_path": "fast_experience_closed_loop",
@@ -2184,6 +2253,75 @@
             },
             "pass_route": "fast_path",
             "fail_route": "slow_path"
+          },
+          "interactive_eval_contract": {
+            "version": "1.0",
+            "contract_name": "DynamicGoalDeltaReactionContract",
+            "scenario_type": "prewarm_buffer",
+            "target_ground_truth": {
+              "I1": {
+                "intent": "抖音开直播保障",
+                "slots": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月17日12时00分",
+                    "end_timestamp": "2026年10月17日13时30分",
+                    "duration": "90min"
+                  }
+                }
+              }
+            },
+            "termination_conditions": {
+              "max_turns": 5,
+              "required_status": "resolved",
+              "early_stop_on_match": true
+            },
+            "delta_reaction_matrix": {
+              "on_slot_error": {
+                "description": "Agent机械按活动时间掐点预约，未执行提前30分钟试机预热推算",
+                "trigger_condition": "agent_slots.get('timestamp.start_timestamp') != ground_truth['I1']['slots']['timestamp']['start_timestamp']",
+                "monitored_slots": [
+                  "I1.timestamp.start_timestamp"
+                ],
+                "user_action_types": [
+                  "Revise_Intent_Request",
+                  "Inform_Slot"
+                ],
+                "simulator_reply": "等等，这是大型场馆活动，现场设备调试很多，掐着点开通根本来不及试机！必须提前半小时起保！"
+              },
+              "on_slot_missing": {
+                "description": "Agent虽修正了提前起保时间，但未向用户主动确认预热期的网络指标规格",
+                "trigger_condition": "not agent_slots.get('resolution') or not agent_slots.get('rtt')",
+                "monitored_slots": [
+                  "I1.resolution",
+                  "I1.rtt"
+                ],
+                "user_action_types": [
+                  "Confirm_Slot"
+                ],
+                "simulator_reply": "对，必须提前半小时试机才稳妥，那预热调试期间的网络指标还是保持高规格吧？"
+              },
+              "on_agent_inquiry": {
+                "description": "Agent主动询问用户预热起止时段或规格要求",
+                "trigger_condition": "agent_action in ['Request_Slot']",
+                "user_action_types": [
+                  "Inform_Slot"
+                ],
+                "simulator_reply": "保障时间要从2026年10月17日12时00分开始算，提前30分钟起保，规格按1080p和时延≤50ms。"
+              },
+              "on_goal_matched": {
+                "description": "提前预热起保时序与网络指标完全核准对齐，用户确认办理",
+                "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+                "user_action_types": [
+                  "Confirm_Slot"
+                ],
+                "simulator_reply": "好的，这就稳妥了，确认开通。"
+              }
+            },
+            "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
           },
           "simulator_dialogue_tree": [
             {
@@ -2500,6 +2638,75 @@
       "learning_source_session": "S-USER_001-05",
       "experience_id": "EXP_PREWARM_BUFFER_01",
       "rule_title": "重大活动与大型现场提前30分钟网络预热起保经验",
+      "interactive_eval_contract": {
+        "version": "1.0",
+        "contract_name": "DynamicGoalDeltaReactionContract",
+        "scenario_type": "prewarm_buffer",
+        "target_ground_truth": {
+          "I1": {
+            "intent": "抖音开直播保障",
+            "slots": {
+              "application_name": "抖音",
+              "service_name": "开直播",
+              "resolution": "1080p",
+              "rtt": "50ms",
+              "timestamp": {
+                "start_timestamp": "2026年10月17日12时00分",
+                "end_timestamp": "2026年10月17日13时30分",
+                "duration": "90min"
+              }
+            }
+          }
+        },
+        "termination_conditions": {
+          "max_turns": 5,
+          "required_status": "resolved",
+          "early_stop_on_match": true
+        },
+        "delta_reaction_matrix": {
+          "on_slot_error": {
+            "description": "Agent机械按活动时间掐点预约，未执行提前30分钟试机预热推算",
+            "trigger_condition": "agent_slots.get('timestamp.start_timestamp') != ground_truth['I1']['slots']['timestamp']['start_timestamp']",
+            "monitored_slots": [
+              "I1.timestamp.start_timestamp"
+            ],
+            "user_action_types": [
+              "Revise_Intent_Request",
+              "Inform_Slot"
+            ],
+            "simulator_reply": "等等，这是大型场馆活动，现场设备调试很多，掐着点开通根本来不及试机！必须提前半小时起保！"
+          },
+          "on_slot_missing": {
+            "description": "Agent虽修正了提前起保时间，但未向用户主动确认预热期的网络指标规格",
+            "trigger_condition": "not agent_slots.get('resolution') or not agent_slots.get('rtt')",
+            "monitored_slots": [
+              "I1.resolution",
+              "I1.rtt"
+            ],
+            "user_action_types": [
+              "Confirm_Slot"
+            ],
+            "simulator_reply": "对，必须提前半小时试机才稳妥，那预热调试期间的网络指标还是保持高规格吧？"
+          },
+          "on_agent_inquiry": {
+            "description": "Agent主动询问用户预热起止时段或规格要求",
+            "trigger_condition": "agent_action in ['Request_Slot']",
+            "user_action_types": [
+              "Inform_Slot"
+            ],
+            "simulator_reply": "保障时间要从2026年10月17日12时00分开始算，提前30分钟起保，规格按1080p和时延≤50ms。"
+          },
+          "on_goal_matched": {
+            "description": "提前预热起保时序与网络指标完全核准对齐，用户确认办理",
+            "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+            "user_action_types": [
+              "Confirm_Slot"
+            ],
+            "simulator_reply": "好的，这就稳妥了，确认开通。"
+          }
+        },
+        "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+      },
       "fast_path": {
         "round_count": 2,
         "closure_path": "fast_experience_closed_loop",
@@ -2528,6 +2735,75 @@
           },
           "pass_route": "fast_path",
           "fail_route": "slow_path"
+        },
+        "interactive_eval_contract": {
+          "version": "1.0",
+          "contract_name": "DynamicGoalDeltaReactionContract",
+          "scenario_type": "prewarm_buffer",
+          "target_ground_truth": {
+            "I1": {
+              "intent": "抖音开直播保障",
+              "slots": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月17日12时00分",
+                  "end_timestamp": "2026年10月17日13时30分",
+                  "duration": "90min"
+                }
+              }
+            }
+          },
+          "termination_conditions": {
+            "max_turns": 5,
+            "required_status": "resolved",
+            "early_stop_on_match": true
+          },
+          "delta_reaction_matrix": {
+            "on_slot_error": {
+              "description": "Agent机械按活动时间掐点预约，未执行提前30分钟试机预热推算",
+              "trigger_condition": "agent_slots.get('timestamp.start_timestamp') != ground_truth['I1']['slots']['timestamp']['start_timestamp']",
+              "monitored_slots": [
+                "I1.timestamp.start_timestamp"
+              ],
+              "user_action_types": [
+                "Revise_Intent_Request",
+                "Inform_Slot"
+              ],
+              "simulator_reply": "等等，这是大型场馆活动，现场设备调试很多，掐着点开通根本来不及试机！必须提前半小时起保！"
+            },
+            "on_slot_missing": {
+              "description": "Agent虽修正了提前起保时间，但未向用户主动确认预热期的网络指标规格",
+              "trigger_condition": "not agent_slots.get('resolution') or not agent_slots.get('rtt')",
+              "monitored_slots": [
+                "I1.resolution",
+                "I1.rtt"
+              ],
+              "user_action_types": [
+                "Confirm_Slot"
+              ],
+              "simulator_reply": "对，必须提前半小时试机才稳妥，那预热调试期间的网络指标还是保持高规格吧？"
+            },
+            "on_agent_inquiry": {
+              "description": "Agent主动询问用户预热起止时段或规格要求",
+              "trigger_condition": "agent_action in ['Request_Slot']",
+              "user_action_types": [
+                "Inform_Slot"
+              ],
+              "simulator_reply": "保障时间要从2026年10月17日12时00分开始算，提前30分钟起保，规格按1080p和时延≤50ms。"
+            },
+            "on_goal_matched": {
+              "description": "提前预热起保时序与网络指标完全核准对齐，用户确认办理",
+              "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+              "user_action_types": [
+                "Confirm_Slot"
+              ],
+              "simulator_reply": "好的，这就稳妥了，确认开通。"
+            }
+          },
+          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
         },
         "simulator_dialogue_tree": [
           {
@@ -3393,7 +3669,7 @@
       "intent_count": 2,
       "memory_role": "reuse_session",
       "memory_tier": "experiential_memory",
-      "skeleton_signature": "T2-4|2|2|I1:抖音/开直播/1/multi_intent_experience/resolved|I2:微信/视频通话/1/locked_intact/resolved|none",
+      "skeleton_signature": "T2-4|2|2|I1:抖音/开直播/1/multi_intent_experience/resolved|I2:腾讯会议/会议/1/locked_intact/resolved|none",
       "scenario": {
         "environment": "露天高山滑雪训练基地",
         "blueprint_type": "multi_intent_experience",
@@ -3411,6 +3687,90 @@
         "learning_source_session": "S-USER_001-06",
         "experience_id": "EXP_MULTI_INTENT_PARTITION_01",
         "rule_title": "多任务并行局部调整与时序因果隔离经验",
+        "interactive_eval_contract": {
+          "version": "1.0",
+          "contract_name": "DynamicGoalDeltaReactionContract",
+          "scenario_type": "multi_intent_partition",
+          "target_ground_truth": {
+            "I1": {
+              "intent": "抖音开直播保障",
+              "slots": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月19日12时30分",
+                  "end_timestamp": "2026年10月19日13时30分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "I2": {
+              "intent": "腾讯会议会议保障",
+              "slots": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月19日14时00分",
+                  "end_timestamp": "2026年10月19日16时00分",
+                  "duration": "120min"
+                }
+              }
+            }
+          },
+          "termination_conditions": {
+            "max_turns": 6,
+            "required_status": "resolved",
+            "early_stop_on_match": true
+          },
+          "delta_reaction_matrix": {
+            "on_slot_error": {
+              "description": "Agent发生跨意图污染，误将I1延误扩散至受保护意图I2的时段",
+              "trigger_condition": "agent_slots.get('I2.timestamp.start_timestamp') != ground_truth['I2']['slots']['timestamp']['start_timestamp']",
+              "monitored_slots": [
+                "I2.timestamp.start_timestamp",
+                "I2.timestamp.end_timestamp"
+              ],
+              "user_action_types": [
+                "Revise_Intent_Request",
+                "Inform_Slot"
+              ],
+              "simulator_reply": "不对啊！我只让你把上午的开直播延长，怎么把下午的会议也往后推迟了？下午的时间绝对不能动！"
+            },
+            "on_slot_missing": {
+              "description": "Agent虽冻结锁定I2，但遗漏了上午任务延后后的总保障时长核算",
+              "trigger_condition": "not agent_slots.get('I1.timestamp.duration')",
+              "monitored_slots": [
+                "I1.timestamp.duration"
+              ],
+              "user_action_types": [
+                "Confirm_Slot"
+              ],
+              "simulator_reply": "下午别动是对的，但我上午延后之后，总保障时长到底是按多久算的？你们系统到底算准了没有？"
+            },
+            "on_agent_inquiry": {
+              "description": "Agent向用户核验两笔保障各自网络指标独立完整性",
+              "trigger_condition": "agent_action in ['Request_Slot', 'Confirm_Slot']",
+              "user_action_types": [
+                "Confirm_Slot",
+                "Inform_Slot"
+              ],
+              "simulator_reply": "行，时长算清楚了。那改期后上午和下午的网络规格（清晰度和时延）没被改乱吧？"
+            },
+            "on_goal_matched": {
+              "description": "两笔保障参数与时序完全核准对齐，用户确认闭环出单",
+              "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+              "user_action_types": [
+                "Confirm_Slot"
+              ],
+              "simulator_reply": "行，两边都对齐没问题了，确认开通。"
+            }
+          },
+          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+        },
         "fast_path": {
           "round_count": 3,
           "closure_path": "fast_experience_closed_loop",
@@ -3443,14 +3803,98 @@
             "pass_route": "fast_path",
             "fail_route": "slow_path"
           },
+          "interactive_eval_contract": {
+            "version": "1.0",
+            "contract_name": "DynamicGoalDeltaReactionContract",
+            "scenario_type": "multi_intent_partition",
+            "target_ground_truth": {
+              "I1": {
+                "intent": "抖音开直播保障",
+                "slots": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月19日12时30分",
+                    "end_timestamp": "2026年10月19日13时30分",
+                    "duration": "120min"
+                  }
+                }
+              },
+              "I2": {
+                "intent": "腾讯会议会议保障",
+                "slots": {
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月19日14时00分",
+                    "end_timestamp": "2026年10月19日16时00分",
+                    "duration": "120min"
+                  }
+                }
+              }
+            },
+            "termination_conditions": {
+              "max_turns": 6,
+              "required_status": "resolved",
+              "early_stop_on_match": true
+            },
+            "delta_reaction_matrix": {
+              "on_slot_error": {
+                "description": "Agent发生跨意图污染，误将I1延误扩散至受保护意图I2的时段",
+                "trigger_condition": "agent_slots.get('I2.timestamp.start_timestamp') != ground_truth['I2']['slots']['timestamp']['start_timestamp']",
+                "monitored_slots": [
+                  "I2.timestamp.start_timestamp",
+                  "I2.timestamp.end_timestamp"
+                ],
+                "user_action_types": [
+                  "Revise_Intent_Request",
+                  "Inform_Slot"
+                ],
+                "simulator_reply": "不对啊！我只让你把上午的开直播延长，怎么把下午的会议也往后推迟了？下午的时间绝对不能动！"
+              },
+              "on_slot_missing": {
+                "description": "Agent虽冻结锁定I2，但遗漏了上午任务延后后的总保障时长核算",
+                "trigger_condition": "not agent_slots.get('I1.timestamp.duration')",
+                "monitored_slots": [
+                  "I1.timestamp.duration"
+                ],
+                "user_action_types": [
+                  "Confirm_Slot"
+                ],
+                "simulator_reply": "下午别动是对的，但我上午延后之后，总保障时长到底是按多久算的？你们系统到底算准了没有？"
+              },
+              "on_agent_inquiry": {
+                "description": "Agent向用户核验两笔保障各自网络指标独立完整性",
+                "trigger_condition": "agent_action in ['Request_Slot', 'Confirm_Slot']",
+                "user_action_types": [
+                  "Confirm_Slot",
+                  "Inform_Slot"
+                ],
+                "simulator_reply": "行，时长算清楚了。那改期后上午和下午的网络规格（清晰度和时延）没被改乱吧？"
+              },
+              "on_goal_matched": {
+                "description": "两笔保障参数与时序完全核准对齐，用户确认闭环出单",
+                "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+                "user_action_types": [
+                  "Confirm_Slot"
+                ],
+                "simulator_reply": "行，两边都对齐没问题了，确认开通。"
+              }
+            },
+            "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+          },
           "simulator_dialogue_tree": [
             {
               "turn": 1,
               "speaker": "user",
               "simulator_user_prompt": "帮我改一下上午的抖音开直播保障，临时通知延误了推迟到12:00结束；下午的保障千万别动，保持原样。",
-              "agent_hypothesis": "Agent缺乏时序因果隔离经验，误将抖音开直播的延期连带应用到微信视频通话，统一往后推迟",
-              "baseline_agent_flawed_response": "收到，已为您将上午抖音开直播顺延至2026年10月19日13时30分，同时为您将下午微信视频通话一并顺延后移，确认按此统一调整吗？",
-              "expected_agent_correction": "收到，已为您将上午抖音开直播顺延至2026年10月19日13时30分，同时为您将下午微信视频通话一并顺延后移，确认按此统一调整吗？",
+              "agent_hypothesis": "Agent缺乏时序因果隔离经验，误将抖音开直播的延期连带应用到腾讯会议会议，统一往后推迟",
+              "baseline_agent_flawed_response": "收到，已为您将上午抖音开直播顺延至2026年10月19日13时30分，同时为您将下午腾讯会议会议一并顺延后移，确认按此统一调整吗？",
+              "expected_agent_correction": "收到，已为您将上午抖音开直播顺延至2026年10月19日13时30分，同时为您将下午腾讯会议会议一并顺延后移，确认按此统一调整吗？",
               "flaw_type": "cross_intent_delay_leakage",
               "flaw_description": "将I1的任务延期错误扩散至I2，污染非目标意图时段",
               "agent_action_types": [
@@ -3460,9 +3904,9 @@
             {
               "turn": 2,
               "speaker": "user_simulator",
-              "simulator_user_prompt": "不对啊！我只让你把上午的开直播延长，怎么把下午的视频通话也往后推迟了？下午的时间绝对不能动！",
+              "simulator_user_prompt": "不对啊！我只让你把上午的开直播延长，怎么把下午的会议也往后推迟了？下午的时间绝对不能动！",
               "agent_hypothesis": "Agent意识到跨任务污染错误，紧急冻结锁定下午时段，但遗漏了上午时长的重新核算，泛泛反问",
-              "expected_agent_correction": "非常抱歉！已纠正错误，上午抖音开直播已顺延，下午微信视频通话已严格锁定恢复原时段（2026年10月19日14时00分至2026年10月19日16时00分）不变，请问上午按此直接开通吗？",
+              "expected_agent_correction": "非常抱歉！已纠正错误，上午抖音开直播已顺延，下午腾讯会议会议已严格锁定恢复原时段（2026年10月19日14时00分至2026年10月19日16时00分）不变，请问上午按此直接开通吗？",
               "agent_action_types": [
                 "Confirm_Slot"
               ]
@@ -3492,7 +3936,7 @@
               "speaker": "user_simulator",
               "simulator_user_prompt": "行，两边都对齐没问题了，确认开通。",
               "agent_hypothesis": "Agent成功完成多任务因果隔离闭环出单",
-              "expected_agent_correction": "好的，已完成多任务时序因果隔离确认，上午抖音延长办理、下午微信维持原有时段不变，两笔保障均已成功受理！",
+              "expected_agent_correction": "好的，已完成多任务时序因果隔离确认，上午抖音延长办理、下午腾讯会议维持原有时段不变，两笔保障均已成功受理！",
               "agent_action_types": [
                 "Acknowledge"
               ]
@@ -3509,7 +3953,7 @@
                 ]
               },
               "agent": {
-                "utterance": "收到，已为您将上午抖音开直播顺延至2026年10月19日13时30分，同时为您将下午微信视频通话一并顺延后移，确认按此统一调整吗？",
+                "utterance": "收到，已为您将上午抖音开直播顺延至2026年10月19日13时30分，同时为您将下午腾讯会议会议一并顺延后移，确认按此统一调整吗？",
                 "action_types": [
                   "Confirm_Slot"
                 ]
@@ -3551,15 +3995,15 @@
                   "status": "in_progress",
                   "closure_path": "flawed_delay_leakage",
                   "expression_level": 1,
-                  "intent": "微信视频通话保障",
+                  "intent": "腾讯会议会议保障",
                   "params": {
                     "application_name": {
-                      "value": "微信",
+                      "value": "腾讯会议",
                       "source_type": "Memory",
                       "source_ref": "SUB_001"
                     },
                     "service_name": {
-                      "value": "视频通话",
+                      "value": "会议",
                       "source_type": "Memory",
                       "source_ref": "SUB_001"
                     },
@@ -3577,14 +4021,14 @@
             {
               "turn": 2,
               "user": {
-                "utterance": "不对啊！我只让你把上午的开直播延长，怎么把下午的视频通话也往后推迟了？下午的时间绝对不能动！",
+                "utterance": "不对啊！我只让你把上午的开直播延长，怎么把下午的会议也往后推迟了？下午的时间绝对不能动！",
                 "action_types": [
                   "Revise_Intent_Request",
                   "Inform_Slot"
                 ]
               },
               "agent": {
-                "utterance": "非常抱歉！已纠正错误，上午抖音开直播已顺延，下午微信视频通话已严格锁定恢复原时段（2026年10月19日14时00分至2026年10月19日16时00分）不变，请问上午按此直接开通吗？",
+                "utterance": "非常抱歉！已纠正错误，上午抖音开直播已顺延，下午腾讯会议会议已严格锁定恢复原时段（2026年10月19日14时00分至2026年10月19日16时00分）不变，请问上午按此直接开通吗？",
                 "action_types": [
                   "Confirm_Slot"
                 ]
@@ -3631,15 +4075,15 @@
                   "status": "in_progress",
                   "closure_path": "isolated_locked",
                   "expression_level": 1,
-                  "intent": "微信视频通话保障",
+                  "intent": "腾讯会议会议保障",
                   "params": {
                     "application_name": {
-                      "value": "微信",
+                      "value": "腾讯会议",
                       "source_type": "Memory",
                       "source_ref": "SUB_001"
                     },
                     "service_name": {
-                      "value": "视频通话",
+                      "value": "会议",
                       "source_type": "Memory",
                       "source_ref": "SUB_001"
                     },
@@ -3725,15 +4169,15 @@
                   "status": "in_progress",
                   "closure_path": "isolated_locked",
                   "expression_level": 1,
-                  "intent": "微信视频通话保障",
+                  "intent": "腾讯会议会议保障",
                   "params": {
                     "application_name": {
-                      "value": "微信",
+                      "value": "腾讯会议",
                       "source_type": "Memory",
                       "source_ref": "SUB_001"
                     },
                     "service_name": {
-                      "value": "视频通话",
+                      "value": "会议",
                       "source_type": "Memory",
                       "source_ref": "SUB_001"
                     },
@@ -3833,15 +4277,15 @@
                   "status": "in_progress",
                   "closure_path": "isolated_locked",
                   "expression_level": 1,
-                  "intent": "微信视频通话保障",
+                  "intent": "腾讯会议会议保障",
                   "params": {
                     "application_name": {
-                      "value": "微信",
+                      "value": "腾讯会议",
                       "source_type": "Memory",
                       "source_ref": "SUB_001"
                     },
                     "service_name": {
-                      "value": "视频通话",
+                      "value": "会议",
                       "source_type": "Memory",
                       "source_ref": "SUB_001"
                     },
@@ -3889,7 +4333,7 @@
                 ]
               },
               "agent": {
-                "utterance": "好的，已完成多任务时序因果隔离确认，上午抖音延长办理、下午微信维持原有时段不变，两笔保障均已成功受理！",
+                "utterance": "好的，已完成多任务时序因果隔离确认，上午抖音延长办理、下午腾讯会议维持原有时段不变，两笔保障均已成功受理！",
                 "action_types": [
                   "Acknowledge"
                 ]
@@ -3955,15 +4399,15 @@
                   "status": "resolved",
                   "closure_path": "locked_intact",
                   "expression_level": 1,
-                  "intent": "微信视频通话保障",
+                  "intent": "腾讯会议会议保障",
                   "params": {
                     "application_name": {
-                      "value": "微信",
+                      "value": "腾讯会议",
                       "source_type": "Memory",
                       "source_ref": "SUB_001"
                     },
                     "service_name": {
-                      "value": "视频通话",
+                      "value": "会议",
                       "source_type": "Memory",
                       "source_ref": "SUB_001"
                     },
@@ -4020,6 +4464,90 @@
       "learning_source_session": "S-USER_001-06",
       "experience_id": "EXP_MULTI_INTENT_PARTITION_01",
       "rule_title": "多任务并行局部调整与时序因果隔离经验",
+      "interactive_eval_contract": {
+        "version": "1.0",
+        "contract_name": "DynamicGoalDeltaReactionContract",
+        "scenario_type": "multi_intent_partition",
+        "target_ground_truth": {
+          "I1": {
+            "intent": "抖音开直播保障",
+            "slots": {
+              "application_name": "抖音",
+              "service_name": "开直播",
+              "resolution": "1080p",
+              "rtt": "50ms",
+              "timestamp": {
+                "start_timestamp": "2026年10月19日12时30分",
+                "end_timestamp": "2026年10月19日13时30分",
+                "duration": "120min"
+              }
+            }
+          },
+          "I2": {
+            "intent": "腾讯会议会议保障",
+            "slots": {
+              "application_name": "腾讯会议",
+              "service_name": "会议",
+              "resolution": "1080p",
+              "rtt": "50ms",
+              "timestamp": {
+                "start_timestamp": "2026年10月19日14时00分",
+                "end_timestamp": "2026年10月19日16时00分",
+                "duration": "120min"
+              }
+            }
+          }
+        },
+        "termination_conditions": {
+          "max_turns": 6,
+          "required_status": "resolved",
+          "early_stop_on_match": true
+        },
+        "delta_reaction_matrix": {
+          "on_slot_error": {
+            "description": "Agent发生跨意图污染，误将I1延误扩散至受保护意图I2的时段",
+            "trigger_condition": "agent_slots.get('I2.timestamp.start_timestamp') != ground_truth['I2']['slots']['timestamp']['start_timestamp']",
+            "monitored_slots": [
+              "I2.timestamp.start_timestamp",
+              "I2.timestamp.end_timestamp"
+            ],
+            "user_action_types": [
+              "Revise_Intent_Request",
+              "Inform_Slot"
+            ],
+            "simulator_reply": "不对啊！我只让你把上午的开直播延长，怎么把下午的会议也往后推迟了？下午的时间绝对不能动！"
+          },
+          "on_slot_missing": {
+            "description": "Agent虽冻结锁定I2，但遗漏了上午任务延后后的总保障时长核算",
+            "trigger_condition": "not agent_slots.get('I1.timestamp.duration')",
+            "monitored_slots": [
+              "I1.timestamp.duration"
+            ],
+            "user_action_types": [
+              "Confirm_Slot"
+            ],
+            "simulator_reply": "下午别动是对的，但我上午延后之后，总保障时长到底是按多久算的？你们系统到底算准了没有？"
+          },
+          "on_agent_inquiry": {
+            "description": "Agent向用户核验两笔保障各自网络指标独立完整性",
+            "trigger_condition": "agent_action in ['Request_Slot', 'Confirm_Slot']",
+            "user_action_types": [
+              "Confirm_Slot",
+              "Inform_Slot"
+            ],
+            "simulator_reply": "行，时长算清楚了。那改期后上午和下午的网络规格（清晰度和时延）没被改乱吧？"
+          },
+          "on_goal_matched": {
+            "description": "两笔保障参数与时序完全核准对齐，用户确认闭环出单",
+            "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+            "user_action_types": [
+              "Confirm_Slot"
+            ],
+            "simulator_reply": "行，两边都对齐没问题了，确认开通。"
+          }
+        },
+        "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+      },
       "fast_path": {
         "round_count": 3,
         "closure_path": "fast_experience_closed_loop",
@@ -4052,14 +4580,98 @@
           "pass_route": "fast_path",
           "fail_route": "slow_path"
         },
+        "interactive_eval_contract": {
+          "version": "1.0",
+          "contract_name": "DynamicGoalDeltaReactionContract",
+          "scenario_type": "multi_intent_partition",
+          "target_ground_truth": {
+            "I1": {
+              "intent": "抖音开直播保障",
+              "slots": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月19日12时30分",
+                  "end_timestamp": "2026年10月19日13时30分",
+                  "duration": "120min"
+                }
+              }
+            },
+            "I2": {
+              "intent": "腾讯会议会议保障",
+              "slots": {
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月19日14时00分",
+                  "end_timestamp": "2026年10月19日16时00分",
+                  "duration": "120min"
+                }
+              }
+            }
+          },
+          "termination_conditions": {
+            "max_turns": 6,
+            "required_status": "resolved",
+            "early_stop_on_match": true
+          },
+          "delta_reaction_matrix": {
+            "on_slot_error": {
+              "description": "Agent发生跨意图污染，误将I1延误扩散至受保护意图I2的时段",
+              "trigger_condition": "agent_slots.get('I2.timestamp.start_timestamp') != ground_truth['I2']['slots']['timestamp']['start_timestamp']",
+              "monitored_slots": [
+                "I2.timestamp.start_timestamp",
+                "I2.timestamp.end_timestamp"
+              ],
+              "user_action_types": [
+                "Revise_Intent_Request",
+                "Inform_Slot"
+              ],
+              "simulator_reply": "不对啊！我只让你把上午的开直播延长，怎么把下午的会议也往后推迟了？下午的时间绝对不能动！"
+            },
+            "on_slot_missing": {
+              "description": "Agent虽冻结锁定I2，但遗漏了上午任务延后后的总保障时长核算",
+              "trigger_condition": "not agent_slots.get('I1.timestamp.duration')",
+              "monitored_slots": [
+                "I1.timestamp.duration"
+              ],
+              "user_action_types": [
+                "Confirm_Slot"
+              ],
+              "simulator_reply": "下午别动是对的，但我上午延后之后，总保障时长到底是按多久算的？你们系统到底算准了没有？"
+            },
+            "on_agent_inquiry": {
+              "description": "Agent向用户核验两笔保障各自网络指标独立完整性",
+              "trigger_condition": "agent_action in ['Request_Slot', 'Confirm_Slot']",
+              "user_action_types": [
+                "Confirm_Slot",
+                "Inform_Slot"
+              ],
+              "simulator_reply": "行，时长算清楚了。那改期后上午和下午的网络规格（清晰度和时延）没被改乱吧？"
+            },
+            "on_goal_matched": {
+              "description": "两笔保障参数与时序完全核准对齐，用户确认闭环出单",
+              "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+              "user_action_types": [
+                "Confirm_Slot"
+              ],
+              "simulator_reply": "行，两边都对齐没问题了，确认开通。"
+            }
+          },
+          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+        },
         "simulator_dialogue_tree": [
           {
             "turn": 1,
             "speaker": "user",
             "simulator_user_prompt": "帮我改一下上午的抖音开直播保障，临时通知延误了推迟到12:00结束；下午的保障千万别动，保持原样。",
-            "agent_hypothesis": "Agent缺乏时序因果隔离经验，误将抖音开直播的延期连带应用到微信视频通话，统一往后推迟",
-            "baseline_agent_flawed_response": "收到，已为您将上午抖音开直播顺延至2026年10月19日13时30分，同时为您将下午微信视频通话一并顺延后移，确认按此统一调整吗？",
-            "expected_agent_correction": "收到，已为您将上午抖音开直播顺延至2026年10月19日13时30分，同时为您将下午微信视频通话一并顺延后移，确认按此统一调整吗？",
+            "agent_hypothesis": "Agent缺乏时序因果隔离经验，误将抖音开直播的延期连带应用到腾讯会议会议，统一往后推迟",
+            "baseline_agent_flawed_response": "收到，已为您将上午抖音开直播顺延至2026年10月19日13时30分，同时为您将下午腾讯会议会议一并顺延后移，确认按此统一调整吗？",
+            "expected_agent_correction": "收到，已为您将上午抖音开直播顺延至2026年10月19日13时30分，同时为您将下午腾讯会议会议一并顺延后移，确认按此统一调整吗？",
             "flaw_type": "cross_intent_delay_leakage",
             "flaw_description": "将I1的任务延期错误扩散至I2，污染非目标意图时段",
             "agent_action_types": [
@@ -4069,9 +4681,9 @@
           {
             "turn": 2,
             "speaker": "user_simulator",
-            "simulator_user_prompt": "不对啊！我只让你把上午的开直播延长，怎么把下午的视频通话也往后推迟了？下午的时间绝对不能动！",
+            "simulator_user_prompt": "不对啊！我只让你把上午的开直播延长，怎么把下午的会议也往后推迟了？下午的时间绝对不能动！",
             "agent_hypothesis": "Agent意识到跨任务污染错误，紧急冻结锁定下午时段，但遗漏了上午时长的重新核算，泛泛反问",
-            "expected_agent_correction": "非常抱歉！已纠正错误，上午抖音开直播已顺延，下午微信视频通话已严格锁定恢复原时段（2026年10月19日14时00分至2026年10月19日16时00分）不变，请问上午按此直接开通吗？",
+            "expected_agent_correction": "非常抱歉！已纠正错误，上午抖音开直播已顺延，下午腾讯会议会议已严格锁定恢复原时段（2026年10月19日14时00分至2026年10月19日16时00分）不变，请问上午按此直接开通吗？",
             "agent_action_types": [
               "Confirm_Slot"
             ]
@@ -4101,7 +4713,7 @@
             "speaker": "user_simulator",
             "simulator_user_prompt": "行，两边都对齐没问题了，确认开通。",
             "agent_hypothesis": "Agent成功完成多任务因果隔离闭环出单",
-            "expected_agent_correction": "好的，已完成多任务时序因果隔离确认，上午抖音延长办理、下午微信维持原有时段不变，两笔保障均已成功受理！",
+            "expected_agent_correction": "好的，已完成多任务时序因果隔离确认，上午抖音延长办理、下午腾讯会议维持原有时段不变，两笔保障均已成功受理！",
             "agent_action_types": [
               "Acknowledge"
             ]
@@ -4118,7 +4730,7 @@
               ]
             },
             "agent": {
-              "utterance": "收到，已为您将上午抖音开直播顺延至2026年10月19日13时30分，同时为您将下午微信视频通话一并顺延后移，确认按此统一调整吗？",
+              "utterance": "收到，已为您将上午抖音开直播顺延至2026年10月19日13时30分，同时为您将下午腾讯会议会议一并顺延后移，确认按此统一调整吗？",
               "action_types": [
                 "Confirm_Slot"
               ]
@@ -4160,15 +4772,15 @@
                 "status": "in_progress",
                 "closure_path": "flawed_delay_leakage",
                 "expression_level": 1,
-                "intent": "微信视频通话保障",
+                "intent": "腾讯会议会议保障",
                 "params": {
                   "application_name": {
-                    "value": "微信",
+                    "value": "腾讯会议",
                     "source_type": "Memory",
                     "source_ref": "SUB_001"
                   },
                   "service_name": {
-                    "value": "视频通话",
+                    "value": "会议",
                     "source_type": "Memory",
                     "source_ref": "SUB_001"
                   },
@@ -4186,14 +4798,14 @@
           {
             "turn": 2,
             "user": {
-              "utterance": "不对啊！我只让你把上午的开直播延长，怎么把下午的视频通话也往后推迟了？下午的时间绝对不能动！",
+              "utterance": "不对啊！我只让你把上午的开直播延长，怎么把下午的会议也往后推迟了？下午的时间绝对不能动！",
               "action_types": [
                 "Revise_Intent_Request",
                 "Inform_Slot"
               ]
             },
             "agent": {
-              "utterance": "非常抱歉！已纠正错误，上午抖音开直播已顺延，下午微信视频通话已严格锁定恢复原时段（2026年10月19日14时00分至2026年10月19日16时00分）不变，请问上午按此直接开通吗？",
+              "utterance": "非常抱歉！已纠正错误，上午抖音开直播已顺延，下午腾讯会议会议已严格锁定恢复原时段（2026年10月19日14时00分至2026年10月19日16时00分）不变，请问上午按此直接开通吗？",
               "action_types": [
                 "Confirm_Slot"
               ]
@@ -4240,15 +4852,15 @@
                 "status": "in_progress",
                 "closure_path": "isolated_locked",
                 "expression_level": 1,
-                "intent": "微信视频通话保障",
+                "intent": "腾讯会议会议保障",
                 "params": {
                   "application_name": {
-                    "value": "微信",
+                    "value": "腾讯会议",
                     "source_type": "Memory",
                     "source_ref": "SUB_001"
                   },
                   "service_name": {
-                    "value": "视频通话",
+                    "value": "会议",
                     "source_type": "Memory",
                     "source_ref": "SUB_001"
                   },
@@ -4334,15 +4946,15 @@
                 "status": "in_progress",
                 "closure_path": "isolated_locked",
                 "expression_level": 1,
-                "intent": "微信视频通话保障",
+                "intent": "腾讯会议会议保障",
                 "params": {
                   "application_name": {
-                    "value": "微信",
+                    "value": "腾讯会议",
                     "source_type": "Memory",
                     "source_ref": "SUB_001"
                   },
                   "service_name": {
-                    "value": "视频通话",
+                    "value": "会议",
                     "source_type": "Memory",
                     "source_ref": "SUB_001"
                   },
@@ -4442,15 +5054,15 @@
                 "status": "in_progress",
                 "closure_path": "isolated_locked",
                 "expression_level": 1,
-                "intent": "微信视频通话保障",
+                "intent": "腾讯会议会议保障",
                 "params": {
                   "application_name": {
-                    "value": "微信",
+                    "value": "腾讯会议",
                     "source_type": "Memory",
                     "source_ref": "SUB_001"
                   },
                   "service_name": {
-                    "value": "视频通话",
+                    "value": "会议",
                     "source_type": "Memory",
                     "source_ref": "SUB_001"
                   },
@@ -4498,7 +5110,7 @@
               ]
             },
             "agent": {
-              "utterance": "好的，已完成多任务时序因果隔离确认，上午抖音延长办理、下午微信维持原有时段不变，两笔保障均已成功受理！",
+              "utterance": "好的，已完成多任务时序因果隔离确认，上午抖音延长办理、下午腾讯会议维持原有时段不变，两笔保障均已成功受理！",
               "action_types": [
                 "Acknowledge"
               ]
@@ -4564,15 +5176,15 @@
                 "status": "resolved",
                 "closure_path": "locked_intact",
                 "expression_level": 1,
-                "intent": "微信视频通话保障",
+                "intent": "腾讯会议会议保障",
                 "params": {
                   "application_name": {
-                    "value": "微信",
+                    "value": "腾讯会议",
                     "source_type": "Memory",
                     "source_ref": "SUB_001"
                   },
                   "service_name": {
-                    "value": "视频通话",
+                    "value": "会议",
                     "source_type": "Memory",
                     "source_ref": "SUB_001"
                   },
@@ -4672,15 +5284,15 @@
             "status": "resolved",
             "closure_path": "locked_intact",
             "expression_level": 1,
-            "intent": "微信视频通话保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "微信",
+                "value": "腾讯会议",
                 "source_type": "Memory",
                 "source_ref": "SUB_001"
               },
               "service_name": {
-                "value": "视频通话",
+                "value": "会议",
                 "source_type": "Memory",
                 "source_ref": "SUB_001"
               },
@@ -4802,15 +5414,15 @@
             "status": "resolved",
             "closure_path": "locked_intact",
             "expression_level": 1,
-            "intent": "微信视频通话保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "微信",
+                "value": "腾讯会议",
                 "source_type": "Memory",
                 "source_ref": "SUB_001"
               },
               "service_name": {
-                "value": "视频通话",
+                "value": "会议",
                 "source_type": "Memory",
                 "source_ref": "SUB_001"
               },
@@ -4906,15 +5518,15 @@
         "status": "resolved",
         "closure_path": "locked_intact",
         "expression_level": 1,
-        "intent": "微信视频通话保障",
+        "intent": "腾讯会议会议保障",
         "params": {
           "application_name": {
-            "value": "微信",
+            "value": "腾讯会议",
             "source_type": "Memory",
             "source_ref": "SUB_001"
           },
           "service_name": {
-            "value": "视频通话",
+            "value": "会议",
             "source_type": "Memory",
             "source_ref": "SUB_001"
           },
@@ -5026,12 +5638,12 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "微信",
+                "value": "腾讯会议",
                 "source_type": "Memory",
                 "source_ref": "SUB_001"
               },
               "service_name": {
-                "value": "视频通话",
+                "value": "会议",
                 "source_type": "Memory",
                 "source_ref": "SUB_001"
               },
@@ -5663,7 +6275,7 @@
         "memory_action": "reschedule_working_record"
       },
       "working_memory_pointer": {
-        "target_record_id": "REC_mobile_persona_001_20261021_188",
+        "target_record_id": "REC_mobile_persona_001_20261021_12",
         "inferred_delta_days": 1,
         "matched_application": "抖音",
         "matched_service": "开直播",
@@ -5678,7 +6290,7 @@
       "agility_factor": null
     },
     "working_memory_pointer": {
-      "target_record_id": "REC_mobile_persona_001_20261021_188",
+      "target_record_id": "REC_mobile_persona_001_20261021_12",
       "inferred_delta_days": 1,
       "matched_application": "抖音",
       "matched_service": "开直播",
@@ -5719,25 +6331,25 @@
               "application_name": {
                 "value": "抖音",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_001_20261021_188"
+                "source_ref": "REC_mobile_persona_001_20261021_12"
               },
               "service_name": {
                 "value": "开直播",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_001_20261021_188"
+                "source_ref": "REC_mobile_persona_001_20261021_12"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_001_20261021_188"
+                  "source_ref": "REC_mobile_persona_001_20261021_12"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_001_20261021_188"
+                  "source_ref": "REC_mobile_persona_001_20261021_12"
                 }
               },
               "timestamp": {
@@ -5754,14 +6366,14 @@
                 "duration": {
                   "value": "60min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_001_20261021_188"
+                  "source_ref": "REC_mobile_persona_001_20261021_12"
                 }
               }
             }
           }
         ],
         "working_memory_pointer": {
-          "target_record_id": "REC_mobile_persona_001_20261021_188",
+          "target_record_id": "REC_mobile_persona_001_20261021_12",
           "inferred_delta_days": 1,
           "matched_application": "抖音",
           "matched_service": "开直播",
@@ -5801,25 +6413,25 @@
               "application_name": {
                 "value": "抖音",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_001_20261021_188"
+                "source_ref": "REC_mobile_persona_001_20261021_12"
               },
               "service_name": {
                 "value": "开直播",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_001_20261021_188"
+                "source_ref": "REC_mobile_persona_001_20261021_12"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_001_20261021_188"
+                  "source_ref": "REC_mobile_persona_001_20261021_12"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_001_20261021_188"
+                  "source_ref": "REC_mobile_persona_001_20261021_12"
                 }
               },
               "timestamp": {
@@ -5836,7 +6448,7 @@
                 "duration": {
                   "value": "60min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_001_20261021_188"
+                  "source_ref": "REC_mobile_persona_001_20261021_12"
                 }
               }
             }
@@ -5855,25 +6467,25 @@
           "application_name": {
             "value": "抖音",
             "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_001_20261021_188"
+            "source_ref": "REC_mobile_persona_001_20261021_12"
           },
           "service_name": {
             "value": "开直播",
             "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_001_20261021_188"
+            "source_ref": "REC_mobile_persona_001_20261021_12"
           },
           "resolution": {
             "min_value": {
               "value": "1080p",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_001_20261021_188"
+              "source_ref": "REC_mobile_persona_001_20261021_12"
             }
           },
           "rtt": {
             "max_value": {
               "value": "50ms",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_001_20261021_188"
+              "source_ref": "REC_mobile_persona_001_20261021_12"
             }
           },
           "timestamp": {
@@ -5890,7 +6502,7 @@
             "duration": {
               "value": "60min",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_001_20261021_188"
+              "source_ref": "REC_mobile_persona_001_20261021_12"
             }
           }
         }
@@ -5907,25 +6519,25 @@
               "application_name": {
                 "value": "抖音",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_001_20261021_188"
+                "source_ref": "REC_mobile_persona_001_20261021_12"
               },
               "service_name": {
                 "value": "开直播",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_001_20261021_188"
+                "source_ref": "REC_mobile_persona_001_20261021_12"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_001_20261021_188"
+                  "source_ref": "REC_mobile_persona_001_20261021_12"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_001_20261021_188"
+                  "source_ref": "REC_mobile_persona_001_20261021_12"
                 }
               },
               "timestamp": {
@@ -5942,7 +6554,7 @@
                 "duration": {
                   "value": "60min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_001_20261021_188"
+                  "source_ref": "REC_mobile_persona_001_20261021_12"
                 }
               }
             }
@@ -5971,7 +6583,7 @@
         "memory_action": "reschedule_working_record"
       },
       "working_memory_pointer": {
-        "target_record_id": "REC_mobile_persona_001_20261022_189",
+        "target_record_id": "REC_mobile_persona_001_20261022_13",
         "inferred_delta_days": 1,
         "matched_application": "抖音",
         "matched_service": "开直播",
@@ -5986,7 +6598,7 @@
       "agility_factor": null
     },
     "working_memory_pointer": {
-      "target_record_id": "REC_mobile_persona_001_20261022_189",
+      "target_record_id": "REC_mobile_persona_001_20261022_13",
       "inferred_delta_days": 1,
       "matched_application": "抖音",
       "matched_service": "开直播",
@@ -6027,25 +6639,25 @@
               "application_name": {
                 "value": "抖音",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_001_20261022_189"
+                "source_ref": "REC_mobile_persona_001_20261022_13"
               },
               "service_name": {
                 "value": "开直播",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_001_20261022_189"
+                "source_ref": "REC_mobile_persona_001_20261022_13"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_001_20261022_189"
+                  "source_ref": "REC_mobile_persona_001_20261022_13"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_001_20261022_189"
+                  "source_ref": "REC_mobile_persona_001_20261022_13"
                 }
               },
               "timestamp": {
@@ -6062,14 +6674,14 @@
                 "duration": {
                   "value": "60min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_001_20261022_189"
+                  "source_ref": "REC_mobile_persona_001_20261022_13"
                 }
               }
             }
           }
         ],
         "working_memory_pointer": {
-          "target_record_id": "REC_mobile_persona_001_20261022_189",
+          "target_record_id": "REC_mobile_persona_001_20261022_13",
           "inferred_delta_days": 1,
           "matched_application": "抖音",
           "matched_service": "开直播",
@@ -6109,25 +6721,25 @@
               "application_name": {
                 "value": "抖音",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_001_20261022_189"
+                "source_ref": "REC_mobile_persona_001_20261022_13"
               },
               "service_name": {
                 "value": "开直播",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_001_20261022_189"
+                "source_ref": "REC_mobile_persona_001_20261022_13"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_001_20261022_189"
+                  "source_ref": "REC_mobile_persona_001_20261022_13"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_001_20261022_189"
+                  "source_ref": "REC_mobile_persona_001_20261022_13"
                 }
               },
               "timestamp": {
@@ -6144,7 +6756,7 @@
                 "duration": {
                   "value": "60min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_001_20261022_189"
+                  "source_ref": "REC_mobile_persona_001_20261022_13"
                 }
               }
             }
@@ -6163,25 +6775,25 @@
           "application_name": {
             "value": "抖音",
             "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_001_20261022_189"
+            "source_ref": "REC_mobile_persona_001_20261022_13"
           },
           "service_name": {
             "value": "开直播",
             "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_001_20261022_189"
+            "source_ref": "REC_mobile_persona_001_20261022_13"
           },
           "resolution": {
             "min_value": {
               "value": "1080p",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_001_20261022_189"
+              "source_ref": "REC_mobile_persona_001_20261022_13"
             }
           },
           "rtt": {
             "max_value": {
               "value": "50ms",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_001_20261022_189"
+              "source_ref": "REC_mobile_persona_001_20261022_13"
             }
           },
           "timestamp": {
@@ -6198,7 +6810,7 @@
             "duration": {
               "value": "60min",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_001_20261022_189"
+              "source_ref": "REC_mobile_persona_001_20261022_13"
             }
           }
         }
@@ -6215,25 +6827,25 @@
               "application_name": {
                 "value": "抖音",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_001_20261022_189"
+                "source_ref": "REC_mobile_persona_001_20261022_13"
               },
               "service_name": {
                 "value": "开直播",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_001_20261022_189"
+                "source_ref": "REC_mobile_persona_001_20261022_13"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_001_20261022_189"
+                  "source_ref": "REC_mobile_persona_001_20261022_13"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_001_20261022_189"
+                  "source_ref": "REC_mobile_persona_001_20261022_13"
                 }
               },
               "timestamp": {
@@ -6250,7 +6862,7 @@
                 "duration": {
                   "value": "60min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_001_20261022_189"
+                  "source_ref": "REC_mobile_persona_001_20261022_13"
                 }
               }
             }
@@ -6734,7 +7346,7 @@
       "round_count": 3,
       "intent_count": 1,
       "memory_role": "evidence_session",
-      "skeleton_signature": "T2-1|3|1|I1:腾讯会议/会议/1/clarified/resolved|none",
+      "skeleton_signature": "T2-1|3|1|I1:微信/视频通话/1/clarified/resolved|none",
       "scenario": {
         "environment": "驻地酒店商务中心",
         "blueprint_type": "sub_02",
@@ -6748,14 +7360,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "你好，需要给腾讯会议会议做一个网络保障，时间是今天20时15分开始。",
+          "utterance": "你好，需要给微信视频通话做一个网络保障，时间是今天20时15分开始。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，已为您锁定腾讯会议会议保障，时间从20时15分开始。请问您需要保障的清晰度、时延上限和预计持续时长分别是多少呢？",
+          "utterance": "收到，已为您锁定微信视频通话保障，时间从20时15分开始。请问您需要保障的清晰度、时延上限和预计持续时长分别是多少呢？",
           "action_types": [
             "Request_Slot"
           ]
@@ -6774,15 +7386,15 @@
             "status": "in_progress",
             "closure_path": "clarify",
             "expression_level": 1,
-            "intent": "腾讯会议会议保障",
+            "intent": "微信视频通话保障",
             "params": {
               "application_name": {
-                "value": "腾讯会议",
+                "value": "微信",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "会议",
+                "value": "视频通话",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -6800,7 +7412,7 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "好的，画质用1080p，时延80ms以内，预计持续90min（到21时45分）。以后我说‘大屏看清楚’，画质就是1080p。以后只要我处于【驻地酒店休息区】，就按老规矩来：腾讯会议会议、1080p、80ms以内，帮我把这个习惯记好，别掉链子。",
+          "utterance": "好的，画质用1080p，时延80ms以内，预计持续90min（到21时45分）。以后我说‘画面通透’，画质就是1080p。以后只要我处于【驻地酒店休息区】，就按老规矩来：微信视频通话、1080p、80ms以内，帮我把这个习惯记好，别掉链子。",
           "action_types": [
             "Inform_Slot"
           ]
@@ -6821,15 +7433,15 @@
             "status": "in_progress",
             "closure_path": "clarify",
             "expression_level": 1,
-            "intent": "腾讯会议会议保障",
+            "intent": "微信视频通话保障",
             "params": {
               "application_name": {
-                "value": "腾讯会议",
+                "value": "微信",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "会议",
+                "value": "视频通话",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -6877,7 +7489,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您成功受理腾讯会议会议网络保障（1080p / 时延≤80ms），祝您使用愉快！",
+          "utterance": "好的，已为您成功受理微信视频通话网络保障（1080p / 时延≤80ms），祝您使用愉快！",
           "action_types": [
             "Acknowledge"
           ]
@@ -6892,15 +7504,15 @@
             "status": "resolved",
             "closure_path": "clarified",
             "expression_level": 1,
-            "intent": "腾讯会议会议保障",
+            "intent": "微信视频通话保障",
             "params": {
               "application_name": {
-                "value": "腾讯会议",
+                "value": "微信",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "会议",
+                "value": "视频通话",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -6946,15 +7558,15 @@
         "status": "resolved",
         "closure_path": "clarified",
         "expression_level": 1,
-        "intent": "腾讯会议会议保障",
+        "intent": "微信视频通话保障",
         "params": {
           "application_name": {
-            "value": "腾讯会议",
+            "value": "微信",
             "source_type": "Turn",
             "source_ref": "U1"
           },
           "service_name": {
-            "value": "会议",
+            "value": "视频通话",
             "source_type": "Turn",
             "source_ref": "U1"
           },
@@ -7001,12 +7613,12 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "腾讯会议",
+                "value": "微信",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "会议",
+                "value": "视频通话",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },

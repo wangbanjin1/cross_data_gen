@@ -407,13 +407,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "画质标准按‘一般清楚就行’，时延控制在100ms以内，预计持续60min。",
+          "utterance": "画质按‘一般清楚就行’来，时延控制在100ms以内，预计持续60min。",
           "action_types": [
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "请教一下，您提到的‘一般清楚就行’具体对应哪档画质档位？以后也帮您按这个记吗？",
+          "utterance": "问一下，您说的‘一般清楚就行’具体是指哪种画质档位？往后也按这套标准来吗？",
           "action_types": [
             "Request_Disambiguation"
           ]
@@ -473,7 +473,7 @@
       {
         "turn": 3,
         "user": {
-          "utterance": "指的就是画质档位720p，以后默认按这个来，直接保上吧。",
+          "utterance": "对，就是画质档位720p，往后都照这个标准记，开通吧。",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -1573,6 +1573,75 @@
         "learning_source_session": "S-USER_005-04",
         "experience_id": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01",
         "rule_title": "周期例行排期遇法定节假日自动顺延经验",
+        "interactive_eval_contract": {
+          "version": "1.0",
+          "contract_name": "DynamicGoalDeltaReactionContract",
+          "scenario_type": "holiday_exception",
+          "target_ground_truth": {
+            "I1": {
+              "intent": "抖音开直播保障",
+              "slots": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月08日08时30分",
+                  "end_timestamp": "2026年10月08日10时30分",
+                  "duration": "120min"
+                }
+              }
+            }
+          },
+          "termination_conditions": {
+            "max_turns": 5,
+            "required_status": "resolved",
+            "early_stop_on_match": true
+          },
+          "delta_reaction_matrix": {
+            "on_slot_error": {
+              "description": "Agent未识别国庆长假，机械在办公室全员放假当天预约",
+              "trigger_condition": "agent_slots.get('timestamp.start_timestamp') == '2026年10月01日08时30分'",
+              "monitored_slots": [
+                "I1.timestamp.start_timestamp"
+              ],
+              "user_action_types": [
+                "Revise_Intent_Request",
+                "Inform_Slot"
+              ],
+              "simulator_reply": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月1号？"
+            },
+            "on_agent_inquiry": {
+              "description": "Agent识别假期冲突并撤销放假当天预约后，反问改期意图",
+              "trigger_condition": "agent_action in ['Request_Slot']",
+              "user_action_types": [
+                "Inform_Slot"
+              ],
+              "simulator_reply": "放假千万别空跑白扣费，按惯例自动顺延到节后上班第一天就行。"
+            },
+            "on_slot_missing": {
+              "description": "Agent顺延了日期但遗漏明确节后规格或扣费说明",
+              "trigger_condition": "not agent_slots.get('timestamp.duration')",
+              "monitored_slots": [
+                "I1.timestamp.duration",
+                "I1.resolution"
+              ],
+              "user_action_types": [
+                "Confirm_Slot"
+              ],
+              "simulator_reply": "顺延到节后的话，时长还是120min，清晰度规格没变吧？"
+            },
+            "on_goal_matched": {
+              "description": "节后首个工作日顺延时序与规格核准，用户确认办理",
+              "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+              "user_action_types": [
+                "Confirm_Slot"
+              ],
+              "simulator_reply": "对，放假千万别空跑，就顺延到10月8日开通吧。"
+            }
+          },
+          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+        },
         "fast_path": {
           "round_count": 2,
           "closure_path": "fast_experience_closed_loop",
@@ -1601,6 +1670,75 @@
             },
             "pass_route": "fast_path",
             "fail_route": "slow_path"
+          },
+          "interactive_eval_contract": {
+            "version": "1.0",
+            "contract_name": "DynamicGoalDeltaReactionContract",
+            "scenario_type": "holiday_exception",
+            "target_ground_truth": {
+              "I1": {
+                "intent": "抖音开直播保障",
+                "slots": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月08日08时30分",
+                    "end_timestamp": "2026年10月08日10时30分",
+                    "duration": "120min"
+                  }
+                }
+              }
+            },
+            "termination_conditions": {
+              "max_turns": 5,
+              "required_status": "resolved",
+              "early_stop_on_match": true
+            },
+            "delta_reaction_matrix": {
+              "on_slot_error": {
+                "description": "Agent未识别国庆长假，机械在办公室全员放假当天预约",
+                "trigger_condition": "agent_slots.get('timestamp.start_timestamp') == '2026年10月01日08时30分'",
+                "monitored_slots": [
+                  "I1.timestamp.start_timestamp"
+                ],
+                "user_action_types": [
+                  "Revise_Intent_Request",
+                  "Inform_Slot"
+                ],
+                "simulator_reply": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月1号？"
+              },
+              "on_agent_inquiry": {
+                "description": "Agent识别假期冲突并撤销放假当天预约后，反问改期意图",
+                "trigger_condition": "agent_action in ['Request_Slot']",
+                "user_action_types": [
+                  "Inform_Slot"
+                ],
+                "simulator_reply": "放假千万别空跑白扣费，按惯例自动顺延到节后上班第一天就行。"
+              },
+              "on_slot_missing": {
+                "description": "Agent顺延了日期但遗漏明确节后规格或扣费说明",
+                "trigger_condition": "not agent_slots.get('timestamp.duration')",
+                "monitored_slots": [
+                  "I1.timestamp.duration",
+                  "I1.resolution"
+                ],
+                "user_action_types": [
+                  "Confirm_Slot"
+                ],
+                "simulator_reply": "顺延到节后的话，时长还是120min，清晰度规格没变吧？"
+              },
+              "on_goal_matched": {
+                "description": "节后首个工作日顺延时序与规格核准，用户确认办理",
+                "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+                "user_action_types": [
+                  "Confirm_Slot"
+                ],
+                "simulator_reply": "对，放假千万别空跑，就顺延到10月8日开通吧。"
+              }
+            },
+            "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
           },
           "simulator_dialogue_tree": [
             {
@@ -2151,6 +2289,75 @@
       "learning_source_session": "S-USER_005-04",
       "experience_id": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01",
       "rule_title": "周期例行排期遇法定节假日自动顺延经验",
+      "interactive_eval_contract": {
+        "version": "1.0",
+        "contract_name": "DynamicGoalDeltaReactionContract",
+        "scenario_type": "holiday_exception",
+        "target_ground_truth": {
+          "I1": {
+            "intent": "抖音开直播保障",
+            "slots": {
+              "application_name": "抖音",
+              "service_name": "开直播",
+              "resolution": "1080p",
+              "rtt": "50ms",
+              "timestamp": {
+                "start_timestamp": "2026年10月08日08时30分",
+                "end_timestamp": "2026年10月08日10时30分",
+                "duration": "120min"
+              }
+            }
+          }
+        },
+        "termination_conditions": {
+          "max_turns": 5,
+          "required_status": "resolved",
+          "early_stop_on_match": true
+        },
+        "delta_reaction_matrix": {
+          "on_slot_error": {
+            "description": "Agent未识别国庆长假，机械在办公室全员放假当天预约",
+            "trigger_condition": "agent_slots.get('timestamp.start_timestamp') == '2026年10月01日08时30分'",
+            "monitored_slots": [
+              "I1.timestamp.start_timestamp"
+            ],
+            "user_action_types": [
+              "Revise_Intent_Request",
+              "Inform_Slot"
+            ],
+            "simulator_reply": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月1号？"
+          },
+          "on_agent_inquiry": {
+            "description": "Agent识别假期冲突并撤销放假当天预约后，反问改期意图",
+            "trigger_condition": "agent_action in ['Request_Slot']",
+            "user_action_types": [
+              "Inform_Slot"
+            ],
+            "simulator_reply": "放假千万别空跑白扣费，按惯例自动顺延到节后上班第一天就行。"
+          },
+          "on_slot_missing": {
+            "description": "Agent顺延了日期但遗漏明确节后规格或扣费说明",
+            "trigger_condition": "not agent_slots.get('timestamp.duration')",
+            "monitored_slots": [
+              "I1.timestamp.duration",
+              "I1.resolution"
+            ],
+            "user_action_types": [
+              "Confirm_Slot"
+            ],
+            "simulator_reply": "顺延到节后的话，时长还是120min，清晰度规格没变吧？"
+          },
+          "on_goal_matched": {
+            "description": "节后首个工作日顺延时序与规格核准，用户确认办理",
+            "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+            "user_action_types": [
+              "Confirm_Slot"
+            ],
+            "simulator_reply": "对，放假千万别空跑，就顺延到10月8日开通吧。"
+          }
+        },
+        "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+      },
       "fast_path": {
         "round_count": 2,
         "closure_path": "fast_experience_closed_loop",
@@ -2179,6 +2386,75 @@
           },
           "pass_route": "fast_path",
           "fail_route": "slow_path"
+        },
+        "interactive_eval_contract": {
+          "version": "1.0",
+          "contract_name": "DynamicGoalDeltaReactionContract",
+          "scenario_type": "holiday_exception",
+          "target_ground_truth": {
+            "I1": {
+              "intent": "抖音开直播保障",
+              "slots": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月08日08时30分",
+                  "end_timestamp": "2026年10月08日10时30分",
+                  "duration": "120min"
+                }
+              }
+            }
+          },
+          "termination_conditions": {
+            "max_turns": 5,
+            "required_status": "resolved",
+            "early_stop_on_match": true
+          },
+          "delta_reaction_matrix": {
+            "on_slot_error": {
+              "description": "Agent未识别国庆长假，机械在办公室全员放假当天预约",
+              "trigger_condition": "agent_slots.get('timestamp.start_timestamp') == '2026年10月01日08时30分'",
+              "monitored_slots": [
+                "I1.timestamp.start_timestamp"
+              ],
+              "user_action_types": [
+                "Revise_Intent_Request",
+                "Inform_Slot"
+              ],
+              "simulator_reply": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月1号？"
+            },
+            "on_agent_inquiry": {
+              "description": "Agent识别假期冲突并撤销放假当天预约后，反问改期意图",
+              "trigger_condition": "agent_action in ['Request_Slot']",
+              "user_action_types": [
+                "Inform_Slot"
+              ],
+              "simulator_reply": "放假千万别空跑白扣费，按惯例自动顺延到节后上班第一天就行。"
+            },
+            "on_slot_missing": {
+              "description": "Agent顺延了日期但遗漏明确节后规格或扣费说明",
+              "trigger_condition": "not agent_slots.get('timestamp.duration')",
+              "monitored_slots": [
+                "I1.timestamp.duration",
+                "I1.resolution"
+              ],
+              "user_action_types": [
+                "Confirm_Slot"
+              ],
+              "simulator_reply": "顺延到节后的话，时长还是120min，清晰度规格没变吧？"
+            },
+            "on_goal_matched": {
+              "description": "节后首个工作日顺延时序与规格核准，用户确认办理",
+              "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+              "user_action_types": [
+                "Confirm_Slot"
+              ],
+              "simulator_reply": "对，放假千万别空跑，就顺延到10月8日开通吧。"
+            }
+          },
+          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
         },
         "simulator_dialogue_tree": [
           {
@@ -2472,7 +2748,7 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "今天在影视传媒数字创作基地，老规矩，用阿抖做开播，帮我把保障开上。",
+          "utterance": "今天在影视传媒数字创作基地，老规矩，用阿抖做推流，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
@@ -2767,6 +3043,75 @@
         "learning_source_session": "S-USER_005-05",
         "experience_id": "EXP_PREWARM_BUFFER_01",
         "rule_title": "重大活动与大型现场提前30分钟网络预热起保经验",
+        "interactive_eval_contract": {
+          "version": "1.0",
+          "contract_name": "DynamicGoalDeltaReactionContract",
+          "scenario_type": "prewarm_buffer",
+          "target_ground_truth": {
+            "I1": {
+              "intent": "抖音开直播保障",
+              "slots": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月28日08时00分",
+                  "end_timestamp": "2026年10月28日10时30分",
+                  "duration": "150min"
+                }
+              }
+            }
+          },
+          "termination_conditions": {
+            "max_turns": 5,
+            "required_status": "resolved",
+            "early_stop_on_match": true
+          },
+          "delta_reaction_matrix": {
+            "on_slot_error": {
+              "description": "Agent机械按活动时间掐点预约，未执行提前30分钟试机预热推算",
+              "trigger_condition": "agent_slots.get('timestamp.start_timestamp') != ground_truth['I1']['slots']['timestamp']['start_timestamp']",
+              "monitored_slots": [
+                "I1.timestamp.start_timestamp"
+              ],
+              "user_action_types": [
+                "Revise_Intent_Request",
+                "Inform_Slot"
+              ],
+              "simulator_reply": "等等，这是大型场馆活动，现场设备调试很多，掐着点开通根本来不及试机！必须提前半小时起保！"
+            },
+            "on_slot_missing": {
+              "description": "Agent虽修正了提前起保时间，但未向用户主动确认预热期的网络指标规格",
+              "trigger_condition": "not agent_slots.get('resolution') or not agent_slots.get('rtt')",
+              "monitored_slots": [
+                "I1.resolution",
+                "I1.rtt"
+              ],
+              "user_action_types": [
+                "Confirm_Slot"
+              ],
+              "simulator_reply": "对，必须提前半小时试机才稳妥，那预热调试期间的网络指标还是保持高规格吧？"
+            },
+            "on_agent_inquiry": {
+              "description": "Agent主动询问用户预热起止时段或规格要求",
+              "trigger_condition": "agent_action in ['Request_Slot']",
+              "user_action_types": [
+                "Inform_Slot"
+              ],
+              "simulator_reply": "保障时间要从2026年10月28日08时00分开始算，提前30分钟起保，规格按1080p和时延≤50ms。"
+            },
+            "on_goal_matched": {
+              "description": "提前预热起保时序与网络指标完全核准对齐，用户确认办理",
+              "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+              "user_action_types": [
+                "Confirm_Slot"
+              ],
+              "simulator_reply": "好的，这就稳妥了，确认开通。"
+            }
+          },
+          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+        },
         "fast_path": {
           "round_count": 2,
           "closure_path": "fast_experience_closed_loop",
@@ -2795,6 +3140,75 @@
             },
             "pass_route": "fast_path",
             "fail_route": "slow_path"
+          },
+          "interactive_eval_contract": {
+            "version": "1.0",
+            "contract_name": "DynamicGoalDeltaReactionContract",
+            "scenario_type": "prewarm_buffer",
+            "target_ground_truth": {
+              "I1": {
+                "intent": "抖音开直播保障",
+                "slots": {
+                  "application_name": "抖音",
+                  "service_name": "开直播",
+                  "resolution": "1080p",
+                  "rtt": "50ms",
+                  "timestamp": {
+                    "start_timestamp": "2026年10月28日08时00分",
+                    "end_timestamp": "2026年10月28日10时30分",
+                    "duration": "150min"
+                  }
+                }
+              }
+            },
+            "termination_conditions": {
+              "max_turns": 5,
+              "required_status": "resolved",
+              "early_stop_on_match": true
+            },
+            "delta_reaction_matrix": {
+              "on_slot_error": {
+                "description": "Agent机械按活动时间掐点预约，未执行提前30分钟试机预热推算",
+                "trigger_condition": "agent_slots.get('timestamp.start_timestamp') != ground_truth['I1']['slots']['timestamp']['start_timestamp']",
+                "monitored_slots": [
+                  "I1.timestamp.start_timestamp"
+                ],
+                "user_action_types": [
+                  "Revise_Intent_Request",
+                  "Inform_Slot"
+                ],
+                "simulator_reply": "等等，这是大型场馆活动，现场设备调试很多，掐着点开通根本来不及试机！必须提前半小时起保！"
+              },
+              "on_slot_missing": {
+                "description": "Agent虽修正了提前起保时间，但未向用户主动确认预热期的网络指标规格",
+                "trigger_condition": "not agent_slots.get('resolution') or not agent_slots.get('rtt')",
+                "monitored_slots": [
+                  "I1.resolution",
+                  "I1.rtt"
+                ],
+                "user_action_types": [
+                  "Confirm_Slot"
+                ],
+                "simulator_reply": "对，必须提前半小时试机才稳妥，那预热调试期间的网络指标还是保持高规格吧？"
+              },
+              "on_agent_inquiry": {
+                "description": "Agent主动询问用户预热起止时段或规格要求",
+                "trigger_condition": "agent_action in ['Request_Slot']",
+                "user_action_types": [
+                  "Inform_Slot"
+                ],
+                "simulator_reply": "保障时间要从2026年10月28日08时00分开始算，提前30分钟起保，规格按1080p和时延≤50ms。"
+              },
+              "on_goal_matched": {
+                "description": "提前预热起保时序与网络指标完全核准对齐，用户确认办理",
+                "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+                "user_action_types": [
+                  "Confirm_Slot"
+                ],
+                "simulator_reply": "好的，这就稳妥了，确认开通。"
+              }
+            },
+            "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
           },
           "simulator_dialogue_tree": [
             {
@@ -3111,6 +3525,75 @@
       "learning_source_session": "S-USER_005-05",
       "experience_id": "EXP_PREWARM_BUFFER_01",
       "rule_title": "重大活动与大型现场提前30分钟网络预热起保经验",
+      "interactive_eval_contract": {
+        "version": "1.0",
+        "contract_name": "DynamicGoalDeltaReactionContract",
+        "scenario_type": "prewarm_buffer",
+        "target_ground_truth": {
+          "I1": {
+            "intent": "抖音开直播保障",
+            "slots": {
+              "application_name": "抖音",
+              "service_name": "开直播",
+              "resolution": "1080p",
+              "rtt": "50ms",
+              "timestamp": {
+                "start_timestamp": "2026年10月28日08时00分",
+                "end_timestamp": "2026年10月28日10时30分",
+                "duration": "150min"
+              }
+            }
+          }
+        },
+        "termination_conditions": {
+          "max_turns": 5,
+          "required_status": "resolved",
+          "early_stop_on_match": true
+        },
+        "delta_reaction_matrix": {
+          "on_slot_error": {
+            "description": "Agent机械按活动时间掐点预约，未执行提前30分钟试机预热推算",
+            "trigger_condition": "agent_slots.get('timestamp.start_timestamp') != ground_truth['I1']['slots']['timestamp']['start_timestamp']",
+            "monitored_slots": [
+              "I1.timestamp.start_timestamp"
+            ],
+            "user_action_types": [
+              "Revise_Intent_Request",
+              "Inform_Slot"
+            ],
+            "simulator_reply": "等等，这是大型场馆活动，现场设备调试很多，掐着点开通根本来不及试机！必须提前半小时起保！"
+          },
+          "on_slot_missing": {
+            "description": "Agent虽修正了提前起保时间，但未向用户主动确认预热期的网络指标规格",
+            "trigger_condition": "not agent_slots.get('resolution') or not agent_slots.get('rtt')",
+            "monitored_slots": [
+              "I1.resolution",
+              "I1.rtt"
+            ],
+            "user_action_types": [
+              "Confirm_Slot"
+            ],
+            "simulator_reply": "对，必须提前半小时试机才稳妥，那预热调试期间的网络指标还是保持高规格吧？"
+          },
+          "on_agent_inquiry": {
+            "description": "Agent主动询问用户预热起止时段或规格要求",
+            "trigger_condition": "agent_action in ['Request_Slot']",
+            "user_action_types": [
+              "Inform_Slot"
+            ],
+            "simulator_reply": "保障时间要从2026年10月28日08时00分开始算，提前30分钟起保，规格按1080p和时延≤50ms。"
+          },
+          "on_goal_matched": {
+            "description": "提前预热起保时序与网络指标完全核准对齐，用户确认办理",
+            "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+            "user_action_types": [
+              "Confirm_Slot"
+            ],
+            "simulator_reply": "好的，这就稳妥了，确认开通。"
+          }
+        },
+        "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
+      },
       "fast_path": {
         "round_count": 2,
         "closure_path": "fast_experience_closed_loop",
@@ -3139,6 +3622,75 @@
           },
           "pass_route": "fast_path",
           "fail_route": "slow_path"
+        },
+        "interactive_eval_contract": {
+          "version": "1.0",
+          "contract_name": "DynamicGoalDeltaReactionContract",
+          "scenario_type": "prewarm_buffer",
+          "target_ground_truth": {
+            "I1": {
+              "intent": "抖音开直播保障",
+              "slots": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "resolution": "1080p",
+                "rtt": "50ms",
+                "timestamp": {
+                  "start_timestamp": "2026年10月28日08时00分",
+                  "end_timestamp": "2026年10月28日10时30分",
+                  "duration": "150min"
+                }
+              }
+            }
+          },
+          "termination_conditions": {
+            "max_turns": 5,
+            "required_status": "resolved",
+            "early_stop_on_match": true
+          },
+          "delta_reaction_matrix": {
+            "on_slot_error": {
+              "description": "Agent机械按活动时间掐点预约，未执行提前30分钟试机预热推算",
+              "trigger_condition": "agent_slots.get('timestamp.start_timestamp') != ground_truth['I1']['slots']['timestamp']['start_timestamp']",
+              "monitored_slots": [
+                "I1.timestamp.start_timestamp"
+              ],
+              "user_action_types": [
+                "Revise_Intent_Request",
+                "Inform_Slot"
+              ],
+              "simulator_reply": "等等，这是大型场馆活动，现场设备调试很多，掐着点开通根本来不及试机！必须提前半小时起保！"
+            },
+            "on_slot_missing": {
+              "description": "Agent虽修正了提前起保时间，但未向用户主动确认预热期的网络指标规格",
+              "trigger_condition": "not agent_slots.get('resolution') or not agent_slots.get('rtt')",
+              "monitored_slots": [
+                "I1.resolution",
+                "I1.rtt"
+              ],
+              "user_action_types": [
+                "Confirm_Slot"
+              ],
+              "simulator_reply": "对，必须提前半小时试机才稳妥，那预热调试期间的网络指标还是保持高规格吧？"
+            },
+            "on_agent_inquiry": {
+              "description": "Agent主动询问用户预热起止时段或规格要求",
+              "trigger_condition": "agent_action in ['Request_Slot']",
+              "user_action_types": [
+                "Inform_Slot"
+              ],
+              "simulator_reply": "保障时间要从2026年10月28日08时00分开始算，提前30分钟起保，规格按1080p和时延≤50ms。"
+            },
+            "on_goal_matched": {
+              "description": "提前预热起保时序与网络指标完全核准对齐，用户确认办理",
+              "trigger_condition": "agent_slots_all_matched and agent_action in ['Confirm_Slot', 'Acknowledge']",
+              "user_action_types": [
+                "Confirm_Slot"
+              ],
+              "simulator_reply": "好的，这就稳妥了，确认开通。"
+            }
+          },
+          "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的提参结果与话术，对比 target_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键校验项（如时长核算或服务规格），触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请开通，触发 on_goal_matched 确认闭环并收尾。"
         },
         "simulator_dialogue_tree": [
           {
@@ -4856,7 +5408,7 @@
         "memory_action": "reschedule_working_record"
       },
       "working_memory_pointer": {
-        "target_record_id": "REC_mobile_persona_005_20261107_61",
+        "target_record_id": "REC_mobile_persona_005_20261107_12",
         "inferred_delta_days": 4,
         "matched_application": "抖音",
         "matched_service": "开直播",
@@ -4871,7 +5423,7 @@
       "agility_factor": null
     },
     "working_memory_pointer": {
-      "target_record_id": "REC_mobile_persona_005_20261107_61",
+      "target_record_id": "REC_mobile_persona_005_20261107_12",
       "inferred_delta_days": 4,
       "matched_application": "抖音",
       "matched_service": "开直播",
@@ -4912,25 +5464,25 @@
               "application_name": {
                 "value": "抖音",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_005_20261107_61"
+                "source_ref": "REC_mobile_persona_005_20261107_12"
               },
               "service_name": {
                 "value": "开直播",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_005_20261107_61"
+                "source_ref": "REC_mobile_persona_005_20261107_12"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_005_20261107_61"
+                  "source_ref": "REC_mobile_persona_005_20261107_12"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_005_20261107_61"
+                  "source_ref": "REC_mobile_persona_005_20261107_12"
                 }
               },
               "timestamp": {
@@ -4947,14 +5499,14 @@
                 "duration": {
                   "value": "120min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_005_20261107_61"
+                  "source_ref": "REC_mobile_persona_005_20261107_12"
                 }
               }
             }
           }
         ],
         "working_memory_pointer": {
-          "target_record_id": "REC_mobile_persona_005_20261107_61",
+          "target_record_id": "REC_mobile_persona_005_20261107_12",
           "inferred_delta_days": 4,
           "matched_application": "抖音",
           "matched_service": "开直播",
@@ -4994,25 +5546,25 @@
               "application_name": {
                 "value": "抖音",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_005_20261107_61"
+                "source_ref": "REC_mobile_persona_005_20261107_12"
               },
               "service_name": {
                 "value": "开直播",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_005_20261107_61"
+                "source_ref": "REC_mobile_persona_005_20261107_12"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_005_20261107_61"
+                  "source_ref": "REC_mobile_persona_005_20261107_12"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_005_20261107_61"
+                  "source_ref": "REC_mobile_persona_005_20261107_12"
                 }
               },
               "timestamp": {
@@ -5029,7 +5581,7 @@
                 "duration": {
                   "value": "120min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_005_20261107_61"
+                  "source_ref": "REC_mobile_persona_005_20261107_12"
                 }
               }
             }
@@ -5048,25 +5600,25 @@
           "application_name": {
             "value": "抖音",
             "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_005_20261107_61"
+            "source_ref": "REC_mobile_persona_005_20261107_12"
           },
           "service_name": {
             "value": "开直播",
             "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_005_20261107_61"
+            "source_ref": "REC_mobile_persona_005_20261107_12"
           },
           "resolution": {
             "min_value": {
               "value": "1080p",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_005_20261107_61"
+              "source_ref": "REC_mobile_persona_005_20261107_12"
             }
           },
           "rtt": {
             "max_value": {
               "value": "50ms",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_005_20261107_61"
+              "source_ref": "REC_mobile_persona_005_20261107_12"
             }
           },
           "timestamp": {
@@ -5083,7 +5635,7 @@
             "duration": {
               "value": "120min",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_005_20261107_61"
+              "source_ref": "REC_mobile_persona_005_20261107_12"
             }
           }
         }
@@ -5100,25 +5652,25 @@
               "application_name": {
                 "value": "抖音",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_005_20261107_61"
+                "source_ref": "REC_mobile_persona_005_20261107_12"
               },
               "service_name": {
                 "value": "开直播",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_005_20261107_61"
+                "source_ref": "REC_mobile_persona_005_20261107_12"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_005_20261107_61"
+                  "source_ref": "REC_mobile_persona_005_20261107_12"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_005_20261107_61"
+                  "source_ref": "REC_mobile_persona_005_20261107_12"
                 }
               },
               "timestamp": {
@@ -5135,7 +5687,7 @@
                 "duration": {
                   "value": "120min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_005_20261107_61"
+                  "source_ref": "REC_mobile_persona_005_20261107_12"
                 }
               }
             }
@@ -5164,7 +5716,7 @@
         "memory_action": "reschedule_working_record"
       },
       "working_memory_pointer": {
-        "target_record_id": "REC_mobile_persona_005_20261111_62",
+        "target_record_id": "REC_mobile_persona_005_20261111_13",
         "inferred_delta_days": 4,
         "matched_application": "抖音",
         "matched_service": "开直播",
@@ -5179,7 +5731,7 @@
       "agility_factor": null
     },
     "working_memory_pointer": {
-      "target_record_id": "REC_mobile_persona_005_20261111_62",
+      "target_record_id": "REC_mobile_persona_005_20261111_13",
       "inferred_delta_days": 4,
       "matched_application": "抖音",
       "matched_service": "开直播",
@@ -5220,25 +5772,25 @@
               "application_name": {
                 "value": "抖音",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_005_20261111_62"
+                "source_ref": "REC_mobile_persona_005_20261111_13"
               },
               "service_name": {
                 "value": "开直播",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_005_20261111_62"
+                "source_ref": "REC_mobile_persona_005_20261111_13"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_005_20261111_62"
+                  "source_ref": "REC_mobile_persona_005_20261111_13"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_005_20261111_62"
+                  "source_ref": "REC_mobile_persona_005_20261111_13"
                 }
               },
               "timestamp": {
@@ -5255,14 +5807,14 @@
                 "duration": {
                   "value": "120min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_005_20261111_62"
+                  "source_ref": "REC_mobile_persona_005_20261111_13"
                 }
               }
             }
           }
         ],
         "working_memory_pointer": {
-          "target_record_id": "REC_mobile_persona_005_20261111_62",
+          "target_record_id": "REC_mobile_persona_005_20261111_13",
           "inferred_delta_days": 4,
           "matched_application": "抖音",
           "matched_service": "开直播",
@@ -5302,25 +5854,25 @@
               "application_name": {
                 "value": "抖音",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_005_20261111_62"
+                "source_ref": "REC_mobile_persona_005_20261111_13"
               },
               "service_name": {
                 "value": "开直播",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_005_20261111_62"
+                "source_ref": "REC_mobile_persona_005_20261111_13"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_005_20261111_62"
+                  "source_ref": "REC_mobile_persona_005_20261111_13"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_005_20261111_62"
+                  "source_ref": "REC_mobile_persona_005_20261111_13"
                 }
               },
               "timestamp": {
@@ -5337,7 +5889,7 @@
                 "duration": {
                   "value": "120min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_005_20261111_62"
+                  "source_ref": "REC_mobile_persona_005_20261111_13"
                 }
               }
             }
@@ -5356,25 +5908,25 @@
           "application_name": {
             "value": "抖音",
             "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_005_20261111_62"
+            "source_ref": "REC_mobile_persona_005_20261111_13"
           },
           "service_name": {
             "value": "开直播",
             "source_type": "WorkingRecord",
-            "source_ref": "REC_mobile_persona_005_20261111_62"
+            "source_ref": "REC_mobile_persona_005_20261111_13"
           },
           "resolution": {
             "min_value": {
               "value": "1080p",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_005_20261111_62"
+              "source_ref": "REC_mobile_persona_005_20261111_13"
             }
           },
           "rtt": {
             "max_value": {
               "value": "50ms",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_005_20261111_62"
+              "source_ref": "REC_mobile_persona_005_20261111_13"
             }
           },
           "timestamp": {
@@ -5391,7 +5943,7 @@
             "duration": {
               "value": "120min",
               "source_type": "WorkingRecord",
-              "source_ref": "REC_mobile_persona_005_20261111_62"
+              "source_ref": "REC_mobile_persona_005_20261111_13"
             }
           }
         }
@@ -5408,25 +5960,25 @@
               "application_name": {
                 "value": "抖音",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_005_20261111_62"
+                "source_ref": "REC_mobile_persona_005_20261111_13"
               },
               "service_name": {
                 "value": "开直播",
                 "source_type": "WorkingRecord",
-                "source_ref": "REC_mobile_persona_005_20261111_62"
+                "source_ref": "REC_mobile_persona_005_20261111_13"
               },
               "resolution": {
                 "min_value": {
                   "value": "1080p",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_005_20261111_62"
+                  "source_ref": "REC_mobile_persona_005_20261111_13"
                 }
               },
               "rtt": {
                 "max_value": {
                   "value": "50ms",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_005_20261111_62"
+                  "source_ref": "REC_mobile_persona_005_20261111_13"
                 }
               },
               "timestamp": {
@@ -5443,7 +5995,7 @@
                 "duration": {
                   "value": "120min",
                   "source_type": "WorkingRecord",
-                  "source_ref": "REC_mobile_persona_005_20261111_62"
+                  "source_ref": "REC_mobile_persona_005_20261111_13"
                 }
               }
             }
