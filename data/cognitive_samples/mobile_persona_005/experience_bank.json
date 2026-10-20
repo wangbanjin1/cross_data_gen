@@ -24,6 +24,9 @@
       "duration_add_minutes": 30,
       "strategy": "前置预热加固"
     },
+    "condition": "识别重大活动或大型直播现场，需提前预热试机",
+    "action": "起保时间提前30分钟，保障时长扩充30分钟",
+    "validity": "适用于大型外场直播、开幕式、峰会论坛等重大活动现场；普通单人日常视频通话不适用此预热规则。",
     "applicable_boundaries": "适用于大型外场直播、开幕式、峰会论坛等重大活动现场；普通单人日常视频通话不适用此预热规则。",
     "negative_counterexamples": "若用户明确声明“必须精准从14:00开始开通，千万不要提前开”，则遵从用户指令。",
     "strategy_type": "prewarm_buffer"
@@ -50,6 +53,9 @@
     "recommended_adjustments": {
       "rule": "严格按任务单元进行局部更新与隔离"
     },
+    "condition": "单次会话内包含2个及以上业务任务，用户局部改期",
+    "action": "严格按任务单元进行局部更新与时序隔离，锁定未改动任务",
+    "validity": "适用于单次会话内包含 2 个及以上业务任务的复合场景。",
     "applicable_boundaries": "适用于单次会话内包含 2 个及以上业务任务（如上午会议 + 晚上直播）的复合场景。",
     "negative_counterexamples": "若用户明确表示“两个任务全都改成同样的时间和规格”，则按用户指示统一更新。",
     "strategy_type": "multi_intent_partition"
@@ -77,6 +83,9 @@
       "action": "顺延至节后首个工作日",
       "strategy": "节假日排期避让"
     },
+    "condition": "周期例行周会排期遇法定节假日冲突",
+    "action": "顺延至节后首个工作日同时段办理，避免放假期间空跑扣费",
+    "validity": "适用于工作日固定周期例会类保障；节假日演出等活动不适用。",
     "applicable_boundaries": "适用于工作日固定周期例会类保障；节假日照常举办的文体演出或商业活动不适用避让规则。",
     "negative_counterexamples": "若用户明确说明“国庆期间虽然放假但有突发值班，必须照常开通保障”，则遵从指令按原排期办理。",
     "strategy_type": "holiday_avoidance"
@@ -102,6 +111,9 @@
     "recommended_adjustments": {
       "rule": "基于质量日志过滤异常工单并锁定优质工单"
     },
+    "condition": "用户模糊指代按办得好的那次规格办理",
+    "action": "调取质量日志过滤抖动丢包单据，锁定1080p/50ms优质单",
+    "validity": "适用于历史存在同类应用多次保障记录且网络质量存在差异的情境。",
     "applicable_boundaries": "适用于历史存在同类应用多次保障记录且网络质量存在差异的情境；若历史工单质量均一致，则需按时间就近原则办理。",
     "negative_counterexamples": "若用户直接报出确切工单编号（如“按单号REC-01来”），则直接按指定工单执行，无需比对质量日志。",
     "strategy_type": "quality_disambiguation"
@@ -129,6 +141,9 @@
       "action": "冲突交界点提前结单旧工单并无缝接续新工单",
       "strategy": "时序重叠仲裁"
     },
+    "condition": "新申请保障与系统内已有工单发生时段重叠冲突",
+    "action": "时钟让路仲裁：原工单在交界点提前结单，新保障准时接管",
+    "validity": "适用于同设备或同账号下新旧工单时段交叠的场景。",
     "applicable_boundaries": "适用于同设备或同账号下新旧工单时段交叠的场景；不同独立设备的工单并行运行不受此仲裁约束。",
     "negative_counterexamples": "若用户明确要求“两笔单子同时并行开通，各走各的”，则不进行提前结单。",
     "strategy_type": "overlapping_resolution"

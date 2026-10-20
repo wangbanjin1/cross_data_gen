@@ -98,15 +98,25 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
     elif b_type == "experience_learning":
         exp_id = s_plan.get("experience_id") or s_plan.get("experience_citation", {}).get("experience_id")
         if exp_id == "EXP_CALENDAR_HOLIDAY_EXCEPTION_01":
+            sh_t = tp.get("nominal_start", tp.get("start_timestamp", "")).split("日")[-1] or "15时00分"
+            eh_t = tp.get("nominal_end", tp.get("end_timestamp", "")).split("日")[-1] or "17时00分"
             if turn_idx == 1:
-                return f"今天在{env}，帮我把下周一例行周会的{app}{srv}保障预约上，时间还是上午9点开始。"
+                return f"帮我预约下周一（10月5日）例行周会的{app}{srv}保障，时间从{sh_t}到{eh_t}。"
             else:
-                return "哎等等！刚看了下日历，10月1号不是国庆长假第一天全员放假吗？办公室没人开会，差点白白开通空跑了！帮我顺延改到节后上班第一天（10月8号）同时段吧。"
+                return "等等，下周一不是国庆长假放假吗？办公室都没人开会，别空跑浪费钱了，帮我顺延到节后上班第一天（10月8日）同时段再开。"
         elif exp_id == "EXP_MULTI_INTENT_PARTITION_01":
+            app2 = s_plan.get("second_source", {}).get("application_name", "腾讯会议")
+            srv2 = s_plan.get("second_source", {}).get("service_name", "会议")
+            sh_t = tp.get("start_timestamp", "").split("日")[-1] or "12时30分"
+            eh_t = s_plan.get("base_end", tp.get("end_timestamp", "")).split("日")[-1] or "13时30分"
+            new_eh_t = tp.get("end_timestamp", "").split("日")[-1] or "14时30分"
+            sh2_t = s_plan.get("start2", "").split("日")[-1] if s_plan.get("start2") else "15时00分"
+            eh2_t = s_plan.get("end2", "").split("日")[-1] if s_plan.get("end2") else "17时00分"
+            dur_val = tp.get("duration", "120min")
             if turn_idx == 1:
-                return f"今天在{env}上午和下午都有安排。上午的{app}{srv}会议临时通知要延长，帮我把上午的结束时间改到12:00；下午的任务绝对不能动，保持原有时段。"
+                return f"今天在{env}有两场重要活动，帮我同时开通两项保障：第一场是{app}{srv}，时间从{sh_t}到{eh_t}；第二场是{app2}{srv2}，时间从{sh2_t}到{eh2_t}。"
             else:
-                return "对，上午单独延长，下午别受任何影响，直接生效吧。"
+                return f"第一场{app}{srv}临时通知延误了，推迟到{new_eh_t}结束（总时长更新为{dur_val}）；第二场{app2}{srv2}千万别动，保持原样。"
         elif exp_id == "EXP_PREWARM_BUFFER_01":
             if turn_idx == 1:
                 return f"今天在{env}有重要活动直播，活动两点半正式开始，帮我开从{tp['start_timestamp'].split('日')[-1]}到{tp['end_timestamp'].split('日')[-1]}的{app}{srv}保障。"
@@ -128,15 +138,26 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
             else:
                 return "好的，直接办理开通吧。"
     elif s_plan.get("experience_citation", {}).get("experience_id") == "EXP_CALENDAR_HOLIDAY_EXCEPTION_01":
+        sh_t = tp.get("nominal_start", tp.get("start_timestamp", "")).split("日")[-1] or "15时00分"
+        eh_t = tp.get("nominal_end", tp.get("end_timestamp", "")).split("日")[-1] or "17时00分"
         if turn_idx == 1:
-            return f"今天在{env}，帮我把例行周会的{app}{srv}保障开上，时间是下周一。"
+            return f"帮我预约下周一（10月5日）例行周会的{app}{srv}保障，时间还是{sh_t}到{eh_t}。"
         else:
-            return "好的，太周到了，就顺延到10月8日开通吧。"
+            return "太周到了，参考上次的做法正合适，就按顺延到10月8日开通吧！"
     elif tid == "T2-4" or s_plan.get("experience_citation", {}).get("experience_id") == "EXP_MULTI_INTENT_PARTITION_01":
+        app2 = s_plan.get("second_source", {}).get("application_name", "腾讯会议")
+        srv2 = s_plan.get("second_source", {}).get("service_name", "会议")
+        tp = s_plan.get("target_params", {})
+        sh_t = tp.get("start_timestamp", "").split("日")[-1] or "12时30分"
+        eh_t = s_plan.get("base_end", tp.get("end_timestamp", "")).split("日")[-1] or "13时30分"
+        new_eh_t = tp.get("end_timestamp", "").split("日")[-1] or "14时30分"
+        sh2_t = s_plan.get("start2", "").split("日")[-1] if s_plan.get("start2") else "15时00分"
+        eh2_t = s_plan.get("end2", "").split("日")[-1] if s_plan.get("end2") else "17时00分"
+        dur_val = tp.get("duration", "120min")
         if turn_idx == 1:
-            return f"帮我改一下上午的{app}{srv}保障，临时通知延误了推迟到12:00结束；下午的保障千万别动，保持原样。"
+            return f"今天在{env}有两项保障任务：先开{app}{srv}（{sh_t}至{eh_t}），紧接着开{app2}{srv2}（{sh2_t}至{eh2_t}），帮我把两单都建上。"
         else:
-            return "对，确认修改上午保障，下午锁定不动。"
+            return f"第一场{app}{srv}要推迟到{new_eh_t}结束（总时长更新为{dur_val}），第二场{app2}{srv2}保持原样别受影响。"
     elif tid == "T2-9" or s_plan.get("experience_citation", {}).get("experience_id") == "EXP_PREWARM_BUFFER_01":
         nom_start = s_plan.get("nominal_start")
         nom_start_t = nom_start.split('日')[-1] if nom_start else tp['start_timestamp'].split('日')[-1]
@@ -167,7 +188,7 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
         start_t = tp['start_timestamp'].split('日')[-1]
         end_t = tp['end_timestamp'].split('日')[-1]
         if turn_idx == 1:
-            return f"下午要在{env}开个紧急{app}{srv}保障，但刚才系统里还有笔日常单子时间重叠撞车了，能直接接上吗？"
+            return f"下午要在{env}开个紧急{app}{srv}保障，时间从{start_t}到{end_t}，但刚才系统里还有笔日常单子时间重叠撞车了，能直接接上吗？"
         else:
             return "太好了，就按这个让路方案开通！"
     elif tid == "T2-5":
@@ -315,15 +336,25 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
     elif b_type == "experience_learning":
         exp_id = s_plan.get("experience_id") or s_plan.get("experience_citation", {}).get("experience_id")
         if exp_id == "EXP_CALENDAR_HOLIDAY_EXCEPTION_01":
+            sh_t = tp.get("nominal_start", tp.get("start_timestamp", "")).split("日")[-1] or "15时00分"
+            eh_t = tp.get("nominal_end", tp.get("end_timestamp", "")).split("日")[-1] or "17时00分"
             if turn_idx == 1:
-                return f"收到，已为您准备好10月1日{tp['start_timestamp'].split('日')[-1]}至{tp['end_timestamp'].split('日')[-1]}的例行周会保障（{res} / 时延≤{rtt}），确认按此时段预约吗？"
+                return f"收到，已为您准备好下周一（10月5日）{sh_t}至{eh_t}的例行周会保障（{res} / 时延≤{rtt}），确认按此时段预约吗？"
             else:
                 return f"收到！已为您将本次保障顺延调整至节后首个工作日（10月8日）同时段办理（{res} / 时延≤{rtt}），避免假期在空办公室产生空跑费用，祝您假期愉快！"
         elif exp_id == "EXP_MULTI_INTENT_PARTITION_01":
+            app2 = s_plan.get("second_source", {}).get("application_name", "腾讯会议")
+            srv2 = s_plan.get("second_source", {}).get("service_name", "会议")
+            sh_t = tp.get("start_timestamp", "").split("日")[-1] or "12时30分"
+            eh_t = s_plan.get("base_end", tp.get("end_timestamp", "")).split("日")[-1] or "13时30分"
+            new_eh_t = tp.get("end_timestamp", "").split("日")[-1] or "14时30分"
+            sh2_t = s_plan.get("start2", "").split("日")[-1] if s_plan.get("start2") else "15时00分"
+            eh2_t = s_plan.get("end2", "").split("日")[-1] if s_plan.get("end2") else "17时00分"
+            dur_val = tp.get("duration", "120min")
             if turn_idx == 1:
-                return f"收到！已为您将上午任务单独延长至12:00并重算时长；下午任务已严格锁定维持原有时段与配置不变，确认按此生效吗？"
+                return f"收到，已为您同时锁定两项保障：{app}{srv}（{sh_t}至{eh_t}）与{app2}{srv2}（{sh2_t}至{eh2_t}），均按1080p/时延≤50ms配置，确认直接为您预约吗？"
             else:
-                return f"好的，已完成多任务调整，上午保障已延长至12:00（{res} / 时延≤{rtt}），下午任务维持原有时段不变，祝使用顺利！"
+                return f"好的，已完成多任务调整，{app}{srv}保障已顺延至{new_eh_t}（总时长更新为{dur_val}，{res} / 时延≤{rtt}），{app2}{srv2}严格维持原有时段（{sh2_t}至{eh2_t}）不变，祝使用顺利！"
         elif exp_id == "EXP_PREWARM_BUFFER_01":
             if turn_idx == 1:
                 return f"收到，已为您准备好{tp['start_timestamp'].split('日')[-1]}至{tp['end_timestamp'].split('日')[-1]}的现场网络保障配置（{res} / 时延≤{rtt}），确认直接开通吗？"
@@ -348,16 +379,25 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
         learn_sid = s_plan.get("learning_source_session")
         learn_prefix = f"参考此前在 {learn_sid} 的处理做法，" if learn_sid else "参考此前的处理经验，"
         if turn_idx == 1:
-            return f"收到，识别到下周一恰逢国庆节法定长假第一天，办公区全员放假。{learn_prefix}已主动为您将保障顺延至节后首个工作日（10月8日）同时段办理，避免放假期间在空办公室空跑产生费用，确认按此顺延办理吗？"
+            return f"收到，识别到下周一（10月5日）恰逢国庆节法定长假，办公区全员放假。{learn_prefix}已主动为您将保障顺延至节后首个工作日（10月8日）同时段办理，避免放假期间在空办公室空跑产生费用，确认按此顺延办理吗？"
         else:
             return f"好的，已为您将例行周会网络保障顺延至10月8日办理（{res} / 时延≤{rtt}），祝您假期愉快！"
     elif tid == "T2-4" or s_plan.get("experience_citation", {}).get("experience_id") == "EXP_MULTI_INTENT_PARTITION_01":
         learn_sid = s_plan.get("learning_source_session")
         learn_prefix = f"参考此前在 {learn_sid} 的处理做法，" if learn_sid else "参考此前的处理经验，"
+        app2 = s_plan.get("second_source", {}).get("application_name", "腾讯会议")
+        srv2 = s_plan.get("second_source", {}).get("service_name", "会议")
+        tp = s_plan.get("target_params", {})
+        sh_t = tp.get("start_timestamp", "").split("日")[-1] or "12时30分"
+        eh_t = s_plan.get("base_end", tp.get("end_timestamp", "")).split("日")[-1] or "13时30分"
+        new_eh_t = tp.get("end_timestamp", "").split("日")[-1] or "14时30分"
+        sh2_t = s_plan.get("start2", "").split("日")[-1] if s_plan.get("start2") else "15时00分"
+        eh2_t = s_plan.get("end2", "").split("日")[-1] if s_plan.get("end2") else "17时00分"
+        dur_val = tp.get("duration", "120min")
         if turn_idx == 1:
-            return f"收到！已针对上午保障任务进行局部调整，结束时间顺延至12:00并重算时长；{learn_prefix}下午任务已严格锁定冻结不变，防止相互干扰，确认按此生效吗？"
+            return f"收到，已为您同时锁定两项保障：{app}{srv}（{sh_t}至{eh_t}）与{app2}{srv2}（{sh2_t}至{eh2_t}），均按1080p/时延≤50ms配置，确认直接为您预约吗？"
         else:
-            return f"好的，已完成多任务时序因果隔离调整，上午保障已延长至12:00，下午任务维持原配置不变！"
+            return f"收到！已对{app}{srv}保障结束时间局部顺延至{new_eh_t}（总时长更新为{dur_val}）；{learn_prefix}{app2}{srv2}原时段（{sh2_t}至{eh2_t}）严格冻结锁定不变，防止相互干扰，确认按此生效吗？"
     elif tid == "T2-9" or s_plan.get("experience_citation", {}).get("experience_id") == "EXP_PREWARM_BUFFER_01":
         pw_start_t = tp['start_timestamp'].split('日')[-1]
         end_t = tp['end_timestamp'].split('日')[-1]

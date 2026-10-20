@@ -1,3 +1,5 @@
+import re
+import json
 """
 会话组装器 (SessionAssembler)
 负责根据 official pilot100 模版规范（T2-4, T2-2, T2-1, T1-2, T2-5, X-1, T2-3, T1-1）
@@ -73,7 +75,12 @@ class SessionAssembler:
                 event_sequence, snapshot_before, memory_events, gold_after,
                 experience_citation=s_plan.get("experience_citation", {}),
                 second_source=s_plan.get("second_source"),
-                learning_source_session=s_plan.get("learning_source_session")
+                learning_source_session=s_plan.get("learning_source_session"),
+                base_end=s_plan.get("base_end") or s_plan.get("base_end_timestamp"),
+                base_dur=s_plan.get("base_dur") or s_plan.get("base_duration"),
+                start2=s_plan.get("start2"),
+                end2=s_plan.get("end2"),
+                dur2=s_plan.get("dur2")
             )
         elif tid == "T2-6":
             res = cls._assemble_t2_6(
@@ -605,15 +612,32 @@ class SessionAssembler:
                 "fail_route": "slow_path"
             }
 
+            # 计算第二任务被错误连带顺延的参数（推迟 30 分钟）
+            m_s2 = re.search(r'^(.*?)(\d{1,2})时(\d{2})分$', start2)
+            if m_s2:
+                pfx2, h2, m2 = m_s2.group(1), int(m_s2.group(2)), int(m_s2.group(3))
+                s2_flaw_tot = h2 * 60 + m2 + 30
+                start2_flawed = f"{pfx2}{(s2_flaw_tot // 60) % 24:02d}时{s2_flaw_tot % 60:02d}分"
+            else:
+                start2_flawed = start2
+
+            m_e2 = re.search(r'^(.*?)(\d{1,2})时(\d{2})分$', end2)
+            if m_e2:
+                pfx2, h2, m2 = m_e2.group(1), int(m_e2.group(2)), int(m_e2.group(3))
+                e2_flaw_tot = h2 * 60 + m2 + 30
+                end2_flawed = f"{pfx2}{(e2_flaw_tot // 60) % 24:02d}时{e2_flaw_tot % 60:02d}分"
+            else:
+                end2_flawed = end2
+
             tree = [
                 {
                     "turn": 1,
                     "speaker": "user",
                     "simulator_user_prompt": user_prompt,
                     "agent_hypothesis": f"Agent缺乏时序因果隔离经验，误将{app}{srv}的延期连带应用到{app2}{srv2}，统一往后推迟",
-                    "baseline_agent_flawed_response": f"收到，已为您将上午{app}{srv}顺延至{end}，同时为您将下午{app2}{srv2}一并顺延后移，确认按此统一调整吗？",
-                    "expected_agent_correction": f"收到，已为您将上午{app}{srv}顺延至{end}（总时长更新为{dur}）；同时严格锁定下午{app2}{srv2}原有时序（{start2}至{end2}，时长{dur2}）不变，两项保障互不干扰，确认按此办理吗？",
-                    "expected_agent_response": f"收到，已为您将上午{app}{srv}顺延至{end}（总时长更新为{dur}）；同时严格锁定下午{app2}{srv2}原有时序（{start2}至{end2}，时长{dur2}）不变，两项保障互不干扰，确认按此办理吗？",
+                    "baseline_agent_flawed_response": f"收到，已为您将第一场{app}{srv}顺延至{end}，同时为您将第二场{app2}{srv2}一并顺延后移至{start2_flawed}，确认按此统一调整吗？",
+                    "expected_agent_correction": f"收到，已为您将第一场{app}{srv}顺延至{end}（总时长更新为{dur}）；同时严格锁定第二场{app2}{srv2}原有时序（{start2}至{end2}，时长{dur2}）不变，两项保障互不干扰，确认按此办理吗？",
+                    "expected_agent_response": f"收到，已为您将第一场{app}{srv}顺延至{end}（总时长更新为{dur}）；同时严格锁定第二场{app2}{srv2}原有时序（{start2}至{end2}，时长{dur2}）不变，两项保障互不干扰，确认按此办理吗？",
                     "flaw_type": "cross_intent_delay_leakage",
                     "flaw_description": "将I1的任务延期错误扩散至I2，污染非目标意图时段",
                     "agent_action_types": ["Confirm_Slot"],
@@ -623,11 +647,11 @@ class SessionAssembler:
                     },
                     "baseline_flawed_slots": {
                         "I1": {"application_name": app, "service_name": srv, "resolution": res, "rtt": rtt, "timestamp": {"start_timestamp": start, "end_timestamp": end, "duration": dur}},
-                        "I2": {"application_name": app2, "service_name": srv2, "resolution": res2, "rtt": rtt2, "timestamp": {"start_timestamp": end, "end_timestamp": end2, "duration": dur2}}
+                        "I2": {"application_name": app2, "service_name": srv2, "resolution": res2, "rtt": rtt2, "timestamp": {"start_timestamp": start2_flawed, "end_timestamp": end2_flawed, "duration": dur2}}
                     },
                     "delta_from_gt": {
                         "has_error": True,
-                        "error_details": [f"I2.timestamp.start_timestamp: expected '{start2}', got '{end}'"],
+                        "error_details": [f"I2.timestamp.start_timestamp: expected '{start2}', got '{start2_flawed}'"],
                         "triggered_reaction": "on_slot_error"
                     }
                 },
@@ -698,8 +722,8 @@ class SessionAssembler:
                     "related_intent_ids": ["I1", "I2"],
                     "requested_params": [],
                     "turn_intents": [
-                        {"intent_id": "I1", "status": "in_progress", "closure_path": "flawed_delay_leakage", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"}}}},
-                        {"intent_id": "I2", "status": "in_progress", "closure_path": "flawed_delay_leakage", "expression_level": 1, "intent": f"{app2}{srv2}保障", "params": {"application_name": {"value": app2, "source_type": "Memory", "source_ref": "SUB_001"}, "service_name": {"value": srv2, "source_type": "Memory", "source_ref": "SUB_001"}, "resolution": {"min_value": {"value": res2, "source_type": "Memory", "source_ref": "SUB_001"}}, "rtt": {"max_value": {"value": rtt2, "source_type": "Memory", "source_ref": "SUB_001"}}, "timestamp": {"start_timestamp": {"value": end, "source_type": "Flawed_Inference", "source_ref": "Agent"}, "end_timestamp": {"value": end2, "source_type": "Memory", "source_ref": "SUB_001"}, "duration": {"value": dur2, "source_type": "Memory", "source_ref": "SUB_001"}}}}
+                        {"intent_id": "I1", "status": "in_progress", "closure_path": "multi_intent_experience", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"}}}},
+                        {"intent_id": "I2", "status": "in_progress", "closure_path": "locked_intact", "expression_level": 1, "intent": f"{app2}{srv2}保障", "params": {"application_name": {"value": app2, "source_type": "Memory", "source_ref": "SUB_001"}, "service_name": {"value": srv2, "source_type": "Memory", "source_ref": "SUB_001"}, "resolution": {"min_value": {"value": res2, "source_type": "Memory", "source_ref": "SUB_001"}}, "rtt": {"max_value": {"value": rtt2, "source_type": "Memory", "source_ref": "SUB_001"}}, "timestamp": {"start_timestamp": {"value": start2, "source_type": "Memory", "source_ref": "SUB_001"}, "end_timestamp": {"value": end2, "source_type": "Memory", "source_ref": "SUB_001"}, "duration": {"value": dur2, "source_type": "Memory", "source_ref": "SUB_001"}}}}
                     ]
                 },
                 {
@@ -749,7 +773,6 @@ class SessionAssembler:
             ]
 
         elif scenario_type == "prewarm_buffer":
-            import re
             fast_cond = "自主识别重大活动并执行推流预热时间差推算（提前30分钟起保，总时长扩充），2轮确认极速闭环"
             slow_cond = "机械按活动时间开通，未预留调试时间导致用户纠偏改单，拉扯4轮才收尾"
             gate = {
@@ -871,7 +894,7 @@ class SessionAssembler:
                     "agent": {"utterance": tree[0]["baseline_agent_flawed_response"], "action_types": ["Confirm_Slot"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
-                    "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "flawed_baseline_attempt", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}}, "timestamp": {"start_timestamp": {"value": nom_start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": nom_dur, "source_type": "Turn", "source_ref": "U1"}}}}]
+                    "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "prewarm_buffer", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Experience", "source_ref": "EXP_PREWARM_BUFFER_01"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Experience", "source_ref": "EXP_PREWARM_BUFFER_01"}}}}]
                 },
                 {
                     "turn": 2,
@@ -900,7 +923,6 @@ class SessionAssembler:
             ]
 
         elif scenario_type == "holiday_exception":
-            import re
             fast_cond = "日历引擎识别国庆假期冲突，主动在大白话回复中顺延至节后首个工作日，2轮优雅出单"
             slow_cond = "Agent缺乏节假日经验，机械按放假当天开通导致白白扣费，用户投诉退单，经历取消、重算、改期4轮拉扯"
             gate = {
@@ -917,8 +939,8 @@ class SessionAssembler:
                 "fail_route": "slow_path"
             }
 
-            holiday_start = re.sub(r'\d{4}年\d{1,2}月\d{1,2}日', '2026年10月01日', start)
-            holiday_end = re.sub(r'\d{4}年\d{1,2}月\d{1,2}日', '2026年10月01日', end)
+            holiday_start = re.sub(r'\d{4}年\d{1,2}月\d{1,2}日', '2026年10月05日', start)
+            holiday_end = re.sub(r'\d{4}年\d{1,2}月\d{1,2}日', '2026年10月05日', end)
             holiday_dur = dur
 
             tree = [
@@ -927,9 +949,9 @@ class SessionAssembler:
                     "speaker": "user",
                     "simulator_user_prompt": user_prompt,
                     "agent_hypothesis": "Agent未识别下周一为国庆节法定假期，直接在放假当天机械预约",
-                    "baseline_agent_flawed_response": f"收到，已为您预约下周一（10月1日）的{app}{srv}保障（{holiday_start}至{holiday_end}），确认直接按此开通吗？",
-                    "expected_agent_correction": f"收到，识别到10月1日为国庆法定长假，办公室全员放假。参考前序避让经验，已主动为您顺延至节后首个工作日（10月8日{start}至{end}，时长{dur}，{res} / 时延≤{rtt}），确认按此顺延生效吗？",
-                    "expected_agent_response": f"收到，识别到10月1日为国庆法定长假，办公室全员放假。参考前序避让经验，已主动为您顺延至节后首个工作日（10月8日{start}至{end}，时长{dur}，{res} / 时延≤{rtt}），确认按此顺延生效吗？",
+                    "baseline_agent_flawed_response": f"收到，已为您预约下周一（10月5日）的{app}{srv}保障（{holiday_start}至{holiday_end}），确认直接按此开通吗？",
+                    "expected_agent_correction": f"收到，识别到10月5日为国庆法定长假，办公室全员放假。参考前序避让经验，已主动为您顺延至节后首个工作日（10月8日{start}至{end}，时长{dur}，{res} / 时延≤{rtt}），确认按此顺延生效吗？",
+                    "expected_agent_response": f"收到，识别到10月5日为国庆法定长假，办公室全员放假。参考前序避让经验，已主动为您顺延至节后首个工作日（10月8日{start}至{end}，时长{dur}，{res} / 时延≤{rtt}），确认按此顺延生效吗？",
                     "flaw_type": "unaware_of_holiday_conflict",
                     "flaw_description": "未对法定节假日冲突避让进行推断，在办公室全员放假时机械预约",
                     "agent_action_types": ["Confirm_Slot"],
@@ -968,9 +990,9 @@ class SessionAssembler:
                 {
                     "turn": 2,
                     "speaker": "user_simulator",
-                    "simulator_user_prompt": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月1号？",
+                    "simulator_user_prompt": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月5号？",
                     "agent_hypothesis": "Agent收到投诉纠偏后撤销放假当天预约，并反问改期",
-                    "expected_agent_correction": "抱歉！识别到10月1日为国庆法定长假，全员放假。已为您撤销10月1日的预约，请问您打算改到哪天办理？",
+                    "expected_agent_correction": "抱歉！识别到10月5日为国庆法定长假，全员放假。已为您撤销10月5日的预约，请问您打算改到哪天办理？",
                     "agent_action_types": ["Request_Slot"],
                     "expected_slots_gt": {
                         "I1": {
@@ -979,8 +1001,8 @@ class SessionAssembler:
                             "resolution": res,
                             "rtt": rtt,
                             "timestamp": {
-                                "start_timestamp": None,
-                                "end_timestamp": None,
+                                "start_timestamp": start,
+                                "end_timestamp": end,
                                 "duration": dur
                             }
                         }
@@ -1016,15 +1038,15 @@ class SessionAssembler:
                     "agent": {"utterance": tree[0]["baseline_agent_flawed_response"], "action_types": ["Confirm_Slot"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
-                    "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "flawed_baseline_attempt", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Memory", "source_ref": "MF_001"}, "service_name": {"value": srv, "source_type": "Memory", "source_ref": "MF_001"}, "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}}, "timestamp": {"start_timestamp": {"value": holiday_start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": holiday_end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": holiday_dur, "source_type": "Turn", "source_ref": "U1"}}}}]
+                    "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "holiday_deferral_confirm", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Memory", "source_ref": "MF_001"}, "service_name": {"value": srv, "source_type": "Memory", "source_ref": "MF_001"}, "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Experience", "source_ref": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01"}, "end_timestamp": {"value": end, "source_type": "Experience", "source_ref": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01"}, "duration": {"value": dur, "source_type": "Memory", "source_ref": "MF_001"}}}}]
                 },
                 {
                     "turn": 2,
                     "user": {"utterance": tree[1]["simulator_user_prompt"], "action_types": ["Revise_Intent_Request", "Inform_Slot"]},
                     "agent": {"utterance": tree[1]["expected_agent_correction"], "action_types": ["Request_Slot"]},
                     "related_intent_ids": ["I1"],
-                    "requested_params": ["start_timestamp"],
-                    "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "holiday_cancellation", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Memory", "source_ref": "MF_001"}, "service_name": {"value": srv, "source_type": "Memory", "source_ref": "MF_001"}, "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}}, "timestamp": {"duration": {"value": dur, "source_type": "Memory", "source_ref": "MF_001"}}}}]
+                    "requested_params": [],
+                    "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "holiday_deferral_confirm", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Memory", "source_ref": "MF_001"}, "service_name": {"value": srv, "source_type": "Memory", "source_ref": "MF_001"}, "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Correction", "source_ref": "Agent"}, "end_timestamp": {"value": end, "source_type": "Correction", "source_ref": "Agent"}, "duration": {"value": dur, "source_type": "Memory", "source_ref": "MF_001"}}}}]
                 },
                 {
                     "turn": 3,
@@ -1128,7 +1150,7 @@ class SessionAssembler:
                     "agent": {"utterance": tree[0]["baseline_agent_flawed_response"], "action_types": ["Confirm_Slot"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
-                    "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "flawed_baseline_attempt", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": "720p", "source_type": "Flawed_Record", "source_ref": "REC_FLAWED"}}, "rtt": {"max_value": {"value": "80ms", "source_type": "Flawed_Record", "source_ref": "REC_FLAWED"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"}}}}]
+                    "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "quality_disambiguation", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Experience", "source_ref": "EXP_ORDER_QUALITY_DISAMBIGUATION_01"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Experience", "source_ref": "EXP_ORDER_QUALITY_DISAMBIGUATION_01"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"}}}}]
                 },
                 {
                     "turn": 2,
@@ -1325,9 +1347,9 @@ class SessionAssembler:
                 },
                 "on_agent_inquiry": {
                     "description": "Agent向用户核验两笔保障各自网络指标独立完整性",
-                    "trigger_condition": "agent_action in ['Request_Slot', 'Confirm_Slot']",
-                    "user_action_types": ["Confirm_Slot", "Inform_Slot"],
-                    "simulator_reply": f"行，时长算清楚了。那改期后上午和下午的网络规格（清晰度和时延）没被改乱吧？"
+                    "trigger_condition": "agent_action in ['Request_Slot']",
+                    "user_action_types": ["Inform_Slot"],
+                    "simulator_reply": f"第一场是{app}{srv}，延期到{end}结束；第二场是{app2}{srv2}，保持{start2}到{end2}不变。"
                 },
                 "on_goal_matched": {
                     "description": "两笔保障参数与时序完全核准对齐，用户确认闭环出单",
@@ -1346,11 +1368,11 @@ class SessionAssembler:
                     "simulator_reply": "等等，这是大型场馆活动，现场设备调试很多，掐着点开通根本来不及试机！必须提前半小时起保！"
                 },
                 "on_slot_missing": {
-                    "description": "Agent虽修正了提前起保时间，但未向用户主动确认预热期的网络指标规格",
-                    "trigger_condition": "not agent_slots.get('resolution') or not agent_slots.get('rtt')",
-                    "monitored_slots": ["I1.resolution", "I1.rtt"],
+                    "description": "Agent虽修正了提前起保时间，但遗漏将总时长扩充至目标值",
+                    "trigger_condition": "agent_slots.get('timestamp.start_timestamp') == ground_truth['I1']['slots']['timestamp']['start_timestamp'] and (not agent_slots.get('timestamp.duration') or agent_slots.get('timestamp.duration') == nom_dur)",
+                    "monitored_slots": ["I1.timestamp.duration"],
                     "user_action_types": ["Confirm_Slot"],
-                    "simulator_reply": "对，必须提前半小时试机才稳妥，那预热调试期间的网络指标还是保持高规格吧？"
+                    "simulator_reply": f"起保时间提前半小时了，但总时长也要相应延到{dur}，时长到底算准了没有？"
                 },
                 "on_agent_inquiry": {
                     "description": "Agent主动询问用户预热起止时段或规格要求",
@@ -1369,10 +1391,10 @@ class SessionAssembler:
             reaction_matrix = {
                 "on_slot_error": {
                     "description": "Agent未识别国庆长假，机械在办公室全员放假当天预约",
-                    "trigger_condition": "agent_slots.get('timestamp.start_timestamp') == '2026年10月01日08时30分'",
+                    "trigger_condition": "'10月05日' in str(agent_slots.get('timestamp.start_timestamp')) or '10月5日' in str(agent_slots.get('timestamp.start_timestamp')) or agent_slots.get('timestamp.start_timestamp') == holiday_start",
                     "monitored_slots": ["I1.timestamp.start_timestamp"],
                     "user_action_types": ["Revise_Intent_Request", "Inform_Slot"],
-                    "simulator_reply": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月1号？"
+                    "simulator_reply": "等等，下周一不是国庆长假第一天全员放假吗？办公室都没人，怎么还给我排在10月5号？别在空办公室空跑浪费钱了，帮我顺延到节后上班第一天（10月8日）同时段再开！"
                 },
                 "on_agent_inquiry": {
                     "description": "Agent识别假期冲突并撤销放假当天预约后，反问改期意图",
@@ -1507,6 +1529,7 @@ class SessionAssembler:
                 item["baseline_flawed_slots"] = node["baseline_flawed_slots"]
             if "delta_from_gt" in node:
                 item["delta_from_gt"] = node["delta_from_gt"]
+            item["is_terminal"] = (i == len(tree) - 1)
             turn_level_gt.append(item)
 
         contract = {
@@ -1563,21 +1586,30 @@ class SessionAssembler:
         app, srv, res, rtt, start, end, dur,
         events, snap, mems, gold,
         experience_citation=None, second_source=None,
-        learning_source_session=None
+        learning_source_session=None,
+        base_end=None, base_dur=None,
+        start2=None, end2=None, dur2=None
     ):
         """T2-4: 经验记忆 ReasoningBank 多意图局部突发延误隔离 (2 轮, 2 意图)"""
         exp_c = experience_citation or {}
         exp_id = exp_c.get("experience_id") or "EXP_MULTI_INTENT_PARTITION_01"
 
-        app2 = second_source.get("application_name", "抖音") if second_source else "抖音"
-        srv2 = second_source.get("service_name", "直播") if second_source else "直播"
+        app2 = second_source.get("application_name", "腾讯会议") if second_source else "腾讯会议"
+        srv2 = second_source.get("service_name", "会议") if second_source else "会议"
         res2 = second_source.get("resolution", "1080p") if second_source else "1080p"
         rtt2 = second_source.get("rtt", "50ms") if second_source else "50ms"
 
-        d_str = ref_time.split("日")[0] + "日" if "日" in ref_time else "2026年10月24日"
-        start2 = f"{d_str}14时00分"
-        end2 = f"{d_str}16时00分"
-        dur2 = "120min"
+        d_str = ref_time.split("日")[0] + "日" if "日" in ref_time else "2026年10月16日"
+        if not start2:
+            start2 = f"{d_str}15时00分"
+        if not end2:
+            end2 = f"{d_str}17时00分"
+        if not dur2:
+            dur2 = "120min"
+        if not base_end:
+            base_end = end
+        if not base_dur:
+            base_dur = dur
 
         sig = f"T2-4|{len(events)}|2|I1:{app}/{srv}/1/multi_intent_experience/resolved|I2:{app2}/{srv2}/1/locked_intact/resolved|none"
 
@@ -1595,8 +1627,8 @@ class SessionAssembler:
                     "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}},
                     "timestamp": {
                         "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
-                        "end_timestamp": {"value": end, "source_type": "Experience", "source_ref": exp_id},
-                        "duration": {"value": dur, "source_type": "Experience", "source_ref": exp_id},
+                        "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U2"},
+                        "duration": {"value": dur, "source_type": "Turn", "source_ref": "U2"},
                     },
                 },
             },
@@ -1607,14 +1639,14 @@ class SessionAssembler:
                 "expression_level": 1,
                 "intent": f"{app2}{srv2}保障",
                 "params": {
-                    "application_name": {"value": app2, "source_type": "Memory", "source_ref": "SUB_001"},
-                    "service_name": {"value": srv2, "source_type": "Memory", "source_ref": "SUB_001"},
-                    "resolution": {"min_value": {"value": "1080p", "source_type": "Memory", "source_ref": "SUB_001"}},
-                    "rtt": {"max_value": {"value": "50ms", "source_type": "Memory", "source_ref": "SUB_001"}},
+                    "application_name": {"value": app2, "source_type": "Turn", "source_ref": "U1"},
+                    "service_name": {"value": srv2, "source_type": "Turn", "source_ref": "U1"},
+                    "resolution": {"min_value": {"value": res2, "source_type": "Memory", "source_ref": "SUB_001"}},
+                    "rtt": {"max_value": {"value": rtt2, "source_type": "Memory", "source_ref": "SUB_001"}},
                     "timestamp": {
-                        "start_timestamp": {"value": start2, "source_type": "Memory", "source_ref": "SUB_001"},
-                        "end_timestamp": {"value": end2, "source_type": "Memory", "source_ref": "SUB_001"},
-                        "duration": {"value": dur2, "source_type": "Memory", "source_ref": "SUB_001"},
+                        "start_timestamp": {"value": start2, "source_type": "Turn", "source_ref": "U1"},
+                        "end_timestamp": {"value": end2, "source_type": "Turn", "source_ref": "U1"},
+                        "duration": {"value": dur2, "source_type": "Turn", "source_ref": "U1"},
                     },
                 },
             }
@@ -1629,19 +1661,21 @@ class SessionAssembler:
                         "params": {
                             "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
                             "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
+                            "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}},
+                            "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}},
                             "timestamp": {
                                 "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
-                                "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
+                                "end_timestamp": {"value": base_end, "source_type": "Turn", "source_ref": "U1"},
+                                "duration": {"value": base_dur, "source_type": "Turn", "source_ref": "U1"},
                             },
                         },
                     },
                     {
                         "turn": 2,
                         "params": {
-                            "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}},
-                            "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}},
                             "timestamp": {
-                                "duration": {"value": dur, "source_type": "Experience", "source_ref": exp_id},
+                                "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U2"},
+                                "duration": {"value": dur, "source_type": "Turn", "source_ref": "U2"},
                             },
                         },
                     },
@@ -1653,14 +1687,14 @@ class SessionAssembler:
                     {
                         "turn": 1,
                         "params": {
-                            "application_name": {"value": app2, "source_type": "Memory", "source_ref": "SUB_001"},
-                            "service_name": {"value": srv2, "source_type": "Memory", "source_ref": "SUB_001"},
-                            "resolution": {"min_value": {"value": "1080p", "source_type": "Memory", "source_ref": "SUB_001"}},
-                            "rtt": {"max_value": {"value": "50ms", "source_type": "Memory", "source_ref": "SUB_001"}},
+                            "application_name": {"value": app2, "source_type": "Turn", "source_ref": "U1"},
+                            "service_name": {"value": srv2, "source_type": "Turn", "source_ref": "U1"},
+                            "resolution": {"min_value": {"value": res2, "source_type": "Memory", "source_ref": "SUB_001"}},
+                            "rtt": {"max_value": {"value": rtt2, "source_type": "Memory", "source_ref": "SUB_001"}},
                             "timestamp": {
-                                "start_timestamp": {"value": start2, "source_type": "Memory", "source_ref": "SUB_001"},
-                                "end_timestamp": {"value": end2, "source_type": "Memory", "source_ref": "SUB_001"},
-                                "duration": {"value": dur2, "source_type": "Memory", "source_ref": "SUB_001"},
+                                "start_timestamp": {"value": start2, "source_type": "Turn", "source_ref": "U1"},
+                                "end_timestamp": {"value": end2, "source_type": "Turn", "source_ref": "U1"},
+                                "duration": {"value": dur2, "source_type": "Turn", "source_ref": "U1"},
                             },
                         },
                     },
@@ -1684,13 +1718,33 @@ class SessionAssembler:
                     "params": {
                         "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
                         "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
+                        "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}},
+                        "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}},
                         "timestamp": {
                             "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
-                            "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
+                            "end_timestamp": {"value": base_end, "source_type": "Turn", "source_ref": "U1"},
+                            "duration": {"value": base_dur, "source_type": "Turn", "source_ref": "U1"},
                         },
                     },
                 },
-                intents[1]
+                {
+                    "intent_id": "I2",
+                    "status": "in_progress",
+                    "closure_path": "locked_intact",
+                    "expression_level": 1,
+                    "intent": f"{app2}{srv2}保障",
+                    "params": {
+                        "application_name": {"value": app2, "source_type": "Turn", "source_ref": "U1"},
+                        "service_name": {"value": srv2, "source_type": "Turn", "source_ref": "U1"},
+                        "resolution": {"min_value": {"value": res2, "source_type": "Memory", "source_ref": "SUB_001"}},
+                        "rtt": {"max_value": {"value": rtt2, "source_type": "Memory", "source_ref": "SUB_001"}},
+                        "timestamp": {
+                            "start_timestamp": {"value": start2, "source_type": "Turn", "source_ref": "U1"},
+                            "end_timestamp": {"value": end2, "source_type": "Turn", "source_ref": "U1"},
+                            "duration": {"value": dur2, "source_type": "Turn", "source_ref": "U1"},
+                        },
+                    },
+                }
             ]
             events[0]["experience_citation"] = exp_c
             events[1]["requested_params"] = []
@@ -1699,6 +1753,7 @@ class SessionAssembler:
             events[0]["requested_params"] = []
             events[0]["turn_intents"] = intents
             events[0]["experience_citation"] = exp_c
+
         u_prompt = events[0]["user"]["utterance"] if events and "user" in events[0] else ""
         branching_info = cls._build_experience_branching(
             scenario_type="multi_intent_partition",
@@ -1707,7 +1762,7 @@ class SessionAssembler:
             learning_source_session=learning_source_session,
             user_prompt=u_prompt,
             ctx={
-                "app": app, "srv": srv, "res": res, "rtt": rtt, "start": start, "end": end, "dur": dur,
+                "app": app, "srv": srv, "res": res, "rtt": rtt, "start": start, "base_end": base_end, "base_dur": base_dur, "end": end, "dur": dur,
                 "app2": app2, "srv2": srv2, "res2": res2, "rtt2": rtt2, "start2": start2, "end2": end2, "dur2": dur2
             }
         )

@@ -440,6 +440,12 @@ class DialogueGenerator:
                 if bad_word in u_text:
                     u_text = u_text.replace(bad_word, "1080p原画" if tp.get("resolution") == "1080p" else tp.get("resolution", ""))
 
+        # 经验记忆多意图与假期顺延场景：严格采用高保真标准化 Fallback，确保多轮参数、因果时序与 Ground Truth 100% 严密对齐
+        exp_id = s_plan.get("experience_id") or s_plan.get("experience_citation", {}).get("experience_id")
+        if tid == "T2-4" or exp_id in ["EXP_MULTI_INTENT_PARTITION_01", "EXP_CALENDAR_HOLIDAY_EXCEPTION_01"]:
+            u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+            a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
+
         # 同样规范化客服台词中的画质与时延
         for bad_word in ["顶格清晰度", "顶格画质", "最高画质", "极限画质", "最高清晰度"]:
             if bad_word in a_text:

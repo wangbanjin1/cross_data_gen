@@ -265,7 +265,10 @@ class DynamicTimelinePlanner:
                     "experience_id": exp.get("experience_id", exp_id),
                     "title": exp.get("title", "ReasoningBank经验策略"),
                     "strategy_type": exp.get("strategy_type", "proactive_suggestion"),
-                    "suggested_adjustments": exp.get("recommended_adjustments", {})
+                    "suggested_adjustments": exp.get("recommended_adjustments", {}),
+                    "condition": exp.get("condition") or str(exp.get("trigger_conditions", {})),
+                    "action": exp.get("action") or str(exp.get("recommended_adjustments", {})),
+                    "validity": exp.get("validity") or str(exp.get("applicable_boundaries", ""))
                 }
                 if exp_id == "EXP_PREWARM_BUFFER_01":
                     res = src.get("preferred_params", {}).get("resolution") or "1080p"
@@ -385,6 +388,9 @@ class DynamicTimelinePlanner:
                         "title": exp["title"],
                         "strategy_type": exp["strategy_type"],
                         "suggested_adjustments": exp.get("recommended_adjustments", {}),
+                        "condition": exp.get("condition") or "识别重大活动或大型直播现场，需提前预热试机",
+                        "action": exp.get("action") or "起保时间提前30分钟，保障时长扩充30分钟",
+                        "validity": exp.get("validity") or exp.get("applicable_boundaries", ""),
                         "negotiation_required": (round_count == 3)
                     }
                     res = exp.get("recommended_adjustments", {}).get("resolution", "1080p")
@@ -395,7 +401,10 @@ class DynamicTimelinePlanner:
                     "experience_id": exp["experience_id"],
                     "title": exp["title"],
                     "strategy_type": exp["strategy_type"],
-                    "suggested_adjustments": exp.get("recommended_adjustments", {})
+                    "suggested_adjustments": exp.get("recommended_adjustments", {}),
+                    "condition": exp.get("condition") or "新申请保障与既有工单发生时段重叠冲突",
+                    "action": exp.get("action") or "时钟让路仲裁：原工单提前结单，新保障准时激活",
+                    "validity": exp.get("validity") or exp.get("applicable_boundaries", "")
                 }
 
             s_obj = {
@@ -427,6 +436,11 @@ class DynamicTimelinePlanner:
                 "period_type": main_mt.get("period_type", "weekly"),
                 "base_duration": cfg.get("base_dur", cfg["dur"]),
                 "base_end_timestamp": cfg.get("base_end", cfg["end"]),
+                "base_end": cfg.get("base_end"),
+                "base_dur": cfg.get("base_dur"),
+                "start2": cfg.get("start2"),
+                "end2": cfg.get("end2"),
+                "dur2": cfg.get("dur2"),
                 "aliases": aliases,
                 "small_memory": small_memory,
                 "small_memory_evidence_mode": evidence_mode,
