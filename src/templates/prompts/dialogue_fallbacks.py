@@ -98,97 +98,121 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
     elif b_type == "experience_learning":
         exp_id = s_plan.get("experience_id") or s_plan.get("experience_citation", {}).get("experience_id")
         if exp_id == "EXP_CALENDAR_HOLIDAY_EXCEPTION_01":
-            sh_t = tp.get("nominal_start", tp.get("start_timestamp", "")).split("日")[-1] or "15时00分"
-            eh_t = tp.get("nominal_end", tp.get("end_timestamp", "")).split("日")[-1] or "17时00分"
+            sh_t = (s_plan.get("nominal_start") or tp.get("start_timestamp", "")).split("日")[-1] or "15时00分"
+            eh_t = (s_plan.get("nominal_end") or tp.get("end_timestamp", "")).split("日")[-1] or "17时00分"
+            dur_val = s_plan.get("base_dur") or tp.get("duration", "120min")
             if turn_idx == 1:
-                return f"帮我预约下周一（10月5日）例行周会的{app}{srv}保障，时间从{sh_t}到{eh_t}。"
+                return f"帮我预约下周一（10月5日）例行周会的{app}{srv}保障，时间从{sh_t}到{eh_t}（持续{dur_val}），画质要求{res}，时延控制在{rtt}以内。"
             else:
                 return "等等，下周一不是国庆长假放假吗？办公室都没人开会，别空跑浪费钱了，帮我顺延到节后上班第一天（10月8日）同时段再开。"
         elif exp_id == "EXP_MULTI_INTENT_PARTITION_01":
-            app2 = s_plan.get("second_source", {}).get("application_name", "腾讯会议")
-            srv2 = s_plan.get("second_source", {}).get("service_name", "会议")
+            sec = s_plan.get("second_source") or {}
+            app2 = sec.get("application_name", "腾讯会议")
+            srv2 = sec.get("service_name", "会议")
+            res2 = (sec.get("preferred_params") or {}).get("resolution") or (sec.get("params") or {}).get("resolution") or sec.get("resolution", "1080p")
+            rtt2 = (sec.get("preferred_params") or {}).get("rtt_max") or (sec.get("params") or {}).get("rtt_max") or sec.get("rtt", "50ms")
             sh_t = tp.get("start_timestamp", "").split("日")[-1] or "12时30分"
             eh_t = s_plan.get("base_end", tp.get("end_timestamp", "")).split("日")[-1] or "13时30分"
+            base_dur = s_plan.get("base_dur") or s_plan.get("base_duration") or "60min"
             new_eh_t = tp.get("end_timestamp", "").split("日")[-1] or "14时30分"
             sh2_t = s_plan.get("start2", "").split("日")[-1] if s_plan.get("start2") else "15时00分"
             eh2_t = s_plan.get("end2", "").split("日")[-1] if s_plan.get("end2") else "17时00分"
+            dur2_val = s_plan.get("dur2") or "120min"
             dur_val = tp.get("duration", "120min")
             if turn_idx == 1:
-                return f"今天在{env}有两场重要活动，帮我同时开通两项保障：第一场是{app}{srv}，时间从{sh_t}到{eh_t}；第二场是{app2}{srv2}，时间从{sh2_t}到{eh2_t}。"
+                return f"今天在{env}有两场重要活动，帮我同时开通两项保障：第一场是{app}{srv}，时间从{sh_t}到{eh_t}（持续{base_dur}），画质要{res}、时延控制在{rtt}以内；第二场是{app2}{srv2}，时间从{sh2_t}到{eh2_t}（持续{dur2_val}），画质要{res2}、时延控制在{rtt2}以内。"
             else:
                 return f"第一场{app}{srv}临时通知延误了，推迟到{new_eh_t}结束（总时长更新为{dur_val}）；第二场{app2}{srv2}千万别动，保持原样。"
         elif exp_id == "EXP_PREWARM_BUFFER_01":
+            sh_t = tp['start_timestamp'].split('日')[-1]
+            eh_t = tp['end_timestamp'].split('日')[-1]
+            base_dur = s_plan.get("base_dur") or tp.get("duration", "120min")
             if turn_idx == 1:
-                return f"今天在{env}有重要活动直播，活动两点半正式开始，帮我开从{tp['start_timestamp'].split('日')[-1]}到{tp['end_timestamp'].split('日')[-1]}的{app}{srv}保障。"
+                return f"今天在{env}有重要活动直播，活动{sh_t}正式开始，帮我开从{sh_t}到{eh_t}（持续{base_dur}）的{app}{srv}保障，画质要求{res}，时延控制在{rtt}以内。"
             else:
-                return f"等等，现场设备连线和多机位推流调试很多，掐着开场时间起保来不及试机！时间帮我往前提前半小时，总时长也相应延到{tp['duration']}，按这个开通。"
+                return f"等等，现场设备连线和多机位推流调试很多，掐着开场时间起保来不及试机！时间帮我往前提前半小时，总时长也相应延长30分钟，按这个开通。"
         elif exp_id == "EXP_ORDER_QUALITY_DISAMBIGUATION_01":
+            sh_t = tp['start_timestamp'].split('日')[-1]
+            eh_t = tp['end_timestamp'].split('日')[-1]
             if turn_idx == 1:
-                return f"今天在{env}，帮我按上周办过的工单规格开通{app}{srv}保障。"
+                return f"今天在{env}，时间从{sh_t}到{eh_t}（持续{tp['duration']}），帮我按上周办过的工单规格开通{app}{srv}保障。"
             else:
                 return "周四那单后来现场反馈网络有抖动丢包，千万别按周四的配！要按周二那单，周二那单全程顺畅无丢包，质量最好！"
         elif exp_id == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
+            sh_t = tp['start_timestamp'].split('日')[-1]
+            eh_t = tp['end_timestamp'].split('日')[-1]
             if turn_idx == 1:
-                return f"下午要在{env}开个紧急{app}{srv}保障，但刚才看了下系统里还有笔原有的日常保障，两单时段有部分重叠撞车了，这该怎么处理？"
+                return f"下午要在{env}开个紧急{app}{srv}保障，时间从{sh_t}到{eh_t}（持续{tp['duration']}），画质要求{res}，时延控制在{rtt}以内；但刚才看了下系统里还有笔原有的日常保障，两单时段有部分重叠撞车了，这该怎么处理？"
             else:
                 return "行，原工单提前让路结单、新保障准时接管，这样衔接很合理，直接办理吧。"
         else:
+            sh_t = tp['start_timestamp'].split('日')[-1]
+            eh_t = tp['end_timestamp'].split('日')[-1]
             if turn_idx == 1:
-                return f"今天在{env}开{app}{srv}保障，请按标准流程配置。"
+                return f"今天在{env}开{app}{srv}保障，时间从{sh_t}到{eh_t}（持续{tp['duration']}），画质要求{res}，时延控制在{rtt}以内。"
             else:
                 return "好的，直接办理开通吧。"
     elif s_plan.get("experience_citation", {}).get("experience_id") == "EXP_CALENDAR_HOLIDAY_EXCEPTION_01":
-        sh_t = tp.get("nominal_start", tp.get("start_timestamp", "")).split("日")[-1] or "15时00分"
-        eh_t = tp.get("nominal_end", tp.get("end_timestamp", "")).split("日")[-1] or "17时00分"
+        sh_t = (s_plan.get("nominal_start") or tp.get("start_timestamp", "")).split("日")[-1] or "15时00分"
+        eh_t = (s_plan.get("nominal_end") or tp.get("end_timestamp", "")).split("日")[-1] or "17时00分"
+        dur_val = tp.get("duration", "120min")
         if turn_idx == 1:
-            return f"帮我预约下周一（10月5日）例行周会的{app}{srv}保障，时间还是{sh_t}到{eh_t}。"
+            return f"帮我预约下周一（10月5日）例行周会的{app}{srv}保障，时间从{sh_t}到{eh_t}（持续{dur_val}），画质要求{res}，时延控制在{rtt}以内。"
         else:
             return "太周到了，参考上次的做法正合适，就按顺延到10月8日开通吧！"
     elif tid == "T2-4" or s_plan.get("experience_citation", {}).get("experience_id") == "EXP_MULTI_INTENT_PARTITION_01":
-        app2 = s_plan.get("second_source", {}).get("application_name", "腾讯会议")
-        srv2 = s_plan.get("second_source", {}).get("service_name", "会议")
+        sec = s_plan.get("second_source") or {}
+        app2 = sec.get("application_name", "腾讯会议")
+        srv2 = sec.get("service_name", "会议")
+        res2 = (sec.get("preferred_params") or {}).get("resolution") or (sec.get("params") or {}).get("resolution") or sec.get("resolution", "1080p")
+        rtt2 = (sec.get("preferred_params") or {}).get("rtt_max") or (sec.get("params") or {}).get("rtt_max") or sec.get("rtt", "50ms")
         tp = s_plan.get("target_params", {})
         sh_t = tp.get("start_timestamp", "").split("日")[-1] or "12时30分"
         eh_t = s_plan.get("base_end", tp.get("end_timestamp", "")).split("日")[-1] or "13时30分"
+        base_dur = s_plan.get("base_dur") or s_plan.get("base_duration") or "60min"
         new_eh_t = tp.get("end_timestamp", "").split("日")[-1] or "14时30分"
         sh2_t = s_plan.get("start2", "").split("日")[-1] if s_plan.get("start2") else "15时00分"
         eh2_t = s_plan.get("end2", "").split("日")[-1] if s_plan.get("end2") else "17时00分"
+        dur2_val = s_plan.get("dur2") or "120min"
         dur_val = tp.get("duration", "120min")
         if turn_idx == 1:
-            return f"今天在{env}有两项保障任务：先开{app}{srv}（{sh_t}至{eh_t}），紧接着开{app2}{srv2}（{sh2_t}至{eh2_t}），帮我把两单都建上。"
+            return f"今天在{env}有两项保障任务：第一场开{app}{srv}（{sh_t}至{eh_t}，持续{base_dur}，画质{res}、时延{rtt}以内），第二场开{app2}{srv2}（{sh2_t}至{eh2_t}，持续{dur2_val}，画质{res2}、时延{rtt2}以内），帮我把两单都建上。"
         else:
             return f"第一场{app}{srv}要推迟到{new_eh_t}结束（总时长更新为{dur_val}），第二场{app2}{srv2}保持原样别受影响。"
     elif tid == "T2-9" or s_plan.get("experience_citation", {}).get("experience_id") == "EXP_PREWARM_BUFFER_01":
         nom_start = s_plan.get("nominal_start")
         nom_start_t = nom_start.split('日')[-1] if nom_start else tp['start_timestamp'].split('日')[-1]
+        nom_dur = s_plan.get("nominal_dur") or s_plan.get("base_dur") or tp.get("duration", "120min")
         end_t = tp['end_timestamp'].split('日')[-1]
         if s_plan.get("is_counterexample"):
             if turn_idx == 1:
-                return f"今天在{env}做原画级视频采录，必须保持1080p高清，哪怕网络有波动也不能降画质，时间从{nom_start_t}到{end_t}，帮我开{app}{srv}保障。"
+                return f"今天在{env}做原画级视频采录，必须保持1080p高清、时延控制在{rtt}以内，哪怕网络有波动也不能降画质，时间从{nom_start_t}到{end_t}（持续{nom_dur}），帮我开{app}{srv}保障。"
             else:
                 return "确认不降画质，我就需要1080p，直接开通。"
         elif s_plan.get("round_count") == 3:
             if turn_idx == 1:
-                return f"今天在{env}有重要活动直播，开{app}{srv}保障，时间从{nom_start_t}到{end_t}，画质要求1080p。"
+                return f"今天在{env}有重要活动直播，开{app}{srv}保障，时间从{nom_start_t}到{end_t}（原定时长{nom_dur}），画质要求{res}，时延控制在{rtt}以内。"
             elif turn_idx == 2:
                 return "提前半小时试机预热够充分吗？只要开场不卡顿就行。"
             else:
                 return "行，听你的，就提前半小时预热开通吧。"
         else:
             if turn_idx == 1:
-                return f"今天在{env}有重大活动直播，帮我开{app}{srv}保障，时间从{nom_start_t}到{end_t}。"
+                return f"今天在{env}有重大活动直播，帮我开{app}{srv}保障，活动时间从{nom_start_t}到{end_t}（原定时长{nom_dur}），画质要求{res}，时延控制在{rtt}以内。"
             else:
                 return "好的，提前半小时试机预热太重要了，按这个开通！"
     elif s_plan.get("experience_citation", {}).get("experience_id") == "EXP_ORDER_QUALITY_DISAMBIGUATION_01":
+        start_t = tp['start_timestamp'].split('日')[-1]
+        end_t = tp['end_timestamp'].split('日')[-1]
         if turn_idx == 1:
-            return f"今天在{env}，帮我开个{app}{srv}保障，就按上周办得好的那次规格来办。"
+            return f"今天在{env}，时间从{start_t}到{end_t}（持续{tp['duration']}），帮我开个{app}{srv}保障，画质和时延就按上周办得好的那次规格来办。"
         else:
             return "对，就按那次办，直接开通。"
     elif tid == "T2-10" or s_plan.get("experience_citation", {}).get("experience_id") == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
         start_t = tp['start_timestamp'].split('日')[-1]
         end_t = tp['end_timestamp'].split('日')[-1]
         if turn_idx == 1:
-            return f"下午要在{env}开个紧急{app}{srv}保障，时间从{start_t}到{end_t}，但刚才系统里还有笔日常单子时间重叠撞车了，能直接接上吗？"
+            return f"下午要在{env}开个紧急{app}{srv}保障，时间从{start_t}到{end_t}（持续{tp['duration']}），画质要求{res}，时延控制在{rtt}以内；但刚才系统里还有笔日常单子时间重叠撞车了，能直接接上吗？"
         else:
             return "太好了，就按这个让路方案开通！"
     elif tid == "T2-5":

@@ -722,8 +722,8 @@ class SessionAssembler:
                     "related_intent_ids": ["I1", "I2"],
                     "requested_params": [],
                     "turn_intents": [
-                        {"intent_id": "I1", "status": "in_progress", "closure_path": "multi_intent_experience", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"}}}},
-                        {"intent_id": "I2", "status": "in_progress", "closure_path": "locked_intact", "expression_level": 1, "intent": f"{app2}{srv2}保障", "params": {"application_name": {"value": app2, "source_type": "Memory", "source_ref": "SUB_001"}, "service_name": {"value": srv2, "source_type": "Memory", "source_ref": "SUB_001"}, "resolution": {"min_value": {"value": res2, "source_type": "Memory", "source_ref": "SUB_001"}}, "rtt": {"max_value": {"value": rtt2, "source_type": "Memory", "source_ref": "SUB_001"}}, "timestamp": {"start_timestamp": {"value": start2, "source_type": "Memory", "source_ref": "SUB_001"}, "end_timestamp": {"value": end2, "source_type": "Memory", "source_ref": "SUB_001"}, "duration": {"value": dur2, "source_type": "Memory", "source_ref": "SUB_001"}}}}
+                        {"intent_id": "I1", "status": "in_progress", "closure_path": "multi_intent_experience", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"}}}},
+                        {"intent_id": "I2", "status": "in_progress", "closure_path": "locked_intact", "expression_level": 1, "intent": f"{app2}{srv2}保障", "params": {"application_name": {"value": app2, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv2, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res2, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt2, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start2, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end2, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur2, "source_type": "Turn", "source_ref": "U1"}}}}
                     ]
                 },
                 {
@@ -733,8 +733,8 @@ class SessionAssembler:
                     "related_intent_ids": ["I1", "I2"],
                     "requested_params": [],
                     "turn_intents": [
-                        {"intent_id": "I1", "status": "in_progress", "closure_path": "correction_in_progress", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Correction", "source_ref": "Agent"}}}},
-                        {"intent_id": "I2", "status": "in_progress", "closure_path": "isolated_locked", "expression_level": 1, "intent": f"{app2}{srv2}保障", "params": {"application_name": {"value": app2, "source_type": "Memory", "source_ref": "SUB_001"}, "service_name": {"value": srv2, "source_type": "Memory", "source_ref": "SUB_001"}, "resolution": {"min_value": {"value": res2, "source_type": "Memory", "source_ref": "SUB_001"}}, "rtt": {"max_value": {"value": rtt2, "source_type": "Memory", "source_ref": "SUB_001"}}, "timestamp": {"start_timestamp": {"value": start2, "source_type": "Memory", "source_ref": "SUB_001"}, "end_timestamp": {"value": end2, "source_type": "Memory", "source_ref": "SUB_001"}, "duration": {"value": dur2, "source_type": "Memory", "source_ref": "SUB_001"}}}}
+                        {"intent_id": "I1", "status": "in_progress", "closure_path": "correction_in_progress", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Correction", "source_ref": "Agent"}}}},
+                        {"intent_id": "I2", "status": "in_progress", "closure_path": "isolated_locked", "expression_level": 1, "intent": f"{app2}{srv2}保障", "params": {"application_name": {"value": app2, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv2, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res2, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt2, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start2, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end2, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur2, "source_type": "Turn", "source_ref": "U1"}}}}
                     ]
                 },
                 {
@@ -744,8 +744,8 @@ class SessionAssembler:
                     "related_intent_ids": ["I1", "I2"],
                     "requested_params": [],
                     "turn_intents": [
-                        {"intent_id": "I1", "status": "in_progress", "closure_path": "duration_recalculated", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Correction", "source_ref": "Agent"}}}},
-                        {"intent_id": "I2", "status": "in_progress", "closure_path": "isolated_locked", "expression_level": 1, "intent": f"{app2}{srv2}保障", "params": {"application_name": {"value": app2, "source_type": "Memory", "source_ref": "SUB_001"}, "service_name": {"value": srv2, "source_type": "Memory", "source_ref": "SUB_001"}, "resolution": {"min_value": {"value": res2, "source_type": "Memory", "source_ref": "SUB_001"}}, "rtt": {"max_value": {"value": rtt2, "source_type": "Memory", "source_ref": "SUB_001"}}, "timestamp": {"start_timestamp": {"value": start2, "source_type": "Memory", "source_ref": "SUB_001"}, "end_timestamp": {"value": end2, "source_type": "Memory", "source_ref": "SUB_001"}, "duration": {"value": dur2, "source_type": "Memory", "source_ref": "SUB_001"}}}}
+                        {"intent_id": "I1", "status": "in_progress", "closure_path": "duration_recalculated", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Correction", "source_ref": "Agent"}}}},
+                        {"intent_id": "I2", "status": "in_progress", "closure_path": "isolated_locked", "expression_level": 1, "intent": f"{app2}{srv2}保障", "params": {"application_name": {"value": app2, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv2, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res2, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt2, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start2, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end2, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur2, "source_type": "Turn", "source_ref": "U1"}}}}
                     ]
                 },
                 {
@@ -755,8 +755,8 @@ class SessionAssembler:
                     "related_intent_ids": ["I1", "I2"],
                     "requested_params": [],
                     "turn_intents": [
-                        {"intent_id": "I1", "status": "in_progress", "closure_path": "specs_verified", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Correction", "source_ref": "Agent"}}}},
-                        {"intent_id": "I2", "status": "in_progress", "closure_path": "isolated_locked", "expression_level": 1, "intent": f"{app2}{srv2}保障", "params": {"application_name": {"value": app2, "source_type": "Memory", "source_ref": "SUB_001"}, "service_name": {"value": srv2, "source_type": "Memory", "source_ref": "SUB_001"}, "resolution": {"min_value": {"value": res2, "source_type": "Memory", "source_ref": "SUB_001"}}, "rtt": {"max_value": {"value": rtt2, "source_type": "Memory", "source_ref": "SUB_001"}}, "timestamp": {"start_timestamp": {"value": start2, "source_type": "Memory", "source_ref": "SUB_001"}, "end_timestamp": {"value": end2, "source_type": "Memory", "source_ref": "SUB_001"}, "duration": {"value": dur2, "source_type": "Memory", "source_ref": "SUB_001"}}}}
+                        {"intent_id": "I1", "status": "in_progress", "closure_path": "specs_verified", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Correction", "source_ref": "Agent"}}}},
+                        {"intent_id": "I2", "status": "in_progress", "closure_path": "isolated_locked", "expression_level": 1, "intent": f"{app2}{srv2}保障", "params": {"application_name": {"value": app2, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv2, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res2, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt2, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start2, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end2, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur2, "source_type": "Turn", "source_ref": "U1"}}}}
                     ]
                 },
                 {
@@ -766,8 +766,8 @@ class SessionAssembler:
                     "related_intent_ids": ["I1", "I2"],
                     "requested_params": [],
                     "turn_intents": [
-                        {"intent_id": "I1", "status": "resolved", "closure_path": "clarification_after_correction", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Correction", "source_ref": "Agent"}}}},
-                        {"intent_id": "I2", "status": "resolved", "closure_path": "locked_intact", "expression_level": 1, "intent": f"{app2}{srv2}保障", "params": {"application_name": {"value": app2, "source_type": "Memory", "source_ref": "SUB_001"}, "service_name": {"value": srv2, "source_type": "Memory", "source_ref": "SUB_001"}, "resolution": {"min_value": {"value": res2, "source_type": "Memory", "source_ref": "SUB_001"}}, "rtt": {"max_value": {"value": rtt2, "source_type": "Memory", "source_ref": "SUB_001"}}, "timestamp": {"start_timestamp": {"value": start2, "source_type": "Memory", "source_ref": "SUB_001"}, "end_timestamp": {"value": end2, "source_type": "Memory", "source_ref": "SUB_001"}, "duration": {"value": dur2, "source_type": "Memory", "source_ref": "SUB_001"}}}}
+                        {"intent_id": "I1", "status": "resolved", "closure_path": "clarification_after_correction", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Correction", "source_ref": "Agent"}}}},
+                        {"intent_id": "I2", "status": "resolved", "closure_path": "locked_intact", "expression_level": 1, "intent": f"{app2}{srv2}保障", "params": {"application_name": {"value": app2, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv2, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res2, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt2, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start2, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end2, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur2, "source_type": "Turn", "source_ref": "U1"}}}}
                     ]
                 }
             ]
@@ -894,7 +894,7 @@ class SessionAssembler:
                     "agent": {"utterance": tree[0]["baseline_agent_flawed_response"], "action_types": ["Confirm_Slot"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
-                    "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "prewarm_buffer", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Experience", "source_ref": "EXP_PREWARM_BUFFER_01"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Experience", "source_ref": "EXP_PREWARM_BUFFER_01"}}}}]
+                    "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "prewarm_buffer", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Experience", "source_ref": "EXP_PREWARM_BUFFER_01"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Experience", "source_ref": "EXP_PREWARM_BUFFER_01"}}}}]
                 },
                 {
                     "turn": 2,
@@ -902,7 +902,7 @@ class SessionAssembler:
                     "agent": {"utterance": tree[1]["expected_agent_correction"], "action_types": ["Confirm_Slot"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
-                    "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "prewarm_correction", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Correction", "source_ref": "Agent"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Correction", "source_ref": "Agent"}}}}]
+                    "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "prewarm_correction", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Correction", "source_ref": "Agent"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Correction", "source_ref": "Agent"}}}}]
                 },
                 {
                     "turn": 3,
@@ -910,7 +910,7 @@ class SessionAssembler:
                     "agent": {"utterance": tree[2]["expected_agent_correction"], "action_types": ["Confirm_Slot"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
-                    "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "prewarm_correction", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Correction", "source_ref": "Agent"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Correction", "source_ref": "Agent"}}}}]
+                    "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "prewarm_correction", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Correction", "source_ref": "Agent"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Correction", "source_ref": "Agent"}}}}]
                 },
                 {
                     "turn": 4,
@@ -918,7 +918,7 @@ class SessionAssembler:
                     "agent": {"utterance": tree[3]["expected_agent_correction"], "action_types": ["Acknowledge"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
-                    "turn_intents": [{"intent_id": "I1", "status": "resolved", "closure_path": "clarification_after_correction", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Correction", "source_ref": "Agent"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Correction", "source_ref": "Agent"}}}}]
+                    "turn_intents": [{"intent_id": "I1", "status": "resolved", "closure_path": "clarification_after_correction", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Correction", "source_ref": "Agent"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Correction", "source_ref": "Agent"}}}}]
                 }
             ]
 
@@ -1038,7 +1038,7 @@ class SessionAssembler:
                     "agent": {"utterance": tree[0]["baseline_agent_flawed_response"], "action_types": ["Confirm_Slot"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
-                    "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "holiday_deferral_confirm", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Memory", "source_ref": "MF_001"}, "service_name": {"value": srv, "source_type": "Memory", "source_ref": "MF_001"}, "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Experience", "source_ref": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01"}, "end_timestamp": {"value": end, "source_type": "Experience", "source_ref": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01"}, "duration": {"value": dur, "source_type": "Memory", "source_ref": "MF_001"}}}}]
+                    "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "holiday_deferral_confirm", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Experience", "source_ref": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01"}, "end_timestamp": {"value": end, "source_type": "Experience", "source_ref": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"}}}}]
                 },
                 {
                     "turn": 2,
@@ -1046,7 +1046,7 @@ class SessionAssembler:
                     "agent": {"utterance": tree[1]["expected_agent_correction"], "action_types": ["Request_Slot"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
-                    "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "holiday_deferral_confirm", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Memory", "source_ref": "MF_001"}, "service_name": {"value": srv, "source_type": "Memory", "source_ref": "MF_001"}, "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Correction", "source_ref": "Agent"}, "end_timestamp": {"value": end, "source_type": "Correction", "source_ref": "Agent"}, "duration": {"value": dur, "source_type": "Memory", "source_ref": "MF_001"}}}}]
+                    "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "holiday_deferral_confirm", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Correction", "source_ref": "Agent"}, "end_timestamp": {"value": end, "source_type": "Correction", "source_ref": "Agent"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"}}}}]
                 },
                 {
                     "turn": 3,
@@ -1054,7 +1054,7 @@ class SessionAssembler:
                     "agent": {"utterance": tree[2]["expected_agent_correction"], "action_types": ["Confirm_Slot"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
-                    "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "holiday_deferral_confirm", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Memory", "source_ref": "MF_001"}, "service_name": {"value": srv, "source_type": "Memory", "source_ref": "MF_001"}, "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Correction", "source_ref": "Agent"}, "end_timestamp": {"value": end, "source_type": "Correction", "source_ref": "Agent"}, "duration": {"value": dur, "source_type": "Memory", "source_ref": "MF_001"}}}}]
+                    "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "holiday_deferral_confirm", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Correction", "source_ref": "Agent"}, "end_timestamp": {"value": end, "source_type": "Correction", "source_ref": "Agent"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"}}}}]
                 },
                 {
                     "turn": 4,
@@ -1062,7 +1062,7 @@ class SessionAssembler:
                     "agent": {"utterance": tree[3]["expected_agent_correction"], "action_types": ["Acknowledge"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
-                    "turn_intents": [{"intent_id": "I1", "status": "resolved", "closure_path": "clarification_after_correction", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Memory", "source_ref": "MF_001"}, "service_name": {"value": srv, "source_type": "Memory", "source_ref": "MF_001"}, "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Correction", "source_ref": "Agent"}, "end_timestamp": {"value": end, "source_type": "Correction", "source_ref": "Agent"}, "duration": {"value": dur, "source_type": "Memory", "source_ref": "MF_001"}}}}]
+                    "turn_intents": [{"intent_id": "I1", "status": "resolved", "closure_path": "clarification_after_correction", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Correction", "source_ref": "Agent"}, "end_timestamp": {"value": end, "source_type": "Correction", "source_ref": "Agent"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"}}}}]
                 }
             ]
 
@@ -1260,7 +1260,7 @@ class SessionAssembler:
                     "agent": {"utterance": tree[0]["baseline_agent_flawed_response"], "action_types": ["Reject_Request"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
-                    "turn_intents": [{"intent_id": "I1", "status": "rejected", "closure_path": "mechanical_conflict_rejection", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"}}}}]
+                    "turn_intents": [{"intent_id": "I1", "status": "rejected", "closure_path": "mechanical_conflict_rejection", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"}}}}]
                 },
                 {
                     "turn": 2,
@@ -1268,7 +1268,7 @@ class SessionAssembler:
                     "agent": {"utterance": tree[1]["expected_agent_correction"], "action_types": ["Confirm_Slot"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
-                    "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "clock_arbitration_yield", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Correction", "source_ref": "Agent"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"}}}}]
+                    "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "clock_arbitration_yield", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Correction", "source_ref": "Agent"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"}}}}]
                 },
                 {
                     "turn": 3,
@@ -1276,7 +1276,7 @@ class SessionAssembler:
                     "agent": {"utterance": tree[2]["expected_agent_correction"], "action_types": ["Confirm_Slot"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
-                    "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "clock_arbitration_yield", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Correction", "source_ref": "Agent"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"}}}}]
+                    "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "clock_arbitration_yield", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Correction", "source_ref": "Agent"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"}}}}]
                 },
                 {
                     "turn": 4,
@@ -1284,7 +1284,7 @@ class SessionAssembler:
                     "agent": {"utterance": tree[3]["expected_agent_correction"], "action_types": ["Acknowledge"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
-                    "turn_intents": [{"intent_id": "I1", "status": "resolved", "closure_path": "clarification_after_correction", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Correction", "source_ref": "Agent"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"}}}}]
+                    "turn_intents": [{"intent_id": "I1", "status": "resolved", "closure_path": "clarification_after_correction", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Correction", "source_ref": "Agent"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"}}}}]
                 }
             ]
         else:
@@ -1623,8 +1623,8 @@ class SessionAssembler:
                 "params": {
                     "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
                     "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
-                    "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}},
-                    "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}},
+                    "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}},
+                    "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}},
                     "timestamp": {
                         "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
                         "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U2"},
@@ -1641,8 +1641,8 @@ class SessionAssembler:
                 "params": {
                     "application_name": {"value": app2, "source_type": "Turn", "source_ref": "U1"},
                     "service_name": {"value": srv2, "source_type": "Turn", "source_ref": "U1"},
-                    "resolution": {"min_value": {"value": res2, "source_type": "Memory", "source_ref": "SUB_001"}},
-                    "rtt": {"max_value": {"value": rtt2, "source_type": "Memory", "source_ref": "SUB_001"}},
+                    "resolution": {"min_value": {"value": res2, "source_type": "Turn", "source_ref": "U1"}},
+                    "rtt": {"max_value": {"value": rtt2, "source_type": "Turn", "source_ref": "U1"}},
                     "timestamp": {
                         "start_timestamp": {"value": start2, "source_type": "Turn", "source_ref": "U1"},
                         "end_timestamp": {"value": end2, "source_type": "Turn", "source_ref": "U1"},
@@ -1661,8 +1661,8 @@ class SessionAssembler:
                         "params": {
                             "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
                             "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
-                            "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}},
-                            "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}},
+                            "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}},
+                            "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}},
                             "timestamp": {
                                 "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
                                 "end_timestamp": {"value": base_end, "source_type": "Turn", "source_ref": "U1"},
@@ -1689,8 +1689,8 @@ class SessionAssembler:
                         "params": {
                             "application_name": {"value": app2, "source_type": "Turn", "source_ref": "U1"},
                             "service_name": {"value": srv2, "source_type": "Turn", "source_ref": "U1"},
-                            "resolution": {"min_value": {"value": res2, "source_type": "Memory", "source_ref": "SUB_001"}},
-                            "rtt": {"max_value": {"value": rtt2, "source_type": "Memory", "source_ref": "SUB_001"}},
+                            "resolution": {"min_value": {"value": res2, "source_type": "Turn", "source_ref": "U1"}},
+                            "rtt": {"max_value": {"value": rtt2, "source_type": "Turn", "source_ref": "U1"}},
                             "timestamp": {
                                 "start_timestamp": {"value": start2, "source_type": "Turn", "source_ref": "U1"},
                                 "end_timestamp": {"value": end2, "source_type": "Turn", "source_ref": "U1"},
@@ -1718,8 +1718,8 @@ class SessionAssembler:
                     "params": {
                         "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
                         "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
-                        "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}},
-                        "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}},
+                        "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}},
+                        "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}},
                         "timestamp": {
                             "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
                             "end_timestamp": {"value": base_end, "source_type": "Turn", "source_ref": "U1"},
@@ -1736,8 +1736,8 @@ class SessionAssembler:
                     "params": {
                         "application_name": {"value": app2, "source_type": "Turn", "source_ref": "U1"},
                         "service_name": {"value": srv2, "source_type": "Turn", "source_ref": "U1"},
-                        "resolution": {"min_value": {"value": res2, "source_type": "Memory", "source_ref": "SUB_001"}},
-                        "rtt": {"max_value": {"value": rtt2, "source_type": "Memory", "source_ref": "SUB_001"}},
+                        "resolution": {"min_value": {"value": res2, "source_type": "Turn", "source_ref": "U1"}},
+                        "rtt": {"max_value": {"value": rtt2, "source_type": "Turn", "source_ref": "U1"}},
                         "timestamp": {
                             "start_timestamp": {"value": start2, "source_type": "Turn", "source_ref": "U1"},
                             "end_timestamp": {"value": end2, "source_type": "Turn", "source_ref": "U1"},
@@ -1811,13 +1811,13 @@ class SessionAssembler:
         exp_c = experience_citation or {}
         if exp_c.get("experience_id") == "EXP_CALENDAR_HOLIDAY_EXCEPTION_01" and b_type != "experience_learning":
             exp_id = exp_c["experience_id"]
-            app_src, app_ref = "Memory", "MF_001"
-            srv_src, srv_ref = "Memory", "MF_001"
-            res_src, res_ref = "Memory", "MF_001"
-            rtt_src, rtt_ref = "Memory", "MF_001"
+            app_src, app_ref = "Turn", "U1"
+            srv_src, srv_ref = "Turn", "U1"
+            res_src, res_ref = "Turn", "U1"
+            rtt_src, rtt_ref = "Turn", "U1"
             start_src, start_ref = "Experience", exp_id
             end_src, end_ref = "Experience", exp_id
-            dur_src, dur_ref = "Memory", "MF_001"
+            dur_src, dur_ref = "Turn", "U1"
             closure_path = "holiday_avoidance_deferral"
         elif b_type == "experience_learning":
             closure_path = "experience_crystallized"
@@ -2124,11 +2124,15 @@ class SessionAssembler:
 
         if is_exp:
             closure_path = "quality_disambiguated_reuse"
+            app_src, app_ref = "Turn", "U1"
+            srv_src, srv_ref = "Turn", "U1"
             res_src, res_ref = "Experience", exp_id
             rtt_src, rtt_ref = "Experience", exp_id
             ts_ref = "U1"
         else:
             closure_path = "working_record_reuse"
+            app_src, app_ref = "WorkingRecord", rec_id
+            srv_src, srv_ref = "WorkingRecord", rec_id
             res_src, res_ref = "WorkingRecord", rec_id
             rtt_src, rtt_ref = "WorkingRecord", rec_id
             ts_ref = "U1" if is_disambig else "U2"
@@ -2143,8 +2147,8 @@ class SessionAssembler:
                 "expression_level": 1,
                 "intent": f"{app}{srv}保障",
                 "params": {
-                    "application_name": {"value": app, "source_type": "WorkingRecord", "source_ref": rec_id},
-                    "service_name": {"value": srv, "source_type": "WorkingRecord", "source_ref": rec_id},
+                    "application_name": {"value": app, "source_type": app_src, "source_ref": app_ref},
+                    "service_name": {"value": srv, "source_type": srv_src, "source_ref": srv_ref},
                     "resolution": {"min_value": {"value": res, "source_type": res_src, "source_ref": res_ref}},
                     "rtt": {"max_value": {"value": rtt, "source_type": rtt_src, "source_ref": rtt_ref}},
                     "timestamp": {
@@ -2164,8 +2168,8 @@ class SessionAssembler:
                         {
                             "turn": 1,
                             "params": {
-                                "application_name": {"value": app, "source_type": "WorkingRecord", "source_ref": rec_id},
-                                "service_name": {"value": srv, "source_type": "WorkingRecord", "source_ref": rec_id},
+                                "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
+                                "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
                                 "resolution": {"min_value": {"value": res, "source_type": "Experience", "source_ref": exp_id}},
                                 "rtt": {"max_value": {"value": rtt, "source_type": "Experience", "source_ref": exp_id}},
                                 "timestamp": {
@@ -2505,8 +2509,8 @@ class SessionAssembler:
                     "params": {
                         "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
                         "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
-                        "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}},
-                        "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}},
+                        "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}},
+                        "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}},
                         "timestamp": {
                             "start_timestamp": {"value": start, "source_type": "Experience", "source_ref": exp_id},
                             "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
@@ -2524,8 +2528,8 @@ class SessionAssembler:
                             "params": {
                                 "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
                                 "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
-                                "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}},
-                                "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}},
+                                "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}},
+                                "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}},
                                 "timestamp": {
                                     "start_timestamp": {"value": start, "source_type": "Experience", "source_ref": exp_id},
                                     "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
@@ -2793,8 +2797,8 @@ class SessionAssembler:
             closure_path = "overlapping_order_resolution"
             sig = f"T2-10|{len(events)}|1|I1:{app}/{srv}/1/{closure_path}/resolved|none"
             start_src, start_ref = "Experience", exp_id
-            res_src, res_ref = "Memory", "MF_001"
-            rtt_src, rtt_ref = "Memory", "MF_001"
+            res_src, res_ref = "Turn", "U1"
+            rtt_src, rtt_ref = "Turn", "U1"
 
             intents = [
                 {

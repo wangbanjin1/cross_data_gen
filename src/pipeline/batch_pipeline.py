@@ -73,7 +73,10 @@ class BatchPipeline:
             print(f"    - Generated Persona Skeleton -> {persona_skeleton_path.name}")
 
         # 2. 动态规划认知记忆时间线（绑定独立工单账本与经验知识库）
-        working_ledger = WorkingRecordsLedger(user_id=pid, storage_path=sample_dir / "working_records.jsonl")
+        ledger_path = sample_dir / "working_records.jsonl"
+        if ledger_path.exists():
+            ledger_path.unlink()
+        working_ledger = WorkingRecordsLedger(user_id=pid, storage_path=ledger_path)
         experience_bank = ExperienceBank()
         timeline = DynamicTimelinePlanner.plan(persona_skeleton, llm=self.llm, working_ledger=working_ledger, experience_bank=experience_bank)
         print(f"    - Planned {len(timeline)} sessions across timeline (including working memory & experiential memory).")
@@ -141,7 +144,8 @@ class BatchPipeline:
             print(f"    [!] QC Warnings/Issues: {qc_report['issues']}")
 
         # 8. 记录检查点
-        self.checkpoint["completed_personas"].append(pid)
+        if pid not in self.checkpoint["completed_personas"]:
+            self.checkpoint["completed_personas"].append(pid)
         self._save_checkpoint()
         print(f"    [SUCCESS] {pid} finished in {elapsed:.1f}s -> {sample_dir}")
         return True

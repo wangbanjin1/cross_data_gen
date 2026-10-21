@@ -152,21 +152,23 @@ class DialogueGenerator:
                 )
             elif tid == "T2-9":
                 exp = s_plan.get("experience_citation", {})
-                exp_title = exp.get("title", "极值与高密环境主动降画质保抗丢包平稳度")
+                exp_title = exp.get("title", "重大活动与大型现场提前30分钟网络预热起保经验")
+                nom_s = (s_plan.get("nominal_start") or tp["start_timestamp"]).split("日")[-1]
+                nom_d = s_plan.get("nominal_dur") or s_plan.get("base_dur") or tp["duration"]
                 t1_rule = (
-                    f"【经验记忆主动提议会话：当前环境为高密现场'{env}'。第1轮用户提出在{env}开启{tp['application_name']}{tp['service_name']}保障；"
-                    f"第1轮客服依据ReasoningBank经验卡片【{exp_title}】，主动提示现场人流拥塞信道争抢风险，建议采用稳定性优先方案（画质微调为{tp['resolution']}、时延收紧至{tp['rtt']}），询问用户是否同意采纳；"
-                    f"第2轮用户采纳经验建议（如'好的，按你的专业建议来'）；"
-                    f"第2轮客服确认按优化方案开通并收尾。】"
+                    f"【经验记忆主动提议会话：当前环境为高密/重大活动现场'{env}'。第1轮用户必须一次性把基础参数说清楚（应用{tp['application_name']}、业务{tp['service_name']}、原定活动时间{nom_s}至{tp['end_timestamp'].split('日')[-1]}、原定时长{nom_d}、画质{tp['resolution']}、时延{tp['rtt']}以内），不依赖此前事实记忆；"
+                    f"第1轮客服依据ReasoningBank经验卡片【{exp_title}】，主动将起保时间提前30分钟推算为{tp['start_timestamp'].split('日')[-1]}至{tp['end_timestamp'].split('日')[-1]}（保障时长扩至{tp['duration']}），询问用户是否确认开通；"
+                    f"第2轮用户确认采纳提前预热经验（如'好的，提前半小时试机预热太重要了，按这个开通！'）；"
+                    f"第2轮客服确认按提前30分钟预热方案开通并收尾。】"
                 )
             elif tid == "T2-10":
                 exp = s_plan.get("experience_citation", {})
-                exp_title = exp.get("title", "恶劣天气高衰减环境增强抗丢包加固策略")
+                exp_title = exp.get("title", "新旧工单时段撞车无缝让路与时序重叠仲裁经验")
                 t1_rule = (
-                    f"【经验记忆经验回溯会话：第1轮用户主动调取既往避坑经验（如'今天在{env}天气很恶劣，按上次恶劣天气的抗衰落加固方案配{tp['application_name']}{tp['service_name']}'）；"
-                    f"第1轮客服调取经验卡片【{exp_title}】，向用户反问确认加固方案（画质{tp['resolution']}、时延{tp['rtt']}、持续{tp['duration']}）；"
-                    f"第2轮用户确认（如'对，直接开'）；"
-                    f"第2轮客服确认按加固配置开通并收尾。】"
+                    f"【经验记忆经验回溯/仲裁会话：第1轮用户必须一次性说清紧急保障的基础参数（应用{tp['application_name']}、业务{tp['service_name']}、时间{tp['start_timestamp'].split('日')[-1]}至{tp['end_timestamp'].split('日')[-1]}、持续{tp['duration']}、画质{tp['resolution']}、时延{tp['rtt']}以内），并提及与系统内已有日常工单时段重叠冲突；"
+                    f"第1轮客服调取经验卡片【{exp_title}】，协调原工单在交界点提前结单让路、新保障准时无缝激活接管，反问确认；"
+                    f"第2轮用户确认（如'太好了，就按这个让路方案开通！'）；"
+                    f"第2轮客服确认按时钟让路仲裁方案开通并收尾。】"
                 )
             elif tid == "X-1":
                 is_weekend = "周末" in env
@@ -440,9 +442,14 @@ class DialogueGenerator:
                 if bad_word in u_text:
                     u_text = u_text.replace(bad_word, "1080p原画" if tp.get("resolution") == "1080p" else tp.get("resolution", ""))
 
-        # 经验记忆多意图与假期顺延场景：严格采用高保真标准化 Fallback，确保多轮参数、因果时序与 Ground Truth 100% 严密对齐
+        # 经验记忆全系场景（含学习铺垫轮与迁移测试轮）：严格采用高保真标准化 Fallback，确保 Turn 1 基础参数自包含且与双轨分支评测 Ground Truth 100% 严密对齐
         exp_id = s_plan.get("experience_id") or s_plan.get("experience_citation", {}).get("experience_id")
-        if tid == "T2-4" or exp_id in ["EXP_MULTI_INTENT_PARTITION_01", "EXP_CALENDAR_HOLIDAY_EXCEPTION_01"]:
+        if (
+            tid in ["T2-4", "T2-9", "T2-10"]
+            or s_plan.get("memory_tier") == "experiential_memory"
+            or s_plan.get("blueprint_type") == "experience_learning"
+            or bool(exp_id)
+        ):
             u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
             a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
 
