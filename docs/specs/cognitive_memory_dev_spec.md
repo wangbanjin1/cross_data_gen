@@ -145,7 +145,7 @@ $$\text{target\_count} = 16 + (\text{uid\_num} \pmod 5)$$
 支持根据用户 ID 均匀离散分布在 `16, 17, 18, 19, 20` 轮之间。
 
 ```mermaid
-graph LR
+graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
     classDef exp fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
     classDef work fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px,color:#0F172A,font-weight:bold;
@@ -343,7 +343,7 @@ sequenceDiagram
 * `experiences.jsonl`：存储从历史成败对比中提炼出的五大黄金 ReasoningBank 经验卡片（含 `exp_id`、`title`、`content`、`trigger_Pattern`、`slot_Resolution_Hint`）。
 
 ```mermaid
-graph LR
+graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
     subgraph Dir ["<b>单画像交付产物目录 (data/cognitive_samples/mobile_persona_XXX/)</b>"]

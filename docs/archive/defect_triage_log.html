@@ -161,7 +161,7 @@
             border-radius: 4px;
         }
         .toc-link:hover { background: var(--surface-elevated); color: var(--accent-primary); }
-        .main-content { flex: 1; padding: 28px 42px 80px; max-width: 1180px; margin: 0 auto; overflow-x: hidden; }
+        .main-content { flex: 1; padding: 28px 42px 80px; max-width: 1320px; margin: 0 auto; overflow-x: hidden; }
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -219,7 +219,7 @@
         .meta-stat-val { font-size: 1.05rem; font-weight: 800; }
         .mermaid-wrapper {
             margin: 18px 0 26px;
-            padding: 16px 20px 22px;
+            padding: 18px 24px 26px;
             background-color: #FFFFFF !important;
             border: 2.5px solid #0F172A;
             border-radius: 10px;
@@ -231,26 +231,57 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             padding-bottom: 8px;
             border-bottom: 1px solid #E2E8F0;
+            flex-wrap: wrap;
+            gap: 8px;
         }
-        .mermaid-badge { font-size: 0.78rem; font-weight: 800; color: #0F172A; }
+        .mermaid-badge { font-size: 0.80rem; font-weight: 800; color: #0F172A; }
+        .mermaid-ctrl-group { display: flex; align-items: center; gap: 6px; }
         .mermaid-zoom-btn {
             background: #F8FAFC;
             border: 1.5px solid #0F172A;
             color: #0F172A;
             font-weight: 700;
             font-size: 0.75rem;
-            padding: 3px 10px;
+            padding: 4px 10px;
             border-radius: 6px;
             cursor: pointer;
+            transition: all 0.15s;
         }
-        .mermaid { background: #FFFFFF !important; font-weight: 700 !important; }
-        .mermaid svg text, .mermaid svg span, .mermaid svg .nodeLabel, .mermaid svg .edgeLabel {
+        .mermaid-zoom-btn:hover {
+            background: #0F172A;
+            color: #FFFFFF;
+        }
+        .mermaid {
+            background: #FFFFFF !important;
+            color: #0F172A !important;
+            font-weight: 700 !important;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            min-height: 220px;
+            margin: 0 auto;
+            overflow-x: auto;
+        }
+        .mermaid svg {
+            background-color: #FFFFFF !important;
+            font-weight: 700 !important;
+            width: 100% !important;
+            max-width: none !important;
+            height: auto !important;
+            display: block;
+            margin: 0 auto;
+        }
+        .mermaid svg text, .mermaid svg tspan, .mermaid svg span, .mermaid svg div, .mermaid svg p, .mermaid svg .nodeLabel, .mermaid svg .edgeLabel {
             font-weight: 700 !important;
             color: #0F172A !important;
             fill: #0F172A !important;
+        }
+        .mermaid svg path, .mermaid svg line, .mermaid svg polyline, .mermaid svg rect, .mermaid svg polygon, .mermaid svg circle {
+            stroke-width: 2.3px !important;
         }
         .column-section { margin-bottom: 32px; }
         .column-section-header { margin-bottom: 14px; border-left: 4px solid var(--accent-primary); padding-left: 12px; }
@@ -362,8 +393,13 @@
 <body>
     <div id="mermaid-modal" onclick="if(event.target===this)closeMermaidModal()">
         <div class="mermaid-modal-box">
-            <button class="mermaid-modal-close" onclick="closeMermaidModal()">✕ 关闭全屏预览</button>
-            <div id="mermaid-modal-content" style="margin-top: 12px; text-align: center;"></div>
+            <div style="position: sticky; top: 0; z-index: 10; display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 10px;">
+                <button class="mermaid-zoom-btn" onclick="zoomModalMermaid(-25)">➖ 缩小</button>
+                <button class="mermaid-zoom-btn" id="modalZoomLabel" onclick="zoomModalMermaid(0)">100%</button>
+                <button class="mermaid-zoom-btn" onclick="zoomModalMermaid(30)">➕ 放大</button>
+                <button class="mermaid-modal-close" style="position: static; float: none;" onclick="closeMermaidModal()">✕ 关闭全屏预览</button>
+            </div>
+            <div id="mermaid-modal-content" style="margin-top: 8px; text-align: center; overflow: auto;"></div>
         </div>
     </div>
     <div class="layout-wrapper">
@@ -552,10 +588,15 @@
                 
         <div class="mermaid-wrapper">
             <div class="mermaid-toolbar">
-                <span class="mermaid-badge">📊 缺陷根因分类与 R1~R14 门禁拦截闭环全景图</span>
-                <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 点击放大全屏查看</button>
+                <span class="mermaid-badge">📊 缺陷根因分类与 R1~R14 门禁拦截闭环全景图 (支持缩放与全屏)</span>
+                <div class="mermaid-ctrl-group">
+                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
+                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
+                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
+                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
+                </div>
             </div>
-            <pre class="mermaid">graph LR
+            <div class="mermaid">graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
     classDef gate fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
@@ -579,7 +620,7 @@
 
     style Defects fill:#FFFFFF,stroke:#DC2626,stroke-width:2.5px;
     style Fix fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px;
-    style Gate fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px;</pre>
+    style Gate fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px;</div>
         </div>
         
 
@@ -1751,7 +1792,7 @@ Agent: &quot;好的，已按老规矩为您开通微信视频通话保障：画�
 &gt; **文档定位**：系统记录跨会话记忆数据集在早期研发、质检对齐与提示词工程落地中遇到的 21 项典型缺陷、排查根因、解决办法与 R1~R14 质检拦截规则。关于最新三层认知架构与 16~20 轮动态生命周期规范，请参阅权威技术规范：[**《“联接”Agent 跨会话三层认知记忆数据集与双轨评测引擎技术规范》**](../specs/cognitive_memory_dev_spec.md)。
 
 ```mermaid
-graph LR
+graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
     classDef gate fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
@@ -2758,6 +2799,52 @@ Agent: &quot;好的，已按老规矩为您开通微信视频通话保障：画�
             const ta = document.getElementById('mdSourceArea');
             navigator.clipboard.writeText(ta.value);
         }
+        function enhanceMermaidDiagrams() {
+            document.querySelectorAll('.mermaid svg').forEach(svg => {
+                svg.style.removeProperty('max-width');
+                const wrapper = svg.closest('.mermaid-wrapper');
+                const wrapperW = wrapper ? Math.max(wrapper.clientWidth - 48, 880) : 1120;
+                let vbW = 960, vbH = 540;
+                const vbAttr = svg.getAttribute('viewBox');
+                if (vbAttr) {
+                    const parts = vbAttr.trim().split(/[\s,]+/).map(Number);
+                    if (parts.length === 4 && parts[2] > 0) {
+                        vbW = parts[2];
+                        vbH = parts[3] || 540;
+                    }
+                }
+                const aspect = vbW / Math.max(vbH, 1);
+                let targetW;
+                if (aspect >= 1.6) {
+                    targetW = Math.max(wrapperW, Math.round(vbW * 1.12));
+                } else if (aspect >= 0.85) {
+                    targetW = Math.max(Math.round(wrapperW * 0.96), Math.round(vbW * 1.15));
+                } else {
+                    targetW = Math.max(Math.min(wrapperW, 980), Math.round(vbW * 1.2));
+                }
+                svg.setAttribute('width', targetW + 'px');
+                svg.style.setProperty('width', targetW + 'px', 'important');
+                svg.style.setProperty('max-width', 'none', 'important');
+                svg.style.setProperty('height', 'auto', 'important');
+                svg.dataset.baseWidth = String(targetW);
+                svg.dataset.zoom = '100';
+            });
+        }
+        function zoomMermaid(btn, delta) {
+            const wrapper = btn.closest('.mermaid-wrapper');
+            const svg = wrapper ? wrapper.querySelector('svg') : null;
+            if (!svg) return;
+            const baseW = parseFloat(svg.dataset.baseWidth || svg.clientWidth || 960);
+            let curZoom = parseInt(svg.dataset.zoom || '100', 10);
+            curZoom = delta === 0 ? 100 : Math.min(Math.max(curZoom + delta, 50), 280);
+            svg.dataset.zoom = String(curZoom);
+            const newW = Math.round(baseW * (curZoom / 100));
+            svg.setAttribute('width', newW + 'px');
+            svg.style.setProperty('width', newW + 'px', 'important');
+            svg.style.setProperty('max-width', 'none', 'important');
+            const label = wrapper.querySelector('.mermaid-zoom-label');
+            if (label) label.innerText = curZoom + '%';
+        }
         function openMermaidModal(btn) {
             const wrapper = btn.closest('.mermaid-wrapper');
             const svg = wrapper ? wrapper.querySelector('svg') : null;
@@ -2766,10 +2853,33 @@ Agent: &quot;好的，已按老规矩为您开通微信视频通话保障：画�
             modalContent.innerHTML = svg.outerHTML;
             const clonedSvg = modalContent.querySelector('svg');
             if (clonedSvg) {
-                clonedSvg.style.maxWidth = '90vw';
-                clonedSvg.style.height = 'auto';
+                const baseW = parseFloat(svg.dataset.baseWidth || svg.clientWidth || 1000);
+                const initModalW = Math.max(Math.round(baseW * 1.25), Math.round(window.innerWidth * 0.86));
+                clonedSvg.setAttribute('width', initModalW + 'px');
+                clonedSvg.style.setProperty('width', initModalW + 'px', 'important');
+                clonedSvg.style.setProperty('max-width', 'none', 'important');
+                clonedSvg.style.setProperty('height', 'auto', 'important');
+                clonedSvg.dataset.baseWidth = String(initModalW);
+                clonedSvg.dataset.zoom = '100';
+                const lbl = document.getElementById('modalZoomLabel');
+                if (lbl) lbl.innerText = '100%';
             }
             document.getElementById('mermaid-modal').classList.add('active');
+        }
+        function zoomModalMermaid(delta) {
+            const modalContent = document.getElementById('mermaid-modal-content');
+            const svg = modalContent ? modalContent.querySelector('svg') : null;
+            if (!svg) return;
+            const baseW = parseFloat(svg.dataset.baseWidth || svg.clientWidth || 1200);
+            let curZoom = parseInt(svg.dataset.zoom || '100', 10);
+            curZoom = delta === 0 ? 100 : Math.min(Math.max(curZoom + delta, 50), 300);
+            svg.dataset.zoom = String(curZoom);
+            const newW = Math.round(baseW * (curZoom / 100));
+            svg.setAttribute('width', newW + 'px');
+            svg.style.setProperty('width', newW + 'px', 'important');
+            svg.style.setProperty('max-width', 'none', 'important');
+            const lbl = document.getElementById('modalZoomLabel');
+            if (lbl) lbl.innerText = curZoom + '%';
         }
         function closeMermaidModal() {
             document.getElementById('mermaid-modal').classList.remove('active');
@@ -2789,17 +2899,18 @@ Agent: &quot;好的，已按老规矩为您开通微信视频通话保障：画�
                 card.style.display = (!kw || card.innerText.toLowerCase().includes(kw)) ? 'block' : 'none';
             });
         }
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', async () => {
             const saved = localStorage.getItem('doc-theme') || 'parchment';
             document.documentElement.setAttribute('data-theme', saved);
             document.getElementById('themeBtn').innerText = saved === 'twilight' ? '切换米纸' : '切换暮色';
             if (window.mermaid) {
                 mermaid.initialize({
-                    startOnLoad: true,
+                    startOnLoad: false,
                     securityLevel: 'loose',
                     theme: 'base',
-                    flowchart: { htmlLabels: true, curve: 'basis', padding: 16 },
+                    flowchart: { useMaxWidth: false, htmlLabels: true, curve: 'basis', padding: 20, nodeSpacing: 45, rankSpacing: 55 },
                     themeVariables: {
+                        fontSize: '16px',
                         background: '#FFFFFF',
                         primaryColor: '#FFFFFF',
                         primaryTextColor: '#0F172A',
@@ -2811,6 +2922,11 @@ Agent: &quot;好的，已按老规矩为您开通微信视频通话保障：画�
                         clusterBorder: '#0F172A'
                     }
                 });
+                try {
+                    await mermaid.run({ querySelector: '.mermaid' });
+                } catch (e) {}
+                enhanceMermaidDiagrams();
+                setTimeout(enhanceMermaidDiagrams, 200);
             }
         });
     </script>

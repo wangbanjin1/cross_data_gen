@@ -303,7 +303,7 @@
         }
 
         .container {
-            max-width: 1060px;
+            max-width: 1280px;
             margin: 0 auto;
         }
 
@@ -795,7 +795,7 @@
         /* Mermaid 图表容器：强制纯白底色 (#FFFFFF)、加粗字体、加粗线条 */
         .mermaid-wrapper {
             margin: 22px 0 28px;
-            padding: 16px 22px 24px;
+            padding: 18px 24px 26px;
             background-color: #FFFFFF !important;
             border: 2.5px solid #0F172A;
             border-radius: 10px;
@@ -811,13 +811,21 @@
             margin-bottom: 14px;
             padding-bottom: 8px;
             border-bottom: 1px solid #E2E8F0;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         .mermaid-badge {
-            font-size: 0.78rem;
+            font-size: 0.80rem;
             font-weight: 800;
             color: #0F172A;
             letter-spacing: 0.02em;
+        }
+
+        .mermaid-ctrl-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .mermaid-zoom-btn {
@@ -826,7 +834,7 @@
             color: #0F172A;
             font-size: 0.75rem;
             font-weight: 700;
-            padding: 3px 10px;
+            padding: 4px 10px;
             border-radius: 6px;
             cursor: pointer;
             transition: all 0.15s;
@@ -841,16 +849,23 @@
             background-color: #FFFFFF !important;
             color: #0F172A !important;
             font-weight: 700 !important;
-            display: inline-block;
-            min-width: 320px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            min-height: 220px;
             margin: 0 auto;
+            overflow-x: auto;
         }
 
         .mermaid svg {
             background-color: #FFFFFF !important;
             font-weight: 700 !important;
-            max-width: 100%;
-            height: auto;
+            width: 100% !important;
+            max-width: none !important;
+            height: auto !important;
+            display: block;
+            margin: 0 auto;
         }
 
         .mermaid svg text,
@@ -994,8 +1009,13 @@
 <body>
     <div id="mermaid-modal" onclick="if(event.target===this)closeMermaidModal()">
         <div class="mermaid-modal-box">
-            <button class="mermaid-modal-close" onclick="closeMermaidModal()">✕ 关闭全屏预览</button>
-            <div id="mermaid-modal-content" style="margin-top: 12px; text-align: center;"></div>
+            <div style="position: sticky; top: 0; z-index: 10; display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 10px;">
+                <button class="mermaid-zoom-btn" onclick="zoomModalMermaid(-25)">➖ 缩小</button>
+                <button class="mermaid-zoom-btn" id="modalZoomLabel" onclick="zoomModalMermaid(0)">100%</button>
+                <button class="mermaid-zoom-btn" onclick="zoomModalMermaid(30)">➕ 放大</button>
+                <button class="mermaid-modal-close" style="position: static; float: none;" onclick="closeMermaidModal()">✕ 关闭全屏预览</button>
+            </div>
+            <div id="mermaid-modal-content" style="margin-top: 8px; text-align: center; overflow: auto;"></div>
         </div>
     </div>
 
@@ -1148,10 +1168,15 @@
 
                         <div class="mermaid-wrapper">
                             <div class="mermaid-toolbar">
-                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范)</span>
-                                <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 点击放大全屏查看</button>
+                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范 · 支持缩放与全屏)</span>
+                                <div class="mermaid-ctrl-group">
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
+                                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
+                                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
+                                </div>
                             </div>
-                            <pre class="mermaid">graph TD
+                            <div class="mermaid">graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
     classDef highlight fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
@@ -1160,7 +1185,7 @@
     C --&gt; D["&lt;b&gt;D. 规划 16~20 Session 因果时间线拓扑&lt;br/&gt;(src/core/timeline_planner.py)&lt;/b&gt;"]:::highlight
     D --&gt; E["&lt;b&gt;E. 逐 Session 受控对话渲染与双轨分支生成&lt;br/&gt;(src/generation/dialogue_generator.py)&lt;/b&gt;"]:::highlight
     E --&gt; F["&lt;b&gt;F. 双真值链组装与 R1~R14 自动化质检&lt;br/&gt;(session_assembler.py + qc_validator.py)&lt;/b&gt;"]
-    F --&gt; G["&lt;b&gt;G. 交付四大标准产物&lt;br/&gt;(skeleton / sessions / working_records / experiences)&lt;/b&gt;"]</pre>
+    F --&gt; G["&lt;b&gt;G. 交付四大标准产物&lt;br/&gt;(skeleton / sessions / working_records / experiences)&lt;/b&gt;"]</div>
                         </div>
                         
 <h3 id="21-session-角色-模板-轮数-硬约束v4-优化点">2.1 Session 角色 × 模板 × 轮数 硬约束（v4 优化点）</h3>
@@ -1267,10 +1292,15 @@
 
                         <div class="mermaid-wrapper">
                             <div class="mermaid-toolbar">
-                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范)</span>
-                                <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 点击放大全屏查看</button>
+                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范 · 支持缩放与全屏)</span>
+                                <div class="mermaid-ctrl-group">
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
+                                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
+                                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
+                                </div>
                             </div>
-                            <pre class="mermaid">graph LR
+                            <div class="mermaid">graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
     P["&lt;b&gt;原始画像记录&lt;br/&gt;(data/personas/*.json)&lt;/b&gt;"]
@@ -1306,7 +1336,7 @@
     style StepA fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;
     style StepB fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px;
     style StepC fill:#FFFFFF,stroke:#D97706,stroke-width:2.5px;
-    style StepD fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px;</pre>
+    style StepD fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px;</div>
                         </div>
                         
 <p><strong>LLM 使用边界</strong>：</p>
@@ -1344,16 +1374,21 @@
 
                         <div class="mermaid-wrapper">
                             <div class="mermaid-toolbar">
-                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范)</span>
-                                <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 点击放大全屏查看</button>
+                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范 · 支持缩放与全屏)</span>
+                                <div class="mermaid-ctrl-group">
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
+                                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
+                                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
+                                </div>
                             </div>
-                            <pre class="mermaid">graph LR
+                            <div class="mermaid">graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
     G4["&lt;b&gt;personalization_gt&lt;br/&gt;决定“记什么” (核心内容)&lt;/b&gt;"] --&gt; MF["&lt;b&gt;Memory Fact (MF)&lt;br/&gt;字段级原子事实单元&lt;/b&gt;"]
     G2["&lt;b&gt;conditional_gt&lt;br/&gt;决定“在什么条件下成立” (conditions)&lt;/b&gt;"] --&gt; MF
     G3["&lt;b&gt;changeable_gt&lt;br/&gt;决定“何时及为何变化” (lifecycle / validity)&lt;/b&gt;"] --&gt; MF
-    G1["&lt;b&gt;static_gt&lt;br/&gt;决定“是否合法且符合身份” (白名单约束)&lt;/b&gt;"] -.-&gt; MF</pre>
+    G1["&lt;b&gt;static_gt&lt;br/&gt;决定“是否合法且符合身份” (白名单约束)&lt;/b&gt;"] -.-&gt; MF</div>
                         </div>
                         
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
@@ -1362,10 +1397,15 @@
 
                         <div class="mermaid-wrapper">
                             <div class="mermaid-toolbar">
-                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范)</span>
-                                <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 点击放大全屏查看</button>
+                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范 · 支持缩放与全屏)</span>
+                                <div class="mermaid-ctrl-group">
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
+                                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
+                                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
+                                </div>
                             </div>
-                            <pre class="mermaid">graph TD
+                            <div class="mermaid">graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
     MT["&lt;b&gt;Memory Target (MT) — 意图场景容器&lt;br/&gt;定义单意图/多意图、意图间关系、整体时间线与干扰设计&lt;/b&gt;"]
@@ -1373,7 +1413,7 @@
     MF2["&lt;b&gt;Memory Fact 2 (MF_002) — 字段级原子事实&lt;br/&gt;例：体验参数组合 首选 1080p+80ms / 备选 720p+150ms&lt;/b&gt;"]
 
     MT --&gt; MF1
-    MT --&gt; MF2</pre>
+    MT --&gt; MF2</div>
                         </div>
                         
 <h4 id="431-mt-负责描述">4.3.1 MT 负责描述</h4>
@@ -1465,10 +1505,15 @@
 
                         <div class="mermaid-wrapper">
                             <div class="mermaid-toolbar">
-                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范)</span>
-                                <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 点击放大全屏查看</button>
+                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范 · 支持缩放与全屏)</span>
+                                <div class="mermaid-ctrl-group">
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
+                                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
+                                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
+                                </div>
                             </div>
-                            <pre class="mermaid">graph TD
+                            <div class="mermaid">graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
     Q1{"&lt;b&gt;1. 是否存在明确长期声明？&lt;/b&gt;"}
@@ -1477,7 +1522,7 @@
     Q2 --&gt;|"&lt;b&gt;是&lt;/b&gt;"| R2["&lt;b&gt;判定为 conditional&lt;/b&gt;"]
     Q2 --&gt;|"&lt;b&gt;否&lt;/b&gt;"| Q3{"&lt;b&gt;3. 行为证据是否在足够跨度和周期中稳定收敛？&lt;/b&gt;"}
     Q3 --&gt;|"&lt;b&gt;是&lt;/b&gt;"| R3["&lt;b&gt;判定为 primary 候选&lt;/b&gt;"]
-    Q3 --&gt;|"&lt;b&gt;否&lt;/b&gt;"| R4["&lt;b&gt;判定为 distractor_only (仅作干扰项)&lt;/b&gt;"]</pre>
+    Q3 --&gt;|"&lt;b&gt;否&lt;/b&gt;"| R4["&lt;b&gt;判定为 distractor_only (仅作干扰项)&lt;/b&gt;"]</div>
                         </div>
                         
 <p>资格级别：</p>
@@ -1952,10 +1997,15 @@ personalization_gt:
 
                         <div class="mermaid-wrapper">
                             <div class="mermaid-toolbar">
-                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范)</span>
-                                <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 点击放大全屏查看</button>
+                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范 · 支持缩放与全屏)</span>
+                                <div class="mermaid-ctrl-group">
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
+                                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
+                                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
+                                </div>
                             </div>
-                            <pre class="mermaid">graph TD
+                            <div class="mermaid">graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
     classDef must fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
@@ -1966,7 +2016,7 @@ personalization_gt:
     P5["&lt;b&gt;优先级 5（容量允许）：记忆更新与冲突处理&lt;br/&gt;从 changeable_gt 取素材 → memory_correction / preference_change&lt;/b&gt;"]
     P6["&lt;b&gt;优先级 6（可选）：Scope 限制 extending MT&lt;br/&gt;基于已有 MT 做跨 scope 不迁移负样本（+1 Session）&lt;/b&gt;"]
 
-    P1 --&gt; P2 --&gt; P3 --&gt; P4 --&gt; P5 --&gt; P6</pre>
+    P1 --&gt; P2 --&gt; P3 --&gt; P4 --&gt; P5 --&gt; P6</div>
                         </div>
                         
 <p>优先级 1-2 是必选（<code>max_mts ≥ 2</code> 即可满足），优先级 3-4 按时间线容量依次追加，优先级 5 从 <code>changeable_gt</code> 取素材作为非 extending MT，优先级 6 是 extending MT。<code>NON_EXTENDABLE_TYPES</code> 从 catalog 自动推导：<code>category=&quot;追问决策&quot;</code> 或 <code>eval_tags</code> 含 <code>&quot;follow_up_decision&quot;</code> 的类型不可被 extend。</p>
@@ -2069,10 +2119,15 @@ MT_003: memory_correction (记忆纠正)
 
                         <div class="mermaid-wrapper">
                             <div class="mermaid-toolbar">
-                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范)</span>
-                                <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 点击放大全屏查看</button>
+                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范 · 支持缩放与全屏)</span>
+                                <div class="mermaid-ctrl-group">
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
+                                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
+                                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
+                                </div>
                             </div>
-                            <pre class="mermaid">graph LR
+                            <div class="mermaid">graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
     S1["&lt;b&gt;S001: evidence_session [MT_001]&lt;br/&gt;首次说“高清”，Agent 追问确认&lt;/b&gt;"]
@@ -2082,7 +2137,7 @@ MT_003: memory_correction (记忆纠正)
     S5["&lt;b&gt;S005: distractor_session [无]&lt;br/&gt;微信会议（无关干扰场景）&lt;/b&gt;"]
     S6["&lt;b&gt;S006: correction_session [MT_003]&lt;br/&gt;用户显式纠正：“改成标清 720p”&lt;/b&gt;"]
 
-    S1 --&gt; S2 --&gt; S3 --&gt; S4 --&gt; S5 --&gt; S6</pre>
+    S1 --&gt; S2 --&gt; S3 --&gt; S4 --&gt; S5 --&gt; S6</div>
                         </div>
                         
 <p><code>correction</code> 后不再需要单独验证 Session：后续如有 <code>reinforcement_session</code> / <code>reuse_session</code>，自然会检验“联接”Agent 是否使用了纠正后的新值。</p>
@@ -2114,10 +2169,15 @@ MT_003: memory_correction (记忆纠正)
 
                         <div class="mermaid-wrapper">
                             <div class="mermaid-toolbar">
-                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范)</span>
-                                <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 点击放大全屏查看</button>
+                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范 · 支持缩放与全屏)</span>
+                                <div class="mermaid-ctrl-group">
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
+                                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
+                                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
+                                </div>
                             </div>
-                            <pre class="mermaid">graph TD
+                            <div class="mermaid">graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
     classDef llm fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
@@ -2128,7 +2188,7 @@ MT_003: memory_correction (记忆纠正)
     Step5["&lt;b&gt;5. 规则标注四元 source_type (纯规则推导)&lt;br/&gt;Turn / Memory / WorkingRecord / Experience&lt;/b&gt;"]
     Step6["&lt;b&gt;6. 计算记忆事件 + 写入工单账本 + 提炼经验卡片&lt;/b&gt;"]
 
-    Step1 --&gt; Step2 --&gt; Step3 --&gt; Step4 --&gt; Step5 --&gt; Step6</pre>
+    Step1 --&gt; Step2 --&gt; Step3 --&gt; Step4 --&gt; Step5 --&gt; Step6</div>
                         </div>
                         
 <h3 id="72-偏好映射表">7.2 偏好映射表</h3>
@@ -2233,10 +2293,15 @@ MT_003: memory_correction (记忆纠正)
 
                         <div class="mermaid-wrapper">
                             <div class="mermaid-toolbar">
-                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范)</span>
-                                <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 点击放大全屏查看</button>
+                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范 · 支持缩放与全屏)</span>
+                                <div class="mermaid-ctrl-group">
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
+                                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
+                                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
+                                </div>
                             </div>
-                            <pre class="mermaid">graph LR
+                            <div class="mermaid">graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
     subgraph PathA ["&lt;b&gt;路径 A：口语模糊词通过映射表解析&lt;/b&gt;"]
@@ -2250,7 +2315,7 @@ MT_003: memory_correction (记忆纠正)
     end
 
     style PathA fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px;
-    style PathB fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px;</pre>
+    style PathB fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px;</div>
                         </div>
                         
 <p><strong>同一个值 <code>1080p</code>，因为表达方式与信息来源不同，<code>source_type</code> 完全不同</strong>。</p>
@@ -2487,10 +2552,15 @@ Turn 3:
 
                         <div class="mermaid-wrapper">
                             <div class="mermaid-toolbar">
-                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范)</span>
-                                <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 点击放大全屏查看</button>
+                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范 · 支持缩放与全屏)</span>
+                                <div class="mermaid-ctrl-group">
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
+                                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
+                                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
+                                </div>
                             </div>
-                            <pre class="mermaid">graph LR
+                            <div class="mermaid">graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
     classDef active fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
@@ -2501,17 +2571,22 @@ Turn 3:
     A --&gt;|"&lt;b&gt;dispute / 临时冲突存疑&lt;/b&gt;"| D["&lt;b&gt;disputed (争议态)&lt;/b&gt;"]
     D --&gt;|"&lt;b&gt;reinforce / 再次确认恢复&lt;/b&gt;"| A
     D --&gt;|"&lt;b&gt;deactivation / 明确停用&lt;/b&gt;"| IN["&lt;b&gt;inactive (停用态)&lt;/b&gt;"]
-    A --&gt;|"&lt;b&gt;valid_until 到期&lt;/b&gt;"| EXP["&lt;b&gt;expired (过期失效态)&lt;/b&gt;"]</pre>
+    A --&gt;|"&lt;b&gt;valid_until 到期&lt;/b&gt;"| EXP["&lt;b&gt;expired (过期失效态)&lt;/b&gt;"]</div>
                         </div>
                         
 <h3 id="77-本例的记忆演进轨迹">7.7 本例的记忆演进轨迹</h3>
 
                         <div class="mermaid-wrapper">
                             <div class="mermaid-toolbar">
-                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范)</span>
-                                <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 点击放大全屏查看</button>
+                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范 · 支持缩放与全屏)</span>
+                                <div class="mermaid-ctrl-group">
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
+                                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
+                                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
+                                </div>
                             </div>
-                            <pre class="mermaid">graph LR
+                            <div class="mermaid">graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
     T1["&lt;b&gt;S001 后&lt;br/&gt;高清→1080p (candidate)&lt;/b&gt;"]
@@ -2521,7 +2596,7 @@ Turn 3:
     T5["&lt;b&gt;S005 后 (distractor)&lt;br/&gt;保持 2 条 active 不受污染&lt;/b&gt;"]
     T6["&lt;b&gt;S006 后 (correction)&lt;br/&gt;高清→1080p (superseded)&lt;br/&gt;+标清→720p (active 新值生效)&lt;/b&gt;"]
 
-    T1 --&gt; T2 --&gt; T3 --&gt; T4 --&gt; T5 --&gt; T6</pre>
+    T1 --&gt; T2 --&gt; T3 --&gt; T4 --&gt; T5 --&gt; T6</div>
                         </div>
                         
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
@@ -2658,10 +2733,15 @@ def validate_sessions(skeleton: dict, sessions: list[dict]) -&gt; dict:
 
                         <div class="mermaid-wrapper">
                             <div class="mermaid-toolbar">
-                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范)</span>
-                                <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 点击放大全屏查看</button>
+                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范 · 支持缩放与全屏)</span>
+                                <div class="mermaid-ctrl-group">
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
+                                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
+                                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
+                                </div>
                             </div>
-                            <pre class="mermaid">graph TD
+                            <div class="mermaid">graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
     subgraph LayerInput ["&lt;b&gt;输入层：配置与数据源&lt;/b&gt;"]
@@ -2724,7 +2804,7 @@ def validate_sessions(skeleton: dict, sessions: list[dict]) -&gt; dict:
     style LayerTimeline fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;
     style LayerGen fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px;
     style LayerVal fill:#FFFFFF,stroke:#D97706,stroke-width:2.5px;
-    style LayerOut fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px;</pre>
+    style LayerOut fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px;</div>
                         </div>
                         
 <p><strong>依赖关系</strong>：</p>
@@ -2885,7 +2965,7 @@ graph TD
 #### 4.2.1 处理流程
 
 ```mermaid
-graph LR
+graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
     P[&quot;&lt;b&gt;原始画像记录&lt;br/&gt;(data/personas/*.json)&lt;/b&gt;&quot;]
@@ -2956,7 +3036,7 @@ graph LR
 | `changeable_gt` | 角色变化、事件驱动变化、阶段切换 | `memory_fact.lifecycle_pattern`、`validity` |
 
 ```mermaid
-graph LR
+graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
     G4[&quot;&lt;b&gt;personalization_gt&lt;br/&gt;决定“记什么” (核心内容)&lt;/b&gt;&quot;] --&gt; MF[&quot;&lt;b&gt;Memory Fact (MF)&lt;br/&gt;字段级原子事实单元&lt;/b&gt;&quot;]
@@ -3633,7 +3713,7 @@ MT_003: memory_correction (记忆纠正)
 按角色类型因果排序：`evidence` $\to$ `reinforcement` $\to$ `distractor` $\to$ `correction`：
 
 ```mermaid
-graph LR
+graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
     S1[&quot;&lt;b&gt;S001: evidence_session [MT_001]&lt;br/&gt;首次说“高清”，Agent 追问确认&lt;/b&gt;&quot;]
@@ -3778,7 +3858,7 @@ graph TD
 #### 7.2.2 映射如何产生 `source_type` 标注
 
 ```mermaid
-graph LR
+graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
     subgraph PathA [&quot;&lt;b&gt;路径 A：口语模糊词通过映射表解析&lt;/b&gt;&quot;]
@@ -3998,7 +4078,7 @@ Turn 3:
 事实记忆包含 6 种生命周期状态与有效时间控制：
 
 ```mermaid
-graph LR
+graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
     classDef active fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
@@ -4015,7 +4095,7 @@ graph LR
 ### 7.7 本例的记忆演进轨迹
 
 ```mermaid
-graph LR
+graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
     T1[&quot;&lt;b&gt;S001 后&lt;br/&gt;高清→1080p (candidate)&lt;/b&gt;&quot;]
@@ -4292,6 +4372,54 @@ graph TD
             });
         }
 
+        function enhanceMermaidDiagrams() {
+            document.querySelectorAll('.mermaid svg').forEach(svg => {
+                svg.style.removeProperty('max-width');
+                const wrapper = svg.closest('.mermaid-wrapper');
+                const wrapperW = wrapper ? Math.max(wrapper.clientWidth - 48, 880) : 1120;
+                let vbW = 960, vbH = 540;
+                const vbAttr = svg.getAttribute('viewBox');
+                if (vbAttr) {
+                    const parts = vbAttr.trim().split(/[\s,]+/).map(Number);
+                    if (parts.length === 4 && parts[2] > 0) {
+                        vbW = parts[2];
+                        vbH = parts[3] || 540;
+                    }
+                }
+                const aspect = vbW / Math.max(vbH, 1);
+                let targetW;
+                if (aspect >= 1.6) {
+                    targetW = Math.max(wrapperW, Math.round(vbW * 1.12));
+                } else if (aspect >= 0.85) {
+                    targetW = Math.max(Math.round(wrapperW * 0.96), Math.round(vbW * 1.15));
+                } else {
+                    targetW = Math.max(Math.min(wrapperW, 980), Math.round(vbW * 1.2));
+                }
+                svg.setAttribute('width', targetW + 'px');
+                svg.style.setProperty('width', targetW + 'px', 'important');
+                svg.style.setProperty('max-width', 'none', 'important');
+                svg.style.setProperty('height', 'auto', 'important');
+                svg.dataset.baseWidth = String(targetW);
+                svg.dataset.zoom = '100';
+            });
+        }
+
+        function zoomMermaid(btn, delta) {
+            const wrapper = btn.closest('.mermaid-wrapper');
+            const svg = wrapper ? wrapper.querySelector('svg') : null;
+            if (!svg) return;
+            const baseW = parseFloat(svg.dataset.baseWidth || svg.clientWidth || 960);
+            let curZoom = parseInt(svg.dataset.zoom || '100', 10);
+            curZoom = delta === 0 ? 100 : Math.min(Math.max(curZoom + delta, 50), 280);
+            svg.dataset.zoom = String(curZoom);
+            const newW = Math.round(baseW * (curZoom / 100));
+            svg.setAttribute('width', newW + 'px');
+            svg.style.setProperty('width', newW + 'px', 'important');
+            svg.style.setProperty('max-width', 'none', 'important');
+            const label = wrapper.querySelector('.mermaid-zoom-label');
+            if (label) label.innerText = curZoom + '%';
+        }
+
         function openMermaidModal(btn) {
             const wrapper = btn.closest('.mermaid-wrapper');
             const svg = wrapper ? wrapper.querySelector('svg') : null;
@@ -4300,10 +4428,34 @@ graph TD
             modalContent.innerHTML = svg.outerHTML;
             const clonedSvg = modalContent.querySelector('svg');
             if (clonedSvg) {
-                clonedSvg.style.maxWidth = '90vw';
-                clonedSvg.style.height = 'auto';
+                const baseW = parseFloat(svg.dataset.baseWidth || svg.clientWidth || 1000);
+                const initModalW = Math.max(Math.round(baseW * 1.25), Math.round(window.innerWidth * 0.86));
+                clonedSvg.setAttribute('width', initModalW + 'px');
+                clonedSvg.style.setProperty('width', initModalW + 'px', 'important');
+                clonedSvg.style.setProperty('max-width', 'none', 'important');
+                clonedSvg.style.setProperty('height', 'auto', 'important');
+                clonedSvg.dataset.baseWidth = String(initModalW);
+                clonedSvg.dataset.zoom = '100';
+                const lbl = document.getElementById('modalZoomLabel');
+                if (lbl) lbl.innerText = '100%';
             }
             document.getElementById('mermaid-modal').classList.add('active');
+        }
+
+        function zoomModalMermaid(delta) {
+            const modalContent = document.getElementById('mermaid-modal-content');
+            const svg = modalContent ? modalContent.querySelector('svg') : null;
+            if (!svg) return;
+            const baseW = parseFloat(svg.dataset.baseWidth || svg.clientWidth || 1200);
+            let curZoom = parseInt(svg.dataset.zoom || '100', 10);
+            curZoom = delta === 0 ? 100 : Math.min(Math.max(curZoom + delta, 50), 300);
+            svg.dataset.zoom = String(curZoom);
+            const newW = Math.round(baseW * (curZoom / 100));
+            svg.setAttribute('width', newW + 'px');
+            svg.style.setProperty('width', newW + 'px', 'important');
+            svg.style.setProperty('max-width', 'none', 'important');
+            const lbl = document.getElementById('modalZoomLabel');
+            if (lbl) lbl.innerText = curZoom + '%';
         }
 
         function closeMermaidModal() {
@@ -4328,7 +4480,7 @@ graph TD
             });
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', async () => {
             const savedTheme = localStorage.getItem('doc-theme') || 'parchment';
             document.documentElement.setAttribute('data-theme', savedTheme);
             document.getElementById('themeBtn').innerText = savedTheme === 'parchment' ? '切换暮色' : '切换米纸';
@@ -4354,24 +4506,31 @@ graph TD
 
             if (window.mermaid) {
                 mermaid.initialize({
-                    startOnLoad: true,
+                    startOnLoad: false,
                     securityLevel: 'loose',
                     theme: 'base',
                     flowchart: {
+                        useMaxWidth: false,
                         htmlLabels: true,
                         curve: 'basis',
-                        padding: 16
+                        padding: 20,
+                        nodeSpacing: 45,
+                        rankSpacing: 55
                     },
                     sequence: {
-                        useMaxWidth: true,
+                        useMaxWidth: false,
                         wrap: true,
                         actorFontWeight: '700',
                         messageFontWeight: '700',
                         noteFontWeight: '700',
-                        boxMargin: 10,
-                        messageMargin: 36
+                        boxMargin: 12,
+                        messageMargin: 40
+                    },
+                    state: {
+                        useMaxWidth: false
                     },
                     themeVariables: {
+                        fontSize: '16px',
                         background: '#FFFFFF',
                         primaryColor: '#FFFFFF',
                         primaryTextColor: '#0F172A',
@@ -4396,6 +4555,11 @@ graph TD
                         noteTextColor: '#0F172A'
                     }
                 });
+                try {
+                    await mermaid.run({ querySelector: '.mermaid' });
+                } catch (e) {}
+                enhanceMermaidDiagrams();
+                setTimeout(enhanceMermaidDiagrams, 200);
             }
 
             if (window.hljs) {

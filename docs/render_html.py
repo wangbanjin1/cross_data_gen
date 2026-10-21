@@ -442,10 +442,15 @@ def render_triage_card_page(md_path: Path, html_path: Path, docs_root: Path):
         top_mermaid_html = f"""
         <div class="mermaid-wrapper">
             <div class="mermaid-toolbar">
-                <span class="mermaid-badge">📊 缺陷根因分类与 R1~R14 门禁拦截闭环全景图</span>
-                <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 点击放大全屏查看</button>
+                <span class="mermaid-badge">📊 缺陷根因分类与 R1~R14 门禁拦截闭环全景图 (支持缩放与全屏)</span>
+                <div class="mermaid-ctrl-group">
+                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
+                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
+                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
+                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
+                </div>
             </div>
-            <pre class="mermaid">{m_code}</pre>
+            <div class="mermaid">{m_code}</div>
         </div>
         """
 
@@ -754,7 +759,7 @@ def render_triage_card_page(md_path: Path, html_path: Path, docs_root: Path):
             border-radius: 4px;
         }}
         .toc-link:hover {{ background: var(--surface-elevated); color: var(--accent-primary); }}
-        .main-content {{ flex: 1; padding: 28px 42px 80px; max-width: 1180px; margin: 0 auto; overflow-x: hidden; }}
+        .main-content {{ flex: 1; padding: 28px 42px 80px; max-width: 1320px; margin: 0 auto; overflow-x: hidden; }}
         .top-bar {{
             display: flex;
             justify-content: space-between;
@@ -812,7 +817,7 @@ def render_triage_card_page(md_path: Path, html_path: Path, docs_root: Path):
         .meta-stat-val {{ font-size: 1.05rem; font-weight: 800; }}
         .mermaid-wrapper {{
             margin: 18px 0 26px;
-            padding: 16px 20px 22px;
+            padding: 18px 24px 26px;
             background-color: #FFFFFF !important;
             border: 2.5px solid #0F172A;
             border-radius: 10px;
@@ -824,26 +829,57 @@ def render_triage_card_page(md_path: Path, html_path: Path, docs_root: Path):
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             padding-bottom: 8px;
             border-bottom: 1px solid #E2E8F0;
+            flex-wrap: wrap;
+            gap: 8px;
         }}
-        .mermaid-badge {{ font-size: 0.78rem; font-weight: 800; color: #0F172A; }}
+        .mermaid-badge {{ font-size: 0.80rem; font-weight: 800; color: #0F172A; }}
+        .mermaid-ctrl-group {{ display: flex; align-items: center; gap: 6px; }}
         .mermaid-zoom-btn {{
             background: #F8FAFC;
             border: 1.5px solid #0F172A;
             color: #0F172A;
             font-weight: 700;
             font-size: 0.75rem;
-            padding: 3px 10px;
+            padding: 4px 10px;
             border-radius: 6px;
             cursor: pointer;
+            transition: all 0.15s;
         }}
-        .mermaid {{ background: #FFFFFF !important; font-weight: 700 !important; }}
-        .mermaid svg text, .mermaid svg span, .mermaid svg .nodeLabel, .mermaid svg .edgeLabel {{
+        .mermaid-zoom-btn:hover {{
+            background: #0F172A;
+            color: #FFFFFF;
+        }}
+        .mermaid {{
+            background: #FFFFFF !important;
+            color: #0F172A !important;
+            font-weight: 700 !important;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            min-height: 220px;
+            margin: 0 auto;
+            overflow-x: auto;
+        }}
+        .mermaid svg {{
+            background-color: #FFFFFF !important;
+            font-weight: 700 !important;
+            width: 100% !important;
+            max-width: none !important;
+            height: auto !important;
+            display: block;
+            margin: 0 auto;
+        }}
+        .mermaid svg text, .mermaid svg tspan, .mermaid svg span, .mermaid svg div, .mermaid svg p, .mermaid svg .nodeLabel, .mermaid svg .edgeLabel {{
             font-weight: 700 !important;
             color: #0F172A !important;
             fill: #0F172A !important;
+        }}
+        .mermaid svg path, .mermaid svg line, .mermaid svg polyline, .mermaid svg rect, .mermaid svg polygon, .mermaid svg circle {{
+            stroke-width: 2.3px !important;
         }}
         .column-section {{ margin-bottom: 32px; }}
         .column-section-header {{ margin-bottom: 14px; border-left: 4px solid var(--accent-primary); padding-left: 12px; }}
@@ -955,8 +991,13 @@ def render_triage_card_page(md_path: Path, html_path: Path, docs_root: Path):
 <body>
     <div id="mermaid-modal" onclick="if(event.target===this)closeMermaidModal()">
         <div class="mermaid-modal-box">
-            <button class="mermaid-modal-close" onclick="closeMermaidModal()">✕ 关闭全屏预览</button>
-            <div id="mermaid-modal-content" style="margin-top: 12px; text-align: center;"></div>
+            <div style="position: sticky; top: 0; z-index: 10; display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 10px;">
+                <button class="mermaid-zoom-btn" onclick="zoomModalMermaid(-25)">➖ 缩小</button>
+                <button class="mermaid-zoom-btn" id="modalZoomLabel" onclick="zoomModalMermaid(0)">100%</button>
+                <button class="mermaid-zoom-btn" onclick="zoomModalMermaid(30)">➕ 放大</button>
+                <button class="mermaid-modal-close" style="position: static; float: none;" onclick="closeMermaidModal()">✕ 关闭全屏预览</button>
+            </div>
+            <div id="mermaid-modal-content" style="margin-top: 8px; text-align: center; overflow: auto;"></div>
         </div>
     </div>
     <div class="layout-wrapper">
@@ -1092,6 +1133,52 @@ def render_triage_card_page(md_path: Path, html_path: Path, docs_root: Path):
             const ta = document.getElementById('mdSourceArea');
             navigator.clipboard.writeText(ta.value);
         }}
+        function enhanceMermaidDiagrams() {{
+            document.querySelectorAll('.mermaid svg').forEach(svg => {{
+                svg.style.removeProperty('max-width');
+                const wrapper = svg.closest('.mermaid-wrapper');
+                const wrapperW = wrapper ? Math.max(wrapper.clientWidth - 48, 880) : 1120;
+                let vbW = 960, vbH = 540;
+                const vbAttr = svg.getAttribute('viewBox');
+                if (vbAttr) {{
+                    const parts = vbAttr.trim().split(/[\\s,]+/).map(Number);
+                    if (parts.length === 4 && parts[2] > 0) {{
+                        vbW = parts[2];
+                        vbH = parts[3] || 540;
+                    }}
+                }}
+                const aspect = vbW / Math.max(vbH, 1);
+                let targetW;
+                if (aspect >= 1.6) {{
+                    targetW = Math.max(wrapperW, Math.round(vbW * 1.12));
+                }} else if (aspect >= 0.85) {{
+                    targetW = Math.max(Math.round(wrapperW * 0.96), Math.round(vbW * 1.15));
+                }} else {{
+                    targetW = Math.max(Math.min(wrapperW, 980), Math.round(vbW * 1.2));
+                }}
+                svg.setAttribute('width', targetW + 'px');
+                svg.style.setProperty('width', targetW + 'px', 'important');
+                svg.style.setProperty('max-width', 'none', 'important');
+                svg.style.setProperty('height', 'auto', 'important');
+                svg.dataset.baseWidth = String(targetW);
+                svg.dataset.zoom = '100';
+            }});
+        }}
+        function zoomMermaid(btn, delta) {{
+            const wrapper = btn.closest('.mermaid-wrapper');
+            const svg = wrapper ? wrapper.querySelector('svg') : null;
+            if (!svg) return;
+            const baseW = parseFloat(svg.dataset.baseWidth || svg.clientWidth || 960);
+            let curZoom = parseInt(svg.dataset.zoom || '100', 10);
+            curZoom = delta === 0 ? 100 : Math.min(Math.max(curZoom + delta, 50), 280);
+            svg.dataset.zoom = String(curZoom);
+            const newW = Math.round(baseW * (curZoom / 100));
+            svg.setAttribute('width', newW + 'px');
+            svg.style.setProperty('width', newW + 'px', 'important');
+            svg.style.setProperty('max-width', 'none', 'important');
+            const label = wrapper.querySelector('.mermaid-zoom-label');
+            if (label) label.innerText = curZoom + '%';
+        }}
         function openMermaidModal(btn) {{
             const wrapper = btn.closest('.mermaid-wrapper');
             const svg = wrapper ? wrapper.querySelector('svg') : null;
@@ -1100,10 +1187,33 @@ def render_triage_card_page(md_path: Path, html_path: Path, docs_root: Path):
             modalContent.innerHTML = svg.outerHTML;
             const clonedSvg = modalContent.querySelector('svg');
             if (clonedSvg) {{
-                clonedSvg.style.maxWidth = '90vw';
-                clonedSvg.style.height = 'auto';
+                const baseW = parseFloat(svg.dataset.baseWidth || svg.clientWidth || 1000);
+                const initModalW = Math.max(Math.round(baseW * 1.25), Math.round(window.innerWidth * 0.86));
+                clonedSvg.setAttribute('width', initModalW + 'px');
+                clonedSvg.style.setProperty('width', initModalW + 'px', 'important');
+                clonedSvg.style.setProperty('max-width', 'none', 'important');
+                clonedSvg.style.setProperty('height', 'auto', 'important');
+                clonedSvg.dataset.baseWidth = String(initModalW);
+                clonedSvg.dataset.zoom = '100';
+                const lbl = document.getElementById('modalZoomLabel');
+                if (lbl) lbl.innerText = '100%';
             }}
             document.getElementById('mermaid-modal').classList.add('active');
+        }}
+        function zoomModalMermaid(delta) {{
+            const modalContent = document.getElementById('mermaid-modal-content');
+            const svg = modalContent ? modalContent.querySelector('svg') : null;
+            if (!svg) return;
+            const baseW = parseFloat(svg.dataset.baseWidth || svg.clientWidth || 1200);
+            let curZoom = parseInt(svg.dataset.zoom || '100', 10);
+            curZoom = delta === 0 ? 100 : Math.min(Math.max(curZoom + delta, 50), 300);
+            svg.dataset.zoom = String(curZoom);
+            const newW = Math.round(baseW * (curZoom / 100));
+            svg.setAttribute('width', newW + 'px');
+            svg.style.setProperty('width', newW + 'px', 'important');
+            svg.style.setProperty('max-width', 'none', 'important');
+            const lbl = document.getElementById('modalZoomLabel');
+            if (lbl) lbl.innerText = curZoom + '%';
         }}
         function closeMermaidModal() {{
             document.getElementById('mermaid-modal').classList.remove('active');
@@ -1123,17 +1233,18 @@ def render_triage_card_page(md_path: Path, html_path: Path, docs_root: Path):
                 card.style.display = (!kw || card.innerText.toLowerCase().includes(kw)) ? 'block' : 'none';
             }});
         }}
-        window.addEventListener('DOMContentLoaded', () => {{
+        window.addEventListener('DOMContentLoaded', async () => {{
             const saved = localStorage.getItem('doc-theme') || 'parchment';
             document.documentElement.setAttribute('data-theme', saved);
             document.getElementById('themeBtn').innerText = saved === 'twilight' ? '切换米纸' : '切换暮色';
             if (window.mermaid) {{
                 mermaid.initialize({{
-                    startOnLoad: true,
+                    startOnLoad: false,
                     securityLevel: 'loose',
                     theme: 'base',
-                    flowchart: {{ htmlLabels: true, curve: 'basis', padding: 16 }},
+                    flowchart: {{ useMaxWidth: false, htmlLabels: true, curve: 'basis', padding: 20, nodeSpacing: 45, rankSpacing: 55 }},
                     themeVariables: {{
+                        fontSize: '16px',
                         background: '#FFFFFF',
                         primaryColor: '#FFFFFF',
                         primaryTextColor: '#0F172A',
@@ -1145,6 +1256,11 @@ def render_triage_card_page(md_path: Path, html_path: Path, docs_root: Path):
                         clusterBorder: '#0F172A'
                     }}
                 }});
+                try {{
+                    await mermaid.run({{ querySelector: '.mermaid' }});
+                }} catch (e) {{}}
+                enhanceMermaidDiagrams();
+                setTimeout(enhanceMermaidDiagrams, 200);
             }}
         }});
     </script>
@@ -1464,7 +1580,7 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
         }
 
         .container {
-            max-width: 1060px;
+            max-width: 1280px;
             margin: 0 auto;
         }
 
@@ -1956,7 +2072,7 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
         /* Mermaid 图表容器：强制纯白底色 (#FFFFFF)、加粗字体、加粗线条 */
         .mermaid-wrapper {
             margin: 22px 0 28px;
-            padding: 16px 22px 24px;
+            padding: 18px 24px 26px;
             background-color: #FFFFFF !important;
             border: 2.5px solid #0F172A;
             border-radius: 10px;
@@ -1972,13 +2088,21 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
             margin-bottom: 14px;
             padding-bottom: 8px;
             border-bottom: 1px solid #E2E8F0;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         .mermaid-badge {
-            font-size: 0.78rem;
+            font-size: 0.80rem;
             font-weight: 800;
             color: #0F172A;
             letter-spacing: 0.02em;
+        }
+
+        .mermaid-ctrl-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .mermaid-zoom-btn {
@@ -1987,7 +2111,7 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
             color: #0F172A;
             font-size: 0.75rem;
             font-weight: 700;
-            padding: 3px 10px;
+            padding: 4px 10px;
             border-radius: 6px;
             cursor: pointer;
             transition: all 0.15s;
@@ -2002,16 +2126,23 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
             background-color: #FFFFFF !important;
             color: #0F172A !important;
             font-weight: 700 !important;
-            display: inline-block;
-            min-width: 320px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            min-height: 220px;
             margin: 0 auto;
+            overflow-x: auto;
         }
 
         .mermaid svg {
             background-color: #FFFFFF !important;
             font-weight: 700 !important;
-            max-width: 100%;
-            height: auto;
+            width: 100% !important;
+            max-width: none !important;
+            height: auto !important;
+            display: block;
+            margin: 0 auto;
         }
 
         .mermaid svg text,
@@ -2155,8 +2286,13 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
 <body>
     <div id="mermaid-modal" onclick="if(event.target===this)closeMermaidModal()">
         <div class="mermaid-modal-box">
-            <button class="mermaid-modal-close" onclick="closeMermaidModal()">✕ 关闭全屏预览</button>
-            <div id="mermaid-modal-content" style="margin-top: 12px; text-align: center;"></div>
+            <div style="position: sticky; top: 0; z-index: 10; display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 10px;">
+                <button class="mermaid-zoom-btn" onclick="zoomModalMermaid(-25)">➖ 缩小</button>
+                <button class="mermaid-zoom-btn" id="modalZoomLabel" onclick="zoomModalMermaid(0)">100%</button>
+                <button class="mermaid-zoom-btn" onclick="zoomModalMermaid(30)">➕ 放大</button>
+                <button class="mermaid-modal-close" style="position: static; float: none;" onclick="closeMermaidModal()">✕ 关闭全屏预览</button>
+            </div>
+            <div id="mermaid-modal-content" style="margin-top: 8px; text-align: center; overflow: auto;"></div>
         </div>
     </div>
 
@@ -2267,6 +2403,54 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
             });
         }
 
+        function enhanceMermaidDiagrams() {
+            document.querySelectorAll('.mermaid svg').forEach(svg => {
+                svg.style.removeProperty('max-width');
+                const wrapper = svg.closest('.mermaid-wrapper');
+                const wrapperW = wrapper ? Math.max(wrapper.clientWidth - 48, 880) : 1120;
+                let vbW = 960, vbH = 540;
+                const vbAttr = svg.getAttribute('viewBox');
+                if (vbAttr) {
+                    const parts = vbAttr.trim().split(/[\\s,]+/).map(Number);
+                    if (parts.length === 4 && parts[2] > 0) {
+                        vbW = parts[2];
+                        vbH = parts[3] || 540;
+                    }
+                }
+                const aspect = vbW / Math.max(vbH, 1);
+                let targetW;
+                if (aspect >= 1.6) {
+                    targetW = Math.max(wrapperW, Math.round(vbW * 1.12));
+                } else if (aspect >= 0.85) {
+                    targetW = Math.max(Math.round(wrapperW * 0.96), Math.round(vbW * 1.15));
+                } else {
+                    targetW = Math.max(Math.min(wrapperW, 980), Math.round(vbW * 1.2));
+                }
+                svg.setAttribute('width', targetW + 'px');
+                svg.style.setProperty('width', targetW + 'px', 'important');
+                svg.style.setProperty('max-width', 'none', 'important');
+                svg.style.setProperty('height', 'auto', 'important');
+                svg.dataset.baseWidth = String(targetW);
+                svg.dataset.zoom = '100';
+            });
+        }
+
+        function zoomMermaid(btn, delta) {
+            const wrapper = btn.closest('.mermaid-wrapper');
+            const svg = wrapper ? wrapper.querySelector('svg') : null;
+            if (!svg) return;
+            const baseW = parseFloat(svg.dataset.baseWidth || svg.clientWidth || 960);
+            let curZoom = parseInt(svg.dataset.zoom || '100', 10);
+            curZoom = delta === 0 ? 100 : Math.min(Math.max(curZoom + delta, 50), 280);
+            svg.dataset.zoom = String(curZoom);
+            const newW = Math.round(baseW * (curZoom / 100));
+            svg.setAttribute('width', newW + 'px');
+            svg.style.setProperty('width', newW + 'px', 'important');
+            svg.style.setProperty('max-width', 'none', 'important');
+            const label = wrapper.querySelector('.mermaid-zoom-label');
+            if (label) label.innerText = curZoom + '%';
+        }
+
         function openMermaidModal(btn) {
             const wrapper = btn.closest('.mermaid-wrapper');
             const svg = wrapper ? wrapper.querySelector('svg') : null;
@@ -2275,10 +2459,34 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
             modalContent.innerHTML = svg.outerHTML;
             const clonedSvg = modalContent.querySelector('svg');
             if (clonedSvg) {
-                clonedSvg.style.maxWidth = '90vw';
-                clonedSvg.style.height = 'auto';
+                const baseW = parseFloat(svg.dataset.baseWidth || svg.clientWidth || 1000);
+                const initModalW = Math.max(Math.round(baseW * 1.25), Math.round(window.innerWidth * 0.86));
+                clonedSvg.setAttribute('width', initModalW + 'px');
+                clonedSvg.style.setProperty('width', initModalW + 'px', 'important');
+                clonedSvg.style.setProperty('max-width', 'none', 'important');
+                clonedSvg.style.setProperty('height', 'auto', 'important');
+                clonedSvg.dataset.baseWidth = String(initModalW);
+                clonedSvg.dataset.zoom = '100';
+                const lbl = document.getElementById('modalZoomLabel');
+                if (lbl) lbl.innerText = '100%';
             }
             document.getElementById('mermaid-modal').classList.add('active');
+        }
+
+        function zoomModalMermaid(delta) {
+            const modalContent = document.getElementById('mermaid-modal-content');
+            const svg = modalContent ? modalContent.querySelector('svg') : null;
+            if (!svg) return;
+            const baseW = parseFloat(svg.dataset.baseWidth || svg.clientWidth || 1200);
+            let curZoom = parseInt(svg.dataset.zoom || '100', 10);
+            curZoom = delta === 0 ? 100 : Math.min(Math.max(curZoom + delta, 50), 300);
+            svg.dataset.zoom = String(curZoom);
+            const newW = Math.round(baseW * (curZoom / 100));
+            svg.setAttribute('width', newW + 'px');
+            svg.style.setProperty('width', newW + 'px', 'important');
+            svg.style.setProperty('max-width', 'none', 'important');
+            const lbl = document.getElementById('modalZoomLabel');
+            if (lbl) lbl.innerText = curZoom + '%';
         }
 
         function closeMermaidModal() {
@@ -2303,7 +2511,7 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
             });
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', async () => {
             const savedTheme = localStorage.getItem('doc-theme') || 'parchment';
             document.documentElement.setAttribute('data-theme', savedTheme);
             document.getElementById('themeBtn').innerText = savedTheme === 'parchment' ? '切换暮色' : '切换米纸';
@@ -2329,24 +2537,31 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
 
             if (window.mermaid) {
                 mermaid.initialize({
-                    startOnLoad: true,
+                    startOnLoad: false,
                     securityLevel: 'loose',
                     theme: 'base',
                     flowchart: {
+                        useMaxWidth: false,
                         htmlLabels: true,
                         curve: 'basis',
-                        padding: 16
+                        padding: 20,
+                        nodeSpacing: 45,
+                        rankSpacing: 55
                     },
                     sequence: {
-                        useMaxWidth: true,
+                        useMaxWidth: false,
                         wrap: true,
                         actorFontWeight: '700',
                         messageFontWeight: '700',
                         noteFontWeight: '700',
-                        boxMargin: 10,
-                        messageMargin: 36
+                        boxMargin: 12,
+                        messageMargin: 40
+                    },
+                    state: {
+                        useMaxWidth: false
                     },
                     themeVariables: {
+                        fontSize: '16px',
                         background: '#FFFFFF',
                         primaryColor: '#FFFFFF',
                         primaryTextColor: '#0F172A',
@@ -2371,6 +2586,11 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
                         noteTextColor: '#0F172A'
                     }
                 });
+                try {
+                    await mermaid.run({ querySelector: '.mermaid' });
+                } catch (e) {}
+                enhanceMermaidDiagrams();
+                setTimeout(enhanceMermaidDiagrams, 200);
             }
 
             if (window.hljs) {
@@ -2500,10 +2720,15 @@ def parse_doc_markdown(md_text: str):
                         f"""
                         <div class="mermaid-wrapper">
                             <div class="mermaid-toolbar">
-                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范)</span>
-                                <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 点击放大全屏查看</button>
+                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范 · 支持缩放与全屏)</span>
+                                <div class="mermaid-ctrl-group">
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
+                                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
+                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
+                                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
+                                </div>
                             </div>
-                            <pre class="mermaid">{safe_mermaid}</pre>
+                            <div class="mermaid">{safe_mermaid}</div>
                         </div>
                         """
                     )

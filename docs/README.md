@@ -67,7 +67,7 @@ graph TD
 “联接”Agent 专精于通信网络保障的**意图参数提取（提参数）**与精准闭环受理。系统通过 **“规则定骨架与真值、LLM 负责口语化渲染、验证器强门禁拦截”** 的混合架构，在单个用户的 16~20 个跨会话生命周期中完整演练三层认知记忆：
 
 ```mermaid
-graph LR
+graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
     subgraph Input ["<b>1. 输入层 (Persona & Config)</b>"]

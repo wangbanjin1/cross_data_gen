@@ -138,7 +138,7 @@ graph TD
 #### 4.2.1 处理流程
 
 ```mermaid
-graph LR
+graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
     P["<b>原始画像记录<br/>(data/personas/*.json)</b>"]
@@ -209,7 +209,7 @@ graph LR
 | `changeable_gt` | 角色变化、事件驱动变化、阶段切换 | `memory_fact.lifecycle_pattern`、`validity` |
 
 ```mermaid
-graph LR
+graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
     G4["<b>personalization_gt<br/>决定“记什么” (核心内容)</b>"] --> MF["<b>Memory Fact (MF)<br/>字段级原子事实单元</b>"]
@@ -886,7 +886,7 @@ MT_003: memory_correction (记忆纠正)
 按角色类型因果排序：`evidence` $\to$ `reinforcement` $\to$ `distractor` $\to$ `correction`：
 
 ```mermaid
-graph LR
+graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
     S1["<b>S001: evidence_session [MT_001]<br/>首次说“高清”，Agent 追问确认</b>"]
@@ -1031,7 +1031,7 @@ graph TD
 #### 7.2.2 映射如何产生 `source_type` 标注
 
 ```mermaid
-graph LR
+graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
     subgraph PathA ["<b>路径 A：口语模糊词通过映射表解析</b>"]
@@ -1251,7 +1251,7 @@ Turn 3:
 事实记忆包含 6 种生命周期状态与有效时间控制：
 
 ```mermaid
-graph LR
+graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
     classDef active fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
@@ -1268,7 +1268,7 @@ graph LR
 ### 7.7 本例的记忆演进轨迹
 
 ```mermaid
-graph LR
+graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
     T1["<b>S001 后<br/>高清→1080p (candidate)</b>"]

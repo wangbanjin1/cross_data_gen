@@ -4,7 +4,7 @@
 > **文档定位**：系统记录跨会话记忆数据集在早期研发、质检对齐与提示词工程落地中遇到的 21 项典型缺陷、排查根因、解决办法与 R1~R14 质检拦截规则。关于最新三层认知架构与 16~20 轮动态生命周期规范，请参阅权威技术规范：[**《“联接”Agent 跨会话三层认知记忆数据集与双轨评测引擎技术规范》**](../specs/cognitive_memory_dev_spec.md)。
 
 ```mermaid
-graph LR
+graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
     classDef gate fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 

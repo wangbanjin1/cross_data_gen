@@ -52,7 +52,7 @@ graph TD
 ### 2.1 冷热启动交互对照流图
 
 ```mermaid
-graph LR
+graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
     subgraph ColdStart ["<b>主线一：冷启动无记忆 (多轮澄清收敛线)</b>"]
@@ -117,7 +117,7 @@ $$T_{\text{hot}} = \text{round}\big(T_{\text{cold}} \cdot (1 - \alpha)\big)$$
 #### 3. 生成控制到评测指标的因果闭环
 
 ```mermaid
-graph LR
+graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
     A["<b>生成端：配置敏捷度因子 α (0.0 ~ 1.0)</b>"] --> B["<b>动态规划器：控制目标轮数与台词省略深度</b>"]
@@ -135,7 +135,7 @@ graph LR
 ### 3.1 时态推断引擎与工单检索流程
 
 ```mermaid
-graph LR
+graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
     UserInput["<b>用户相对时态输入<br/>“这次还按上周在奥体开的规格”</b>"] --> Engine["<b>时态推断引擎 (Temporal Engine)<br/>推算目标时间窗: 10月17日 周六</b>"]
@@ -260,7 +260,7 @@ graph LR
 #### 经验反思双环流流程图
 
 ```mermaid
-graph LR
+graph TD
     classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
     Context["<b>Turn 1 业务特征感知 (Context)<br/>诉求: 15:00-17:00 王者荣耀赛事压测<br/>基础参数: 1080P / 20ms (自包含)</b>"] --> Bank["<b>经验知识库 (Experience Bank)<br/>EXP_PREWARM_BUFFER_01<br/>策略: 高优活动主动提前 15 分钟预热缓冲</b>"]
