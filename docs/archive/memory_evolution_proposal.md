@@ -1,8 +1,8 @@
 # 跨会话记忆认知架构演进：指标体系、工作记忆检索与经验记忆构造规划
 
-> **文档性质**：【历史设计提案 / RFC 归档】  
-> **文档定位**：记录三层认知架构演进初期的理论论证、MemoryArena/ReasoningBank 文献启发与 Phase 1~4 敏捷工程路线图。  
-> **权威实现规范**：本项目正式生效的实现设计与评测基准，请全量以 **[“联接”Agent 认知记忆全景演进与双轨评测技术规范](../specs/cognitive_memory_dev_spec.md)** 为准。
+> **文档层级**：第四层 · 架构演进提案与理论归档（Architecture Evolution RFC）  
+> **文档定位**：记录三层认知架构演进初期的理论论证、MemoryArena / ReasoningBank 文献启发与 Phase 1~4 敏捷工程路线图。  
+> **权威实现规范**：本项目正式生效的实现设计与评测基准，请全量以 [**《“联接”Agent 跨会话三层认知记忆数据集与双轨评测引擎技术规范》**](../specs/cognitive_memory_dev_spec.md) 为准。
 
 ---
 
@@ -10,31 +10,31 @@
 
 ### 1.1 核心演进背景
 
-当前数据集已完成 150 个画像共 2100 个多轮会话的基线构造，实现了基于“长期偏好与个性化表达”的事实记忆（Factual Profile Memory）闭环。为了让智能体从被动的“偏好记录”迈向具备真实人类协作质感的多层认知体系，并为下游模型提供严密量化的评测基准，系统亟需拓展工作记忆的单据回溯能力，并重点构建基于真实成败轨迹反思与策略迁移的**经验记忆（Experiential Memory）**。
+当前数据集在完成基础画像的多轮会话基线构造、实现基于“长期偏好与个性化表达”的事实记忆（Factual Profile Memory）闭环后，为了让“联接”Agent 从被动的“偏好记录”迈向具备真实人类协作质感的多层认知体系，并为下游模型提供严密量化的评测基准，系统拓展了工作记忆的独立单据回溯能力，并重点构建基于真实成败轨迹反思与策略迁移的**经验记忆（Experiential Memory）**。
 
 ### 1.2 三层认知记忆架构拓扑全景
 
 ```mermaid
 graph TD
-    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2.5px,color:#111111;
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
-    User["用户多轮自然语言交互诉求"] --> Dispatcher["认知分发与记忆调度中枢"]
+    User["<b>用户多轮自然语言交互诉求</b>"] --> Dispatcher["<b>认知分发与记忆调度中枢</b>"]
 
-    subgraph MemoryTiers ["三层认知记忆架构全景"]
-        FM["【层次一：事实记忆 Factual】<br/>长期老规矩 (MF_001) / 默认业务 / 代称映射 / 周期规则<br/>(状态：跨生命周期持久生效)"]
-        WM["【层次二：工作记忆工单账本 Working】<br/>历史履约流水账 (REC_Ledger) / 时态推断 / 历史改期与核对<br/>(状态：动态增量工单索引)"]
-        EM["【层次三：经验记忆情境反思 Experiential】<br/>场景情境特征 (Context) / 避坑最佳实践 / 智能体主动建议<br/>(状态：情境匹配条件反射)"]
+    subgraph MemoryTiers ["<b>三层认知记忆架构全景</b>"]
+        FM["<b>【层次一：事实记忆 Factual】<br/>长期老规矩 (MF_001) / 默认业务 / 代称映射 / 周期规则<br/>(状态：跨生命周期持久生效)</b>"]
+        WM["<b>【层次二：工作记忆工单账本 Working】<br/>历史履约流水账 (REC_Ledger) / 时态推断 / 历史改期与核对<br/>(状态：动态增量工单索引)</b>"]
+        EM["<b>【层次三：经验记忆情境反思 Experiential】<br/>五大黄金经验策略 / 提前预热与分段隔离 / 智能体主动建议<br/>(状态：情境匹配主动闭环)</b>"]
     end
 
     Dispatcher --> FM
     Dispatcher --> WM
     Dispatcher --> EM
 
-    FM --> Output["下游模型输出：精准闭环与自然台词应答"]
+    FM --> Output["<b>下游模型输出：精准闭环与自然台词应答</b>"]
     WM --> Output
     EM --> Output
 
-    style MemoryTiers fill:#FFFFFF,stroke:#111111,stroke-width:2.5px;
+    style MemoryTiers fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;
 ```
 
 ### 1.3 三层认知记忆职责划分
@@ -43,7 +43,7 @@ graph TD
 |:-------------------- |:------------------------------------------------------ |:-------------------------------------------------- |:---------------------------------------------- |
 | **事实记忆**         | 用户固有习惯、个性化老规矩、默认绑定关系与代称别名     | “按老规矩办”、“开直播保障”、“按那个省心档来”       | 免去常规已知参数盘问，保持长期个性化默契       |
 | **工作记忆工单账本** | 历史各次保障工单履约记录、时间戳、地点与网络指标流水账 | “这次去奥体还按上周的来”、“把昨天的改一下”         | 建立时态相对指称索引，支持跨会话参数复用与改期 |
-| **经验记忆情境反思** | 基于极端或特殊外场环境沉淀的避坑策略与最佳实践         | “大型漫展人流高密主动降画质提议”、“恶劣天气防丢包” | 变被动应答为主动提议，增强专业履约质感         |
+| **经验记忆情境反思** | 基于历史成败对比提炼的五大黄金避坑策略与主动闭环准则   | “赛事压测主动提前15分钟预热”、“双业务独立分段” | 变被动应答为主动提议，在 Fast Path 中 2 轮高效闭环 |
 
 ---
 
@@ -53,25 +53,25 @@ graph TD
 
 ```mermaid
 graph LR
-    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2.5px,color:#111111;
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
-    subgraph ColdStart ["主线一：冷启动无记忆 (多轮澄清收敛线)"]
+    subgraph ColdStart ["<b>主线一：冷启动无记忆 (多轮澄清收敛线)</b>"]
         direction TB
-        C1["Turn 1 用户提出初步意图<br/>(缺失画质/时延/时长等槽位)"] --> C2["Turn 1 客服拒绝脑补<br/>主动反问澄清缺失参数"]
-        C2 --> C3["Turn 2 用户明确 1080p/50ms<br/>建立长期个性化习惯"]
-        C3 --> C4["Turn 2 客服登记记忆<br/>反问确认起止时段"]
-        C4 --> C5["Turn 3 用户确认并完成闭环<br/>(平均交互 2.5 ~ 3.0 轮)"]
+        C1["<b>Turn 1 用户提出初步意图<br/>(缺失画质/时延/时长等槽位)</b>"] --> C2["<b>Turn 1 客服拒绝脑补<br/>主动反问澄清缺失参数</b>"]
+        C2 --> C3["<b>Turn 2 用户明确 1080p/50ms<br/>建立长期个性化习惯</b>"]
+        C3 --> C4["<b>Turn 2 客服登记记忆<br/>反问确认起止时段</b>"]
+        C4 --> C5["<b>Turn 3 用户确认并完成闭环<br/>(平均交互 2.5 ~ 3.0 轮)</b>"]
     end
 
-    subgraph HotStart ["主线二：热启动有记忆 (极速收敛复用线)"]
+    subgraph HotStart ["<b>主线二：热启动有记忆 (极速收敛复用线)</b>"]
         direction TB
-        H1["Turn 1 用户极简口语触发<br/>'按老规矩开保障'"] --> H2["Turn 1 客服秒级命中记忆<br/>直接回显参数并反问确认"]
-        H2 --> H3["Turn 2 用户快速确认<br/>'对，直接开'"]
-        H3 --> H4["Turn 2 客服受理闭环<br/>(平均交互 1.0 ~ 2.0 轮，TCG ≥ 40%)"]
+        H1["<b>Turn 1 用户极简口语触发<br/>“按老规矩开保障”</b>"] --> H2["<b>Turn 1 客服秒级命中记忆<br/>直接回显参数并反问确认</b>"]
+        H2 --> H3["<b>Turn 2 用户快速确认<br/>“对，直接开”</b>"]
+        H3 --> H4["<b>Turn 2 客服受理闭环<br/>(平均交互 1.0 ~ 2.0 轮，TCG ≥ 40%)</b>"]
     end
 
-    style ColdStart fill:#FFFFFF,stroke:#111111,stroke-width:2.5px;
-    style HotStart fill:#FFFFFF,stroke:#111111,stroke-width:2.5px;
+    style ColdStart fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;
+    style HotStart fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px;
 ```
 
 ### 2.2 事实记忆核心量化指标：交互轮数压缩增益（TCG）
@@ -82,7 +82,7 @@ graph LR
 
 定量衡量长程事实记忆机制为用户减少的无谓交互轮次比例：
 
-$$\text{TCG} = \frac{\bar{T}_{\text{cold}} - \bar{T}_{\text{hot}}}{\bar{T}_{\text{cold}}} 	imes 100\%$$
+$$\text{TCG} = \frac{\bar{T}_{\text{cold}} - \bar{T}_{\text{hot}}}{\bar{T}_{\text{cold}}} \times 100\%$$
 
 其中：
 
@@ -118,15 +118,15 @@ $$T_{\text{hot}} = \text{round}\big(T_{\text{cold}} \cdot (1 - \alpha)\big)$$
 
 ```mermaid
 graph LR
-    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2.5px,color:#111111;
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
-    A["生成端：配置敏捷度因子 α (0.0 ~ 1.0)"] --> B["动态规划器：控制目标轮数与台词省略深度"]
-    B --> C["批量渲染：生成不同默契梯度的会话数据"]
-    C --> D["评测端：计算模型实际轮次压缩增益 TCG"]
-    D --> E["验证闭环：实测 TCG 与期望目标对齐"]
+    A["<b>生成端：配置敏捷度因子 α (0.0 ~ 1.0)</b>"] --> B["<b>动态规划器：控制目标轮数与台词省略深度</b>"]
+    B --> C["<b>批量渲染：生成不同默契梯度的会话数据</b>"]
+    C --> D["<b>评测端：计算模型实际轮次压缩增益 TCG</b>"]
+    D --> E["<b>验证闭环：实测 TCG 与期望目标对齐</b>"]
 ```
 
-在生成 150 个画像时，通过配置 $\alpha$ 梯度分布（如 20% 生成 $\alpha=1.0$、60% 生成 $\alpha=0.5$、20% 生成 $\alpha=0.0$），即可系统化构建覆盖从初识到熟客不同默契深度的全阶梯评测基准。
+在生成画像时，通过配置 $\alpha$ 梯度分布（如 20% 生成 $\alpha=1.0$、60% 生成 $\alpha=0.5$、20% 生成 $\alpha=0.0$），即可系统化构建覆盖从初识到熟客不同默契深度的全阶梯评测基准。
 
 ---
 
@@ -134,26 +134,24 @@ graph LR
 
 ### 3.1 时态推断引擎与工单检索流程
 
-<!-- 框图 3：工作记忆时态推断与历史工单检索流程图 (支持在此直接修改 SVG 文本、标签或样式，亦可替换为 Mermaid 代码块) -->
-
 ```mermaid
 graph LR
-    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2.5px,color:#111111;
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
-    UserInput["用户相对时态输入<br/>“这次还按上周在奥体开的规格”"] --> Engine["时态推断引擎 (Temporal Engine)<br/>推算目标时间窗: 10月17日 周六"]
-    TimeRef["当前基准时间锚点 (t_ref)<br/>2026年10月24日 14:00 (周六)"] --> Engine
+    UserInput["<b>用户相对时态输入<br/>“这次还按上周在奥体开的规格”</b>"] --> Engine["<b>时态推断引擎 (Temporal Engine)<br/>推算目标时间窗: 10月17日 周六</b>"]
+    TimeRef["<b>当前基准时间锚点 (t_ref)<br/>2026年10月24日 14:00 (周六)</b>"] --> Engine
 
-    subgraph Ledger ["历史工单流水账 (Working Records Ledger)"]
-        R1["单据 REC_1012 (12天前): 抖音直播/720p<br/>[状态: 已过期 / 不匹配]"]
-        R2["单据 REC_1017_01 (7天前·奥体南门)<br/>快手转播 1080p / 50ms / 120min<br/>★ [精准命中]"]
+    subgraph Ledger ["<b>历史工单流水账 (Working Records Ledger)</b>"]
+        R1["<b>单据 REC_1012 (12天前): 抖音直播/720p<br/>[状态: 已过期 / 不匹配]</b>"]
+        R2["<b>单据 REC_1017_01 (7天前·奥体南门)<br/>快手转播 1080p / 50ms / 120min<br/>★ [精准命中]</b>"]
     end
 
     Engine --> R1
     Engine --> R2
 
-    R2 --> Output["继承目标参数：1080p / 50ms<br/>反问确认今日起止时间与开通"]
+    R2 --> Output["<b>继承目标参数：1080p / 50ms<br/>反问确认今日起止时间与开通</b>"]
 
-    style Ledger fill:#FFFFFF,stroke:#111111,stroke-width:2.5px;
+    style Ledger fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;
 ```
 
 ### 3.2 工作记忆账本与会话流的解耦架构规范（Decoupled Storage Standard）
@@ -162,8 +160,8 @@ graph LR
 
 | 数据存储文件   | 物理存储路径                                   | 职责定位与存储内容                                                        | 上下文注入与引用机制                                                             |
 |:-------------- |:---------------------------------------------- |:------------------------------------------------------------------------- |:-------------------------------------------------------------------------------- |
-| **会话对话流** | `data/generated/sessions/sessions.jsonl`       | 仅存储用户与客服的多轮对话（turns）、意图标注、以及**轻量级单据引用指针** | 仅记录 `retrieval_target: {"record_id": "REC_1017_01", "temporal_delta": "-7d"}` |
-| **工单流水账** | `data/generated/records/working_records.jsonl` | 独立全局履约单据流水库，包含所有历史开通记录的完整快照与环境元数据        | 仅当下游评测或 Agent 需要执行时态回溯时，由外部检索器调取匹配单据                |
+| **会话对话流** | `data/cognitive_samples/<id>/sessions.jsonl`       | 仅存储用户与客服的多轮对话（turns）、意图标注、以及**轻量级单据引用指针** | 仅记录 `source_type: "WorkingRecord", source_ref: "REC_0001"` |
+| **工单流水账** | `data/cognitive_samples/<id>/working_records.jsonl` | 独立全局履约单据流水库，包含所有历史开通记录的完整快照与环境元数据        | 仅当下游评测或“联接”Agent 需要执行时态回溯时，由外部检索器调取匹配单据                |
 
 > **【核心架构收益】工作记忆工单流水独立解耦的三大价值**
 >
@@ -231,15 +229,17 @@ graph LR
 
 ## 四、经验记忆构造：MemoryArena 与 ReasoningBank 深度融合
 
-经验记忆是智能体面对复杂外场环境、冲突边界与多轮交互时沉淀的元认知策略。针对提参智能体的经验记忆构造，系统全面汲取 **MemoryArena** 与 **ReasoningBank** 的核心思想，打造从理论启发、双真值链、经验卡片规范到四大落地场景的完整生成体系：
+经验记忆是“联接”Agent 面对复杂外场环境、冲突边界与多轮交互时沉淀的元认知策略。针对提参智能体的经验记忆构造，系统全面汲取 **MemoryArena** 与 **ReasoningBank (MaTTS)** 的核心思想，打造从理论启发、双真值链、经验卡片规范到五大黄金落地场景的完整生成体系：
 
 ### 4.1 论文理念精要与对经验记忆构造的关键启发
 
-
+| 理论来源 | 核心学术洞见 | 对“联接”Agent 经验记忆构造的工程启发 |
+| :--- | :--- | :--- |
+| **ReasoningBank** | 将智能体交互历史中的成功捷径与失败踩坑记录，通过自对比反思（Self-Contrast Reflection）提炼为结构化三元组卡片 `(Title, Description, Content)` | 拒绝将用户的个人静态偏好充当经验；经验卡片专门存储**通用主动服务与避坑策略**（如重大压测提前 15 分钟预热、同日多单优先选取零卡顿优质工单） |
+| **MaTTS (Test-Time Scaling)** | 单一正确轨迹无法检验模型是否真正习得策略；必须同时构造**应用经验的高效轨迹（Fast Path）**与**忽略经验的低效纠偏轨迹（Slow Path）** | 在 `sessions.jsonl` 的每个经验会话中内嵌 **双轨成败分支测试（Fast/Slow Branch Evaluation）**，且首轮用户输入保持基础参数自包含，精准量化轮次压缩增益（TCG） |
+| **MemoryArena** | 真实长程任务中存在跨会话的多候选干扰与时效状态冲突，智能体必须联合当前条件与历史记录做消歧或裁决 | 设计多业务分段隔离、法定节假日周期豁免、新旧重叠工单温和截断让路等复杂推理场景 |
 
 ### 4.2 经验记忆核心机制：首创“双真值链”解耦并行
-
-在数据合成中坚决拒绝把通用经验与个人偏好混为一谈，首创采用**事实链**与**经验链**解耦并行的生成机制：
 
 在数据合成中坚决拒绝把通用经验与个人偏好混为一谈，首创采用**事实链**与**经验链**解耦并行的生成机制：
 
@@ -247,11 +247,11 @@ graph LR
    - **关注问题**：用户的通信保障参数（画质、时延、应用）在什么时间、什么条件下有效？怎样建立、临时变更和长期更新？
    - **载体支撑**：用户画像配置（Persona Profile）与持久化历史工单流水账（`working_records.jsonl`）。
 2. **经验链（Reasoning Ground-Truth Chain）**：
-   - **关注问题**：智能体在交互中遇到了什么处理困境（如指代模糊、多候选干扰、时效越界、多意图混淆）？采取了什么应对策略？结果如何？从中提炼出什么通用的元认知处理方法？
-   - **载体支撑**：结构化经验知识库（`experience_cards`）。
+   - **关注问题**：智能体在交互中遇到了什么处理困境（如开场突发拥塞、多候选工单质量参差、节假日排期冲突、新旧单时段重叠、多意图混用参数）？采取了什么应对策略？从中提炼出什么通用的元认知处理方法？
+   - **载体支撑**：结构化经验知识库（`experiences.jsonl`）。
 3. **汇聚原则（Convergence Principle）**：
-   - 两条链在**迁移测试会话（Transfer Tasks）**中交汇：经验策略指导智能体如何排查记录范围、何时发起消歧追问；
-   - **绝对隔离**：经验策略绝不能凭空捏造新用户的通信参数，新用户的最终分辨率与时延真值必须严格由该用户自身的事实证据决定。
+   - 两条链在**经验演练会话（Experiential Sessions）**中交汇：用户在 Turn 1 给出自包含的基础保障参数，“联接”Agent 主动应用经验策略给出优化方案；
+   - **绝对隔离**：经验策略绝不篡改用户的核心画质/时延规格，而是提供时钟前移预热、双单拆分、节假日顺延等结构化决策增益。
 
 ---
 
@@ -259,50 +259,36 @@ graph LR
 
 #### 经验反思双环流流程图
 
-<!-- 框图 4：经验记忆感知、主动提议与反思闭环流图 (支持在此直接修改 SVG 文本、标签或样式，亦可替换为 Mermaid 代码块) -->
-
 ```mermaid
 graph LR
-    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2.5px,color:#111111;
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
-    Context["外部情境感知 (Context)<br/>地点: 体育场万人集聚现场<br/>风险: 现场人多网络易拥堵"] --> Bank["经验知识库 (Experience Bank)<br/>EXP_01: 高密人流保流畅策略<br/>规则: 主动提议 720p + 30ms 极低时延"]
+    Context["<b>Turn 1 业务特征感知 (Context)<br/>诉求: 15:00-17:00 王者荣耀赛事压测<br/>基础参数: 1080P / 20ms (自包含)</b>"] --> Bank["<b>经验知识库 (Experience Bank)<br/>EXP_PREWARM_BUFFER_01<br/>策略: 高优活动主动提前 15 分钟预热缓冲</b>"]
     
-    Bank --> AgentAction["“联接”Agent 主动提议 (Proactive)<br/>“现场人流密集易卡顿，<br/>建议调整为 720p/30ms 确保顺畅”"]
+    Bank --> AgentAction["<b>“联接”Agent 主动提议 (Fast Path)<br/>“建议将保障起点提前 15 分钟至 14:45 开启预热，<br/>保持 1080P/20ms，确保 15:00 准时稳态运行”</b>"]
     
-    AgentAction --> Feedback["用户采纳并闭环履约<br/>触发经验反思与固化"]
-    Feedback -. 反思固化与策略沉淀 .-> Bank
+    AgentAction --> Feedback["<b>Turn 2 用户拍板采纳 (2 轮极速闭环)<br/>对比 Slow Path (4 轮纠偏) 节省 50% 轮次</b>"]
+    Feedback -.->|"<b>成败轨迹对比反思沉淀</b>"| Bank
 ```
 
 #### ReasoningBank 标准经验条目卡片规范
 
-全面对齐 ReasoningBank 论文规范，将经验记忆形式化为标准卡片三元组 `(title, description, content)` 并扩充情境条件与反例边界约束：
+全面对齐 ReasoningBank 论文规范，将经验记忆形式化为标准卡片三元组 `(title, description, content)` 并附带触发模式与槽位求解提示：
 
 ```json
 {
-  "experience_id": "EXP_STADIUM_CONGESTION_01",
-  "title": "极值与高密环境主动降画质保抗丢包平稳度",
-  "description": "大型体育场馆或展会万人集聚场景下，空口上行信道受限，盲目开高画质易引发频繁丢包卡顿。",
-  "content": "识别到会展中心、体育场等高密人流场景时，主动提议将画质从 1080p 降为 720p、并将时延门限收紧至 30ms，以稳定性优先策略确保零掉帧。",
-  "trigger_conditions": {
-    "location_keywords": ["体育场", "漫展", "演唱会", "会展中心"],
-    "crowd_density": "极度密集",
-    "risk_factors": ["上行空口资源争抢", "突发丢包卡顿"]
-  },
-  "recommended_adjustments": {
-    "resolution": "720p",
-    "rtt_max": "30ms",
-    "strategy": "稳定性优先"
-  },
-  "applicable_boundaries": "仅适用于公众聚集、基站突发过载的外场保障；私有专网或具备专用切片保障的 VIP 场景不适用此降质规则。",
-  "negative_counterexamples": "用户明确要求“无论多卡都必须开 4K 原画录像”时，智能体不得强行覆盖，应提示风险后尊重用户指令。"
+  "exp_id": "EXP_PREWARM_BUFFER_01",
+  "title": "高优活动提前15分钟预热缓冲",
+  "description": "当用户申请大型赛事直播、压测或跨国高优会议保障时，准点开通极易遭遇开场瞬时流量冲击导致前几分钟卡顿。",
+  "content": "识别到高优直播、赛事压测或核心峰会需求时，即使首轮用户已给出完整的起止时间、画质与时延参数，智能体也应在首轮确认中主动建议将 start_time 提前 15 分钟开启预热缓冲通道，避免开场抖动。",
+  "trigger_Pattern": "高优先级直播/压测/峰会 + 整点或准点开始",
+  "slot_Resolution_Hint": "start_time = stated_start_time - 15min (proactive suggestion in Turn 1)"
 }
 ```
 
 ---
 
 ### 4.4 经验记忆驱动的四大提参数据生成升级方案
-
-结合 MemoryArena 的跨 Session 依赖评测理念与 ReasoningBank 的经历提炼迁移机制，针对移动核心网提参智能体打造四个数据升级方案：
 
 结合 MemoryArena 的跨 Session 依赖评测理念与 ReasoningBank 的经历提炼迁移机制，针对移动核心网提参智能体打造四个数据升级方案：
 

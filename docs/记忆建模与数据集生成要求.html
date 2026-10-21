@@ -106,13 +106,13 @@
 
         /* 侧边栏导航与目录 */
         .sidebar-toc {
-            width: 310px;
+            width: 320px;
             background-color: var(--surface-color);
             border-right: 1px solid var(--border-color);
             position: sticky;
             top: 0;
             height: 100vh;
-            padding: 20px 16px;
+            padding: 18px 15px;
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
@@ -124,15 +124,25 @@
             padding-bottom: 12px;
             border-bottom: 1px solid var(--border-color);
             flex-shrink: 0;
+            max-height: 45vh;
+            overflow-y: auto;
         }
 
         .portal-nav-title {
             font-size: 0.76rem;
-            font-weight: 700;
+            font-weight: 800;
             color: var(--accent-primary);
             margin-bottom: 6px;
             letter-spacing: 0.04em;
             text-transform: uppercase;
+        }
+
+        .portal-group-label {
+            font-size: 0.71rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin: 8px 0 3px 4px;
+            letter-spacing: 0.02em;
         }
 
         .portal-nav-list {
@@ -144,7 +154,7 @@
         .portal-nav-item {
             display: block;
             padding: 4px 8px;
-            font-size: 0.81rem;
+            font-size: 0.80rem;
             color: var(--text-secondary);
             text-decoration: none;
             border-radius: 5px;
@@ -170,8 +180,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding-bottom: 10px;
-            margin-bottom: 10px;
+            padding-bottom: 8px;
+            margin-bottom: 8px;
             border-bottom: 1px solid var(--border-color);
             flex-shrink: 0;
         }
@@ -180,7 +190,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             font-weight: 700;
             color: var(--text-primary);
         }
@@ -201,7 +211,7 @@
         }
 
         .toc-search-box {
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             flex-shrink: 0;
         }
 
@@ -212,7 +222,7 @@
             border: 1px solid var(--border-color);
             background: var(--bg-color);
             color: var(--text-primary);
-            font-size: 0.82rem;
+            font-size: 0.81rem;
             outline: none;
         }
 
@@ -231,30 +241,30 @@
         }
 
         .toc-item {
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
 
         .toc-item.toc-level-2 {
-            margin-top: 8px;
+            margin-top: 6px;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.84rem;
         }
 
         .toc-item.toc-level-3 {
             padding-left: 12px;
-            font-size: 0.81rem;
+            font-size: 0.80rem;
             color: var(--text-secondary);
         }
 
         .toc-item.toc-level-4 {
             padding-left: 22px;
-            font-size: 0.78rem;
+            font-size: 0.77rem;
             color: var(--text-muted);
         }
 
         .toc-link {
             display: block;
-            padding: 4px 8px;
+            padding: 3px 8px;
             color: inherit;
             text-decoration: none;
             border-radius: 4px;
@@ -293,7 +303,7 @@
         }
 
         .container {
-            max-width: 1020px;
+            max-width: 1060px;
             margin: 0 auto;
         }
 
@@ -356,7 +366,7 @@
         }
 
         .markdown-body h1 {
-            font-size: 1.95rem;
+            font-size: 1.92rem;
             font-weight: 800;
             line-height: 1.35;
             margin-bottom: 20px;
@@ -441,30 +451,29 @@
         }
 
         /* 代码块带复制栏 */
-        .code-card {
+        .code-card, .visual-card {
             background-color: var(--pre-bg);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            margin: 16px 0 22px;
+            border-radius: 10px;
+            margin: 18px 0 24px;
             overflow: hidden;
             box-shadow: var(--card-shadow);
         }
 
-        .code-card-header {
+        .code-card-header, .visual-card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 6px 14px;
+            padding: 7px 14px;
             background-color: var(--surface-color);
             border-bottom: 1px solid var(--border-color);
-            font-size: 0.76rem;
+            font-size: 0.78rem;
         }
 
-        .code-card-lang {
-            font-family: "JetBrains Mono", Consolas, monospace;
+        .code-card-lang, .visual-card-badge {
+            font-family: "JetBrains Mono", -apple-system, BlinkMacSystemFont, sans-serif;
             font-weight: 700;
             color: var(--accent-primary);
-            text-transform: uppercase;
         }
 
         .code-copy-btn {
@@ -499,14 +508,191 @@
             white-space: pre;
         }
 
-        .doc-intro {
-            background-color: var(--surface-color);
-            border-left: 4px solid var(--accent-primary);
+        /* 可视化目录树组件 (.visual-tree-card) */
+        .vtree-body {
             padding: 14px 18px;
-            border-radius: 0 8px 8px 0;
-            margin-bottom: 26px;
+            font-family: "JetBrains Mono", Consolas, monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+        }
+        .vtree-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 2px 0;
+            white-space: pre;
+        }
+        .vtree-branch {
+            color: var(--text-muted);
+            user-select: none;
+        }
+        .vtree-icon {
+            font-size: 0.9rem;
+        }
+        .vtree-dir {
+            font-weight: 800;
+            color: var(--accent-primary);
+        }
+        .vtree-file {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .vtree-comment {
+            margin-left: 10px;
+            padding: 1px 8px;
+            border-radius: 10px;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
             color: var(--text-secondary);
-            font-size: 0.94rem;
+            font-size: 0.76rem;
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+        }
+
+        /* 可视化多轮对话气泡组件 (.visual-dialogue-card) */
+        .vdialog-body {
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .vdialog-turn-divider {
+            align-self: center;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            color: var(--accent-primary);
+            font-weight: 700;
+            font-size: 0.76rem;
+            padding: 2px 12px;
+            border-radius: 12px;
+            margin-top: 4px;
+        }
+        .vdialog-row {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+        .vdialog-avatar {
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            flex-shrink: 0;
+            min-width: 105px;
+            text-align: center;
+        }
+        .vdialog-user .vdialog-avatar {
+            background: var(--callout-imp-bg);
+            color: var(--callout-imp-text);
+            border: 1px solid var(--callout-imp-border);
+        }
+        .vdialog-agent .vdialog-avatar {
+            background: var(--callout-note-bg);
+            color: var(--callout-note-text);
+            border: 1px solid var(--callout-note-border);
+        }
+        .vdialog-bubble {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            flex: 1;
+        }
+        .vdialog-note {
+            display: inline-block;
+            margin-left: 8px;
+            padding: 1px 8px;
+            border-radius: 6px;
+            background: var(--callout-warn-bg);
+            color: var(--callout-warn-text);
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+        .vdialog-meta {
+            font-family: "JetBrains Mono", Consolas, monospace;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            padding-left: 118px;
+        }
+
+        /* 可视化结构规范卡 (.visual-spec-card) */
+        .vspec-body {
+            padding: 14px 18px;
+            font-family: "JetBrains Mono", -apple-system, BlinkMacSystemFont, monospace;
+            font-size: 0.85rem;
+            line-height: 1.65;
+            overflow-x: auto;
+        }
+        .vspec-line {
+            white-space: pre-wrap;
+            margin-bottom: 2px;
+        }
+        .vspec-spacer {
+            height: 8px;
+        }
+        .vspec-key {
+            font-weight: 800;
+            color: var(--accent-primary);
+        }
+        .vspec-arrow {
+            font-weight: 800;
+            color: #2563EB;
+            padding: 0 2px;
+        }
+        .vspec-badge-good {
+            display: inline-block;
+            padding: 0 6px;
+            border-radius: 4px;
+            background: var(--callout-note-bg);
+            color: var(--callout-note-text);
+            font-weight: 700;
+            font-size: 0.78rem;
+        }
+        .vspec-badge-bad {
+            display: inline-block;
+            padding: 0 6px;
+            border-radius: 4px;
+            background: #fae8e5;
+            color: #a83220;
+            font-weight: 700;
+            font-size: 0.78rem;
+        }
+
+        /* 四阶段工程路线图网格 (.roadmap-grid) */
+        .roadmap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin: 20px 0 28px;
+        }
+        .roadmap-card {
+            background: var(--surface-color);
+            border: 1.5px solid var(--border-color);
+            border-top: 4px solid var(--accent-primary);
+            border-radius: 10px;
+            padding: 16px;
+            box-shadow: var(--card-shadow);
+        }
+        .roadmap-phase {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--accent-primary);
+            background: var(--tag-bg);
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+        .roadmap-title {
+            font-size: 1.02rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        .roadmap-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
         }
 
         blockquote {
@@ -609,46 +795,128 @@
         /* Mermaid 图表容器：强制纯白底色 (#FFFFFF)、加粗字体、加粗线条 */
         .mermaid-wrapper {
             margin: 22px 0 28px;
-            padding: 24px;
+            padding: 16px 22px 24px;
             background-color: #FFFFFF !important;
-            border: 2px solid #111111;
+            border: 2.5px solid #0F172A;
             border-radius: 10px;
             overflow-x: auto;
             text-align: center;
             box-shadow: var(--card-shadow);
         }
 
+        .mermaid-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .mermaid-badge {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: #0F172A;
+            letter-spacing: 0.02em;
+        }
+
+        .mermaid-zoom-btn {
+            background-color: #F8FAFC;
+            border: 1.5px solid #0F172A;
+            color: #0F172A;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .mermaid-zoom-btn:hover {
+            background-color: #0F172A;
+            color: #FFFFFF;
+        }
+
         .mermaid {
             background-color: #FFFFFF !important;
-            color: #111111 !important;
+            color: #0F172A !important;
             font-weight: 700 !important;
             display: inline-block;
             min-width: 320px;
+            margin: 0 auto;
         }
 
         .mermaid svg {
             background-color: #FFFFFF !important;
             font-weight: 700 !important;
+            max-width: 100%;
+            height: auto;
         }
 
         .mermaid svg text,
+        .mermaid svg tspan,
         .mermaid svg span,
+        .mermaid svg div,
+        .mermaid svg p,
         .mermaid svg .nodeLabel,
         .mermaid svg .edgeLabel,
+        .mermaid svg .cluster-label,
         .mermaid svg .messageText,
         .mermaid svg .labelText,
-        .mermaid svg .loopText {
+        .mermaid svg .loopText,
+        .mermaid svg .noteText,
+        .mermaid svg .actor {
             font-weight: 700 !important;
-            color: #111111 !important;
-            fill: #111111 !important;
+            color: #0F172A !important;
+            fill: #0F172A !important;
         }
 
         .mermaid svg path,
         .mermaid svg line,
+        .mermaid svg polyline,
         .mermaid svg rect,
         .mermaid svg polygon,
         .mermaid svg circle {
-            stroke-width: 2.2px !important;
+            stroke-width: 2.3px !important;
+        }
+
+        /* Mermaid 全屏放大模态框 */
+        #mermaid-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.82);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 28px;
+        }
+        #mermaid-modal.active {
+            display: flex;
+        }
+        .mermaid-modal-box {
+            background: #FFFFFF;
+            border: 3px solid #0F172A;
+            border-radius: 12px;
+            max-width: 96vw;
+            max-height: 92vh;
+            overflow: auto;
+            padding: 24px;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+        }
+        .mermaid-modal-close {
+            position: sticky;
+            top: 0;
+            float: right;
+            background: #0F172A;
+            color: #FFFFFF;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            z-index: 10;
         }
 
         /* 数学公式块 */
@@ -724,19 +992,31 @@
     </style>
 </head>
 <body>
+    <div id="mermaid-modal" onclick="if(event.target===this)closeMermaidModal()">
+        <div class="mermaid-modal-box">
+            <button class="mermaid-modal-close" onclick="closeMermaidModal()">✕ 关闭全屏预览</button>
+            <div id="mermaid-modal-content" style="margin-top: 12px; text-align: center;"></div>
+        </div>
+    </div>
+
     <div class="layout-wrapper">
         <aside class="sidebar-toc" id="sidebarToc">
             <div class="portal-nav-box">
-                <div class="portal-nav-title">文档中心快速导航</div>
+                <div class="portal-nav-title">四层文档架构导航</div>
                 <div class="portal-nav-list">
-<a href="README.html" class="portal-nav-item" title="文档中心总览 (README)">文档中心总览 (README)</a>
-<a href="specs/cognitive_memory_dev_spec.html" class="portal-nav-item" title="三层认知记忆与双轨评测规范">三层认知记忆与双轨评测规范</a>
-<a href="跨 Session 记忆数据集生成器思路.html" class="portal-nav-item" title="跨 Session 生成器总体设计">跨 Session 生成器总体设计</a>
+<div class="portal-group-label">总览与阅读路线</div>
+<a href="README.html" class="portal-nav-item" title="文档中心总览与路线图">文档中心总览与路线图</a>
+<div class="portal-group-label">第一层 · 业务与建模要求</div>
 <a href="记忆建模与数据集生成要求.html" class="portal-nav-item active" title="记忆建模与生成要求">记忆建模与生成要求</a>
-<a href="specs/persona_spec.html" class="portal-nav-item" title="Persona 画像建模规范">Persona 画像建模规范</a>
+<div class="portal-group-label">第二层 · 核心架构与流水线</div>
+<a href="specs/cognitive_memory_dev_spec.html" class="portal-nav-item" title="三层认知记忆与双轨评测总纲">三层认知记忆与双轨评测总纲</a>
+<a href="跨 Session 记忆数据集生成器思路.html" class="portal-nav-item" title="跨 Session 生成流水线详设">跨 Session 生成流水线详设</a>
+<div class="portal-group-label">第三层 · 输入规范与操作</div>
+<a href="specs/persona_spec.html" class="portal-nav-item" title="Persona 画像与故事线规范">Persona 画像与故事线规范</a>
 <a href="guides/cli_usage.html" class="portal-nav-item" title="CLI 命令行与流水线指南">CLI 命令行与流水线指南</a>
+<div class="portal-group-label">第四层 · 理论与治理归档</div>
+<a href="archive/memory_evolution_proposal.html" class="portal-nav-item" title="三层认知演进立项提案 (RFC)">三层认知演进立项提案 (RFC)</a>
 <a href="archive/defect_triage_log.html" class="portal-nav-item" title="001~150 批次缺陷治理实录">001~150 批次缺陷治理实录</a>
-<a href="archive/memory_evolution_proposal.html" class="portal-nav-item" title="认知架构演进提案 (RFC)">认知架构演进提案 (RFC)</a>
                 </div>
             </div>
             <div class="toc-header">
@@ -750,7 +1030,7 @@
             </div>
             <nav class="toc-body">
                 <ul class="toc-list" id="tocList">
-<li class="toc-item toc-level-2"><a href="#一-记忆的核心作用" class="toc-link" title="一、 记忆的核心作用">一、 记忆的核心作用</a></li>
+<li class="toc-item toc-level-2"><a href="#一-记忆的核心作用与三层认知记忆全景" class="toc-link" title="一、 记忆的核心作用与三层认知记忆全景">一、 记忆的核心作用与三层认知记忆全景</a></li>
 <li class="toc-item toc-level-2"><a href="#二-用户事实记忆体系" class="toc-link" title="二、 用户事实记忆体系">二、 用户事实记忆体系</a></li>
 <li class="toc-item toc-level-3"><a href="#1-核心定义" class="toc-link" title="1. 核心定义">1. 核心定义</a></li>
 <li class="toc-item toc-level-3"><a href="#2-主要存储对象" class="toc-link" title="2. 主要存储对象">2. 主要存储对象</a></li>
@@ -775,7 +1055,7 @@
                     <div class="nav-links">
                         <button class="nav-btn" id="expandTocBtn" onclick="toggleDesktopToc()" style="display: none;">展开目录</button>
                         <a href="README.html" class="nav-btn">◀ 文档中心首页</a>
-                        <button class="nav-btn active" id="btnReadView" onclick="switchDocView('read')">阅读视图</button>
+                        <button class="nav-btn active" id="btnReadView" onclick="switchDocView('read')">可视化阅读视图</button>
                         <button class="nav-btn" id="btnSourceView" onclick="switchDocView('source')">Markdown 源码</button>
                         <span style="color: var(--border-color)">|</span>
                         <span style="font-size: 0.84rem; color: var(--text-muted);">docs/记忆建模与数据集生成要求.md</span>
@@ -787,15 +1067,56 @@
 
                 <article class="markdown-body" id="docReadView">
 <h1>记忆建模与数据集生成要求</h1>
-<blockquote><p><strong>文档定位</strong>：定义核心网智能助理在通信网络保障场景下的记忆建模理论、事实记忆边界判定、四层 Ground Truth 映射关系及正负样本生成要求。</p></blockquote>
+<blockquote><p><strong>文档层级</strong>：第一层 · 业务定义与记忆建模要求（Why & What）</p>
+<p><strong>文档定位</strong>：定义通信网络保障 <strong>“联接”Agent</strong> 在意图参数提取（提参数）场景下的三层认知记忆建模理论、事实记忆边界判定、四层 Ground Truth 映射关系及正负样本生成要求。</p>
+<p><strong>关联阅读</strong>：下一层核心架构详见 <a href="specs/cognitive_memory_dev_spec.html" class="md-link"><strong>《三层认知记忆演进开发规范》</strong></a> 与 <a href="跨%20Session%20记忆数据集生成器思路.html" class="md-link"><strong>《跨 Session 记忆数据集生成器思路》</strong></a>。</p></blockquote>
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
-<h2 id="一-记忆的核心作用">一、 记忆的核心作用</h2>
-<blockquote><p>核心能力要求：识别用户自定义表达；补全省略参数；识别应用和业务；处理时间表达；复用历史澄清结果；判断何时必须向用户追问。</p></blockquote>
-<p>记忆不是检索到就直接使用，而是需要结合当前输入、用户事实记忆和环境事实记忆进行判断：</p>
-<ul><li><strong>证据充分时</strong>：精准补全省略槽位；
+<h2 id="一-记忆的核心作用与三层认知记忆全景">一、 记忆的核心作用与三层认知记忆全景</h2>
+<blockquote><p><strong>核心能力要求</strong>：识别用户自定义表达；补全省略参数；识别应用和业务；处理时间表达；复用历史澄清结果与历史保障单据；内化跨会话排障与提参经验；判断何时必须向用户追问。</p></blockquote>
+<p>记忆不是检索到就机械套用，而是需要结合<strong>当前轮明确输入</strong>、<strong>用户事实记忆</strong>、<strong>工作记忆（历史工单账本）</strong>与<strong>经验记忆（主动服务策略）</strong>进行联合决策：</p>
+<ul><li><strong>证据充分且作用域匹配时</strong>：精准补全省略槽位，或主动提供经验策略建议（2 轮高效闭环）；
 </li>
-<li><strong>证据不足或存在冲突时</strong>：主动向用户发起澄清追问。
+<li><strong>证据不足、候选冲突或跨作用域时</strong>：主动向用户发起结构化澄清或消歧追问，严禁脑补盲猜。
 </li></ul>
+
+                        <div class="mermaid-wrapper">
+                            <div class="mermaid-toolbar">
+                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范)</span>
+                                <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 点击放大全屏查看</button>
+                            </div>
+                            <pre class="mermaid">graph TD
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+    classDef core fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+
+    ROOT["&lt;b&gt;“联接”Agent 跨会话三层认知记忆体系&lt;/b&gt;"]:::core
+
+    subgraph M1 ["&lt;b&gt;第一层：事实记忆 (Factual Memory / 长期画像)&lt;/b&gt;"]
+        F1["&lt;b&gt;用户稳定事实 (static_gt)&lt;br/&gt;套餐权益 / 常用 APP / 合法业务池&lt;/b&gt;"]
+        F2["&lt;b&gt;个性化表达映射 (expression_mappings)&lt;br/&gt;应用别名 / 业务别名 / 画质与时延口语映射&lt;/b&gt;"]
+        F3["&lt;b&gt;行为与体验偏好 (preferences)&lt;br/&gt;应用-业务选择 / 时间模式 / 体验参数组合&lt;/b&gt;"]
+        F4["&lt;b&gt;生命周期更新 (changeable_gt)&lt;br/&gt;用户显式纠偏 / 角色转变 / 临时偏好到期&lt;/b&gt;"]
+    end
+
+    subgraph M2 ["&lt;b&gt;第二层：工作记忆 (Working Memory / 独立工单账本)&lt;/b&gt;"]
+        W1["&lt;b&gt;历史保障工单 (working_records.jsonl)&lt;br/&gt;记录每次已闭环的 APP / 业务 / 时段 / 720P-1080P 参数&lt;/b&gt;"]
+        W2["&lt;b&gt;跨期单据精准指代复用 (working_memory_reuse)&lt;br/&gt;解析“按上周三那次办”，复用历史参数且不污染长期画像&lt;/b&gt;"]
+        W3["&lt;b&gt;多候选单据冲突消歧 (working_memory_disambiguation)&lt;br/&gt;历史存在多条异构单据时主动发起 Request_Disambiguation&lt;/b&gt;"]
+    end
+
+    subgraph M3 ["&lt;b&gt;第三层：经验记忆 (Experiential Memory / 主动服务策略)&lt;/b&gt;"]
+        E1["&lt;b&gt;五大黄金经验库 (experiences.jsonl)&lt;br/&gt;多业务分段 / 压测提前15分钟 / 调休节假日豁免 / 同日优选 / 时段重叠消解&lt;/b&gt;"]
+        E2["&lt;b&gt;双轨成败分支测试 (Fast / Slow Branch Evaluation)&lt;br/&gt;Turn 1 基础参数自包含 → 复用经验 2~3 轮闭环 vs 遗忘经验 4~5 轮纠偏&lt;/b&gt;"]
+    end
+
+    ROOT --&gt; M1
+    ROOT --&gt; M2
+    ROOT --&gt; M3
+
+    style M1 fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;
+    style M2 fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px;
+    style M3 fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px;</pre>
+                        </div>
+                        
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
 <h2 id="二-用户事实记忆体系">二、 用户事实记忆体系</h2>
 <h3 id="1-核心定义">1. 核心定义</h3>
@@ -804,10 +1125,28 @@
 </li>
 <li><strong>多次归纳</strong>：根据历史行为归纳的偏好，需要多次相互独立且一致的历史证据支撑；
 </li>
-<li><strong>事件区别</strong>：一次历史行为只表示某个事件曾经发生，不能直接视为用户的长期偏好；
+<li><strong>事件区别</strong>：一次历史行为只表示某个事件曾经发生（记入工作记忆工单账本），不能直接视为用户的长期偏好；
 </li>
-<li><strong>确认隔离</strong>：严格区分“仅对本次任务的确认”与“可以在未来复用的长期记忆确认”。
+<li><strong>确认隔离</strong>：严格区分“仅对本次任务的确认（Working Record）”与“可以在未来复用的长期记忆确认（Factual Memory）”。
 </li></ul>
+
+                        <div class="mermaid-wrapper">
+                            <div class="mermaid-toolbar">
+                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范)</span>
+                                <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 点击放大全屏查看</button>
+                            </div>
+                            <pre class="mermaid">graph LR
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+
+    A["&lt;b&gt;用户交互事件输入&lt;/b&gt;"] --&gt; B{"&lt;b&gt;是否为显式长期声明？&lt;br/&gt;(如“以后默认按此办”)&lt;/b&gt;"}
+    B --&gt;|"&lt;b&gt;是 (Explicit)&lt;/b&gt;"| C["&lt;b&gt;单次确认直接升级为 Active 事实记忆&lt;/b&gt;"]
+    B --&gt;|"&lt;b&gt;否 (Behavioral)&lt;/b&gt;"| D{"&lt;b&gt;是否跨周期多次独立一致？&lt;/b&gt;"}
+    D --&gt;|"&lt;b&gt;首次出现 (1次)&lt;/b&gt;"| E["&lt;b&gt;记入 Working Record 工单&lt;br/&gt;事实状态为 Candidate (不直接盲填)&lt;/b&gt;"]
+    D --&gt;|"&lt;b&gt;多次一致确认 (≥2次)&lt;/b&gt;"| F["&lt;b&gt;由 Candidate 升级为 Active 事实记忆&lt;/b&gt;"]
+    C --&gt; G["&lt;b&gt;跨会话省略槽位时安全补全&lt;/b&gt;"]
+    F --&gt; G</pre>
+                        </div>
+                        
 <h3 id="2-主要存储对象">2. 主要存储对象</h3>
 <p>涵盖用户固有属性、个性化表达映射、默认值偏好及纠错记录。</p>
 <ul><li><strong>用户稳定事实</strong>：套餐权益、用户明确设置的默认值等；
@@ -816,7 +1155,7 @@
 </li>
 <li><strong>行为偏好</strong>：根据多次历史行为归纳得到的、具有条件性和概率性的偏好；
 </li>
-<li><strong>历史事件</strong>：某次任务中发生过的行为（本身不等于长期偏好）。
+<li><strong>历史事件（工作记忆）</strong>：某次任务中发生过的具体保障工单记录（本身不等于长期偏好，仅供显式跨期指代查询）。
 </li></ul>
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
 <h3 id="3-静态用户事实">3. 静态用户事实</h3>
@@ -854,9 +1193,9 @@
                             <p><strong>证据来源严格分级</strong>：</p>
 <p>1. 用户明确声明（例如“以后我说老业务，就是指抖音直播”）；</p>
 <p>2. 用户在澄清过程中明确确认表达的含义；</p>
-<p>3. 用户纠正 Agent 后得到最终含义；</p>
+<p>3. 用户纠正“联接”Agent 后得到最终含义；</p>
 <p>4. 多次历史会话形成稳定、一致的表达映射；</p>
-<p>5. Agent 根据任务结果推测（未经用户确认，不可作为全局稳定事实）。</p>
+<p>5. “联接”Agent 根据任务结果推测（未经用户确认，不可作为全局稳定事实）。</p>
 <p>*用户确认本次任务参数，不一定等于确认长期表达映射。例如，用户同意本次将“高清”处理为 1080p，不代表以后“高清”始终等于 1080p。同一个表达对应多个目标取值时，需结合当前条件消歧；条件不足时必须追问。*</p>
                         </div>
                     </div>
@@ -914,7 +1253,7 @@
             <table>
                 <thead><tr><th>评测维度</th><th>覆盖子类与关键场景</th><th>负样本与追问要求</th></tr></thead>
                 <tbody>
-                    <tr><td><strong>个性化表达理解</strong></td><td>应用别名、业务别名、时间表达、参数模糊表达、一对一/一对多映射、表达随时间更新与纠偏</td><td>未经确认的候选表达、条件不足时必须追问</td></tr><tr><td><strong>参数缺失补全</strong></td><td>业务补全应用、应用补全业务、联合补全、时间参数补全、体验参数补全、多参数组合补全</td><td>排除排斥组合、多个候选概率接近时不补全并追问</td></tr><tr><td><strong>条件偏好推断</strong></td><td>单条件/多条件联合、全局偏好、场景偏好、周期偏好、显式偏好与归纳偏好</td><td>条件不匹配、条件部分匹配但证据不足、多偏好冲突</td></tr><tr><td><strong>记忆更新与冲突</strong></td><td>记忆巩固、用户纠正、新偏好覆盖旧偏好、撤销偏好、全局偏好细化、临时规律到期</td><td>显式偏好与行为偏好冲突、用户事实与环境事实冲突、当前明确输入与历史记忆冲突</td></tr><tr><td><strong>追问决策红线</strong></td><td>无相关记忆、仅单次偶发行为、证据不足、关键参数必须确认</td><td>记忆已失效、推断结果违反业务规则或超出套餐权益时必须拒识追问</td></tr>
+                    <tr><td><strong>个性化表达理解</strong></td><td>应用别名、业务别名、时间表达、参数模糊表达、一对一/一对多映射、表达随时间更新与纠偏</td><td>未经确认的候选表达、条件不足时必须追问</td></tr><tr><td><strong>参数缺失补全</strong></td><td>业务补全应用、应用补全业务、联合补全、时间参数补全、体验参数补全、多参数组合补全</td><td>排除排斥组合、多个候选概率接近时不补全并追问</td></tr><tr><td><strong>条件偏好推断</strong></td><td>单条件/多条件联合、全局偏好、场景偏好、周期偏好、显式偏好与归纳偏好</td><td>条件不匹配、条件部分匹配但证据不足、多偏好冲突</td></tr><tr><td><strong>工作记忆跨期复用</strong></td><td>精确时空指代（“按上周三那次参数办”）、仅复用目标体验参数槽位、不篡改当前日期</td><td>历史存在多条异构工单候选时必须发起 <code>Request_Disambiguation</code> 追问</td></tr><tr><td><strong>经验记忆主动闭环</strong></td><td>Turn 1 基础参数自包含输入下，主动触发提前 15 分钟预热、多业务分段、法定调休豁免等策略</td><td>遗忘或忽略历史教训进入 Slow Path，触发用户不满与多轮返工修正</td></tr><tr><td><strong>记忆更新与冲突</strong></td><td>记忆巩固、用户纠正、新偏好覆盖旧偏好、撤销偏好、全局偏好细化、临时规律到期</td><td>显式偏好与行为偏好冲突、用户事实与环境事实冲突、当前明确输入与历史记忆冲突</td></tr><tr><td><strong>追问决策红线</strong></td><td>无相关记忆、仅单次偶发行为、证据不足、关键参数必须确认</td><td>记忆已失效、推断结果违反业务规则或超出套餐权益时必须拒识追问</td></tr>
                 </tbody>
             </table>
         </div>
@@ -926,7 +1265,7 @@
 </li>
 <li><strong>环境事实决定合法性</strong>：环境事实决定推断结果当前是否真实、合法且在网络支持白名单内；
 </li>
-<li><strong>单次事件不等于长期偏好</strong>：历史偶发事件不能自动升级为长期画像；
+<li><strong>单次事件不等于长期偏好</strong>：历史偶发事件（Working Record）不能自动升级为长期画像（Factual Memory）；
 </li>
 <li><strong>单次任务确认不等于长期确认</strong>：单次工单参数确认不能自动升级为未来通用映射；
 </li>
@@ -937,6 +1276,51 @@
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
 <h2 id="四-记忆建模与四层-ground-truth-映射矩阵">四、 记忆建模与四层 Ground Truth 映射矩阵</h2>
 
+                        <div class="mermaid-wrapper">
+                            <div class="mermaid-toolbar">
+                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范)</span>
+                                <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 点击放大全屏查看</button>
+                            </div>
+                            <pre class="mermaid">graph LR
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+
+    subgraph Persona ["&lt;b&gt;原始画像输入 (data/personas/)&lt;/b&gt;"]
+        P1["&lt;b&gt;static_profile&lt;/b&gt;"]
+        P2["&lt;b&gt;dynamic_profile&lt;/b&gt;"]
+        P3["&lt;b&gt;storyline&lt;/b&gt;"]
+    end
+
+    subgraph GT ["&lt;b&gt;四层真值模型 (src/core/gt_builder.py)&lt;/b&gt;"]
+        G1["&lt;b&gt;Layer 1: static_gt&lt;br/&gt;合法场景池与常用 APP 白名单&lt;/b&gt;"]
+        G2["&lt;b&gt;Layer 2: conditional_gt&lt;br/&gt;时间规律与场景触发条件&lt;/b&gt;"]
+        G3["&lt;b&gt;Layer 3: changeable_gt&lt;br/&gt;角色迁移与事件驱动变更&lt;/b&gt;"]
+        G4["&lt;b&gt;Layer 4: personalization_gt&lt;br/&gt;别名映射 / 体验参数组合 / 应用业务偏好&lt;/b&gt;"]
+    end
+
+    subgraph MT ["&lt;b&gt;评测目标反推 (src/core/mt_selector.py)&lt;/b&gt;"]
+        M1["&lt;b&gt;个性化表达理解 MT&lt;/b&gt;"]
+        M2["&lt;b&gt;体验参数与业务补全 MT&lt;/b&gt;"]
+        M3["&lt;b&gt;时间模式与条件推断 MT&lt;/b&gt;"]
+        M4["&lt;b&gt;记忆更新与纠偏 MT&lt;/b&gt;"]
+    end
+
+    P1 --&gt; G1
+    P2 --&gt; G2
+    P2 --&gt; G3
+    P2 --&gt; G4
+    P3 --&gt; G3
+    G1 -.-&gt;|"&lt;b&gt;合法性白名单约束&lt;/b&gt;"| MT
+    G4 --&gt; M1
+    G4 --&gt; M2
+    G2 --&gt; M3
+    G3 --&gt; M4
+
+    style Persona fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;
+    style GT fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px;
+    style MT fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px;</pre>
+                        </div>
+                        
+
         <div class="table-wrapper">
             <table>
                 <thead><tr><th>data_design 类别</th><th>对应 Ground Truth 层</th><th>对应代码字段</th><th>MT 选择路径</th><th>语义解释与约束</th></tr></thead>
@@ -946,14 +1330,14 @@
             </table>
         </div>
         
-<h3 id="staticgt-的作用与流转路径">static_gt 的作用与流转路径</h3>
+<h3 id="staticgt-的作用与流转路径"><code>static_gt</code> 的作用与流转路径</h3>
 <p><code>static_gt</code> 不直接参与 Memory Targets 选择，其字段通过以下路径在全流水线中流转生效：</p>
 
         <div class="table-wrapper">
             <table>
                 <thead><tr><th>字段名</th><th>流水线使用路径</th><th>核心业务说明</th></tr></thead>
                 <tbody>
-                    <tr><td><code>static_gt.identity</code></td><td><code>session_generator.py</code> <span class="katex-inline" data-tex="\to">$\to$</span> LLM prompt</td><td>用户画像静态身份描述，作为对话生成的背景上下文</td></tr><tr><td><code>static_gt.allowed_scenarios</code></td><td><code>timeline_planner.py</code> <span class="katex-inline" data-tex="\to">$\to$</span> 场景选择池</td><td>约束 APP × 业务 × 支持分辨率的合法场景组合</td></tr><tr><td><code>static_gt.frequent_apps</code></td><td>全流程白名单间接校验</td><td>常用 APP 标准名列表，用于校验和场景推导合法性</td></tr>
+                    <tr><td><code>static_gt.identity</code></td><td><code>src/generation/dialogue_generator.py</code> <span class="katex-inline" data-tex="\to">$\to$</span> LLM Prompt</td><td>用户画像静态身份描述，作为对话生成的背景上下文</td></tr><tr><td><code>static_gt.allowed_scenarios</code></td><td><code>src/core/timeline_planner.py</code> <span class="katex-inline" data-tex="\to">$\to$</span> 场景选择池</td><td>约束 APP × 业务 × 支持分辨率的合法场景组合</td></tr><tr><td><code>static_gt.frequent_apps</code></td><td>全流程白名单间接校验 (<code>src/core/gt_builder.py</code>)</td><td>常用 APP 标准名列表，用于校验和场景推导合法性</td></tr>
                 </tbody>
             </table>
         </div>
@@ -967,17 +1351,53 @@
                     </div>
                     <textarea class="raw-md-textarea" id="rawMdArea" readonly># 记忆建模与数据集生成要求
 
-&gt; **文档定位**：定义核心网智能助理在通信网络保障场景下的记忆建模理论、事实记忆边界判定、四层 Ground Truth 映射关系及正负样本生成要求。
+&gt; **文档层级**：第一层 · 业务定义与记忆建模要求（Why &amp; What）  
+&gt; **文档定位**：定义通信网络保障 **“联接”Agent** 在意图参数提取（提参数）场景下的三层认知记忆建模理论、事实记忆边界判定、四层 Ground Truth 映射关系及正负样本生成要求。  
+&gt; **关联阅读**：下一层核心架构详见 [**《三层认知记忆演进开发规范》**](specs/cognitive_memory_dev_spec.md) 与 [**《跨 Session 记忆数据集生成器思路》**](跨%20Session%20记忆数据集生成器思路.md)。
 
 ---
 
-## 一、 记忆的核心作用
+## 一、 记忆的核心作用与三层认知记忆全景
 
-&gt; 核心能力要求：识别用户自定义表达；补全省略参数；识别应用和业务；处理时间表达；复用历史澄清结果；判断何时必须向用户追问。
+&gt; **核心能力要求**：识别用户自定义表达；补全省略参数；识别应用和业务；处理时间表达；复用历史澄清结果与历史保障单据；内化跨会话排障与提参经验；判断何时必须向用户追问。
 
-记忆不是检索到就直接使用，而是需要结合当前输入、用户事实记忆和环境事实记忆进行判断：
-* **证据充分时**：精准补全省略槽位；
-* **证据不足或存在冲突时**：主动向用户发起澄清追问。
+记忆不是检索到就机械套用，而是需要结合**当前轮明确输入**、**用户事实记忆**、**工作记忆（历史工单账本）**与**经验记忆（主动服务策略）**进行联合决策：
+* **证据充分且作用域匹配时**：精准补全省略槽位，或主动提供经验策略建议（2 轮高效闭环）；
+* **证据不足、候选冲突或跨作用域时**：主动向用户发起结构化澄清或消歧追问，严禁脑补盲猜。
+
+```mermaid
+graph TD
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+    classDef core fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+
+    ROOT[&quot;&lt;b&gt;“联接”Agent 跨会话三层认知记忆体系&lt;/b&gt;&quot;]:::core
+
+    subgraph M1 [&quot;&lt;b&gt;第一层：事实记忆 (Factual Memory / 长期画像)&lt;/b&gt;&quot;]
+        F1[&quot;&lt;b&gt;用户稳定事实 (static_gt)&lt;br/&gt;套餐权益 / 常用 APP / 合法业务池&lt;/b&gt;&quot;]
+        F2[&quot;&lt;b&gt;个性化表达映射 (expression_mappings)&lt;br/&gt;应用别名 / 业务别名 / 画质与时延口语映射&lt;/b&gt;&quot;]
+        F3[&quot;&lt;b&gt;行为与体验偏好 (preferences)&lt;br/&gt;应用-业务选择 / 时间模式 / 体验参数组合&lt;/b&gt;&quot;]
+        F4[&quot;&lt;b&gt;生命周期更新 (changeable_gt)&lt;br/&gt;用户显式纠偏 / 角色转变 / 临时偏好到期&lt;/b&gt;&quot;]
+    end
+
+    subgraph M2 [&quot;&lt;b&gt;第二层：工作记忆 (Working Memory / 独立工单账本)&lt;/b&gt;&quot;]
+        W1[&quot;&lt;b&gt;历史保障工单 (working_records.jsonl)&lt;br/&gt;记录每次已闭环的 APP / 业务 / 时段 / 720P-1080P 参数&lt;/b&gt;&quot;]
+        W2[&quot;&lt;b&gt;跨期单据精准指代复用 (working_memory_reuse)&lt;br/&gt;解析“按上周三那次办”，复用历史参数且不污染长期画像&lt;/b&gt;&quot;]
+        W3[&quot;&lt;b&gt;多候选单据冲突消歧 (working_memory_disambiguation)&lt;br/&gt;历史存在多条异构单据时主动发起 Request_Disambiguation&lt;/b&gt;&quot;]
+    end
+
+    subgraph M3 [&quot;&lt;b&gt;第三层：经验记忆 (Experiential Memory / 主动服务策略)&lt;/b&gt;&quot;]
+        E1[&quot;&lt;b&gt;五大黄金经验库 (experiences.jsonl)&lt;br/&gt;多业务分段 / 压测提前15分钟 / 调休节假日豁免 / 同日优选 / 时段重叠消解&lt;/b&gt;&quot;]
+        E2[&quot;&lt;b&gt;双轨成败分支测试 (Fast / Slow Branch Evaluation)&lt;br/&gt;Turn 1 基础参数自包含 → 复用经验 2~3 轮闭环 vs 遗忘经验 4~5 轮纠偏&lt;/b&gt;&quot;]
+    end
+
+    ROOT --&gt; M1
+    ROOT --&gt; M2
+    ROOT --&gt; M3
+
+    style M1 fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;
+    style M2 fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px;
+    style M3 fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px;
+```
 
 ---
 
@@ -988,8 +1408,21 @@
 
 * **单次建立**：用户明确声明的事实、表达映射或偏好，可以通过单次明确表达建立；
 * **多次归纳**：根据历史行为归纳的偏好，需要多次相互独立且一致的历史证据支撑；
-* **事件区别**：一次历史行为只表示某个事件曾经发生，不能直接视为用户的长期偏好；
-* **确认隔离**：严格区分“仅对本次任务的确认”与“可以在未来复用的长期记忆确认”。
+* **事件区别**：一次历史行为只表示某个事件曾经发生（记入工作记忆工单账本），不能直接视为用户的长期偏好；
+* **确认隔离**：严格区分“仅对本次任务的确认（Working Record）”与“可以在未来复用的长期记忆确认（Factual Memory）”。
+
+```mermaid
+graph LR
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+
+    A[&quot;&lt;b&gt;用户交互事件输入&lt;/b&gt;&quot;] --&gt; B{&quot;&lt;b&gt;是否为显式长期声明？&lt;br/&gt;(如“以后默认按此办”)&lt;/b&gt;&quot;}
+    B --&gt;|&quot;&lt;b&gt;是 (Explicit)&lt;/b&gt;&quot;| C[&quot;&lt;b&gt;单次确认直接升级为 Active 事实记忆&lt;/b&gt;&quot;]
+    B --&gt;|&quot;&lt;b&gt;否 (Behavioral)&lt;/b&gt;&quot;| D{&quot;&lt;b&gt;是否跨周期多次独立一致？&lt;/b&gt;&quot;}
+    D --&gt;|&quot;&lt;b&gt;首次出现 (1次)&lt;/b&gt;&quot;| E[&quot;&lt;b&gt;记入 Working Record 工单&lt;br/&gt;事实状态为 Candidate (不直接盲填)&lt;/b&gt;&quot;]
+    D --&gt;|&quot;&lt;b&gt;多次一致确认 (≥2次)&lt;/b&gt;&quot;| F[&quot;&lt;b&gt;由 Candidate 升级为 Active 事实记忆&lt;/b&gt;&quot;]
+    C --&gt; G[&quot;&lt;b&gt;跨会话省略槽位时安全补全&lt;/b&gt;&quot;]
+    F --&gt; G
+```
 
 ### 2. 主要存储对象
 涵盖用户固有属性、个性化表达映射、默认值偏好及纠错记录。
@@ -997,7 +1430,7 @@
 * **用户稳定事实**：套餐权益、用户明确设置的默认值等；
 * **个性化表达映射**：用户表达与标准应用、业务、时间或参数之间的映射；
 * **行为偏好**：根据多次历史行为归纳得到的、具有条件性和概率性的偏好；
-* **历史事件**：某次任务中发生过的行为（本身不等于长期偏好）。
+* **历史事件（工作记忆）**：某次任务中发生过的具体保障工单记录（本身不等于长期偏好，仅供显式跨期指代查询）。
 
 ---
 
@@ -1024,9 +1457,9 @@
 &gt; **证据来源严格分级**：
 &gt; 1. 用户明确声明（例如“以后我说老业务，就是指抖音直播”）；
 &gt; 2. 用户在澄清过程中明确确认表达的含义；
-&gt; 3. 用户纠正 Agent 后得到最终含义；
+&gt; 3. 用户纠正“联接”Agent 后得到最终含义；
 &gt; 4. 多次历史会话形成稳定、一致的表达映射；
-&gt; 5. Agent 根据任务结果推测（未经用户确认，不可作为全局稳定事实）。
+&gt; 5. “联接”Agent 根据任务结果推测（未经用户确认，不可作为全局稳定事实）。
 &gt; 
 &gt; *用户确认本次任务参数，不一定等于确认长期表达映射。例如，用户同意本次将“高清”处理为 1080p，不代表以后“高清”始终等于 1080p。同一个表达对应多个目标取值时，需结合当前条件消歧；条件不足时必须追问。*
 
@@ -1067,6 +1500,8 @@
 | **个性化表达理解** | 应用别名、业务别名、时间表达、参数模糊表达、一对一/一对多映射、表达随时间更新与纠偏 | 未经确认的候选表达、条件不足时必须追问 |
 | **参数缺失补全** | 业务补全应用、应用补全业务、联合补全、时间参数补全、体验参数补全、多参数组合补全 | 排除排斥组合、多个候选概率接近时不补全并追问 |
 | **条件偏好推断** | 单条件/多条件联合、全局偏好、场景偏好、周期偏好、显式偏好与归纳偏好 | 条件不匹配、条件部分匹配但证据不足、多偏好冲突 |
+| **工作记忆跨期复用** | 精确时空指代（“按上周三那次参数办”）、仅复用目标体验参数槽位、不篡改当前日期 | 历史存在多条异构工单候选时必须发起 `Request_Disambiguation` 追问 |
+| **经验记忆主动闭环** | Turn 1 基础参数自包含输入下，主动触发提前 15 分钟预热、多业务分段、法定调休豁免等策略 | 遗忘或忽略历史教训进入 Slow Path，触发用户不满与多轮返工修正 |
 | **记忆更新与冲突** | 记忆巩固、用户纠正、新偏好覆盖旧偏好、撤销偏好、全局偏好细化、临时规律到期 | 显式偏好与行为偏好冲突、用户事实与环境事实冲突、当前明确输入与历史记忆冲突 |
 | **追问决策红线** | 无相关记忆、仅单次偶发行为、证据不足、关键参数必须确认 | 记忆已失效、推断结果违反业务规则或超出套餐权益时必须拒识追问 |
 
@@ -1075,7 +1510,7 @@
 1. **当前明确表达绝对优先**：用户当轮明确表达 &gt; 历史记忆与先验偏好；
 2. **显式声明优先于归纳**：用户显式立规矩 &gt; 历史多轮行为统计归纳；
 3. **环境事实决定合法性**：环境事实决定推断结果当前是否真实、合法且在网络支持白名单内；
-4. **单次事件不等于长期偏好**：历史偶发事件不能自动升级为长期画像；
+4. **单次事件不等于长期偏好**：历史偶发事件（Working Record）不能自动升级为长期画像（Factual Memory）；
 5. **单次任务确认不等于长期确认**：单次工单参数确认不能自动升级为未来通用映射；
 6. **充分必要条件约束**：只有在条件匹配、记忆有效、证据充分且无冲突时方可补全；
 7. **无法唯一确定时必须反问**：存在多个接近候选时，正确决策必须是发起追问消歧，严禁脑补盲猜。
@@ -1083,6 +1518,46 @@
 ---
 
 ## 四、 记忆建模与四层 Ground Truth 映射矩阵
+
+```mermaid
+graph LR
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+
+    subgraph Persona [&quot;&lt;b&gt;原始画像输入 (data/personas/)&lt;/b&gt;&quot;]
+        P1[&quot;&lt;b&gt;static_profile&lt;/b&gt;&quot;]
+        P2[&quot;&lt;b&gt;dynamic_profile&lt;/b&gt;&quot;]
+        P3[&quot;&lt;b&gt;storyline&lt;/b&gt;&quot;]
+    end
+
+    subgraph GT [&quot;&lt;b&gt;四层真值模型 (src/core/gt_builder.py)&lt;/b&gt;&quot;]
+        G1[&quot;&lt;b&gt;Layer 1: static_gt&lt;br/&gt;合法场景池与常用 APP 白名单&lt;/b&gt;&quot;]
+        G2[&quot;&lt;b&gt;Layer 2: conditional_gt&lt;br/&gt;时间规律与场景触发条件&lt;/b&gt;&quot;]
+        G3[&quot;&lt;b&gt;Layer 3: changeable_gt&lt;br/&gt;角色迁移与事件驱动变更&lt;/b&gt;&quot;]
+        G4[&quot;&lt;b&gt;Layer 4: personalization_gt&lt;br/&gt;别名映射 / 体验参数组合 / 应用业务偏好&lt;/b&gt;&quot;]
+    end
+
+    subgraph MT [&quot;&lt;b&gt;评测目标反推 (src/core/mt_selector.py)&lt;/b&gt;&quot;]
+        M1[&quot;&lt;b&gt;个性化表达理解 MT&lt;/b&gt;&quot;]
+        M2[&quot;&lt;b&gt;体验参数与业务补全 MT&lt;/b&gt;&quot;]
+        M3[&quot;&lt;b&gt;时间模式与条件推断 MT&lt;/b&gt;&quot;]
+        M4[&quot;&lt;b&gt;记忆更新与纠偏 MT&lt;/b&gt;&quot;]
+    end
+
+    P1 --&gt; G1
+    P2 --&gt; G2
+    P2 --&gt; G3
+    P2 --&gt; G4
+    P3 --&gt; G3
+    G1 -.-&gt;|&quot;&lt;b&gt;合法性白名单约束&lt;/b&gt;&quot;| MT
+    G4 --&gt; M1
+    G4 --&gt; M2
+    G2 --&gt; M3
+    G3 --&gt; M4
+
+    style Persona fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;
+    style GT fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px;
+    style MT fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px;
+```
 
 | data_design 类别 | 对应 Ground Truth 层 | 对应代码字段 | MT 选择路径 | 语义解释与约束 |
 | :--- | :--- | :--- | :--- | :--- |
@@ -1092,15 +1567,15 @@
 | **体验参数偏好** | `personalization_gt.experience_param_preferences` | `preferred_bundle / fallback_bundle / rejected_values` | $\to$ `preferred_value` / `fallback_value` / `rejected_value` / `multi_param_bundle` / `scope_restriction` | 针对特定应用或业务的首选值、备选值、排斥值、多参数组合 |
 | **记忆更新与冲突处理** | `changeable_gt` | `fact_type: role_change / event_driven_change` | $\to$ `memory_correction` / `preference_change` | 纠正、新偏好覆盖旧偏好、临时规律到期、显式偏好与行为偏好冲突 |
 
-### static_gt 的作用与流转路径
+### `static_gt` 的作用与流转路径
 
 `static_gt` 不直接参与 Memory Targets 选择，其字段通过以下路径在全流水线中流转生效：
 
 | 字段名 | 流水线使用路径 | 核心业务说明 |
 | :--- | :--- | :--- |
-| `static_gt.identity` | `session_generator.py` $\to$ LLM prompt | 用户画像静态身份描述，作为对话生成的背景上下文 |
-| `static_gt.allowed_scenarios` | `timeline_planner.py` $\to$ 场景选择池 | 约束 APP × 业务 × 支持分辨率的合法场景组合 |
-| `static_gt.frequent_apps` | 全流程白名单间接校验 | 常用 APP 标准名列表，用于校验和场景推导合法性 |
+| `static_gt.identity` | `src/generation/dialogue_generator.py` $\to$ LLM Prompt | 用户画像静态身份描述，作为对话生成的背景上下文 |
+| `static_gt.allowed_scenarios` | `src/core/timeline_planner.py` $\to$ 场景选择池 | 约束 APP × 业务 × 支持分辨率的合法场景组合 |
+| `static_gt.frequent_apps` | 全流程白名单间接校验 (`src/core/gt_builder.py`) | 常用 APP 标准名列表，用于校验和场景推导合法性 |
 </textarea>
                 </div>
             </div>
@@ -1148,6 +1623,35 @@
             });
         }
 
+        function copyVisualRaw(btn) {
+            const card = btn.closest('.visual-card');
+            const code = card ? card.querySelector('.visual-raw-hidden code') : null;
+            if (!code) return;
+            navigator.clipboard.writeText(code.innerText).then(() => {
+                const orig = btn.innerText;
+                btn.innerText = '已复制';
+                setTimeout(() => { btn.innerText = orig; }, 1800);
+            });
+        }
+
+        function openMermaidModal(btn) {
+            const wrapper = btn.closest('.mermaid-wrapper');
+            const svg = wrapper ? wrapper.querySelector('svg') : null;
+            if (!svg) return;
+            const modalContent = document.getElementById('mermaid-modal-content');
+            modalContent.innerHTML = svg.outerHTML;
+            const clonedSvg = modalContent.querySelector('svg');
+            if (clonedSvg) {
+                clonedSvg.style.maxWidth = '90vw';
+                clonedSvg.style.height = 'auto';
+            }
+            document.getElementById('mermaid-modal').classList.add('active');
+        }
+
+        function closeMermaidModal() {
+            document.getElementById('mermaid-modal').classList.remove('active');
+        }
+
         function copyLatex(btn) {
             const tex = btn.getAttribute('data-tex');
             if (tex) {
@@ -1193,30 +1697,45 @@
             if (window.mermaid) {
                 mermaid.initialize({
                     startOnLoad: true,
+                    securityLevel: 'loose',
                     theme: 'base',
+                    flowchart: {
+                        htmlLabels: true,
+                        curve: 'basis',
+                        padding: 16
+                    },
+                    sequence: {
+                        useMaxWidth: true,
+                        wrap: true,
+                        actorFontWeight: '700',
+                        messageFontWeight: '700',
+                        noteFontWeight: '700',
+                        boxMargin: 10,
+                        messageMargin: 36
+                    },
                     themeVariables: {
                         background: '#FFFFFF',
                         primaryColor: '#FFFFFF',
-                        primaryTextColor: '#111111',
-                        primaryBorderColor: '#111111',
-                        lineColor: '#111111',
+                        primaryTextColor: '#0F172A',
+                        primaryBorderColor: '#0F172A',
+                        lineColor: '#0F172A',
                         secondaryColor: '#FFFFFF',
                         tertiaryColor: '#FFFFFF',
                         mainBkg: '#FFFFFF',
-                        nodeBorder: '#111111',
+                        nodeBorder: '#0F172A',
                         clusterBkg: '#FFFFFF',
-                        clusterBorder: '#111111',
+                        clusterBorder: '#0F172A',
                         actorBkg: '#FFFFFF',
-                        actorBorder: '#111111',
-                        actorTextColor: '#111111',
-                        signalColor: '#111111',
-                        signalTextColor: '#111111',
+                        actorBorder: '#0F172A',
+                        actorTextColor: '#0F172A',
+                        signalColor: '#0F172A',
+                        signalTextColor: '#0F172A',
                         labelBoxBkgColor: '#FFFFFF',
-                        labelBoxBorderColor: '#111111',
-                        labelTextColor: '#111111',
+                        labelBoxBorderColor: '#0F172A',
+                        labelTextColor: '#0F172A',
                         noteBkgColor: '#FFFFFF',
-                        noteBorderColor: '#111111',
-                        noteTextColor: '#111111'
+                        noteBorderColor: '#0F172A',
+                        noteTextColor: '#0F172A'
                     }
                 });
             }

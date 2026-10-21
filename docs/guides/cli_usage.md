@@ -1,20 +1,34 @@
-# 跨会话长程记忆数据集生成引擎 - 命令行使用手册与架构指南
+# “联接”Agent 跨会话三层认知记忆数据集引擎 — 命令行使用手册与架构指南
 
-本文档汇总了当前数据集生成引擎的所有命令行工具、配置文件规范、自定义原始画像替换指南，以及数据核心字段 `skeleton_signature` 的深度作用解析。
+> **文档层级**：第三层 · 工程运行与操作指南（CLI & Pipeline Operations Guide）  
+> **文档定位**：汇总当前数据集生成引擎（`run.py`）的所有命令行参数、配置文件规范、自定义原始画像替换指南、`skeleton_signature` 拓扑指纹解析以及代码分层职责说明。
 
 ---
 
 ## 一、 快速上手：常用命令行一览
 
+```mermaid
+graph LR
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+    classDef highlight fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+
+    CLI["<b>python run.py<br/>(--input / --output / --start / --count / --offline / --verify / --force)</b>"]:::highlight
+    BP["<b>BatchPipeline 流水线调度<br/>(src/pipeline/batch_pipeline.py)</b>"]
+    QC["<b>QCValidator R1~R14 质检门禁<br/>(src/core/qc_validator.py)</b>"]
+    OUT["<b>四大认知记忆产物落盘<br/>(skeleton / sessions / working_records / experiences)</b>"]
+
+    CLI --> BP --> QC --> OUT
+```
+
 | 目标任务 | 推荐执行命令 | 说明 |
 | :--- | :--- | :--- |
-| **一键批量生成** | `python run.py` | 读取 `config.json` 默认配置执行（默认生成 5 个人物画像） |
-| **按数量生成** | `python run.py --start 0 --count 10` | 从第 0 个画像开始，生成 10 个人物（共 150 个会话） |
-| **更换原始画像** | `python run.py --input data/original/custom.json --count 5` | 指定自定义原始画像池，不修改全局配置 |
-| **更换输出目录** | `python run.py --output data/experiment_v2 --count 5` | 将生成样本保存至指定的新目录 |
-| **全量自动化校验** | `python run.py --verify` | 自动化遍历校验当前输出目录下所有样本的格式与动作完整性 |
-| **校验指定目录** | `python run.py --verify --output data/experiment_v2` | 针对自定义输出目录执行严格 100% 格式验收 |
-| **查看分布统计** | `python scripts/inspect_dataset.py` | 扫描画像骨架，统计显/隐模式与三大触发范式的分布比例 |
+| **一键批量生成标杆认知样本** | `python run.py --input data/personas --output data/cognitive_samples --start 0 --count 5 --verify --force` | 生成 5 个移动核心网标杆画像（每个 16~20 轮会话）并执行 R1~R14 全量质检 |
+| **单画像快速开发调试** | `python run.py --input data/personas --output data/cognitive_samples --start 0 --count 1 --verify --force` | 仅针对第 0 个画像重新生成三层认知记忆样本并立即验收 |
+| **离线确定性极速生成** | `python run.py --input data/personas --output data/cognitive_samples --count 5 --offline --verify --force` | 不依赖外部 LLM API，使用高质量内置模板瞬间生成并验证双轨分支 |
+| **更换原始画像输入源** | `python run.py --input data/original/custom.json --output data/experiment_v2 --count 5` | 指定自定义原始画像池与新输出目录，不修改全局配置 |
+| **独立执行全量自动化质检** | `python run.py --verify --output data/cognitive_samples` | 遍历校验目标输出目录下所有样本的 R1~R14 规则、工单账本与双轨分支完整性 |
+| **查看数据集分布统计** | `python scripts/inspect_dataset.py` | 扫描画像骨架，统计显/隐模式与三大触发范式的分布比例 |
+| **重新生成 HTML 可视化文档** | `python docs/render_html.py` | 将 `docs/` 下所有 Markdown 渲染为高保真交互式 HTML 页面 |
 
 ---
 
@@ -24,12 +38,12 @@
 
 ```json
 {
-  "raw_persona_path": "data/original/mobile_network_personas_500.json",
-  "output_dir": "data/generated",
+  "raw_persona_path": "data/personas/mobile_customer_personas.json",
+  "output_dir": "data/cognitive_samples",
   "batch_size": 5,
   "default_start_idx": 0,
   "default_count": 5,
-  "model": "deepseek-flash",
+  "model": "deepseek-chat",
   "base_url": "https://api.deepseek.com",
   "enable_thinking": false
 }
@@ -37,14 +51,14 @@
 
 ### 字段说明：
 - `raw_persona_path`: 原始人物画像池文件路径。若要永久替换初始画像，修改此项即可。
-- `output_dir`: 生成产物的默认保存目录。
+- `output_dir`: 生成产物的默认保存目录（每个画像生成 `skeleton.json`、`sessions.jsonl`、`working_records.jsonl`、`experiences.jsonl`）。
 - `batch_size`: 对话渲染并发批次大小（默认 5 个会话为一个批次请求，大幅节约 API 往返耗时）。
 - `default_start_idx`: 默认起始画像下标（从 0 开始）。
 - `default_count`: 默认生成的画像数量。
-- `model`: 调用的模型名称（默认为超低成本极速模型 `deepseek-flash`）。
+- `model`: 调用的模型名称。
 - `enable_thinking`: 是否开启深度思考（默认 `false`，生成结构化对话无需 CoT，成本节约 95%）。
 
-> **优先级原则**：命令行参数（如 `--input`, `--output`, `--count`）> `config.json` 配置值 > 代码内部缺省值。
+> **优先级原则**：命令行参数（如 `--input`, `--output`, `--count`, `--offline`, `--force`）> `config.json` 配置值 > 代码内部缺省值。
 
 ---
 
@@ -71,7 +85,7 @@
 ### 2. 执行方式（任选其一）
 - **方式 1：命令行即插即用（无需改配置文件）**
   ```powershell
-  python run.py --input "D:/data/my_new_personas.json" --output "data/my_output" --count 10
+  python run.py --input "D:/data/my_new_personas.json" --output "data/my_output" --count 10 --verify
   ```
 - **方式 2：修改 `config.json` 后直接运行**
   修改 `"raw_persona_path": "D:/data/my_new_personas.json"`，随后执行：
@@ -98,7 +112,7 @@
 
 | 段落切片 | 示例中的值 | 含义解释 |
 | :--- | :--- | :--- |
-| **第 1 段** | `T1-1` 或 `T2-1` | **会话模板协议 ID**（`T1-1` 为 1 轮直达型；`T2-1` 为 2 轮反问确认/记忆引导型；`T2-4` 为 2 轮显式纠正型） |
+| **第 1 段** | `T1-1` 或 `T2-1` | **会话模板协议 ID**（`T1-1` 为 1 轮直达型；`T2-1` 为 2 轮反问确认/记忆引导型；`T2-4` 为双意图并行/分段隔离型） |
 | **第 2 段** | `1` 或 `2` | **交互总轮数（Round Count）** |
 | **第 3 段** | `1` | **包含的意图数量（Intent Count）** |
 | **第 4 段** | `I1:快手/看直播/1/direct/resolved` | **意图核心特征五元组**：<br>• `I1`: 意图编号<br>• `快手`: 目标应用 (`application_name`)<br>• `看直播`: 目标业务 (`service_name`)<br>• `1`: 用户表达层级（1 为简明直接，5 为复杂指代）<br>• `direct` / `memory_filled`: **闭环路径 (`closure_path`)**（`direct` 为单轮直接完整说清；`clarified` 为通过追问填补；`memory_filled` 为借助历史跨会话记忆自动补全；`corrected` 为临时纠正覆盖）<br>• `resolved`: 意图最终达成状态 |
@@ -120,43 +134,48 @@
 
 ## 五、 代码分级架构与模块职责说明
 
-为避免 Prompt、模版定义与业务逻辑互相交织耦合，系统采用清晰的分层解耦架构：
+为避免 Prompt、模版定义与三层认知业务逻辑互相交织耦合，系统采用清晰的分层解耦架构：
 
-```
+```text
 cross_memory_data/
-├── run.py                          # 顶层命令行统一入口
-├── config.json                     # 全局可调参数集中配置文件
+├── run.py                             # 顶层命令行统一入口
+├── config.json                        # 全局可调参数集中配置文件
 ├── src/
-│   ├── config/                     # 【配置层】
-│   │   ├── settings.py             # 全局配置类与环境变量加载 (Config)
+│   ├── config/                        # 【配置层】
+│   │   ├── settings.py                # 全局配置类与环境变量加载 (Config)
 │   │   └── __init__.py
-│   ├── core/                       # 【核心领域状态与质检层】
-│   │   ├── timeline_planner.py     # 15会话动态时间线规划器 (DynamicTimelinePlanner)
-│   │   ├── memory_tracker.py       # 跨会话记忆演进追踪器与状态机 (MemoryTracker)
-│   │   ├── qc_validator.py         # 100% 规则验证器 (QCValidator)
+│   ├── core/                          # 【三层认知记忆引擎与质检层】
+│   │   ├── persona_StoryExtractor.py  # 画像故事线提取与增强器
+│   │   ├── gt_builder.py              # 四层 Ground Truth 构建器
+│   │   ├── mt_selector.py             # 评测目标 (Memory Targets) 反推器
+│   │   ├── timeline_planner.py        # 16~20 会话动态时间线规划器 (DynamicTimelinePlanner)
+│   │   ├── memory_tracker.py          # 事实记忆演进追踪器与状态机 (MemoryEngine)
+│   │   ├── working_records_ledger.py  # 独立历史保障工单账本 (WorkingRecordsLedger)
+│   │   ├── experience_bank.py         # 五大黄金经验策略库 (ExperienceBank)
+│   │   ├── qc_validator.py            # R1~R14 全量规则验证器 (QCValidator)
 │   │   └── __init__.py
-│   ├── generation/                 # 【生成与装配引擎】
-│   │   ├── llm_client.py           # DeepSeek 客户端、Token计费与重试机制 (LLMClient)
-│   │   ├── persona_generator.py    # 画像骨架扩充生成器 (PersonaGenerator)
-│   │   ├── dialogue_generator.py   # 对话批量渲染引擎 (DialogueGenerator)
-│   │   ├── session_assembler.py    # 8 大模版数据装配器 (SessionAssembler)
+│   ├── generation/                    # 【双轨对话生成与装配引擎】
+│   │   ├── llm_client.py              # LLM 客户端、Token 计费与重试机制 (LLMClient)
+│   │   ├── persona_generator.py       # 画像骨架扩充生成器 (PersonaGenerator)
+│   │   ├── dialogue_generator.py      # 受控对话与 Fast/Slow 分支渲染引擎 (DialogueGenerator)
+│   │   ├── session_assembler.py       # 四元溯源与双轨评测数据装配器 (SessionAssembler)
 │   │   └── __init__.py
-│   ├── pipeline/                   # 【流水线调度层】
-│   │   ├── batch_pipeline.py       # 自动化流水线调度与检查点控制 (BatchPipeline)
+│   ├── pipeline/                      # 【流水线调度层】
+│   │   ├── batch_pipeline.py          # 自动化流水线调度、账本持久化与断点续传 (BatchPipeline)
 │   │   └── __init__.py
-│   └── templates/                  # 【模版与 Prompt 独立层（解耦抽离）】
-│       ├── timeline_blueprints.py  # 15 会话生命周期序列蓝图配置模版
-│       └── prompts/                # 纯净 Prompt 与兜底台词库
-│           ├── persona_prompts.py  # 画像骨架扩充 Prompt 模版
-│           ├── dialogue_prompts.py # 批量与单会话台词渲染 Prompt 模版
-│           ├── dialogue_fallbacks.py# 各模版确定性兜底台词与动作规范
+│   └── templates/                     # 【模版与 Prompt 独立层（解耦抽离）】
+│       ├── timeline_blueprints.py     # 16~20 会话生命周期序列蓝图配置模版
+│       └── prompts/                   # 纯净 Prompt 与确定性兜底台词库
+│           ├── persona_prompts.py     # 画像骨架扩充 Prompt 模版
+│           ├── dialogue_prompts.py    # 批量、单会话与双轨经验分支 Prompt 模版
+│           ├── dialogue_fallbacks.py  # 各角色与五大黄金经验确定性兜底台词库
 │           └── __init__.py
 ```
 
 ### 核心解耦优势：
-1. **Prompt 纯净维护**：所有向大模型发送的指令、规则和 JSON Schema 集中在 `src/templates/prompts/` 中，调优台词或微调语气无需改动任何生成逻辑。
-2. **模版装配隔离**：8 大模版（`T2-4`, `T2-2`, `T2-1`, `T1-2`, `T2-5`, `X-1`, `T2-3`, `T1-1`）的标准 JSON 结构与槽位流转逻辑全部封装在 `SessionAssembler` 中，新增或变更模版不影响渲染器。
-3. **100% 平滑向下兼容**：顶层 `src/` 提供了兼容性 Facade 引用，现有外部工具脚本无需修改即可直接使用。
+1. **三层认知记忆正交隔离**：`MemoryEngine`（事实）、`WorkingRecordsLedger`（工作工单）与 `ExperienceBank`（五大经验）在 `src/core/` 中各自拥有独立状态机与持久化文件，互不污染。
+2. **Prompt 与兜底台词纯净维护**：所有向大模型发送的指令、Turn 1 自包含约束与双轨分支模板集中在 `src/templates/prompts/` 中，调优台词无需改动核心管线。
+3. **R1~R14 硬性门禁拦截**：`src/core/qc_validator.py` 对时序递增、冷启动零脑补、工单引用存在性、双轨轮数压缩（$T_{\text{fast}} < T_{\text{slow}}$）与零枚举泄漏执行 100% 强校验。
 
 ---
 

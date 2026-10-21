@@ -1,15 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-跨会话长程认知记忆数据集文档中心 HTML 渲染引擎 (docs/render_html.py)
-----------------------------------------------------------------------
-功能特性：
-  1. 自动扫描并渲染 docs/ 下全量 Markdown 文档（含根目录、specs/、guides/、archive/）
-  2. 双主题支持：Parchment（米纸学术）与 Twilight（暮色极简）一键切换
-  3. 跨文档全局门户导航：支持在所有 HTML 文档间无缝跳转，自动重写内部 .md 链接为 .html
-  4. Mermaid 图表规范强化：严格遵循纯白底色 (#FFFFFF)、全量粗体文字、2px~2.5px 加粗线条
-  5. KaTeX 数学公式渲染：支持块级公式 ($$...$$) 一键复制 LaTeX 与行内公式 ($...$) 安全隔离渲染
-  6. 专属视图支持：defect_triage_log.md 支持分栏对比卡片 + 分类筛选 + 实时检索视图；所有文档均支持阅读视图与 Markdown 源码视图切换
+“联接”Agent 跨会话三层认知记忆数据集文档中心 HTML 可视化渲染引擎 (docs/render_html.py)
+--------------------------------------------------------------------------------------
+核心特性：
+  1. 四层架构全景导航：侧边栏按“总览 → 业务要求 → 核心架构 → 工程规范 → 演进归档”逻辑分层组织
+  2. Mermaid 图表 100% 规范化与无损渲染：
+     - 严格遵循 GEMINI.md：纯白底色 (#FFFFFF)、全量粗体文字、2px~2.5px 加粗线条
+     - 开启 securityLevel: 'loose' 与 htmlLabels: true，完美解析 <b> 与 <br/>
+     - 自动处理 sequenceDiagram SVG 文本粗体渲染，支持点击放大全屏预览
+  3. Markdown 内容全量可视化增强：
+     - 目录树代码块 (├── / └──) 自动转化为交互式可视化文件树卡片 (Visual File Tree)
+     - 对话示例块 (Turn / User / Agent) 自动转化为可视化气泡对话模拟卡 (Visual Dialogue Card)
+     - 结构化示例/映射块 (MT_001 / static_gt / 示例) 自动转化为高亮键值卡片 (Visual Spec Card)
+     - 块级与行内 KaTeX 数学公式渲染 + 一键复制 LaTeX
+     - 原生 HTML 路线图网格 (.roadmap-grid) 完整支持
 """
 
 import sys
@@ -21,28 +26,215 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
 
-DOCS_PORTAL_ITEMS = [
-    ("README.html", "文档中心总览 (README)"),
-    ("specs/cognitive_memory_dev_spec.html", "三层认知记忆与双轨评测规范"),
-    ("跨 Session 记忆数据集生成器思路.html", "跨 Session 生成器总体设计"),
-    ("记忆建模与数据集生成要求.html", "记忆建模与生成要求"),
-    ("specs/persona_spec.html", "Persona 画像建模规范"),
-    ("guides/cli_usage.html", "CLI 命令行与流水线指南"),
-    ("archive/defect_triage_log.html", "001~150 批次缺陷治理实录"),
-    ("archive/memory_evolution_proposal.html", "认知架构演进提案 (RFC)"),
+DOCS_PORTAL_GROUPS = [
+    (
+        "总览与阅读路线",
+        [
+            ("README.html", "文档中心总览与路线图"),
+        ],
+    ),
+    (
+        "第一层 · 业务与建模要求",
+        [
+            ("记忆建模与数据集生成要求.html", "记忆建模与生成要求"),
+        ],
+    ),
+    (
+        "第二层 · 核心架构与流水线",
+        [
+            ("specs/cognitive_memory_dev_spec.html", "三层认知记忆与双轨评测总纲"),
+            ("跨 Session 记忆数据集生成器思路.html", "跨 Session 生成流水线详设"),
+        ],
+    ),
+    (
+        "第三层 · 输入规范与操作",
+        [
+            ("specs/persona_spec.html", "Persona 画像与故事线规范"),
+            ("guides/cli_usage.html", "CLI 命令行与流水线指南"),
+        ],
+    ),
+    (
+        "第四层 · 理论与治理归档",
+        [
+            ("archive/memory_evolution_proposal.html", "三层认知演进立项提案 (RFC)"),
+            ("archive/defect_triage_log.html", "001~150 批次缺陷治理实录"),
+        ],
+    ),
 ]
 
 
 def build_portal_links_html(rel_prefix: str, current_rel_html: str) -> str:
-    links = []
+    parts = []
     norm_curr = current_rel_html.replace("\\", "/")
-    for href, label in DOCS_PORTAL_ITEMS:
-        active_cls = " active" if href == norm_curr else ""
-        full_href = f"{rel_prefix}{href}"
-        links.append(
-            f'<a href="{full_href}" class="portal-nav-item{active_cls}" title="{html.escape(label)}">{html.escape(label)}</a>'
+    for group_title, items in DOCS_PORTAL_GROUPS:
+        parts.append(f'<div class="portal-group-label">{html.escape(group_title)}</div>')
+        for href, label in items:
+            active_cls = " active" if href == norm_curr else ""
+            full_href = f"{rel_prefix}{href}"
+            parts.append(
+                f'<a href="{full_href}" class="portal-nav-item{active_cls}" title="{html.escape(label)}">{html.escape(label)}</a>'
+            )
+    return "\n".join(parts)
+
+
+def prepare_mermaid_code(raw_code: str) -> str:
+    """
+    预处理 Mermaid 源码以消除浏览器端渲染问题：
+    - 对于 sequenceDiagram：Mermaid v10 使用 SVG <text> 渲染参与者与消息标签，
+      若包含字面量 <b>...</b> 会直接显示标签字符，因此移除字面量 <b>/</b>，
+      统一由 Mermaid sequence 配置 + CSS font-weight: 700 !important 保证全量粗体。
+    - 对于 graph / flowchart：保留 <b> 与 <br/>，配合 securityLevel: 'loose' 与 htmlLabels: true 渲染。
+    """
+    code = raw_code.strip()
+    first_line = code.splitlines()[0].strip() if code else ""
+    if first_line.startswith("sequenceDiagram"):
+        code = re.sub(r"</?b>", "", code, flags=re.IGNORECASE)
+    return html.escape(code, quote=False)
+
+
+def render_visual_tree_block(raw_code: str) -> str:
+    """将包含 ├── / └── 的目录树或流程树代码块渲染为可视化文件树组件"""
+    lines = raw_code.strip().splitlines()
+    rows_html = []
+    for line in lines:
+        if not line.strip():
+            continue
+        # 切分注释 (# 或 ←)
+        comment = ""
+        main_part = line
+        if " # " in line:
+            main_part, comment = line.split(" # ", 1)
+            comment = "# " + comment.strip()
+        elif " ← " in line:
+            main_part, comment = line.split(" ← ", 1)
+            comment = "← " + comment.strip()
+
+        # 识别前缀缩进与树枝符号
+        m = re.match(r"^([\s│├└─┬┼]*)(.*)$", main_part)
+        prefix = m.group(1) if m else ""
+        node_text = m.group(2).strip() if m else main_part.strip()
+
+        if not node_text:
+            rows_html.append(
+                f'<div class="vtree-row vtree-guide-only"><span class="vtree-Branch">{html.escape(prefix)}</span></div>'
+            )
+            continue
+
+        is_dir = node_text.endswith("/") or (not prefix and ("/" in node_text or "." not in node_text))
+        icon = "📁" if is_dir else ("🐍" if node_text.endswith(".py") else ("📋" if node_text.endswith((".json", ".jsonl")) else "📄"))
+        node_cls = "vtree-dir" if is_dir else "vtree-file"
+
+        comment_html = f'<span class="vtree-comment">{html.escape(comment)}</span>' if comment else ""
+        rows_html.append(
+            f"""<div class="vtree-row">
+                <span class="vtree-branch">{html.escape(prefix)}</span>
+                <span class="vtree-icon">{icon}</span>
+                <span class="vtree-name {node_cls}">{html.escape(node_text)}</span>
+                {comment_html}
+            </div>"""
         )
-    return "\n".join(links)
+
+    return f"""
+    <div class="visual-card visual-tree-card">
+        <div class="visual-card-header">
+            <span class="visual-card-badge">🗂️ 结构化目录与模块树视图</span>
+            <button class="code-copy-btn" onclick="copyVisualRaw(this)">复制文本</button>
+        </div>
+        <div class="vtree-body">
+            {''.join(rows_html)}
+        </div>
+        <pre class="visual-raw-hidden" style="display:none;"><code>{html.escape(raw_code)}</code></pre>
+    </div>
+    """
+
+
+def render_visual_dialogue_block(raw_code: str) -> str:
+    """将包含 User: / Agent: / Turn N: 的代码块转化为可视化对话气泡模拟卡片"""
+    lines = raw_code.strip().splitlines()
+    items_html = []
+    for line in lines:
+        s = line.strip()
+        if not s:
+            continue
+        if re.match(r"^(Turn\s*\d+|evidence_session|reinforcement_session)", s, re.IGNORECASE):
+            items_html.append(f'<div class="vdialog-turn-divider">{html.escape(s)}</div>')
+        elif s.startswith("User:"):
+            msg = s[5:].strip()
+            note = ""
+            if "←" in msg:
+                msg, note = msg.split("←", 1)
+                note = f'<span class="vdialog-note">← {html.escape(note.strip())}</span>'
+            items_html.append(
+                f"""<div class="vdialog-row vdialog-user">
+                    <div class="vdialog-avatar">👤 用户</div>
+                    <div class="vdialog-bubble">{html.escape(msg.strip())} {note}</div>
+                </div>"""
+            )
+        elif s.startswith("Agent:"):
+            msg = s[6:].strip()
+            note = ""
+            if "←" in msg:
+                msg, note = msg.split("←", 1)
+                note = f'<span class="vdialog-note">← {html.escape(note.strip())}</span>'
+            items_html.append(
+                f"""<div class="vdialog-row vdialog-agent">
+                    <div class="vdialog-avatar">🤖 “联接”Agent</div>
+                    <div class="vdialog-bubble">{html.escape(msg.strip())} {note}</div>
+                </div>"""
+            )
+        elif "action_types:" in s or s.startswith("→"):
+            items_html.append(f'<div class="vdialog-meta">{html.escape(s)}</div>')
+        else:
+            items_html.append(f'<div class="vdialog-meta">{html.escape(s)}</div>')
+
+    return f"""
+    <div class="visual-card visual-dialogue-card">
+        <div class="visual-card-header">
+            <span class="visual-card-badge">💬 多轮交互与动作标注模拟视图</span>
+            <button class="code-copy-btn" onclick="copyVisualRaw(this)">复制源码</button>
+        </div>
+        <div class="vdialog-body">
+            {''.join(items_html)}
+        </div>
+        <pre class="visual-raw-hidden" style="display:none;"><code>{html.escape(raw_code)}</code></pre>
+    </div>
+    """
+
+
+def render_visual_spec_block(raw_code: str, disp_lang: str) -> str:
+    """将无语言标记的结构化规则/示例文本渲染为带高亮键值与徽章的可视化卡片"""
+    lines = raw_code.strip().splitlines()
+    rows_html = []
+    for line in lines:
+        if not line.strip():
+            rows_html.append('<div class="vspec-spacer"></div>')
+            continue
+        esc = html.escape(line)
+        # 高亮 ✅ / ❌
+        esc = esc.replace("✅", '<span class="vspec-badge-good">✅ 推荐</span>')
+        esc = esc.replace("❌", '<span class="vspec-badge-bad">❌ 禁止</span>')
+        # 高亮箭头
+        esc = re.sub(r"(--&gt;|→|←|↓)", r'<span class="vspec-arrow">\1</span>', esc)
+        # 高亮行首 Key:
+        esc = re.sub(
+            r"^(\s*)([A-Za-z0-9_\u4e00-\u9fa5\-\(\)（）]+)(:|：)",
+            r'\1<span class="vspec-key">\2\3</span>',
+            esc,
+        )
+        rows_html.append(f'<div class="vspec-line">{esc}</div>')
+
+    return f"""
+    <div class="visual-card visual-spec-card">
+        <div class="visual-card-header">
+            <span class="visual-card-badge">📌 结构化规则与示例视图 ({html.escape(disp_lang)})</span>
+            <button class="code-copy-btn" onclick="copyVisualRaw(this)">复制内容</button>
+        </div>
+        <div class="vspec-body">
+            {''.join(rows_html)}
+        </div>
+        <pre class="visual-raw-hidden" style="display:none;"><code>{html.escape(raw_code)}</code></pre>
+    </div>
+    """
 
 
 def format_inline_markdown(text: str) -> str:
@@ -72,7 +264,7 @@ def format_inline_markdown(text: str) -> str:
 
     text = re.sub(r"`([^`]+)`", repl_code, text)
 
-    # 2. 保护行内块级公式 $$...$$ 与行内公式 $...$ (避免匹配货币或空 $)
+    # 2. 保护行内块级公式 $$...$$ 与行内公式 $...$
     def repl_display_math(m):
         tex = m.group(1).strip()
         if not tex:
@@ -97,7 +289,6 @@ def format_inline_markdown(text: str) -> str:
     def repl_link(m):
         label = m.group(1)
         href = m.group(2).strip()
-        # 将指向本地 .md 的链接自动转为 .html
         if not href.startswith(("http://", "https://", "mailto:", "#")):
             if ".md#" in href:
                 href = href.replace(".md#", ".html#")
@@ -242,6 +433,21 @@ def render_triage_card_page(md_path: Path, html_path: Path, docs_root: Path):
     depth = len(html_path.relative_to(docs_root).parts) - 1
     rel_prefix = "../" * depth
     portal_links_html = build_portal_links_html(rel_prefix, rel_html)
+
+    # 提取顶部的 Mermaid 全景闭环图
+    top_mermaid_html = ""
+    top_m = re.search(r"```mermaid\n(.*?)```", md_text[:2500], re.DOTALL)
+    if top_m:
+        m_code = prepare_mermaid_code(top_m.group(1))
+        top_mermaid_html = f"""
+        <div class="mermaid-wrapper">
+            <div class="mermaid-toolbar">
+                <span class="mermaid-badge">📊 缺陷根因分类与 R1~R14 门禁拦截闭环全景图</span>
+                <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 点击放大全屏查看</button>
+            </div>
+            <pre class="mermaid">{m_code}</pre>
+        </div>
+        """
 
     sections = re.split(r"\n##\s+", md_text)
     cards = []
@@ -391,6 +597,7 @@ def render_triage_card_page(md_path: Path, html_path: Path, docs_root: Path):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>跨会话长程记忆数据集：生成问题排查与数据治理实录</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <style>
         :root[data-theme="parchment"] {{
             --bg-color: #f7f4ec;
@@ -407,15 +614,6 @@ def render_triage_card_page(md_path: Path, html_path: Path, docs_root: Path):
             --code-text: #8d3a2b;
             --pre-bg: #ece5d6;
             --pre-text: #2d3748;
-            --callout-note-bg: #e5ede3;
-            --callout-note-border: #709775;
-            --callout-note-text: #2b5133;
-            --callout-warn-bg: #f5eedb;
-            --callout-warn-border: #c48a37;
-            --callout-warn-text: #704b12;
-            --callout-imp-bg: #e5eaf5;
-            --callout-imp-border: #5c7cb6;
-            --callout-imp-text: #1e3863;
             --contrast-bad-bg: #fae8e5;
             --contrast-bad-border: #e8b0a5;
             --contrast-bad-text: #a83220;
@@ -446,277 +644,226 @@ def render_triage_card_page(md_path: Path, html_path: Path, docs_root: Path):
             --code-text: #f08d70;
             --pre-bg: #171b21;
             --pre-text: #cdd3dc;
-            --callout-note-bg: #202b28;
-            --callout-note-border: #4d7a68;
-            --callout-note-text: #8bbfa8;
-            --callout-warn-bg: #2b251d;
-            --callout-warn-border: #8a6c38;
-            --callout-warn-text: #d9b168;
-            --callout-imp-bg: #1d2533;
-            --callout-imp-border: #4a638c;
-            --callout-imp-text: #96b5e3;
-            --contrast-bad-bg: #2d1e20;
-            --contrast-bad-border: #5c3035;
-            --contrast-bad-text: #f07167;
-            --contrast-good-bg: #1c2b22;
-            --contrast-good-border: #355e42;
-            --contrast-good-text: #70c48a;
+            --contrast-bad-bg: #2d1e1e;
+            --contrast-bad-border: #6e3531;
+            --contrast-bad-text: #f29b91;
+            --contrast-good-bg: #1d2b22;
+            --contrast-good-border: #366342;
+            --contrast-good-text: #8ed19e;
             --table-header: #262e38;
             --table-alt: #1f242c;
             --tag-bg: #323c48;
             --tag-text: #d2a679;
             --toggle-bg: #323b47;
-            --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
-            --card-hover-shadow: 0 8px 24px rgba(224, 159, 103, 0.12);
+            --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+            --card-hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
         }}
 
         * {{ box-sizing: border-box; margin: 0; padding: 0; }}
         html {{ scroll-behavior: smooth; }}
         body {{
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
             background-color: var(--bg-color);
             color: var(--text-primary);
-            line-height: 1.8;
-            padding: 24px 16px;
+            line-height: 1.72;
             font-size: 15px;
         }}
-        .layout-wrapper {{
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            max-width: 1420px;
-            margin: 0 auto;
-            gap: 28px;
-        }}
+        .layout-wrapper {{ display: flex; min-height: 100vh; }}
         .sidebar-toc {{
             width: 310px;
-            flex-shrink: 0;
-            position: sticky;
-            top: 20px;
-            max-height: calc(100vh - 40px);
-            display: flex;
-            flex-direction: column;
-        }}
-        .toc-card {{
             background-color: var(--surface-color);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px 14px;
-            display: flex;
-            flex-direction: column;
-            max-height: calc(100vh - 40px);
-            box-shadow: var(--card-shadow);
+            border-right: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding: 18px 14px;
+            flex-shrink: 0;
+            overflow-y: auto;
         }}
         .portal-nav-box {{
-            margin-bottom: 12px;
-            padding-bottom: 10px;
+            margin-bottom: 14px;
+            padding-bottom: 12px;
             border-bottom: 1px solid var(--border-color);
         }}
         .portal-nav-title {{
             font-size: 0.76rem;
-            font-weight: 700;
+            font-weight: 800;
             color: var(--accent-primary);
             margin-bottom: 6px;
             letter-spacing: 0.04em;
         }}
-        .portal-nav-list {{
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
+        .portal-group-label {{
+            font-size: 0.71rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin: 8px 0 3px 4px;
         }}
+        .portal-nav-list {{ display: flex; flex-direction: column; gap: 2px; }}
         .portal-nav-item {{
             display: block;
             padding: 4px 8px;
-            font-size: 0.8rem;
+            font-size: 0.80rem;
             color: var(--text-secondary);
             text-decoration: none;
             border-radius: 5px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
         }}
-        .portal-nav-item:hover {{
-            background: var(--surface-elevated);
-            color: var(--accent-primary);
-        }}
+        .portal-nav-item:hover {{ background-color: var(--surface-elevated); color: var(--accent-primary); }}
         .portal-nav-item.active {{
-            background: var(--accent-glow);
+            background-color: var(--accent-glow);
             color: var(--accent-primary);
             font-weight: 700;
             border-left: 3px solid var(--accent-primary);
         }}
         .toc-header {{
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            padding-bottom: 10px;
-            margin-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+            margin-bottom: 8px;
         }}
-        .toc-title {{ font-size: 0.92rem; font-weight: 700; }}
-        .toc-action-btn {{
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            padding: 4px;
-        }}
-        .search-box {{ margin-bottom: 10px; }}
+        .toc-title {{ font-size: 0.86rem; font-weight: 700; }}
+        .toc-action-btn {{ background: none; border: none; cursor: pointer; color: var(--text-muted); }}
+        .search-box {{ margin-bottom: 8px; }}
         .search-input {{
             width: 100%;
-            padding: 7px 10px;
+            padding: 6px 10px;
             border-radius: 6px;
             border: 1px solid var(--border-color);
             background: var(--bg-color);
-            font-size: 0.83rem;
             color: var(--text-primary);
+            font-size: 0.82rem;
         }}
-        .category-pills {{
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
-        }}
+        .category-pills {{ display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }}
         .cat-pill {{
-            background: var(--tag-bg);
-            color: var(--tag-text);
-            border: none;
             padding: 3px 8px;
-            border-radius: 5px;
             font-size: 0.74rem;
-            font-weight: 600;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-color);
+            color: var(--text-secondary);
             cursor: pointer;
         }}
-        .cat-pill.active {{
-            background: var(--accent-primary);
-            color: #ffffff;
-        }}
-        .toc-body {{ overflow-y: auto; flex: 1; padding-right: 4px; }}
-        .toc-group-title {{
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--accent-primary);
-            margin: 8px 0 4px 6px;
-        }}
+        .cat-pill.active {{ background: var(--accent-primary); color: #fff; border-color: var(--accent-primary); }}
+        .toc-group-title {{ font-size: 0.75rem; font-weight: 700; color: var(--accent-primary); margin: 10px 0 4px; }}
         .toc-list {{ list-style: none; }}
-        .toc-item {{ margin: 2px 0; }}
         .toc-link {{
             display: block;
-            padding: 4px 8px;
+            padding: 3px 6px;
+            font-size: 0.79rem;
             color: var(--text-secondary);
             text-decoration: none;
-            font-size: 0.81rem;
-            border-radius: 5px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            border-radius: 4px;
         }}
-        .toc-link:hover, .toc-link.active {{
-            color: var(--accent-primary);
-            background: var(--accent-glow);
-        }}
-        body.toc-collapsed .sidebar-toc {{ display: none; }}
-        body.toc-collapsed #expandTocBtn {{ display: inline-flex !important; }}
-        .main-content {{ flex: 1; min-width: 0; max-width: 1040px; }}
+        .toc-link:hover {{ background: var(--surface-elevated); color: var(--accent-primary); }}
+        .main-content {{ flex: 1; padding: 28px 42px 80px; max-width: 1180px; margin: 0 auto; overflow-x: hidden; }}
         .top-bar {{
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
             flex-wrap: wrap;
             gap: 10px;
         }}
-        .nav-links {{ display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }}
-        .nav-btn {{
-            background-color: var(--surface-color);
-            color: var(--text-secondary);
-            border: 1px solid var(--border-color);
+        .nav-links {{ display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }}
+        .nav-btn, .theme-switch-btn {{
             padding: 5px 12px;
             border-radius: 6px;
-            font-size: 0.83rem;
-            text-decoration: none;
-            cursor: pointer;
-        }}
-        .nav-btn:hover, .nav-btn.active {{
-            background: var(--accent-primary);
-            color: #ffffff;
-            border-color: var(--accent-primary);
-        }}
-        .theme-switch-btn {{
-            background-color: var(--toggle-bg);
-            color: var(--text-primary);
             border: 1px solid var(--border-color);
-            padding: 6px 14px;
-            border-radius: 20px;
+            background: var(--surface-color);
+            color: var(--text-primary);
             font-size: 0.83rem;
             cursor: pointer;
-            font-weight: 600;
+            text-decoration: none;
         }}
-        header.doc-header {{
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 22px;
-            margin-bottom: 28px;
+        .nav-btn.active {{ background: var(--accent-primary); color: #fff; border-color: var(--accent-primary); }}
+        .doc-header {{
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
         }}
         .header-tag {{
             display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
             background: var(--tag-bg);
             color: var(--tag-text);
-            font-size: 0.78rem;
-            font-weight: 650;
-            padding: 3px 10px;
-            border-radius: 4px;
-            margin-bottom: 10px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            margin-bottom: 8px;
         }}
-        h1.doc-title {{ font-size: 1.9rem; margin-bottom: 10px; }}
-        .doc-lead {{ font-size: 0.93rem; color: var(--text-secondary); margin-bottom: 16px; }}
-        .md-link {{ color: var(--accent-primary); text-decoration: underline; font-weight: 600; }}
+        .doc-title {{ font-size: 1.65rem; font-weight: 800; margin-bottom: 8px; }}
+        .doc-lead {{ color: var(--text-secondary); font-size: 0.92rem; margin-bottom: 16px; }}
+        .md-link {{ color: var(--accent-primary); font-weight: 700; text-decoration: underline; }}
         .header-meta-grid {{
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
         }}
         .meta-stat-card {{
-            background-color: var(--surface-color);
+            background: var(--bg-color);
             border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 10px 14px;
         }}
-        .meta-stat-label {{ font-size: 0.74rem; color: var(--text-muted); }}
-        .meta-stat-val {{ font-size: 1.02rem; font-weight: 700; color: var(--accent-primary); }}
-        .column-section-header {{
-            margin: 34px 0 18px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid var(--border-color);
+        .meta-stat-label {{ font-size: 0.75rem; color: var(--text-muted); }}
+        .meta-stat-val {{ font-size: 1.05rem; font-weight: 800; }}
+        .mermaid-wrapper {{
+            margin: 18px 0 26px;
+            padding: 16px 20px 22px;
+            background-color: #FFFFFF !important;
+            border: 2.5px solid #0F172A;
+            border-radius: 10px;
+            overflow-x: auto;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+        }}
+        .mermaid-toolbar {{
             display: flex;
-            align-items: baseline;
-            gap: 12px;
-            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #E2E8F0;
         }}
-        .column-section-header h2 {{
-            font-size: 1.35rem;
-            border-left: 4px solid var(--accent-primary);
-            padding-left: 10px;
+        .mermaid-badge {{ font-size: 0.78rem; font-weight: 800; color: #0F172A; }}
+        .mermaid-zoom-btn {{
+            background: #F8FAFC;
+            border: 1.5px solid #0F172A;
+            color: #0F172A;
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 6px;
+            cursor: pointer;
         }}
-        .column-section-desc {{ font-size: 0.83rem; color: var(--text-muted); }}
+        .mermaid {{ background: #FFFFFF !important; font-weight: 700 !important; }}
+        .mermaid svg text, .mermaid svg span, .mermaid svg .nodeLabel, .mermaid svg .edgeLabel {{
+            font-weight: 700 !important;
+            color: #0F172A !important;
+            fill: #0F172A !important;
+        }}
+        .column-section {{ margin-bottom: 32px; }}
+        .column-section-header {{ margin-bottom: 14px; border-left: 4px solid var(--accent-primary); padding-left: 12px; }}
+        .column-section-desc {{ font-size: 0.84rem; color: var(--text-muted); }}
         .issue-card {{
-            background-color: var(--surface-color);
+            background: var(--surface-color);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px 22px;
-            margin-bottom: 22px;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 18px;
             box-shadow: var(--card-shadow);
         }}
         .issue-header {{
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
             margin-bottom: 12px;
-            border-bottom: 1px solid var(--border-color);
             padding-bottom: 10px;
-            flex-wrap: wrap;
-            gap: 8px;
+            border-bottom: 1px solid var(--border-color);
         }}
         .issue-title-group {{ display: flex; align-items: center; gap: 10px; }}
         .issue-num {{
@@ -726,149 +873,97 @@ def render_triage_card_page(md_path: Path, html_path: Path, docs_root: Path):
             width: 26px;
             height: 26px;
             border-radius: 50%;
-            background: var(--surface-elevated);
-            color: var(--accent-primary);
+            background: var(--accent-primary);
+            color: #fff;
+            font-weight: 800;
             font-size: 0.82rem;
-            font-weight: 700;
+            flex-shrink: 0;
         }}
-        .issue-header h2 {{ font-size: 1.08rem; font-weight: 650; }}
-        .issue-tag-group {{ display: flex; gap: 6px; align-items: center; }}
-        .issue-cat-badge {{ font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; font-weight: 650; }}
-        .badge-arch {{ background: var(--callout-imp-bg); color: var(--callout-imp-text); border: 1px solid var(--callout-imp-border); }}
-        .badge-gov {{ background: var(--callout-warn-bg); color: var(--callout-warn-text); border: 1px solid var(--callout-warn-border); }}
-        .badge-bug {{ background: var(--callout-note-bg); color: var(--callout-note-text); border: 1px solid var(--callout-note-border); }}
-        .issue-date-tag {{
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            background: var(--surface-elevated);
-            border: 1px solid var(--border-color);
+        .issue-header h2 {{ font-size: 1.08rem; font-weight: 700; }}
+        .issue-tag-group {{ display: flex; gap: 6px; flex-shrink: 0; }}
+        .issue-cat-badge, .issue-date-tag {{
             padding: 2px 8px;
             border-radius: 4px;
+            font-size: 0.74rem;
+            font-weight: 700;
+            background: var(--tag-bg);
+            color: var(--tag-text);
         }}
         .desc-block {{ margin-bottom: 14px; font-size: 0.91rem; }}
-        .section-sublabel {{ font-weight: 700; color: var(--accent-primary); margin: 12px 0 6px; }}
-        .bullet-item {{ display: flex; gap: 8px; margin-bottom: 6px; }}
-        .bullet-prefix {{ color: var(--accent-primary); font-weight: 700; }}
-        code {{
-            font-family: "JetBrains Mono", Consolas, monospace;
-            background-color: var(--code-bg);
-            color: var(--code-text);
-            padding: 2px 5px;
-            border-radius: 4px;
-            font-size: 0.87em;
-        }}
-        .contrast-grid {{
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            margin-top: 12px;
-        }}
-        @media (max-width: 960px) {{
-            .contrast-grid {{ grid-template-columns: 1fr; }}
-            .sidebar-toc {{ display: none; }}
-        }}
-        .contrast-box {{ border-radius: 8px; padding: 12px 14px; font-size: 0.84rem; min-width: 0; }}
-        .contrast-box.bad {{ background: var(--contrast-bad-bg); border: 1px solid var(--contrast-bad-border); }}
-        .contrast-box.good {{ background: var(--contrast-good-bg); border: 1px solid var(--contrast-good-border); }}
-        .contrast-header {{ display: flex; justify-content: space-between; margin-bottom: 8px; }}
-        .contrast-pill-bad {{
-            background: var(--contrast-bad-border);
-            color: var(--contrast-bad-text);
-            font-size: 0.72rem;
+        .section-sublabel {{
             font-weight: 700;
-            padding: 1px 6px;
-            border-radius: 4px;
-            margin-right: 5px;
+            color: var(--accent-primary);
+            margin: 10px 0 4px;
+            font-size: 0.86rem;
         }}
-        .contrast-pill-good {{
-            background: var(--contrast-good-border);
-            color: var(--contrast-good-text);
-            font-size: 0.72rem;
-            font-weight: 700;
-            padding: 1px 6px;
-            border-radius: 4px;
-            margin-right: 5px;
-        }}
-        .code-block {{
-            background: var(--pre-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            overflow: hidden;
-        }}
-        .code-header {{
-            display: flex;
-            justify-content: space-between;
-            padding: 4px 10px;
-            background: var(--surface-color);
-            border-bottom: 1px solid var(--border-color);
-            font-size: 0.74rem;
-        }}
-        .copy-btn {{
-            background: transparent;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            color: var(--text-muted);
-            padding: 1px 8px;
-            font-size: 0.73rem;
-            cursor: pointer;
-        }}
-        pre {{ padding: 10px 12px; overflow-x: auto; margin: 0; line-height: 1.5; }}
-        pre code {{ background: transparent; color: var(--pre-text); padding: 0; white-space: pre-wrap; overflow-wrap: anywhere; }}
-        .table-wrapper {{ overflow-x: auto; margin: 14px 0; }}
-        table {{ width: 100%; border-collapse: collapse; font-size: 0.87rem; }}
-        th, td {{ border: 1px solid var(--border-color); padding: 9px 12px; text-align: left; }}
-        th {{ background: var(--table-header); font-weight: 650; }}
-        tr:nth-child(even) {{ background: var(--table-alt); }}
-        .summary-card {{
-            background: var(--surface-color);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-        }}
-        #markdown-view-container {{
+        .bullet-item {{ display: flex; gap: 8px; margin-bottom: 5px; }}
+        .bullet-prefix {{ font-weight: 700; color: var(--accent-primary); }}
+        .contrast-grid {{ display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }}
+        @media (max-width: 900px) {{ .contrast-grid {{ grid-template-columns: 1fr; }} }}
+        .contrast-box {{ border-radius: 8px; padding: 12px; border: 1px solid var(--border-color); }}
+        .contrast-box.bad {{ background: var(--contrast-bad-bg); border-color: var(--contrast-bad-border); }}
+        .contrast-box.good {{ background: var(--contrast-good-bg); border-color: var(--contrast-good-border); }}
+        .contrast-header {{ display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.82rem; font-weight: 700; }}
+        .contrast-pill-bad {{ color: var(--contrast-bad-text); }}
+        .contrast-pill-good {{ color: var(--contrast-good-text); }}
+        .code-block {{ background: var(--pre-bg); border-radius: 6px; overflow: hidden; border: 1px solid var(--border-color); }}
+        .code-header {{ display: flex; justify-content: space-between; padding: 4px 10px; background: var(--surface-color); font-size: 0.74rem; }}
+        .copy-btn {{ background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 4px; padding: 1px 6px; cursor: pointer; font-size: 0.72rem; color: var(--text-secondary); }}
+        .code-block pre {{ padding: 10px; overflow-x: auto; font-size: 0.82rem; line-height: 1.5; }}
+        .table-wrapper {{ overflow-x: auto; border: 1px solid var(--border-color); border-radius: 8px; }}
+        table {{ width: 100%; border-collapse: collapse; font-size: 0.86rem; }}
+        th, td {{ padding: 9px 12px; border-bottom: 1px solid var(--border-color); text-align: left; }}
+        thead tr {{ background: var(--table-header); }}
+        #markdown-view-container {{ display: none; }}
+        .raw-md-textarea {{ width: 100%; height: 75vh; font-family: monospace; padding: 14px; border-radius: 8px; background: var(--bg-color); color: var(--text-primary); border: 1px solid var(--border-color); }}
+        body.toc-collapsed .sidebar-toc {{ display: none; }}
+        #mermaid-modal {{
             display: none;
-            background: var(--surface-color);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-        }}
-        .md-toolbar {{
-            display: flex;
-            justify-content: space-between;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.82);
+            z-index: 9999;
             align-items: center;
-            margin-bottom: 12px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
+            justify-content: center;
+            padding: 28px;
         }}
-        .btn-copy-md {{
-            background: var(--accent-primary);
-            color: #ffffff;
+        #mermaid-modal.active {{ display: flex; }}
+        .mermaid-modal-box {{
+            background: #FFFFFF;
+            border: 3px solid #0F172A;
+            border-radius: 12px;
+            max-width: 96vw;
+            max-height: 92vh;
+            overflow: auto;
+            padding: 24px;
+            position: relative;
+        }}
+        .mermaid-modal-close {{
+            position: sticky;
+            top: 0;
+            float: right;
+            background: #0F172A;
+            color: #FFFFFF;
             border: none;
             padding: 6px 14px;
             border-radius: 6px;
+            font-weight: 700;
             cursor: pointer;
-            font-weight: 600;
-        }}
-        .raw-md-textarea {{
-            width: 100%;
-            height: 75vh;
-            font-family: "JetBrains Mono", Consolas, monospace;
-            font-size: 0.84rem;
-            background: var(--bg-color);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 14px;
-            line-height: 1.6;
         }}
     </style>
 </head>
 <body>
+    <div id="mermaid-modal" onclick="if(event.target===this)closeMermaidModal()">
+        <div class="mermaid-modal-box">
+            <button class="mermaid-modal-close" onclick="closeMermaidModal()">✕ 关闭全屏预览</button>
+            <div id="mermaid-modal-content" style="margin-top: 12px; text-align: center;"></div>
+        </div>
+    </div>
     <div class="layout-wrapper">
         <aside class="sidebar-toc" id="sidebarToc">
             <div class="toc-card">
                 <div class="portal-nav-box">
-                    <div class="portal-nav-title">文档中心快速导航</div>
+                    <div class="portal-nav-title">四层文档架构导航</div>
                     <div class="portal-nav-list">
                         {portal_links_html}
                     </div>
@@ -907,16 +1002,18 @@ def render_triage_card_page(md_path: Path, html_path: Path, docs_root: Path):
 
             <div id="card-view-container">
                 <header class="doc-header">
-                    <span class="header-tag">跨会话记忆数据集研发体系 · 历史治理归档</span>
+                    <span class="header-tag">第四层 · 数据质量治理与缺陷排查归档</span>
                     <h1 class="doc-title">生成问题排查、架构拓扑与数据治理实录 (001~150 批次)</h1>
                     <p class="doc-lead">系统记录早期批次在流水线生成、质量检验、生命周期因果演进与业务对齐过程中的 21 项典型缺陷、根因分析与治理规范。最新架构规范请参阅 <a href="{rel_prefix}specs/cognitive_memory_dev_spec.html" class="md-link">“联接”Agent 三层认知记忆与双轨评测技术规范</a>。</p>
                     <div class="header-meta-grid">
-                        <div class="meta-stat-card"><div class="meta-stat-label">记录周期</div><div class="meta-stat-val">09.28 - 10.16</div></div>
+                        <div class="meta-stat-card"><div class="meta-stat-label">记录周期</div><div class="meta-stat-val">09.28 - 10.21</div></div>
                         <div class="meta-stat-card"><div class="meta-stat-label">排查与规范总项</div><div class="meta-stat-val">{len(cards)} 项</div></div>
-                        <div class="meta-stat-card"><div class="meta-stat-label">覆盖画像样本</div><div class="meta-stat-val">150 个画像</div></div>
+                        <div class="meta-stat-card"><div class="meta-stat-label">覆盖画像样本</div><div class="meta-stat-val">150+5 个画像</div></div>
                         <div class="meta-stat-card"><div class="meta-stat-label">全量质检通过率</div><div class="meta-stat-val" style="color: var(--contrast-good-text);">100.0% 一次通过</div></div>
                     </div>
                 </header>
+
+                {top_mermaid_html}
 
                 <section class="column-section" data-cat="arch">
                     <div class="column-section-header">
@@ -954,9 +1051,9 @@ def render_triage_card_page(md_path: Path, html_path: Path, docs_root: Path):
             </div>
 
             <div id="markdown-view-container">
-                <div class="md-toolbar">
+                <div class="md-toolbar" style="margin-bottom: 10px; display: flex; justify-content: space-between;">
                     <strong>docs/{rel_html[:-5]}.md 原生源码</strong>
-                    <button class="btn-copy-md" onclick="copyMarkdownSource()">复制 Markdown 全文</button>
+                    <button class="nav-btn active" onclick="copyMarkdownSource()">复制 Markdown 全文</button>
                 </div>
                 <textarea class="raw-md-textarea" id="mdSourceArea" readonly>{html.escape(md_text)}</textarea>
             </div>
@@ -973,6 +1070,8 @@ def render_triage_card_page(md_path: Path, html_path: Path, docs_root: Path):
         }}
         function toggleDesktopToc() {{
             document.body.classList.toggle('toc-collapsed');
+            const isCollapsed = document.body.classList.contains('toc-collapsed');
+            document.getElementById('expandTocBtn').style.display = isCollapsed ? 'inline-flex' : 'none';
         }}
         function switchView(mode) {{
             document.getElementById('card-view-container').style.display = mode === 'markdown' ? 'none' : 'block';
@@ -993,6 +1092,22 @@ def render_triage_card_page(md_path: Path, html_path: Path, docs_root: Path):
             const ta = document.getElementById('mdSourceArea');
             navigator.clipboard.writeText(ta.value);
         }}
+        function openMermaidModal(btn) {{
+            const wrapper = btn.closest('.mermaid-wrapper');
+            const svg = wrapper ? wrapper.querySelector('svg') : null;
+            if (!svg) return;
+            const modalContent = document.getElementById('mermaid-modal-content');
+            modalContent.innerHTML = svg.outerHTML;
+            const clonedSvg = modalContent.querySelector('svg');
+            if (clonedSvg) {{
+                clonedSvg.style.maxWidth = '90vw';
+                clonedSvg.style.height = 'auto';
+            }}
+            document.getElementById('mermaid-modal').classList.add('active');
+        }}
+        function closeMermaidModal() {{
+            document.getElementById('mermaid-modal').classList.remove('active');
+        }}
         function selectCategory(cat) {{
             document.querySelectorAll('.cat-pill').forEach(p => p.classList.toggle('active', p.dataset.cat === cat));
             document.querySelectorAll('.column-section').forEach(s => {{
@@ -1008,11 +1123,30 @@ def render_triage_card_page(md_path: Path, html_path: Path, docs_root: Path):
                 card.style.display = (!kw || card.innerText.toLowerCase().includes(kw)) ? 'block' : 'none';
             }});
         }}
-        (function() {{
+        window.addEventListener('DOMContentLoaded', () => {{
             const saved = localStorage.getItem('doc-theme') || 'parchment';
             document.documentElement.setAttribute('data-theme', saved);
             document.getElementById('themeBtn').innerText = saved === 'twilight' ? '切换米纸' : '切换暮色';
-        }})();
+            if (window.mermaid) {{
+                mermaid.initialize({{
+                    startOnLoad: true,
+                    securityLevel: 'loose',
+                    theme: 'base',
+                    flowchart: {{ htmlLabels: true, curve: 'basis', padding: 16 }},
+                    themeVariables: {{
+                        background: '#FFFFFF',
+                        primaryColor: '#FFFFFF',
+                        primaryTextColor: '#0F172A',
+                        primaryBorderColor: '#0F172A',
+                        lineColor: '#0F172A',
+                        mainBkg: '#FFFFFF',
+                        nodeBorder: '#0F172A',
+                        clusterBkg: '#FFFFFF',
+                        clusterBorder: '#0F172A'
+                    }}
+                }});
+            }}
+        }});
     </script>
 </body>
 </html>
@@ -1022,7 +1156,7 @@ def render_triage_card_page(md_path: Path, html_path: Path, docs_root: Path):
 
 
 # ==============================================================================
-# 通用高保真学术文档渲染器 (用于 docs/ 下其余全部 Markdown 文档)
+# 通用高保真可视化文档渲染器 (用于 docs/ 下其余全部 Markdown 文档)
 # ==============================================================================
 
 DOC_HTML_SHELL = """<!DOCTYPE html>
@@ -1133,13 +1267,13 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
 
         /* 侧边栏导航与目录 */
         .sidebar-toc {
-            width: 310px;
+            width: 320px;
             background-color: var(--surface-color);
             border-right: 1px solid var(--border-color);
             position: sticky;
             top: 0;
             height: 100vh;
-            padding: 20px 16px;
+            padding: 18px 15px;
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
@@ -1151,15 +1285,25 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
             padding-bottom: 12px;
             border-bottom: 1px solid var(--border-color);
             flex-shrink: 0;
+            max-height: 45vh;
+            overflow-y: auto;
         }
 
         .portal-nav-title {
             font-size: 0.76rem;
-            font-weight: 700;
+            font-weight: 800;
             color: var(--accent-primary);
             margin-bottom: 6px;
             letter-spacing: 0.04em;
             text-transform: uppercase;
+        }
+
+        .portal-group-label {
+            font-size: 0.71rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin: 8px 0 3px 4px;
+            letter-spacing: 0.02em;
         }
 
         .portal-nav-list {
@@ -1171,7 +1315,7 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
         .portal-nav-item {
             display: block;
             padding: 4px 8px;
-            font-size: 0.81rem;
+            font-size: 0.80rem;
             color: var(--text-secondary);
             text-decoration: none;
             border-radius: 5px;
@@ -1197,8 +1341,8 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding-bottom: 10px;
-            margin-bottom: 10px;
+            padding-bottom: 8px;
+            margin-bottom: 8px;
             border-bottom: 1px solid var(--border-color);
             flex-shrink: 0;
         }
@@ -1207,7 +1351,7 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             font-weight: 700;
             color: var(--text-primary);
         }
@@ -1228,7 +1372,7 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
         }
 
         .toc-search-box {
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             flex-shrink: 0;
         }
 
@@ -1239,7 +1383,7 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
             border: 1px solid var(--border-color);
             background: var(--bg-color);
             color: var(--text-primary);
-            font-size: 0.82rem;
+            font-size: 0.81rem;
             outline: none;
         }
 
@@ -1258,30 +1402,30 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
         }
 
         .toc-item {
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
 
         .toc-item.toc-level-2 {
-            margin-top: 8px;
+            margin-top: 6px;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.84rem;
         }
 
         .toc-item.toc-level-3 {
             padding-left: 12px;
-            font-size: 0.81rem;
+            font-size: 0.80rem;
             color: var(--text-secondary);
         }
 
         .toc-item.toc-level-4 {
             padding-left: 22px;
-            font-size: 0.78rem;
+            font-size: 0.77rem;
             color: var(--text-muted);
         }
 
         .toc-link {
             display: block;
-            padding: 4px 8px;
+            padding: 3px 8px;
             color: inherit;
             text-decoration: none;
             border-radius: 4px;
@@ -1320,7 +1464,7 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
         }
 
         .container {
-            max-width: 1020px;
+            max-width: 1060px;
             margin: 0 auto;
         }
 
@@ -1383,7 +1527,7 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
         }
 
         .markdown-body h1 {
-            font-size: 1.95rem;
+            font-size: 1.92rem;
             font-weight: 800;
             line-height: 1.35;
             margin-bottom: 20px;
@@ -1468,30 +1612,29 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
         }
 
         /* 代码块带复制栏 */
-        .code-card {
+        .code-card, .visual-card {
             background-color: var(--pre-bg);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            margin: 16px 0 22px;
+            border-radius: 10px;
+            margin: 18px 0 24px;
             overflow: hidden;
             box-shadow: var(--card-shadow);
         }
 
-        .code-card-header {
+        .code-card-header, .visual-card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 6px 14px;
+            padding: 7px 14px;
             background-color: var(--surface-color);
             border-bottom: 1px solid var(--border-color);
-            font-size: 0.76rem;
+            font-size: 0.78rem;
         }
 
-        .code-card-lang {
-            font-family: "JetBrains Mono", Consolas, monospace;
+        .code-card-lang, .visual-card-badge {
+            font-family: "JetBrains Mono", -apple-system, BlinkMacSystemFont, sans-serif;
             font-weight: 700;
             color: var(--accent-primary);
-            text-transform: uppercase;
         }
 
         .code-copy-btn {
@@ -1526,14 +1669,191 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
             white-space: pre;
         }
 
-        .doc-intro {
-            background-color: var(--surface-color);
-            border-left: 4px solid var(--accent-primary);
+        /* 可视化目录树组件 (.visual-tree-card) */
+        .vtree-body {
             padding: 14px 18px;
-            border-radius: 0 8px 8px 0;
-            margin-bottom: 26px;
+            font-family: "JetBrains Mono", Consolas, monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+        }
+        .vtree-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 2px 0;
+            white-space: pre;
+        }
+        .vtree-branch {
+            color: var(--text-muted);
+            user-select: none;
+        }
+        .vtree-icon {
+            font-size: 0.9rem;
+        }
+        .vtree-dir {
+            font-weight: 800;
+            color: var(--accent-primary);
+        }
+        .vtree-file {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .vtree-comment {
+            margin-left: 10px;
+            padding: 1px 8px;
+            border-radius: 10px;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
             color: var(--text-secondary);
-            font-size: 0.94rem;
+            font-size: 0.76rem;
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+        }
+
+        /* 可视化多轮对话气泡组件 (.visual-dialogue-card) */
+        .vdialog-body {
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .vdialog-turn-divider {
+            align-self: center;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            color: var(--accent-primary);
+            font-weight: 700;
+            font-size: 0.76rem;
+            padding: 2px 12px;
+            border-radius: 12px;
+            margin-top: 4px;
+        }
+        .vdialog-row {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+        .vdialog-avatar {
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            flex-shrink: 0;
+            min-width: 105px;
+            text-align: center;
+        }
+        .vdialog-user .vdialog-avatar {
+            background: var(--callout-imp-bg);
+            color: var(--callout-imp-text);
+            border: 1px solid var(--callout-imp-border);
+        }
+        .vdialog-agent .vdialog-avatar {
+            background: var(--callout-note-bg);
+            color: var(--callout-note-text);
+            border: 1px solid var(--callout-note-border);
+        }
+        .vdialog-bubble {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            flex: 1;
+        }
+        .vdialog-note {
+            display: inline-block;
+            margin-left: 8px;
+            padding: 1px 8px;
+            border-radius: 6px;
+            background: var(--callout-warn-bg);
+            color: var(--callout-warn-text);
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+        .vdialog-meta {
+            font-family: "JetBrains Mono", Consolas, monospace;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            padding-left: 118px;
+        }
+
+        /* 可视化结构规范卡 (.visual-spec-card) */
+        .vspec-body {
+            padding: 14px 18px;
+            font-family: "JetBrains Mono", -apple-system, BlinkMacSystemFont, monospace;
+            font-size: 0.85rem;
+            line-height: 1.65;
+            overflow-x: auto;
+        }
+        .vspec-line {
+            white-space: pre-wrap;
+            margin-bottom: 2px;
+        }
+        .vspec-spacer {
+            height: 8px;
+        }
+        .vspec-key {
+            font-weight: 800;
+            color: var(--accent-primary);
+        }
+        .vspec-arrow {
+            font-weight: 800;
+            color: #2563EB;
+            padding: 0 2px;
+        }
+        .vspec-badge-good {
+            display: inline-block;
+            padding: 0 6px;
+            border-radius: 4px;
+            background: var(--callout-note-bg);
+            color: var(--callout-note-text);
+            font-weight: 700;
+            font-size: 0.78rem;
+        }
+        .vspec-badge-bad {
+            display: inline-block;
+            padding: 0 6px;
+            border-radius: 4px;
+            background: #fae8e5;
+            color: #a83220;
+            font-weight: 700;
+            font-size: 0.78rem;
+        }
+
+        /* 四阶段工程路线图网格 (.roadmap-grid) */
+        .roadmap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin: 20px 0 28px;
+        }
+        .roadmap-card {
+            background: var(--surface-color);
+            border: 1.5px solid var(--border-color);
+            border-top: 4px solid var(--accent-primary);
+            border-radius: 10px;
+            padding: 16px;
+            box-shadow: var(--card-shadow);
+        }
+        .roadmap-phase {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--accent-primary);
+            background: var(--tag-bg);
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+        .roadmap-title {
+            font-size: 1.02rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        .roadmap-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
         }
 
         blockquote {
@@ -1636,46 +1956,128 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
         /* Mermaid 图表容器：强制纯白底色 (#FFFFFF)、加粗字体、加粗线条 */
         .mermaid-wrapper {
             margin: 22px 0 28px;
-            padding: 24px;
+            padding: 16px 22px 24px;
             background-color: #FFFFFF !important;
-            border: 2px solid #111111;
+            border: 2.5px solid #0F172A;
             border-radius: 10px;
             overflow-x: auto;
             text-align: center;
             box-shadow: var(--card-shadow);
         }
 
+        .mermaid-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .mermaid-badge {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: #0F172A;
+            letter-spacing: 0.02em;
+        }
+
+        .mermaid-zoom-btn {
+            background-color: #F8FAFC;
+            border: 1.5px solid #0F172A;
+            color: #0F172A;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .mermaid-zoom-btn:hover {
+            background-color: #0F172A;
+            color: #FFFFFF;
+        }
+
         .mermaid {
             background-color: #FFFFFF !important;
-            color: #111111 !important;
+            color: #0F172A !important;
             font-weight: 700 !important;
             display: inline-block;
             min-width: 320px;
+            margin: 0 auto;
         }
 
         .mermaid svg {
             background-color: #FFFFFF !important;
             font-weight: 700 !important;
+            max-width: 100%;
+            height: auto;
         }
 
         .mermaid svg text,
+        .mermaid svg tspan,
         .mermaid svg span,
+        .mermaid svg div,
+        .mermaid svg p,
         .mermaid svg .nodeLabel,
         .mermaid svg .edgeLabel,
+        .mermaid svg .cluster-label,
         .mermaid svg .messageText,
         .mermaid svg .labelText,
-        .mermaid svg .loopText {
+        .mermaid svg .loopText,
+        .mermaid svg .noteText,
+        .mermaid svg .actor {
             font-weight: 700 !important;
-            color: #111111 !important;
-            fill: #111111 !important;
+            color: #0F172A !important;
+            fill: #0F172A !important;
         }
 
         .mermaid svg path,
         .mermaid svg line,
+        .mermaid svg polyline,
         .mermaid svg rect,
         .mermaid svg polygon,
         .mermaid svg circle {
-            stroke-width: 2.2px !important;
+            stroke-width: 2.3px !important;
+        }
+
+        /* Mermaid 全屏放大模态框 */
+        #mermaid-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.82);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 28px;
+        }
+        #mermaid-modal.active {
+            display: flex;
+        }
+        .mermaid-modal-box {
+            background: #FFFFFF;
+            border: 3px solid #0F172A;
+            border-radius: 12px;
+            max-width: 96vw;
+            max-height: 92vh;
+            overflow: auto;
+            padding: 24px;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+        }
+        .mermaid-modal-close {
+            position: sticky;
+            top: 0;
+            float: right;
+            background: #0F172A;
+            color: #FFFFFF;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            z-index: 10;
         }
 
         /* 数学公式块 */
@@ -1751,10 +2153,17 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
     </style>
 </head>
 <body>
+    <div id="mermaid-modal" onclick="if(event.target===this)closeMermaidModal()">
+        <div class="mermaid-modal-box">
+            <button class="mermaid-modal-close" onclick="closeMermaidModal()">✕ 关闭全屏预览</button>
+            <div id="mermaid-modal-content" style="margin-top: 12px; text-align: center;"></div>
+        </div>
+    </div>
+
     <div class="layout-wrapper">
         <aside class="sidebar-toc" id="sidebarToc">
             <div class="portal-nav-box">
-                <div class="portal-nav-title">文档中心快速导航</div>
+                <div class="portal-nav-title">四层文档架构导航</div>
                 <div class="portal-nav-list">
 {PORTAL_LINKS}
                 </div>
@@ -1781,7 +2190,7 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
                     <div class="nav-links">
                         <button class="nav-btn" id="expandTocBtn" onclick="toggleDesktopToc()" style="display: none;">展开目录</button>
                         <a href="{HOME_HREF}" class="nav-btn">◀ 文档中心首页</a>
-                        <button class="nav-btn active" id="btnReadView" onclick="switchDocView('read')">阅读视图</button>
+                        <button class="nav-btn active" id="btnReadView" onclick="switchDocView('read')">可视化阅读视图</button>
                         <button class="nav-btn" id="btnSourceView" onclick="switchDocView('source')">Markdown 源码</button>
                         <span style="color: var(--border-color)">|</span>
                         <span style="font-size: 0.84rem; color: var(--text-muted);">{MD_REL_PATH}</span>
@@ -1847,6 +2256,35 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
             });
         }
 
+        function copyVisualRaw(btn) {
+            const card = btn.closest('.visual-card');
+            const code = card ? card.querySelector('.visual-raw-hidden code') : null;
+            if (!code) return;
+            navigator.clipboard.writeText(code.innerText).then(() => {
+                const orig = btn.innerText;
+                btn.innerText = '已复制';
+                setTimeout(() => { btn.innerText = orig; }, 1800);
+            });
+        }
+
+        function openMermaidModal(btn) {
+            const wrapper = btn.closest('.mermaid-wrapper');
+            const svg = wrapper ? wrapper.querySelector('svg') : null;
+            if (!svg) return;
+            const modalContent = document.getElementById('mermaid-modal-content');
+            modalContent.innerHTML = svg.outerHTML;
+            const clonedSvg = modalContent.querySelector('svg');
+            if (clonedSvg) {
+                clonedSvg.style.maxWidth = '90vw';
+                clonedSvg.style.height = 'auto';
+            }
+            document.getElementById('mermaid-modal').classList.add('active');
+        }
+
+        function closeMermaidModal() {
+            document.getElementById('mermaid-modal').classList.remove('active');
+        }
+
         function copyLatex(btn) {
             const tex = btn.getAttribute('data-tex');
             if (tex) {
@@ -1892,30 +2330,45 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
             if (window.mermaid) {
                 mermaid.initialize({
                     startOnLoad: true,
+                    securityLevel: 'loose',
                     theme: 'base',
+                    flowchart: {
+                        htmlLabels: true,
+                        curve: 'basis',
+                        padding: 16
+                    },
+                    sequence: {
+                        useMaxWidth: true,
+                        wrap: true,
+                        actorFontWeight: '700',
+                        messageFontWeight: '700',
+                        noteFontWeight: '700',
+                        boxMargin: 10,
+                        messageMargin: 36
+                    },
                     themeVariables: {
                         background: '#FFFFFF',
                         primaryColor: '#FFFFFF',
-                        primaryTextColor: '#111111',
-                        primaryBorderColor: '#111111',
-                        lineColor: '#111111',
+                        primaryTextColor: '#0F172A',
+                        primaryBorderColor: '#0F172A',
+                        lineColor: '#0F172A',
                         secondaryColor: '#FFFFFF',
                         tertiaryColor: '#FFFFFF',
                         mainBkg: '#FFFFFF',
-                        nodeBorder: '#111111',
+                        nodeBorder: '#0F172A',
                         clusterBkg: '#FFFFFF',
-                        clusterBorder: '#111111',
+                        clusterBorder: '#0F172A',
                         actorBkg: '#FFFFFF',
-                        actorBorder: '#111111',
-                        actorTextColor: '#111111',
-                        signalColor: '#111111',
-                        signalTextColor: '#111111',
+                        actorBorder: '#0F172A',
+                        actorTextColor: '#0F172A',
+                        signalColor: '#0F172A',
+                        signalTextColor: '#0F172A',
                         labelBoxBkgColor: '#FFFFFF',
-                        labelBoxBorderColor: '#111111',
-                        labelTextColor: '#111111',
+                        labelBoxBorderColor: '#0F172A',
+                        labelTextColor: '#0F172A',
                         noteBkgColor: '#FFFFFF',
-                        noteBorderColor: '#111111',
-                        noteTextColor: '#111111'
+                        noteBorderColor: '#0F172A',
+                        noteTextColor: '#0F172A'
                     }
                 });
             }
@@ -2005,7 +2458,6 @@ def parse_doc_markdown(md_text: str):
             return
 
         headers = split_table_row(table_lines[0])
-        # 检查第2行是否为分隔行 (| --- | --- |)
         start_row_idx = 2 if re.match(r"^[\s|:\-]+$", table_lines[1]) else 1
         rows = [split_table_row(tl) for tl in table_lines[start_row_idx:]]
 
@@ -2041,12 +2493,41 @@ def parse_doc_markdown(md_text: str):
             if in_code_block:
                 in_code_block = False
                 full_code = "\n".join(code_lines)
-                if code_lang.lower() == "mermaid":
+                lang_l = code_lang.lower()
+                if lang_l == "mermaid":
+                    safe_mermaid = prepare_mermaid_code(full_code)
                     body_parts.append(
-                        f'<div class="mermaid-wrapper"><div class="mermaid">\n{full_code}\n</div></div>'
+                        f"""
+                        <div class="mermaid-wrapper">
+                            <div class="mermaid-toolbar">
+                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范)</span>
+                                <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 点击放大全屏查看</button>
+                            </div>
+                            <pre class="mermaid">{safe_mermaid}</pre>
+                        </div>
+                        """
                     )
+                elif "├──" in full_code or "└──" in full_code:
+                    body_parts.append(render_visual_tree_block(full_code))
+                elif ("User:" in full_code and "Agent:" in full_code):
+                    body_parts.append(render_visual_dialogue_block(full_code))
+                elif not lang_l and full_code.strip().startswith("{") and full_code.strip().endswith("}"):
+                    # 自动识别未标注 json 的 JSON 块
+                    body_parts.append(
+                        f"""
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">JSON 数据结构</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code class="language-json">{html.escape(full_code)}</code></pre>
+                        </div>
+                        """
+                    )
+                elif lang_l in ("", "text"):
+                    body_parts.append(render_visual_spec_block(full_code, "SPEC / EXAMPLE"))
                 else:
-                    disp_lang = code_lang.upper() if code_lang else "TEXT"
+                    disp_lang = code_lang.upper() if code_lang else "CODE"
                     lang_cls = f' class="language-{code_lang}"' if code_lang else ""
                     body_parts.append(
                         f"""
@@ -2088,6 +2569,12 @@ def parse_doc_markdown(md_text: str):
 
         # 3. 注释行
         if line_s.startswith("<!--"):
+            i += 1
+            continue
+
+        # 3.5 原生 HTML 布局块 (如 <div class="roadmap-grid">)
+        if line_s.startswith("<div") or line_s.startswith("</div"):
+            body_parts.append(line)
             i += 1
             continue
 
@@ -2232,13 +2719,11 @@ def parse_doc_markdown(md_text: str):
                 curr_line = lines[i]
                 curr_s = curr_line.strip()
                 if not curr_s:
-                    # 若空行后紧跟列表项，继续保持列表上下文
                     if i + 1 < n and re.match(r"^(\s*)([-*•]|\d+\.)\s+", lines[i + 1]):
                         i += 1
                         continue
                     break
 
-                # 检查列表内缩进的块级公式 $$...$$
                 if curr_s.startswith("$$") and stack:
                     if curr_s.endswith("$$") and len(curr_s) > 4:
                         tex = curr_s[2:-2].strip()
@@ -2260,7 +2745,6 @@ def parse_doc_markdown(md_text: str):
 
                 item_m = re.match(r"^(\s*)([-*•]|\d+\.)\s+(.*)", curr_line)
                 if not item_m:
-                    # 列表项的多行续行文本
                     if curr_line.startswith("  ") and stack:
                         list_html_lines.append(f" {format_inline_markdown(curr_s)}")
                         i += 1
@@ -2340,7 +2824,6 @@ def render_general_doc_page(md_path: Path, html_path: Path, docs_root: Path):
     html_path.write_text(full_html, encoding="utf-8")
     print(f"[+] 完成输出: {rel_html} ({len(full_html) // 1024} KB)")
 
-    # 若当前为 docs/README.md，同步生成 docs/index.html 便于直接打开门户
     if rel_md == "README.md":
         index_path = docs_root / "index.html"
         index_path.write_text(full_html, encoding="utf-8")

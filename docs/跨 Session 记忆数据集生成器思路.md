@@ -1,21 +1,27 @@
 # 跨 Session 记忆数据集生成器思路
 
-## 1 概述
-
-生成面向核心网Agent的跨Session记忆数据集，提高Agent的**记忆形成、复用、更新和追问决策**能力。
-
-每个输出样本 = 一个用户的完整生命周期（若干Session的时间线），包含从"记忆尚未形成"到"记忆可用"的全过程。
+> **文档层级**：第二层 · 端到端生成流水线与规则引擎详设（Pipeline & Engine Design）  
+> **文档定位**：详细阐述“联接”Agent 跨会话数据集从 **原始 Persona 画像 $\to$ 四层 Ground Truth 真值（GT）$\to$ 评测目标反推（MT/MF）$\to$ 时间线因果编排（Timeline Planner）$\to$ 16 种骨架约束对话生成 $\to$ 双层一致性校验** 的底层实现机制。  
+> **架构衔接说明**：本文档重点拆解基础事实记忆（Factual Memory）与规则引擎的底层算法逻辑；关于 16~20 Session 三层认知记忆（事实 + 工作工单账本 + 五大黄金经验）及 **双轨成败分支测试（Fast/Slow Branch Evaluation）** 的顶层设计，请结合 [**《三层认知记忆演进开发规范》**](specs/cognitive_memory_dev_spec.md) 阅读。
 
 ---
 
-### 1.1 参考资源
+## 1 概述
 
-| 资源名称 | 角色定位 | 具体使用方式 |
+生成面向通信网络保障 **“联接”Agent** 的跨 Session 认知记忆数据集，全面评测并提升智能体的**记忆形成、跨期复用、动态更新、经验内化和追问消歧决策**能力。
+
+每个输出样本 = 一个用户的完整跨会话生命周期（标准配置为 16~20 个 Session 的时间线），包含从“冷启动零记忆澄清”到“事实/工作/经验记忆成熟复用与冲突裁决”的全过程。
+
+---
+
+### 1.1 参考资源与代码模块映射
+
+| 资源 / 模块名称 | 角色定位 | 具体使用方式与代码落点 |
 | ------------------------------------------- | -------------------- | ------------------------------------------------------------------------------------- |
-| 思路方案 (`docs/多轮对话含事实记忆数据集构建.md`)             | 方法论 & 层级定义           | 4层GT分层、16种对话模板、4种Session角色、8条结构校验+5条内容校验                                              |
-| 数据建模 (`docs/data_design.md`)                | 记忆建模规范 & 正负样本        | 5大用户事实记忆类别（用户个性化表达、应用-业务选择偏好、时间模式偏好、体验参数偏好、记忆更新与冲突处理）、追问决策（补充类别）、24种MT类型、每个类别的正/负测试样例 |
-| 业务配置 (`dataset_prepare/`, 3个JSON)           | 参数值域白名单              | app_config: 合法的resolution/latency档位; app_map: 别名映射; support_matrix: 场景校验              |
-| 参考数据 (`data/ref_data/`, 452条session, 16种模板) | 交互骨架 + source_type标注 | skeleton_signature编码了轮数/参数来源/意图路径; source_type=Memory/Record标注了6种记忆来源模式               |
+| 记忆建模规范 ([`docs/记忆建模与数据集生成要求.md`](记忆建模与数据集生成要求.md)) | 记忆建模规范 & 正负样本 | 5大用户事实记忆类别（用户个性化表达、应用-业务选择偏好、时间模式偏好、体验参数偏好、记忆更新与冲突处理）、追问决策红线与 Golden Invariants |
+| 三层认知总纲 ([`docs/specs/cognitive_memory_dev_spec.md`](specs/cognitive_memory_dev_spec.md)) | 三层认知拓扑 & 双轨评测 | 16~20 Session 动态拓扑、独立工单账本 (`working_records_ledger.py`)、五大黄金经验库 (`experience_bank.py`)、Fast/Slow 双轨分支 |
+| 业务配置 (`config/`, 3个JSON) | 参数值域白名单 | `app_config.json`: 合法的 resolution/latency 档位; `app_map.json`: 别名映射; `support_matrix.json`: 场景白名单校验 |
+| 核心流水线 (`src/core/` & `src/generation/`) | 规则骨架 + 受控生成 | `gt_builder.py` (四层GT) $\to$ `mt_selector.py` (MT反推) $\to$ `timeline_planner.py` (时间线) $\to$ `dialogue_generator.py` (对话渲染) $\to$ `qc_validator.py` (R1~R14质检) |
 
 ---
 
@@ -23,14 +29,15 @@
 
 ```mermaid
 graph TD
-    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2px,color:#111111;
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+    classDef highlight fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
-    A["<b>A. 加载配置与数据源</b>"] --> B["<b>B. 生成 Persona Ground Truth（四层真值）</b>"]
-    B --> C["<b>C. 定义 Memory Targets（评测目标反推）</b>"]
-    C --> D["<b>D. 规划时间线拓扑（Timeline Planner）</b>"]
-    D --> E["<b>E. 逐 Session 对话渲染与演进跟踪</b>"]
-    E --> F["<b>F. 评测标注与双层一致性校验</b>"]
-    F --> G["<b>G. 交付产物（skeleton.json + sessions.jsonl）</b>"]
+    A["<b>A. 加载业务配置与 Persona 画像<br/>(config/*.json + data/personas/*.json)</b>"] --> B["<b>B. 构建 Persona Ground Truth 四层真值<br/>(src/core/gt_builder.py)</b>"]
+    B --> C["<b>C. 反推 Memory Targets 与经验/工单目标<br/>(src/core/mt_selector.py + experience_bank.py)</b>"]
+    C --> D["<b>D. 规划 16~20 Session 因果时间线拓扑<br/>(src/core/timeline_planner.py)</b>"]:::highlight
+    D --> E["<b>E. 逐 Session 受控对话渲染与双轨分支生成<br/>(src/generation/dialogue_generator.py)</b>"]:::highlight
+    E --> F["<b>F. 双真值链组装与 R1~R14 自动化质检<br/>(session_assembler.py + qc_validator.py)</b>"]
+    F --> G["<b>G. 交付四大标准产物<br/>(skeleton / sessions / working_records / experiences)</b>"]
 ```
 
 ### 2.1 Session 角色 × 模板 × 轮数 硬约束（v4 优化点）
@@ -102,7 +109,7 @@ graph TD
 
 ### 3.3 Persona模板
 
-详见 [`docs/persona_generate.md`](persona_generate.md)。
+详见 [`docs/specs/persona_spec.md`](specs/persona_spec.md)。
 
 ---
 
@@ -119,7 +126,7 @@ graph TD
 
 ### 4.2 从 Persona 到 Ground Truth 的转换
 
-`corenet_personas.jsonl` 中的每一条原始 persona 包含 `static_profile`（稳定属性）和 `dynamic_profile`（动态偏好）两部分。转换过程按步骤逐层抽取、解析、映射，生成 4 层 ground truth：
+`data/personas/` 中的每一条原始 persona 包含 `static_profile`（稳定属性）、`dynamic_profile`（动态偏好）与 `storyline`（阶段故事线）。转换过程（`src/core/gt_builder.py`）按步骤逐层抽取、解析、映射，生成 4 层 ground truth：
 
 - **Step A（static_gt）**：从 `static_profile.apps` 的中文 APP 名通过 `_resolve_app_name` 映射为标准英文名，再结合 `app_config` 和 `support_matrix` 合成每个 APP 在哪些业务场景下合法，以及各场景下的 `good` 档位参数。
 - **Step B（conditional_gt）**：从 `dynamic_profile` 中提取 `time_based`（时间条件偏好）、`scene_switch`（场景切换偏好）和 `conditional_preferences`（结构化条件偏好），分别解析为结构化条件描述，并通过 LLM 语义匹配到具体 app+service 场景。
@@ -130,29 +137,44 @@ graph TD
 
 #### 4.2.1 处理流程
 
-```
-corenet_personas.jsonl 第N条
-  │
-  ├─ Step A: _build_static_gt(static_profile)
-  │   ├── apps 中文 → 英文  (_resolve_app_name)
-  │   └─ APP × app_config.services × support_matrix → allowed_scenarios
-  │
-  ├─ Step B: _build_conditional_gt(dynamic_profile)
-  │   ├── time_based → conditional_time_preference  (_parse_condition_str + _llm_choose_scenario)
-  │   ├── scene_switch → conditional_scene_preference
-  │   └─ conditional_preferences → conditional_preference  (结构化提取)
-  │
-  ├─ Step C: _build_changeable_gt(dynamic_profile)
-  │   ├── role_change → role_change
-  │   └─ event_driven → event_driven_change
-  │
-  └─ Step D: _build_personalization_gt(persona)
-      ├── aliases.app_aliases → app_alias mapping
-      ├── aliases.service_aliases → service_alias mapping
-      ├── time_expressions → time_expression mapping
-      ├── param_mappings → quality_expression mapping
-      ├── experience_preferences → experience_param_preferences
-      └─ app_service_preferences → app_business_preferences
+```mermaid
+graph LR
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+
+    P["<b>原始画像记录<br/>(data/personas/*.json)</b>"]
+
+    subgraph StepA ["<b>Step A: _build_static_gt</b>"]
+        A1["<b>中文 APP → 标准英文名 (_resolve_app_name)</b>"]
+        A2["<b>联合 app_config × support_matrix → allowed_scenarios</b>"]
+        A1 --> A2
+    end
+
+    subgraph StepB ["<b>Step B: _build_conditional_gt</b>"]
+        B1["<b>time_based → conditional_time_preference</b>"]
+        B2["<b>scene_switch → conditional_scene_preference</b>"]
+        B3["<b>conditional_preferences → 结构化条件偏好</b>"]
+    end
+
+    subgraph StepC ["<b>Step C: _build_changeable_gt</b>"]
+        C1["<b>role_change → 角色转变事实</b>"]
+        C2["<b>event_driven → 事件驱动限时事实</b>"]
+    end
+
+    subgraph StepD ["<b>Step D: _build_personalization_gt</b>"]
+        D1["<b>aliases / time_expressions / param_mappings → 表达映射</b>"]
+        D2["<b>experience_preferences → preferred/fallback/rejected 组合</b>"]
+        D3["<b>app_service_preferences → 应用-业务双向偏好</b>"]
+    end
+
+    P --> StepA
+    P --> StepB
+    P --> StepC
+    P --> StepD
+
+    style StepA fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;
+    style StepB fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px;
+    style StepC fill:#FFFFFF,stroke:#D97706,stroke-width:2.5px;
+    style StepD fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px;
 ```
 
 **LLM 使用边界**：
@@ -178,6 +200,7 @@ corenet_personas.jsonl 第N条
 #### 4.2.3 GT 层到 MT 的构造流程（两级结构）
 
 > **核心认识**：GT 四层不是互斥事实类别，而是从不同角度描述同一用户事实。
+
 | GT 层 | 主要作用 | 在 MT/MF 中的位置 |
 | --- | --- | --- |
 | `static_gt` | 用户背景、常用 APP、套餐与合法业务场景 | 候选过滤、合法性校验、场景约束 |
@@ -185,28 +208,33 @@ corenet_personas.jsonl 第N条
 | `conditional_gt` | 时间、地点、场景、事件等成立条件 | `memory_fact.conditions` |
 | `changeable_gt` | 角色变化、事件驱动变化、阶段切换 | `memory_fact.lifecycle_pattern`、`validity` |
 
-四层职责可简化为：
+```mermaid
+graph LR
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
-```
-personalization_gt：记什么
-conditional_gt：在什么条件下成立
-changeable_gt：何时以及为何变化
-static_gt：该事实是否合法、是否符合人物背景
+    G4["<b>personalization_gt<br/>决定“记什么” (核心内容)</b>"] --> MF["<b>Memory Fact (MF)<br/>字段级原子事实单元</b>"]
+    G2["<b>conditional_gt<br/>决定“在什么条件下成立” (conditions)</b>"] --> MF
+    G3["<b>changeable_gt<br/>决定“何时及为何变化” (lifecycle / validity)</b>"] --> MF
+    G1["<b>static_gt<br/>决定“是否合法且符合身份” (白名单约束)</b>"] -.-> MF
 ```
 
 ---
 
 ### 4.3 MT 两级结构
 
-> 原有设计采用扁平枚举（24 种 MT 类型），新设计将其改为**意图容器 + 字段级事实**的两级结构：
->
-> ```
-> Memory Target (MT)
->  一个单意图或多意图场景容器
->      ↓
->  Memory Fact (MF)
->      场景中可独立形成、强化、纠正或失效的字段级事实
-> ```
+原有设计采用扁平枚举（24 种 MT 类型），新设计将其升级为 **意图容器（Memory Target）+ 字段级事实（Memory Fact）** 的两级结构：
+
+```mermaid
+graph TD
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+
+    MT["<b>Memory Target (MT) — 意图场景容器<br/>定义单意图/多意图、意图间关系、整体时间线与干扰设计</b>"]
+    MF1["<b>Memory Fact 1 (MF_001) — 字段级原子事实<br/>例：表达映射 “开播保障” → 抖音 + 开直播</b>"]
+    MF2["<b>Memory Fact 2 (MF_002) — 字段级原子事实<br/>例：体验参数组合 首选 1080p+80ms / 备选 720p+150ms</b>"]
+
+    MT --> MF1
+    MT --> MF2
+```
 
 #### 4.3.1 MT 负责描述
 
@@ -227,38 +255,32 @@ static_gt：该事实是否合法、是否符合人物背景
 
 #### 4.3.3 单意图 MT
 
-单意图仍以现有意图结构为基础：
+单意图仍以现有意图结构为基础（`一个应用 + 一个业务 + 相关参数`），示例：
 
-```
-一个应用 + 一个业务 + 相关参数
-```
-
-示例：
-
-```
+```json
 {
-  "memory_target_id": "MT_001",
-  "intent_mode": "single_intent",
-  "intents": [
-    { "intent_id": "I1", "application_name": "Douyin", "business_type": "live" }
+  "memory_target_id": "MT_001",
+  "intent_mode": "single_intent",
+  "intents": [
+    { "intent_id": "I1", "application_name": "Douyin", "business_type": "live" }
   ],
-  "memory_facts": [
-    {
-      "memory_fact_id": "MF_001",
-      "intent_refs": ["I1"],
-      "target_fields": ["application_name", "business_type"],
-      "content_type": "expression_mapping",
-      "content_subtype": "app_service_expression",
-      "content": { "expression": "开播保障", "target": { "application_name": "Douyin", "business_type": "live" } }
-    },
-    {
-      "memory_fact_id": "MF_002",
-      "intent_refs": ["I1"],
-      "target_fields": ["resolution", "latency_ms"],
-      "content_type": "experience_param_preference",
-      "content": { "preferred": { "resolution": "1080p", "latency_ms": 80 }, "fallback": { "resolution": "720p", "latency_ms": 150 } },
-      "value_structure": "preferred_fallback_bundle"
-    }
+  "memory_facts": [
+    {
+      "memory_fact_id": "MF_001",
+      "intent_refs": ["I1"],
+      "target_fields": ["application_name", "business_type"],
+      "content_type": "expression_mapping",
+      "content_subtype": "app_service_expression",
+      "content": { "expression": "开播保障", "target": { "application_name": "Douyin", "business_type": "live" } }
+    },
+    {
+      "memory_fact_id": "MF_002",
+      "intent_refs": ["I1"],
+      "target_fields": ["resolution", "latency_ms"],
+      "content_type": "experience_param_preference",
+      "content": { "preferred": { "resolution": "1080p", "latency_ms": 80 }, "fallback": { "resolution": "720p", "latency_ms": 150 } },
+      "value_structure": "preferred_fallback_bundle"
+    }
   ]
 }
 ```
@@ -294,18 +316,17 @@ static_gt：该事实是否合法、是否符合人物背景
 
 MT 资格从 GT 层组合判定，而非简单枚举：
 
-```
-是否存在明确长期声明？
-    ├─ 是 → primary 或 changeable
-    └─ 否
-        ↓
-    是否存在稳定的条件分组？
-        ├─ 是 → conditional
-        └─ 否
-            ↓
-        行为证据是否在足够跨度和周期中稳定收敛？
-            ├─ 是 → primary 候选
-            └─ 否 → distractor_only
+```mermaid
+graph TD
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+
+    Q1{"<b>1. 是否存在明确长期声明？</b>"}
+    Q1 -->|"<b>是</b>"| R1["<b>判定为 primary 或 changeable</b>"]
+    Q1 -->|"<b>否</b>"| Q2{"<b>2. 是否存在稳定的条件分组？</b>"}
+    Q2 -->|"<b>是</b>"| R2["<b>判定为 conditional</b>"]
+    Q2 -->|"<b>否</b>"| Q3{"<b>3. 行为证据是否在足够跨度和周期中稳定收敛？</b>"}
+    Q3 -->|"<b>是</b>"| R3["<b>判定为 primary 候选</b>"]
+    Q3 -->|"<b>否</b>"| R4["<b>判定为 distractor_only (仅作干扰项)</b>"]
 ```
 
 资格级别：
@@ -319,15 +340,15 @@ MT 资格从 GT 层组合判定，而非简单枚举：
 
 > **注意**：`static_gt` 不直接参与 MT 选择，仅作为场景白名单、LLM prompt 上下文等参考信息使用。
 
-> **MT 类型从 GT 各层抽取素材的映射**（实际构造是组合式的，以下作为参考）：
->
-> || GT 层数据内容 | 对应偏好类别 | 对应 MT 类型（示例） |
-> || --- | --- | --- |
-> || `personalization_gt.expression_mappings` | 用户个性化表达 | app_alias_mapping / quality_grade_mapping |
-> || `personalization_gt.app_business_preferences` | 应用—业务选择偏好 | service_to_app / app_to_service / app_service_combo |
-> || `conditional_gt` | 时间模式偏好 | weekly_preference / daily_time_preference |
-> || `personalization_gt.experience_param_preferences` | 体验参数偏好 | multi_param_bundle / scope_restriction |
-> || `changeable_gt` | 记忆更新与冲突处理 | memory_correction / preference_change |
+**MT 类型从 GT 各层抽取素材的映射**（实际构造是组合式的，以下作为参考）：
+
+| GT 层数据内容 | 对应偏好类别 | 对应 MT 类型（示例） |
+| --- | --- | --- |
+| `personalization_gt.expression_mappings` | 用户个性化表达 | `app_alias_mapping` / `quality_grade_mapping` |
+| `personalization_gt.app_business_preferences` | 应用—业务选择偏好 | `service_to_app` / `app_to_service` / `app_service_combo` |
+| `conditional_gt` | 时间模式偏好 | `weekly_preference` / `daily_time_preference` |
+| `personalization_gt.experience_param_preferences` | 体验参数偏好 | `multi_param_bundle` / `scope_restriction` |
+| `changeable_gt` | 记忆更新与冲突处理 | `memory_correction` / `preference_change` |
 
 ---
 
@@ -758,43 +779,33 @@ MT类型按data_design的5大用户事实记忆类别+2个补充类别组织，�
 
 ### 5.4 选择优先级
 
-选择顺序是**按5大用户事实记忆类别优先级逐层展开**，先保证核心类别覆盖，容量允许时扩展更多类别和extending类型：
+选择顺序是**按 5 大用户事实记忆类别优先级逐层展开**，先保证核心类别覆盖，容量允许时扩展更多类别和 extending 类型：
 
-```
-优先级1（必选）：个性化表达 (用户个性化表达)
-  → 5种子类型: app_alias/service_alias/time_expr/quality_grade/speed_expr
-  → 随机选1个（配置固定，每个子类型候选少，得分无区分度）
-  → 排斥：同expression不重复
+```mermaid
+graph TD
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+    classDef must fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
-优先级2（必选）：参数补全 (体验参数偏好)
-  → 5种子类型: preferred_value/fallback_value/rejected_value/multi_param_bundle/scope_restriction
-  → 随机选1个（配置固定，候选少，得分无区分度）
-  → 排斥：同scope不重复
+    P1["<b>优先级 1（必选）：个性化表达 (用户个性化表达)<br/>5 种子类型: app_alias / service_alias / time_expr / quality_grade / speed_expr<br/>约束：同 expression 不重复</b>"]:::must
+    P2["<b>优先级 2（必选）：参数补全 (体验参数偏好)<br/>5 种子类型: preferred / fallback / rejected / multi_param_bundle / scope_restriction<br/>约束：同 scope 不重复</b>"]:::must
+    P3["<b>优先级 3：应用-业务选择 (应用-业务选择偏好)<br/>service_to_app / app_to_service / app_service_combo / candidate_disambiguation</b>"]
+    P4["<b>优先级 4：时间模式 (时间模式偏好)<br/>daily_time / weekly / weekday_weekend / temporary / periodic</b>"]
+    P5["<b>优先级 5（容量允许）：记忆更新与冲突处理<br/>从 changeable_gt 取素材 → memory_correction / preference_change</b>"]
+    P6["<b>优先级 6（可选）：Scope 限制 extending MT<br/>基于已有 MT 做跨 scope 不迁移负样本（+1 Session）</b>"]
 
-优先级3：应用-业务选择 (应用-业务选择偏好)
-  → 5种子类型: service_to_app/app_to_service/app_service_combo/candidate_disambiguation/rejection_combo
-
-优先级4：时间模式 (时间模式偏好)
-  → 5种子类型: daily_time/weekly/weekday_weekend/temporary/periodic
-
-优先级5（容量允许）：记忆更新 (记忆更新与冲突处理)
-  → 从 changeable_gt 取 role_change/event_driven_change 素材
-  → memory_correction（用户纠正）/ preference_change（偏好变化）
-
-优先级6（可选）：Scope限制 extending MT
-  → 基于已有的某个MT做scope_restriction负样本
-  → 只需+1个Session
+    P1 --> P2 --> P3 --> P4 --> P5 --> P6
 ```
 
-优先级1-2是必选（max_mts≥2即可满足），优先级3-4按时间线容量依次追加，优先级5同样从 `changeable_gt` 取素材作为非 extending MT，优先级6是 extending MT。NON_EXTENDABLE_TYPES从catalog自动推导：category="追问决策"或eval_tags含"follow_up_decision"的类型不可被extend。
+优先级 1-2 是必选（`max_mts ≥ 2` 即可满足），优先级 3-4 按时间线容量依次追加，优先级 5 从 `changeable_gt` 取素材作为非 extending MT，优先级 6 是 extending MT。`NON_EXTENDABLE_TYPES` 从 catalog 自动推导：`category="追问决策"` 或 `eval_tags` 含 `"follow_up_decision"` 的类型不可被 extend。
 
 容量与类别覆盖的关系：
 
-```
-N=6  → max 2 MT → 覆盖优先级1+2
-N=8  → max 3 MT → 覆盖优先级1+2+3 or 1+2+5(记忆更新)
-N=10 → max 4 MT → 覆盖优先级1+2+3+4 or 1+2+3+5 or 1+2+4+5 etc.
-```
+| 时间线容量 ($N$) | 最大主 MT 数 | 覆盖优先级组合 |
+| :---: | :---: | :--- |
+| $N=6$ | $\max 2$ MT | 覆盖优先级 $1+2$ |
+| $N=8$ | $\max 3$ MT | 覆盖优先级 $1+2+3$ 或 $1+2+5$（记忆更新） |
+| $N=10$ | $\max 4$ MT | 覆盖优先级 $1+2+3+4$ 或 $1+2+3+5$ |
+| $N=16\sim 20$（三层认知全量版） | 全覆盖 + 工作/经验记忆 | 完整覆盖事实记忆 + 独立工单复用/消歧 + 五大黄金经验双轨评测 |
 
 ### 5.5 选择策略
 
@@ -872,18 +883,23 @@ MT_003: memory_correction (记忆纠正)
 
 ### 6.2 交错排列
 
-按角色类型排序：evidence → reinforcement → distractor → correction
+按角色类型因果排序：`evidence` $\to$ `reinforcement` $\to$ `distractor` $\to$ `correction`：
 
-```
-S001: evidence_session    [MT_001]  用户首次说"高清"，Agent追问确认
-S002: evidence_session    [MT_002]  用户明确说了1080p+80ms
-S003: reinforcement_session [MT_001] 用户再说"高清"省略参数，Agent应从记忆补全1080p
-S004: reinforcement_session [MT_002] 用户省略分辨率+时延，Agent应从记忆补全
-S005: distractor_session  [无]      微信会议（无关场景）
-S006: correction_session  [MT_003]  用户纠正："改成标清"
+```mermaid
+graph LR
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+
+    S1["<b>S001: evidence_session [MT_001]<br/>首次说“高清”，Agent 追问确认</b>"]
+    S2["<b>S002: evidence_session [MT_002]<br/>明确交代 1080p+80ms</b>"]
+    S3["<b>S003: reinforcement [MT_001]<br/>再说“高清”，从记忆补全 1080p</b>"]
+    S4["<b>S004: reinforcement [MT_002]<br/>省略参数，从记忆补全 1080p+80ms</b>"]
+    S5["<b>S005: distractor_session [无]<br/>微信会议（无关干扰场景）</b>"]
+    S6["<b>S006: correction_session [MT_003]<br/>用户显式纠正：“改成标清 720p”</b>"]
+
+    S1 --> S2 --> S3 --> S4 --> S5 --> S6
 ```
 
-correction后不再需要单独验证Session：后续如有reinforcement_session，自然会检验Agent是否用了纠正后的新值。
+`correction` 后不再需要单独验证 Session：后续如有 `reinforcement_session` / `reuse_session`，自然会检验“联接”Agent 是否使用了纠正后的新值。
 
 ### 6.3 时间间隔规则
 
@@ -909,35 +925,24 @@ correction后不再需要单独验证Session：后续如有reinforcement_session
 
 ### 7.1 单个Session的生成流程
 
-```
-1. 计算记忆快照（基于此前所有Session的累积事件）
-   ↓
-2. 构建精准意图（从GT推导，不依赖LLM）
-   - app_name: 从scenario取
-   - resolution/latency: 从app_config取good档
-   ↓
-3. 构建槽位表达计划（根据session_role决定用户如何表达）
-   - evidence_session: app_name=alias, resolution=fuzzy (自然表达)
-   - reinforcement_session: resolution=omitted, latency=omitted (省略参数让记忆补)
-   - correction_session: resolution=explicit (纠正时必须说清)
-   ↓
-4. 调用LLM生成对话（只负责自然语言渲染）
-   Prompt包含: 精准意图 + 表达计划 + 记忆快照 + Agent动作约束
-   LLM只做: 将精准意图降质为口语表达 + 生成Agent回复
-   ↓
-5. 规则标注source_type（不依赖LLM）
-   - 用户当前说的 → Turn
-   - 记忆快照补全的 → Memory (附memory_id)
-   - 保障记录查询的 → Record (附record_id)
-   - 知识库映射的 → Knowledge (附knowledge_key)
-   - 计算得到的 → Context
-   ↓
-6. 计算记忆事件 + 更新记忆快照
+```mermaid
+graph TD
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+    classDef llm fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+
+    Step1["<b>1. 计算初始记忆快照 (Memory / WorkingRecord / Experience)<br/>基于此前所有 Session 的累积事件与有效窗口</b>"]
+    Step2["<b>2. 构建精准意图 (纯规则推导，不依赖 LLM)<br/>从 GT / 工单账本 / 经验规则推导目标参数值</b>"]
+    Step3["<b>3. 构建槽位表达计划 (Slot Expression Plan)<br/>evidence: alias/fuzzy | reinforcement: omitted | experiential: Turn 1 基础参数显式自包含</b>"]
+    Step4["<b>4. 调用 LLM 生成多轮对话 (自然语言渲染层)<br/>输入：精准意图 + 表达计划 + 记忆快照 + 六类动作约束</b>"]:::llm
+    Step5["<b>5. 规则标注四元 source_type (纯规则推导)<br/>Turn / Memory / WorkingRecord / Experience</b>"]
+    Step6["<b>6. 计算记忆事件 + 写入工单账本 + 提炼经验卡片</b>"]
+
+    Step1 --> Step2 --> Step3 --> Step4 --> Step5 --> Step6
 ```
 
 ### 7.2 偏好映射表
 
-代码位置：`extractors/preference_maps.py`
+代码位置：`src/core/preference_maps.py`
 
 用户不会说"1080p"和"80ms"，而是说"高清""不卡"。偏好映射表将模糊表达映射到精确参数值，同时正确标注source_type。对应data_design.md的7个偏好类别。
 
@@ -1023,25 +1028,27 @@ correction后不再需要单独验证Session：后续如有reinforcement_session
 
 关键原则：**用户确认本次任务参数，不一定等于确认长期表达映射。** 用户同意本次将"高清"处理为1080p，不代表以后"高清"始终等于1080p。
 
-#### 7.2.2 映射如何产生source_type标注
+#### 7.2.2 映射如何产生 `source_type` 标注
 
-```
-用户说: "高清"
-  ↓ PreferenceMaps.resolve_quality(app="微信", service="看直播", expression="高清")
-  ↓ 查 QUALITY_EXPRESSION_MAP["高清"] → tier="good"
-  ↓ 查 app_config["微信"]["看直播"]["good"] → resolution=["1080p"]
-  → 参数记录: value=1080p, source_type=Knowledge,
-    source_ref="resolution_quality_map:微信:看直播:高清"
+```mermaid
+graph LR
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+
+    subgraph PathA ["<b>路径 A：口语模糊词通过映射表解析</b>"]
+        U1["<b>用户说：“高清”</b>"] --> M1["<b>查 QUALITY_EXPRESSION_MAP<br/>“高清” → tier = good</b>"]
+        M1 --> M2["<b>查 app_config[微信][看直播][good]<br/>→ resolution = 1080p</b>"]
+        M2 --> R1["<b>标注结果：value = 1080p<br/>source_type = Knowledge / Memory</b>"]
+    end
+
+    subgraph PathB ["<b>路径 B：用户当轮直接说出精确参数值</b>"]
+        U2["<b>用户说：“1080p”</b>"] --> R2["<b>标注结果：value = 1080p<br/>source_type = Turn (source_ref = U2)</b>"]
+    end
+
+    style PathA fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px;
+    style PathB fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px;
 ```
 
-对比用户直接说精确值的情况：
-
-```
-用户说: "1080p"
-  → 参数记录: value=1080p, source_type=Turn, source_ref="U2"
-```
-
-**同一个值1080p，因为表达方式不同，source_type不同**。
+**同一个值 `1080p`，因为表达方式与信息来源不同，`source_type` 完全不同**。
 
 #### 7.2.3 与session链的关系
 
@@ -1064,19 +1071,25 @@ reinforcement_session (再次做相同选择):
 
 偏好不是用户"告诉"Agent的，是Agent通过交互中的证据（我们的agent主要是追问）观察到的选择。映射表将自然语言选择翻译成精确参数值和正确的source_type标注。
 
-### 7.3 ref_data模板骨架
+### 7.3 `ref_data` 模板骨架编码规范
 
-从`ref_data`的session数据中提取16种skeleton_signature格式，用于Session生成时的交互模式约束。
+从 `ref_data` 的 session 数据中提取 16 种 `skeleton_signature` 格式，用于 Session 生成时的交互模式约束。`skeleton_signature` 是每个 session 的交互骨架编码，格式为：
 
-skeleton_signature是每个session的交互骨架编码，格式为：
+`模板 | 轮数 | 意图数 | 意图路径 | 意图关系 | 每轮 source_type 序列 | 特殊标签`
 
-模板|轮数|意图数|意图路径|意图关系|每轮source_type序列|特殊标签
+以 `T1-4` 为例：`T1-4|1|1|I1:芒果TV/视频/3/memory/resolved|none|Record,Record,Record,Record,Turn,Turn,Turn|none`
 
- T1-4为例：
+| 签名段位 | 示例取值 | 字段语义解释 |
+| :--- | :--- | :--- |
+| **1. 模板 ID** | `T1-4` | 1 轮交互模板（记忆/历史记录复用） |
+| **2. 交互轮数** | `1` | 共 1 轮 User-Agent 对话 |
+| **3. 意图数量** | `1` | 单意图会话 |
+| **4. 意图路径** | `I1:芒果TV/视频/3/memory/resolved` | 芒果TV / 视频业务 / 历史第 3 次交互 / memory 补全模式 / 已闭环 |
+| **5. 意图间关系** | `none` | 单意图无跨意图关系 |
+| **6. 参数溯源序列** | `Record,Record,Record,Record,Turn,Turn,Turn` | 4 个槽位来自历史记录/记忆补全，3 个槽位来自当轮输入 |
+| **7. 特殊标签** | `none` | 无特殊拒识或互斥消歧标签 |
 
-> T1-4|1|1|I1:芒果TV/视频/3/memory/resolved|none|Record,Record,Record,Record,Turn,Turn,Turn|none       │  │           │                      │       │                                  │       │  │           │                      │       │                                  └─ 无特殊标签       │  │           │                      │       └─ 7轮对话的source_type序列(4轮Record+3轮Turn)       │  │           │                      └─ 意图间关系: none       │  │           └─ 意图路径: 芒果TV/视频/3次对话/memory模式/已解决       │  └─ 1个意图       └─ 1轮交互
-
-在生成Session时，不能让LLM自由发挥对话结构，而是用这个signature约束生成。对话的骨架是规则定的，对话的自然语言内容是LLM填的。
+在生成 Session 时，不能让 LLM 自由发挥对话结构，而是用这个 signature 约束生成。**对话的骨架是规则定的，对话的自然语言内容是 LLM 填的。**
 
 #### 7.3.1 骨架与自然语言的关系：X-2实例
 
@@ -1127,7 +1140,7 @@ Turn 3:
 
 **intent结果**中I1的resolution参数：
 
-```
+```json
 "resolution": {
   "min_value": {
     "value": "1080p",
@@ -1191,7 +1204,7 @@ Turn 3:
 | **distractor_session**    | T1-2, X-1, T2-6              | 干扰需求，与目标记忆无关。T1-2=域外拒绝，X-1=域内+域外混合，T2-6=一成一取消                                                        |
 | **correction_session**    | T2-3, T2-5, T3-2             | 纠正更新模式。T2-3=业务不支持需纠正；T2-5=修改已有参数（如时长）；T3-2=APP和业务不兼容需多轮纠正                                            |
 
-当前使用4种session角色：evidence_session、reinforcement_session、distractor_session、correction_session。
+当前基础事实层使用 4 种 session 角色：`evidence_session`、`reinforcement_session`、`distractor_session`、`correction_session`；在三层认知架构中进一步扩展了 `working_memory_reuse_session`、`working_memory_disambiguation_session` 与五大经验记忆 `experiential_*_session`。
 
 ### 7.4 Agent 动作类型（严格限定六类）
 
@@ -1233,41 +1246,39 @@ Turn 3:
 
 **每个Session约2次LLM调用**（用户表达+Agent回复在同一个prompt中），比PersonaMem-v2的5-6次降低约60%。
 
-### 7.6 记忆状态机制
+### 7.6 记忆状态转移机制
 
-6种状态 + 有效时间：
+事实记忆包含 6 种生命周期状态与有效时间控制：
 
-```
-candidate
-   │ reinforcement / confirmation
-   ↓
-active
-   │ correction / dispute
-   ↓
-disputed → 可被reinforce回到active
-   │ deactivation
-   ↓
-inactive
+```mermaid
+graph LR
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+    classDef active fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
-superseded: 被新版记忆替代
-expired: 有效期已过
-
-升级规则：
-- 首次证据 → candidate
-- 两次一致证据 → active
-- 用户纠正 → update 新值，旧版 superseded
+    E0["<b>首次隐式证据 (N=1)</b>"] --> C["<b>candidate (候选态)</b>"]
+    E1["<b>首次显式声明 (Explicit)</b>"] --> A["<b>active (生效态)</b>"]:::active
+    C -->|"<b>reinforcement / 2次一致确认</b>"| A
+    A -->|"<b>correction / 用户显式纠正</b>"| SUP["<b>superseded (被新版本替代)</b>"]
+    A -->|"<b>dispute / 临时冲突存疑</b>"| D["<b>disputed (争议态)</b>"]
+    D -->|"<b>reinforce / 再次确认恢复</b>"| A
+    D -->|"<b>deactivation / 明确停用</b>"| IN["<b>inactive (停用态)</b>"]
+    A -->|"<b>valid_until 到期</b>"| EXP["<b>expired (过期失效态)</b>"]
 ```
 
-### 7.7 本例的记忆演进
+### 7.7 本例的记忆演进轨迹
 
-```
-S001后: [高清→1080p(candidate)]                                ← 首次出现
-S002后: [+抖音+看直播→1080p+80ms(candidate)]                    ← 参数偏好首次出现
-S003后: 高清→1080p(candidate→active)                            ← 两次一致，升级
-S004后: 抖音+看直播→1080p+80ms(candidate→active)                ← 两次一致，升级
-S005后: 2 active                                               ← distractor不影响状态
-S006后: 高清→1080p(active→superseded), +标清→720p(active)      ← 纠正后旧记忆被替代
-后续reinforcement时Agent应使用720p(新值)                      ← 下一个reinforcement_session自然验证
+```mermaid
+graph LR
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+
+    T1["<b>S001 后<br/>高清→1080p (candidate)</b>"]
+    T2["<b>S002 后<br/>+抖音看直播→1080p+80ms (candidate)</b>"]
+    T3["<b>S003 后<br/>高清→1080p (升级为 active)</b>"]
+    T4["<b>S004 后<br/>抖音看直播→1080p+80ms (升级为 active)</b>"]
+    T5["<b>S005 后 (distractor)<br/>保持 2 条 active 不受污染</b>"]
+    T6["<b>S006 后 (correction)<br/>高清→1080p (superseded)<br/>+标清→720p (active 新值生效)</b>"]
+
+    T1 --> T2 --> T3 --> T4 --> T5 --> T6
 ```
 
 ---
@@ -1403,19 +1414,19 @@ def validate_sessions(skeleton: dict, sessions: list[dict]) -> dict:
 
 ```mermaid
 graph TD
-    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2px,color:#111111;
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
 
     subgraph LayerInput ["<b>输入层：配置与数据源</b>"]
         IN1["<b>业务配置 (app_config / app_map / support_matrix)</b>"]
-        IN2["<b>Persona 模板 (corenet_personas.jsonl)</b>"]
+        IN2["<b>Persona 画像模板 (data/personas/*.json)</b>"]
         IN3["<b>参考模板 (ref_data 16种骨架)</b>"]
-        IN4["<b>评测目标库 (mt_type_catalog.json)</b>"]
+        IN4["<b>评测目标库与经验库 (mt_type_catalog / ExperienceBank)</b>"]
     end
 
     subgraph LayerGT ["<b>B - Persona Ground Truth (四层真值)</b>"]
-        GT1["<b>static_gt: 固定属性</b>"]
+        GT1["<b>static_gt: 固定属性与合法场景池</b>"]
         GT2["<b>conditional_gt: 条件偏好</b>"]
-        GT3["<b>changeable_gt: 可变属性</b>"]
+        GT3["<b>changeable_gt: 可变属性与故事线</b>"]
         GT4["<b>personalization_gt: 表达映射与参数偏好</b>"]
     end
 
@@ -1424,30 +1435,32 @@ graph TD
         MT2["<b>优先级 2: 参数补全 (必选)</b>"]
         MT3["<b>优先级 3: 应用-业务选择</b>"]
         MT4["<b>优先级 4: 时间模式</b>"]
-        MT5["<b>扩展: 记忆纠偏 (memory_correction)</b>"]
+        MT5["<b>扩展: 记忆纠偏 + 工作工单复用 + 五大黄金经验</b>"]
     end
 
     subgraph LayerTimeline ["<b>D - Timeline 规划 (时间线因果拓扑)</b>"]
-        TL1["<b>角色池编排: evidence / reinforcement / distractor / correction</b>"]
+        TL1["<b>角色池编排: 事实 / 工作工单 / 五大经验会话 (16~20 轮)</b>"]
         TL2["<b>时间戳单调递增与自然间隔规则</b>"]
     end
 
     subgraph LayerGen ["<b>E - 逐 Session 生成循环</b>"]
         E1["<b>计算初始记忆快照 (规则层)</b>"] --> E2["<b>槽位表达计划与意图构建 (规则层)</b>"]
-        E2 --> E3["<b>LLM 生成对话台词 (自然语言层)</b>"]
+        E2 --> E3["<b>LLM 生成对话台词与双轨分支 (自然语言层)</b>"]
         E3 --> E4["<b>计算记忆事件与更新快照 (规则层)</b>"]
         E4 --> E5["<b>四元 source_type 精准标注 (规则层)</b>"]
     end
 
-    subgraph LayerVal ["<b>F - 评测与一致性双层校验</b>"]
-        V1["<b>结构校验 R1~R8 (骨架层硬规则)</b>"]
-        V2["<b>内容校验 C1~C5 (台词语义断言)</b>"]
-        V3["<b>校验未通过: 自动标记/重试/熔断</b>"]
+    subgraph LayerVal ["<b>F - 评测与一致性双层校验 (qc_validator.py)</b>"]
+        V1["<b>结构与三层认知校验 R1~R14 (骨架层硬规则)</b>"]
+        V2["<b>内容校验 C1~C5 (台词语义断言与零泄漏)</b>"]
+        V3["<b>校验未通过: 自动标记 / 重试 / 确定性兜底</b>"]
     end
 
-    subgraph LayerOut ["<b>G - 交付产物</b>"]
+    subgraph LayerOut ["<b>G - 四大标准交付产物</b>"]
         OUT1["<b>skeleton.json: 确定性设计骨架 (应该发生什么)</b>"]
-        OUT2["<b>sessions.jsonl: 多轮对话与记忆演进记录 (实际发生了什么)</b>"]
+        OUT2["<b>sessions.jsonl: 多轮对话与 Fast/Slow 双轨评测记录</b>"]
+        OUT3["<b>working_records.jsonl: 独立历史保障工单物理账本</b>"]
+        OUT4["<b>experiences.jsonl: 五大黄金经验策略卡片库</b>"]
     end
 
     LayerInput --> LayerGT
@@ -1457,13 +1470,13 @@ graph TD
     LayerGen --> LayerVal
     LayerVal --> LayerOut
 
-    style LayerInput fill:#FFFFFF,stroke:#111111,stroke-width:2px;
-    style LayerGT fill:#FFFFFF,stroke:#111111,stroke-width:2px;
-    style LayerMT fill:#FFFFFF,stroke:#111111,stroke-width:2px;
-    style LayerTimeline fill:#FFFFFF,stroke:#111111,stroke-width:2px;
-    style LayerGen fill:#FFFFFF,stroke:#111111,stroke-width:2px;
-    style LayerVal fill:#FFFFFF,stroke:#111111,stroke-width:2px;
-    style LayerOut fill:#FFFFFF,stroke:#111111,stroke-width:2px;
+    style LayerInput fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;
+    style LayerGT fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px;
+    style LayerMT fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;
+    style LayerTimeline fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;
+    style LayerGen fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px;
+    style LayerVal fill:#FFFFFF,stroke:#D97706,stroke-width:2.5px;
+    style LayerOut fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px;
 ```
 
 **依赖关系**：
@@ -1474,4 +1487,4 @@ graph TD
 | C-MT选择               | 评分函数+优先级+diversity排斥 | —          |
 | D-Timeline           | 角色排列+间隔规则            | —          |
 | E-快照/意图/表达/标注/事件     | 全部规则推算               | 仅E4对话生成    |
-| F-校验                 | R1-R8结构校验            | C1-C5需解析文本 |
+| F-校验                 | R1-R14 结构与认知闭环校验     | C1-C5需解析文本 |

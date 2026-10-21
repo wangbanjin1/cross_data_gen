@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>跨会话长程记忆数据集：生成问题排查与数据治理实录</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <style>
         :root[data-theme="parchment"] {
             --bg-color: #f7f4ec;
@@ -20,15 +21,6 @@
             --code-text: #8d3a2b;
             --pre-bg: #ece5d6;
             --pre-text: #2d3748;
-            --callout-note-bg: #e5ede3;
-            --callout-note-border: #709775;
-            --callout-note-text: #2b5133;
-            --callout-warn-bg: #f5eedb;
-            --callout-warn-border: #c48a37;
-            --callout-warn-text: #704b12;
-            --callout-imp-bg: #e5eaf5;
-            --callout-imp-border: #5c7cb6;
-            --callout-imp-text: #1e3863;
             --contrast-bad-bg: #fae8e5;
             --contrast-bad-border: #e8b0a5;
             --contrast-bad-text: #a83220;
@@ -59,277 +51,226 @@
             --code-text: #f08d70;
             --pre-bg: #171b21;
             --pre-text: #cdd3dc;
-            --callout-note-bg: #202b28;
-            --callout-note-border: #4d7a68;
-            --callout-note-text: #8bbfa8;
-            --callout-warn-bg: #2b251d;
-            --callout-warn-border: #8a6c38;
-            --callout-warn-text: #d9b168;
-            --callout-imp-bg: #1d2533;
-            --callout-imp-border: #4a638c;
-            --callout-imp-text: #96b5e3;
-            --contrast-bad-bg: #2d1e20;
-            --contrast-bad-border: #5c3035;
-            --contrast-bad-text: #f07167;
-            --contrast-good-bg: #1c2b22;
-            --contrast-good-border: #355e42;
-            --contrast-good-text: #70c48a;
+            --contrast-bad-bg: #2d1e1e;
+            --contrast-bad-border: #6e3531;
+            --contrast-bad-text: #f29b91;
+            --contrast-good-bg: #1d2b22;
+            --contrast-good-border: #366342;
+            --contrast-good-text: #8ed19e;
             --table-header: #262e38;
             --table-alt: #1f242c;
             --tag-bg: #323c48;
             --tag-text: #d2a679;
             --toggle-bg: #323b47;
-            --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
-            --card-hover-shadow: 0 8px 24px rgba(224, 159, 103, 0.12);
+            --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+            --card-hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
             background-color: var(--bg-color);
             color: var(--text-primary);
-            line-height: 1.8;
-            padding: 24px 16px;
+            line-height: 1.72;
             font-size: 15px;
         }
-        .layout-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            max-width: 1420px;
-            margin: 0 auto;
-            gap: 28px;
-        }
+        .layout-wrapper { display: flex; min-height: 100vh; }
         .sidebar-toc {
             width: 310px;
-            flex-shrink: 0;
-            position: sticky;
-            top: 20px;
-            max-height: calc(100vh - 40px);
-            display: flex;
-            flex-direction: column;
-        }
-        .toc-card {
             background-color: var(--surface-color);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px 14px;
-            display: flex;
-            flex-direction: column;
-            max-height: calc(100vh - 40px);
-            box-shadow: var(--card-shadow);
+            border-right: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding: 18px 14px;
+            flex-shrink: 0;
+            overflow-y: auto;
         }
         .portal-nav-box {
-            margin-bottom: 12px;
-            padding-bottom: 10px;
+            margin-bottom: 14px;
+            padding-bottom: 12px;
             border-bottom: 1px solid var(--border-color);
         }
         .portal-nav-title {
             font-size: 0.76rem;
-            font-weight: 700;
+            font-weight: 800;
             color: var(--accent-primary);
             margin-bottom: 6px;
             letter-spacing: 0.04em;
         }
-        .portal-nav-list {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
+        .portal-group-label {
+            font-size: 0.71rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin: 8px 0 3px 4px;
         }
+        .portal-nav-list { display: flex; flex-direction: column; gap: 2px; }
         .portal-nav-item {
             display: block;
             padding: 4px 8px;
-            font-size: 0.8rem;
+            font-size: 0.80rem;
             color: var(--text-secondary);
             text-decoration: none;
             border-radius: 5px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
         }
-        .portal-nav-item:hover {
-            background: var(--surface-elevated);
-            color: var(--accent-primary);
-        }
+        .portal-nav-item:hover { background-color: var(--surface-elevated); color: var(--accent-primary); }
         .portal-nav-item.active {
-            background: var(--accent-glow);
+            background-color: var(--accent-glow);
             color: var(--accent-primary);
             font-weight: 700;
             border-left: 3px solid var(--accent-primary);
         }
         .toc-header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            padding-bottom: 10px;
-            margin-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+            margin-bottom: 8px;
         }
-        .toc-title { font-size: 0.92rem; font-weight: 700; }
-        .toc-action-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            padding: 4px;
-        }
-        .search-box { margin-bottom: 10px; }
+        .toc-title { font-size: 0.86rem; font-weight: 700; }
+        .toc-action-btn { background: none; border: none; cursor: pointer; color: var(--text-muted); }
+        .search-box { margin-bottom: 8px; }
         .search-input {
             width: 100%;
-            padding: 7px 10px;
+            padding: 6px 10px;
             border-radius: 6px;
             border: 1px solid var(--border-color);
             background: var(--bg-color);
-            font-size: 0.83rem;
             color: var(--text-primary);
+            font-size: 0.82rem;
         }
-        .category-pills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
-        }
+        .category-pills { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
         .cat-pill {
-            background: var(--tag-bg);
-            color: var(--tag-text);
-            border: none;
             padding: 3px 8px;
-            border-radius: 5px;
             font-size: 0.74rem;
-            font-weight: 600;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-color);
+            color: var(--text-secondary);
             cursor: pointer;
         }
-        .cat-pill.active {
-            background: var(--accent-primary);
-            color: #ffffff;
-        }
-        .toc-body { overflow-y: auto; flex: 1; padding-right: 4px; }
-        .toc-group-title {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--accent-primary);
-            margin: 8px 0 4px 6px;
-        }
+        .cat-pill.active { background: var(--accent-primary); color: #fff; border-color: var(--accent-primary); }
+        .toc-group-title { font-size: 0.75rem; font-weight: 700; color: var(--accent-primary); margin: 10px 0 4px; }
         .toc-list { list-style: none; }
-        .toc-item { margin: 2px 0; }
         .toc-link {
             display: block;
-            padding: 4px 8px;
+            padding: 3px 6px;
+            font-size: 0.79rem;
             color: var(--text-secondary);
             text-decoration: none;
-            font-size: 0.81rem;
-            border-radius: 5px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            border-radius: 4px;
         }
-        .toc-link:hover, .toc-link.active {
-            color: var(--accent-primary);
-            background: var(--accent-glow);
-        }
-        body.toc-collapsed .sidebar-toc { display: none; }
-        body.toc-collapsed #expandTocBtn { display: inline-flex !important; }
-        .main-content { flex: 1; min-width: 0; max-width: 1040px; }
+        .toc-link:hover { background: var(--surface-elevated); color: var(--accent-primary); }
+        .main-content { flex: 1; padding: 28px 42px 80px; max-width: 1180px; margin: 0 auto; overflow-x: hidden; }
         .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
             flex-wrap: wrap;
             gap: 10px;
         }
-        .nav-links { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-        .nav-btn {
-            background-color: var(--surface-color);
-            color: var(--text-secondary);
-            border: 1px solid var(--border-color);
+        .nav-links { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .nav-btn, .theme-switch-btn {
             padding: 5px 12px;
             border-radius: 6px;
-            font-size: 0.83rem;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .nav-btn:hover, .nav-btn.active {
-            background: var(--accent-primary);
-            color: #ffffff;
-            border-color: var(--accent-primary);
-        }
-        .theme-switch-btn {
-            background-color: var(--toggle-bg);
-            color: var(--text-primary);
             border: 1px solid var(--border-color);
-            padding: 6px 14px;
-            border-radius: 20px;
+            background: var(--surface-color);
+            color: var(--text-primary);
             font-size: 0.83rem;
             cursor: pointer;
-            font-weight: 600;
+            text-decoration: none;
         }
-        header.doc-header {
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 22px;
-            margin-bottom: 28px;
+        .nav-btn.active { background: var(--accent-primary); color: #fff; border-color: var(--accent-primary); }
+        .doc-header {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
         }
         .header-tag {
             display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
             background: var(--tag-bg);
             color: var(--tag-text);
-            font-size: 0.78rem;
-            font-weight: 650;
-            padding: 3px 10px;
-            border-radius: 4px;
-            margin-bottom: 10px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            margin-bottom: 8px;
         }
-        h1.doc-title { font-size: 1.9rem; margin-bottom: 10px; }
-        .doc-lead { font-size: 0.93rem; color: var(--text-secondary); margin-bottom: 16px; }
-        .md-link { color: var(--accent-primary); text-decoration: underline; font-weight: 600; }
+        .doc-title { font-size: 1.65rem; font-weight: 800; margin-bottom: 8px; }
+        .doc-lead { color: var(--text-secondary); font-size: 0.92rem; margin-bottom: 16px; }
+        .md-link { color: var(--accent-primary); font-weight: 700; text-decoration: underline; }
         .header-meta-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
         }
         .meta-stat-card {
-            background-color: var(--surface-color);
+            background: var(--bg-color);
             border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 10px 14px;
         }
-        .meta-stat-label { font-size: 0.74rem; color: var(--text-muted); }
-        .meta-stat-val { font-size: 1.02rem; font-weight: 700; color: var(--accent-primary); }
-        .column-section-header {
-            margin: 34px 0 18px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid var(--border-color);
+        .meta-stat-label { font-size: 0.75rem; color: var(--text-muted); }
+        .meta-stat-val { font-size: 1.05rem; font-weight: 800; }
+        .mermaid-wrapper {
+            margin: 18px 0 26px;
+            padding: 16px 20px 22px;
+            background-color: #FFFFFF !important;
+            border: 2.5px solid #0F172A;
+            border-radius: 10px;
+            overflow-x: auto;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+        }
+        .mermaid-toolbar {
             display: flex;
-            align-items: baseline;
-            gap: 12px;
-            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #E2E8F0;
         }
-        .column-section-header h2 {
-            font-size: 1.35rem;
-            border-left: 4px solid var(--accent-primary);
-            padding-left: 10px;
+        .mermaid-badge { font-size: 0.78rem; font-weight: 800; color: #0F172A; }
+        .mermaid-zoom-btn {
+            background: #F8FAFC;
+            border: 1.5px solid #0F172A;
+            color: #0F172A;
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 6px;
+            cursor: pointer;
         }
-        .column-section-desc { font-size: 0.83rem; color: var(--text-muted); }
+        .mermaid { background: #FFFFFF !important; font-weight: 700 !important; }
+        .mermaid svg text, .mermaid svg span, .mermaid svg .nodeLabel, .mermaid svg .edgeLabel {
+            font-weight: 700 !important;
+            color: #0F172A !important;
+            fill: #0F172A !important;
+        }
+        .column-section { margin-bottom: 32px; }
+        .column-section-header { margin-bottom: 14px; border-left: 4px solid var(--accent-primary); padding-left: 12px; }
+        .column-section-desc { font-size: 0.84rem; color: var(--text-muted); }
         .issue-card {
-            background-color: var(--surface-color);
+            background: var(--surface-color);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px 22px;
-            margin-bottom: 22px;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 18px;
             box-shadow: var(--card-shadow);
         }
         .issue-header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
             margin-bottom: 12px;
-            border-bottom: 1px solid var(--border-color);
             padding-bottom: 10px;
-            flex-wrap: wrap;
-            gap: 8px;
+            border-bottom: 1px solid var(--border-color);
         }
         .issue-title-group { display: flex; align-items: center; gap: 10px; }
         .issue-num {
@@ -339,158 +280,111 @@
             width: 26px;
             height: 26px;
             border-radius: 50%;
-            background: var(--surface-elevated);
-            color: var(--accent-primary);
+            background: var(--accent-primary);
+            color: #fff;
+            font-weight: 800;
             font-size: 0.82rem;
-            font-weight: 700;
+            flex-shrink: 0;
         }
-        .issue-header h2 { font-size: 1.08rem; font-weight: 650; }
-        .issue-tag-group { display: flex; gap: 6px; align-items: center; }
-        .issue-cat-badge { font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; font-weight: 650; }
-        .badge-arch { background: var(--callout-imp-bg); color: var(--callout-imp-text); border: 1px solid var(--callout-imp-border); }
-        .badge-gov { background: var(--callout-warn-bg); color: var(--callout-warn-text); border: 1px solid var(--callout-warn-border); }
-        .badge-bug { background: var(--callout-note-bg); color: var(--callout-note-text); border: 1px solid var(--callout-note-border); }
-        .issue-date-tag {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            background: var(--surface-elevated);
-            border: 1px solid var(--border-color);
+        .issue-header h2 { font-size: 1.08rem; font-weight: 700; }
+        .issue-tag-group { display: flex; gap: 6px; flex-shrink: 0; }
+        .issue-cat-badge, .issue-date-tag {
             padding: 2px 8px;
             border-radius: 4px;
+            font-size: 0.74rem;
+            font-weight: 700;
+            background: var(--tag-bg);
+            color: var(--tag-text);
         }
         .desc-block { margin-bottom: 14px; font-size: 0.91rem; }
-        .section-sublabel { font-weight: 700; color: var(--accent-primary); margin: 12px 0 6px; }
-        .bullet-item { display: flex; gap: 8px; margin-bottom: 6px; }
-        .bullet-prefix { color: var(--accent-primary); font-weight: 700; }
-        code {
-            font-family: "JetBrains Mono", Consolas, monospace;
-            background-color: var(--code-bg);
-            color: var(--code-text);
-            padding: 2px 5px;
-            border-radius: 4px;
-            font-size: 0.87em;
-        }
-        .contrast-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            margin-top: 12px;
-        }
-        @media (max-width: 960px) {
-            .contrast-grid { grid-template-columns: 1fr; }
-            .sidebar-toc { display: none; }
-        }
-        .contrast-box { border-radius: 8px; padding: 12px 14px; font-size: 0.84rem; min-width: 0; }
-        .contrast-box.bad { background: var(--contrast-bad-bg); border: 1px solid var(--contrast-bad-border); }
-        .contrast-box.good { background: var(--contrast-good-bg); border: 1px solid var(--contrast-good-border); }
-        .contrast-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
-        .contrast-pill-bad {
-            background: var(--contrast-bad-border);
-            color: var(--contrast-bad-text);
-            font-size: 0.72rem;
+        .section-sublabel {
             font-weight: 700;
-            padding: 1px 6px;
-            border-radius: 4px;
-            margin-right: 5px;
+            color: var(--accent-primary);
+            margin: 10px 0 4px;
+            font-size: 0.86rem;
         }
-        .contrast-pill-good {
-            background: var(--contrast-good-border);
-            color: var(--contrast-good-text);
-            font-size: 0.72rem;
-            font-weight: 700;
-            padding: 1px 6px;
-            border-radius: 4px;
-            margin-right: 5px;
-        }
-        .code-block {
-            background: var(--pre-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            overflow: hidden;
-        }
-        .code-header {
-            display: flex;
-            justify-content: space-between;
-            padding: 4px 10px;
-            background: var(--surface-color);
-            border-bottom: 1px solid var(--border-color);
-            font-size: 0.74rem;
-        }
-        .copy-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            color: var(--text-muted);
-            padding: 1px 8px;
-            font-size: 0.73rem;
-            cursor: pointer;
-        }
-        pre { padding: 10px 12px; overflow-x: auto; margin: 0; line-height: 1.5; }
-        pre code { background: transparent; color: var(--pre-text); padding: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
-        .table-wrapper { overflow-x: auto; margin: 14px 0; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
-        th, td { border: 1px solid var(--border-color); padding: 9px 12px; text-align: left; }
-        th { background: var(--table-header); font-weight: 650; }
-        tr:nth-child(even) { background: var(--table-alt); }
-        .summary-card {
-            background: var(--surface-color);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-        }
-        #markdown-view-container {
+        .bullet-item { display: flex; gap: 8px; margin-bottom: 5px; }
+        .bullet-prefix { font-weight: 700; color: var(--accent-primary); }
+        .contrast-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        @media (max-width: 900px) { .contrast-grid { grid-template-columns: 1fr; } }
+        .contrast-box { border-radius: 8px; padding: 12px; border: 1px solid var(--border-color); }
+        .contrast-box.bad { background: var(--contrast-bad-bg); border-color: var(--contrast-bad-border); }
+        .contrast-box.good { background: var(--contrast-good-bg); border-color: var(--contrast-good-border); }
+        .contrast-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.82rem; font-weight: 700; }
+        .contrast-pill-bad { color: var(--contrast-bad-text); }
+        .contrast-pill-good { color: var(--contrast-good-text); }
+        .code-block { background: var(--pre-bg); border-radius: 6px; overflow: hidden; border: 1px solid var(--border-color); }
+        .code-header { display: flex; justify-content: space-between; padding: 4px 10px; background: var(--surface-color); font-size: 0.74rem; }
+        .copy-btn { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 4px; padding: 1px 6px; cursor: pointer; font-size: 0.72rem; color: var(--text-secondary); }
+        .code-block pre { padding: 10px; overflow-x: auto; font-size: 0.82rem; line-height: 1.5; }
+        .table-wrapper { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+        th, td { padding: 9px 12px; border-bottom: 1px solid var(--border-color); text-align: left; }
+        thead tr { background: var(--table-header); }
+        #markdown-view-container { display: none; }
+        .raw-md-textarea { width: 100%; height: 75vh; font-family: monospace; padding: 14px; border-radius: 8px; background: var(--bg-color); color: var(--text-primary); border: 1px solid var(--border-color); }
+        body.toc-collapsed .sidebar-toc { display: none; }
+        #mermaid-modal {
             display: none;
-            background: var(--surface-color);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-        }
-        .md-toolbar {
-            display: flex;
-            justify-content: space-between;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.82);
+            z-index: 9999;
             align-items: center;
-            margin-bottom: 12px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
+            justify-content: center;
+            padding: 28px;
         }
-        .btn-copy-md {
-            background: var(--accent-primary);
-            color: #ffffff;
+        #mermaid-modal.active { display: flex; }
+        .mermaid-modal-box {
+            background: #FFFFFF;
+            border: 3px solid #0F172A;
+            border-radius: 12px;
+            max-width: 96vw;
+            max-height: 92vh;
+            overflow: auto;
+            padding: 24px;
+            position: relative;
+        }
+        .mermaid-modal-close {
+            position: sticky;
+            top: 0;
+            float: right;
+            background: #0F172A;
+            color: #FFFFFF;
             border: none;
             padding: 6px 14px;
             border-radius: 6px;
+            font-weight: 700;
             cursor: pointer;
-            font-weight: 600;
-        }
-        .raw-md-textarea {
-            width: 100%;
-            height: 75vh;
-            font-family: "JetBrains Mono", Consolas, monospace;
-            font-size: 0.84rem;
-            background: var(--bg-color);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 14px;
-            line-height: 1.6;
         }
     </style>
 </head>
 <body>
+    <div id="mermaid-modal" onclick="if(event.target===this)closeMermaidModal()">
+        <div class="mermaid-modal-box">
+            <button class="mermaid-modal-close" onclick="closeMermaidModal()">✕ 关闭全屏预览</button>
+            <div id="mermaid-modal-content" style="margin-top: 12px; text-align: center;"></div>
+        </div>
+    </div>
     <div class="layout-wrapper">
         <aside class="sidebar-toc" id="sidebarToc">
             <div class="toc-card">
                 <div class="portal-nav-box">
-                    <div class="portal-nav-title">文档中心快速导航</div>
+                    <div class="portal-nav-title">四层文档架构导航</div>
                     <div class="portal-nav-list">
-                        <a href="../README.html" class="portal-nav-item" title="文档中心总览 (README)">文档中心总览 (README)</a>
-<a href="../specs/cognitive_memory_dev_spec.html" class="portal-nav-item" title="三层认知记忆与双轨评测规范">三层认知记忆与双轨评测规范</a>
-<a href="../跨 Session 记忆数据集生成器思路.html" class="portal-nav-item" title="跨 Session 生成器总体设计">跨 Session 生成器总体设计</a>
+                        <div class="portal-group-label">总览与阅读路线</div>
+<a href="../README.html" class="portal-nav-item" title="文档中心总览与路线图">文档中心总览与路线图</a>
+<div class="portal-group-label">第一层 · 业务与建模要求</div>
 <a href="../记忆建模与数据集生成要求.html" class="portal-nav-item" title="记忆建模与生成要求">记忆建模与生成要求</a>
-<a href="../specs/persona_spec.html" class="portal-nav-item" title="Persona 画像建模规范">Persona 画像建模规范</a>
+<div class="portal-group-label">第二层 · 核心架构与流水线</div>
+<a href="../specs/cognitive_memory_dev_spec.html" class="portal-nav-item" title="三层认知记忆与双轨评测总纲">三层认知记忆与双轨评测总纲</a>
+<a href="../跨 Session 记忆数据集生成器思路.html" class="portal-nav-item" title="跨 Session 生成流水线详设">跨 Session 生成流水线详设</a>
+<div class="portal-group-label">第三层 · 输入规范与操作</div>
+<a href="../specs/persona_spec.html" class="portal-nav-item" title="Persona 画像与故事线规范">Persona 画像与故事线规范</a>
 <a href="../guides/cli_usage.html" class="portal-nav-item" title="CLI 命令行与流水线指南">CLI 命令行与流水线指南</a>
+<div class="portal-group-label">第四层 · 理论与治理归档</div>
+<a href="../archive/memory_evolution_proposal.html" class="portal-nav-item" title="三层认知演进立项提案 (RFC)">三层认知演进立项提案 (RFC)</a>
 <a href="../archive/defect_triage_log.html" class="portal-nav-item active" title="001~150 批次缺陷治理实录">001~150 批次缺陷治理实录</a>
-<a href="../archive/memory_evolution_proposal.html" class="portal-nav-item" title="认知架构演进提案 (RFC)">认知架构演进提案 (RFC)</a>
                     </div>
                 </div>
                 <div class="toc-header">
@@ -644,16 +538,50 @@
 
             <div id="card-view-container">
                 <header class="doc-header">
-                    <span class="header-tag">跨会话记忆数据集研发体系 · 历史治理归档</span>
+                    <span class="header-tag">第四层 · 数据质量治理与缺陷排查归档</span>
                     <h1 class="doc-title">生成问题排查、架构拓扑与数据治理实录 (001~150 批次)</h1>
                     <p class="doc-lead">系统记录早期批次在流水线生成、质量检验、生命周期因果演进与业务对齐过程中的 21 项典型缺陷、根因分析与治理规范。最新架构规范请参阅 <a href="../specs/cognitive_memory_dev_spec.html" class="md-link">“联接”Agent 三层认知记忆与双轨评测技术规范</a>。</p>
                     <div class="header-meta-grid">
-                        <div class="meta-stat-card"><div class="meta-stat-label">记录周期</div><div class="meta-stat-val">09.28 - 10.16</div></div>
+                        <div class="meta-stat-card"><div class="meta-stat-label">记录周期</div><div class="meta-stat-val">09.28 - 10.21</div></div>
                         <div class="meta-stat-card"><div class="meta-stat-label">排查与规范总项</div><div class="meta-stat-val">17 项</div></div>
-                        <div class="meta-stat-card"><div class="meta-stat-label">覆盖画像样本</div><div class="meta-stat-val">150 个画像</div></div>
+                        <div class="meta-stat-card"><div class="meta-stat-label">覆盖画像样本</div><div class="meta-stat-val">150+5 个画像</div></div>
                         <div class="meta-stat-card"><div class="meta-stat-label">全量质检通过率</div><div class="meta-stat-val" style="color: var(--contrast-good-text);">100.0% 一次通过</div></div>
                     </div>
                 </header>
+
+                
+        <div class="mermaid-wrapper">
+            <div class="mermaid-toolbar">
+                <span class="mermaid-badge">📊 缺陷根因分类与 R1~R14 门禁拦截闭环全景图</span>
+                <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 点击放大全屏查看</button>
+            </div>
+            <pre class="mermaid">graph LR
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+    classDef gate fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+
+    subgraph Defects ["&lt;b&gt;早期生成 4 大类典型缺陷 (21 项排查实录)&lt;/b&gt;"]
+        D1["&lt;b&gt;1. 时序与状态机越界&lt;br/&gt;候选未确认即标生效 / 次轮参数首轮早泄 / 临时覆盖误持久化&lt;/b&gt;"]
+        D2["&lt;b&gt;2. 角色与表达越界&lt;br/&gt;单轮干扰会话参数不全引发追问 / 干扰会话误用个性化代称&lt;/b&gt;"]
+        D3["&lt;b&gt;3. 台词与真值泄漏&lt;br/&gt;后台规则长句拼接进台词 / 内部英文枚举直接暴露&lt;/b&gt;"]
+        D4["&lt;b&gt;4. 动作与槽位错位&lt;br/&gt;域外拒识动作矛盾 / slot_updates 与 turn_intent 脱节&lt;/b&gt;"]
+    end
+
+    subgraph Fix ["&lt;b&gt;双层根因治理方案&lt;/b&gt;"]
+        F1["&lt;b&gt;规则骨架层 (timeline / assembler)&lt;br/&gt;严格隔离 Turn 1 / Turn 2 槽位更新与作用域&lt;/b&gt;"]
+        F2["&lt;b&gt;提示词与兜底层 (prompts / fallbacks)&lt;br/&gt;注入角色红线、口语改写与 Turn 1 自包含约束&lt;/b&gt;"]
+    end
+
+    subgraph Gate ["&lt;b&gt;自动化质检门禁 (qc_validator.py)&lt;/b&gt;"]
+        G1["&lt;b&gt;R1~R14 结构与认知闭环强校验&lt;br/&gt;100% 拦截告警，零缺陷放行&lt;/b&gt;"]:::gate
+    end
+
+    Defects --&gt; Fix --&gt; Gate
+
+    style Defects fill:#FFFFFF,stroke:#DC2626,stroke-width:2.5px;
+    style Fix fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px;
+    style Gate fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px;</pre>
+        </div>
+        
 
                 <section class="column-section" data-cat="arch">
                     <div class="column-section-header">
@@ -716,9 +644,9 @@
                         <pre><code>现行 16 槽位拓扑因果设计
 // 16 候选槽位安全裁剪与多故事线交替穿插拓扑：
 1. 长度浮动：target_count = 12 + (uid_num % 5)，支持 12~16 轮动态浮动；
-2. 因果严密：建联(Evidence) &amp;rarr; 固化(Reinf) &amp;rarr; 复用(Reuse) 拓扑单调不可逆；
+2. 因果严密：建联(Evidence) → 固化(Reinf) → 复用(Reuse) 拓扑单调不可逆；
 3. 多线隔离：主线与支线在时间轴上交错穿插（S1主-S2支-S3主-S5扰-S6支-S7主...）；
-4. 状态机闭环：S11(暴雨纠错) &amp;rarr; S12(纠错生效) &amp;rarr; S13(支线隔离验证) &amp;rarr; S15(事件到期自动恢复 1080p 基线)。</code></pre>
+4. 状态机闭环：S11(暴雨纠错) → S12(纠错生效) → S13(支线隔离验证) → S15(事件到期自动恢复 1080p 基线)。</code></pre>
                     </div>
                 </div>
             </div>
@@ -1813,23 +1741,52 @@ Agent: &quot;好的，已按老规矩为您开通微信视频通话保障：画�
             </div>
 
             <div id="markdown-view-container">
-                <div class="md-toolbar">
+                <div class="md-toolbar" style="margin-bottom: 10px; display: flex; justify-content: space-between;">
                     <strong>docs/archive/defect_triage_log.md 原生源码</strong>
-                    <button class="btn-copy-md" onclick="copyMarkdownSource()">复制 Markdown 全文</button>
+                    <button class="nav-btn active" onclick="copyMarkdownSource()">复制 Markdown 全文</button>
                 </div>
                 <textarea class="raw-md-textarea" id="mdSourceArea" readonly># 跨会话长程记忆数据集：生成问题排查与数据治理实录 (001~150 批次)
 
-&gt; **文档定位**：系统记录 001~150 画像跨会话记忆数据集在早期研发、质检对齐与提示词工程落地中遇到的 21 项典型缺陷、排查根因、解决办法与质检规则。关于最新三层认知架构与 16~20 轮动态生命周期规范，请参阅权威技术规范：[认知记忆全景演进与双轨评测技术规范](../specs/cognitive_memory_dev_spec.md)。
+&gt; **文档层级**：第四层 · 数据质量治理与缺陷排查归档（Data Governance &amp; Defect Triage Archive）  
+&gt; **文档定位**：系统记录跨会话记忆数据集在早期研发、质检对齐与提示词工程落地中遇到的 21 项典型缺陷、排查根因、解决办法与 R1~R14 质检拦截规则。关于最新三层认知架构与 16~20 轮动态生命周期规范，请参阅权威技术规范：[**《“联接”Agent 跨会话三层认知记忆数据集与双轨评测引擎技术规范》**](../specs/cognitive_memory_dev_spec.md)。
+
+```mermaid
+graph LR
+    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+    classDef gate fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+
+    subgraph Defects [&quot;&lt;b&gt;早期生成 4 大类典型缺陷 (21 项排查实录)&lt;/b&gt;&quot;]
+        D1[&quot;&lt;b&gt;1. 时序与状态机越界&lt;br/&gt;候选未确认即标生效 / 次轮参数首轮早泄 / 临时覆盖误持久化&lt;/b&gt;&quot;]
+        D2[&quot;&lt;b&gt;2. 角色与表达越界&lt;br/&gt;单轮干扰会话参数不全引发追问 / 干扰会话误用个性化代称&lt;/b&gt;&quot;]
+        D3[&quot;&lt;b&gt;3. 台词与真值泄漏&lt;br/&gt;后台规则长句拼接进台词 / 内部英文枚举直接暴露&lt;/b&gt;&quot;]
+        D4[&quot;&lt;b&gt;4. 动作与槽位错位&lt;br/&gt;域外拒识动作矛盾 / slot_updates 与 turn_intent 脱节&lt;/b&gt;&quot;]
+    end
+
+    subgraph Fix [&quot;&lt;b&gt;双层根因治理方案&lt;/b&gt;&quot;]
+        F1[&quot;&lt;b&gt;规则骨架层 (timeline / assembler)&lt;br/&gt;严格隔离 Turn 1 / Turn 2 槽位更新与作用域&lt;/b&gt;&quot;]
+        F2[&quot;&lt;b&gt;提示词与兜底层 (prompts / fallbacks)&lt;br/&gt;注入角色红线、口语改写与 Turn 1 自包含约束&lt;/b&gt;&quot;]
+    end
+
+    subgraph Gate [&quot;&lt;b&gt;自动化质检门禁 (qc_validator.py)&lt;/b&gt;&quot;]
+        G1[&quot;&lt;b&gt;R1~R14 结构与认知闭环强校验&lt;br/&gt;100% 拦截告警，零缺陷放行&lt;/b&gt;&quot;]:::gate
+    end
+
+    Defects --&gt; Fix --&gt; Gate
+
+    style Defects fill:#FFFFFF,stroke:#DC2626,stroke-width:2.5px;
+    style Fix fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px;
+    style Gate fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px;
+```
 
 ## 核心元数据
 
 | 属性 | 指标说明 |
 | :--- | :--- |
-| **记录周期** | 2026年09月28日 - 2026年10月16日 |
+| **记录周期** | 2026年09月28日 - 2026年10月21日 |
 | **累计排查与规范项** | 21 项（含全景认知记忆、架构拓扑、生命周期因果与多样性规范） |
-| **样本画像规模** | 150 个画像（`mobile_persona_001` ~ `mobile_persona_150`） |
-| **全量会话总数** | 2400 个多轮/单轮交互会话（三层认知记忆全量贯通） |
-| **质检通过率** | **100.0%**（全量会话全部一次性无告警通过） |
+| **样本画像规模** | 150 个基础画像 + 5 个三层认知全量标杆画像（`mobile_persona_001` ~ `005`） |
+| **全量会话总数** | 2400+ 个多轮/单轮交互会话（三层认知记忆与双轨分支全量贯通） |
+| **质检通过率** | **100.0%**（全量会话全部一次性无告警通过 R1~R14 门禁） |
 
 ## 目录大纲
 
@@ -1902,9 +1859,9 @@ Agent: &quot;好的，已按老规矩为您开通微信视频通话保障：画�
 现行 16 槽位拓扑因果设计
 // 16 候选槽位安全裁剪与多故事线交替穿插拓扑：
 1. 长度浮动：target_count = 12 + (uid_num % 5)，支持 12~16 轮动态浮动；
-2. 因果严密：建联(Evidence) &amp;rarr; 固化(Reinf) &amp;rarr; 复用(Reuse) 拓扑单调不可逆；
+2. 因果严密：建联(Evidence) → 固化(Reinf) → 复用(Reuse) 拓扑单调不可逆；
 3. 多线隔离：主线与支线在时间轴上交错穿插（S1主-S2支-S3主-S5扰-S6支-S7主...）；
-4. 状态机闭环：S11(暴雨纠错) &amp;rarr; S12(纠错生效) &amp;rarr; S13(支线隔离验证) &amp;rarr; S15(事件到期自动恢复 1080p 基线)。
+4. 状态机闭环：S11(暴雨纠错) → S12(纠错生效) → S13(支线隔离验证) → S15(事件到期自动恢复 1080p 基线)。
 ```
 
 ---
@@ -2779,6 +2736,8 @@ Agent: &quot;好的，已按老规矩为您开通微信视频通话保障：画�
         }
         function toggleDesktopToc() {
             document.body.classList.toggle('toc-collapsed');
+            const isCollapsed = document.body.classList.contains('toc-collapsed');
+            document.getElementById('expandTocBtn').style.display = isCollapsed ? 'inline-flex' : 'none';
         }
         function switchView(mode) {
             document.getElementById('card-view-container').style.display = mode === 'markdown' ? 'none' : 'block';
@@ -2799,6 +2758,22 @@ Agent: &quot;好的，已按老规矩为您开通微信视频通话保障：画�
             const ta = document.getElementById('mdSourceArea');
             navigator.clipboard.writeText(ta.value);
         }
+        function openMermaidModal(btn) {
+            const wrapper = btn.closest('.mermaid-wrapper');
+            const svg = wrapper ? wrapper.querySelector('svg') : null;
+            if (!svg) return;
+            const modalContent = document.getElementById('mermaid-modal-content');
+            modalContent.innerHTML = svg.outerHTML;
+            const clonedSvg = modalContent.querySelector('svg');
+            if (clonedSvg) {
+                clonedSvg.style.maxWidth = '90vw';
+                clonedSvg.style.height = 'auto';
+            }
+            document.getElementById('mermaid-modal').classList.add('active');
+        }
+        function closeMermaidModal() {
+            document.getElementById('mermaid-modal').classList.remove('active');
+        }
         function selectCategory(cat) {
             document.querySelectorAll('.cat-pill').forEach(p => p.classList.toggle('active', p.dataset.cat === cat));
             document.querySelectorAll('.column-section').forEach(s => {
@@ -2814,11 +2789,30 @@ Agent: &quot;好的，已按老规矩为您开通微信视频通话保障：画�
                 card.style.display = (!kw || card.innerText.toLowerCase().includes(kw)) ? 'block' : 'none';
             });
         }
-        (function() {
+        window.addEventListener('DOMContentLoaded', () => {
             const saved = localStorage.getItem('doc-theme') || 'parchment';
             document.documentElement.setAttribute('data-theme', saved);
             document.getElementById('themeBtn').innerText = saved === 'twilight' ? '切换米纸' : '切换暮色';
-        })();
+            if (window.mermaid) {
+                mermaid.initialize({
+                    startOnLoad: true,
+                    securityLevel: 'loose',
+                    theme: 'base',
+                    flowchart: { htmlLabels: true, curve: 'basis', padding: 16 },
+                    themeVariables: {
+                        background: '#FFFFFF',
+                        primaryColor: '#FFFFFF',
+                        primaryTextColor: '#0F172A',
+                        primaryBorderColor: '#0F172A',
+                        lineColor: '#0F172A',
+                        mainBkg: '#FFFFFF',
+                        nodeBorder: '#0F172A',
+                        clusterBkg: '#FFFFFF',
+                        clusterBorder: '#0F172A'
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>
