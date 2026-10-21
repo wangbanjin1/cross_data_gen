@@ -413,7 +413,7 @@
 <div class="portal-group-label">第一层 · 业务与建模要求</div>
 <a href="../记忆建模与数据集生成要求.html" class="portal-nav-item" title="记忆建模与生成要求">记忆建模与生成要求</a>
 <div class="portal-group-label">第二层 · 核心架构与流水线</div>
-<a href="../specs/cognitive_memory_dev_spec.html" class="portal-nav-item" title="三层认知记忆与双轨评测总纲">三层认知记忆与双轨评测总纲</a>
+<a href="../specs/cognitive_memory_dev_spec.html" class="portal-nav-item" title="三层认知记忆与双轨评测规范">三层认知记忆与双轨评测规范</a>
 <a href="../跨 Session 记忆数据集生成器思路.html" class="portal-nav-item" title="跨 Session 生成流水线详设">跨 Session 生成流水线详设</a>
 <div class="portal-group-label">第三层 · 输入规范与操作</div>
 <a href="../specs/persona_spec.html" class="portal-nav-item" title="Persona 画像与故事线规范">Persona 画像与故事线规范</a>
@@ -586,43 +586,6 @@
                 </header>
 
                 
-        <div class="mermaid-wrapper">
-            <div class="mermaid-toolbar">
-                <span class="mermaid-badge">📊 缺陷根因分类与 R1~R14 门禁拦截闭环全景图 (支持缩放与全屏)</span>
-                <div class="mermaid-ctrl-group">
-                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
-                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
-                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
-                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
-                </div>
-            </div>
-            <div class="mermaid">graph TD
-    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-    classDef gate fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-
-    subgraph Defects ["&lt;b&gt;早期生成 4 大类典型缺陷 (21 项排查实录)&lt;/b&gt;"]
-        D1["&lt;b&gt;1. 时序与状态机越界&lt;br/&gt;候选未确认即标生效 / 次轮参数首轮早泄 / 临时覆盖误持久化&lt;/b&gt;"]
-        D2["&lt;b&gt;2. 角色与表达越界&lt;br/&gt;单轮干扰会话参数不全引发追问 / 干扰会话误用个性化代称&lt;/b&gt;"]
-        D3["&lt;b&gt;3. 台词与真值泄漏&lt;br/&gt;后台规则长句拼接进台词 / 内部英文枚举直接暴露&lt;/b&gt;"]
-        D4["&lt;b&gt;4. 动作与槽位错位&lt;br/&gt;域外拒识动作矛盾 / slot_updates 与 turn_intent 脱节&lt;/b&gt;"]
-    end
-
-    subgraph Fix ["&lt;b&gt;双层根因治理方案&lt;/b&gt;"]
-        F1["&lt;b&gt;规则骨架层 (timeline / assembler)&lt;br/&gt;严格隔离 Turn 1 / Turn 2 槽位更新与作用域&lt;/b&gt;"]
-        F2["&lt;b&gt;提示词与兜底层 (prompts / fallbacks)&lt;br/&gt;注入角色红线、口语改写与 Turn 1 自包含约束&lt;/b&gt;"]
-    end
-
-    subgraph Gate ["&lt;b&gt;自动化质检门禁 (qc_validator.py)&lt;/b&gt;"]
-        G1["&lt;b&gt;R1~R14 结构与认知闭环强校验&lt;br/&gt;100% 拦截告警，零缺陷放行&lt;/b&gt;"]:::gate
-    end
-
-    Defects --&gt; Fix --&gt; Gate
-
-    style Defects fill:#FFFFFF,stroke:#DC2626,stroke-width:2.5px;
-    style Fix fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px;
-    style Gate fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px;</div>
-        </div>
-        
 
                 <section class="column-section" data-cat="arch">
                     <div class="column-section-header">
@@ -667,7 +630,7 @@
                         <pre><code>传统做法（固定长度与随机时序）
 // 传统固定长度与随机时序的致命缺陷：
 1. 固定 15 轮机械死板，缺乏真实用户跨度差异；
-2. 随机打乱模板导致“因果倒置”：在 S1 之前就复用记忆（无源之水）；
+2. 随机打乱模板导致“因果倒置”：在 S1 之前就复用记忆（缺乏前置依据）；
 3. 临时纠偏未设置“失效期后基线恢复”节点，无法检验记忆状态机闭环；
 4. 缺乏多故事线穿插隔离验证，容易导致主线临时纠错污染支线业务。</code></pre>
                     </div>
@@ -685,9 +648,9 @@
                         <pre><code>现行 16 槽位拓扑因果设计
 // 16 候选槽位安全裁剪与多故事线交替穿插拓扑：
 1. 长度浮动：target_count = 12 + (uid_num % 5)，支持 12~16 轮动态浮动；
-2. 因果严密：建联(Evidence) → 固化(Reinf) → 复用(Reuse) 拓扑单调不可逆；
+2. 因果严密：建联(Evidence) &amp;rarr; 固化(Reinf) &amp;rarr; 复用(Reuse) 拓扑单调不可逆；
 3. 多线隔离：主线与支线在时间轴上交错穿插（S1主-S2支-S3主-S5扰-S6支-S7主...）；
-4. 状态机闭环：S11(暴雨纠错) → S12(纠错生效) → S13(支线隔离验证) → S15(事件到期自动恢复 1080p 基线)。</code></pre>
+4. 状态机闭环：S11(暴雨纠错) &amp;rarr; S12(纠错生效) &amp;rarr; S13(支线隔离验证) &amp;rarr; S15(事件到期自动恢复 1080p 基线)。</code></pre>
                     </div>
                 </div>
             </div>
@@ -742,7 +705,7 @@
                         <pre><code>无规范约束时的潜在隐患
 // 缺乏 提示词强约束与白名单时：
 1. LLM 自由发挥捏造“帮忙充话费”、“调试交换机”等域外业务；
-2. 出现“零卡顿”、“秒开”、“极致顶格清晰度”等物理失真词汇；
+2. 出现“零卡顿”、“秒开”、“高标准顶格清晰度”等物理失真词汇；
 3. 用户台词出现“系统请记录我的元指令长期偏好”等浓重 AI 味；
 4. 用户首轮就直呼“老规矩”，导致冷启动阶段记忆无源产生幻觉。</code></pre>
                     </div>
@@ -1772,7 +1735,7 @@ Agent: &quot;好的，已按老规矩为您开通微信视频通话保障：画�
         <table>
             <thead><tr><th>对比维度</th><th>修复前表现</th><th>修复后实测结果</th></tr></thead>
             <tbody>
-                <tr><td><strong>质检通过率</strong></td><td>约 71.4%（单画像常出现 3~4 个会话未通过）</td><td><strong>100.0%</strong>（全量会话全部一次性无告警通过严格质检）</td></tr><tr><td><strong>认知记忆三层体系贯通</strong></td><td>事实/工作/经验三层孤立无序，缺乏工单账本与经验知识库</td><td><strong>全量贯通</strong>（16 槽位拓扑完美编排，覆盖事实、工作与经验三层记忆）</td></tr><tr><td><strong>事实记忆冷热启动与TCG</strong></td><td>无冷热启动区分，缺乏轮数压缩量化指标</td><td><strong>冷启动 3 轮严格防御</strong>（<span class="katex-inline" data-tex="\bar{T}_{\text{cold}}=3.0">$\bar{T}_{\text{cold}}=3.0$</span>），<strong>热启动 α 因子调控</strong>（<span class="katex-inline" data-tex="\text{TCG}=44.44\% \ge 40\%">$\text{TCG}=44.44\% \ge 40\%$</span>）</td></tr><tr><td><strong>工作记忆物理解耦</strong></td><td>工单直接堆砌在对话 Prompt，无持久账本</td><td><strong>100% 物理解耦</strong>（独立 <code>working_records.jsonl</code>，时态引擎相对检索）</td></tr><tr><td><strong>经验记忆与双轨成败分支</strong></td><td>伪经验查表字典，单调无分支无轮数对比</td><td><strong>真实任务推理 + 双轨成败分支</strong>（Fast Path <span class="katex-inline" data-tex="T=1">$T=1$</span> vs Slow Path <span class="katex-inline" data-tex="T=3">$T=3$</span>，经验标注显式可溯源）</td></tr><tr><td><strong>下游意图工程评测对齐</strong></td><td>仅支持简单 Turn/Memory，工单与经验无法溯源</td><td><strong>四元溯源全景支持</strong>（<code>Turn</code>, <code>Memory</code>, <code>WorkingRecord</code>, <code>Experience</code> 四大 <code>source_type</code> 严格闭环）</td></tr><tr><td><strong>slot_updates 与 turn_intent 对齐</strong></td><td>时间更新分支漏提取 <code>duration</code>，与意图声明不一致</td><td><strong>100% 严格对齐</strong>（全量会话同步注入 duration，三元组完整闭环）</td></tr><tr><td><strong>会话总长度与模板拓扑</strong></td><td>固定轮数机械死板，缺乏拓扑因果约束与多故事线隔离</td><td><strong>12~16 轮动态浮动</strong>（16 槽位拓扑 DAG 严格保证生命周期与故事线隔离）</td></tr><tr><td><strong>数据多样性与规则解耦</strong></td><td>缺乏系统分层，业务边界与别名夸大失真难以控制</td><td><strong>双层解耦架构</strong>（50/50声明、1:1:1触发、6维哈希抽样 + 7大业务Prompt铁律）</td></tr><tr><td><strong>时长延长最小表达</strong></td><td>S06 首轮仅凭“别卡顿”个性化表达发起，无场景与应用业务</td><td><strong>100% 达标</strong>（场景+应用+业务+老规矩四要素齐全，次轮明确时长延长）</td></tr><tr><td><strong>临时纠正最小表达</strong></td><td>S09 首轮只有个性化表达，无场景、无应用业务</td><td><strong>100% 达标</strong>（场景+应用+业务+个性化表达齐备，次轮交代特殊原因）</td></tr><tr><td><strong>单轮干扰全显式表达</strong></td><td>S12 漏传参数、引入模糊个性化表达且客服脑补</td><td><strong>彻底隔离未建立的个性化表达</strong>（6大参数全量显式交代，客服直接闭环受理）</td></tr><tr><td><strong>干扰会话个性化表达隔离</strong></td><td>X-1 单轮干扰未建记忆却凭空直呼个性化表达并补全</td><td><strong>100% 隔离</strong>（无先验记忆注入，正常表达需求）</td></tr><tr><td><strong>临时纠正记忆恢复</strong></td><td>S09 临时降级后 S10 继续沿用 720p/30ms</td><td><strong>规范回归</strong>（S10 自动恢复并复用 1080p/50ms 基线）</td></tr><tr><td><strong>口语日期与真值对齐</strong></td><td>台词说“明天”但标注落在“今天”（S12）</td><td><strong>严格吻合</strong>（同日即时预约统一规范为“今天”）</td></tr><tr><td><strong>台词口语真实度</strong></td><td>出现“今天又到[长句]办事了”等生硬拼接</td><td><strong>完全口语化</strong>（提炼简短地点，通顺自然）</td></tr><tr><td><strong>地点提炼泛化性</strong></td><td>人工写死正则，无法泛化新职业</td><td><strong>LLM 语义提炼 + 规则兜底</strong>（强覆盖无盲区）</td></tr><tr><td><strong>时序跨轮早泄</strong></td><td>普遍存在（首轮提前写入 QoS 与结束时间）</td><td><strong>0 处泄露</strong>（严格按交互轮次增量更新）</td></tr><tr><td><strong>域外拒识语义</strong></td><td>动作标为拒绝但台词实际答应受理</td><td><strong>100% 对齐</strong>（台词包含明确不可受理及指引说辞）</td></tr><tr><td><strong>口语代称与槽位</strong></td><td>代称凭空突现；复用会话机械全量复读</td><td><strong>完全受控</strong>（严格前置确认登记；复用省略已知槽位）</td></tr><tr><td><strong>模板规格一致性</strong></td><td>存在 T2-2 与 3 轮交互错配</td><td><strong>0 处错配</strong>（模板 ID、轮数与意图数完全对齐）</td></tr>
+                <tr><td><strong>质检通过率</strong></td><td>约 71.4%（单画像常出现 3~4 个会话未通过）</td><td><strong>100.0%</strong>（全量会话全部一次性无告警通过严格质检）</td></tr><tr><td><strong>认知记忆三层体系贯通</strong></td><td>事实/工作/经验三层孤立无序，缺乏工单账本与经验知识库</td><td><strong>全量贯通</strong>（16 槽位拓扑完整编排，覆盖事实、工作与经验三层记忆）</td></tr><tr><td><strong>事实记忆冷热启动与TCG</strong></td><td>无冷热启动区分，缺乏轮数压缩量化指标</td><td><strong>冷启动 3 轮严格防御</strong>（<span class="katex-inline" data-tex="\bar{T}_{\text{cold}}=3.0">$\bar{T}_{\text{cold}}=3.0$</span>），<strong>热启动 α 因子调控</strong>（<span class="katex-inline" data-tex="\text{TCG}=44.44\% \ge 40\%">$\text{TCG}=44.44\% \ge 40\%$</span>）</td></tr><tr><td><strong>工作记忆物理解耦</strong></td><td>工单直接堆砌在对话 Prompt，无持久账本</td><td><strong>100% 物理解耦</strong>（独立 <code>working_records.jsonl</code>，时态引擎相对检索）</td></tr><tr><td><strong>经验记忆与双轨成败分支</strong></td><td>伪经验查表字典，单调无分支无轮数对比</td><td><strong>真实任务推理 + 双轨成败分支</strong>（Fast Path <span class="katex-inline" data-tex="T=1">$T=1$</span> vs Slow Path <span class="katex-inline" data-tex="T=3">$T=3$</span>，经验标注显式可溯源）</td></tr><tr><td><strong>下游意图工程评测对齐</strong></td><td>仅支持简单 Turn/Memory，工单与经验无法溯源</td><td><strong>四元溯源全景支持</strong>（<code>Turn</code>, <code>Memory</code>, <code>WorkingRecord</code>, <code>Experience</code> 四大 <code>source_type</code> 严格闭环）</td></tr><tr><td><strong>slot_updates 与 turn_intent 对齐</strong></td><td>时间更新分支漏提取 <code>duration</code>，与意图声明不一致</td><td><strong>100% 严格对齐</strong>（全量会话同步注入 duration，三元组完整闭环）</td></tr><tr><td><strong>会话总长度与模板拓扑</strong></td><td>固定轮数机械死板，缺乏拓扑因果约束与多故事线隔离</td><td><strong>12~16 轮动态浮动</strong>（16 槽位拓扑 DAG 严格保证生命周期与故事线隔离）</td></tr><tr><td><strong>数据多样性与规则解耦</strong></td><td>缺乏系统分层，业务边界与别名夸大失真难以控制</td><td><strong>双层解耦架构</strong>（50/50声明、1:1:1触发、6维哈希抽样 + 7大业务Prompt约束准则）</td></tr><tr><td><strong>时长延长最小表达</strong></td><td>S06 首轮仅凭“别卡顿”个性化表达发起，无场景与应用业务</td><td><strong>100% 达标</strong>（场景+应用+业务+老规矩四要素齐全，次轮明确时长延长）</td></tr><tr><td><strong>临时纠正最小表达</strong></td><td>S09 首轮只有个性化表达，无场景、无应用业务</td><td><strong>100% 达标</strong>（场景+应用+业务+个性化表达齐备，次轮交代特殊原因）</td></tr><tr><td><strong>单轮干扰全显式表达</strong></td><td>S12 漏传参数、引入模糊个性化表达且客服脑补</td><td><strong>彻底隔离未建立的个性化表达</strong>（6大参数全量显式交代，客服直接闭环受理）</td></tr><tr><td><strong>干扰会话个性化表达隔离</strong></td><td>X-1 单轮干扰未建记忆却凭空直呼个性化表达并补全</td><td><strong>100% 隔离</strong>（无先验记忆注入，正常表达需求）</td></tr><tr><td><strong>临时纠正记忆恢复</strong></td><td>S09 临时降级后 S10 继续沿用 720p/30ms</td><td><strong>规范回归</strong>（S10 自动恢复并复用 1080p/50ms 基线）</td></tr><tr><td><strong>口语日期与真值对齐</strong></td><td>台词说“明天”但标注落在“今天”（S12）</td><td><strong>严格吻合</strong>（同日即时预约统一规范为“今天”）</td></tr><tr><td><strong>台词口语真实度</strong></td><td>出现“今天又到[长句]办事了”等生硬拼接</td><td><strong>完全口语化</strong>（提炼简短地点，通顺自然）</td></tr><tr><td><strong>地点提炼泛化性</strong></td><td>人工写死正则，无法泛化新职业</td><td><strong>LLM 语义提炼 + 规则兜底</strong>（强覆盖无盲区）</td></tr><tr><td><strong>时序跨轮早泄</strong></td><td>普遍存在（首轮提前写入 QoS 与结束时间）</td><td><strong>0 处泄露</strong>（严格按交互轮次增量更新）</td></tr><tr><td><strong>域外拒识语义</strong></td><td>动作标为拒绝但台词实际答应受理</td><td><strong>100% 对齐</strong>（台词包含明确不可受理及指引说辞）</td></tr><tr><td><strong>口语代称与槽位</strong></td><td>代称凭空突现；复用会话机械全量复读</td><td><strong>完全受控</strong>（严格前置确认登记；复用省略已知槽位）</td></tr><tr><td><strong>模板规格一致性</strong></td><td>存在 T2-2 与 3 轮交互错配</td><td><strong>0 处错配</strong>（模板 ID、轮数与意图数完全对齐）</td></tr>
             </tbody>
         </table>
     </div>
@@ -1788,46 +1751,17 @@ Agent: &quot;好的，已按老规矩为您开通微信视频通话保障：画�
                 </div>
                 <textarea class="raw-md-textarea" id="mdSourceArea" readonly># 跨会话长程记忆数据集：生成问题排查与数据治理实录 (001~150 批次)
 
-&gt; **文档层级**：第四层 · 数据质量治理与缺陷排查归档（Data Governance &amp; Defect Triage Archive）  
-&gt; **文档定位**：系统记录跨会话记忆数据集在早期研发、质检对齐与提示词工程落地中遇到的 21 项典型缺陷、排查根因、解决办法与 R1~R14 质检拦截规则。关于最新三层认知架构与 16~20 轮动态生命周期规范，请参阅权威技术规范：[**《“联接”Agent 跨会话三层认知记忆数据集与双轨评测引擎技术规范》**](../specs/cognitive_memory_dev_spec.md)。
-
-```mermaid
-graph TD
-    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-    classDef gate fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-
-    subgraph Defects [&quot;&lt;b&gt;早期生成 4 大类典型缺陷 (21 项排查实录)&lt;/b&gt;&quot;]
-        D1[&quot;&lt;b&gt;1. 时序与状态机越界&lt;br/&gt;候选未确认即标生效 / 次轮参数首轮早泄 / 临时覆盖误持久化&lt;/b&gt;&quot;]
-        D2[&quot;&lt;b&gt;2. 角色与表达越界&lt;br/&gt;单轮干扰会话参数不全引发追问 / 干扰会话误用个性化代称&lt;/b&gt;&quot;]
-        D3[&quot;&lt;b&gt;3. 台词与真值泄漏&lt;br/&gt;后台规则长句拼接进台词 / 内部英文枚举直接暴露&lt;/b&gt;&quot;]
-        D4[&quot;&lt;b&gt;4. 动作与槽位错位&lt;br/&gt;域外拒识动作矛盾 / slot_updates 与 turn_intent 脱节&lt;/b&gt;&quot;]
-    end
-
-    subgraph Fix [&quot;&lt;b&gt;双层根因治理方案&lt;/b&gt;&quot;]
-        F1[&quot;&lt;b&gt;规则骨架层 (timeline / assembler)&lt;br/&gt;严格隔离 Turn 1 / Turn 2 槽位更新与作用域&lt;/b&gt;&quot;]
-        F2[&quot;&lt;b&gt;提示词与兜底层 (prompts / fallbacks)&lt;br/&gt;注入角色红线、口语改写与 Turn 1 自包含约束&lt;/b&gt;&quot;]
-    end
-
-    subgraph Gate [&quot;&lt;b&gt;自动化质检门禁 (qc_validator.py)&lt;/b&gt;&quot;]
-        G1[&quot;&lt;b&gt;R1~R14 结构与认知闭环强校验&lt;br/&gt;100% 拦截告警，零缺陷放行&lt;/b&gt;&quot;]:::gate
-    end
-
-    Defects --&gt; Fix --&gt; Gate
-
-    style Defects fill:#FFFFFF,stroke:#DC2626,stroke-width:2.5px;
-    style Fix fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px;
-    style Gate fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px;
-```
+&gt; **文档定位**：系统记录 001~150 画像跨会话记忆数据集在早期研发、质检对齐与提示词工程落地中遇到的 21 项典型缺陷、排查根因、解决办法与质检规则。关于最新三层认知架构与 16~20 轮动态生命周期规范，请参阅权威技术规范：[认知记忆全景演进与双轨评测技术规范](../specs/cognitive_memory_dev_spec.md)。
 
 ## 核心元数据
 
 | 属性 | 指标说明 |
 | :--- | :--- |
-| **记录周期** | 2026年09月28日 - 2026年10月21日 |
+| **记录周期** | 2026年09月28日 - 2026年10月16日 |
 | **累计排查与规范项** | 21 项（含全景认知记忆、架构拓扑、生命周期因果与多样性规范） |
-| **样本画像规模** | 150 个基础画像 + 5 个三层认知全量标杆画像（`mobile_persona_001` ~ `005`） |
-| **全量会话总数** | 2400+ 个多轮/单轮交互会话（三层认知记忆与双轨分支全量贯通） |
-| **质检通过率** | **100.0%**（全量会话全部一次性无告警通过 R1~R14 门禁） |
+| **样本画像规模** | 150 个画像（`mobile_persona_001` ~ `mobile_persona_150`） |
+| **全量会话总数** | 2400 个多轮/单轮交互会话（三层认知记忆全量贯通） |
+| **质检通过率** | **100.0%**（全量会话全部一次性无告警通过） |
 
 ## 目录大纲
 
@@ -1891,7 +1825,7 @@ graph TD
 传统做法（固定长度与随机时序）
 // 传统固定长度与随机时序的致命缺陷：
 1. 固定 15 轮机械死板，缺乏真实用户跨度差异；
-2. 随机打乱模板导致“因果倒置”：在 S1 之前就复用记忆（无源之水）；
+2. 随机打乱模板导致“因果倒置”：在 S1 之前就复用记忆（缺乏前置依据）；
 3. 临时纠偏未设置“失效期后基线恢复”节点，无法检验记忆状态机闭环；
 4. 缺乏多故事线穿插隔离验证，容易导致主线临时纠错污染支线业务。
 ```
@@ -1900,9 +1834,9 @@ graph TD
 现行 16 槽位拓扑因果设计
 // 16 候选槽位安全裁剪与多故事线交替穿插拓扑：
 1. 长度浮动：target_count = 12 + (uid_num % 5)，支持 12~16 轮动态浮动；
-2. 因果严密：建联(Evidence) → 固化(Reinf) → 复用(Reuse) 拓扑单调不可逆；
+2. 因果严密：建联(Evidence) &amp;rarr; 固化(Reinf) &amp;rarr; 复用(Reuse) 拓扑单调不可逆；
 3. 多线隔离：主线与支线在时间轴上交错穿插（S1主-S2支-S3主-S5扰-S6支-S7主...）；
-4. 状态机闭环：S11(暴雨纠错) → S12(纠错生效) → S13(支线隔离验证) → S15(事件到期自动恢复 1080p 基线)。
+4. 状态机闭环：S11(暴雨纠错) &amp;rarr; S12(纠错生效) &amp;rarr; S13(支线隔离验证) &amp;rarr; S15(事件到期自动恢复 1080p 基线)。
 ```
 
 ---
@@ -1913,7 +1847,7 @@ graph TD
 
 ### 全流水线“多样性离散处理”与“提示词约束规则”规范解耦
 
-&gt; **归档时间**：`2026-10-10 架构解析` | **分类**：`多样性架构 / 提示词铁律`
+&gt; **归档时间**：`2026-10-10 架构解析` | **分类**：`多样性架构 / 提示词约束规则`
 
 #### 背景与问题
 整个数据生成流水线中，哪些维度做了随机/多样性处理以保证百人百面？哪些逻辑是在 Prompt 或代码中严格写死的？二者的边界与设计原则是什么？
@@ -1952,7 +1886,7 @@ graph TD
 无规范约束时的潜在隐患
 // 缺乏 提示词强约束与白名单时：
 1. LLM 自由发挥捏造“帮忙充话费”、“调试交换机”等域外业务；
-2. 出现“零卡顿”、“秒开”、“极致顶格清晰度”等物理失真词汇；
+2. 出现“零卡顿”、“秒开”、“高标准顶格清晰度”等物理失真词汇；
 3. 用户台词出现“系统请记录我的元指令长期偏好”等浓重 AI 味；
 4. 用户首轮就直呼“老规矩”，导致冷启动阶段记忆无源产生幻觉。
 ```
@@ -2742,14 +2676,14 @@ Agent: &quot;好的，已按老规矩为您开通微信视频通话保障：画�
 | 对比维度 | 修复前表现 | 修复后实测结果 |
 | :--- | :--- | :--- |
 | **质检通过率** | 约 71.4%（单画像常出现 3~4 个会话未通过） | **100.0%**（全量会话全部一次性无告警通过严格质检） |
-| **认知记忆三层体系贯通** | 事实/工作/经验三层孤立无序，缺乏工单账本与经验知识库 | **全量贯通**（16 槽位拓扑完美编排，覆盖事实、工作与经验三层记忆） |
+| **认知记忆三层体系贯通** | 事实/工作/经验三层孤立无序，缺乏工单账本与经验知识库 | **全量贯通**（16 槽位拓扑完整编排，覆盖事实、工作与经验三层记忆） |
 | **事实记忆冷热启动与TCG** | 无冷热启动区分，缺乏轮数压缩量化指标 | **冷启动 3 轮严格防御**（$\bar{T}_{\text{cold}}=3.0$），**热启动 α 因子调控**（$\text{TCG}=44.44\% \ge 40\%$） |
 | **工作记忆物理解耦** | 工单直接堆砌在对话 Prompt，无持久账本 | **100% 物理解耦**（独立 `working_records.jsonl`，时态引擎相对检索） |
 | **经验记忆与双轨成败分支** | 伪经验查表字典，单调无分支无轮数对比 | **真实任务推理 + 双轨成败分支**（Fast Path $T=1$ vs Slow Path $T=3$，经验标注显式可溯源） |
 | **下游意图工程评测对齐** | 仅支持简单 Turn/Memory，工单与经验无法溯源 | **四元溯源全景支持**（`Turn`, `Memory`, `WorkingRecord`, `Experience` 四大 `source_type` 严格闭环） |
 | **slot_updates 与 turn_intent 对齐** | 时间更新分支漏提取 `duration`，与意图声明不一致 | **100% 严格对齐**（全量会话同步注入 duration，三元组完整闭环） |
 | **会话总长度与模板拓扑** | 固定轮数机械死板，缺乏拓扑因果约束与多故事线隔离 | **12~16 轮动态浮动**（16 槽位拓扑 DAG 严格保证生命周期与故事线隔离） |
-| **数据多样性与规则解耦** | 缺乏系统分层，业务边界与别名夸大失真难以控制 | **双层解耦架构**（50/50声明、1:1:1触发、6维哈希抽样 + 7大业务Prompt铁律） |
+| **数据多样性与规则解耦** | 缺乏系统分层，业务边界与别名夸大失真难以控制 | **双层解耦架构**（50/50声明、1:1:1触发、6维哈希抽样 + 7大业务Prompt约束准则） |
 | **时长延长最小表达** | S06 首轮仅凭“别卡顿”个性化表达发起，无场景与应用业务 | **100% 达标**（场景+应用+业务+老规矩四要素齐全，次轮明确时长延长） |
 | **临时纠正最小表达** | S09 首轮只有个性化表达，无场景、无应用业务 | **100% 达标**（场景+应用+业务+个性化表达齐备，次轮交代特殊原因） |
 | **单轮干扰全显式表达** | S12 漏传参数、引入模糊个性化表达且客服脑补 | **彻底隔离未建立的个性化表达**（6大参数全量显式交代，客服直接闭环受理） |

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>“联接”Agent 跨会话三层认知记忆数据集文档中心</title>
+    <title>跨会话认知记忆数据集与引擎开发文档中心</title>
     <!-- KaTeX 数学公式样式与渲染脚本 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css';">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js';"></script>
@@ -792,107 +792,39 @@
             background-color: var(--table-alt);
         }
 
-        /* Mermaid 图表容器：强制纯白底色 (#FFFFFF)、加粗字体、加粗线条 */
+        /* Mermaid 图表容器：与 Antigravity 原生 Mermaid 渲染一致 */
         .mermaid-wrapper {
-            margin: 22px 0 28px;
-            padding: 18px 24px 26px;
+            margin: 20px 0 24px;
+            padding: 18px 20px;
             background-color: #FFFFFF !important;
-            border: 2.5px solid #0F172A;
-            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
             overflow-x: auto;
             text-align: center;
             box-shadow: var(--card-shadow);
         }
 
-        .mermaid-toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 14px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #E2E8F0;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .mermaid-badge {
-            font-size: 0.80rem;
-            font-weight: 800;
-            color: #0F172A;
-            letter-spacing: 0.02em;
-        }
-
-        .mermaid-ctrl-group {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .mermaid-zoom-btn {
-            background-color: #F8FAFC;
-            border: 1.5px solid #0F172A;
-            color: #0F172A;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.15s;
-        }
-
-        .mermaid-zoom-btn:hover {
-            background-color: #0F172A;
-            color: #FFFFFF;
-        }
-
         .mermaid {
             background-color: #FFFFFF !important;
-            color: #0F172A !important;
-            font-weight: 700 !important;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: block;
             width: 100%;
-            min-height: 220px;
             margin: 0 auto;
-            overflow-x: auto;
+            text-align: center;
         }
 
         .mermaid svg {
             background-color: #FFFFFF !important;
-            font-weight: 700 !important;
-            width: 100% !important;
-            max-width: none !important;
-            height: auto !important;
-            display: block;
-            margin: 0 auto;
+            max-width: 100%;
+            height: auto;
         }
 
         .mermaid svg text,
         .mermaid svg tspan,
         .mermaid svg span,
-        .mermaid svg div,
-        .mermaid svg p,
         .mermaid svg .nodeLabel,
         .mermaid svg .edgeLabel,
-        .mermaid svg .cluster-label,
-        .mermaid svg .messageText,
-        .mermaid svg .labelText,
-        .mermaid svg .loopText,
-        .mermaid svg .noteText,
-        .mermaid svg .actor {
-            font-weight: 700 !important;
-            color: #0F172A !important;
-            fill: #0F172A !important;
-        }
-
-        .mermaid svg path,
-        .mermaid svg line,
-        .mermaid svg polyline,
-        .mermaid svg rect,
-        .mermaid svg polygon,
-        .mermaid svg circle {
-            stroke-width: 2.3px !important;
+        .mermaid svg .cluster-label {
+            font-weight: 700;
         }
 
         /* Mermaid 全屏放大模态框 */
@@ -1029,7 +961,7 @@
 <div class="portal-group-label">第一层 · 业务与建模要求</div>
 <a href="记忆建模与数据集生成要求.html" class="portal-nav-item" title="记忆建模与生成要求">记忆建模与生成要求</a>
 <div class="portal-group-label">第二层 · 核心架构与流水线</div>
-<a href="specs/cognitive_memory_dev_spec.html" class="portal-nav-item" title="三层认知记忆与双轨评测总纲">三层认知记忆与双轨评测总纲</a>
+<a href="specs/cognitive_memory_dev_spec.html" class="portal-nav-item" title="三层认知记忆与双轨评测规范">三层认知记忆与双轨评测规范</a>
 <a href="跨 Session 记忆数据集生成器思路.html" class="portal-nav-item" title="跨 Session 生成流水线详设">跨 Session 生成流水线详设</a>
 <div class="portal-group-label">第三层 · 输入规范与操作</div>
 <a href="specs/persona_spec.html" class="portal-nav-item" title="Persona 画像与故事线规范">Persona 画像与故事线规范</a>
@@ -1050,12 +982,17 @@
             </div>
             <nav class="toc-body">
                 <ul class="toc-list" id="tocList">
-<li class="toc-item toc-level-2"><a href="#一-核心架构与文档阅读路线图" class="toc-link" title="一、 核心架构与文档阅读路线图">一、 核心架构与文档阅读路线图</a></li>
-<li class="toc-item toc-level-2"><a href="#二-文档体系全景导航表" class="toc-link" title="二、 文档体系全景导航表">二、 文档体系全景导航表</a></li>
-<li class="toc-item toc-level-2"><a href="#三-联接agent-三层认知记忆架构一图流" class="toc-link" title="三、 “联接”Agent 三层认知记忆架构一图流">三、 “联接”Agent 三层认知记忆架构一图流</a></li>
-<li class="toc-item toc-level-2"><a href="#四-文档与代码仓目录结构" class="toc-link" title="四、 文档与代码仓目录结构">四、 文档与代码仓目录结构</a></li>
-<li class="toc-item toc-level-2"><a href="#五-快速上手命令基于当前代码仓-runpy" class="toc-link" title="五、 快速上手命令（基于当前代码仓 run.py）">五、 快速上手命令（基于当前代码仓 run.py）</a></li>
-<li class="toc-item toc-level-2"><a href="#五-全局编写与制图硬性准则源自-geminimd" class="toc-link" title="五、 全局编写与制图硬性准则（源自 GEMINI.md）">五、 全局编写与制图硬性准则（源自 GEMINI.md）</a></li>
+<li class="toc-item toc-level-2"><a href="#一-文档分类导航与目录索引" class="toc-link" title="一、 文档分类导航与目录索引">一、 文档分类导航与目录索引</a></li>
+<li class="toc-item toc-level-2"><a href="#二-基础系统设计与需求准则" class="toc-link" title="二、 基础系统设计与需求准则">二、 基础系统设计与需求准则</a></li>
+<li class="toc-item toc-level-3"><a href="#1-记忆建模与数据集生成要求记忆建模与数据集生成要求md" class="toc-link" title="1. [记忆建模与数据集生成要求](记忆建模与数据集生成要求.md)">1. [记忆建模与数据集生成要求](记忆建模与数据集生成要求.md)</a></li>
+<li class="toc-item toc-level-3"><a href="#2-跨-session-记忆数据集生成器思路跨20session20记忆数据集生成器思路md" class="toc-link" title="2. [跨 Session 记忆数据集生成器思路](跨%20Session%20记忆数据集生成器思路.md)">2. [跨 Session 记忆数据集生成器思路](跨%20Session%20记忆数据集生成器思路.md)</a></li>
+<li class="toc-item toc-level-2"><a href="#三-核心技术规范-specs" class="toc-link" title="三、 核心技术规范 (Specs)">三、 核心技术规范 (Specs)</a></li>
+<li class="toc-item toc-level-3"><a href="#1-联接agent-三层认知记忆与双轨评测技术规范specscognitivememorydevspecmd-核心规范" class="toc-link" title="1. [“联接”Agent 三层认知记忆与双轨评测技术规范](specs/cognitivememorydevspec.md) [核心规范]">1. [“联接”Agent 三层认知记忆与双轨评测技术规范](specs/cognitivememorydevspec.md) [核心规范]</a></li>
+<li class="toc-item toc-level-3"><a href="#2-persona-画像与主支线建模规范specspersonaspecmd-基础规范" class="toc-link" title="2. [Persona 画像与主/支线建模规范](specs/personaspec.md) [基础规范]">2. [Persona 画像与主/支线建模规范](specs/personaspec.md) [基础规范]</a></li>
+<li class="toc-item toc-level-2"><a href="#四-研发与运行指南-guides" class="toc-link" title="四、 研发与运行指南 (Guides)">四、 研发与运行指南 (Guides)</a></li>
+<li class="toc-item toc-level-3"><a href="#1-命令行使用手册与流水线指南guidescliusagemd" class="toc-link" title="1. [命令行使用手册与流水线指南](guides/cliusage.md)">1. [命令行使用手册与流水线指南](guides/cliusage.md)</a></li>
+<li class="toc-item toc-level-2"><a href="#五-历史沉淀与排查记录-archive" class="toc-link" title="五、 历史沉淀与排查记录 (Archive)">五、 历史沉淀与排查记录 (Archive)</a></li>
+<li class="toc-item toc-level-2"><a href="#六-文档维护与更新准则" class="toc-link" title="六、 文档维护与更新准则">六、 文档维护与更新准则</a></li>
                 </ul>
             </nav>
         </aside>
@@ -1077,254 +1014,135 @@
                 </div>
 
                 <article class="markdown-body" id="docReadView">
-<h1>“联接”Agent 跨会话三层认知记忆数据集文档中心</h1>
-<p>本目录汇集了 <strong>通信网络保障“联接”Agent 跨会话认知记忆数据集（Cross-Session Cognitive Memory Dataset）</strong> 的完整技术文档体系。为了便于理解系统全貌，文档按 <strong>“业务要求 <span class="katex-inline" data-tex="\to">$\to$</span> 核心架构 <span class="katex-inline" data-tex="\to">$\to$</span> 工程规范 <span class="katex-inline" data-tex="\to">$\to$</span> 演进归档”</strong> 四层逻辑递进组织。</p>
+<h1>跨会话认知记忆数据集与引擎开发文档中心</h1>
+<blockquote><p>本文档中心为<strong>“联接”Agent</strong>（面向通信网络保障<strong>意图参数提取（提参数）</strong>与闭环受理的核心智能体）跨会话认知记忆数据集与评测引擎的统一文档索引。</p></blockquote>
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
-<h2 id="一-核心架构与文档阅读路线图">一、 核心架构与文档阅读路线图</h2>
-<p>如果你是首次接触本项目，建议按照以下 <strong>四层递进路线</strong> 阅读文档：</p>
-
-                        <div class="mermaid-wrapper">
-                            <div class="mermaid-toolbar">
-                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范 · 支持缩放与全屏)</span>
-                                <div class="mermaid-ctrl-group">
-                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
-                                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
-                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
-                                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
-                                </div>
-                            </div>
-                            <div class="mermaid">graph TD
-    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-    classDef highlight fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-
-    subgraph L1 ["&lt;b&gt;第一层：业务定义与记忆建模要求 (Why &amp; What)&lt;/b&gt;"]
-        D1["&lt;b&gt;《记忆建模与数据集生成要求》&lt;br/&gt;定义通信保障提参数场景、三层记忆分类与五元组真值闭环&lt;/b&gt;"]
-    end
-
-    subgraph L2 ["&lt;b&gt;第二层：核心架构与生成流水线详设 (How It Works)&lt;/b&gt;"]
-        D2["&lt;b&gt;《三层认知记忆演进开发规范 (Core Spec)》&lt;br/&gt;16~20 Session 拓扑、五大黄金经验、Turn 1 自包含与双轨成败分支评测&lt;/b&gt;"]:::highlight
-        D3["&lt;b&gt;《跨 Session 记忆数据集生成器思路》&lt;br/&gt;GT 四层构建 → MT 反推 → 时间线编排 → 骨架约束渲染 → 双层校验全链路&lt;/b&gt;"]
-    end
-
-    subgraph L3 ["&lt;b&gt;第三层：输入规范与工程操作手册 (Specs &amp; Operations)&lt;/b&gt;"]
-        D4["&lt;b&gt;《Persona 模板生成规范》&lt;br/&gt;static / dynamic / storyline 画像结构与 10 项设计清单&lt;/b&gt;"]
-        D5["&lt;b&gt;《CLI 与流水线操作指南》&lt;br/&gt;run.py 命令行参数、批量并发、离线降级与 R1~R14 质检门禁&lt;/b&gt;"]
-    end
-
-    subgraph L4 ["&lt;b&gt;第四层：理论立项与数据治理归档 (Evolution &amp; Governance)&lt;/b&gt;"]
-        D6["&lt;b&gt;《认知记忆演进立项提案 (RFC)》&lt;br/&gt;ReasoningBank / MaTTS 理论借鉴与 TCG/ERRA 评测指标推导&lt;/b&gt;"]
-        D7["&lt;b&gt;《数据集缺陷排查与治理台账》&lt;br/&gt;7 大类历史数据缺陷根因剖析与质检拦截闭环&lt;/b&gt;"]
-    end
-
-    D1 --&gt; D2
-    D2 --&gt; D3
-    D2 --&gt; D4
-    D3 --&gt; D5
-    D4 --&gt; D5
-    D2 -.-&gt; D6
-    D5 -.-&gt; D7
-
-    style L1 fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;
-    style L2 fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px;
-    style L3 fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;
-    style L4 fill:#FFFFFF,stroke:#475569,stroke-width:2px;</div>
-                        </div>
-                        
-<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
-<h2 id="二-文档体系全景导航表">二、 文档体系全景导航表</h2>
-
-        <div class="table-wrapper">
-            <table>
-                <thead><tr><th>逻辑分层</th><th>文档名称</th><th>核心定位与解决的问题</th><th>对应代码模块</th></tr></thead>
-                <tbody>
-                    <tr><td><strong>第一层：业务与建模要求</strong></td><td><a href="记忆建模与数据集生成要求.html" class="md-link"><strong>《记忆建模与数据集生成要求》</strong></a></td><td>为什么要构建跨会话记忆？定义<strong>事实记忆、工作记忆、经验记忆</strong>三大维度、五元组真值映射、六类标准动作集与跨会话时间线硬约束</td><td>全局规范</td></tr><tr><td><strong>第二层：核心架构与流水线</strong></td><td><a href="specs/cognitive_memory_dev_spec.html" class="md-link"><strong>《三层认知记忆演进开发规范》</strong></a></td><td><strong>【核心总纲】</strong> 16~20 Session 怎么编排？详解三大正交记忆引擎、五大黄金经验策略、<strong>Turn 1 基础参数自包含原则</strong>与 <strong>双轨成败分支测试（Fast/Slow Branch Evaluation）</strong></td><td><code>timeline_planner.py</code><br/><code>working_records_ledger.py</code><br/><code>experience_bank.py</code><br/><code>session_assembler.py</code></td></tr><tr><td><strong>第二层：核心架构与流水线</strong></td><td><a href="跨%20Session%20记忆数据集生成器思路.html" class="md-link"><strong>《跨 Session 记忆数据集生成器思路》</strong></a></td><td>单个样本如何从画像变成多轮对话？详解 <strong>四层 GT 构建 <span class="katex-inline" data-tex="\to">$\to$</span> MT/MF 反推 <span class="katex-inline" data-tex="\to">$\to$</span> 16 种模板骨架约束 <span class="katex-inline" data-tex="\to">$\to$</span> 槽位表达计划 <span class="katex-inline" data-tex="\to">$\to$</span> 四元 <code>source_type</code> 标注</strong></td><td><code>gt_builder.py</code><br/><code>mt_selector.py</code><br/><code>dialogue_generator.py</code><br/><code>preference_maps.py</code></td></tr><tr><td><strong>第三层：输入规范与操作</strong></td><td><a href="specs/persona_spec.html" class="md-link"><strong>《Persona 模板生成规范》</strong></a></td><td>输入画像长什么样？规定 <code>static_profile</code>、<code>dynamic_profile</code> 与 <code>storyline</code> 的 JSON Schema、编写原则及 10 项质量检查清单</td><td><code>persona_StoryExtractor.py</code><br/><code>data/personas/</code></td></tr><tr><td><strong>第三层：输入规范与操作</strong></td><td><a href="guides/cli_usage.html" class="md-link"><strong>《CLI 与流水线操作指南》</strong></a></td><td>怎么运行代码与验收数据？提供 <code>run.py</code> 命令行参数详解、单画像/批量生成指令、产物目录结构说明及 <strong>R1~R14 自动化质检</strong>指南</td><td><code>run.py</code><br/><code>batch_pipeline.py</code><br/><code>qc_validator.py</code></td></tr><tr><td><strong>第四层：理论与治理归档</strong></td><td><a href="archive/memory_evolution_proposal.html" class="md-link"><strong>《认知记忆演进立项提案 (RFC)》</strong></a></td><td>经验记忆与双轨评测的学术依据是什么？阐述 ReasoningBank 与 MaTTS 理论迁移、TCG 轮次压缩增益公式与四阶段演进路线</td><td>架构立项参考</td></tr><tr><td><strong>第四层：理论与治理归档</strong></td><td><a href="archive/defect_triage_log.html" class="md-link"><strong>《数据集缺陷排查与治理台账》</strong></a></td><td>历史版本踩过哪些坑？归档 7 大类早期样本缺陷（断链、重复确认、冷启动抢答、内部枚举泄漏等）的根因定位与修复闭环</td><td><code>qc_validator.py</code><br/><code>dialogue_prompts.py</code></td></tr>
-                </tbody>
-            </table>
-        </div>
-        
-<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
-<h2 id="三-联接agent-三层认知记忆架构一图流">三、 “联接”Agent 三层认知记忆架构一图流</h2>
-<p>“联接”Agent 专精于通信网络保障的<strong>意图参数提取（提参数）</strong>与精准闭环受理。系统通过 <strong>“规则定骨架与真值、LLM 负责口语化渲染、验证器强门禁拦截”</strong> 的混合架构，在单个用户的 16~20 个跨会话生命周期中完整演练三层认知记忆：</p>
-
-                        <div class="mermaid-wrapper">
-                            <div class="mermaid-toolbar">
-                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范 · 支持缩放与全屏)</span>
-                                <div class="mermaid-ctrl-group">
-                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
-                                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
-                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
-                                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
-                                </div>
-                            </div>
-                            <div class="mermaid">graph TD
-    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-
-    subgraph Input ["&lt;b&gt;1. 输入层 (Persona &amp; Config)&lt;/b&gt;"]
-        P["&lt;b&gt;用户画像与故事线&lt;br/&gt;(data/personas/*.json)&lt;/b&gt;"]
-        C["&lt;b&gt;业务支持矩阵与别名库&lt;br/&gt;(config/*.json)&lt;/b&gt;"]
-    end
-
-    subgraph Engine ["&lt;b&gt;2. 三层认知记忆规划与状态引擎 (src/core/)&lt;/b&gt;"]
-        GT["&lt;b&gt;四层真值与 MT 反推&lt;br/&gt;(gt_builder / mt_selector)&lt;/b&gt;"]
-        TL["&lt;b&gt;16~20 Session 拓扑编排&lt;br/&gt;(timeline_planner)&lt;/b&gt;"]
-        M1["&lt;b&gt;事实记忆引擎 (MemoryEngine)&lt;br/&gt;别名映射 / 体验偏好 / 长期修正&lt;/b&gt;"]
-        M2["&lt;b&gt;工作记忆账本 (WorkingRecordsLedger)&lt;br/&gt;历史工单 / 跨期复用 / 多候选消歧&lt;/b&gt;"]
-        M3["&lt;b&gt;经验记忆库 (ExperienceBank)&lt;br/&gt;五大黄金经验 / 思维护栏注入&lt;/b&gt;"]
-    end
-
-    subgraph Render ["&lt;b&gt;3. 双轨对话生成与组装 (src/generation/)&lt;/b&gt;"]
-        DG["&lt;b&gt;受控对话渲染与兜底引擎&lt;br/&gt;(dialogue_generator / fallbacks)&lt;/b&gt;"]
-        SA["&lt;b&gt;双轨分支组装器 (session_assembler)&lt;br/&gt;Fast Path (2~3轮) vs Slow Path (4~5轮)&lt;/b&gt;"]
-    end
-
-    subgraph Output ["&lt;b&gt;4. 质检门禁与评测产物 (data/cognitive_samples/)&lt;/b&gt;"]
-        QC["&lt;b&gt;R1~R14 自动化质检&lt;br/&gt;(qc_validator.py)&lt;/b&gt;"]
-        OUT["&lt;b&gt;四大标准产物交付&lt;br/&gt;skeleton / sessions / records / experiences&lt;/b&gt;"]
-    end
-
-    P --&gt; GT
-    C --&gt; GT
-    GT --&gt; TL
-    TL --&gt; M1
-    TL --&gt; M2
-    TL --&gt; M3
-    M1 --&gt; DG
-    M2 --&gt; DG
-    M3 --&gt; DG
-    DG --&gt; SA
-    SA --&gt; QC
-    QC --&gt; OUT
-
-    style Input fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;
-    style Engine fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px;
-    style Render fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;
-    style Output fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px;</div>
-                        </div>
-                        
-<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
-<h2 id="四-文档与代码仓目录结构">四、 文档与代码仓目录结构</h2>
-
-    <div class="visual-card visual-tree-card">
-        <div class="visual-card-header">
-            <span class="visual-card-badge">🗂️ 结构化目录与模块树视图</span>
-            <button class="code-copy-btn" onclick="copyVisualRaw(this)">复制文本</button>
-        </div>
-        <div class="vtree-body">
-            <div class="vtree-row">
-                <span class="vtree-branch"></span>
-                <span class="vtree-icon">📁</span>
-                <span class="vtree-name vtree-dir">docs/</span>
-                
-            </div><div class="vtree-row">
-                <span class="vtree-branch">├── </span>
-                <span class="vtree-icon">📄</span>
-                <span class="vtree-name vtree-file">README.md</span>
-                <span class="vtree-comment"># 文档中心总入口与四层阅读路线图（本文档）</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">├── </span>
-                <span class="vtree-icon">📄</span>
-                <span class="vtree-name vtree-file">记忆建模与数据集生成要求.md</span>
-                <span class="vtree-comment"># 第一层：业务背景、三层记忆分类与五元组真值要求</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">├── </span>
-                <span class="vtree-icon">📄</span>
-                <span class="vtree-name vtree-file">跨 Session 记忆数据集生成器思路.md</span>
-                <span class="vtree-comment"># 第二层：端到端生成流水线、GT→MT→Timeline→Session 详设</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">├── </span>
-                <span class="vtree-icon">📁</span>
-                <span class="vtree-name vtree-dir">specs/</span>
-                <span class="vtree-comment"># 核心架构与输入规范 (Specifications)</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   ├── </span>
-                <span class="vtree-icon">📄</span>
-                <span class="vtree-name vtree-file">cognitive_memory_dev_spec.md</span>
-                <span class="vtree-comment"># 第二层：【核心总纲】三层认知记忆与双轨成败分支测试规范</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   └── </span>
-                <span class="vtree-icon">📄</span>
-                <span class="vtree-name vtree-file">persona_spec.md</span>
-                <span class="vtree-comment"># 第三层：Persona 画像与故事线输入 JSON 规范</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">├── </span>
-                <span class="vtree-icon">📁</span>
-                <span class="vtree-name vtree-dir">guides/</span>
-                <span class="vtree-comment"># 工程运行与操作指南 (Operational Guides)</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   └── </span>
-                <span class="vtree-icon">📄</span>
-                <span class="vtree-name vtree-file">cli_usage.md</span>
-                <span class="vtree-comment"># 第三层：run.py 命令行使用、产物说明与质检操作手册</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">├── </span>
-                <span class="vtree-icon">📁</span>
-                <span class="vtree-name vtree-dir">archive/</span>
-                <span class="vtree-comment"># 演进提案与治理归档 (Historical &amp; Governance Archive)</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   ├── </span>
-                <span class="vtree-icon">📄</span>
-                <span class="vtree-name vtree-file">memory_evolution_proposal.md</span>
-                <span class="vtree-comment"># 第四层：三层认知记忆演进立项提案 (RFC)</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   └── </span>
-                <span class="vtree-icon">📄</span>
-                <span class="vtree-name vtree-file">defect_triage_log.md</span>
-                <span class="vtree-comment"># 第四层：历史数据集缺陷根因剖析与治理台账</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">└── </span>
-                <span class="vtree-icon">🐍</span>
-                <span class="vtree-name vtree-file">render_html.py</span>
-                <span class="vtree-comment"># 文档可视化渲染引擎（一键生成全套高保真 HTML 文档）</span>
-            </div>
-        </div>
-        <pre class="visual-raw-hidden" style="display:none;"><code>docs/
-├── README.md                              # 文档中心总入口与四层阅读路线图（本文档）
-├── 记忆建模与数据集生成要求.md               # 第一层：业务背景、三层记忆分类与五元组真值要求
-├── 跨 Session 记忆数据集生成器思路.md        # 第二层：端到端生成流水线、GT→MT→Timeline→Session 详设
-├── specs/                                 # 核心架构与输入规范 (Specifications)
-│   ├── cognitive_memory_dev_spec.md       # 第二层：【核心总纲】三层认知记忆与双轨成败分支测试规范
-│   └── persona_spec.md                    # 第三层：Persona 画像与故事线输入 JSON 规范
-├── guides/                                # 工程运行与操作指南 (Operational Guides)
-│   └── cli_usage.md                       # 第三层：run.py 命令行使用、产物说明与质检操作手册
-├── archive/                               # 演进提案与治理归档 (Historical &amp; Governance Archive)
-│   ├── memory_evolution_proposal.md       # 第四层：三层认知记忆演进立项提案 (RFC)
-│   └── defect_triage_log.md               # 第四层：历史数据集缺陷根因剖析与治理台账
-└── render_html.py                         # 文档可视化渲染引擎（一键生成全套高保真 HTML 文档）</code></pre>
-    </div>
-    
-<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
-<h2 id="五-快速上手命令基于当前代码仓-runpy">五、 快速上手命令（基于当前代码仓 <code>run.py</code>）</h2>
+<h2 id="一-文档分类导航与目录索引">一、 文档分类导航与目录索引</h2>
 
                         <div class="code-card">
                             <div class="code-card-header">
-                                <span class="code-card-lang">BASH</span>
+                                <span class="code-card-lang">TEXT</span>
                                 <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
                             </div>
-                            <pre><code class="language-bash"># 1. 单画像端到端生成与 R1~R14 质检验证（推荐开发调试使用）
-python run.py --input data/personas --output data/cognitive_samples --start 0 --count 1 --verify --force
-
-# 2. 离线确定性生成模式（不依赖外部 LLM API，使用高质量内置模板瞬间生成并质检）
-python run.py --input data/personas --output data/cognitive_samples --start 0 --count 5 --offline --verify --force
-
-# 3. 批量生成移动核心网 5 个标杆画像全量认知记忆样本
-python run.py --input data/personas --output data/cognitive_samples --start 0 --count 5 --verify --force
-
-# 4. 重新渲染 docs/ 下所有 Markdown 为可视化 HTML 网页
-python docs/render_html.py</code></pre>
+                            <pre><code class="language-text">docs/
+├── README.md                              # [本文件] 文档中心导航总览与索引
+│
+├── 记忆建模与数据集生成要求.md              # 【需求标准】第一层：事实记忆建模、正负样本生成要求与追问决策准则
+├── 跨 Session 记忆数据集生成器思路.md        # 【系统设计】第二层：跨 Session 数据集生成器总体架构、流水线设计、GT建模与校验
+│
+├── specs/                                 # 【核心技术规范】
+│   ├── cognitive_memory_dev_spec.md       # 【核心规范】第二层：“联接”Agent 三层认知记忆与双轨评测技术规范 (16~20轮)
+│   └── persona_spec.md                    # 【基础规范】第三层：Persona 画像、主/支线与干扰项建模生成规范
+│
+├── guides/                                # 【研发与运行指南】
+│   └── cli_usage.md                       # 第三层：命令行工具手册、批处理流水线与数据质检操作指南
+│
+└── archive/                               # 【历史沉淀与排查记录】
+    ├── memory_evolution_proposal.md       # 第四层：认知架构立项方案 (RFC)：ReasoningBank 理论调研、α 因子推导与演进路线
+    └── defect_triage_log.md               # 第四层：001~150 早期批次数据治理实录：21 项典型生成缺陷、排查根因与修复措施</code></pre>
                         </div>
                         
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
-<h2 id="五-全局编写与制图硬性准则源自-geminimd">五、 全局编写与制图硬性准则（源自 <code>GEMINI.md</code>）</h2>
-<ol><li><strong>智能体统一称谓</strong>：本项目的核心智能体统一命名为 <strong>“联接”Agent</strong>，专精于通信网络保障的<strong>意图参数提取（提参数）</strong>与精准闭环受理。
+<h2 id="二-基础系统设计与需求准则">二、 基础系统设计与需求准则</h2>
+<h3 id="1-记忆建模与数据集生成要求记忆建模与数据集生成要求md">1. <a href="记忆建模与数据集生成要求.html" class="md-link">记忆建模与数据集生成要求</a></h3>
+<ul><li><strong>核心定位</strong>：记忆建模规范与正负样本评测基准要求。
 </li>
-<li><strong>正规评测专业命名</strong>：架构图、时序图、技术文档及代码注释中，统一采用 <strong>“动态多分支模拟评测”</strong>、<strong>“双轨成败分支测试（Fast/Slow Branch Evaluation）”</strong> 或 <strong>“树状交互评测”</strong>。
+<li><strong>涵盖模块</strong>：
+<ul><li><strong>用户事实记忆边界</strong>：静态事实（套餐/权益）与动态事实（个性化表达、选择偏好、时间规律、体验参数）；
 </li>
-<li><strong>Mermaid 视觉标准</strong>：
-<ul><li><strong>纯白底色</strong>：所有图表背景统一采用纯白色（<code>#FFFFFF</code>），保持清爽高对比度；
+<li><strong>追问决策准则</strong>：证据不足、多候选接近、冲突场景下的必须追问条件；
 </li>
-<li><strong>加粗字体</strong>：图中所有节点名称、时序消息、分支标注与说明文字<strong>全量采用粗体（Bold）</strong>；
+<li><strong>四层 Ground Truth</strong> 映射矩阵。
+</li></ul>
+</li></ul>
+<h3 id="2-跨-session-记忆数据集生成器思路跨20session20记忆数据集生成器思路md">2. <a href="跨%20Session%20记忆数据集生成器思路.html" class="md-link">跨 Session 记忆数据集生成器思路</a></h3>
+<ul><li><strong>核心定位</strong>：全流水线顶层设计文档。
 </li>
-<li><strong>线条加粗</strong>：连接线与箭头统一加粗（<code>stroke-width: 2px ~ 2.5px</code>），确保轮廓清晰锐利。
+<li><strong>涵盖模块</strong>：
+<ul><li><strong>流水线架构</strong>：GT 构建 <span class="katex-inline" data-tex="\to">$\to$</span> Memory Targets 规划 <span class="katex-inline" data-tex="\to">$\to$</span> 时间线编排 <span class="katex-inline" data-tex="\to">$\to$</span> 逐 Session 渲染 <span class="katex-inline" data-tex="\to">$\to$</span> 评测与一致性校验；
+</li>
+<li><strong>Session 角色 × 模板 × 轮数硬约束</strong>；
+</li>
+<li><strong>双层校验防御</strong>：结构校验 R1~R8（纯规则）与内容校验 C1~C5（语义断言）；
+</li>
+<li><strong>输入输出契约</strong>：画像骨架（<code>skeleton.json</code>）与对话记录（<code>sessions.jsonl</code>）。
+</li></ul>
+</li></ul>
+<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+<h2 id="三-核心技术规范-specs">三、 核心技术规范 (Specs)</h2>
+<h3 id="1-联接agent-三层认知记忆与双轨评测技术规范specscognitivememorydevspecmd-核心规范">1. <a href="specs/cognitive_memory_dev_spec.html" class="md-link">“联接”Agent 三层认知记忆与双轨评测技术规范</a> <code>[核心规范]</code></h3>
+<ul><li><strong>业务定位</strong>：面向“联接”Agent 通信保障场景下的<strong>意图参数提取（提参数）</strong>与闭环受理。
+</li>
+<li><strong>三层认知记忆架构</strong>：
+<ul><li><strong>事实记忆 (Factual Memory)</strong>：用户长期配置画像（偏好、别名映射、长期默认参数）。
+</li>
+<li><strong>工作记忆 (Working Memory)</strong>：跨会话历史工单记录（单据复用、时间变更、多候选消歧）。
+</li>
+<li><strong>经验记忆 (Experiential Memory)</strong>：跨会话排障与提参策略库（<code>experiences.jsonl</code> 结构化卡片）。
+</li>
+</ul></li>
+<li><strong>五类经验记忆场景</strong>：
+<ol><li><code>EXP_MULTI_INTENT_PARTITION_01</code>：多任务并行分段隔离与局部调整。
+</li>
+<li><code>EXP_PREWARM_BUFFER_01</code>：重大活动提前预热时间推算。
+</li>
+<li><code>EXP_CALENDAR_HOLIDAY_EXCEPTION_01</code>：周期例行排期遇法定节假日顺延。
+</li>
+<li><code>EXP_ORDER_QUALITY_DISAMBIGUATION_01</code>：基于历史工单运行质量的同日多单消歧。
+</li>
+<li><code>EXP_OVERLAPPING_ORDER_RESOLUTION_01</code>：新旧工单时段重叠冲突裁决。
+</li>
+</ol></li>
+<li><strong>会话规模与拓扑</strong>：单生命周期支持 <strong>16 ~ 20 轮动态会话</strong>演进（S01 ~ S20 动态 DAG 拓扑）。
+</li>
+<li><strong>双轨成败分支测试（Fast/Slow Branch Evaluation）</strong>：
+<ul><li>经验应用测试会话首轮（Turn 1）基础参数自包含，重点评测模型能否识别场景特征并主动应用经验；
+</li>
+<li>对比 Fast Path（命中经验记忆：2~3 轮快速闭环）与 Slow Path（缺失经验记忆：4~5 轮澄清与纠偏）；
+</li>
+<li>交互轮数压缩增益：<div class="math-block" data-tex="\text{TCG} = \frac{T_{\text{Slow}} - T_{\text{Fast}}}{T_{\text{Slow}}} \times 100\% \ge 50\%"><div class="katex-display-container" data-tex="\text{TCG} = \frac{T_{\text{Slow}} - T_{\text{Fast}}}{T_{\text{Slow}}} \times 100\% \ge 50\%">$$\text{TCG} = \frac{T_{\text{Slow}} - T_{\text{Fast}}}{T_{\text{Slow}}} \times 100\% \ge 50\%$$</div></div>。
+</li></ul>
+</li></ul>
+<h3 id="2-persona-画像与主支线建模规范specspersonaspecmd-基础规范">2. <a href="specs/persona_spec.html" class="md-link">Persona 画像与主/支线建模规范</a> <code>[基础规范]</code></h3>
+<ul><li>规范 Persona 静态画像（职业、语言风格、身份背景）与动态画像（主线业务、支线保障、突发事件、干扰项池）。
+</li>
+<li>保证生成画像的多样性、真实性与参数合理性。
+</li></ul>
+<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+<h2 id="四-研发与运行指南-guides">四、 研发与运行指南 (Guides)</h2>
+<h3 id="1-命令行使用手册与流水线指南guidescliusagemd">1. <a href="guides/cli_usage.html" class="md-link">命令行使用手册与流水线指南</a></h3>
+<ul><li><strong>端到端生成与质检</strong>：<code>python run.py --input data/personas --output data/cognitive_samples --start 0 --count 5 --verify</code>
+</li>
+<li><strong>离线确定性生成</strong>：<code>python run.py --input data/personas --output data/cognitive_samples --start 0 --count 5 --offline --verify</code>
+</li>
+<li><strong>单独执行质检</strong>：<code>python run.py --output data/cognitive_samples --verify-only</code>
+</li></ul>
+<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+<h2 id="五-历史沉淀与排查记录-archive">五、 历史沉淀与排查记录 (Archive)</h2>
+<ul><li><strong><a href="archive/memory_evolution_proposal.html" class="md-link">认知记忆演进提案规划 (memory_evolution_proposal.md)</a></strong>：三层认知记忆架构设计草案（RFC），包含 MemoryArena / ReasoningBank 理论参考、敏捷度因子 <span class="katex-inline" data-tex="\alpha">$\alpha$</span> 推导及 Phase 1~4 演进路线。
+</li>
+<li><strong><a href="archive/defect_triage_log.html" class="md-link">早期生成排查与数据治理实录 (defect_triage_log.md)</a></strong>：归档 001~150 批次生成中关于跨轮泄漏、时间倒灌、T1-1/T2-5 边界、口语自然度等 21 项典型缺陷的根因分析与修复方案。
+</li></ul>
+<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+<h2 id="六-文档维护与更新准则">六、 文档维护与更新准则</h2>
+<ol><li><strong>唯一真值原则</strong>：
+<ul><li>系统整体思路与需求基准以顶层设计文档为准；三层认知记忆实现以 <code>specs/cognitive_memory_dev_spec.md</code> 为准；<code>archive/</code> 保留历史排查与立项背景。
+</li>
+</ul></li>
+<li><strong>命名规范</strong>：
+<ul><li>新增文档采用英文小写加下划线命名，历史顶层文档保留原名以保障兼容。
+</li>
+</ul></li>
+<li><strong>评测术语规范</strong>：
+<ul><li>所有技术文档统一使用<strong>“双轨成败分支测试（Fast/Slow Branch Evaluation）”</strong>或<strong>“动态多分支模拟评测”</strong>。
+</li>
+</ul></li>
+<li><strong>语言风格</strong>：
+<ul><li>文档表述保持严谨、简洁；业务对话示例采用自然口语表达，避免生僻底层网管专业术语（如“空口切片”、“相控阵天线”）。
+</li>
+</ul></li>
+<li><strong>Mermaid 制图规范</strong>：
+<ul><li>纯白底色 (<code>#FFFFFF</code>)、粗体文字、加粗线条（<code>stroke-width: 2px</code>）。
 </li></ul>
 </li></ol>
                 </article>
@@ -1334,168 +1152,108 @@ python docs/render_html.py</code></pre>
                         <strong>docs/README.md 原生 Markdown 源码</strong>
                         <button class="nav-btn active" onclick="copyRawMarkdown()">复制全文源码</button>
                     </div>
-                    <textarea class="raw-md-textarea" id="rawMdArea" readonly># “联接”Agent 跨会话三层认知记忆数据集文档中心
+                    <textarea class="raw-md-textarea" id="rawMdArea" readonly># 跨会话认知记忆数据集与引擎开发文档中心
 
-本目录汇集了 **通信网络保障“联接”Agent 跨会话认知记忆数据集（Cross-Session Cognitive Memory Dataset）** 的完整技术文档体系。为了便于理解系统全貌，文档按 **“业务要求 $\to$ 核心架构 $\to$ 工程规范 $\to$ 演进归档”** 四层逻辑递进组织。
-
----
-
-## 一、 核心架构与文档阅读路线图
-
-如果你是首次接触本项目，建议按照以下 **四层递进路线** 阅读文档：
-
-```mermaid
-graph TD
-    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-    classDef highlight fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-
-    subgraph L1 [&quot;&lt;b&gt;第一层：业务定义与记忆建模要求 (Why &amp; What)&lt;/b&gt;&quot;]
-        D1[&quot;&lt;b&gt;《记忆建模与数据集生成要求》&lt;br/&gt;定义通信保障提参数场景、三层记忆分类与五元组真值闭环&lt;/b&gt;&quot;]
-    end
-
-    subgraph L2 [&quot;&lt;b&gt;第二层：核心架构与生成流水线详设 (How It Works)&lt;/b&gt;&quot;]
-        D2[&quot;&lt;b&gt;《三层认知记忆演进开发规范 (Core Spec)》&lt;br/&gt;16~20 Session 拓扑、五大黄金经验、Turn 1 自包含与双轨成败分支评测&lt;/b&gt;&quot;]:::highlight
-        D3[&quot;&lt;b&gt;《跨 Session 记忆数据集生成器思路》&lt;br/&gt;GT 四层构建 → MT 反推 → 时间线编排 → 骨架约束渲染 → 双层校验全链路&lt;/b&gt;&quot;]
-    end
-
-    subgraph L3 [&quot;&lt;b&gt;第三层：输入规范与工程操作手册 (Specs &amp; Operations)&lt;/b&gt;&quot;]
-        D4[&quot;&lt;b&gt;《Persona 模板生成规范》&lt;br/&gt;static / dynamic / storyline 画像结构与 10 项设计清单&lt;/b&gt;&quot;]
-        D5[&quot;&lt;b&gt;《CLI 与流水线操作指南》&lt;br/&gt;run.py 命令行参数、批量并发、离线降级与 R1~R14 质检门禁&lt;/b&gt;&quot;]
-    end
-
-    subgraph L4 [&quot;&lt;b&gt;第四层：理论立项与数据治理归档 (Evolution &amp; Governance)&lt;/b&gt;&quot;]
-        D6[&quot;&lt;b&gt;《认知记忆演进立项提案 (RFC)》&lt;br/&gt;ReasoningBank / MaTTS 理论借鉴与 TCG/ERRA 评测指标推导&lt;/b&gt;&quot;]
-        D7[&quot;&lt;b&gt;《数据集缺陷排查与治理台账》&lt;br/&gt;7 大类历史数据缺陷根因剖析与质检拦截闭环&lt;/b&gt;&quot;]
-    end
-
-    D1 --&gt; D2
-    D2 --&gt; D3
-    D2 --&gt; D4
-    D3 --&gt; D5
-    D4 --&gt; D5
-    D2 -.-&gt; D6
-    D5 -.-&gt; D7
-
-    style L1 fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;
-    style L2 fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px;
-    style L3 fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;
-    style L4 fill:#FFFFFF,stroke:#475569,stroke-width:2px;
-```
+&gt; 本文档中心为**“联接”Agent**（面向通信网络保障**意图参数提取（提参数）**与闭环受理的核心智能体）跨会话认知记忆数据集与评测引擎的统一文档索引。
 
 ---
 
-## 二、 文档体系全景导航表
-
-| 逻辑分层 | 文档名称 | 核心定位与解决的问题 | 对应代码模块 |
-| :--- | :--- | :--- | :--- |
-| **第一层：业务与建模要求** | [**《记忆建模与数据集生成要求》**](记忆建模与数据集生成要求.md) | 为什么要构建跨会话记忆？定义**事实记忆、工作记忆、经验记忆**三大维度、五元组真值映射、六类标准动作集与跨会话时间线硬约束 | 全局规范 |
-| **第二层：核心架构与流水线** | [**《三层认知记忆演进开发规范》**](specs/cognitive_memory_dev_spec.md) | **【核心总纲】** 16~20 Session 怎么编排？详解三大正交记忆引擎、五大黄金经验策略、**Turn 1 基础参数自包含原则**与 **双轨成败分支测试（Fast/Slow Branch Evaluation）** | `timeline_planner.py`&lt;br/&gt;`working_records_ledger.py`&lt;br/&gt;`experience_bank.py`&lt;br/&gt;`session_assembler.py` |
-| **第二层：核心架构与流水线** | [**《跨 Session 记忆数据集生成器思路》**](跨%20Session%20记忆数据集生成器思路.md) | 单个样本如何从画像变成多轮对话？详解 **四层 GT 构建 $\to$ MT/MF 反推 $\to$ 16 种模板骨架约束 $\to$ 槽位表达计划 $\to$ 四元 `source_type` 标注** | `gt_builder.py`&lt;br/&gt;`mt_selector.py`&lt;br/&gt;`dialogue_generator.py`&lt;br/&gt;`preference_maps.py` |
-| **第三层：输入规范与操作** | [**《Persona 模板生成规范》**](specs/persona_spec.md) | 输入画像长什么样？规定 `static_profile`、`dynamic_profile` 与 `storyline` 的 JSON Schema、编写原则及 10 项质量检查清单 | `persona_StoryExtractor.py`&lt;br/&gt;`data/personas/` |
-| **第三层：输入规范与操作** | [**《CLI 与流水线操作指南》**](guides/cli_usage.md) | 怎么运行代码与验收数据？提供 `run.py` 命令行参数详解、单画像/批量生成指令、产物目录结构说明及 **R1~R14 自动化质检**指南 | `run.py`&lt;br/&gt;`batch_pipeline.py`&lt;br/&gt;`qc_validator.py` |
-| **第四层：理论与治理归档** | [**《认知记忆演进立项提案 (RFC)》**](archive/memory_evolution_proposal.md) | 经验记忆与双轨评测的学术依据是什么？阐述 ReasoningBank 与 MaTTS 理论迁移、TCG 轮次压缩增益公式与四阶段演进路线 | 架构立项参考 |
-| **第四层：理论与治理归档** | [**《数据集缺陷排查与治理台账》**](archive/defect_triage_log.md) | 历史版本踩过哪些坑？归档 7 大类早期样本缺陷（断链、重复确认、冷启动抢答、内部枚举泄漏等）的根因定位与修复闭环 | `qc_validator.py`&lt;br/&gt;`dialogue_prompts.py` |
-
----
-
-## 三、 “联接”Agent 三层认知记忆架构一图流
-
-“联接”Agent 专精于通信网络保障的**意图参数提取（提参数）**与精准闭环受理。系统通过 **“规则定骨架与真值、LLM 负责口语化渲染、验证器强门禁拦截”** 的混合架构，在单个用户的 16~20 个跨会话生命周期中完整演练三层认知记忆：
-
-```mermaid
-graph TD
-    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-
-    subgraph Input [&quot;&lt;b&gt;1. 输入层 (Persona &amp; Config)&lt;/b&gt;&quot;]
-        P[&quot;&lt;b&gt;用户画像与故事线&lt;br/&gt;(data/personas/*.json)&lt;/b&gt;&quot;]
-        C[&quot;&lt;b&gt;业务支持矩阵与别名库&lt;br/&gt;(config/*.json)&lt;/b&gt;&quot;]
-    end
-
-    subgraph Engine [&quot;&lt;b&gt;2. 三层认知记忆规划与状态引擎 (src/core/)&lt;/b&gt;&quot;]
-        GT[&quot;&lt;b&gt;四层真值与 MT 反推&lt;br/&gt;(gt_builder / mt_selector)&lt;/b&gt;&quot;]
-        TL[&quot;&lt;b&gt;16~20 Session 拓扑编排&lt;br/&gt;(timeline_planner)&lt;/b&gt;&quot;]
-        M1[&quot;&lt;b&gt;事实记忆引擎 (MemoryEngine)&lt;br/&gt;别名映射 / 体验偏好 / 长期修正&lt;/b&gt;&quot;]
-        M2[&quot;&lt;b&gt;工作记忆账本 (WorkingRecordsLedger)&lt;br/&gt;历史工单 / 跨期复用 / 多候选消歧&lt;/b&gt;&quot;]
-        M3[&quot;&lt;b&gt;经验记忆库 (ExperienceBank)&lt;br/&gt;五大黄金经验 / 思维护栏注入&lt;/b&gt;&quot;]
-    end
-
-    subgraph Render [&quot;&lt;b&gt;3. 双轨对话生成与组装 (src/generation/)&lt;/b&gt;&quot;]
-        DG[&quot;&lt;b&gt;受控对话渲染与兜底引擎&lt;br/&gt;(dialogue_generator / fallbacks)&lt;/b&gt;&quot;]
-        SA[&quot;&lt;b&gt;双轨分支组装器 (session_assembler)&lt;br/&gt;Fast Path (2~3轮) vs Slow Path (4~5轮)&lt;/b&gt;&quot;]
-    end
-
-    subgraph Output [&quot;&lt;b&gt;4. 质检门禁与评测产物 (data/cognitive_samples/)&lt;/b&gt;&quot;]
-        QC[&quot;&lt;b&gt;R1~R14 自动化质检&lt;br/&gt;(qc_validator.py)&lt;/b&gt;&quot;]
-        OUT[&quot;&lt;b&gt;四大标准产物交付&lt;br/&gt;skeleton / sessions / records / experiences&lt;/b&gt;&quot;]
-    end
-
-    P --&gt; GT
-    C --&gt; GT
-    GT --&gt; TL
-    TL --&gt; M1
-    TL --&gt; M2
-    TL --&gt; M3
-    M1 --&gt; DG
-    M2 --&gt; DG
-    M3 --&gt; DG
-    DG --&gt; SA
-    SA --&gt; QC
-    QC --&gt; OUT
-
-    style Input fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;
-    style Engine fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px;
-    style Render fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;
-    style Output fill:#FFFFFF,stroke:#16A34A,stroke-width:2.5px;
-```
-
----
-
-## 四、 文档与代码仓目录结构
+## 一、 文档分类导航与目录索引
 
 ```text
 docs/
-├── README.md                              # 文档中心总入口与四层阅读路线图（本文档）
-├── 记忆建模与数据集生成要求.md               # 第一层：业务背景、三层记忆分类与五元组真值要求
-├── 跨 Session 记忆数据集生成器思路.md        # 第二层：端到端生成流水线、GT→MT→Timeline→Session 详设
-├── specs/                                 # 核心架构与输入规范 (Specifications)
-│   ├── cognitive_memory_dev_spec.md       # 第二层：【核心总纲】三层认知记忆与双轨成败分支测试规范
-│   └── persona_spec.md                    # 第三层：Persona 画像与故事线输入 JSON 规范
-├── guides/                                # 工程运行与操作指南 (Operational Guides)
-│   └── cli_usage.md                       # 第三层：run.py 命令行使用、产物说明与质检操作手册
-├── archive/                               # 演进提案与治理归档 (Historical &amp; Governance Archive)
-│   ├── memory_evolution_proposal.md       # 第四层：三层认知记忆演进立项提案 (RFC)
-│   └── defect_triage_log.md               # 第四层：历史数据集缺陷根因剖析与治理台账
-└── render_html.py                         # 文档可视化渲染引擎（一键生成全套高保真 HTML 文档）
+├── README.md                              # [本文件] 文档中心导航总览与索引
+│
+├── 记忆建模与数据集生成要求.md              # 【需求标准】第一层：事实记忆建模、正负样本生成要求与追问决策准则
+├── 跨 Session 记忆数据集生成器思路.md        # 【系统设计】第二层：跨 Session 数据集生成器总体架构、流水线设计、GT建模与校验
+│
+├── specs/                                 # 【核心技术规范】
+│   ├── cognitive_memory_dev_spec.md       # 【核心规范】第二层：“联接”Agent 三层认知记忆与双轨评测技术规范 (16~20轮)
+│   └── persona_spec.md                    # 【基础规范】第三层：Persona 画像、主/支线与干扰项建模生成规范
+│
+├── guides/                                # 【研发与运行指南】
+│   └── cli_usage.md                       # 第三层：命令行工具手册、批处理流水线与数据质检操作指南
+│
+└── archive/                               # 【历史沉淀与排查记录】
+    ├── memory_evolution_proposal.md       # 第四层：认知架构立项方案 (RFC)：ReasoningBank 理论调研、α 因子推导与演进路线
+    └── defect_triage_log.md               # 第四层：001~150 早期批次数据治理实录：21 项典型生成缺陷、排查根因与修复措施
 ```
 
 ---
 
-## 五、 快速上手命令（基于当前代码仓 `run.py`）
+## 二、 基础系统设计与需求准则
 
-```bash
-# 1. 单画像端到端生成与 R1~R14 质检验证（推荐开发调试使用）
-python run.py --input data/personas --output data/cognitive_samples --start 0 --count 1 --verify --force
+### 1. [记忆建模与数据集生成要求](记忆建模与数据集生成要求.md)
+* **核心定位**：记忆建模规范与正负样本评测基准要求。
+* **涵盖模块**：
+  * **用户事实记忆边界**：静态事实（套餐/权益）与动态事实（个性化表达、选择偏好、时间规律、体验参数）；
+  * **追问决策准则**：证据不足、多候选接近、冲突场景下的必须追问条件；
+  * **四层 Ground Truth** 映射矩阵。
 
-# 2. 离线确定性生成模式（不依赖外部 LLM API，使用高质量内置模板瞬间生成并质检）
-python run.py --input data/personas --output data/cognitive_samples --start 0 --count 5 --offline --verify --force
-
-# 3. 批量生成移动核心网 5 个标杆画像全量认知记忆样本
-python run.py --input data/personas --output data/cognitive_samples --start 0 --count 5 --verify --force
-
-# 4. 重新渲染 docs/ 下所有 Markdown 为可视化 HTML 网页
-python docs/render_html.py
-```
+### 2. [跨 Session 记忆数据集生成器思路](跨%20Session%20记忆数据集生成器思路.md)
+* **核心定位**：全流水线顶层设计文档。
+* **涵盖模块**：
+  * **流水线架构**：GT 构建 $\to$ Memory Targets 规划 $\to$ 时间线编排 $\to$ 逐 Session 渲染 $\to$ 评测与一致性校验；
+  * **Session 角色 × 模板 × 轮数硬约束**；
+  * **双层校验防御**：结构校验 R1~R8（纯规则）与内容校验 C1~C5（语义断言）；
+  * **输入输出契约**：画像骨架（`skeleton.json`）与对话记录（`sessions.jsonl`）。
 
 ---
 
-## 五、 全局编写与制图硬性准则（源自 `GEMINI.md`）
+## 三、 核心技术规范 (Specs)
 
-1. **智能体统一称谓**：本项目的核心智能体统一命名为 **“联接”Agent**，专精于通信网络保障的**意图参数提取（提参数）**与精准闭环受理。
-2. **正规评测专业命名**：架构图、时序图、技术文档及代码注释中，统一采用 **“动态多分支模拟评测”**、**“双轨成败分支测试（Fast/Slow Branch Evaluation）”** 或 **“树状交互评测”**。
-3. **Mermaid 视觉标准**：
-   - **纯白底色**：所有图表背景统一采用纯白色（`#FFFFFF`），保持清爽高对比度；
-   - **加粗字体**：图中所有节点名称、时序消息、分支标注与说明文字**全量采用粗体（Bold）**；
-   - **线条加粗**：连接线与箭头统一加粗（`stroke-width: 2px ~ 2.5px`），确保轮廓清晰锐利。
+### 1. [“联接”Agent 三层认知记忆与双轨评测技术规范](specs/cognitive_memory_dev_spec.md) `[核心规范]`
+- **业务定位**：面向“联接”Agent 通信保障场景下的**意图参数提取（提参数）**与闭环受理。
+- **三层认知记忆架构**：
+  - **事实记忆 (Factual Memory)**：用户长期配置画像（偏好、别名映射、长期默认参数）。
+  - **工作记忆 (Working Memory)**：跨会话历史工单记录（单据复用、时间变更、多候选消歧）。
+  - **经验记忆 (Experiential Memory)**：跨会话排障与提参策略库（`experiences.jsonl` 结构化卡片）。
+- **五类经验记忆场景**：
+  1. `EXP_MULTI_INTENT_PARTITION_01`：多任务并行分段隔离与局部调整。
+  2. `EXP_PREWARM_BUFFER_01`：重大活动提前预热时间推算。
+  3. `EXP_CALENDAR_HOLIDAY_EXCEPTION_01`：周期例行排期遇法定节假日顺延。
+  4. `EXP_ORDER_QUALITY_DISAMBIGUATION_01`：基于历史工单运行质量的同日多单消歧。
+  5. `EXP_OVERLAPPING_ORDER_RESOLUTION_01`：新旧工单时段重叠冲突裁决。
+- **会话规模与拓扑**：单生命周期支持 **16 ~ 20 轮动态会话**演进（S01 ~ S20 动态 DAG 拓扑）。
+- **双轨成败分支测试（Fast/Slow Branch Evaluation）**：
+  - 经验应用测试会话首轮（Turn 1）基础参数自包含，重点评测模型能否识别场景特征并主动应用经验；
+  - 对比 Fast Path（命中经验记忆：2~3 轮快速闭环）与 Slow Path（缺失经验记忆：4~5 轮澄清与纠偏）；
+  - 交互轮数压缩增益：$$\text{TCG} = \frac{T_{\text{Slow}} - T_{\text{Fast}}}{T_{\text{Slow}}} \times 100\% \ge 50\%$$。
+
+### 2. [Persona 画像与主/支线建模规范](specs/persona_spec.md) `[基础规范]`
+- 规范 Persona 静态画像（职业、语言风格、身份背景）与动态画像（主线业务、支线保障、突发事件、干扰项池）。
+- 保证生成画像的多样性、真实性与参数合理性。
+
+---
+
+## 四、 研发与运行指南 (Guides)
+
+### 1. [命令行使用手册与流水线指南](guides/cli_usage.md)
+- **端到端生成与质检**：`python run.py --input data/personas --output data/cognitive_samples --start 0 --count 5 --verify`
+- **离线确定性生成**：`python run.py --input data/personas --output data/cognitive_samples --start 0 --count 5 --offline --verify`
+- **单独执行质检**：`python run.py --output data/cognitive_samples --verify-only`
+
+---
+
+## 五、 历史沉淀与排查记录 (Archive)
+
+- **[认知记忆演进提案规划 (memory_evolution_proposal.md)](archive/memory_evolution_proposal.md)**：三层认知记忆架构设计草案（RFC），包含 MemoryArena / ReasoningBank 理论参考、敏捷度因子 $\alpha$ 推导及 Phase 1~4 演进路线。
+- **[早期生成排查与数据治理实录 (defect_triage_log.md)](archive/defect_triage_log.md)**：归档 001~150 批次生成中关于跨轮泄漏、时间倒灌、T1-1/T2-5 边界、口语自然度等 21 项典型缺陷的根因分析与修复方案。
+
+---
+
+## 六、 文档维护与更新准则
+
+1. **唯一真值原则**：
+   - 系统整体思路与需求基准以顶层设计文档为准；三层认知记忆实现以 `specs/cognitive_memory_dev_spec.md` 为准；`archive/` 保留历史排查与立项背景。
+2. **命名规范**：
+   - 新增文档采用英文小写加下划线命名，历史顶层文档保留原名以保障兼容。
+3. **评测术语规范**：
+   - 所有技术文档统一使用**“双轨成败分支测试（Fast/Slow Branch Evaluation）”**或**“动态多分支模拟评测”**。
+4. **语言风格**：
+   - 文档表述保持严谨、简洁；业务对话示例采用自然口语表达，避免生僻底层网管专业术语（如“空口切片”、“相控阵天线”）。
+5. **Mermaid 制图规范**：
+   - 纯白底色 (`#FFFFFF`)、粗体文字、加粗线条（`stroke-width: 2px`）。
 </textarea>
                 </div>
             </div>
@@ -1689,59 +1447,21 @@ python docs/render_html.py
             if (window.mermaid) {
                 mermaid.initialize({
                     startOnLoad: false,
-                    securityLevel: 'loose',
-                    theme: 'base',
-                    flowchart: {
-                        useMaxWidth: false,
-                        htmlLabels: true,
-                        curve: 'basis',
-                        padding: 20,
-                        nodeSpacing: 45,
-                        rankSpacing: 55
-                    },
-                    sequence: {
-                        useMaxWidth: false,
-                        wrap: true,
-                        actorFontWeight: '700',
-                        messageFontWeight: '700',
-                        noteFontWeight: '700',
-                        boxMargin: 12,
-                        messageMargin: 40
-                    },
-                    state: {
-                        useMaxWidth: false
-                    },
-                    themeVariables: {
-                        fontSize: '16px',
-                        background: '#FFFFFF',
-                        primaryColor: '#FFFFFF',
-                        primaryTextColor: '#0F172A',
-                        primaryBorderColor: '#0F172A',
-                        lineColor: '#0F172A',
-                        secondaryColor: '#FFFFFF',
-                        tertiaryColor: '#FFFFFF',
-                        mainBkg: '#FFFFFF',
-                        nodeBorder: '#0F172A',
-                        clusterBkg: '#FFFFFF',
-                        clusterBorder: '#0F172A',
-                        actorBkg: '#FFFFFF',
-                        actorBorder: '#0F172A',
-                        actorTextColor: '#0F172A',
-                        signalColor: '#0F172A',
-                        signalTextColor: '#0F172A',
-                        labelBoxBkgColor: '#FFFFFF',
-                        labelBoxBorderColor: '#0F172A',
-                        labelTextColor: '#0F172A',
-                        noteBkgColor: '#FFFFFF',
-                        noteBorderColor: '#0F172A',
-                        noteTextColor: '#0F172A'
-                    }
+                    securityLevel: 'loose'
                 });
-                try {
-                    await mermaid.run({ querySelector: '.mermaid' });
-                } catch (e) {}
-                enhanceMermaidDiagrams();
-                setTimeout(enhanceMermaidDiagrams, 200);
+                const containers = document.querySelectorAll('.mermaid');
+                for (let i = 0; i < containers.length; i++) {
+                    const el = containers[i];
+                    const srcEl = el.querySelector('.mermaid-source');
+                    if (!srcEl) continue;
+                    try {
+                        const payload = JSON.parse(srcEl.textContent);
+                        const { svg } = await mermaid.render('mermaid-svg-' + i, payload.code);
+                        el.innerHTML = svg;
+                    } catch (e) {
+                        console.error('Mermaid render error:', e);
+                    }
+                }
             }
 
             if (window.hljs) {

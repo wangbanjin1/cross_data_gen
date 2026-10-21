@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>“联接”Agent 跨会话三层认知记忆数据集引擎 — 命令行使用手册与架构指南</title>
+    <title>跨会话长程记忆数据集生成引擎 - 命令行使用手册与架构指南</title>
     <!-- KaTeX 数学公式样式与渲染脚本 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css';">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js';"></script>
@@ -792,107 +792,39 @@
             background-color: var(--table-alt);
         }
 
-        /* Mermaid 图表容器：强制纯白底色 (#FFFFFF)、加粗字体、加粗线条 */
+        /* Mermaid 图表容器：与 Antigravity 原生 Mermaid 渲染一致 */
         .mermaid-wrapper {
-            margin: 22px 0 28px;
-            padding: 18px 24px 26px;
+            margin: 20px 0 24px;
+            padding: 18px 20px;
             background-color: #FFFFFF !important;
-            border: 2.5px solid #0F172A;
-            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
             overflow-x: auto;
             text-align: center;
             box-shadow: var(--card-shadow);
         }
 
-        .mermaid-toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 14px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #E2E8F0;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .mermaid-badge {
-            font-size: 0.80rem;
-            font-weight: 800;
-            color: #0F172A;
-            letter-spacing: 0.02em;
-        }
-
-        .mermaid-ctrl-group {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .mermaid-zoom-btn {
-            background-color: #F8FAFC;
-            border: 1.5px solid #0F172A;
-            color: #0F172A;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.15s;
-        }
-
-        .mermaid-zoom-btn:hover {
-            background-color: #0F172A;
-            color: #FFFFFF;
-        }
-
         .mermaid {
             background-color: #FFFFFF !important;
-            color: #0F172A !important;
-            font-weight: 700 !important;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: block;
             width: 100%;
-            min-height: 220px;
             margin: 0 auto;
-            overflow-x: auto;
+            text-align: center;
         }
 
         .mermaid svg {
             background-color: #FFFFFF !important;
-            font-weight: 700 !important;
-            width: 100% !important;
-            max-width: none !important;
-            height: auto !important;
-            display: block;
-            margin: 0 auto;
+            max-width: 100%;
+            height: auto;
         }
 
         .mermaid svg text,
         .mermaid svg tspan,
         .mermaid svg span,
-        .mermaid svg div,
-        .mermaid svg p,
         .mermaid svg .nodeLabel,
         .mermaid svg .edgeLabel,
-        .mermaid svg .cluster-label,
-        .mermaid svg .messageText,
-        .mermaid svg .labelText,
-        .mermaid svg .loopText,
-        .mermaid svg .noteText,
-        .mermaid svg .actor {
-            font-weight: 700 !important;
-            color: #0F172A !important;
-            fill: #0F172A !important;
-        }
-
-        .mermaid svg path,
-        .mermaid svg line,
-        .mermaid svg polyline,
-        .mermaid svg rect,
-        .mermaid svg polygon,
-        .mermaid svg circle {
-            stroke-width: 2.3px !important;
+        .mermaid svg .cluster-label {
+            font-weight: 700;
         }
 
         /* Mermaid 全屏放大模态框 */
@@ -1029,7 +961,7 @@
 <div class="portal-group-label">第一层 · 业务与建模要求</div>
 <a href="../记忆建模与数据集生成要求.html" class="portal-nav-item" title="记忆建模与生成要求">记忆建模与生成要求</a>
 <div class="portal-group-label">第二层 · 核心架构与流水线</div>
-<a href="../specs/cognitive_memory_dev_spec.html" class="portal-nav-item" title="三层认知记忆与双轨评测总纲">三层认知记忆与双轨评测总纲</a>
+<a href="../specs/cognitive_memory_dev_spec.html" class="portal-nav-item" title="三层认知记忆与双轨评测规范">三层认知记忆与双轨评测规范</a>
 <a href="../跨 Session 记忆数据集生成器思路.html" class="portal-nav-item" title="跨 Session 生成流水线详设">跨 Session 生成流水线详设</a>
 <div class="portal-group-label">第三层 · 输入规范与操作</div>
 <a href="../specs/persona_spec.html" class="portal-nav-item" title="Persona 画像与故事线规范">Persona 画像与故事线规范</a>
@@ -1094,40 +1026,16 @@
                 </div>
 
                 <article class="markdown-body" id="docReadView">
-<h1>“联接”Agent 跨会话三层认知记忆数据集引擎 — 命令行使用手册与架构指南</h1>
-<blockquote><p><strong>文档层级</strong>：第三层 · 工程运行与操作指南（CLI & Pipeline Operations Guide）</p>
-<p><strong>文档定位</strong>：汇总当前数据集生成引擎（<code>run.py</code>）的所有命令行参数、配置文件规范、自定义原始画像替换指南、<code>skeleton_signature</code> 拓扑指纹解析以及代码分层职责说明。</p></blockquote>
+<h1>跨会话长程记忆数据集生成引擎 - 命令行使用手册与架构指南</h1>
+<p>本文档汇总了当前数据集生成引擎的所有命令行工具、配置文件规范、自定义原始画像替换指南，以及数据核心字段 <code>skeleton_signature</code> 的深度作用解析。</p>
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
 <h2 id="一-快速上手常用命令行一览">一、 快速上手：常用命令行一览</h2>
-
-                        <div class="mermaid-wrapper">
-                            <div class="mermaid-toolbar">
-                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范 · 支持缩放与全屏)</span>
-                                <div class="mermaid-ctrl-group">
-                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
-                                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
-                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
-                                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
-                                </div>
-                            </div>
-                            <div class="mermaid">graph LR
-    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-    classDef highlight fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-
-    CLI["&lt;b&gt;python run.py&lt;br/&gt;(--input / --output / --start / --count / --offline / --verify / --force)&lt;/b&gt;"]:::highlight
-    BP["&lt;b&gt;BatchPipeline 流水线调度&lt;br/&gt;(src/pipeline/batch_pipeline.py)&lt;/b&gt;"]
-    QC["&lt;b&gt;QCValidator R1~R14 质检门禁&lt;br/&gt;(src/core/qc_validator.py)&lt;/b&gt;"]
-    OUT["&lt;b&gt;四大认知记忆产物落盘&lt;br/&gt;(skeleton / sessions / working_records / experiences)&lt;/b&gt;"]
-
-    CLI --&gt; BP --&gt; QC --&gt; OUT</div>
-                        </div>
-                        
 
         <div class="table-wrapper">
             <table>
                 <thead><tr><th>目标任务</th><th>推荐执行命令</th><th>说明</th></tr></thead>
                 <tbody>
-                    <tr><td><strong>一键批量生成标杆认知样本</strong></td><td><code>python run.py --input data/personas --output data/cognitive_samples --start 0 --count 5 --verify --force</code></td><td>生成 5 个移动核心网标杆画像（每个 16~20 轮会话）并执行 R1~R14 全量质检</td></tr><tr><td><strong>单画像快速开发调试</strong></td><td><code>python run.py --input data/personas --output data/cognitive_samples --start 0 --count 1 --verify --force</code></td><td>仅针对第 0 个画像重新生成三层认知记忆样本并立即验收</td></tr><tr><td><strong>离线确定性极速生成</strong></td><td><code>python run.py --input data/personas --output data/cognitive_samples --count 5 --offline --verify --force</code></td><td>不依赖外部 LLM API，使用高质量内置模板瞬间生成并验证双轨分支</td></tr><tr><td><strong>更换原始画像输入源</strong></td><td><code>python run.py --input data/original/custom.json --output data/experiment_v2 --count 5</code></td><td>指定自定义原始画像池与新输出目录，不修改全局配置</td></tr><tr><td><strong>独立执行全量自动化质检</strong></td><td><code>python run.py --verify --output data/cognitive_samples</code></td><td>遍历校验目标输出目录下所有样本的 R1~R14 规则、工单账本与双轨分支完整性</td></tr><tr><td><strong>查看数据集分布统计</strong></td><td><code>python scripts/inspect_dataset.py</code></td><td>扫描画像骨架，统计显/隐模式与三大触发范式的分布比例</td></tr><tr><td><strong>重新生成 HTML 可视化文档</strong></td><td><code>python docs/render_html.py</code></td><td>将 <code>docs/</code> 下所有 Markdown 渲染为高保真交互式 HTML 页面</td></tr>
+                    <tr><td><strong>一键批量生成</strong></td><td><code>python run.py</code></td><td>读取 <code>config.json</code> 默认配置执行（默认生成 5 个人物画像）</td></tr><tr><td><strong>按数量生成</strong></td><td><code>python run.py --start 0 --count 10</code></td><td>从第 0 个画像开始，生成 10 个人物（共 150 个会话）</td></tr><tr><td><strong>更换原始画像</strong></td><td><code>python run.py --input data/original/custom.json --count 5</code></td><td>指定自定义原始画像池，不修改全局配置</td></tr><tr><td><strong>更换输出目录</strong></td><td><code>python run.py --output data/experiment_v2 --count 5</code></td><td>将生成样本保存至指定的新目录</td></tr><tr><td><strong>全量自动化校验</strong></td><td><code>python run.py --verify</code></td><td>自动化遍历校验当前输出目录下所有样本的格式与动作完整性</td></tr><tr><td><strong>校验指定目录</strong></td><td><code>python run.py --verify --output data/experiment_v2</code></td><td>针对自定义输出目录执行严格 100% 格式验收</td></tr><tr><td><strong>查看分布统计</strong></td><td><code>python scripts/inspect_dataset.py</code></td><td>扫描画像骨架，统计显/隐模式与三大触发范式的分布比例</td></tr>
                 </tbody>
             </table>
         </div>
@@ -1142,12 +1050,12 @@
                                 <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
                             </div>
                             <pre><code class="language-json">{
-  &quot;raw_persona_path&quot;: &quot;data/personas/mobile_customer_personas.json&quot;,
-  &quot;output_dir&quot;: &quot;data/cognitive_samples&quot;,
+  &quot;raw_persona_path&quot;: &quot;data/original/mobile_network_personas_500.json&quot;,
+  &quot;output_dir&quot;: &quot;data/generated&quot;,
   &quot;batch_size&quot;: 5,
   &quot;default_start_idx&quot;: 0,
   &quot;default_count&quot;: 5,
-  &quot;model&quot;: &quot;deepseek-chat&quot;,
+  &quot;model&quot;: &quot;deepseek-flash&quot;,
   &quot;base_url&quot;: &quot;https://api.deepseek.com&quot;,
   &quot;enable_thinking&quot;: false
 }</code></pre>
@@ -1156,7 +1064,7 @@
 <h3 id="字段说明">字段说明：</h3>
 <ul><li><code>raw_persona_path</code>: 原始人物画像池文件路径。若要永久替换初始画像，修改此项即可。
 </li>
-<li><code>output_dir</code>: 生成产物的默认保存目录（每个画像生成 <code>skeleton.json</code>、<code>sessions.jsonl</code>、<code>working_records.jsonl</code>、<code>experiences.jsonl</code>）。
+<li><code>output_dir</code>: 生成产物的默认保存目录。
 </li>
 <li><code>batch_size</code>: 对话渲染并发批次大小（默认 5 个会话为一个批次请求，大幅节约 API 往返耗时）。
 </li>
@@ -1164,11 +1072,11 @@
 </li>
 <li><code>default_count</code>: 默认生成的画像数量。
 </li>
-<li><code>model</code>: 调用的模型名称。
+<li><code>model</code>: 调用的模型名称（默认为 <code>deepseek-flash</code>）。
 </li>
 <li><code>enable_thinking</code>: 是否开启深度思考（默认 <code>false</code>，生成结构化对话无需 CoT，成本节约 95%）。
 </li></ul>
-<blockquote><p><strong>优先级原则</strong>：命令行参数（如 <code>--input</code>, <code>--output</code>, <code>--count</code>, <code>--offline</code>, <code>--force</code>）> <code>config.json</code> 配置值 > 代码内部缺省值。</p></blockquote>
+<blockquote><p><strong>优先级原则</strong>：命令行参数（如 <code>--input</code>, <code>--output</code>, <code>--count</code>）> <code>config.json</code> 配置值 > 代码内部缺省值。</p></blockquote>
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
 <h2 id="三-如何替换为自定义原始画像">三、 如何替换为自定义原始画像？</h2>
 <h3 id="1-原始画像格式兼容说明">1. 原始画像格式兼容说明</h3>
@@ -1193,7 +1101,7 @@
 <h3 id="2-执行方式任选其一">2. 执行方式（任选其一）</h3>
 <ul><li><strong>方式 1：命令行即插即用（无需改配置文件）</strong>
  ```powershell
- python run.py --input "D:/data/my_new_personas.json" --output "data/my_output" --count 10 --verify
+ python run.py --input "D:/data/my_new_personas.json" --output "data/my_output" --count 10
  ```
 </li>
 <li><strong>方式 2：修改 <code>config.json</code> 后直接运行</strong>
@@ -1231,18 +1139,18 @@
             <table>
                 <thead><tr><th>段落切片</th><th>示例中的值</th><th>含义解释</th></tr></thead>
                 <tbody>
-                    <tr><td><strong>第 1 段</strong></td><td><code>T1-1</code> 或 <code>T2-1</code></td><td><strong>会话模板协议 ID</strong>（<code>T1-1</code> 为 1 轮直达型；<code>T2-1</code> 为 2 轮反问确认/记忆引导型；<code>T2-4</code> 为双意图并行/分段隔离型）</td></tr><tr><td><strong>第 2 段</strong></td><td><code>1</code> 或 <code>2</code></td><td><strong>交互总轮数（Round Count）</strong></td></tr><tr><td><strong>第 3 段</strong></td><td><code>1</code></td><td><strong>包含的意图数量（Intent Count）</strong></td></tr><tr><td><strong>第 4 段</strong></td><td><code>I1:快手/看直播/1/direct/resolved</code></td><td><strong>意图核心特征五元组</strong>：<br>• <code>I1</code>: 意图编号<br>• <code>快手</code>: 目标应用 (<code>application_name</code>)<br>• <code>看直播</code>: 目标业务 (<code>service_name</code>)<br>• <code>1</code>: 用户表达层级（1 为简明直接，5 为复杂指代）<br>• <code>direct</code> / <code>memory_filled</code>: <strong>闭环路径 (<code>closure_path</code>)</strong>（<code>direct</code> 为单轮直接完整说清；<code>clarified</code> 为通过追问填补；<code>memory_filled</code> 为借助历史跨会话记忆自动补全；<code>corrected</code> 为临时纠正覆盖）<br>• <code>resolved</code>: 意图最终达成状态</td></tr><tr><td><strong>第 5 段</strong></td><td><code>none</code></td><td><strong>意图依赖关系（Relations）</strong>（单意图为 none，多意图时记录依赖或共现关系）</td></tr>
+                    <tr><td><strong>第 1 段</strong></td><td><code>T1-1</code> 或 <code>T2-1</code></td><td><strong>会话模板协议 ID</strong>（<code>T1-1</code> 为 1 轮直达型；<code>T2-1</code> 为 2 轮反问确认/记忆引导型；<code>T2-4</code> 为 2 轮显式纠正型）</td></tr><tr><td><strong>第 2 段</strong></td><td><code>1</code> 或 <code>2</code></td><td><strong>交互总轮数（Round Count）</strong></td></tr><tr><td><strong>第 3 段</strong></td><td><code>1</code></td><td><strong>包含的意图数量（Intent Count）</strong></td></tr><tr><td><strong>第 4 段</strong></td><td><code>I1:快手/看直播/1/direct/resolved</code></td><td><strong>意图核心特征五元组</strong>：<br>• <code>I1</code>: 意图编号<br>• <code>快手</code>: 目标应用 (<code>application_name</code>)<br>• <code>看直播</code>: 目标业务 (<code>service_name</code>)<br>• <code>1</code>: 用户表达层级（1 为简明直接，5 为复杂指代）<br>• <code>direct</code> / <code>memory_filled</code>: <strong>闭环路径 (<code>closure_path</code>)</strong>（<code>direct</code> 为单轮直接完整说清；<code>clarified</code> 为通过追问填补；<code>memory_filled</code> 为借助历史跨会话记忆自动补全；<code>corrected</code> 为临时纠正覆盖）<br>• <code>resolved</code>: 意图最终达成状态</td></tr><tr><td><strong>第 5 段</strong></td><td><code>none</code></td><td><strong>意图依赖关系（Relations）</strong>（单意图为 none，多意图时记录依赖或共现关系）</td></tr>
                 </tbody>
             </table>
         </div>
         
 <h3 id="2-为什么需要它它的核心作用是什么">2. 为什么需要它？它的核心作用是什么？</h3>
-<ol><li><strong>毫秒级结构指纹检索与去重</strong>：
+<ol><li><strong>结构指纹快速检索与去重</strong>：
 <ul><li>在数万条的大规模对话语料库中，算法无需反序列化数千行深层嵌套的 JSON 树，直接依靠该字符串即可瞬间对会话的交互拓扑进行唯一索引、统计与去重。
 </li>
 </ul></li>
 <li><strong>下游评测分桶切片（Benchmark Evaluation Slicing）</strong>：
-<ul><li>评测跨会话记忆模型时，评测框架通过正则提取 <code>memory_filled</code>，即可一键切分出所有“依赖长程记忆补全”的硬核测试集，单独计算其参数召回准确率。
+<ul><li>评测跨会话记忆模型时，评测框架通过正则提取 <code>memory_filled</code>，即可一键切分出所有“依赖长程记忆补全”的核心测试集，单独计算其参数召回准确率。
 </li>
 <li>对比分析 <code>T1-1</code>（零记忆单轮）与 <code>T2-1</code>（跨会话双轮）的意图辨识能力差异。
 </li>
@@ -1257,231 +1165,58 @@
 </li></ol>
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
 <h2 id="五-代码分级架构与模块职责说明">五、 代码分级架构与模块职责说明</h2>
-<p>为避免 Prompt、模版定义与三层认知业务逻辑互相交织耦合，系统采用清晰的分层解耦架构：</p>
+<p>为避免 Prompt、模版定义与业务逻辑互相交织耦合，系统采用清晰的分层解耦架构：</p>
 
-    <div class="visual-card visual-tree-card">
-        <div class="visual-card-header">
-            <span class="visual-card-badge">🗂️ 结构化目录与模块树视图</span>
-            <button class="code-copy-btn" onclick="copyVisualRaw(this)">复制文本</button>
-        </div>
-        <div class="vtree-body">
-            <div class="vtree-row">
-                <span class="vtree-branch"></span>
-                <span class="vtree-icon">📁</span>
-                <span class="vtree-name vtree-dir">cross_memory_data/</span>
-                
-            </div><div class="vtree-row">
-                <span class="vtree-branch">├── </span>
-                <span class="vtree-icon">🐍</span>
-                <span class="vtree-name vtree-file">run.py</span>
-                <span class="vtree-comment"># 顶层命令行统一入口</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">├── </span>
-                <span class="vtree-icon">📋</span>
-                <span class="vtree-name vtree-file">config.json</span>
-                <span class="vtree-comment"># 全局可调参数集中配置文件</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">├── </span>
-                <span class="vtree-icon">📁</span>
-                <span class="vtree-name vtree-dir">src/</span>
-                
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   ├── </span>
-                <span class="vtree-icon">📁</span>
-                <span class="vtree-name vtree-dir">config/</span>
-                <span class="vtree-comment"># 【配置层】</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   │   ├── </span>
-                <span class="vtree-icon">🐍</span>
-                <span class="vtree-name vtree-file">settings.py</span>
-                <span class="vtree-comment"># 全局配置类与环境变量加载 (Config)</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   │   └── </span>
-                <span class="vtree-icon">🐍</span>
-                <span class="vtree-name vtree-file">__init__.py</span>
-                
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   ├── </span>
-                <span class="vtree-icon">📁</span>
-                <span class="vtree-name vtree-dir">core/</span>
-                <span class="vtree-comment"># 【三层认知记忆引擎与质检层】</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   │   ├── </span>
-                <span class="vtree-icon">🐍</span>
-                <span class="vtree-name vtree-file">persona_StoryExtractor.py</span>
-                <span class="vtree-comment"># 画像故事线提取与增强器</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   │   ├── </span>
-                <span class="vtree-icon">🐍</span>
-                <span class="vtree-name vtree-file">gt_builder.py</span>
-                <span class="vtree-comment"># 四层 Ground Truth 构建器</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   │   ├── </span>
-                <span class="vtree-icon">🐍</span>
-                <span class="vtree-name vtree-file">mt_selector.py</span>
-                <span class="vtree-comment"># 评测目标 (Memory Targets) 反推器</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   │   ├── </span>
-                <span class="vtree-icon">🐍</span>
-                <span class="vtree-name vtree-file">timeline_planner.py</span>
-                <span class="vtree-comment"># 16~20 会话动态时间线规划器 (DynamicTimelinePlanner)</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   │   ├── </span>
-                <span class="vtree-icon">🐍</span>
-                <span class="vtree-name vtree-file">memory_tracker.py</span>
-                <span class="vtree-comment"># 事实记忆演进追踪器与状态机 (MemoryEngine)</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   │   ├── </span>
-                <span class="vtree-icon">🐍</span>
-                <span class="vtree-name vtree-file">working_records_ledger.py</span>
-                <span class="vtree-comment"># 独立历史保障工单账本 (WorkingRecordsLedger)</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   │   ├── </span>
-                <span class="vtree-icon">🐍</span>
-                <span class="vtree-name vtree-file">experience_bank.py</span>
-                <span class="vtree-comment"># 五大黄金经验策略库 (ExperienceBank)</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   │   ├── </span>
-                <span class="vtree-icon">🐍</span>
-                <span class="vtree-name vtree-file">qc_validator.py</span>
-                <span class="vtree-comment"># R1~R14 全量规则验证器 (QCValidator)</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   │   └── </span>
-                <span class="vtree-icon">🐍</span>
-                <span class="vtree-name vtree-file">__init__.py</span>
-                
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   ├── </span>
-                <span class="vtree-icon">📁</span>
-                <span class="vtree-name vtree-dir">generation/</span>
-                <span class="vtree-comment"># 【双轨对话生成与装配引擎】</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   │   ├── </span>
-                <span class="vtree-icon">🐍</span>
-                <span class="vtree-name vtree-file">llm_client.py</span>
-                <span class="vtree-comment"># LLM 客户端、Token 计费与重试机制 (LLMClient)</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   │   ├── </span>
-                <span class="vtree-icon">🐍</span>
-                <span class="vtree-name vtree-file">persona_generator.py</span>
-                <span class="vtree-comment"># 画像骨架扩充生成器 (PersonaGenerator)</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   │   ├── </span>
-                <span class="vtree-icon">🐍</span>
-                <span class="vtree-name vtree-file">dialogue_generator.py</span>
-                <span class="vtree-comment"># 受控对话与 Fast/Slow 分支渲染引擎 (DialogueGenerator)</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   │   ├── </span>
-                <span class="vtree-icon">🐍</span>
-                <span class="vtree-name vtree-file">session_assembler.py</span>
-                <span class="vtree-comment"># 四元溯源与双轨评测数据装配器 (SessionAssembler)</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   │   └── </span>
-                <span class="vtree-icon">🐍</span>
-                <span class="vtree-name vtree-file">__init__.py</span>
-                
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   ├── </span>
-                <span class="vtree-icon">📁</span>
-                <span class="vtree-name vtree-dir">pipeline/</span>
-                <span class="vtree-comment"># 【流水线调度层】</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   │   ├── </span>
-                <span class="vtree-icon">🐍</span>
-                <span class="vtree-name vtree-file">batch_pipeline.py</span>
-                <span class="vtree-comment"># 自动化流水线调度、账本持久化与断点续传 (BatchPipeline)</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   │   └── </span>
-                <span class="vtree-icon">🐍</span>
-                <span class="vtree-name vtree-file">__init__.py</span>
-                
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│   └── </span>
-                <span class="vtree-icon">📁</span>
-                <span class="vtree-name vtree-dir">templates/</span>
-                <span class="vtree-comment"># 【模版与 Prompt 独立层（解耦抽离）】</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│       ├── </span>
-                <span class="vtree-icon">🐍</span>
-                <span class="vtree-name vtree-file">timeline_blueprints.py</span>
-                <span class="vtree-comment"># 16~20 会话生命周期序列蓝图配置模版</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│       └── </span>
-                <span class="vtree-icon">📁</span>
-                <span class="vtree-name vtree-dir">prompts/</span>
-                <span class="vtree-comment"># 纯净 Prompt 与确定性兜底台词库</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│           ├── </span>
-                <span class="vtree-icon">🐍</span>
-                <span class="vtree-name vtree-file">persona_prompts.py</span>
-                <span class="vtree-comment"># 画像骨架扩充 Prompt 模版</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│           ├── </span>
-                <span class="vtree-icon">🐍</span>
-                <span class="vtree-name vtree-file">dialogue_prompts.py</span>
-                <span class="vtree-comment"># 批量、单会话与双轨经验分支 Prompt 模版</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│           ├── </span>
-                <span class="vtree-icon">🐍</span>
-                <span class="vtree-name vtree-file">dialogue_fallbacks.py</span>
-                <span class="vtree-comment"># 各角色与五大黄金经验确定性兜底台词库</span>
-            </div><div class="vtree-row">
-                <span class="vtree-branch">│           └── </span>
-                <span class="vtree-icon">🐍</span>
-                <span class="vtree-name vtree-file">__init__.py</span>
-                
-            </div>
-        </div>
-        <pre class="visual-raw-hidden" style="display:none;"><code>cross_memory_data/
-├── run.py                             # 顶层命令行统一入口
-├── config.json                        # 全局可调参数集中配置文件
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>cross_memory_data/
+├── run.py                          # 顶层命令行统一入口
+├── config.json                     # 全局可调参数集中配置文件
 ├── src/
-│   ├── config/                        # 【配置层】
-│   │   ├── settings.py                # 全局配置类与环境变量加载 (Config)
+│   ├── config/                     # 【配置层】
+│   │   ├── settings.py             # 全局配置类与环境变量加载 (Config)
 │   │   └── __init__.py
-│   ├── core/                          # 【三层认知记忆引擎与质检层】
-│   │   ├── persona_StoryExtractor.py  # 画像故事线提取与增强器
-│   │   ├── gt_builder.py              # 四层 Ground Truth 构建器
-│   │   ├── mt_selector.py             # 评测目标 (Memory Targets) 反推器
-│   │   ├── timeline_planner.py        # 16~20 会话动态时间线规划器 (DynamicTimelinePlanner)
-│   │   ├── memory_tracker.py          # 事实记忆演进追踪器与状态机 (MemoryEngine)
-│   │   ├── working_records_ledger.py  # 独立历史保障工单账本 (WorkingRecordsLedger)
-│   │   ├── experience_bank.py         # 五大黄金经验策略库 (ExperienceBank)
-│   │   ├── qc_validator.py            # R1~R14 全量规则验证器 (QCValidator)
+│   ├── core/                       # 【核心领域状态与质检层】
+│   │   ├── timeline_planner.py     # 15会话动态时间线规划器 (DynamicTimelinePlanner)
+│   │   ├── memory_tracker.py       # 跨会话记忆演进追踪器与状态机 (MemoryTracker)
+│   │   ├── qc_validator.py         # 100% 规则验证器 (QCValidator)
 │   │   └── __init__.py
-│   ├── generation/                    # 【双轨对话生成与装配引擎】
-│   │   ├── llm_client.py              # LLM 客户端、Token 计费与重试机制 (LLMClient)
-│   │   ├── persona_generator.py       # 画像骨架扩充生成器 (PersonaGenerator)
-│   │   ├── dialogue_generator.py      # 受控对话与 Fast/Slow 分支渲染引擎 (DialogueGenerator)
-│   │   ├── session_assembler.py       # 四元溯源与双轨评测数据装配器 (SessionAssembler)
+│   ├── generation/                 # 【生成与装配引擎】
+│   │   ├── llm_client.py           # DeepSeek 客户端、Token计费与重试机制 (LLMClient)
+│   │   ├── persona_generator.py    # 画像骨架扩充生成器 (PersonaGenerator)
+│   │   ├── dialogue_generator.py   # 对话批量渲染引擎 (DialogueGenerator)
+│   │   ├── session_assembler.py    # 8 大模版数据装配器 (SessionAssembler)
 │   │   └── __init__.py
-│   ├── pipeline/                      # 【流水线调度层】
-│   │   ├── batch_pipeline.py          # 自动化流水线调度、账本持久化与断点续传 (BatchPipeline)
+│   ├── pipeline/                   # 【流水线调度层】
+│   │   ├── batch_pipeline.py       # 自动化流水线调度与检查点控制 (BatchPipeline)
 │   │   └── __init__.py
-│   └── templates/                     # 【模版与 Prompt 独立层（解耦抽离）】
-│       ├── timeline_blueprints.py     # 16~20 会话生命周期序列蓝图配置模版
-│       └── prompts/                   # 纯净 Prompt 与确定性兜底台词库
-│           ├── persona_prompts.py     # 画像骨架扩充 Prompt 模版
-│           ├── dialogue_prompts.py    # 批量、单会话与双轨经验分支 Prompt 模版
-│           ├── dialogue_fallbacks.py  # 各角色与五大黄金经验确定性兜底台词库
+│   └── templates/                  # 【模版与 Prompt 独立层（解耦抽离）】
+│       ├── timeline_blueprints.py  # 15 会话生命周期序列蓝图配置模版
+│       └── prompts/                # 纯净 Prompt 与兜底台词库
+│           ├── persona_prompts.py  # 画像骨架扩充 Prompt 模版
+│           ├── dialogue_prompts.py # 批量与单会话台词渲染 Prompt 模版
+│           ├── dialogue_fallbacks.py# 各模版确定性兜底台词与动作规范
 │           └── __init__.py</code></pre>
-    </div>
-    
+                        </div>
+                        
 <h3 id="核心解耦优势">核心解耦优势：</h3>
-<ol><li><strong>三层认知记忆正交隔离</strong>：<code>MemoryEngine</code>（事实）、<code>WorkingRecordsLedger</code>（工作工单）与 <code>ExperienceBank</code>（五大经验）在 <code>src/core/</code> 中各自拥有独立状态机与持久化文件，互不污染。
+<ol><li><strong>Prompt 纯净维护</strong>：所有向大模型发送的指令、规则和 JSON Schema 集中在 <code>src/templates/prompts/</code> 中，调优台词或微调语气无需改动任何生成逻辑。
 </li>
-<li><strong>Prompt 与兜底台词纯净维护</strong>：所有向大模型发送的指令、Turn 1 自包含约束与双轨分支模板集中在 <code>src/templates/prompts/</code> 中，调优台词无需改动核心管线。
+<li><strong>模版装配隔离</strong>：8 大模版（<code>T2-4</code>, <code>T2-2</code>, <code>T2-1</code>, <code>T1-2</code>, <code>T2-5</code>, <code>X-1</code>, <code>T2-3</code>, <code>T1-1</code>）的标准 JSON 结构与槽位流转逻辑全部封装在 <code>SessionAssembler</code> 中，新增或变更模版不影响渲染器。
 </li>
-<li><strong>R1~R14 硬性门禁拦截</strong>：<code>src/core/qc_validator.py</code> 对时序递增、冷启动零脑补、工单引用存在性、双轨轮数压缩（<span class="katex-inline" data-tex="T_{\text{fast}} &lt; T_{\text{slow}}">$T_{\text{fast}} &lt; T_{\text{slow}}$</span>）与零枚举泄漏执行 100% 强校验。
+<li><strong>100% 平滑向下兼容</strong>：顶层 <code>src/</code> 提供了兼容性 Facade 引用，现有外部工具脚本无需修改即可直接使用。
 </li></ol>
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
 <h2 id="六-多粒度周期性与-6-大核心参数口语行话库">六、 多粒度周期性与 6 大核心参数口语行话库</h2>
 <p>为了让大模型在学习长程跨会话记忆时具备极强的泛化能力，系统全面破除了单一“周三周六”的死板设定，并建立了完备的 6 大核心参数口语行话库：</p>
 <h3 id="1-多粒度周期性支持-multi-grain-periodicity">1. 多粒度周期性支持 (Multi-grain Periodicity)</h3>
 <ul><li><strong><code>daily</code> (日级周期)</strong>：
-<ul><li>覆盖早高峰通勤 (08:30-10:00)、午休复盘 (12:30-13:30)、晚间黄金档 (20:00-22:00)、深夜巡检 (23:00-00:30) 等；
+<ul><li>覆盖早高峰通勤 (08:30-10:00)、午休复盘 (12:30-13:30)、晚间高峰档 (20:00-22:00)、深夜巡检 (23:00-00:30) 等；
 </li>
-<li>显式口语表达：“老规矩，还是每天这个时候帮我保一下”、“每天晚间黄金档老规矩”。
+<li>显式口语表达：“老规矩，还是每天这个时候帮我保一下”、“每天晚间高峰档老规矩”。
 </li>
 </ul></li>
 <li><strong><code>weekly</code> (周级周期多样化)</strong>：
@@ -1504,7 +1239,7 @@
 </li>
 <li><strong>分辨率 (<code>resolution</code>)</strong>：1080p（原画、顶格清晰度、千万别糊、蓝光、超清）、720p（普通高清、凑合能看就行、标清偏上、省流画质）等。
 </li>
-<li><strong>时延上限 (<code>rtt</code>)</strong>：30ms（超低时延、零卡顿、极速响应、毫秒级）、50ms（别掉链子、千万别转圈、顺滑一点）、80ms/100ms（不卡就行、能连贯就行）等。
+<li><strong>时延上限 (<code>rtt</code>)</strong>：30ms（超低时延、零卡顿、低时延响应）、50ms（别掉链子、千万别转圈、顺滑一点）、80ms/100ms（不卡就行、能连贯就行）等。
 </li>
 <li><strong>时长 (<code>duration</code> / <code>end_timestamp</code>)</strong>：俩小时、两钟头、播到四点、一个半小时、大半个下午等。
 </li>
@@ -1657,37 +1392,23 @@
                         <strong>docs/guides/cli_usage.md 原生 Markdown 源码</strong>
                         <button class="nav-btn active" onclick="copyRawMarkdown()">复制全文源码</button>
                     </div>
-                    <textarea class="raw-md-textarea" id="rawMdArea" readonly># “联接”Agent 跨会话三层认知记忆数据集引擎 — 命令行使用手册与架构指南
+                    <textarea class="raw-md-textarea" id="rawMdArea" readonly># 跨会话长程记忆数据集生成引擎 - 命令行使用手册与架构指南
 
-&gt; **文档层级**：第三层 · 工程运行与操作指南（CLI &amp; Pipeline Operations Guide）  
-&gt; **文档定位**：汇总当前数据集生成引擎（`run.py`）的所有命令行参数、配置文件规范、自定义原始画像替换指南、`skeleton_signature` 拓扑指纹解析以及代码分层职责说明。
+本文档汇总了当前数据集生成引擎的所有命令行工具、配置文件规范、自定义原始画像替换指南，以及数据核心字段 `skeleton_signature` 的深度作用解析。
 
 ---
 
 ## 一、 快速上手：常用命令行一览
 
-```mermaid
-graph LR
-    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-    classDef highlight fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-
-    CLI[&quot;&lt;b&gt;python run.py&lt;br/&gt;(--input / --output / --start / --count / --offline / --verify / --force)&lt;/b&gt;&quot;]:::highlight
-    BP[&quot;&lt;b&gt;BatchPipeline 流水线调度&lt;br/&gt;(src/pipeline/batch_pipeline.py)&lt;/b&gt;&quot;]
-    QC[&quot;&lt;b&gt;QCValidator R1~R14 质检门禁&lt;br/&gt;(src/core/qc_validator.py)&lt;/b&gt;&quot;]
-    OUT[&quot;&lt;b&gt;四大认知记忆产物落盘&lt;br/&gt;(skeleton / sessions / working_records / experiences)&lt;/b&gt;&quot;]
-
-    CLI --&gt; BP --&gt; QC --&gt; OUT
-```
-
 | 目标任务 | 推荐执行命令 | 说明 |
 | :--- | :--- | :--- |
-| **一键批量生成标杆认知样本** | `python run.py --input data/personas --output data/cognitive_samples --start 0 --count 5 --verify --force` | 生成 5 个移动核心网标杆画像（每个 16~20 轮会话）并执行 R1~R14 全量质检 |
-| **单画像快速开发调试** | `python run.py --input data/personas --output data/cognitive_samples --start 0 --count 1 --verify --force` | 仅针对第 0 个画像重新生成三层认知记忆样本并立即验收 |
-| **离线确定性极速生成** | `python run.py --input data/personas --output data/cognitive_samples --count 5 --offline --verify --force` | 不依赖外部 LLM API，使用高质量内置模板瞬间生成并验证双轨分支 |
-| **更换原始画像输入源** | `python run.py --input data/original/custom.json --output data/experiment_v2 --count 5` | 指定自定义原始画像池与新输出目录，不修改全局配置 |
-| **独立执行全量自动化质检** | `python run.py --verify --output data/cognitive_samples` | 遍历校验目标输出目录下所有样本的 R1~R14 规则、工单账本与双轨分支完整性 |
-| **查看数据集分布统计** | `python scripts/inspect_dataset.py` | 扫描画像骨架，统计显/隐模式与三大触发范式的分布比例 |
-| **重新生成 HTML 可视化文档** | `python docs/render_html.py` | 将 `docs/` 下所有 Markdown 渲染为高保真交互式 HTML 页面 |
+| **一键批量生成** | `python run.py` | 读取 `config.json` 默认配置执行（默认生成 5 个人物画像） |
+| **按数量生成** | `python run.py --start 0 --count 10` | 从第 0 个画像开始，生成 10 个人物（共 150 个会话） |
+| **更换原始画像** | `python run.py --input data/original/custom.json --count 5` | 指定自定义原始画像池，不修改全局配置 |
+| **更换输出目录** | `python run.py --output data/experiment_v2 --count 5` | 将生成样本保存至指定的新目录 |
+| **全量自动化校验** | `python run.py --verify` | 自动化遍历校验当前输出目录下所有样本的格式与动作完整性 |
+| **校验指定目录** | `python run.py --verify --output data/experiment_v2` | 针对自定义输出目录执行严格 100% 格式验收 |
+| **查看分布统计** | `python scripts/inspect_dataset.py` | 扫描画像骨架，统计显/隐模式与三大触发范式的分布比例 |
 
 ---
 
@@ -1697,12 +1418,12 @@ graph LR
 
 ```json
 {
-  &quot;raw_persona_path&quot;: &quot;data/personas/mobile_customer_personas.json&quot;,
-  &quot;output_dir&quot;: &quot;data/cognitive_samples&quot;,
+  &quot;raw_persona_path&quot;: &quot;data/original/mobile_network_personas_500.json&quot;,
+  &quot;output_dir&quot;: &quot;data/generated&quot;,
   &quot;batch_size&quot;: 5,
   &quot;default_start_idx&quot;: 0,
   &quot;default_count&quot;: 5,
-  &quot;model&quot;: &quot;deepseek-chat&quot;,
+  &quot;model&quot;: &quot;deepseek-flash&quot;,
   &quot;base_url&quot;: &quot;https://api.deepseek.com&quot;,
   &quot;enable_thinking&quot;: false
 }
@@ -1710,14 +1431,14 @@ graph LR
 
 ### 字段说明：
 - `raw_persona_path`: 原始人物画像池文件路径。若要永久替换初始画像，修改此项即可。
-- `output_dir`: 生成产物的默认保存目录（每个画像生成 `skeleton.json`、`sessions.jsonl`、`working_records.jsonl`、`experiences.jsonl`）。
+- `output_dir`: 生成产物的默认保存目录。
 - `batch_size`: 对话渲染并发批次大小（默认 5 个会话为一个批次请求，大幅节约 API 往返耗时）。
 - `default_start_idx`: 默认起始画像下标（从 0 开始）。
 - `default_count`: 默认生成的画像数量。
-- `model`: 调用的模型名称。
+- `model`: 调用的模型名称（默认为 `deepseek-flash`）。
 - `enable_thinking`: 是否开启深度思考（默认 `false`，生成结构化对话无需 CoT，成本节约 95%）。
 
-&gt; **优先级原则**：命令行参数（如 `--input`, `--output`, `--count`, `--offline`, `--force`）&gt; `config.json` 配置值 &gt; 代码内部缺省值。
+&gt; **优先级原则**：命令行参数（如 `--input`, `--output`, `--count`）&gt; `config.json` 配置值 &gt; 代码内部缺省值。
 
 ---
 
@@ -1744,7 +1465,7 @@ graph LR
 ### 2. 执行方式（任选其一）
 - **方式 1：命令行即插即用（无需改配置文件）**
   ```powershell
-  python run.py --input &quot;D:/data/my_new_personas.json&quot; --output &quot;data/my_output&quot; --count 10 --verify
+  python run.py --input &quot;D:/data/my_new_personas.json&quot; --output &quot;data/my_output&quot; --count 10
   ```
 - **方式 2：修改 `config.json` 后直接运行**
   修改 `&quot;raw_persona_path&quot;: &quot;D:/data/my_new_personas.json&quot;`，随后执行：
@@ -1771,7 +1492,7 @@ graph LR
 
 | 段落切片 | 示例中的值 | 含义解释 |
 | :--- | :--- | :--- |
-| **第 1 段** | `T1-1` 或 `T2-1` | **会话模板协议 ID**（`T1-1` 为 1 轮直达型；`T2-1` 为 2 轮反问确认/记忆引导型；`T2-4` 为双意图并行/分段隔离型） |
+| **第 1 段** | `T1-1` 或 `T2-1` | **会话模板协议 ID**（`T1-1` 为 1 轮直达型；`T2-1` 为 2 轮反问确认/记忆引导型；`T2-4` 为 2 轮显式纠正型） |
 | **第 2 段** | `1` 或 `2` | **交互总轮数（Round Count）** |
 | **第 3 段** | `1` | **包含的意图数量（Intent Count）** |
 | **第 4 段** | `I1:快手/看直播/1/direct/resolved` | **意图核心特征五元组**：&lt;br&gt;• `I1`: 意图编号&lt;br&gt;• `快手`: 目标应用 (`application_name`)&lt;br&gt;• `看直播`: 目标业务 (`service_name`)&lt;br&gt;• `1`: 用户表达层级（1 为简明直接，5 为复杂指代）&lt;br&gt;• `direct` / `memory_filled`: **闭环路径 (`closure_path`)**（`direct` 为单轮直接完整说清；`clarified` 为通过追问填补；`memory_filled` 为借助历史跨会话记忆自动补全；`corrected` 为临时纠正覆盖）&lt;br&gt;• `resolved`: 意图最终达成状态 |
@@ -1779,10 +1500,10 @@ graph LR
 
 ### 2. 为什么需要它？它的核心作用是什么？
 
-1. **毫秒级结构指纹检索与去重**：
+1. **结构指纹快速检索与去重**：
    - 在数万条的大规模对话语料库中，算法无需反序列化数千行深层嵌套的 JSON 树，直接依靠该字符串即可瞬间对会话的交互拓扑进行唯一索引、统计与去重。
 2. **下游评测分桶切片（Benchmark Evaluation Slicing）**：
-   - 评测跨会话记忆模型时，评测框架通过正则提取 `memory_filled`，即可一键切分出所有“依赖长程记忆补全”的硬核测试集，单独计算其参数召回准确率。
+   - 评测跨会话记忆模型时，评测框架通过正则提取 `memory_filled`，即可一键切分出所有“依赖长程记忆补全”的核心测试集，单独计算其参数召回准确率。
    - 对比分析 `T1-1`（零记忆单轮）与 `T2-1`（跨会话双轮）的意图辨识能力差异。
 3. **数据集覆盖度与多样性审计（Diversity Audit）**：
    - 监控训练集和测试集中各应用、业务、闭环路径的交叉组合比例，防止训练数据在某种路径（如全是 direct 闭环）上发生过拟合。
@@ -1793,48 +1514,43 @@ graph LR
 
 ## 五、 代码分级架构与模块职责说明
 
-为避免 Prompt、模版定义与三层认知业务逻辑互相交织耦合，系统采用清晰的分层解耦架构：
+为避免 Prompt、模版定义与业务逻辑互相交织耦合，系统采用清晰的分层解耦架构：
 
-```text
+```
 cross_memory_data/
-├── run.py                             # 顶层命令行统一入口
-├── config.json                        # 全局可调参数集中配置文件
+├── run.py                          # 顶层命令行统一入口
+├── config.json                     # 全局可调参数集中配置文件
 ├── src/
-│   ├── config/                        # 【配置层】
-│   │   ├── settings.py                # 全局配置类与环境变量加载 (Config)
+│   ├── config/                     # 【配置层】
+│   │   ├── settings.py             # 全局配置类与环境变量加载 (Config)
 │   │   └── __init__.py
-│   ├── core/                          # 【三层认知记忆引擎与质检层】
-│   │   ├── persona_StoryExtractor.py  # 画像故事线提取与增强器
-│   │   ├── gt_builder.py              # 四层 Ground Truth 构建器
-│   │   ├── mt_selector.py             # 评测目标 (Memory Targets) 反推器
-│   │   ├── timeline_planner.py        # 16~20 会话动态时间线规划器 (DynamicTimelinePlanner)
-│   │   ├── memory_tracker.py          # 事实记忆演进追踪器与状态机 (MemoryEngine)
-│   │   ├── working_records_ledger.py  # 独立历史保障工单账本 (WorkingRecordsLedger)
-│   │   ├── experience_bank.py         # 五大黄金经验策略库 (ExperienceBank)
-│   │   ├── qc_validator.py            # R1~R14 全量规则验证器 (QCValidator)
+│   ├── core/                       # 【核心领域状态与质检层】
+│   │   ├── timeline_planner.py     # 15会话动态时间线规划器 (DynamicTimelinePlanner)
+│   │   ├── memory_tracker.py       # 跨会话记忆演进追踪器与状态机 (MemoryTracker)
+│   │   ├── qc_validator.py         # 100% 规则验证器 (QCValidator)
 │   │   └── __init__.py
-│   ├── generation/                    # 【双轨对话生成与装配引擎】
-│   │   ├── llm_client.py              # LLM 客户端、Token 计费与重试机制 (LLMClient)
-│   │   ├── persona_generator.py       # 画像骨架扩充生成器 (PersonaGenerator)
-│   │   ├── dialogue_generator.py      # 受控对话与 Fast/Slow 分支渲染引擎 (DialogueGenerator)
-│   │   ├── session_assembler.py       # 四元溯源与双轨评测数据装配器 (SessionAssembler)
+│   ├── generation/                 # 【生成与装配引擎】
+│   │   ├── llm_client.py           # DeepSeek 客户端、Token计费与重试机制 (LLMClient)
+│   │   ├── persona_generator.py    # 画像骨架扩充生成器 (PersonaGenerator)
+│   │   ├── dialogue_generator.py   # 对话批量渲染引擎 (DialogueGenerator)
+│   │   ├── session_assembler.py    # 8 大模版数据装配器 (SessionAssembler)
 │   │   └── __init__.py
-│   ├── pipeline/                      # 【流水线调度层】
-│   │   ├── batch_pipeline.py          # 自动化流水线调度、账本持久化与断点续传 (BatchPipeline)
+│   ├── pipeline/                   # 【流水线调度层】
+│   │   ├── batch_pipeline.py       # 自动化流水线调度与检查点控制 (BatchPipeline)
 │   │   └── __init__.py
-│   └── templates/                     # 【模版与 Prompt 独立层（解耦抽离）】
-│       ├── timeline_blueprints.py     # 16~20 会话生命周期序列蓝图配置模版
-│       └── prompts/                   # 纯净 Prompt 与确定性兜底台词库
-│           ├── persona_prompts.py     # 画像骨架扩充 Prompt 模版
-│           ├── dialogue_prompts.py    # 批量、单会话与双轨经验分支 Prompt 模版
-│           ├── dialogue_fallbacks.py  # 各角色与五大黄金经验确定性兜底台词库
+│   └── templates/                  # 【模版与 Prompt 独立层（解耦抽离）】
+│       ├── timeline_blueprints.py  # 15 会话生命周期序列蓝图配置模版
+│       └── prompts/                # 纯净 Prompt 与兜底台词库
+│           ├── persona_prompts.py  # 画像骨架扩充 Prompt 模版
+│           ├── dialogue_prompts.py # 批量与单会话台词渲染 Prompt 模版
+│           ├── dialogue_fallbacks.py# 各模版确定性兜底台词与动作规范
 │           └── __init__.py
 ```
 
 ### 核心解耦优势：
-1. **三层认知记忆正交隔离**：`MemoryEngine`（事实）、`WorkingRecordsLedger`（工作工单）与 `ExperienceBank`（五大经验）在 `src/core/` 中各自拥有独立状态机与持久化文件，互不污染。
-2. **Prompt 与兜底台词纯净维护**：所有向大模型发送的指令、Turn 1 自包含约束与双轨分支模板集中在 `src/templates/prompts/` 中，调优台词无需改动核心管线。
-3. **R1~R14 硬性门禁拦截**：`src/core/qc_validator.py` 对时序递增、冷启动零脑补、工单引用存在性、双轨轮数压缩（$T_{\text{fast}} &lt; T_{\text{slow}}$）与零枚举泄漏执行 100% 强校验。
+1. **Prompt 纯净维护**：所有向大模型发送的指令、规则和 JSON Schema 集中在 `src/templates/prompts/` 中，调优台词或微调语气无需改动任何生成逻辑。
+2. **模版装配隔离**：8 大模版（`T2-4`, `T2-2`, `T2-1`, `T1-2`, `T2-5`, `X-1`, `T2-3`, `T1-1`）的标准 JSON 结构与槽位流转逻辑全部封装在 `SessionAssembler` 中，新增或变更模版不影响渲染器。
+3. **100% 平滑向下兼容**：顶层 `src/` 提供了兼容性 Facade 引用，现有外部工具脚本无需修改即可直接使用。
 
 ---
 
@@ -1844,8 +1560,8 @@ cross_memory_data/
 
 ### 1. 多粒度周期性支持 (Multi-grain Periodicity)
 - **`daily` (日级周期)**：
-  - 覆盖早高峰通勤 (08:30-10:00)、午休复盘 (12:30-13:30)、晚间黄金档 (20:00-22:00)、深夜巡检 (23:00-00:30) 等；
-  - 显式口语表达：“老规矩，还是每天这个时候帮我保一下”、“每天晚间黄金档老规矩”。
+  - 覆盖早高峰通勤 (08:30-10:00)、午休复盘 (12:30-13:30)、晚间高峰档 (20:00-22:00)、深夜巡检 (23:00-00:30) 等；
+  - 显式口语表达：“老规矩，还是每天这个时候帮我保一下”、“每天晚间高峰档老规矩”。
 - **`weekly` (周级周期多样化)**：
   - 破除单一周三周六，支持周一与周五例会、周二与周四研讨、周六与周日周末赛事专场、周三与周五晚间对账等丰富组合；
   - 显式口语表达：“跟上周一样，每周一和周五例会保一下”、“周末排位老规矩”。
@@ -1858,7 +1574,7 @@ cross_memory_data/
 1. **应用名 (`application_name`)**：微信（微聊、企微、v信）、抖音（阿抖、某音、抖子）、快手（快子、某手、老铁平台）、腾讯会议（企鹅会议、腾讯开会、会议通）、钉钉（钉上、某钉）、哔哩哔哩（小破站、b站、阿b）等。
 2. **业务名 (`service_name`)**：开直播（推流、开播、上播）、视频通话（打个视讯、连麦、对流程视频）、会议（对齐、开例会、过需求、碰头会）、短视频（刷视频、刷短剧）等。
 3. **分辨率 (`resolution`)**：1080p（原画、顶格清晰度、千万别糊、蓝光、超清）、720p（普通高清、凑合能看就行、标清偏上、省流画质）等。
-4. **时延上限 (`rtt`)**：30ms（超低时延、零卡顿、极速响应、毫秒级）、50ms（别掉链子、千万别转圈、顺滑一点）、80ms/100ms（不卡就行、能连贯就行）等。
+4. **时延上限 (`rtt`)**：30ms（超低时延、零卡顿、低时延响应）、50ms（别掉链子、千万别转圈、顺滑一点）、80ms/100ms（不卡就行、能连贯就行）等。
 5. **时长 (`duration` / `end_timestamp`)**：俩小时、两钟头、播到四点、一个半小时、大半个下午等。
 6. **周期/触发词 (`period_aliases`)**：每天这个时候、老时间、晚间例行、每周一五老规矩、月初例会照旧等。
 
@@ -2174,59 +1890,21 @@ cross_memory_data/
             if (window.mermaid) {
                 mermaid.initialize({
                     startOnLoad: false,
-                    securityLevel: 'loose',
-                    theme: 'base',
-                    flowchart: {
-                        useMaxWidth: false,
-                        htmlLabels: true,
-                        curve: 'basis',
-                        padding: 20,
-                        nodeSpacing: 45,
-                        rankSpacing: 55
-                    },
-                    sequence: {
-                        useMaxWidth: false,
-                        wrap: true,
-                        actorFontWeight: '700',
-                        messageFontWeight: '700',
-                        noteFontWeight: '700',
-                        boxMargin: 12,
-                        messageMargin: 40
-                    },
-                    state: {
-                        useMaxWidth: false
-                    },
-                    themeVariables: {
-                        fontSize: '16px',
-                        background: '#FFFFFF',
-                        primaryColor: '#FFFFFF',
-                        primaryTextColor: '#0F172A',
-                        primaryBorderColor: '#0F172A',
-                        lineColor: '#0F172A',
-                        secondaryColor: '#FFFFFF',
-                        tertiaryColor: '#FFFFFF',
-                        mainBkg: '#FFFFFF',
-                        nodeBorder: '#0F172A',
-                        clusterBkg: '#FFFFFF',
-                        clusterBorder: '#0F172A',
-                        actorBkg: '#FFFFFF',
-                        actorBorder: '#0F172A',
-                        actorTextColor: '#0F172A',
-                        signalColor: '#0F172A',
-                        signalTextColor: '#0F172A',
-                        labelBoxBkgColor: '#FFFFFF',
-                        labelBoxBorderColor: '#0F172A',
-                        labelTextColor: '#0F172A',
-                        noteBkgColor: '#FFFFFF',
-                        noteBorderColor: '#0F172A',
-                        noteTextColor: '#0F172A'
-                    }
+                    securityLevel: 'loose'
                 });
-                try {
-                    await mermaid.run({ querySelector: '.mermaid' });
-                } catch (e) {}
-                enhanceMermaidDiagrams();
-                setTimeout(enhanceMermaidDiagrams, 200);
+                const containers = document.querySelectorAll('.mermaid');
+                for (let i = 0; i < containers.length; i++) {
+                    const el = containers[i];
+                    const srcEl = el.querySelector('.mermaid-source');
+                    if (!srcEl) continue;
+                    try {
+                        const payload = JSON.parse(srcEl.textContent);
+                        const { svg } = await mermaid.render('mermaid-svg-' + i, payload.code);
+                        el.innerHTML = svg;
+                    } catch (e) {
+                        console.error('Mermaid render error:', e);
+                    }
+                }
             }
 
             if (window.hljs) {

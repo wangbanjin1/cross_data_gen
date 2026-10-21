@@ -792,107 +792,39 @@
             background-color: var(--table-alt);
         }
 
-        /* Mermaid 图表容器：强制纯白底色 (#FFFFFF)、加粗字体、加粗线条 */
+        /* Mermaid 图表容器：与 Antigravity 原生 Mermaid 渲染一致 */
         .mermaid-wrapper {
-            margin: 22px 0 28px;
-            padding: 18px 24px 26px;
+            margin: 20px 0 24px;
+            padding: 18px 20px;
             background-color: #FFFFFF !important;
-            border: 2.5px solid #0F172A;
-            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
             overflow-x: auto;
             text-align: center;
             box-shadow: var(--card-shadow);
         }
 
-        .mermaid-toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 14px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #E2E8F0;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .mermaid-badge {
-            font-size: 0.80rem;
-            font-weight: 800;
-            color: #0F172A;
-            letter-spacing: 0.02em;
-        }
-
-        .mermaid-ctrl-group {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .mermaid-zoom-btn {
-            background-color: #F8FAFC;
-            border: 1.5px solid #0F172A;
-            color: #0F172A;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.15s;
-        }
-
-        .mermaid-zoom-btn:hover {
-            background-color: #0F172A;
-            color: #FFFFFF;
-        }
-
         .mermaid {
             background-color: #FFFFFF !important;
-            color: #0F172A !important;
-            font-weight: 700 !important;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: block;
             width: 100%;
-            min-height: 220px;
             margin: 0 auto;
-            overflow-x: auto;
+            text-align: center;
         }
 
         .mermaid svg {
             background-color: #FFFFFF !important;
-            font-weight: 700 !important;
-            width: 100% !important;
-            max-width: none !important;
-            height: auto !important;
-            display: block;
-            margin: 0 auto;
+            max-width: 100%;
+            height: auto;
         }
 
         .mermaid svg text,
         .mermaid svg tspan,
         .mermaid svg span,
-        .mermaid svg div,
-        .mermaid svg p,
         .mermaid svg .nodeLabel,
         .mermaid svg .edgeLabel,
-        .mermaid svg .cluster-label,
-        .mermaid svg .messageText,
-        .mermaid svg .labelText,
-        .mermaid svg .loopText,
-        .mermaid svg .noteText,
-        .mermaid svg .actor {
-            font-weight: 700 !important;
-            color: #0F172A !important;
-            fill: #0F172A !important;
-        }
-
-        .mermaid svg path,
-        .mermaid svg line,
-        .mermaid svg polyline,
-        .mermaid svg rect,
-        .mermaid svg polygon,
-        .mermaid svg circle {
-            stroke-width: 2.3px !important;
+        .mermaid svg .cluster-label {
+            font-weight: 700;
         }
 
         /* Mermaid 全屏放大模态框 */
@@ -1029,7 +961,7 @@
 <div class="portal-group-label">第一层 · 业务与建模要求</div>
 <a href="../记忆建模与数据集生成要求.html" class="portal-nav-item" title="记忆建模与生成要求">记忆建模与生成要求</a>
 <div class="portal-group-label">第二层 · 核心架构与流水线</div>
-<a href="../specs/cognitive_memory_dev_spec.html" class="portal-nav-item" title="三层认知记忆与双轨评测总纲">三层认知记忆与双轨评测总纲</a>
+<a href="../specs/cognitive_memory_dev_spec.html" class="portal-nav-item" title="三层认知记忆与双轨评测规范">三层认知记忆与双轨评测规范</a>
 <a href="../跨 Session 记忆数据集生成器思路.html" class="portal-nav-item" title="跨 Session 生成流水线详设">跨 Session 生成流水线详设</a>
 <div class="portal-group-label">第三层 · 输入规范与操作</div>
 <a href="../specs/persona_spec.html" class="portal-nav-item active" title="Persona 画像与故事线规范">Persona 画像与故事线规范</a>
@@ -1051,7 +983,7 @@
             <nav class="toc-body">
                 <ul class="toc-list" id="tocList">
 <li class="toc-item toc-level-2"><a href="#1-概述" class="toc-link" title="1 概述">1 概述</a></li>
-<li class="toc-item toc-level-2"><a href="#2-画像生成与故事线提取流程" class="toc-link" title="2 画像生成与故事线提取流程">2 画像生成与故事线提取流程</a></li>
+<li class="toc-item toc-level-2"><a href="#2-llm-生成流程" class="toc-link" title="2 LLM 生成流程">2 LLM 生成流程</a></li>
 <li class="toc-item toc-level-3"><a href="#21-使用示例" class="toc-link" title="2.1 使用示例">2.1 使用示例</a></li>
 <li class="toc-item toc-level-2"><a href="#3-模板结构" class="toc-link" title="3 模板结构">3 模板结构</a></li>
 <li class="toc-item toc-level-2"><a href="#4-staticprofile-字段规范" class="toc-link" title="4 staticprofile 字段规范">4 staticprofile 字段规范</a></li>
@@ -1091,127 +1023,108 @@
 
                 <article class="markdown-body" id="docReadView">
 <h1>Persona 模板生成规范</h1>
-<blockquote><p><strong>文档层级</strong>：第三层 · 输入画像与故事线规范（Persona & Storyline Specification）</p>
-<p><strong>文档定位</strong>：定义面向通信网络保障 <strong>“联接”Agent</strong> 的用户画像（Persona）模板 Schema、字段编写准则与 10 项质量检查清单。</p>
-<p><strong>代码落点</strong>：画像加载与故事线增强位于 <code>src/core/persona_StoryExtractor.py</code>，标准画像数据存放于 <code>data/personas/</code>（如 <code>mobile_customer_personas.json</code>）。</p></blockquote>
-<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
 <h2 id="1-概述">1 概述</h2>
-<p>生成面向“联接”Agent 的用户画像（Persona）模板，用于跨 Session 三层认知记忆数据集生成。每条画像记录完整描述一个真实通信保障用户的<strong>静态背景（<code>static_profile</code>）</strong>、<strong>动态偏好（<code>dynamic_profile</code>）</strong>与<strong>跨阶段故事线（<code>storyline</code>）</strong>。</p>
+<p>生成面向核心网 Agent 的用户画像（Persona）模板，用于跨 Session 记忆数据集生成。画像模板是 <code>corenet_personas.jsonl</code> 中的单条记录，描述一个真实用户画像。</p>
 <p>画像模板可以通过两种方式获得：</p>
 
         <div class="table-wrapper">
             <table>
                 <thead><tr><th>生成方式</th><th>说明</th><th>适用场景</th></tr></thead>
                 <tbody>
-                    <tr><td><strong>人工标杆设计</strong></td><td>按本规范编写高保真 JSON</td><td>核心标杆画像（如 <code>data/personas/mobile_customer_personas.json</code> 中的 5 大移动核心网客户画像）</td></tr><tr><td><strong>LLM 批量生成与增强</strong></td><td>提供角色简述，由 LLM + <code>persona_StoryExtractor.py</code> 补全完整字段与故事线</td><td>规模化扩展新画像</td></tr>
+                    <tr><td><strong>人工设计</strong></td><td>按本规范手动编写 JSON</td><td>已有画像（如 <code>corenet_personas.jsonl</code> 中的 19 个）</td></tr><tr><td><strong>LLM 生成</strong></td><td>提供简短的人类角色描述，LLM 补全完整字段</td><td>需要批量生成新画像</td></tr>
                 </tbody>
             </table>
         </div>
         
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
-<h2 id="2-画像生成与故事线提取流程">2 画像生成与故事线提取流程</h2>
+<h2 id="2-llm-生成流程">2 LLM 生成流程</h2>
+<p>独立脚本：<code>persona_generate.py</code>（命令行脚本，解耦于 pipeline）</p>
 
-                        <div class="mermaid-wrapper">
-                            <div class="mermaid-toolbar">
-                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范 · 支持缩放与全屏)</span>
-                                <div class="mermaid-ctrl-group">
-                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
-                                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
-                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
-                                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
-                                </div>
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
                             </div>
-                            <div class="mermaid">graph TD
-    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-    classDef highlight fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-
-    C["&lt;b&gt;1. 读取 config/ 下的 3 个业务白名单 JSON&lt;br/&gt;(app_config.json / app_map.json / support_matrix.json)&lt;/b&gt;"]
-    P["&lt;b&gt;2. 接收系统 Prompt（字段规范 + 合法 APP 列表）+ 角色描述&lt;/b&gt;"]
-    L["&lt;b&gt;3. 生成完整 Persona JSON&lt;br/&gt;(static_profile + dynamic_profile)&lt;/b&gt;"]:::highlight
-    S["&lt;b&gt;4. 故事线解析器增强 (src/core/persona_StoryExtractor.py)&lt;br/&gt;提取跨阶段生命周期 storyline 与角色迁移锚点&lt;/b&gt;"]:::highlight
-    V{"&lt;b&gt;5. 10 项模板设计检查清单校验&lt;br/&gt;(apps 数量 / time_based 覆盖 / evidence 类型等)&lt;/b&gt;"}
-    R["&lt;b&gt;重试修正（最多 3 次）&lt;/b&gt;"]
-    O["&lt;b&gt;6. 写入 data/personas/*.json&lt;br/&gt;供 run.py 流水线加载&lt;/b&gt;"]
-
-    C --&gt; P --&gt; L --&gt; S --&gt; V
-    V --&gt;|"&lt;b&gt;校验通过&lt;/b&gt;"| O
-    V --&gt;|"&lt;b&gt;校验未通过&lt;/b&gt;"| R
-    R --&gt; L</div>
+                            <pre><code>persona_generate.py [--prompt &quot;描述&quot;] [--count N] [--mode generate|regenerate]
+  │
+  ├─ 读取 dataset_prepare/ 下的 3 个 JSON（app_config.json, app_map.json, support_matrix.json）
+  ├─ LLM 接收系统 prompt（字段规范 + 可用 APP 列表）+ 可选基础描述
+  ├─ LLM 输出完整 persona JSON (static_profile + dynamic_profile)
+  ├─ 校验: 模板设计检查清单（apps数量/time_based覆盖/evidence类型等）
+  ├─ 失败则重试（最多3次）
+  └─ 写入 corenet_personas.jsonl (JSON 数组格式)</code></pre>
                         </div>
                         
-<p><strong>Pipeline 调用</strong>：<code>run.py</code> 通过 <code>src/core/persona_StoryExtractor.py</code> 从 <code>data/personas/</code> 加载画像模板并自动补齐故事线结构，随后送入 <code>src/core/gt_builder.py</code> 构建四层 Ground Truth。</p>
+<p><strong>Pipeline 调用</strong>：<code>run.py</code> 只负责从 <code>corenet_personas.jsonl</code> 加载画像模板，不生成 personas。</p>
 <p><strong>LLM 生成 vs 人工设计的区别</strong>：</p>
-<ul><li>LLM 生成时，<code>apps</code> 列表可能是通用名（如"视频APP"），后续 <code>gt_builder.py</code> 的 <code>_resolve_app_name</code> 会自动映射为标准应用名；
+<ul><li>LLM 生成时，apps 列表可能是通用名（如"视频APP"），后续 <code>persona_ground_truth.py</code> 的 <code>_resolve_app_name</code> 会 fallback 到 LLM 做映射
 </li>
-<li>人工设计时，<code>apps</code> 直接用中文标准名，匹配更准确；
+<li>人工设计时，apps 直接用中文标准名，匹配更准确
 </li>
-<li>两种方式的后续生成与质检 pipeline 完全相同。
+<li>两种方式的后续 pipeline 完全相同
 </li></ul>
 <h3 id="21-使用示例">2.1 使用示例</h3>
-<p><strong>方式 1：直接基于 <code>data/personas/</code> 运行流水线（自动完成故事线提取）</strong></p>
+<p><strong>方式1：自由生成</strong></p>
 
                         <div class="code-card">
                             <div class="code-card-header">
-                                <span class="code-card-lang">BASH</span>
+                                <span class="code-card-lang">TEXT</span>
                                 <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
                             </div>
-                            <pre><code class="language-bash">python run.py --input data/personas --output data/cognitive_samples --start 0 --count 5 --verify --force</code></pre>
+                            <pre><code>python persona_generate.py --count 3</code></pre>
                         </div>
                         
-<p><strong>方式 2：扩展自定义画像生成（指定基础角色描述）</strong></p>
+<p><strong>方式2：带基础描述</strong></p>
 
                         <div class="code-card">
                             <div class="code-card-header">
-                                <span class="code-card-lang">BASH</span>
+                                <span class="code-card-lang">TEXT</span>
                                 <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
                             </div>
-                            <pre><code class="language-bash"># 示例角色提示词：
-# 1. &quot;一个经常出差的商务人士，主要用视频通话和导航&quot;
-# 2. &quot;一个大型手游赛事运维总监，主要用王者荣耀、和平精英与腾讯会议&quot;
-# 3. &quot;一个电商直播MCN机构技术负责人，高频使用抖音直播、淘宝直播与企业微信&quot;</code></pre>
+                            <pre><code>python persona_generate.py --count 3 \
+  --prompt &quot;一个经常出差的商务人士，主要用视频通话和导航&quot; \
+  --prompt &quot;一个喜欢追剧的高中生，主要用短视频和追剧APP&quot; \
+  --prompt &quot;一个退休老人，主要用微信视频和听书&quot;</code></pre>
                         </div>
                         
-<p><strong>使用 <code>config/</code> 业务白名单资源</strong>：画像生成与解析会自动读取 <code>config/</code> 下的 3 个 JSON：</p>
+<p><strong>方式3：覆盖全部</strong></p>
+
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>python persona_generate.py --mode regenerate --count 10 --prompt &quot;一个外卖骑手，主要用导航和外卖APP&quot;</code></pre>
+                        </div>
+                        
+<p><strong>方式4：指定资源目录和输出路径</strong></p>
+
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>python persona_generate.py --resource-dir /path/to/dataset_prepare --output /path/to/output.jsonl</code></pre>
+                        </div>
+                        
+<p><strong>输出</strong>：生成完成后，LLM 调用的日志会显示 validation warnings（如果有），最终的 persona 文件会被写入 <code>output</code> 指定的路径（默认 <code>../PersonaMem-v2/data/corenet_personas.jsonl</code>）。</p>
+<p><strong>使用 dataset_prepare/ 资源</strong>：<code>persona_generate.py</code> 会自动读取 <code>dataset_prepare/</code> 下的 3 个 JSON：</p>
 <ul><li><code>app_config.json</code>：所有可用的 APP 名称和业务类型
 </li>
 <li><code>app_map.json</code>：APP 中文名/英文名/别名
 </li>
 <li><code>support_matrix.json</code>：APP × 业务 × 分辨率枚举
 </li></ul>
-<p>这些信息会被注入到 Prompt 与校验器中，确保只选用合法的业务场景，杜绝编造不存在的 APP。</p>
+<p>这些信息会被注入到 LLM prompt 中，让 LLM 知道能选哪些 APP，避免编造不存在的 APP。</p>
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
 <h2 id="3-模板结构">3 模板结构</h2>
-<p>每条画像记录包含三个顶层结构字段：</p>
-
-                        <div class="mermaid-wrapper">
-                            <div class="mermaid-toolbar">
-                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范 · 支持缩放与全屏)</span>
-                                <div class="mermaid-ctrl-group">
-                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
-                                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
-                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
-                                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
-                                </div>
-                            </div>
-                            <div class="mermaid">graph LR
-    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-
-    ROOT["&lt;b&gt;Persona 画像模板&lt;br/&gt;(data/personas/*.json)&lt;/b&gt;"]
-    S["&lt;b&gt;1. static_profile (稳定画像)&lt;br/&gt;identity / devices / apps / subscription&lt;/b&gt;"]
-    D["&lt;b&gt;2. dynamic_profile (动态偏好)&lt;br/&gt;time_based / scene_switch / role_change / event_driven&lt;br/&gt;aliases / time_expressions / param_mappings / preferences&lt;/b&gt;"]
-    ST["&lt;b&gt;3. storyline (跨期故事线)&lt;br/&gt;initial_goal / mid_term_shift / climax_challenge&lt;/b&gt;"]
-
-    ROOT --&gt; S
-    ROOT --&gt; D
-    ROOT --&gt; ST</div>
-                        </div>
-                        
+<p>画像模板是 <code>corenet_personas.jsonl</code> 中的单条记录，包含两个顶层字段：</p>
 
         <div class="table-wrapper">
             <table>
                 <thead><tr><th>字段名</th><th>类型</th><th>说明</th></tr></thead>
                 <tbody>
-                    <tr><td><code>static_profile</code></td><td><code>dict</code></td><td>稳定画像（不变或极少变化：身份、设备、常用 APP、套餐）</td></tr><tr><td><code>dynamic_profile</code></td><td><code>dict</code></td><td>动态画像（随时间/场景/事件变化的偏好、别名映射与角色转变）</td></tr><tr><td><code>storyline</code></td><td><code>dict</code></td><td>跨阶段故事线（由 <code>persona_StoryExtractor.py</code> 提取或人工定义，驱动 16~20 轮演进）</td></tr>
+                    <tr><td><code>static_profile</code></td><td><code>dict</code></td><td>稳定画像（不变或极少变化）</td></tr><tr><td><code>dynamic_profile</code></td><td><code>dict</code></td><td>动态画像（随时间/场景/事件变化）</td></tr>
                 </tbody>
             </table>
         </div>
@@ -1230,20 +1143,17 @@
         
 <h3 id="41-identity-写作规则">4.1 identity 写作规则</h3>
 
-    <div class="visual-card visual-spec-card">
-        <div class="visual-card-header">
-            <span class="visual-card-badge">📌 结构化规则与示例视图 (SPEC / EXAMPLE)</span>
-            <button class="code-copy-btn" onclick="copyVisualRaw(this)">复制内容</button>
-        </div>
-        <div class="vspec-body">
-            <div class="vspec-line"><span class="vspec-key">格式：</span>身份 + 核心活动 + 频率/时长 + 考核/目标</div><div class="vspec-line"><span class="vspec-key">示例：</span></div><div class="vspec-line">  <span class="vspec-badge-good">✅ 推荐</span> &quot;抖音签约的全职户外主播，主要进行城市探店、夜市和商场直播，每周直播5-6场，每场2-4小时，有平台直播时长和活动场次考核&quot;</div><div class="vspec-line">  <span class="vspec-badge-bad">❌ 禁止</span> &quot;全职户外主播，喜欢直播&quot;</div>
-        </div>
-        <pre class="visual-raw-hidden" style="display:none;"><code>格式：身份 + 核心活动 + 频率/时长 + 考核/目标
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>格式：身份 + 核心活动 + 频率/时长 + 考核/目标
 示例：
   ✅ &quot;抖音签约的全职户外主播，主要进行城市探店、夜市和商场直播，每周直播5-6场，每场2-4小时，有平台直播时长和活动场次考核&quot;
   ❌ &quot;全职户外主播，喜欢直播&quot;</code></pre>
-    </div>
-    
+                        </div>
+                        
 <h3 id="42-apps-选择规则">4.2 apps 选择规则</h3>
 <ul><li>覆盖直播/视频类（主力）、沟通类、导航类、支付类等
 </li>
@@ -1272,19 +1182,16 @@
 <li>时间范围用括号标注具体时段
 </li></ul>
 
-    <div class="visual-card visual-spec-card">
-        <div class="visual-card-header">
-            <span class="visual-card-badge">📌 结构化规则与示例视图 (SPEC / EXAMPLE)</span>
-            <button class="code-copy-btn" onclick="copyVisualRaw(this)">复制内容</button>
-        </div>
-        <div class="vspec-body">
-            <div class="vspec-line"><span class="vspec-key">示例：</span></div><div class="vspec-line">  &quot;工作日晚间（18:00-22:00）&quot;: &quot;在夜市、商业街或餐饮门店进行户外直播&quot;</div><div class="vspec-line">  &quot;周末下午至晚间（14:00-21:00）&quot;: &quot;在商场、景区或大型活动现场进行户外直播&quot;</div>
-        </div>
-        <pre class="visual-raw-hidden" style="display:none;"><code>示例：
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>示例：
   &quot;工作日晚间（18:00-22:00）&quot;: &quot;在夜市、商业街或餐饮门店进行户外直播&quot;
   &quot;周末下午至晚间（14:00-21:00）&quot;: &quot;在商场、景区或大型活动现场进行户外直播&quot;</code></pre>
-    </div>
-    
+                        </div>
+                        
 <h3 id="52-sceneswitch">5.2 <code>scene_switch</code></h3>
 
         <div class="table-wrapper">
@@ -1304,19 +1211,16 @@
 <li>至少包含一个"异常/应急"场景（主链路异常等）
 </li></ul>
 
-    <div class="visual-card visual-spec-card">
-        <div class="visual-card-header">
-            <span class="visual-card-badge">📌 结构化规则与示例视图 (SPEC / EXAMPLE)</span>
-            <button class="code-copy-btn" onclick="copyVisualRaw(this)">复制内容</button>
-        </div>
-        <div class="vspec-body">
-            <div class="vspec-line"><span class="vspec-key">示例：</span></div><div class="vspec-line">  &quot;夜市/商业街&quot;: &quot;使用主力5G手机边走边播，主要关注人流密集区域的上行拥塞、小区切换和直播连续性&quot;</div><div class="vspec-line">  &quot;主链路异常&quot;: &quot;切换到备用5G手机或备用号码，关注直播恢复速度以及原有保障策略是否覆盖备用链路&quot;</div>
-        </div>
-        <pre class="visual-raw-hidden" style="display:none;"><code>示例：
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>示例：
   &quot;夜市/商业街&quot;: &quot;使用主力5G手机边走边播，主要关注人流密集区域的上行拥塞、小区切换和直播连续性&quot;
   &quot;主链路异常&quot;: &quot;切换到备用5G手机或备用号码，关注直播恢复速度以及原有保障策略是否覆盖备用链路&quot;</code></pre>
-    </div>
-    
+                        </div>
+                        
 <h3 id="53-rolechange">5.3 <code>role_change</code></h3>
 
         <div class="table-wrapper">
@@ -1336,20 +1240,17 @@
 <li>用于生成 Layer 3 changeable_gt（可变化事实）
 </li></ul>
 
-    <div class="visual-card visual-spec-card">
-        <div class="visual-card-header">
-            <span class="visual-card-badge">📌 结构化规则与示例视图 (SPEC / EXAMPLE)</span>
-            <button class="code-copy-btn" onclick="copyVisualRaw(this)">复制内容</button>
-        </div>
-        <div class="vspec-body">
-            <div class="vspec-line"><span class="vspec-key">示例：</span></div><div class="vspec-line">  <span class="vspec-key">from:</span> &quot;业余探店博主，主要拍摄短视频后再上传&quot;</div><div class="vspec-line">  <span class="vspec-key">to:</span> &quot;抖音签约的全职户外主播，需要在不同地点完成实时直播&quot;</div><div class="vspec-line">  <span class="vspec-key">trigger:</span> &quot;签约后，内容形式从录制后上传为主转变为实时户外直播&quot;</div>
-        </div>
-        <pre class="visual-raw-hidden" style="display:none;"><code>示例：
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>示例：
   from: &quot;业余探店博主，主要拍摄短视频后再上传&quot;
   to: &quot;抖音签约的全职户外主播，需要在不同地点完成实时直播&quot;
   trigger: &quot;签约后，内容形式从录制后上传为主转变为实时户外直播&quot;</code></pre>
-    </div>
-    
+                        </div>
+                        
 <h3 id="54-eventdriven">5.4 <code>event_driven</code></h3>
 
         <div class="table-wrapper">
@@ -1369,19 +1270,16 @@
 <li>用于生成 Layer 3 changeable_gt（可变化事实），设置 valid_from/valid_to
 </li></ul>
 
-    <div class="visual-card visual-spec-card">
-        <div class="visual-card-header">
-            <span class="visual-card-badge">📌 结构化规则与示例视图 (SPEC / EXAMPLE)</span>
-            <button class="code-copy-btn" onclick="copyVisualRaw(this)">复制内容</button>
-        </div>
-        <div class="vspec-body">
-            <div class="vspec-line"><span class="vspec-key">示例：</span></div><div class="vspec-line">  <span class="vspec-key">event:</span> &quot;双11商场促销活动期间进行品牌专场直播，并开启高清推流、嘉宾连麦和商品展示&quot;</div><div class="vspec-line">  <span class="vspec-key">impact:</span> &quot;高清推流和实时连麦使上行稳定性要求高于日常探店直播...&quot;</div>
-        </div>
-        <pre class="visual-raw-hidden" style="display:none;"><code>示例：
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>示例：
   event: &quot;双11商场促销活动期间进行品牌专场直播，并开启高清推流、嘉宾连麦和商品展示&quot;
   impact: &quot;高清推流和实时连麦使上行稳定性要求高于日常探店直播...&quot;</code></pre>
-    </div>
-    
+                        </div>
+                        
 <h3 id="55-aliases">5.5 <code>aliases</code></h3>
 
         <div class="table-wrapper">
@@ -1403,19 +1301,16 @@
 <li>至少包含 2 个 APP 别名 + 1 个业务别名
 </li></ul>
 
-    <div class="visual-card visual-spec-card">
-        <div class="visual-card-header">
-            <span class="visual-card-badge">📌 结构化规则与示例视图 (SPEC / EXAMPLE)</span>
-            <button class="code-copy-btn" onclick="copyVisualRaw(this)">复制内容</button>
-        </div>
-        <div class="vspec-body">
-            <div class="vspec-line"><span class="vspec-key">示例：</span></div><div class="vspec-line">  &quot;抖音&quot;: [&quot;抖音&quot;, &quot;抖&quot;, &quot;阿抖&quot;]</div><div class="vspec-line">  &quot;直播推流&quot;: [&quot;直播&quot;, &quot;推流&quot;, &quot;开播&quot;]</div>
-        </div>
-        <pre class="visual-raw-hidden" style="display:none;"><code>示例：
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>示例：
   &quot;抖音&quot;: [&quot;抖音&quot;, &quot;抖&quot;, &quot;阿抖&quot;]
   &quot;直播推流&quot;: [&quot;直播&quot;, &quot;推流&quot;, &quot;开播&quot;]</code></pre>
-    </div>
-    
+                        </div>
+                        
 <h3 id="56-timeexpressions">5.6 <code>time_expressions</code></h3>
 
         <div class="table-wrapper">
@@ -1435,19 +1330,16 @@
 <li>value 需包含具体的时间解析结果
 </li></ul>
 
-    <div class="visual-card visual-spec-card">
-        <div class="visual-card-header">
-            <span class="visual-card-badge">📌 结构化规则与示例视图 (SPEC / EXAMPLE)</span>
-            <button class="code-copy-btn" onclick="copyVisualRaw(this)">复制内容</button>
-        </div>
-        <div class="vspec-body">
-            <div class="vspec-line"><span class="vspec-key">示例：</span></div><div class="vspec-line">  &quot;一会儿&quot;: { &quot;duration_minutes&quot;: 30, &quot;type&quot;: &quot;duration&quot; }</div><div class="vspec-line">  &quot;下班前&quot;: { &quot;relative_time&quot;: &quot;before_work_end&quot;, &quot;approximate&quot;: &quot;18:00&quot; }</div>
-        </div>
-        <pre class="visual-raw-hidden" style="display:none;"><code>示例：
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>示例：
   &quot;一会儿&quot;: { &quot;duration_minutes&quot;: 30, &quot;type&quot;: &quot;duration&quot; }
   &quot;下班前&quot;: { &quot;relative_time&quot;: &quot;before_work_end&quot;, &quot;approximate&quot;: &quot;18:00&quot; }</code></pre>
-    </div>
-    
+                        </div>
+                        
 <h3 id="57-parammappings">5.7 <code>param_mappings</code></h3>
 
         <div class="table-wrapper">
@@ -1467,20 +1359,17 @@
 <li>这些映射将被生成 Layer 4 personalization_gt 中的 <code>expression_mappings</code>（quality_expression 类型）
 </li></ul>
 
-    <div class="visual-card visual-spec-card">
-        <div class="visual-card-header">
-            <span class="visual-card-badge">📌 结构化规则与示例视图 (SPEC / EXAMPLE)</span>
-            <button class="code-copy-btn" onclick="copyVisualRaw(this)">复制内容</button>
-        </div>
-        <div class="vspec-body">
-            <div class="vspec-line"><span class="vspec-key">示例：</span></div><div class="vspec-line">  &quot;高清&quot;: { &quot;resolution&quot;: &quot;1080p&quot; }</div><div class="vspec-line">  &quot;流畅&quot;: { &quot;resolution&quot;: &quot;360p&quot;, &quot;bitrate_kbps&quot;: 800 }</div><div class="vspec-line">  &quot;标清&quot;: { &quot;resolution&quot;: &quot;720p&quot; }</div>
-        </div>
-        <pre class="visual-raw-hidden" style="display:none;"><code>示例：
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>示例：
   &quot;高清&quot;: { &quot;resolution&quot;: &quot;1080p&quot; }
   &quot;流畅&quot;: { &quot;resolution&quot;: &quot;360p&quot;, &quot;bitrate_kbps&quot;: 800 }
   &quot;标清&quot;: { &quot;resolution&quot;: &quot;720p&quot; }</code></pre>
-    </div>
-    
+                        </div>
+                        
 <h3 id="58-experiencepreferences">5.8 <code>experience_preferences</code></h3>
 
         <div class="table-wrapper">
@@ -1504,15 +1393,12 @@
 <li>用多参数组合偏好生成 Layer 4 <code>experience_param_preferences</code>，被反推为 MT（如 <code>multi_param_bundle</code>）
 </li></ul>
 
-    <div class="visual-card visual-spec-card">
-        <div class="visual-card-header">
-            <span class="visual-card-badge">📌 结构化规则与示例视图 (SPEC / EXAMPLE)</span>
-            <button class="code-copy-btn" onclick="copyVisualRaw(this)">复制内容</button>
-        </div>
-        <div class="vspec-body">
-            <div class="vspec-line"><span class="vspec-key">示例：</span></div><div class="vspec-line">  {</div><div class="vspec-line">    &quot;app&quot;: &quot;Douyin&quot;,</div><div class="vspec-line">    &quot;service&quot;: &quot;live&quot;,</div><div class="vspec-line">    &quot;preferred&quot;: { &quot;resolution&quot;: &quot;1080p&quot;, &quot;latency_ms&quot;: 60 },</div><div class="vspec-line">    &quot;fallback&quot;: { &quot;resolution&quot;: &quot;720p&quot;, &quot;latency_ms&quot;: 120 },</div><div class="vspec-line">    &quot;rejected&quot;: { &quot;resolution&quot;: &quot;360p&quot;, &quot;latency_ms&quot;: 200 },</div><div class="vspec-line">    &quot;evidence&quot;: &quot;explicit&quot;,</div><div class="vspec-line">    &quot;scope&quot;: &quot;long_term&quot;,</div><div class="vspec-line">    &quot;applicable_conditions&quot;: &quot;户外直播场景&quot;</div><div class="vspec-line">  }</div>
-        </div>
-        <pre class="visual-raw-hidden" style="display:none;"><code>示例：
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>示例：
   {
     &quot;app&quot;: &quot;Douyin&quot;,
     &quot;service&quot;: &quot;live&quot;,
@@ -1523,8 +1409,8 @@
     &quot;scope&quot;: &quot;long_term&quot;,
     &quot;applicable_conditions&quot;: &quot;户外直播场景&quot;
   }</code></pre>
-    </div>
-    
+                        </div>
+                        
 <h3 id="59-appservicepreferences">5.9 <code>app_service_preferences</code></h3>
 
         <div class="table-wrapper">
@@ -1544,15 +1430,12 @@
 <li>生成 Layer 4 <code>app_business_preferences</code>，被反推为 MT（如 <code>service_to_app</code>、<code>app_to_service</code>、<code>app_service_combo</code>）
 </li></ul>
 
-    <div class="visual-card visual-spec-card">
-        <div class="visual-card-header">
-            <span class="visual-card-badge">📌 结构化规则与示例视图 (SPEC / EXAMPLE)</span>
-            <button class="code-copy-btn" onclick="copyVisualRaw(this)">复制内容</button>
-        </div>
-        <div class="vspec-body">
-            <div class="vspec-line"><span class="vspec-key">示例：</span></div><div class="vspec-line">  {</div><div class="vspec-line">    &quot;type&quot;: &quot;service_to_app&quot;,</div><div class="vspec-line">    &quot;service&quot;: &quot;live&quot;,</div><div class="vspec-line">    &quot;preferred_apps&quot;: [&quot;Douyin&quot;, &quot;Kuaishou&quot;],</div><div class="vspec-line">    &quot;excluded_apps&quot;: [&quot;Weishi&quot;],</div><div class="vspec-line">    &quot;evidence&quot;: &quot;behavioral&quot;,</div><div class="vspec-line">    &quot;support_count&quot;: 8</div><div class="vspec-line">  }</div>
-        </div>
-        <pre class="visual-raw-hidden" style="display:none;"><code>示例：
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>示例：
   {
     &quot;type&quot;: &quot;service_to_app&quot;,
     &quot;service&quot;: &quot;live&quot;,
@@ -1561,8 +1444,8 @@
     &quot;evidence&quot;: &quot;behavioral&quot;,
     &quot;support_count&quot;: 8
   }</code></pre>
-    </div>
-    
+                        </div>
+                        
 <h3 id="510-conditionalpreferences">5.10 <code>conditional_preferences</code></h3>
 
         <div class="table-wrapper">
@@ -1584,15 +1467,12 @@
 <li>生成 Layer 2 <code>conditional_gt</code>（条件化真值），被反推为 MT（如 <code>temporary_preference</code>）
 </li></ul>
 
-    <div class="visual-card visual-spec-card">
-        <div class="visual-card-header">
-            <span class="visual-card-badge">📌 结构化规则与示例视图 (SPEC / EXAMPLE)</span>
-            <button class="code-copy-btn" onclick="copyVisualRaw(this)">复制内容</button>
-        </div>
-        <div class="vspec-body">
-            <div class="vspec-line"><span class="vspec-key">示例：</span></div><div class="vspec-line">  {</div><div class="vspec-line">    &quot;conditions&quot;: { &quot;event&quot;: &quot;双11&quot;, &quot;location&quot;: &quot;商场&quot; },</div><div class="vspec-line">    &quot;preference&quot;: { &quot;resolution_preference&quot;: &quot;1080p&quot;, &quot;uplink_mbps&quot;: 15 },</div><div class="vspec-line">    &quot;scope&quot;: &quot;temporary&quot;,</div><div class="vspec-line">    &quot;evidence&quot;: &quot;explicit&quot;,</div><div class="vspec-line">    &quot;valid_until&quot;: &quot;2026-11-12&quot;</div><div class="vspec-line">  }</div>
-        </div>
-        <pre class="visual-raw-hidden" style="display:none;"><code>示例：
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>示例：
   {
     &quot;conditions&quot;: { &quot;event&quot;: &quot;双11&quot;, &quot;location&quot;: &quot;商场&quot; },
     &quot;preference&quot;: { &quot;resolution_preference&quot;: &quot;1080p&quot;, &quot;uplink_mbps&quot;: 15 },
@@ -1600,8 +1480,8 @@
     &quot;evidence&quot;: &quot;explicit&quot;,
     &quot;valid_until&quot;: &quot;2026-11-12&quot;
   }</code></pre>
-    </div>
-    
+                        </div>
+                        
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
 <h2 id="6-模板设计检查清单">6 模板设计检查清单</h2>
 <p>生成一个新画像模板时，按以下清单逐项核对：</p>
@@ -1624,104 +1504,91 @@
                     </div>
                     <textarea class="raw-md-textarea" id="rawMdArea" readonly># Persona 模板生成规范
 
-&gt; **文档层级**：第三层 · 输入画像与故事线规范（Persona &amp; Storyline Specification）  
-&gt; **文档定位**：定义面向通信网络保障 **“联接”Agent** 的用户画像（Persona）模板 Schema、字段编写准则与 10 项质量检查清单。  
-&gt; **代码落点**：画像加载与故事线增强位于 `src/core/persona_StoryExtractor.py`，标准画像数据存放于 `data/personas/`（如 `mobile_customer_personas.json`）。
-
----
-
 ## 1 概述
 
-生成面向“联接”Agent 的用户画像（Persona）模板，用于跨 Session 三层认知记忆数据集生成。每条画像记录完整描述一个真实通信保障用户的**静态背景（`static_profile`）**、**动态偏好（`dynamic_profile`）**与**跨阶段故事线（`storyline`）**。
+生成面向核心网 Agent 的用户画像（Persona）模板，用于跨 Session 记忆数据集生成。画像模板是 `corenet_personas.jsonl` 中的单条记录，描述一个真实用户画像。
 
 画像模板可以通过两种方式获得：
 
 | 生成方式 | 说明 | 适用场景 |
 | ------------ | ---------------------- | ---------------------------------------- |
-| **人工标杆设计**     | 按本规范编写高保真 JSON          | 核心标杆画像（如 `data/personas/mobile_customer_personas.json` 中的 5 大移动核心网客户画像） |
-| **LLM 批量生成与增强**   | 提供角色简述，由 LLM + `persona_StoryExtractor.py` 补全完整字段与故事线 | 规模化扩展新画像                                |
+| **人工设计**     | 按本规范手动编写 JSON          | 已有画像（如 `corenet_personas.jsonl` 中的 19 个） |
+| **LLM 生成**   | 提供简短的人类角色描述，LLM 补全完整字段 | 需要批量生成新画像                                |
 
 ---
 
-## 2 画像生成与故事线提取流程
+## 2 LLM 生成流程
 
-```mermaid
-graph TD
-    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-    classDef highlight fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+独立脚本：`persona_generate.py`（命令行脚本，解耦于 pipeline）
 
-    C[&quot;&lt;b&gt;1. 读取 config/ 下的 3 个业务白名单 JSON&lt;br/&gt;(app_config.json / app_map.json / support_matrix.json)&lt;/b&gt;&quot;]
-    P[&quot;&lt;b&gt;2. 接收系统 Prompt（字段规范 + 合法 APP 列表）+ 角色描述&lt;/b&gt;&quot;]
-    L[&quot;&lt;b&gt;3. 生成完整 Persona JSON&lt;br/&gt;(static_profile + dynamic_profile)&lt;/b&gt;&quot;]:::highlight
-    S[&quot;&lt;b&gt;4. 故事线解析器增强 (src/core/persona_StoryExtractor.py)&lt;br/&gt;提取跨阶段生命周期 storyline 与角色迁移锚点&lt;/b&gt;&quot;]:::highlight
-    V{&quot;&lt;b&gt;5. 10 项模板设计检查清单校验&lt;br/&gt;(apps 数量 / time_based 覆盖 / evidence 类型等)&lt;/b&gt;&quot;}
-    R[&quot;&lt;b&gt;重试修正（最多 3 次）&lt;/b&gt;&quot;]
-    O[&quot;&lt;b&gt;6. 写入 data/personas/*.json&lt;br/&gt;供 run.py 流水线加载&lt;/b&gt;&quot;]
-
-    C --&gt; P --&gt; L --&gt; S --&gt; V
-    V --&gt;|&quot;&lt;b&gt;校验通过&lt;/b&gt;&quot;| O
-    V --&gt;|&quot;&lt;b&gt;校验未通过&lt;/b&gt;&quot;| R
-    R --&gt; L
+```
+persona_generate.py [--prompt &quot;描述&quot;] [--count N] [--mode generate|regenerate]
+  │
+  ├─ 读取 dataset_prepare/ 下的 3 个 JSON（app_config.json, app_map.json, support_matrix.json）
+  ├─ LLM 接收系统 prompt（字段规范 + 可用 APP 列表）+ 可选基础描述
+  ├─ LLM 输出完整 persona JSON (static_profile + dynamic_profile)
+  ├─ 校验: 模板设计检查清单（apps数量/time_based覆盖/evidence类型等）
+  ├─ 失败则重试（最多3次）
+  └─ 写入 corenet_personas.jsonl (JSON 数组格式)
 ```
 
-**Pipeline 调用**：`run.py` 通过 `src/core/persona_StoryExtractor.py` 从 `data/personas/` 加载画像模板并自动补齐故事线结构，随后送入 `src/core/gt_builder.py` 构建四层 Ground Truth。
+**Pipeline 调用**：`run.py` 只负责从 `corenet_personas.jsonl` 加载画像模板，不生成 personas。
 
 **LLM 生成 vs 人工设计的区别**：
 
-- LLM 生成时，`apps` 列表可能是通用名（如&quot;视频APP&quot;），后续 `gt_builder.py` 的 `_resolve_app_name` 会自动映射为标准应用名；
-- 人工设计时，`apps` 直接用中文标准名，匹配更准确；
-- 两种方式的后续生成与质检 pipeline 完全相同。
+- LLM 生成时，apps 列表可能是通用名（如&quot;视频APP&quot;），后续 `persona_ground_truth.py` 的 `_resolve_app_name` 会 fallback 到 LLM 做映射
+- 人工设计时，apps 直接用中文标准名，匹配更准确
+- 两种方式的后续 pipeline 完全相同
 
 ### 2.1 使用示例
 
-**方式 1：直接基于 `data/personas/` 运行流水线（自动完成故事线提取）**
+**方式1：自由生成**
 
-```bash
-python run.py --input data/personas --output data/cognitive_samples --start 0 --count 5 --verify --force
+```
+python persona_generate.py --count 3
 ```
 
-**方式 2：扩展自定义画像生成（指定基础角色描述）**
+**方式2：带基础描述**
 
-```bash
-# 示例角色提示词：
-# 1. &quot;一个经常出差的商务人士，主要用视频通话和导航&quot;
-# 2. &quot;一个大型手游赛事运维总监，主要用王者荣耀、和平精英与腾讯会议&quot;
-# 3. &quot;一个电商直播MCN机构技术负责人，高频使用抖音直播、淘宝直播与企业微信&quot;
+```
+python persona_generate.py --count 3 \
+  --prompt &quot;一个经常出差的商务人士，主要用视频通话和导航&quot; \
+  --prompt &quot;一个喜欢追剧的高中生，主要用短视频和追剧APP&quot; \
+  --prompt &quot;一个退休老人，主要用微信视频和听书&quot;
 ```
 
-**使用 `config/` 业务白名单资源**：画像生成与解析会自动读取 `config/` 下的 3 个 JSON：
+**方式3：覆盖全部**
+
+```
+python persona_generate.py --mode regenerate --count 10 --prompt &quot;一个外卖骑手，主要用导航和外卖APP&quot;
+```
+
+**方式4：指定资源目录和输出路径**
+
+```
+python persona_generate.py --resource-dir /path/to/dataset_prepare --output /path/to/output.jsonl
+```
+
+**输出**：生成完成后，LLM 调用的日志会显示 validation warnings（如果有），最终的 persona 文件会被写入 `output` 指定的路径（默认 `../PersonaMem-v2/data/corenet_personas.jsonl`）。
+
+**使用 dataset_prepare/ 资源**：`persona_generate.py` 会自动读取 `dataset_prepare/` 下的 3 个 JSON：
 
 - `app_config.json`：所有可用的 APP 名称和业务类型
 - `app_map.json`：APP 中文名/英文名/别名
 - `support_matrix.json`：APP × 业务 × 分辨率枚举
 
-这些信息会被注入到 Prompt 与校验器中，确保只选用合法的业务场景，杜绝编造不存在的 APP。
+这些信息会被注入到 LLM prompt 中，让 LLM 知道能选哪些 APP，避免编造不存在的 APP。
 
 ---
 
 ## 3 模板结构
 
-每条画像记录包含三个顶层结构字段：
-
-```mermaid
-graph LR
-    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-
-    ROOT[&quot;&lt;b&gt;Persona 画像模板&lt;br/&gt;(data/personas/*.json)&lt;/b&gt;&quot;]
-    S[&quot;&lt;b&gt;1. static_profile (稳定画像)&lt;br/&gt;identity / devices / apps / subscription&lt;/b&gt;&quot;]
-    D[&quot;&lt;b&gt;2. dynamic_profile (动态偏好)&lt;br/&gt;time_based / scene_switch / role_change / event_driven&lt;br/&gt;aliases / time_expressions / param_mappings / preferences&lt;/b&gt;&quot;]
-    ST[&quot;&lt;b&gt;3. storyline (跨期故事线)&lt;br/&gt;initial_goal / mid_term_shift / climax_challenge&lt;/b&gt;&quot;]
-
-    ROOT --&gt; S
-    ROOT --&gt; D
-    ROOT --&gt; ST
-```
+画像模板是 `corenet_personas.jsonl` 中的单条记录，包含两个顶层字段：
 
 | 字段名 | 类型 | 说明 |
 | ----------------- | ------ | ----------------- |
-| `static_profile`  | `dict` | 稳定画像（不变或极少变化：身份、设备、常用 APP、套餐）     |
-| `dynamic_profile` | `dict` | 动态画像（随时间/场景/事件变化的偏好、别名映射与角色转变） |
-| `storyline`       | `dict` | 跨阶段故事线（由 `persona_StoryExtractor.py` 提取或人工定义，驱动 16~20 轮演进） |
+| `static_profile`  | `dict` | 稳定画像（不变或极少变化）     |
+| `dynamic_profile` | `dict` | 动态画像（随时间/场景/事件变化） |
 
 ---
 
@@ -2194,59 +2061,21 @@ graph LR
             if (window.mermaid) {
                 mermaid.initialize({
                     startOnLoad: false,
-                    securityLevel: 'loose',
-                    theme: 'base',
-                    flowchart: {
-                        useMaxWidth: false,
-                        htmlLabels: true,
-                        curve: 'basis',
-                        padding: 20,
-                        nodeSpacing: 45,
-                        rankSpacing: 55
-                    },
-                    sequence: {
-                        useMaxWidth: false,
-                        wrap: true,
-                        actorFontWeight: '700',
-                        messageFontWeight: '700',
-                        noteFontWeight: '700',
-                        boxMargin: 12,
-                        messageMargin: 40
-                    },
-                    state: {
-                        useMaxWidth: false
-                    },
-                    themeVariables: {
-                        fontSize: '16px',
-                        background: '#FFFFFF',
-                        primaryColor: '#FFFFFF',
-                        primaryTextColor: '#0F172A',
-                        primaryBorderColor: '#0F172A',
-                        lineColor: '#0F172A',
-                        secondaryColor: '#FFFFFF',
-                        tertiaryColor: '#FFFFFF',
-                        mainBkg: '#FFFFFF',
-                        nodeBorder: '#0F172A',
-                        clusterBkg: '#FFFFFF',
-                        clusterBorder: '#0F172A',
-                        actorBkg: '#FFFFFF',
-                        actorBorder: '#0F172A',
-                        actorTextColor: '#0F172A',
-                        signalColor: '#0F172A',
-                        signalTextColor: '#0F172A',
-                        labelBoxBkgColor: '#FFFFFF',
-                        labelBoxBorderColor: '#0F172A',
-                        labelTextColor: '#0F172A',
-                        noteBkgColor: '#FFFFFF',
-                        noteBorderColor: '#0F172A',
-                        noteTextColor: '#0F172A'
-                    }
+                    securityLevel: 'loose'
                 });
-                try {
-                    await mermaid.run({ querySelector: '.mermaid' });
-                } catch (e) {}
-                enhanceMermaidDiagrams();
-                setTimeout(enhanceMermaidDiagrams, 200);
+                const containers = document.querySelectorAll('.mermaid');
+                for (let i = 0; i < containers.length; i++) {
+                    const el = containers[i];
+                    const srcEl = el.querySelector('.mermaid-source');
+                    if (!srcEl) continue;
+                    try {
+                        const payload = JSON.parse(srcEl.textContent);
+                        const { svg } = await mermaid.render('mermaid-svg-' + i, payload.code);
+                        el.innerHTML = svg;
+                    } catch (e) {
+                        console.error('Mermaid render error:', e);
+                    }
+                }
             }
 
             if (window.hljs) {

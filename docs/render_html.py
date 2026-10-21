@@ -20,6 +20,7 @@
 import sys
 import re
 import html
+import json
 from pathlib import Path
 
 if hasattr(sys.stdout, "reconfigure"):
@@ -42,7 +43,7 @@ DOCS_PORTAL_GROUPS = [
     (
         "第二层 · 核心架构与流水线",
         [
-            ("specs/cognitive_memory_dev_spec.html", "三层认知记忆与双轨评测总纲"),
+            ("specs/cognitive_memory_dev_spec.html", "三层认知记忆与双轨评测规范"),
             ("跨 Session 记忆数据集生成器思路.html", "跨 Session 生成流水线详设"),
         ],
     ),
@@ -2069,107 +2070,39 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
             background-color: var(--table-alt);
         }
 
-        /* Mermaid 图表容器：强制纯白底色 (#FFFFFF)、加粗字体、加粗线条 */
+        /* Mermaid 图表容器：与 Antigravity 原生 Mermaid 渲染一致 */
         .mermaid-wrapper {
-            margin: 22px 0 28px;
-            padding: 18px 24px 26px;
+            margin: 20px 0 24px;
+            padding: 18px 20px;
             background-color: #FFFFFF !important;
-            border: 2.5px solid #0F172A;
-            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
             overflow-x: auto;
             text-align: center;
             box-shadow: var(--card-shadow);
         }
 
-        .mermaid-toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 14px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #E2E8F0;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .mermaid-badge {
-            font-size: 0.80rem;
-            font-weight: 800;
-            color: #0F172A;
-            letter-spacing: 0.02em;
-        }
-
-        .mermaid-ctrl-group {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .mermaid-zoom-btn {
-            background-color: #F8FAFC;
-            border: 1.5px solid #0F172A;
-            color: #0F172A;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.15s;
-        }
-
-        .mermaid-zoom-btn:hover {
-            background-color: #0F172A;
-            color: #FFFFFF;
-        }
-
         .mermaid {
             background-color: #FFFFFF !important;
-            color: #0F172A !important;
-            font-weight: 700 !important;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: block;
             width: 100%;
-            min-height: 220px;
             margin: 0 auto;
-            overflow-x: auto;
+            text-align: center;
         }
 
         .mermaid svg {
             background-color: #FFFFFF !important;
-            font-weight: 700 !important;
-            width: 100% !important;
-            max-width: none !important;
-            height: auto !important;
-            display: block;
-            margin: 0 auto;
+            max-width: 100%;
+            height: auto;
         }
 
         .mermaid svg text,
         .mermaid svg tspan,
         .mermaid svg span,
-        .mermaid svg div,
-        .mermaid svg p,
         .mermaid svg .nodeLabel,
         .mermaid svg .edgeLabel,
-        .mermaid svg .cluster-label,
-        .mermaid svg .messageText,
-        .mermaid svg .labelText,
-        .mermaid svg .loopText,
-        .mermaid svg .noteText,
-        .mermaid svg .actor {
-            font-weight: 700 !important;
-            color: #0F172A !important;
-            fill: #0F172A !important;
-        }
-
-        .mermaid svg path,
-        .mermaid svg line,
-        .mermaid svg polyline,
-        .mermaid svg rect,
-        .mermaid svg polygon,
-        .mermaid svg circle {
-            stroke-width: 2.3px !important;
+        .mermaid svg .cluster-label {
+            font-weight: 700;
         }
 
         /* Mermaid 全屏放大模态框 */
@@ -2538,59 +2471,21 @@ DOC_HTML_SHELL = """<!DOCTYPE html>
             if (window.mermaid) {
                 mermaid.initialize({
                     startOnLoad: false,
-                    securityLevel: 'loose',
-                    theme: 'base',
-                    flowchart: {
-                        useMaxWidth: false,
-                        htmlLabels: true,
-                        curve: 'basis',
-                        padding: 20,
-                        nodeSpacing: 45,
-                        rankSpacing: 55
-                    },
-                    sequence: {
-                        useMaxWidth: false,
-                        wrap: true,
-                        actorFontWeight: '700',
-                        messageFontWeight: '700',
-                        noteFontWeight: '700',
-                        boxMargin: 12,
-                        messageMargin: 40
-                    },
-                    state: {
-                        useMaxWidth: false
-                    },
-                    themeVariables: {
-                        fontSize: '16px',
-                        background: '#FFFFFF',
-                        primaryColor: '#FFFFFF',
-                        primaryTextColor: '#0F172A',
-                        primaryBorderColor: '#0F172A',
-                        lineColor: '#0F172A',
-                        secondaryColor: '#FFFFFF',
-                        tertiaryColor: '#FFFFFF',
-                        mainBkg: '#FFFFFF',
-                        nodeBorder: '#0F172A',
-                        clusterBkg: '#FFFFFF',
-                        clusterBorder: '#0F172A',
-                        actorBkg: '#FFFFFF',
-                        actorBorder: '#0F172A',
-                        actorTextColor: '#0F172A',
-                        signalColor: '#0F172A',
-                        signalTextColor: '#0F172A',
-                        labelBoxBkgColor: '#FFFFFF',
-                        labelBoxBorderColor: '#0F172A',
-                        labelTextColor: '#0F172A',
-                        noteBkgColor: '#FFFFFF',
-                        noteBorderColor: '#0F172A',
-                        noteTextColor: '#0F172A'
-                    }
+                    securityLevel: 'loose'
                 });
-                try {
-                    await mermaid.run({ querySelector: '.mermaid' });
-                } catch (e) {}
-                enhanceMermaidDiagrams();
-                setTimeout(enhanceMermaidDiagrams, 200);
+                const containers = document.querySelectorAll('.mermaid');
+                for (let i = 0; i < containers.length; i++) {
+                    const el = containers[i];
+                    const srcEl = el.querySelector('.mermaid-source');
+                    if (!srcEl) continue;
+                    try {
+                        const payload = JSON.parse(srcEl.textContent);
+                        const { svg } = await mermaid.render('mermaid-svg-' + i, payload.code);
+                        el.innerHTML = svg;
+                    } catch (e) {
+                        console.error('Mermaid render error:', e);
+                    }
+                }
             }
 
             if (window.hljs) {
@@ -2715,44 +2610,31 @@ def parse_doc_markdown(md_text: str):
                 full_code = "\n".join(code_lines)
                 lang_l = code_lang.lower()
                 if lang_l == "mermaid":
-                    safe_mermaid = prepare_mermaid_code(full_code)
+                    mermaid_json = json.dumps({"code": full_code.strip()}, ensure_ascii=False).replace("</script>", "<\\/script>")
                     body_parts.append(
                         f"""
                         <div class="mermaid-wrapper">
-                            <div class="mermaid-toolbar">
-                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范 · 支持缩放与全屏)</span>
-                                <div class="mermaid-ctrl-group">
-                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
-                                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
-                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
-                                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
-                                </div>
+                            <div class="mermaid">
+                                <script type="application/json" class="mermaid-source">{mermaid_json}</script>
                             </div>
-                            <div class="mermaid">{safe_mermaid}</div>
                         </div>
                         """
                     )
-                elif "├──" in full_code or "└──" in full_code:
-                    body_parts.append(render_visual_tree_block(full_code))
-                elif ("User:" in full_code and "Agent:" in full_code):
-                    body_parts.append(render_visual_dialogue_block(full_code))
                 elif not lang_l and full_code.strip().startswith("{") and full_code.strip().endswith("}"):
                     # 自动识别未标注 json 的 JSON 块
                     body_parts.append(
                         f"""
                         <div class="code-card">
                             <div class="code-card-header">
-                                <span class="code-card-lang">JSON 数据结构</span>
+                                <span class="code-card-lang">JSON</span>
                                 <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
                             </div>
                             <pre><code class="language-json">{html.escape(full_code)}</code></pre>
                         </div>
                         """
                     )
-                elif lang_l in ("", "text"):
-                    body_parts.append(render_visual_spec_block(full_code, "SPEC / EXAMPLE"))
                 else:
-                    disp_lang = code_lang.upper() if code_lang else "CODE"
+                    disp_lang = code_lang.upper() if code_lang else "TEXT"
                     lang_cls = f' class="language-{code_lang}"' if code_lang else ""
                     body_parts.append(
                         f"""

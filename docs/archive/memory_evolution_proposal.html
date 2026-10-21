@@ -792,107 +792,39 @@
             background-color: var(--table-alt);
         }
 
-        /* Mermaid 图表容器：强制纯白底色 (#FFFFFF)、加粗字体、加粗线条 */
+        /* Mermaid 图表容器：与 Antigravity 原生 Mermaid 渲染一致 */
         .mermaid-wrapper {
-            margin: 22px 0 28px;
-            padding: 18px 24px 26px;
+            margin: 20px 0 24px;
+            padding: 18px 20px;
             background-color: #FFFFFF !important;
-            border: 2.5px solid #0F172A;
-            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
             overflow-x: auto;
             text-align: center;
             box-shadow: var(--card-shadow);
         }
 
-        .mermaid-toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 14px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #E2E8F0;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .mermaid-badge {
-            font-size: 0.80rem;
-            font-weight: 800;
-            color: #0F172A;
-            letter-spacing: 0.02em;
-        }
-
-        .mermaid-ctrl-group {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .mermaid-zoom-btn {
-            background-color: #F8FAFC;
-            border: 1.5px solid #0F172A;
-            color: #0F172A;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.15s;
-        }
-
-        .mermaid-zoom-btn:hover {
-            background-color: #0F172A;
-            color: #FFFFFF;
-        }
-
         .mermaid {
             background-color: #FFFFFF !important;
-            color: #0F172A !important;
-            font-weight: 700 !important;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: block;
             width: 100%;
-            min-height: 220px;
             margin: 0 auto;
-            overflow-x: auto;
+            text-align: center;
         }
 
         .mermaid svg {
             background-color: #FFFFFF !important;
-            font-weight: 700 !important;
-            width: 100% !important;
-            max-width: none !important;
-            height: auto !important;
-            display: block;
-            margin: 0 auto;
+            max-width: 100%;
+            height: auto;
         }
 
         .mermaid svg text,
         .mermaid svg tspan,
         .mermaid svg span,
-        .mermaid svg div,
-        .mermaid svg p,
         .mermaid svg .nodeLabel,
         .mermaid svg .edgeLabel,
-        .mermaid svg .cluster-label,
-        .mermaid svg .messageText,
-        .mermaid svg .labelText,
-        .mermaid svg .loopText,
-        .mermaid svg .noteText,
-        .mermaid svg .actor {
-            font-weight: 700 !important;
-            color: #0F172A !important;
-            fill: #0F172A !important;
-        }
-
-        .mermaid svg path,
-        .mermaid svg line,
-        .mermaid svg polyline,
-        .mermaid svg rect,
-        .mermaid svg polygon,
-        .mermaid svg circle {
-            stroke-width: 2.3px !important;
+        .mermaid svg .cluster-label {
+            font-weight: 700;
         }
 
         /* Mermaid 全屏放大模态框 */
@@ -1029,7 +961,7 @@
 <div class="portal-group-label">第一层 · 业务与建模要求</div>
 <a href="../记忆建模与数据集生成要求.html" class="portal-nav-item" title="记忆建模与生成要求">记忆建模与生成要求</a>
 <div class="portal-group-label">第二层 · 核心架构与流水线</div>
-<a href="../specs/cognitive_memory_dev_spec.html" class="portal-nav-item" title="三层认知记忆与双轨评测总纲">三层认知记忆与双轨评测总纲</a>
+<a href="../specs/cognitive_memory_dev_spec.html" class="portal-nav-item" title="三层认知记忆与双轨评测规范">三层认知记忆与双轨评测规范</a>
 <a href="../跨 Session 记忆数据集生成器思路.html" class="portal-nav-item" title="跨 Session 生成流水线详设">跨 Session 生成流水线详设</a>
 <div class="portal-group-label">第三层 · 输入规范与操作</div>
 <a href="../specs/persona_spec.html" class="portal-nav-item" title="Persona 画像与故事线规范">Persona 画像与故事线规范</a>
@@ -1105,45 +1037,19 @@
 
                 <article class="markdown-body" id="docReadView">
 <h1>跨会话记忆认知架构演进：指标体系、工作记忆检索与经验记忆构造规划</h1>
-<blockquote><p><strong>文档层级</strong>：第四层 · 架构演进提案与理论归档（Architecture Evolution RFC）</p>
-<p><strong>文档定位</strong>：记录三层认知架构演进初期的理论论证、MemoryArena / ReasoningBank 文献启发与 Phase 1~4 敏捷工程路线图。</p>
-<p><strong>权威实现规范</strong>：本项目正式生效的实现设计与评测基准，请全量以 <a href="../specs/cognitive_memory_dev_spec.html" class="md-link"><strong>《“联接”Agent 跨会话三层认知记忆数据集与双轨评测引擎技术规范》</strong></a> 为准。</p></blockquote>
+<blockquote><p><strong>文档性质</strong>：【历史设计提案 / RFC 归档】</p>
+<p><strong>文档定位</strong>：记录三层认知架构演进初期的理论论证、MemoryArena/ReasoningBank 文献启发与 Phase 1~4 敏捷工程路线图。</p>
+<p><strong>权威实现规范</strong>：本项目正式生效的实现设计与评测基准，请全量以 <strong><a href="../specs/cognitive_memory_dev_spec.html" class="md-link">“联接”Agent 认知记忆全景演进与双轨评测技术规范</a></strong> 为准。</p></blockquote>
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
 <h2 id="一核心演进背景与三层记忆架构全景">一、核心演进背景与三层记忆架构全景</h2>
 <h3 id="11-核心演进背景">1.1 核心演进背景</h3>
-<p>当前数据集在完成基础画像的多轮会话基线构造、实现基于“长期偏好与个性化表达”的事实记忆（Factual Profile Memory）闭环后，为了让“联接”Agent 从被动的“偏好记录”迈向具备真实人类协作质感的多层认知体系，并为下游模型提供严密量化的评测基准，系统拓展了工作记忆的独立单据回溯能力，并重点构建基于真实成败轨迹反思与策略迁移的<strong>经验记忆（Experiential Memory）</strong>。</p>
+<p>当前数据集已完成 150 个画像共 2100 个多轮会话的基线构造，实现了基于“长期偏好与个性化表达”的事实记忆（Factual Profile Memory）闭环。为了让智能体从被动的“偏好记录”迈向具备真实人类协作质感的多层认知体系，并为下游模型提供严密量化的评测基准，系统亟需拓展工作记忆的单据回溯能力，并重点构建基于真实成败轨迹反思与策略迁移的<strong>经验记忆（Experiential Memory）</strong>。</p>
 <h3 id="12-三层认知记忆架构拓扑全景">1.2 三层认知记忆架构拓扑全景</h3>
 
                         <div class="mermaid-wrapper">
-                            <div class="mermaid-toolbar">
-                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范 · 支持缩放与全屏)</span>
-                                <div class="mermaid-ctrl-group">
-                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
-                                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
-                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
-                                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
-                                </div>
+                            <div class="mermaid">
+                                <script type="application/json" class="mermaid-source">{"code": "graph TD\n    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2.5px,color:#111111,font-weight:bold;\n\n    User[\"用户多轮自然语言交互诉求\"] --> Dispatcher[\"认知分发与记忆调度中枢\"]\n\n    subgraph MemoryTiers [\"三层认知记忆架构全景\"]\n        FM[\"【层次一：事实记忆 Factual】<br/>长期老规矩 (MF_001) / 默认业务 / 代称映射 / 周期规则<br/>(状态：跨生命周期持久生效)\"]\n        WM[\"【层次二：工作记忆工单账本 Working】<br/>历史履约流水账 (REC_Ledger) / 时态推断 / 历史改期与核对<br/>(状态：动态增量工单索引)\"]\n        EM[\"【层次三：经验记忆情境反思 Experiential】<br/>场景情境特征 (Context) / 避坑最佳实践 / 智能体主动建议<br/>(状态：情境匹配条件反射)\"]\n    end\n\n    Dispatcher --> FM\n    Dispatcher --> WM\n    Dispatcher --> EM\n\n    FM --> Output[\"下游模型输出：精准闭环与自然台词应答\"]\n    WM --> Output\n    EM --> Output\n\n    style MemoryTiers fill:#FFFFFF,stroke:#111111,stroke-width:2.5px;"}</script>
                             </div>
-                            <div class="mermaid">graph TD
-    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-
-    User["&lt;b&gt;用户多轮自然语言交互诉求&lt;/b&gt;"] --&gt; Dispatcher["&lt;b&gt;认知分发与记忆调度中枢&lt;/b&gt;"]
-
-    subgraph MemoryTiers ["&lt;b&gt;三层认知记忆架构全景&lt;/b&gt;"]
-        FM["&lt;b&gt;【层次一：事实记忆 Factual】&lt;br/&gt;长期老规矩 (MF_001) / 默认业务 / 代称映射 / 周期规则&lt;br/&gt;(状态：跨生命周期持久生效)&lt;/b&gt;"]
-        WM["&lt;b&gt;【层次二：工作记忆工单账本 Working】&lt;br/&gt;历史履约流水账 (REC_Ledger) / 时态推断 / 历史改期与核对&lt;br/&gt;(状态：动态增量工单索引)&lt;/b&gt;"]
-        EM["&lt;b&gt;【层次三：经验记忆情境反思 Experiential】&lt;br/&gt;五大黄金经验策略 / 提前预热与分段隔离 / 智能体主动建议&lt;br/&gt;(状态：情境匹配主动闭环)&lt;/b&gt;"]
-    end
-
-    Dispatcher --&gt; FM
-    Dispatcher --&gt; WM
-    Dispatcher --&gt; EM
-
-    FM --&gt; Output["&lt;b&gt;下游模型输出：精准闭环与自然台词应答&lt;/b&gt;"]
-    WM --&gt; Output
-    EM --&gt; Output
-
-    style MemoryTiers fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;</div>
                         </div>
                         
 <h3 id="13-三层认知记忆职责划分">1.3 三层认知记忆职责划分</h3>
@@ -1152,7 +1058,7 @@
             <table>
                 <thead><tr><th>记忆层级</th><th>核心定位与存储内容</th><th>典型台词触发形式</th><th>解决的核心认知问题</th></tr></thead>
                 <tbody>
-                    <tr><td><strong>事实记忆</strong></td><td>用户固有习惯、个性化老规矩、默认绑定关系与代称别名</td><td>“按老规矩办”、“开直播保障”、“按那个省心档来”</td><td>免去常规已知参数盘问，保持长期个性化默契</td></tr><tr><td><strong>工作记忆工单账本</strong></td><td>历史各次保障工单履约记录、时间戳、地点与网络指标流水账</td><td>“这次去奥体还按上周的来”、“把昨天的改一下”</td><td>建立时态相对指称索引，支持跨会话参数复用与改期</td></tr><tr><td><strong>经验记忆情境反思</strong></td><td>基于历史成败对比提炼的五大黄金避坑策略与主动闭环准则</td><td>“赛事压测主动提前15分钟预热”、“双业务独立分段”</td><td>变被动应答为主动提议，在 Fast Path 中 2 轮高效闭环</td></tr>
+                    <tr><td><strong>事实记忆</strong></td><td>用户固有习惯、个性化老规矩、默认绑定关系与代称别名</td><td>“按老规矩办”、“开直播保障”、“按那个省心档来”</td><td>免去常规已知参数盘问，保持长期个性化默契</td></tr><tr><td><strong>工作记忆工单账本</strong></td><td>历史各次保障工单履约记录、时间戳、地点与网络指标流水账</td><td>“这次去奥体还按上周的来”、“把昨天的改一下”</td><td>建立时态相对指称索引，支持跨会话参数复用与改期</td></tr><tr><td><strong>经验记忆情境反思</strong></td><td>基于极端或特殊外场环境沉淀的避坑策略与最佳实践</td><td>“大型漫展人流高密主动降画质提议”、“恶劣天气防丢包”</td><td>变被动应答为主动提议，增强专业履约质感</td></tr>
                 </tbody>
             </table>
         </div>
@@ -1162,35 +1068,9 @@
 <h3 id="21-冷热启动交互对照流图">2.1 冷热启动交互对照流图</h3>
 
                         <div class="mermaid-wrapper">
-                            <div class="mermaid-toolbar">
-                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范 · 支持缩放与全屏)</span>
-                                <div class="mermaid-ctrl-group">
-                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
-                                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
-                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
-                                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
-                                </div>
+                            <div class="mermaid">
+                                <script type="application/json" class="mermaid-source">{"code": "graph LR\n    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2.5px,color:#111111,font-weight:bold;\n\n    subgraph ColdStart [\"主线一：冷启动无记忆 (多轮澄清收敛线)\"]\n        direction TB\n        C1[\"Turn 1 用户提出初步意图<br/>(缺失画质/时延/时长等槽位)\"] --> C2[\"Turn 1 客服拒绝脑补<br/>主动反问澄清缺失参数\"]\n        C2 --> C3[\"Turn 2 用户明确 1080p/50ms<br/>建立长期个性化习惯\"]\n        C3 --> C4[\"Turn 2 客服登记记忆<br/>反问确认起止时段\"]\n        C4 --> C5[\"Turn 3 用户确认并完成闭环<br/>(平均交互 2.5 ~ 3.0 轮)\"]\n    end\n\n    subgraph HotStart [\"主线二：热启动有记忆 (快速收敛复用线)\"]\n        direction TB\n        H1[\"Turn 1 用户极简口语触发<br/>'按老规矩开保障'\"] --> H2[\"Turn 1 客服直接命中记忆<br/>直接回显参数并反问确认\"]\n        H2 --> H3[\"Turn 2 用户快速确认<br/>'对，直接开'\"]\n        H3 --> H4[\"Turn 2 客服受理闭环<br/>(平均交互 1.0 ~ 2.0 轮，TCG ≥ 40%)\"]\n    end\n\n    style ColdStart fill:#FFFFFF,stroke:#111111,stroke-width:2.5px;\n    style HotStart fill:#FFFFFF,stroke:#111111,stroke-width:2.5px;"}</script>
                             </div>
-                            <div class="mermaid">graph TD
-    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-
-    subgraph ColdStart ["&lt;b&gt;主线一：冷启动无记忆 (多轮澄清收敛线)&lt;/b&gt;"]
-        direction TB
-        C1["&lt;b&gt;Turn 1 用户提出初步意图&lt;br/&gt;(缺失画质/时延/时长等槽位)&lt;/b&gt;"] --&gt; C2["&lt;b&gt;Turn 1 客服拒绝脑补&lt;br/&gt;主动反问澄清缺失参数&lt;/b&gt;"]
-        C2 --&gt; C3["&lt;b&gt;Turn 2 用户明确 1080p/50ms&lt;br/&gt;建立长期个性化习惯&lt;/b&gt;"]
-        C3 --&gt; C4["&lt;b&gt;Turn 2 客服登记记忆&lt;br/&gt;反问确认起止时段&lt;/b&gt;"]
-        C4 --&gt; C5["&lt;b&gt;Turn 3 用户确认并完成闭环&lt;br/&gt;(平均交互 2.5 ~ 3.0 轮)&lt;/b&gt;"]
-    end
-
-    subgraph HotStart ["&lt;b&gt;主线二：热启动有记忆 (极速收敛复用线)&lt;/b&gt;"]
-        direction TB
-        H1["&lt;b&gt;Turn 1 用户极简口语触发&lt;br/&gt;“按老规矩开保障”&lt;/b&gt;"] --&gt; H2["&lt;b&gt;Turn 1 客服秒级命中记忆&lt;br/&gt;直接回显参数并反问确认&lt;/b&gt;"]
-        H2 --&gt; H3["&lt;b&gt;Turn 2 用户快速确认&lt;br/&gt;“对，直接开”&lt;/b&gt;"]
-        H3 --&gt; H4["&lt;b&gt;Turn 2 客服受理闭环&lt;br/&gt;(平均交互 1.0 ~ 2.0 轮，TCG ≥ 40%)&lt;/b&gt;"]
-    end
-
-    style ColdStart fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;
-    style HotStart fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px;</div>
                         </div>
                         
 <h3 id="22-事实记忆核心量化指标交互轮数压缩增益tcg">2.2 事实记忆核心量化指标：交互轮数压缩增益（TCG）</h3>
@@ -1198,12 +1078,12 @@
 <h4 id="交互轮数压缩增益turn-compression-gain-tcg">交互轮数压缩增益（Turn Compression Gain, TCG）</h4>
 <p>定量衡量长程事实记忆机制为用户减少的无谓交互轮次比例：</p>
 
-                <div class="math-block" data-tex="\text{TCG} = \frac{\bar{T}_{\text{cold}} - \bar{T}_{\text{hot}}}{\bar{T}_{\text{cold}}} \times 100\%">
+                <div class="math-block" data-tex="\text{TCG} = \frac{\bar{T}_{\text{cold}} - \bar{T}_{\text{hot}}}{\bar{T}_{\text{cold}}} 	imes 100\%">
                     <div class="math-block-header">
                         <span class="math-badge">LaTeX · 数学公式</span>
-                        <button class="math-copy-btn" onclick="copyLatex(this)" data-tex="\text{TCG} = \frac{\bar{T}_{\text{cold}} - \bar{T}_{\text{hot}}}{\bar{T}_{\text{cold}}} \times 100\%">复制公式</button>
+                        <button class="math-copy-btn" onclick="copyLatex(this)" data-tex="\text{TCG} = \frac{\bar{T}_{\text{cold}} - \bar{T}_{\text{hot}}}{\bar{T}_{\text{cold}}} 	imes 100\%">复制公式</button>
                     </div>
-                    <div class="katex-display-container" data-tex="\text{TCG} = \frac{\bar{T}_{\text{cold}} - \bar{T}_{\text{hot}}}{\bar{T}_{\text{cold}}} \times 100\%">$$\text{TCG} = \frac{\bar{T}_{\text{cold}} - \bar{T}_{\text{hot}}}{\bar{T}_{\text{cold}}} \times 100\%$$</div>
+                    <div class="katex-display-container" data-tex="\text{TCG} = \frac{\bar{T}_{\text{cold}} - \bar{T}_{\text{hot}}}{\bar{T}_{\text{cold}}} 	imes 100\%">$$\text{TCG} = \frac{\bar{T}_{\text{cold}} - \bar{T}_{\text{hot}}}{\bar{T}_{\text{cold}}} 	imes 100\%$$</div>
                 </div>
                 
 <p>其中：</p>
@@ -1233,7 +1113,7 @@
 </li>
 <li><strong><span class="katex-inline" data-tex="\alpha = 0.5">$\alpha = 0.5$</span>（常规稳健热启动）</strong>：客服从记忆中调取配置向用户反问确认，用户确认后开通，交互轮数稳定在 <span class="katex-inline" data-tex="T = 2">$T = 2$</span> 轮；
 </li>
-<li><strong><span class="katex-inline" data-tex="\alpha = 1.0">$\alpha = 1.0$</span>（极致敏捷热启动）</strong>：用户极简口语触发（如“按老规矩办”），客服秒级命中并默认直接受理闭环，达成极速 <span class="katex-inline" data-tex="T = 1">$T = 1$</span> 轮交互。
+<li><strong><span class="katex-inline" data-tex="\alpha = 1.0">$\alpha = 1.0$</span>（高敏捷度热启动）</strong>：用户极简口语触发（如“按老规矩办”），客服直接命中并默认直接受理闭环，达成快速 <span class="katex-inline" data-tex="T = 1">$T = 1$</span> 轮交互。
 </li></ul>
 <h4 id="2-控制用户台词口语省略深度omission-intensity">2. 控制用户台词口语省略深度（Omission Intensity）</h4>
 <p>敏捷度因子 <span class="katex-inline" data-tex="\alpha">$\alpha$</span> 直接调控 Prompt 中对用户台词槽位省略的严格级别：</p>
@@ -1244,56 +1124,20 @@
 <h4 id="3-生成控制到评测指标的因果闭环">3. 生成控制到评测指标的因果闭环</h4>
 
                         <div class="mermaid-wrapper">
-                            <div class="mermaid-toolbar">
-                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范 · 支持缩放与全屏)</span>
-                                <div class="mermaid-ctrl-group">
-                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
-                                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
-                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
-                                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
-                                </div>
+                            <div class="mermaid">
+                                <script type="application/json" class="mermaid-source">{"code": "graph LR\n    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2.5px,color:#111111,font-weight:bold;\n\n    A[\"生成端：配置敏捷度因子 α (0.0 ~ 1.0)\"] --> B[\"动态规划器：控制目标轮数与台词省略深度\"]\n    B --> C[\"批量渲染：生成不同默契梯度的会话数据\"]\n    C --> D[\"评测端：计算模型实际轮次压缩增益 TCG\"]\n    D --> E[\"验证闭环：实测 TCG 与期望目标对齐\"]"}</script>
                             </div>
-                            <div class="mermaid">graph TD
-    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-
-    A["&lt;b&gt;生成端：配置敏捷度因子 α (0.0 ~ 1.0)&lt;/b&gt;"] --&gt; B["&lt;b&gt;动态规划器：控制目标轮数与台词省略深度&lt;/b&gt;"]
-    B --&gt; C["&lt;b&gt;批量渲染：生成不同默契梯度的会话数据&lt;/b&gt;"]
-    C --&gt; D["&lt;b&gt;评测端：计算模型实际轮次压缩增益 TCG&lt;/b&gt;"]
-    D --&gt; E["&lt;b&gt;验证闭环：实测 TCG 与期望目标对齐&lt;/b&gt;"]</div>
                         </div>
                         
-<p>在生成画像时，通过配置 <span class="katex-inline" data-tex="\alpha">$\alpha$</span> 梯度分布（如 20% 生成 <span class="katex-inline" data-tex="\alpha=1.0">$\alpha=1.0$</span>、60% 生成 <span class="katex-inline" data-tex="\alpha=0.5">$\alpha=0.5$</span>、20% 生成 <span class="katex-inline" data-tex="\alpha=0.0">$\alpha=0.0$</span>），即可系统化构建覆盖从初识到熟客不同默契深度的全阶梯评测基准。</p>
+<p>在生成 150 个画像时，通过配置 <span class="katex-inline" data-tex="\alpha">$\alpha$</span> 梯度分布（如 20% 生成 <span class="katex-inline" data-tex="\alpha=1.0">$\alpha=1.0$</span>、60% 生成 <span class="katex-inline" data-tex="\alpha=0.5">$\alpha=0.5$</span>、20% 生成 <span class="katex-inline" data-tex="\alpha=0.0">$\alpha=0.0$</span>），即可系统化构建覆盖从初识到熟客不同默契深度的全阶梯评测基准。</p>
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
 <h2 id="三工作记忆演进独立工单账本与时态相对检索">三、工作记忆演进：独立工单账本与时态相对检索</h2>
 <h3 id="31-时态推断引擎与工单检索流程">3.1 时态推断引擎与工单检索流程</h3>
 
                         <div class="mermaid-wrapper">
-                            <div class="mermaid-toolbar">
-                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范 · 支持缩放与全屏)</span>
-                                <div class="mermaid-ctrl-group">
-                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
-                                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
-                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
-                                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
-                                </div>
+                            <div class="mermaid">
+                                <script type="application/json" class="mermaid-source">{"code": "graph LR\n    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2.5px,color:#111111,font-weight:bold;\n\n    UserInput[\"用户相对时态输入<br/>“这次还按上周在奥体开的规格”\"] --> Engine[\"时态推断引擎 (Temporal Engine)<br/>推算目标时间窗: 10月17日 周六\"]\n    TimeRef[\"当前基准时间锚点 (t_ref)<br/>2026年10月24日 14:00 (周六)\"] --> Engine\n\n    subgraph Ledger [\"历史工单流水账 (Working Records Ledger)\"]\n        R1[\"单据 REC_1012 (12天前): 抖音直播/720p<br/>[状态: 已过期 / 不匹配]\"]\n        R2[\"单据 REC_1017_01 (7天前·奥体南门)<br/>快手转播 1080p / 50ms / 120min<br/>★ [精准命中]\"]\n    end\n\n    Engine --> R1\n    Engine --> R2\n\n    R2 --> Output[\"继承目标参数：1080p / 50ms<br/>反问确认今日起止时间与开通\"]\n\n    style Ledger fill:#FFFFFF,stroke:#111111,stroke-width:2.5px;"}</script>
                             </div>
-                            <div class="mermaid">graph TD
-    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-
-    UserInput["&lt;b&gt;用户相对时态输入&lt;br/&gt;“这次还按上周在奥体开的规格”&lt;/b&gt;"] --&gt; Engine["&lt;b&gt;时态推断引擎 (Temporal Engine)&lt;br/&gt;推算目标时间窗: 10月17日 周六&lt;/b&gt;"]
-    TimeRef["&lt;b&gt;当前基准时间锚点 (t_ref)&lt;br/&gt;2026年10月24日 14:00 (周六)&lt;/b&gt;"] --&gt; Engine
-
-    subgraph Ledger ["&lt;b&gt;历史工单流水账 (Working Records Ledger)&lt;/b&gt;"]
-        R1["&lt;b&gt;单据 REC_1012 (12天前): 抖音直播/720p&lt;br/&gt;[状态: 已过期 / 不匹配]&lt;/b&gt;"]
-        R2["&lt;b&gt;单据 REC_1017_01 (7天前·奥体南门)&lt;br/&gt;快手转播 1080p / 50ms / 120min&lt;br/&gt;★ [精准命中]&lt;/b&gt;"]
-    end
-
-    Engine --&gt; R1
-    Engine --&gt; R2
-
-    R2 --&gt; Output["&lt;b&gt;继承目标参数：1080p / 50ms&lt;br/&gt;反问确认今日起止时间与开通&lt;/b&gt;"]
-
-    style Ledger fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;</div>
                         </div>
                         
 <h3 id="32-工作记忆账本与会话流的解耦架构规范decoupled-storage-standard">3.2 工作记忆账本与会话流的解耦架构规范（Decoupled Storage Standard）</h3>
@@ -1303,14 +1147,14 @@
             <table>
                 <thead><tr><th>数据存储文件</th><th>物理存储路径</th><th>职责定位与存储内容</th><th>上下文注入与引用机制</th></tr></thead>
                 <tbody>
-                    <tr><td><strong>会话对话流</strong></td><td><code>data/cognitive_samples/&lt;id&gt;/sessions.jsonl</code></td><td>仅存储用户与客服的多轮对话（turns）、意图标注、以及<strong>轻量级单据引用指针</strong></td><td>仅记录 <code>source_type: &quot;WorkingRecord&quot;, source_ref: &quot;REC_0001&quot;</code></td></tr><tr><td><strong>工单流水账</strong></td><td><code>data/cognitive_samples/&lt;id&gt;/working_records.jsonl</code></td><td>独立全局履约单据流水库，包含所有历史开通记录的完整快照与环境元数据</td><td>仅当下游评测或“联接”Agent 需要执行时态回溯时，由外部检索器调取匹配单据</td></tr>
+                    <tr><td><strong>会话对话流</strong></td><td><code>data/generated/sessions/sessions.jsonl</code></td><td>仅存储用户与客服的多轮对话（turns）、意图标注、以及<strong>轻量级单据引用指针</strong></td><td>仅记录 <code>retrieval_target: {&quot;record_id&quot;: &quot;REC_1017_01&quot;, &quot;temporal_delta&quot;: &quot;-7d&quot;}</code></td></tr><tr><td><strong>工单流水账</strong></td><td><code>data/generated/records/working_records.jsonl</code></td><td>独立全局履约单据流水库，包含所有历史开通记录的完整快照与环境元数据</td><td>仅当下游评测或 Agent 需要执行时态回溯时，由外部检索器调取匹配单据</td></tr>
                 </tbody>
             </table>
         </div>
         
 <blockquote><p><strong>【核心架构收益】工作记忆工单流水独立解耦的三大价值</strong></p>
-<p>1. <strong>杜绝 Prompt 上下文剧烈爆炸</strong>：若将用户过去数十次工单全量嵌入每轮对话的 session 中，会话文件体积极速膨胀，不仅极大浪费推理 Token，还会引入无关干扰；解耦后保持会话轻盈纯净。</p>
-<p>2. <strong>真实映射电信生产架构</strong>：在真实运营商核心网中，CRM 客户中心与 OSS/BSS 工单系统是彼此独立的外部数据库。提参 Agent 必须通过“语义提取 <span class="katex-inline" data-tex="\to">$\to$</span> 构造查询 <span class="katex-inline" data-tex="\to">$\to$</span> 调用接口”完成取数，解耦能完美模拟真实系统的接口调用。</p>
+<p>1. <strong>杜绝 Prompt 上下文剧烈爆炸</strong>：若将用户过去数十次工单全量嵌入每轮对话的 session 中，会话文件体积大幅膨胀，不仅极大浪费推理 Token，还会引入无关干扰；解耦后保持会话轻盈纯净。</p>
+<p>2. <strong>真实映射电信生产架构</strong>：在真实运营商核心网中，CRM 客户中心与 OSS/BSS 工单系统是彼此独立的外部数据库。提参 Agent 必须通过“语义提取 <span class="katex-inline" data-tex="\to">$\to$</span> 构造查询 <span class="katex-inline" data-tex="\to">$\to$</span> 调用接口”完成取数，解耦能准确模拟真实系统的接口调用。</p>
 <p>3. <strong>便于外部 Verifier 校验</strong>：自动化质检脚本可独立对 <code>working_records.jsonl</code> 进行时间连续性、主键唯一性校验，与会话多轮质检互不干扰。</p></blockquote>
 <h4 id="独立历史工单流水账结构workingrecordsjsonl">独立历史工单流水账结构（<code>working_records.jsonl</code>）</h4>
 
@@ -1381,19 +1225,10 @@
         
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
 <h2 id="四经验记忆构造memoryarena-与-reasoningbank-深度融合">四、经验记忆构造：MemoryArena 与 ReasoningBank 深度融合</h2>
-<p>经验记忆是“联接”Agent 面对复杂外场环境、冲突边界与多轮交互时沉淀的元认知策略。针对提参智能体的经验记忆构造，系统全面汲取 <strong>MemoryArena</strong> 与 <strong>ReasoningBank (MaTTS)</strong> 的核心思想，打造从理论启发、双真值链、经验卡片规范到五大黄金落地场景的完整生成体系：</p>
+<p>经验记忆是智能体面对复杂外场环境、冲突边界与多轮交互时沉淀的元认知策略。针对提参智能体的经验记忆构造，系统全面汲取 <strong>MemoryArena</strong> 与 <strong>ReasoningBank</strong> 的核心思想，打造从理论启发、双真值链、经验卡片规范到四大落地场景的完整生成体系：</p>
 <h3 id="41-论文理念精要与对经验记忆构造的关键启发">4.1 论文理念精要与对经验记忆构造的关键启发</h3>
-
-        <div class="table-wrapper">
-            <table>
-                <thead><tr><th>理论来源</th><th>核心学术洞见</th><th>对“联接”Agent 经验记忆构造的工程启发</th></tr></thead>
-                <tbody>
-                    <tr><td><strong>ReasoningBank</strong></td><td>将智能体交互历史中的成功捷径与失败踩坑记录，通过自对比反思（Self-Contrast Reflection）提炼为结构化三元组卡片 <code>(Title, Description, Content)</code></td><td>拒绝将用户的个人静态偏好充当经验；经验卡片专门存储<strong>通用主动服务与避坑策略</strong>（如重大压测提前 15 分钟预热、同日多单优先选取零卡顿优质工单）</td></tr><tr><td><strong>MaTTS (Test-Time Scaling)</strong></td><td>单一正确轨迹无法检验模型是否真正习得策略；必须同时构造<strong>应用经验的高效轨迹（Fast Path）</strong>与<strong>忽略经验的低效纠偏轨迹（Slow Path）</strong></td><td>在 <code>sessions.jsonl</code> 的每个经验会话中内嵌 <strong>双轨成败分支测试（Fast/Slow Branch Evaluation）</strong>，且首轮用户输入保持基础参数自包含，精准量化轮次压缩增益（TCG）</td></tr><tr><td><strong>MemoryArena</strong></td><td>真实长程任务中存在跨会话的多候选干扰与时效状态冲突，智能体必须联合当前条件与历史记录做消歧或裁决</td><td>设计多业务分段隔离、法定节假日周期豁免、新旧重叠工单温和截断让路等复杂推理场景</td></tr>
-                </tbody>
-            </table>
-        </div>
-        
 <h3 id="42-经验记忆核心机制首创双真值链解耦并行">4.2 经验记忆核心机制：首创“双真值链”解耦并行</h3>
+<p>在数据合成中坚决拒绝把通用经验与个人偏好混为一谈，首创采用<strong>事实链</strong>与<strong>经验链</strong>解耦并行的生成机制：</p>
 <p>在数据合成中坚决拒绝把通用经验与个人偏好混为一谈，首创采用<strong>事实链</strong>与<strong>经验链</strong>解耦并行的生成机制：</p>
 <ol><li><strong>事实链（Factual Ground-Truth Chain）</strong>：
 <ul><li><strong>关注问题</strong>：用户的通信保障参数（画质、时延、应用）在什么时间、什么条件下有效？怎样建立、临时变更和长期更新？
@@ -1402,15 +1237,15 @@
 </li>
 </ul></li>
 <li><strong>经验链（Reasoning Ground-Truth Chain）</strong>：
-<ul><li><strong>关注问题</strong>：智能体在交互中遇到了什么处理困境（如开场突发拥塞、多候选工单质量参差、节假日排期冲突、新旧单时段重叠、多意图混用参数）？采取了什么应对策略？从中提炼出什么通用的元认知处理方法？
+<ul><li><strong>关注问题</strong>：智能体在交互中遇到了什么处理困境（如指代模糊、多候选干扰、时效越界、多意图混淆）？采取了什么应对策略？结果如何？从中提炼出什么通用的元认知处理方法？
 </li>
-<li><strong>载体支撑</strong>：结构化经验知识库（<code>experiences.jsonl</code>）。
+<li><strong>载体支撑</strong>：结构化经验知识库（<code>experience_cards</code>）。
 </li>
 </ul></li>
 <li><strong>汇聚原则（Convergence Principle）</strong>：
-<ul><li>两条链在<strong>经验演练会话（Experiential Sessions）</strong>中交汇：用户在 Turn 1 给出自包含的基础保障参数，“联接”Agent 主动应用经验策略给出优化方案；
+<ul><li>两条链在<strong>迁移测试会话（Transfer Tasks）</strong>中交汇：经验策略指导智能体如何排查记录范围、何时发起消歧追问；
 </li>
-<li><strong>绝对隔离</strong>：经验策略绝不篡改用户的核心画质/时延规格，而是提供时钟前移预热、双单拆分、节假日顺延等结构化决策增益。
+<li><strong>绝对隔离</strong>：经验策略绝不能凭空捏造新用户的通信参数，新用户的最终分辨率与时延真值必须严格由该用户自身的事实证据决定。
 </li></ul>
 </li></ol>
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
@@ -1418,28 +1253,13 @@
 <h4 id="经验反思双环流流程图">经验反思双环流流程图</h4>
 
                         <div class="mermaid-wrapper">
-                            <div class="mermaid-toolbar">
-                                <span class="mermaid-badge">📊 架构与时序可视化图表 (纯白底色 · 粗体规范 · 支持缩放与全屏)</span>
-                                <div class="mermaid-ctrl-group">
-                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, -20)" title="缩小图表">➖ 缩小</button>
-                                    <button class="mermaid-zoom-btn mermaid-zoom-label" onclick="zoomMermaid(this, 0)" title="重置 100% 最佳尺寸">100%</button>
-                                    <button class="mermaid-zoom-btn" onclick="zoomMermaid(this, 25)" title="放大图表">➕ 放大</button>
-                                    <button class="mermaid-zoom-btn" onclick="openMermaidModal(this)">🔍 全屏大图</button>
-                                </div>
+                            <div class="mermaid">
+                                <script type="application/json" class="mermaid-source">{"code": "graph LR\n    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2.5px,color:#111111,font-weight:bold;\n\n    Context[\"外部情境感知 (Context)<br/>地点: 体育场万人集聚现场<br/>风险: 现场人多网络易拥堵\"] --> Bank[\"经验知识库 (Experience Bank)<br/>EXP_01: 高密人流保流畅策略<br/>规则: 主动提议 720p + 30ms 极低时延\"]\n    \n    Bank --> AgentAction[\"“联接”Agent 主动提议 (Proactive)<br/>“现场人流密集易卡顿，<br/>建议调整为 720p/30ms 确保顺畅”\"]\n    \n    AgentAction --> Feedback[\"用户采纳并闭环履约<br/>触发经验反思与固化\"]\n    Feedback -. 反思固化与策略沉淀 .-> Bank"}</script>
                             </div>
-                            <div class="mermaid">graph TD
-    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-
-    Context["&lt;b&gt;Turn 1 业务特征感知 (Context)&lt;br/&gt;诉求: 15:00-17:00 王者荣耀赛事压测&lt;br/&gt;基础参数: 1080P / 20ms (自包含)&lt;/b&gt;"] --&gt; Bank["&lt;b&gt;经验知识库 (Experience Bank)&lt;br/&gt;EXP_PREWARM_BUFFER_01&lt;br/&gt;策略: 高优活动主动提前 15 分钟预热缓冲&lt;/b&gt;"]
-    
-    Bank --&gt; AgentAction["&lt;b&gt;“联接”Agent 主动提议 (Fast Path)&lt;br/&gt;“建议将保障起点提前 15 分钟至 14:45 开启预热，&lt;br/&gt;保持 1080P/20ms，确保 15:00 准时稳态运行”&lt;/b&gt;"]
-    
-    AgentAction --&gt; Feedback["&lt;b&gt;Turn 2 用户拍板采纳 (2 轮极速闭环)&lt;br/&gt;对比 Slow Path (4 轮纠偏) 节省 50% 轮次&lt;/b&gt;"]
-    Feedback -.-&gt;|"&lt;b&gt;成败轨迹对比反思沉淀&lt;/b&gt;"| Bank</div>
                         </div>
                         
 <h4 id="reasoningbank-标准经验条目卡片规范">ReasoningBank 标准经验条目卡片规范</h4>
-<p>全面对齐 ReasoningBank 论文规范，将经验记忆形式化为标准卡片三元组 <code>(title, description, content)</code> 并附带触发模式与槽位求解提示：</p>
+<p>全面对齐 ReasoningBank 论文规范，将经验记忆形式化为标准卡片三元组 <code>(title, description, content)</code> 并扩充情境条件与反例边界约束：</p>
 
                         <div class="code-card">
                             <div class="code-card-header">
@@ -1447,17 +1267,28 @@
                                 <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
                             </div>
                             <pre><code class="language-json">{
-  &quot;exp_id&quot;: &quot;EXP_PREWARM_BUFFER_01&quot;,
-  &quot;title&quot;: &quot;高优活动提前15分钟预热缓冲&quot;,
-  &quot;description&quot;: &quot;当用户申请大型赛事直播、压测或跨国高优会议保障时，准点开通极易遭遇开场瞬时流量冲击导致前几分钟卡顿。&quot;,
-  &quot;content&quot;: &quot;识别到高优直播、赛事压测或核心峰会需求时，即使首轮用户已给出完整的起止时间、画质与时延参数，智能体也应在首轮确认中主动建议将 start_time 提前 15 分钟开启预热缓冲通道，避免开场抖动。&quot;,
-  &quot;trigger_Pattern&quot;: &quot;高优先级直播/压测/峰会 + 整点或准点开始&quot;,
-  &quot;slot_Resolution_Hint&quot;: &quot;start_time = stated_start_time - 15min (proactive suggestion in Turn 1)&quot;
+  &quot;experience_id&quot;: &quot;EXP_STADIUM_CONGESTION_01&quot;,
+  &quot;title&quot;: &quot;极值与高密环境主动降画质保抗丢包平稳度&quot;,
+  &quot;description&quot;: &quot;大型体育场馆或展会万人集聚场景下，空口上行信道受限，盲目开高画质易引发频繁丢包卡顿。&quot;,
+  &quot;content&quot;: &quot;识别到会展中心、体育场等高密人流场景时，主动提议将画质从 1080p 降为 720p、并将时延门限收紧至 30ms，以稳定性优先策略确保零掉帧。&quot;,
+  &quot;trigger_conditions&quot;: {
+    &quot;location_keywords&quot;: [&quot;体育场&quot;, &quot;漫展&quot;, &quot;演唱会&quot;, &quot;会展中心&quot;],
+    &quot;crowd_density&quot;: &quot;极度密集&quot;,
+    &quot;risk_factors&quot;: [&quot;上行空口资源争抢&quot;, &quot;突发丢包卡顿&quot;]
+  },
+  &quot;recommended_adjustments&quot;: {
+    &quot;resolution&quot;: &quot;720p&quot;,
+    &quot;rtt_max&quot;: &quot;30ms&quot;,
+    &quot;strategy&quot;: &quot;稳定性优先&quot;
+  },
+  &quot;applicable_boundaries&quot;: &quot;仅适用于公众聚集、基站突发过载的外场保障；私有专网或具备专用切片保障的 VIP 场景不适用此降质规则。&quot;,
+  &quot;negative_counterexamples&quot;: &quot;用户明确要求“无论多卡都必须开 4K 原画录像”时，智能体不得强行覆盖，应提示风险后尊重用户指令。&quot;
 }</code></pre>
                         </div>
                         
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
 <h3 id="44-经验记忆驱动的四大提参数据生成升级方案">4.4 经验记忆驱动的四大提参数据生成升级方案</h3>
+<p>结合 MemoryArena 的跨 Session 依赖评测理念与 ReasoningBank 的经历提炼迁移机制，针对移动核心网提参智能体打造四个数据升级方案：</p>
 <p>结合 MemoryArena 的跨 Session 依赖评测理念与 ReasoningBank 的经历提炼迁移机制，针对移动核心网提参智能体打造四个数据升级方案：</p>
 <h4 id="方案-1从事实召回升级为候选记录选择与必要消歧">方案 1：从“事实召回”升级为“候选记录选择与必要消歧”</h4>
 <ul><li><strong>理论借鉴</strong>：借鉴 MemoryArena 的属性兼容链与多候选干扰机制。使当前轮次无法单凭当前句子得出答案，必须利用跨会话依赖回溯；同时通过成败对照提炼消歧方法。
@@ -1537,7 +1368,7 @@
 </li>
 <li><strong>轨迹 2（正确但低效 / 泛化提问）</strong>：Agent 泛泛追问：“您还有什么其他要求吗？”，用户重复强调后，Agent 再次追问画质，导致无谓交互轮数增加至 4 轮；
 </li>
-<li><strong>轨迹 3（高效精准 / 结构化候选反问）</strong>：Agent 基于配置矩阵精准追问：“已为您准备腾讯会议保障，画质支持 720P 高清与 1080P 超清，请问您倾向哪个规格？”，用户秒级回答：“720P”，2 轮高效闭环。
+<li><strong>轨迹 3（高效精准 / 结构化候选反问）</strong>：Agent 基于配置矩阵精准追问：“已为您准备腾讯会议保障，画质支持 720P 高清与 1080P 超清，请问您倾向哪个规格？”，用户快速回答：“720P”，2 轮高效闭环。
 </li>
 </ul></li>
 <li><strong>提炼 ReasoningBank 经验卡片</strong>：
@@ -1652,9 +1483,9 @@ python scripts/evaluate_memory_benchmark.py --input data/generated</code></pre>
                     </div>
                     <textarea class="raw-md-textarea" id="rawMdArea" readonly># 跨会话记忆认知架构演进：指标体系、工作记忆检索与经验记忆构造规划
 
-&gt; **文档层级**：第四层 · 架构演进提案与理论归档（Architecture Evolution RFC）  
-&gt; **文档定位**：记录三层认知架构演进初期的理论论证、MemoryArena / ReasoningBank 文献启发与 Phase 1~4 敏捷工程路线图。  
-&gt; **权威实现规范**：本项目正式生效的实现设计与评测基准，请全量以 [**《“联接”Agent 跨会话三层认知记忆数据集与双轨评测引擎技术规范》**](../specs/cognitive_memory_dev_spec.md) 为准。
+&gt; **文档性质**：【历史设计提案 / RFC 归档】  
+&gt; **文档定位**：记录三层认知架构演进初期的理论论证、MemoryArena/ReasoningBank 文献启发与 Phase 1~4 敏捷工程路线图。  
+&gt; **权威实现规范**：本项目正式生效的实现设计与评测基准，请全量以 **[“联接”Agent 认知记忆全景演进与双轨评测技术规范](../specs/cognitive_memory_dev_spec.md)** 为准。
 
 ---
 
@@ -1662,31 +1493,31 @@ python scripts/evaluate_memory_benchmark.py --input data/generated</code></pre>
 
 ### 1.1 核心演进背景
 
-当前数据集在完成基础画像的多轮会话基线构造、实现基于“长期偏好与个性化表达”的事实记忆（Factual Profile Memory）闭环后，为了让“联接”Agent 从被动的“偏好记录”迈向具备真实人类协作质感的多层认知体系，并为下游模型提供严密量化的评测基准，系统拓展了工作记忆的独立单据回溯能力，并重点构建基于真实成败轨迹反思与策略迁移的**经验记忆（Experiential Memory）**。
+当前数据集已完成 150 个画像共 2100 个多轮会话的基线构造，实现了基于“长期偏好与个性化表达”的事实记忆（Factual Profile Memory）闭环。为了让智能体从被动的“偏好记录”迈向具备真实人类协作质感的多层认知体系，并为下游模型提供严密量化的评测基准，系统亟需拓展工作记忆的单据回溯能力，并重点构建基于真实成败轨迹反思与策略迁移的**经验记忆（Experiential Memory）**。
 
 ### 1.2 三层认知记忆架构拓扑全景
 
 ```mermaid
 graph TD
-    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2.5px,color:#111111,font-weight:bold;
 
-    User[&quot;&lt;b&gt;用户多轮自然语言交互诉求&lt;/b&gt;&quot;] --&gt; Dispatcher[&quot;&lt;b&gt;认知分发与记忆调度中枢&lt;/b&gt;&quot;]
+    User[&quot;用户多轮自然语言交互诉求&quot;] --&gt; Dispatcher[&quot;认知分发与记忆调度中枢&quot;]
 
-    subgraph MemoryTiers [&quot;&lt;b&gt;三层认知记忆架构全景&lt;/b&gt;&quot;]
-        FM[&quot;&lt;b&gt;【层次一：事实记忆 Factual】&lt;br/&gt;长期老规矩 (MF_001) / 默认业务 / 代称映射 / 周期规则&lt;br/&gt;(状态：跨生命周期持久生效)&lt;/b&gt;&quot;]
-        WM[&quot;&lt;b&gt;【层次二：工作记忆工单账本 Working】&lt;br/&gt;历史履约流水账 (REC_Ledger) / 时态推断 / 历史改期与核对&lt;br/&gt;(状态：动态增量工单索引)&lt;/b&gt;&quot;]
-        EM[&quot;&lt;b&gt;【层次三：经验记忆情境反思 Experiential】&lt;br/&gt;五大黄金经验策略 / 提前预热与分段隔离 / 智能体主动建议&lt;br/&gt;(状态：情境匹配主动闭环)&lt;/b&gt;&quot;]
+    subgraph MemoryTiers [&quot;三层认知记忆架构全景&quot;]
+        FM[&quot;【层次一：事实记忆 Factual】&lt;br/&gt;长期老规矩 (MF_001) / 默认业务 / 代称映射 / 周期规则&lt;br/&gt;(状态：跨生命周期持久生效)&quot;]
+        WM[&quot;【层次二：工作记忆工单账本 Working】&lt;br/&gt;历史履约流水账 (REC_Ledger) / 时态推断 / 历史改期与核对&lt;br/&gt;(状态：动态增量工单索引)&quot;]
+        EM[&quot;【层次三：经验记忆情境反思 Experiential】&lt;br/&gt;场景情境特征 (Context) / 避坑最佳实践 / 智能体主动建议&lt;br/&gt;(状态：情境匹配条件反射)&quot;]
     end
 
     Dispatcher --&gt; FM
     Dispatcher --&gt; WM
     Dispatcher --&gt; EM
 
-    FM --&gt; Output[&quot;&lt;b&gt;下游模型输出：精准闭环与自然台词应答&lt;/b&gt;&quot;]
+    FM --&gt; Output[&quot;下游模型输出：精准闭环与自然台词应答&quot;]
     WM --&gt; Output
     EM --&gt; Output
 
-    style MemoryTiers fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;
+    style MemoryTiers fill:#FFFFFF,stroke:#111111,stroke-width:2.5px;
 ```
 
 ### 1.3 三层认知记忆职责划分
@@ -1695,7 +1526,7 @@ graph TD
 |:-------------------- |:------------------------------------------------------ |:-------------------------------------------------- |:---------------------------------------------- |
 | **事实记忆**         | 用户固有习惯、个性化老规矩、默认绑定关系与代称别名     | “按老规矩办”、“开直播保障”、“按那个省心档来”       | 免去常规已知参数盘问，保持长期个性化默契       |
 | **工作记忆工单账本** | 历史各次保障工单履约记录、时间戳、地点与网络指标流水账 | “这次去奥体还按上周的来”、“把昨天的改一下”         | 建立时态相对指称索引，支持跨会话参数复用与改期 |
-| **经验记忆情境反思** | 基于历史成败对比提炼的五大黄金避坑策略与主动闭环准则   | “赛事压测主动提前15分钟预热”、“双业务独立分段” | 变被动应答为主动提议，在 Fast Path 中 2 轮高效闭环 |
+| **经验记忆情境反思** | 基于极端或特殊外场环境沉淀的避坑策略与最佳实践         | “大型漫展人流高密主动降画质提议”、“恶劣天气防丢包” | 变被动应答为主动提议，增强专业履约质感         |
 
 ---
 
@@ -1704,26 +1535,26 @@ graph TD
 ### 2.1 冷热启动交互对照流图
 
 ```mermaid
-graph TD
-    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+graph LR
+    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2.5px,color:#111111,font-weight:bold;
 
-    subgraph ColdStart [&quot;&lt;b&gt;主线一：冷启动无记忆 (多轮澄清收敛线)&lt;/b&gt;&quot;]
+    subgraph ColdStart [&quot;主线一：冷启动无记忆 (多轮澄清收敛线)&quot;]
         direction TB
-        C1[&quot;&lt;b&gt;Turn 1 用户提出初步意图&lt;br/&gt;(缺失画质/时延/时长等槽位)&lt;/b&gt;&quot;] --&gt; C2[&quot;&lt;b&gt;Turn 1 客服拒绝脑补&lt;br/&gt;主动反问澄清缺失参数&lt;/b&gt;&quot;]
-        C2 --&gt; C3[&quot;&lt;b&gt;Turn 2 用户明确 1080p/50ms&lt;br/&gt;建立长期个性化习惯&lt;/b&gt;&quot;]
-        C3 --&gt; C4[&quot;&lt;b&gt;Turn 2 客服登记记忆&lt;br/&gt;反问确认起止时段&lt;/b&gt;&quot;]
-        C4 --&gt; C5[&quot;&lt;b&gt;Turn 3 用户确认并完成闭环&lt;br/&gt;(平均交互 2.5 ~ 3.0 轮)&lt;/b&gt;&quot;]
+        C1[&quot;Turn 1 用户提出初步意图&lt;br/&gt;(缺失画质/时延/时长等槽位)&quot;] --&gt; C2[&quot;Turn 1 客服拒绝脑补&lt;br/&gt;主动反问澄清缺失参数&quot;]
+        C2 --&gt; C3[&quot;Turn 2 用户明确 1080p/50ms&lt;br/&gt;建立长期个性化习惯&quot;]
+        C3 --&gt; C4[&quot;Turn 2 客服登记记忆&lt;br/&gt;反问确认起止时段&quot;]
+        C4 --&gt; C5[&quot;Turn 3 用户确认并完成闭环&lt;br/&gt;(平均交互 2.5 ~ 3.0 轮)&quot;]
     end
 
-    subgraph HotStart [&quot;&lt;b&gt;主线二：热启动有记忆 (极速收敛复用线)&lt;/b&gt;&quot;]
+    subgraph HotStart [&quot;主线二：热启动有记忆 (快速收敛复用线)&quot;]
         direction TB
-        H1[&quot;&lt;b&gt;Turn 1 用户极简口语触发&lt;br/&gt;“按老规矩开保障”&lt;/b&gt;&quot;] --&gt; H2[&quot;&lt;b&gt;Turn 1 客服秒级命中记忆&lt;br/&gt;直接回显参数并反问确认&lt;/b&gt;&quot;]
-        H2 --&gt; H3[&quot;&lt;b&gt;Turn 2 用户快速确认&lt;br/&gt;“对，直接开”&lt;/b&gt;&quot;]
-        H3 --&gt; H4[&quot;&lt;b&gt;Turn 2 客服受理闭环&lt;br/&gt;(平均交互 1.0 ~ 2.0 轮，TCG ≥ 40%)&lt;/b&gt;&quot;]
+        H1[&quot;Turn 1 用户极简口语触发&lt;br/&gt;&#x27;按老规矩开保障&#x27;&quot;] --&gt; H2[&quot;Turn 1 客服直接命中记忆&lt;br/&gt;直接回显参数并反问确认&quot;]
+        H2 --&gt; H3[&quot;Turn 2 用户快速确认&lt;br/&gt;&#x27;对，直接开&#x27;&quot;]
+        H3 --&gt; H4[&quot;Turn 2 客服受理闭环&lt;br/&gt;(平均交互 1.0 ~ 2.0 轮，TCG ≥ 40%)&quot;]
     end
 
-    style ColdStart fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;
-    style HotStart fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px;
+    style ColdStart fill:#FFFFFF,stroke:#111111,stroke-width:2.5px;
+    style HotStart fill:#FFFFFF,stroke:#111111,stroke-width:2.5px;
 ```
 
 ### 2.2 事实记忆核心量化指标：交互轮数压缩增益（TCG）
@@ -1734,7 +1565,7 @@ graph TD
 
 定量衡量长程事实记忆机制为用户减少的无谓交互轮次比例：
 
-$$\text{TCG} = \frac{\bar{T}_{\text{cold}} - \bar{T}_{\text{hot}}}{\bar{T}_{\text{cold}}} \times 100\%$$
+$$\text{TCG} = \frac{\bar{T}_{\text{cold}} - \bar{T}_{\text{hot}}}{\bar{T}_{\text{cold}}} 	imes 100\%$$
 
 其中：
 
@@ -1757,7 +1588,7 @@ $$T_{\text{hot}} = \text{round}\big(T_{\text{cold}} \cdot (1 - \alpha)\big)$$
 
 - **$\alpha = 0.0$（极端保守 / 冷启动基线）**：强制不唤醒事实记忆，客服对所有关键参数逐项盘问澄清，交互轮数保持 $T = 3$ 轮；
 - **$\alpha = 0.5$（常规稳健热启动）**：客服从记忆中调取配置向用户反问确认，用户确认后开通，交互轮数稳定在 $T = 2$ 轮；
-- **$\alpha = 1.0$（极致敏捷热启动）**：用户极简口语触发（如“按老规矩办”），客服秒级命中并默认直接受理闭环，达成极速 $T = 1$ 轮交互。
+- **$\alpha = 1.0$（高敏捷度热启动）**：用户极简口语触发（如“按老规矩办”），客服直接命中并默认直接受理闭环，达成快速 $T = 1$ 轮交互。
 
 #### 2. 控制用户台词口语省略深度（Omission Intensity）
 
@@ -1769,16 +1600,16 @@ $$T_{\text{hot}} = \text{round}\big(T_{\text{cold}} \cdot (1 - \alpha)\big)$$
 #### 3. 生成控制到评测指标的因果闭环
 
 ```mermaid
-graph TD
-    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+graph LR
+    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2.5px,color:#111111,font-weight:bold;
 
-    A[&quot;&lt;b&gt;生成端：配置敏捷度因子 α (0.0 ~ 1.0)&lt;/b&gt;&quot;] --&gt; B[&quot;&lt;b&gt;动态规划器：控制目标轮数与台词省略深度&lt;/b&gt;&quot;]
-    B --&gt; C[&quot;&lt;b&gt;批量渲染：生成不同默契梯度的会话数据&lt;/b&gt;&quot;]
-    C --&gt; D[&quot;&lt;b&gt;评测端：计算模型实际轮次压缩增益 TCG&lt;/b&gt;&quot;]
-    D --&gt; E[&quot;&lt;b&gt;验证闭环：实测 TCG 与期望目标对齐&lt;/b&gt;&quot;]
+    A[&quot;生成端：配置敏捷度因子 α (0.0 ~ 1.0)&quot;] --&gt; B[&quot;动态规划器：控制目标轮数与台词省略深度&quot;]
+    B --&gt; C[&quot;批量渲染：生成不同默契梯度的会话数据&quot;]
+    C --&gt; D[&quot;评测端：计算模型实际轮次压缩增益 TCG&quot;]
+    D --&gt; E[&quot;验证闭环：实测 TCG 与期望目标对齐&quot;]
 ```
 
-在生成画像时，通过配置 $\alpha$ 梯度分布（如 20% 生成 $\alpha=1.0$、60% 生成 $\alpha=0.5$、20% 生成 $\alpha=0.0$），即可系统化构建覆盖从初识到熟客不同默契深度的全阶梯评测基准。
+在生成 150 个画像时，通过配置 $\alpha$ 梯度分布（如 20% 生成 $\alpha=1.0$、60% 生成 $\alpha=0.5$、20% 生成 $\alpha=0.0$），即可系统化构建覆盖从初识到熟客不同默契深度的全阶梯评测基准。
 
 ---
 
@@ -1786,24 +1617,26 @@ graph TD
 
 ### 3.1 时态推断引擎与工单检索流程
 
+&lt;!-- 框图 3：工作记忆时态推断与历史工单检索流程图 (支持在此直接修改 SVG 文本、标签或样式，亦可替换为 Mermaid 代码块) --&gt;
+
 ```mermaid
-graph TD
-    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+graph LR
+    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2.5px,color:#111111,font-weight:bold;
 
-    UserInput[&quot;&lt;b&gt;用户相对时态输入&lt;br/&gt;“这次还按上周在奥体开的规格”&lt;/b&gt;&quot;] --&gt; Engine[&quot;&lt;b&gt;时态推断引擎 (Temporal Engine)&lt;br/&gt;推算目标时间窗: 10月17日 周六&lt;/b&gt;&quot;]
-    TimeRef[&quot;&lt;b&gt;当前基准时间锚点 (t_ref)&lt;br/&gt;2026年10月24日 14:00 (周六)&lt;/b&gt;&quot;] --&gt; Engine
+    UserInput[&quot;用户相对时态输入&lt;br/&gt;“这次还按上周在奥体开的规格”&quot;] --&gt; Engine[&quot;时态推断引擎 (Temporal Engine)&lt;br/&gt;推算目标时间窗: 10月17日 周六&quot;]
+    TimeRef[&quot;当前基准时间锚点 (t_ref)&lt;br/&gt;2026年10月24日 14:00 (周六)&quot;] --&gt; Engine
 
-    subgraph Ledger [&quot;&lt;b&gt;历史工单流水账 (Working Records Ledger)&lt;/b&gt;&quot;]
-        R1[&quot;&lt;b&gt;单据 REC_1012 (12天前): 抖音直播/720p&lt;br/&gt;[状态: 已过期 / 不匹配]&lt;/b&gt;&quot;]
-        R2[&quot;&lt;b&gt;单据 REC_1017_01 (7天前·奥体南门)&lt;br/&gt;快手转播 1080p / 50ms / 120min&lt;br/&gt;★ [精准命中]&lt;/b&gt;&quot;]
+    subgraph Ledger [&quot;历史工单流水账 (Working Records Ledger)&quot;]
+        R1[&quot;单据 REC_1012 (12天前): 抖音直播/720p&lt;br/&gt;[状态: 已过期 / 不匹配]&quot;]
+        R2[&quot;单据 REC_1017_01 (7天前·奥体南门)&lt;br/&gt;快手转播 1080p / 50ms / 120min&lt;br/&gt;★ [精准命中]&quot;]
     end
 
     Engine --&gt; R1
     Engine --&gt; R2
 
-    R2 --&gt; Output[&quot;&lt;b&gt;继承目标参数：1080p / 50ms&lt;br/&gt;反问确认今日起止时间与开通&lt;/b&gt;&quot;]
+    R2 --&gt; Output[&quot;继承目标参数：1080p / 50ms&lt;br/&gt;反问确认今日起止时间与开通&quot;]
 
-    style Ledger fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px;
+    style Ledger fill:#FFFFFF,stroke:#111111,stroke-width:2.5px;
 ```
 
 ### 3.2 工作记忆账本与会话流的解耦架构规范（Decoupled Storage Standard）
@@ -1812,13 +1645,13 @@ graph TD
 
 | 数据存储文件   | 物理存储路径                                   | 职责定位与存储内容                                                        | 上下文注入与引用机制                                                             |
 |:-------------- |:---------------------------------------------- |:------------------------------------------------------------------------- |:-------------------------------------------------------------------------------- |
-| **会话对话流** | `data/cognitive_samples/&lt;id&gt;/sessions.jsonl`       | 仅存储用户与客服的多轮对话（turns）、意图标注、以及**轻量级单据引用指针** | 仅记录 `source_type: &quot;WorkingRecord&quot;, source_ref: &quot;REC_0001&quot;` |
-| **工单流水账** | `data/cognitive_samples/&lt;id&gt;/working_records.jsonl` | 独立全局履约单据流水库，包含所有历史开通记录的完整快照与环境元数据        | 仅当下游评测或“联接”Agent 需要执行时态回溯时，由外部检索器调取匹配单据                |
+| **会话对话流** | `data/generated/sessions/sessions.jsonl`       | 仅存储用户与客服的多轮对话（turns）、意图标注、以及**轻量级单据引用指针** | 仅记录 `retrieval_target: {&quot;record_id&quot;: &quot;REC_1017_01&quot;, &quot;temporal_delta&quot;: &quot;-7d&quot;}` |
+| **工单流水账** | `data/generated/records/working_records.jsonl` | 独立全局履约单据流水库，包含所有历史开通记录的完整快照与环境元数据        | 仅当下游评测或 Agent 需要执行时态回溯时，由外部检索器调取匹配单据                |
 
 &gt; **【核心架构收益】工作记忆工单流水独立解耦的三大价值**
 &gt;
-&gt; 1. **杜绝 Prompt 上下文剧烈爆炸**：若将用户过去数十次工单全量嵌入每轮对话的 session 中，会话文件体积极速膨胀，不仅极大浪费推理 Token，还会引入无关干扰；解耦后保持会话轻盈纯净。
-&gt; 2. **真实映射电信生产架构**：在真实运营商核心网中，CRM 客户中心与 OSS/BSS 工单系统是彼此独立的外部数据库。提参 Agent 必须通过“语义提取 $\to$ 构造查询 $\to$ 调用接口”完成取数，解耦能完美模拟真实系统的接口调用。
+&gt; 1. **杜绝 Prompt 上下文剧烈爆炸**：若将用户过去数十次工单全量嵌入每轮对话的 session 中，会话文件体积大幅膨胀，不仅极大浪费推理 Token，还会引入无关干扰；解耦后保持会话轻盈纯净。
+&gt; 2. **真实映射电信生产架构**：在真实运营商核心网中，CRM 客户中心与 OSS/BSS 工单系统是彼此独立的外部数据库。提参 Agent 必须通过“语义提取 $\to$ 构造查询 $\to$ 调用接口”完成取数，解耦能准确模拟真实系统的接口调用。
 &gt; 3. **便于外部 Verifier 校验**：自动化质检脚本可独立对 `working_records.jsonl` 进行时间连续性、主键唯一性校验，与会话多轮质检互不干扰。
 
 #### 独立历史工单流水账结构（`working_records.jsonl`）
@@ -1881,17 +1714,15 @@ graph TD
 
 ## 四、经验记忆构造：MemoryArena 与 ReasoningBank 深度融合
 
-经验记忆是“联接”Agent 面对复杂外场环境、冲突边界与多轮交互时沉淀的元认知策略。针对提参智能体的经验记忆构造，系统全面汲取 **MemoryArena** 与 **ReasoningBank (MaTTS)** 的核心思想，打造从理论启发、双真值链、经验卡片规范到五大黄金落地场景的完整生成体系：
+经验记忆是智能体面对复杂外场环境、冲突边界与多轮交互时沉淀的元认知策略。针对提参智能体的经验记忆构造，系统全面汲取 **MemoryArena** 与 **ReasoningBank** 的核心思想，打造从理论启发、双真值链、经验卡片规范到四大落地场景的完整生成体系：
 
 ### 4.1 论文理念精要与对经验记忆构造的关键启发
 
-| 理论来源 | 核心学术洞见 | 对“联接”Agent 经验记忆构造的工程启发 |
-| :--- | :--- | :--- |
-| **ReasoningBank** | 将智能体交互历史中的成功捷径与失败踩坑记录，通过自对比反思（Self-Contrast Reflection）提炼为结构化三元组卡片 `(Title, Description, Content)` | 拒绝将用户的个人静态偏好充当经验；经验卡片专门存储**通用主动服务与避坑策略**（如重大压测提前 15 分钟预热、同日多单优先选取零卡顿优质工单） |
-| **MaTTS (Test-Time Scaling)** | 单一正确轨迹无法检验模型是否真正习得策略；必须同时构造**应用经验的高效轨迹（Fast Path）**与**忽略经验的低效纠偏轨迹（Slow Path）** | 在 `sessions.jsonl` 的每个经验会话中内嵌 **双轨成败分支测试（Fast/Slow Branch Evaluation）**，且首轮用户输入保持基础参数自包含，精准量化轮次压缩增益（TCG） |
-| **MemoryArena** | 真实长程任务中存在跨会话的多候选干扰与时效状态冲突，智能体必须联合当前条件与历史记录做消歧或裁决 | 设计多业务分段隔离、法定节假日周期豁免、新旧重叠工单温和截断让路等复杂推理场景 |
+
 
 ### 4.2 经验记忆核心机制：首创“双真值链”解耦并行
+
+在数据合成中坚决拒绝把通用经验与个人偏好混为一谈，首创采用**事实链**与**经验链**解耦并行的生成机制：
 
 在数据合成中坚决拒绝把通用经验与个人偏好混为一谈，首创采用**事实链**与**经验链**解耦并行的生成机制：
 
@@ -1899,11 +1730,11 @@ graph TD
    - **关注问题**：用户的通信保障参数（画质、时延、应用）在什么时间、什么条件下有效？怎样建立、临时变更和长期更新？
    - **载体支撑**：用户画像配置（Persona Profile）与持久化历史工单流水账（`working_records.jsonl`）。
 2. **经验链（Reasoning Ground-Truth Chain）**：
-   - **关注问题**：智能体在交互中遇到了什么处理困境（如开场突发拥塞、多候选工单质量参差、节假日排期冲突、新旧单时段重叠、多意图混用参数）？采取了什么应对策略？从中提炼出什么通用的元认知处理方法？
-   - **载体支撑**：结构化经验知识库（`experiences.jsonl`）。
+   - **关注问题**：智能体在交互中遇到了什么处理困境（如指代模糊、多候选干扰、时效越界、多意图混淆）？采取了什么应对策略？结果如何？从中提炼出什么通用的元认知处理方法？
+   - **载体支撑**：结构化经验知识库（`experience_cards`）。
 3. **汇聚原则（Convergence Principle）**：
-   - 两条链在**经验演练会话（Experiential Sessions）**中交汇：用户在 Turn 1 给出自包含的基础保障参数，“联接”Agent 主动应用经验策略给出优化方案；
-   - **绝对隔离**：经验策略绝不篡改用户的核心画质/时延规格，而是提供时钟前移预热、双单拆分、节假日顺延等结构化决策增益。
+   - 两条链在**迁移测试会话（Transfer Tasks）**中交汇：经验策略指导智能体如何排查记录范围、何时发起消歧追问；
+   - **绝对隔离**：经验策略绝不能凭空捏造新用户的通信参数，新用户的最终分辨率与时延真值必须严格由该用户自身的事实证据决定。
 
 ---
 
@@ -1911,36 +1742,50 @@ graph TD
 
 #### 经验反思双环流流程图
 
-```mermaid
-graph TD
-    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+&lt;!-- 框图 4：经验记忆感知、主动提议与反思闭环流图 (支持在此直接修改 SVG 文本、标签或样式，亦可替换为 Mermaid 代码块) --&gt;
 
-    Context[&quot;&lt;b&gt;Turn 1 业务特征感知 (Context)&lt;br/&gt;诉求: 15:00-17:00 王者荣耀赛事压测&lt;br/&gt;基础参数: 1080P / 20ms (自包含)&lt;/b&gt;&quot;] --&gt; Bank[&quot;&lt;b&gt;经验知识库 (Experience Bank)&lt;br/&gt;EXP_PREWARM_BUFFER_01&lt;br/&gt;策略: 高优活动主动提前 15 分钟预热缓冲&lt;/b&gt;&quot;]
+```mermaid
+graph LR
+    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2.5px,color:#111111,font-weight:bold;
+
+    Context[&quot;外部情境感知 (Context)&lt;br/&gt;地点: 体育场万人集聚现场&lt;br/&gt;风险: 现场人多网络易拥堵&quot;] --&gt; Bank[&quot;经验知识库 (Experience Bank)&lt;br/&gt;EXP_01: 高密人流保流畅策略&lt;br/&gt;规则: 主动提议 720p + 30ms 极低时延&quot;]
     
-    Bank --&gt; AgentAction[&quot;&lt;b&gt;“联接”Agent 主动提议 (Fast Path)&lt;br/&gt;“建议将保障起点提前 15 分钟至 14:45 开启预热，&lt;br/&gt;保持 1080P/20ms，确保 15:00 准时稳态运行”&lt;/b&gt;&quot;]
+    Bank --&gt; AgentAction[&quot;“联接”Agent 主动提议 (Proactive)&lt;br/&gt;“现场人流密集易卡顿，&lt;br/&gt;建议调整为 720p/30ms 确保顺畅”&quot;]
     
-    AgentAction --&gt; Feedback[&quot;&lt;b&gt;Turn 2 用户拍板采纳 (2 轮极速闭环)&lt;br/&gt;对比 Slow Path (4 轮纠偏) 节省 50% 轮次&lt;/b&gt;&quot;]
-    Feedback -.-&gt;|&quot;&lt;b&gt;成败轨迹对比反思沉淀&lt;/b&gt;&quot;| Bank
+    AgentAction --&gt; Feedback[&quot;用户采纳并闭环履约&lt;br/&gt;触发经验反思与固化&quot;]
+    Feedback -. 反思固化与策略沉淀 .-&gt; Bank
 ```
 
 #### ReasoningBank 标准经验条目卡片规范
 
-全面对齐 ReasoningBank 论文规范，将经验记忆形式化为标准卡片三元组 `(title, description, content)` 并附带触发模式与槽位求解提示：
+全面对齐 ReasoningBank 论文规范，将经验记忆形式化为标准卡片三元组 `(title, description, content)` 并扩充情境条件与反例边界约束：
 
 ```json
 {
-  &quot;exp_id&quot;: &quot;EXP_PREWARM_BUFFER_01&quot;,
-  &quot;title&quot;: &quot;高优活动提前15分钟预热缓冲&quot;,
-  &quot;description&quot;: &quot;当用户申请大型赛事直播、压测或跨国高优会议保障时，准点开通极易遭遇开场瞬时流量冲击导致前几分钟卡顿。&quot;,
-  &quot;content&quot;: &quot;识别到高优直播、赛事压测或核心峰会需求时，即使首轮用户已给出完整的起止时间、画质与时延参数，智能体也应在首轮确认中主动建议将 start_time 提前 15 分钟开启预热缓冲通道，避免开场抖动。&quot;,
-  &quot;trigger_Pattern&quot;: &quot;高优先级直播/压测/峰会 + 整点或准点开始&quot;,
-  &quot;slot_Resolution_Hint&quot;: &quot;start_time = stated_start_time - 15min (proactive suggestion in Turn 1)&quot;
+  &quot;experience_id&quot;: &quot;EXP_STADIUM_CONGESTION_01&quot;,
+  &quot;title&quot;: &quot;极值与高密环境主动降画质保抗丢包平稳度&quot;,
+  &quot;description&quot;: &quot;大型体育场馆或展会万人集聚场景下，空口上行信道受限，盲目开高画质易引发频繁丢包卡顿。&quot;,
+  &quot;content&quot;: &quot;识别到会展中心、体育场等高密人流场景时，主动提议将画质从 1080p 降为 720p、并将时延门限收紧至 30ms，以稳定性优先策略确保零掉帧。&quot;,
+  &quot;trigger_conditions&quot;: {
+    &quot;location_keywords&quot;: [&quot;体育场&quot;, &quot;漫展&quot;, &quot;演唱会&quot;, &quot;会展中心&quot;],
+    &quot;crowd_density&quot;: &quot;极度密集&quot;,
+    &quot;risk_factors&quot;: [&quot;上行空口资源争抢&quot;, &quot;突发丢包卡顿&quot;]
+  },
+  &quot;recommended_adjustments&quot;: {
+    &quot;resolution&quot;: &quot;720p&quot;,
+    &quot;rtt_max&quot;: &quot;30ms&quot;,
+    &quot;strategy&quot;: &quot;稳定性优先&quot;
+  },
+  &quot;applicable_boundaries&quot;: &quot;仅适用于公众聚集、基站突发过载的外场保障；私有专网或具备专用切片保障的 VIP 场景不适用此降质规则。&quot;,
+  &quot;negative_counterexamples&quot;: &quot;用户明确要求“无论多卡都必须开 4K 原画录像”时，智能体不得强行覆盖，应提示风险后尊重用户指令。&quot;
 }
 ```
 
 ---
 
 ### 4.4 经验记忆驱动的四大提参数据生成升级方案
+
+结合 MemoryArena 的跨 Session 依赖评测理念与 ReasoningBank 的经历提炼迁移机制，针对移动核心网提参智能体打造四个数据升级方案：
 
 结合 MemoryArena 的跨 Session 依赖评测理念与 ReasoningBank 的经历提炼迁移机制，针对移动核心网提参智能体打造四个数据升级方案：
 
@@ -1993,7 +1838,7 @@ graph TD
 - **三态轨迹对照**：
   - **轨迹 1（失败 / 冒进脑补）**：Agent 擅自脑补 1080P 并直接受理，用户纠正：“我手机屏幕小，720P 够了，别浪费我流量”；
   - **轨迹 2（正确但低效 / 泛化提问）**：Agent 泛泛追问：“您还有什么其他要求吗？”，用户重复强调后，Agent 再次追问画质，导致无谓交互轮数增加至 4 轮；
-  - **轨迹 3（高效精准 / 结构化候选反问）**：Agent 基于配置矩阵精准追问：“已为您准备腾讯会议保障，画质支持 720P 高清与 1080P 超清，请问您倾向哪个规格？”，用户秒级回答：“720P”，2 轮高效闭环。
+  - **轨迹 3（高效精准 / 结构化候选反问）**：Agent 基于配置矩阵精准追问：“已为您准备腾讯会议保障，画质支持 720P 高清与 1080P 超清，请问您倾向哪个规格？”，用户快速回答：“720P”，2 轮高效闭环。
 - **提炼 ReasoningBank 经验卡片**：
   - **Title**：多候选无依据时结构化反问替代泛泛追问
   - **Description**：面对歧义形容词（高清、省心）且无先验记忆时，冒进猜测引发纠错，漫无边际追问增加成本。
@@ -2273,59 +2118,21 @@ python scripts/evaluate_memory_benchmark.py --input data/generated
             if (window.mermaid) {
                 mermaid.initialize({
                     startOnLoad: false,
-                    securityLevel: 'loose',
-                    theme: 'base',
-                    flowchart: {
-                        useMaxWidth: false,
-                        htmlLabels: true,
-                        curve: 'basis',
-                        padding: 20,
-                        nodeSpacing: 45,
-                        rankSpacing: 55
-                    },
-                    sequence: {
-                        useMaxWidth: false,
-                        wrap: true,
-                        actorFontWeight: '700',
-                        messageFontWeight: '700',
-                        noteFontWeight: '700',
-                        boxMargin: 12,
-                        messageMargin: 40
-                    },
-                    state: {
-                        useMaxWidth: false
-                    },
-                    themeVariables: {
-                        fontSize: '16px',
-                        background: '#FFFFFF',
-                        primaryColor: '#FFFFFF',
-                        primaryTextColor: '#0F172A',
-                        primaryBorderColor: '#0F172A',
-                        lineColor: '#0F172A',
-                        secondaryColor: '#FFFFFF',
-                        tertiaryColor: '#FFFFFF',
-                        mainBkg: '#FFFFFF',
-                        nodeBorder: '#0F172A',
-                        clusterBkg: '#FFFFFF',
-                        clusterBorder: '#0F172A',
-                        actorBkg: '#FFFFFF',
-                        actorBorder: '#0F172A',
-                        actorTextColor: '#0F172A',
-                        signalColor: '#0F172A',
-                        signalTextColor: '#0F172A',
-                        labelBoxBkgColor: '#FFFFFF',
-                        labelBoxBorderColor: '#0F172A',
-                        labelTextColor: '#0F172A',
-                        noteBkgColor: '#FFFFFF',
-                        noteBorderColor: '#0F172A',
-                        noteTextColor: '#0F172A'
-                    }
+                    securityLevel: 'loose'
                 });
-                try {
-                    await mermaid.run({ querySelector: '.mermaid' });
-                } catch (e) {}
-                enhanceMermaidDiagrams();
-                setTimeout(enhanceMermaidDiagrams, 200);
+                const containers = document.querySelectorAll('.mermaid');
+                for (let i = 0; i < containers.length; i++) {
+                    const el = containers[i];
+                    const srcEl = el.querySelector('.mermaid-source');
+                    if (!srcEl) continue;
+                    try {
+                        const payload = JSON.parse(srcEl.textContent);
+                        const { svg } = await mermaid.render('mermaid-svg-' + i, payload.code);
+                        el.innerHTML = svg;
+                    } catch (e) {
+                        console.error('Mermaid render error:', e);
+                    }
+                }
             }
 
             if (window.hljs) {

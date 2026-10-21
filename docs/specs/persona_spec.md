@@ -1,103 +1,90 @@
 # Persona 模板生成规范
 
-> **文档层级**：第三层 · 输入画像与故事线规范（Persona & Storyline Specification）  
-> **文档定位**：定义面向通信网络保障 **“联接”Agent** 的用户画像（Persona）模板 Schema、字段编写准则与 10 项质量检查清单。  
-> **代码落点**：画像加载与故事线增强位于 `src/core/persona_StoryExtractor.py`，标准画像数据存放于 `data/personas/`（如 `mobile_customer_personas.json`）。
-
----
-
 ## 1 概述
 
-生成面向“联接”Agent 的用户画像（Persona）模板，用于跨 Session 三层认知记忆数据集生成。每条画像记录完整描述一个真实通信保障用户的**静态背景（`static_profile`）**、**动态偏好（`dynamic_profile`）**与**跨阶段故事线（`storyline`）**。
+生成面向核心网 Agent 的用户画像（Persona）模板，用于跨 Session 记忆数据集生成。画像模板是 `corenet_personas.jsonl` 中的单条记录，描述一个真实用户画像。
 
 画像模板可以通过两种方式获得：
 
 | 生成方式 | 说明 | 适用场景 |
 | ------------ | ---------------------- | ---------------------------------------- |
-| **人工标杆设计**     | 按本规范编写高保真 JSON          | 核心标杆画像（如 `data/personas/mobile_customer_personas.json` 中的 5 大移动核心网客户画像） |
-| **LLM 批量生成与增强**   | 提供角色简述，由 LLM + `persona_StoryExtractor.py` 补全完整字段与故事线 | 规模化扩展新画像                                |
+| **人工设计**     | 按本规范手动编写 JSON          | 已有画像（如 `corenet_personas.jsonl` 中的 19 个） |
+| **LLM 生成**   | 提供简短的人类角色描述，LLM 补全完整字段 | 需要批量生成新画像                                |
 
 ---
 
-## 2 画像生成与故事线提取流程
+## 2 LLM 生成流程
 
-```mermaid
-graph TD
-    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-    classDef highlight fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px,color:#0F172A,font-weight:bold;
+独立脚本：`persona_generate.py`（命令行脚本，解耦于 pipeline）
 
-    C["<b>1. 读取 config/ 下的 3 个业务白名单 JSON<br/>(app_config.json / app_map.json / support_matrix.json)</b>"]
-    P["<b>2. 接收系统 Prompt（字段规范 + 合法 APP 列表）+ 角色描述</b>"]
-    L["<b>3. 生成完整 Persona JSON<br/>(static_profile + dynamic_profile)</b>"]:::highlight
-    S["<b>4. 故事线解析器增强 (src/core/persona_StoryExtractor.py)<br/>提取跨阶段生命周期 storyline 与角色迁移锚点</b>"]:::highlight
-    V{"<b>5. 10 项模板设计检查清单校验<br/>(apps 数量 / time_based 覆盖 / evidence 类型等)</b>"}
-    R["<b>重试修正（最多 3 次）</b>"]
-    O["<b>6. 写入 data/personas/*.json<br/>供 run.py 流水线加载</b>"]
-
-    C --> P --> L --> S --> V
-    V -->|"<b>校验通过</b>"| O
-    V -->|"<b>校验未通过</b>"| R
-    R --> L
+```
+persona_generate.py [--prompt "描述"] [--count N] [--mode generate|regenerate]
+  │
+  ├─ 读取 dataset_prepare/ 下的 3 个 JSON（app_config.json, app_map.json, support_matrix.json）
+  ├─ LLM 接收系统 prompt（字段规范 + 可用 APP 列表）+ 可选基础描述
+  ├─ LLM 输出完整 persona JSON (static_profile + dynamic_profile)
+  ├─ 校验: 模板设计检查清单（apps数量/time_based覆盖/evidence类型等）
+  ├─ 失败则重试（最多3次）
+  └─ 写入 corenet_personas.jsonl (JSON 数组格式)
 ```
 
-**Pipeline 调用**：`run.py` 通过 `src/core/persona_StoryExtractor.py` 从 `data/personas/` 加载画像模板并自动补齐故事线结构，随后送入 `src/core/gt_builder.py` 构建四层 Ground Truth。
+**Pipeline 调用**：`run.py` 只负责从 `corenet_personas.jsonl` 加载画像模板，不生成 personas。
 
 **LLM 生成 vs 人工设计的区别**：
 
-- LLM 生成时，`apps` 列表可能是通用名（如"视频APP"），后续 `gt_builder.py` 的 `_resolve_app_name` 会自动映射为标准应用名；
-- 人工设计时，`apps` 直接用中文标准名，匹配更准确；
-- 两种方式的后续生成与质检 pipeline 完全相同。
+- LLM 生成时，apps 列表可能是通用名（如"视频APP"），后续 `persona_ground_truth.py` 的 `_resolve_app_name` 会 fallback 到 LLM 做映射
+- 人工设计时，apps 直接用中文标准名，匹配更准确
+- 两种方式的后续 pipeline 完全相同
 
 ### 2.1 使用示例
 
-**方式 1：直接基于 `data/personas/` 运行流水线（自动完成故事线提取）**
+**方式1：自由生成**
 
-```bash
-python run.py --input data/personas --output data/cognitive_samples --start 0 --count 5 --verify --force
+```
+python persona_generate.py --count 3
 ```
 
-**方式 2：扩展自定义画像生成（指定基础角色描述）**
+**方式2：带基础描述**
 
-```bash
-# 示例角色提示词：
-# 1. "一个经常出差的商务人士，主要用视频通话和导航"
-# 2. "一个大型手游赛事运维总监，主要用王者荣耀、和平精英与腾讯会议"
-# 3. "一个电商直播MCN机构技术负责人，高频使用抖音直播、淘宝直播与企业微信"
+```
+python persona_generate.py --count 3 \
+  --prompt "一个经常出差的商务人士，主要用视频通话和导航" \
+  --prompt "一个喜欢追剧的高中生，主要用短视频和追剧APP" \
+  --prompt "一个退休老人，主要用微信视频和听书"
 ```
 
-**使用 `config/` 业务白名单资源**：画像生成与解析会自动读取 `config/` 下的 3 个 JSON：
+**方式3：覆盖全部**
+
+```
+python persona_generate.py --mode regenerate --count 10 --prompt "一个外卖骑手，主要用导航和外卖APP"
+```
+
+**方式4：指定资源目录和输出路径**
+
+```
+python persona_generate.py --resource-dir /path/to/dataset_prepare --output /path/to/output.jsonl
+```
+
+**输出**：生成完成后，LLM 调用的日志会显示 validation warnings（如果有），最终的 persona 文件会被写入 `output` 指定的路径（默认 `../PersonaMem-v2/data/corenet_personas.jsonl`）。
+
+**使用 dataset_prepare/ 资源**：`persona_generate.py` 会自动读取 `dataset_prepare/` 下的 3 个 JSON：
 
 - `app_config.json`：所有可用的 APP 名称和业务类型
 - `app_map.json`：APP 中文名/英文名/别名
 - `support_matrix.json`：APP × 业务 × 分辨率枚举
 
-这些信息会被注入到 Prompt 与校验器中，确保只选用合法的业务场景，杜绝编造不存在的 APP。
+这些信息会被注入到 LLM prompt 中，让 LLM 知道能选哪些 APP，避免编造不存在的 APP。
 
 ---
 
 ## 3 模板结构
 
-每条画像记录包含三个顶层结构字段：
-
-```mermaid
-graph LR
-    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-
-    ROOT["<b>Persona 画像模板<br/>(data/personas/*.json)</b>"]
-    S["<b>1. static_profile (稳定画像)<br/>identity / devices / apps / subscription</b>"]
-    D["<b>2. dynamic_profile (动态偏好)<br/>time_based / scene_switch / role_change / event_driven<br/>aliases / time_expressions / param_mappings / preferences</b>"]
-    ST["<b>3. storyline (跨期故事线)<br/>initial_goal / mid_term_shift / climax_challenge</b>"]
-
-    ROOT --> S
-    ROOT --> D
-    ROOT --> ST
-```
+画像模板是 `corenet_personas.jsonl` 中的单条记录，包含两个顶层字段：
 
 | 字段名 | 类型 | 说明 |
 | ----------------- | ------ | ----------------- |
-| `static_profile`  | `dict` | 稳定画像（不变或极少变化：身份、设备、常用 APP、套餐）     |
-| `dynamic_profile` | `dict` | 动态画像（随时间/场景/事件变化的偏好、别名映射与角色转变） |
-| `storyline`       | `dict` | 跨阶段故事线（由 `persona_StoryExtractor.py` 提取或人工定义，驱动 16~20 轮演进） |
+| `static_profile`  | `dict` | 稳定画像（不变或极少变化）     |
+| `dynamic_profile` | `dict` | 动态画像（随时间/场景/事件变化） |
 
 ---
 

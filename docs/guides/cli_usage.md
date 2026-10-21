@@ -1,34 +1,20 @@
-# “联接”Agent 跨会话三层认知记忆数据集引擎 — 命令行使用手册与架构指南
+# 跨会话长程记忆数据集生成引擎 - 命令行使用手册与架构指南
 
-> **文档层级**：第三层 · 工程运行与操作指南（CLI & Pipeline Operations Guide）  
-> **文档定位**：汇总当前数据集生成引擎（`run.py`）的所有命令行参数、配置文件规范、自定义原始画像替换指南、`skeleton_signature` 拓扑指纹解析以及代码分层职责说明。
+本文档汇总了当前数据集生成引擎的所有命令行工具、配置文件规范、自定义原始画像替换指南，以及数据核心字段 `skeleton_signature` 的深度作用解析。
 
 ---
 
 ## 一、 快速上手：常用命令行一览
 
-```mermaid
-graph LR
-    classDef default fill:#FFFFFF,stroke:#0F172A,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-    classDef highlight fill:#FFFFFF,stroke:#2563EB,stroke-width:2.5px,color:#0F172A,font-weight:bold;
-
-    CLI["<b>python run.py<br/>(--input / --output / --start / --count / --offline / --verify / --force)</b>"]:::highlight
-    BP["<b>BatchPipeline 流水线调度<br/>(src/pipeline/batch_pipeline.py)</b>"]
-    QC["<b>QCValidator R1~R14 质检门禁<br/>(src/core/qc_validator.py)</b>"]
-    OUT["<b>四大认知记忆产物落盘<br/>(skeleton / sessions / working_records / experiences)</b>"]
-
-    CLI --> BP --> QC --> OUT
-```
-
 | 目标任务 | 推荐执行命令 | 说明 |
 | :--- | :--- | :--- |
-| **一键批量生成标杆认知样本** | `python run.py --input data/personas --output data/cognitive_samples --start 0 --count 5 --verify --force` | 生成 5 个移动核心网标杆画像（每个 16~20 轮会话）并执行 R1~R14 全量质检 |
-| **单画像快速开发调试** | `python run.py --input data/personas --output data/cognitive_samples --start 0 --count 1 --verify --force` | 仅针对第 0 个画像重新生成三层认知记忆样本并立即验收 |
-| **离线确定性极速生成** | `python run.py --input data/personas --output data/cognitive_samples --count 5 --offline --verify --force` | 不依赖外部 LLM API，使用高质量内置模板瞬间生成并验证双轨分支 |
-| **更换原始画像输入源** | `python run.py --input data/original/custom.json --output data/experiment_v2 --count 5` | 指定自定义原始画像池与新输出目录，不修改全局配置 |
-| **独立执行全量自动化质检** | `python run.py --verify --output data/cognitive_samples` | 遍历校验目标输出目录下所有样本的 R1~R14 规则、工单账本与双轨分支完整性 |
-| **查看数据集分布统计** | `python scripts/inspect_dataset.py` | 扫描画像骨架，统计显/隐模式与三大触发范式的分布比例 |
-| **重新生成 HTML 可视化文档** | `python docs/render_html.py` | 将 `docs/` 下所有 Markdown 渲染为高保真交互式 HTML 页面 |
+| **一键批量生成** | `python run.py` | 读取 `config.json` 默认配置执行（默认生成 5 个人物画像） |
+| **按数量生成** | `python run.py --start 0 --count 10` | 从第 0 个画像开始，生成 10 个人物（共 150 个会话） |
+| **更换原始画像** | `python run.py --input data/original/custom.json --count 5` | 指定自定义原始画像池，不修改全局配置 |
+| **更换输出目录** | `python run.py --output data/experiment_v2 --count 5` | 将生成样本保存至指定的新目录 |
+| **全量自动化校验** | `python run.py --verify` | 自动化遍历校验当前输出目录下所有样本的格式与动作完整性 |
+| **校验指定目录** | `python run.py --verify --output data/experiment_v2` | 针对自定义输出目录执行严格 100% 格式验收 |
+| **查看分布统计** | `python scripts/inspect_dataset.py` | 扫描画像骨架，统计显/隐模式与三大触发范式的分布比例 |
 
 ---
 
@@ -38,12 +24,12 @@ graph LR
 
 ```json
 {
-  "raw_persona_path": "data/personas/mobile_customer_personas.json",
-  "output_dir": "data/cognitive_samples",
+  "raw_persona_path": "data/original/mobile_network_personas_500.json",
+  "output_dir": "data/generated",
   "batch_size": 5,
   "default_start_idx": 0,
   "default_count": 5,
-  "model": "deepseek-chat",
+  "model": "deepseek-flash",
   "base_url": "https://api.deepseek.com",
   "enable_thinking": false
 }
@@ -51,14 +37,14 @@ graph LR
 
 ### 字段说明：
 - `raw_persona_path`: 原始人物画像池文件路径。若要永久替换初始画像，修改此项即可。
-- `output_dir`: 生成产物的默认保存目录（每个画像生成 `skeleton.json`、`sessions.jsonl`、`working_records.jsonl`、`experiences.jsonl`）。
+- `output_dir`: 生成产物的默认保存目录。
 - `batch_size`: 对话渲染并发批次大小（默认 5 个会话为一个批次请求，大幅节约 API 往返耗时）。
 - `default_start_idx`: 默认起始画像下标（从 0 开始）。
 - `default_count`: 默认生成的画像数量。
-- `model`: 调用的模型名称。
+- `model`: 调用的模型名称（默认为 `deepseek-flash`）。
 - `enable_thinking`: 是否开启深度思考（默认 `false`，生成结构化对话无需 CoT，成本节约 95%）。
 
-> **优先级原则**：命令行参数（如 `--input`, `--output`, `--count`, `--offline`, `--force`）> `config.json` 配置值 > 代码内部缺省值。
+> **优先级原则**：命令行参数（如 `--input`, `--output`, `--count`）> `config.json` 配置值 > 代码内部缺省值。
 
 ---
 
@@ -85,7 +71,7 @@ graph LR
 ### 2. 执行方式（任选其一）
 - **方式 1：命令行即插即用（无需改配置文件）**
   ```powershell
-  python run.py --input "D:/data/my_new_personas.json" --output "data/my_output" --count 10 --verify
+  python run.py --input "D:/data/my_new_personas.json" --output "data/my_output" --count 10
   ```
 - **方式 2：修改 `config.json` 后直接运行**
   修改 `"raw_persona_path": "D:/data/my_new_personas.json"`，随后执行：
@@ -112,7 +98,7 @@ graph LR
 
 | 段落切片 | 示例中的值 | 含义解释 |
 | :--- | :--- | :--- |
-| **第 1 段** | `T1-1` 或 `T2-1` | **会话模板协议 ID**（`T1-1` 为 1 轮直达型；`T2-1` 为 2 轮反问确认/记忆引导型；`T2-4` 为双意图并行/分段隔离型） |
+| **第 1 段** | `T1-1` 或 `T2-1` | **会话模板协议 ID**（`T1-1` 为 1 轮直达型；`T2-1` 为 2 轮反问确认/记忆引导型；`T2-4` 为 2 轮显式纠正型） |
 | **第 2 段** | `1` 或 `2` | **交互总轮数（Round Count）** |
 | **第 3 段** | `1` | **包含的意图数量（Intent Count）** |
 | **第 4 段** | `I1:快手/看直播/1/direct/resolved` | **意图核心特征五元组**：<br>• `I1`: 意图编号<br>• `快手`: 目标应用 (`application_name`)<br>• `看直播`: 目标业务 (`service_name`)<br>• `1`: 用户表达层级（1 为简明直接，5 为复杂指代）<br>• `direct` / `memory_filled`: **闭环路径 (`closure_path`)**（`direct` 为单轮直接完整说清；`clarified` 为通过追问填补；`memory_filled` 为借助历史跨会话记忆自动补全；`corrected` 为临时纠正覆盖）<br>• `resolved`: 意图最终达成状态 |
@@ -120,10 +106,10 @@ graph LR
 
 ### 2. 为什么需要它？它的核心作用是什么？
 
-1. **毫秒级结构指纹检索与去重**：
+1. **结构指纹快速检索与去重**：
    - 在数万条的大规模对话语料库中，算法无需反序列化数千行深层嵌套的 JSON 树，直接依靠该字符串即可瞬间对会话的交互拓扑进行唯一索引、统计与去重。
 2. **下游评测分桶切片（Benchmark Evaluation Slicing）**：
-   - 评测跨会话记忆模型时，评测框架通过正则提取 `memory_filled`，即可一键切分出所有“依赖长程记忆补全”的硬核测试集，单独计算其参数召回准确率。
+   - 评测跨会话记忆模型时，评测框架通过正则提取 `memory_filled`，即可一键切分出所有“依赖长程记忆补全”的核心测试集，单独计算其参数召回准确率。
    - 对比分析 `T1-1`（零记忆单轮）与 `T2-1`（跨会话双轮）的意图辨识能力差异。
 3. **数据集覆盖度与多样性审计（Diversity Audit）**：
    - 监控训练集和测试集中各应用、业务、闭环路径的交叉组合比例，防止训练数据在某种路径（如全是 direct 闭环）上发生过拟合。
@@ -134,48 +120,43 @@ graph LR
 
 ## 五、 代码分级架构与模块职责说明
 
-为避免 Prompt、模版定义与三层认知业务逻辑互相交织耦合，系统采用清晰的分层解耦架构：
+为避免 Prompt、模版定义与业务逻辑互相交织耦合，系统采用清晰的分层解耦架构：
 
-```text
+```
 cross_memory_data/
-├── run.py                             # 顶层命令行统一入口
-├── config.json                        # 全局可调参数集中配置文件
+├── run.py                          # 顶层命令行统一入口
+├── config.json                     # 全局可调参数集中配置文件
 ├── src/
-│   ├── config/                        # 【配置层】
-│   │   ├── settings.py                # 全局配置类与环境变量加载 (Config)
+│   ├── config/                     # 【配置层】
+│   │   ├── settings.py             # 全局配置类与环境变量加载 (Config)
 │   │   └── __init__.py
-│   ├── core/                          # 【三层认知记忆引擎与质检层】
-│   │   ├── persona_StoryExtractor.py  # 画像故事线提取与增强器
-│   │   ├── gt_builder.py              # 四层 Ground Truth 构建器
-│   │   ├── mt_selector.py             # 评测目标 (Memory Targets) 反推器
-│   │   ├── timeline_planner.py        # 16~20 会话动态时间线规划器 (DynamicTimelinePlanner)
-│   │   ├── memory_tracker.py          # 事实记忆演进追踪器与状态机 (MemoryEngine)
-│   │   ├── working_records_ledger.py  # 独立历史保障工单账本 (WorkingRecordsLedger)
-│   │   ├── experience_bank.py         # 五大黄金经验策略库 (ExperienceBank)
-│   │   ├── qc_validator.py            # R1~R14 全量规则验证器 (QCValidator)
+│   ├── core/                       # 【核心领域状态与质检层】
+│   │   ├── timeline_planner.py     # 15会话动态时间线规划器 (DynamicTimelinePlanner)
+│   │   ├── memory_tracker.py       # 跨会话记忆演进追踪器与状态机 (MemoryTracker)
+│   │   ├── qc_validator.py         # 100% 规则验证器 (QCValidator)
 │   │   └── __init__.py
-│   ├── generation/                    # 【双轨对话生成与装配引擎】
-│   │   ├── llm_client.py              # LLM 客户端、Token 计费与重试机制 (LLMClient)
-│   │   ├── persona_generator.py       # 画像骨架扩充生成器 (PersonaGenerator)
-│   │   ├── dialogue_generator.py      # 受控对话与 Fast/Slow 分支渲染引擎 (DialogueGenerator)
-│   │   ├── session_assembler.py       # 四元溯源与双轨评测数据装配器 (SessionAssembler)
+│   ├── generation/                 # 【生成与装配引擎】
+│   │   ├── llm_client.py           # DeepSeek 客户端、Token计费与重试机制 (LLMClient)
+│   │   ├── persona_generator.py    # 画像骨架扩充生成器 (PersonaGenerator)
+│   │   ├── dialogue_generator.py   # 对话批量渲染引擎 (DialogueGenerator)
+│   │   ├── session_assembler.py    # 8 大模版数据装配器 (SessionAssembler)
 │   │   └── __init__.py
-│   ├── pipeline/                      # 【流水线调度层】
-│   │   ├── batch_pipeline.py          # 自动化流水线调度、账本持久化与断点续传 (BatchPipeline)
+│   ├── pipeline/                   # 【流水线调度层】
+│   │   ├── batch_pipeline.py       # 自动化流水线调度与检查点控制 (BatchPipeline)
 │   │   └── __init__.py
-│   └── templates/                     # 【模版与 Prompt 独立层（解耦抽离）】
-│       ├── timeline_blueprints.py     # 16~20 会话生命周期序列蓝图配置模版
-│       └── prompts/                   # 纯净 Prompt 与确定性兜底台词库
-│           ├── persona_prompts.py     # 画像骨架扩充 Prompt 模版
-│           ├── dialogue_prompts.py    # 批量、单会话与双轨经验分支 Prompt 模版
-│           ├── dialogue_fallbacks.py  # 各角色与五大黄金经验确定性兜底台词库
+│   └── templates/                  # 【模版与 Prompt 独立层（解耦抽离）】
+│       ├── timeline_blueprints.py  # 15 会话生命周期序列蓝图配置模版
+│       └── prompts/                # 纯净 Prompt 与兜底台词库
+│           ├── persona_prompts.py  # 画像骨架扩充 Prompt 模版
+│           ├── dialogue_prompts.py # 批量与单会话台词渲染 Prompt 模版
+│           ├── dialogue_fallbacks.py# 各模版确定性兜底台词与动作规范
 │           └── __init__.py
 ```
 
 ### 核心解耦优势：
-1. **三层认知记忆正交隔离**：`MemoryEngine`（事实）、`WorkingRecordsLedger`（工作工单）与 `ExperienceBank`（五大经验）在 `src/core/` 中各自拥有独立状态机与持久化文件，互不污染。
-2. **Prompt 与兜底台词纯净维护**：所有向大模型发送的指令、Turn 1 自包含约束与双轨分支模板集中在 `src/templates/prompts/` 中，调优台词无需改动核心管线。
-3. **R1~R14 硬性门禁拦截**：`src/core/qc_validator.py` 对时序递增、冷启动零脑补、工单引用存在性、双轨轮数压缩（$T_{\text{fast}} < T_{\text{slow}}$）与零枚举泄漏执行 100% 强校验。
+1. **Prompt 纯净维护**：所有向大模型发送的指令、规则和 JSON Schema 集中在 `src/templates/prompts/` 中，调优台词或微调语气无需改动任何生成逻辑。
+2. **模版装配隔离**：8 大模版（`T2-4`, `T2-2`, `T2-1`, `T1-2`, `T2-5`, `X-1`, `T2-3`, `T1-1`）的标准 JSON 结构与槽位流转逻辑全部封装在 `SessionAssembler` 中，新增或变更模版不影响渲染器。
+3. **100% 平滑向下兼容**：顶层 `src/` 提供了兼容性 Facade 引用，现有外部工具脚本无需修改即可直接使用。
 
 ---
 
@@ -185,8 +166,8 @@ cross_memory_data/
 
 ### 1. 多粒度周期性支持 (Multi-grain Periodicity)
 - **`daily` (日级周期)**：
-  - 覆盖早高峰通勤 (08:30-10:00)、午休复盘 (12:30-13:30)、晚间黄金档 (20:00-22:00)、深夜巡检 (23:00-00:30) 等；
-  - 显式口语表达：“老规矩，还是每天这个时候帮我保一下”、“每天晚间黄金档老规矩”。
+  - 覆盖早高峰通勤 (08:30-10:00)、午休复盘 (12:30-13:30)、晚间高峰档 (20:00-22:00)、深夜巡检 (23:00-00:30) 等；
+  - 显式口语表达：“老规矩，还是每天这个时候帮我保一下”、“每天晚间高峰档老规矩”。
 - **`weekly` (周级周期多样化)**：
   - 破除单一周三周六，支持周一与周五例会、周二与周四研讨、周六与周日周末赛事专场、周三与周五晚间对账等丰富组合；
   - 显式口语表达：“跟上周一样，每周一和周五例会保一下”、“周末排位老规矩”。
@@ -199,7 +180,7 @@ cross_memory_data/
 1. **应用名 (`application_name`)**：微信（微聊、企微、v信）、抖音（阿抖、某音、抖子）、快手（快子、某手、老铁平台）、腾讯会议（企鹅会议、腾讯开会、会议通）、钉钉（钉上、某钉）、哔哩哔哩（小破站、b站、阿b）等。
 2. **业务名 (`service_name`)**：开直播（推流、开播、上播）、视频通话（打个视讯、连麦、对流程视频）、会议（对齐、开例会、过需求、碰头会）、短视频（刷视频、刷短剧）等。
 3. **分辨率 (`resolution`)**：1080p（原画、顶格清晰度、千万别糊、蓝光、超清）、720p（普通高清、凑合能看就行、标清偏上、省流画质）等。
-4. **时延上限 (`rtt`)**：30ms（超低时延、零卡顿、极速响应、毫秒级）、50ms（别掉链子、千万别转圈、顺滑一点）、80ms/100ms（不卡就行、能连贯就行）等。
+4. **时延上限 (`rtt`)**：30ms（超低时延、零卡顿、低时延响应）、50ms（别掉链子、千万别转圈、顺滑一点）、80ms/100ms（不卡就行、能连贯就行）等。
 5. **时长 (`duration` / `end_timestamp`)**：俩小时、两钟头、播到四点、一个半小时、大半个下午等。
 6. **周期/触发词 (`period_aliases`)**：每天这个时候、老时间、晚间例行、每周一五老规矩、月初例会照旧等。
 
