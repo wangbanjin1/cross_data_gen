@@ -176,7 +176,7 @@ $$\text{target\_count} = 16 + (\text{uid\_num} \pmod 5)$$
 
 ### 场景2：重大活动提前预热试机时间推算
 * **卡片标识**：`EXP_PREWARM_BUFFER_01`
-* **冲突定义**：用户给出的只是活动开幕时间（14:00-16:00），未提及试机预热。
+* **冲突定义**：用户首轮完整给出基础保障参数（应用、业务、画质、时延）及活动原定起止时间（14:00-16:00，持续 120min），未主动提及试机预热。
 * **无经验 Slow Path (4轮)**：机械按 14:00 开通，用户在第 2 轮发现没有预留推流调试时间，急眼打断并要求提前改单，拉扯 4 轮。
 * **“联接”Agent Fast Path (1~2轮)**：
   * 自主识别重大活动并执行时间差推算：
@@ -216,28 +216,28 @@ $$\text{target\_count} = 16 + (\text{uid\_num} \pmod 5)$$
 ```mermaid
 sequenceDiagram
     autonumber
-    actor UserSim as 用户模拟器 (User Simulator)
-    participant Agent as 联接Agent (被测模型)
-    participant Judge as 双轨分支评测仲裁节点
+    actor UserSim as <b>用户模拟器 (User Simulator)</b>
+    participant Agent as <b>“联接”Agent (被测模型)</b>
+    participant Judge as <b>双轨分支评测仲裁节点</b>
 
-    UserSim->>Agent: Turn 1: 提出带冲突或需推理的保障诉求 (如 14:00 重大活动直播)
-    Agent-->>Judge: Agent 输出首轮答复与提取的参数字典
+    UserSim->>Agent: <b>Turn 1: 提出带冲突或需推理的完整基础参数保障诉求 (如 14:00-16:00 重大活动直播)</b>
+    Agent-->>Judge: <b>“联接”Agent 输出首轮答复与提取的参数字典</b>
 
-    Note over Judge: 双轨分支判定 (校验是否自主应用经验推导)
+    Note over Judge: <b>双轨分支判定 (校验是否自主应用经验推导)</b>
 
-    alt 快速通关分支 (Fast Path)
-        Judge-->>UserSim: 仲裁通过: 命中经验记忆 (自主推导提前 30 分钟预热)
-        UserSim->>Agent: Turn 2: 确认开通
-        Note over Agent: 达成 1 至 2 轮极速自闭环 (实际评测轮数 T = 1)
-    else 多轮纠偏分支 (Slow Path)
-        Judge-->>UserSim: 仲裁未通过: 机械按字面受理 (未做预热推断)
-        UserSim->>Agent: Turn 2 紧急纠偏打断: 要求提前半小时预热调试
-        Agent->>UserSim: Turn 3: 客服重新计算时间并反问确认
-        UserSim->>Agent: Turn 4: 用户确认改单
-        Note over Agent: 产生多轮低效拉扯 (实际评测轮数 T = 4)
+    alt <b>快速通关分支 (Fast Path)</b>
+        Judge-->>UserSim: <b>仲裁通过: 命中经验记忆 (自主推导提前 30 分钟预热)</b>
+        UserSim->>Agent: <b>Turn 2: 确认开通</b>
+        Note over Agent: <b>达成 1 至 2 轮极速自闭环 (实际评测轮数 T = 2)</b>
+    else <b>多轮纠偏分支 (Slow Path)</b>
+        Judge-->>UserSim: <b>仲裁未通过: 机械按字面受理 (未做预热推断)</b>
+        UserSim->>Agent: <b>Turn 2 紧急纠偏打断: 要求提前半小时预热调试</b>
+        Agent->>UserSim: <b>Turn 3: 客服重新计算时间并反问确认</b>
+        UserSim->>Agent: <b>Turn 4: 用户确认改单</b>
+        Note over Agent: <b>产生多轮低效拉扯 (实际评测轮数 T = 4)</b>
     end
 
-    Note over Judge: 量化计分: 轮次压缩增益 TCG = (4 - T) / 4 × 100%
+    Note over Judge: <b>量化计分: 轮次压缩增益 TCG = (4 - T) / 4 × 100%</b>
 ```
 
 ### 核心量化指标体系

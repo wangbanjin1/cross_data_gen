@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="parchment">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>“联接”Agent 跨会话三层认知记忆数据集与双轨评测引擎技术规范</title>
+    <!-- KaTeX 数学公式样式与渲染脚本 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css';">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js';"></script>
+    <!-- Highlight.js 代码高亮 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <!-- Mermaid.js 动态图表渲染 -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root[data-theme="parchment"] {
+            --bg-color: #f7f4ec;
+            --surface-color: #eee9dc;
+            --surface-elevated: #e6dfcf;
+            --border-color: #dcd4c0;
+            --border-subtle: #e6dfd1;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --text-muted: #718096;
+            --accent-primary: #a35d28;
+            --accent-glow: rgba(163, 93, 40, 0.08);
+            --code-bg: #eae3d2;
+            --code-text: #8d3a2b;
+            --pre-bg: #ece5d6;
+            --pre-text: #2d3748;
+            --callout-note-bg: #e5ede3;
+            --callout-note-border: #709775;
+            --callout-note-text: #2b5133;
+            --callout-warn-bg: #f5eedb;
+            --callout-warn-border: #c48a37;
+            --callout-warn-text: #704b12;
+            --callout-imp-bg: #e5eaf5;
+            --callout-imp-border: #5c7cb6;
+            --callout-imp-text: #1e3863;
+            --math-bg: #eee7d7;
+            --math-border: #c9bea6;
+            --table-header: #e4dccb;
+            --table-alt: #f1ecdf;
+            --tag-bg: #dfd5be;
+            --tag-text: #59472d;
+            --toggle-bg: #dfd6c2;
+            --card-shadow: 0 4px 18px rgba(45, 55, 72, 0.05);
+        }
+
+        :root[data-theme="twilight"] {
+            --bg-color: #1a1e24;
+            --surface-color: #232931;
+            --surface-elevated: #2c343f;
+            --border-color: #39424e;
+            --border-subtle: #2d3642;
+            --text-primary: #dce1e8;
+            --text-secondary: #b0bac6;
+            --text-muted: #707b88;
+            --accent-primary: #e09f67;
+            --accent-glow: rgba(224, 159, 103, 0.12);
+            --code-bg: #15181d;
+            --code-text: #f08d70;
+            --pre-bg: #171b21;
+            --pre-text: #cdd3dc;
+            --callout-note-bg: #202b28;
+            --callout-note-border: #4d7a68;
+            --callout-note-text: #8bbfa8;
+            --callout-warn-bg: #2b251d;
+            --callout-warn-border: #8a6c38;
+            --callout-warn-text: #d9b168;
+            --callout-imp-bg: #1d2533;
+            --callout-imp-border: #4a638c;
+            --callout-imp-text: #96b5e3;
+            --math-bg: #1f252d;
+            --math-border: #3b4654;
+            --table-header: #262e38;
+            --table-alt: #1f242c;
+            --tag-bg: #323c48;
+            --tag-text: #d2a679;
+            --toggle-bg: #323b47;
+            --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.78;
+            font-size: 15.2px;
+        }
+
+        .layout-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 侧边栏导航与目录 */
+        .sidebar-toc {
+            width: 310px;
+            background-color: var(--surface-color);
+            border-right: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            z-index: 100;
+        }
+
+        .portal-nav-box {
+            margin-bottom: 14px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .portal-nav-title {
+            font-size: 0.76rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: 6px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .portal-nav-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .portal-nav-item {
+            display: block;
+            padding: 4px 8px;
+            font-size: 0.81rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.15s;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .portal-nav-item:hover {
+            background-color: var(--surface-elevated);
+            color: var(--accent-primary);
+        }
+
+        .portal-nav-item.active {
+            background-color: var(--accent-glow);
+            color: var(--accent-primary);
+            font-weight: 700;
+            border-left: 3px solid var(--accent-primary);
+        }
+
+        .toc-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .toc-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .toc-action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            padding: 4px 6px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .toc-action-btn:hover {
+            color: var(--accent-primary);
+            background-color: var(--surface-elevated);
+        }
+
+        .toc-search-box {
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+
+        .toc-search-input {
+            width: 100%;
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-color);
+            color: var(--text-primary);
+            font-size: 0.82rem;
+            outline: none;
+        }
+
+        .toc-search-input:focus {
+            border-color: var(--accent-primary);
+        }
+
+        .toc-body {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-item {
+            margin-bottom: 3px;
+        }
+
+        .toc-item.toc-level-2 {
+            margin-top: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .toc-item.toc-level-3 {
+            padding-left: 12px;
+            font-size: 0.81rem;
+            color: var(--text-secondary);
+        }
+
+        .toc-item.toc-level-4 {
+            padding-left: 22px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .toc-link {
+            display: block;
+            padding: 4px 8px;
+            color: inherit;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.15s;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .toc-link:hover {
+            background-color: var(--surface-elevated);
+            color: var(--accent-primary);
+        }
+
+        .toc-link.active {
+            background-color: var(--accent-glow);
+            color: var(--accent-primary);
+            font-weight: 700;
+            border-left: 3px solid var(--accent-primary);
+        }
+
+        /* 主内容区域 */
+        .main-content {
+            flex: 1;
+            padding: 32px 48px 80px;
+            overflow-x: hidden;
+        }
+
+        @media (max-width: 960px) {
+            .sidebar-toc {
+                display: none;
+            }
+            .main-content {
+                padding: 20px 18px 60px;
+            }
+        }
+
+        .container {
+            max-width: 1020px;
+            margin: 0 auto;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 6px;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.84rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            border-color: var(--accent-primary);
+            color: #ffffff;
+            background-color: var(--accent-primary);
+        }
+
+        .theme-switch-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            background-color: var(--toggle-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 0.84rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Markdown 正文排版 */
+        .markdown-body {
+            color: var(--text-primary);
+        }
+
+        .markdown-body h1 {
+            font-size: 1.95rem;
+            font-weight: 800;
+            line-height: 1.35;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 2px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .markdown-body h2 {
+            font-size: 1.42rem;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-top: 42px;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-primary);
+            padding-left: 12px;
+            color: var(--text-primary);
+        }
+
+        .markdown-body h3 {
+            font-size: 1.15rem;
+            font-weight: 650;
+            line-height: 1.45;
+            margin-top: 28px;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .markdown-body h4 {
+            font-size: 1.0rem;
+            font-weight: 650;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            color: var(--accent-primary);
+        }
+
+        .markdown-body p {
+            margin-bottom: 14px;
+            line-height: 1.78;
+        }
+
+        .markdown-body ul, .markdown-body ol {
+            margin-bottom: 16px;
+            padding-left: 24px;
+        }
+
+        .markdown-body ul ul, .markdown-body ol ul, .markdown-body ul ol {
+            margin-top: 6px;
+            margin-bottom: 6px;
+        }
+
+        .markdown-body li {
+            margin-bottom: 6px;
+            line-height: 1.72;
+        }
+
+        .markdown-body strong {
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .md-link {
+            color: var(--accent-primary);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            font-weight: 600;
+        }
+
+        .md-link:hover {
+            opacity: 0.85;
+        }
+
+        .markdown-body code {
+            font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.88em;
+        }
+
+        /* 代码块带复制栏 */
+        .code-card {
+            background-color: var(--pre-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin: 16px 0 22px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+
+        .code-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 14px;
+            background-color: var(--surface-color);
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.76rem;
+        }
+
+        .code-card-lang {
+            font-family: "JetBrains Mono", Consolas, monospace;
+            font-weight: 700;
+            color: var(--accent-primary);
+            text-transform: uppercase;
+        }
+
+        .code-copy-btn {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            color: var(--text-secondary);
+            padding: 2px 8px;
+            font-size: 0.74rem;
+            cursor: pointer;
+        }
+
+        .code-copy-btn:hover {
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .markdown-body pre {
+            background-color: transparent;
+            color: var(--pre-text);
+            padding: 14px 16px;
+            overflow-x: auto;
+            margin: 0;
+            line-height: 1.55;
+        }
+
+        .markdown-body pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: 0.86rem;
+            white-space: pre;
+        }
+
+        .doc-intro {
+            background-color: var(--surface-color);
+            border-left: 4px solid var(--accent-primary);
+            padding: 14px 18px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 26px;
+            color: var(--text-secondary);
+            font-size: 0.94rem;
+        }
+
+        blockquote {
+            background-color: var(--surface-color);
+            border-left: 4px solid var(--accent-primary);
+            padding: 12px 18px;
+            margin: 16px 0;
+            border-radius: 0 6px 6px 0;
+            color: var(--text-secondary);
+        }
+
+        /* GitHub Alert Callout Cards */
+        .callout-card {
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 18px 0;
+            border-left: 4px solid var(--accent-primary);
+            background-color: var(--surface-color);
+        }
+
+        .callout-card.callout-important {
+            background-color: var(--callout-imp-bg);
+            border-color: var(--callout-imp-border);
+            color: var(--callout-imp-text);
+        }
+
+        .callout-card.callout-tip, .callout-card.callout-note {
+            background-color: var(--callout-note-bg);
+            border-color: var(--callout-note-border);
+            color: var(--callout-note-text);
+        }
+
+        .callout-card.callout-warn {
+            background-color: var(--callout-warn-bg);
+            border-color: var(--callout-warn-border);
+            color: var(--callout-warn-text);
+        }
+
+        .callout-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .callout-badge {
+            display: inline-flex;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #ffffff;
+            background-color: var(--accent-primary);
+        }
+
+        .callout-important .callout-badge { background-color: var(--callout-imp-border); }
+        .callout-tip .callout-badge, .callout-note .callout-badge { background-color: var(--callout-note-border); }
+        .callout-warn .callout-badge { background-color: var(--callout-warn-border); }
+
+        /* 表格样式 */
+        .table-wrapper {
+            margin: 18px 0 24px;
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.89rem;
+            text-align: left;
+        }
+
+        thead tr {
+            background-color: var(--table-header);
+        }
+
+        th {
+            padding: 10px 14px;
+            font-weight: 700;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            vertical-align: top;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: var(--table-alt);
+        }
+
+        /* Mermaid 图表容器：强制纯白底色 (#FFFFFF)、加粗字体、加粗线条 */
+        .mermaid-wrapper {
+            margin: 22px 0 28px;
+            padding: 24px;
+            background-color: #FFFFFF !important;
+            border: 2px solid #111111;
+            border-radius: 10px;
+            overflow-x: auto;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+        }
+
+        .mermaid {
+            background-color: #FFFFFF !important;
+            color: #111111 !important;
+            font-weight: 700 !important;
+            display: inline-block;
+            min-width: 320px;
+        }
+
+        .mermaid svg {
+            background-color: #FFFFFF !important;
+            font-weight: 700 !important;
+        }
+
+        .mermaid svg text,
+        .mermaid svg span,
+        .mermaid svg .nodeLabel,
+        .mermaid svg .edgeLabel,
+        .mermaid svg .messageText,
+        .mermaid svg .labelText,
+        .mermaid svg .loopText {
+            font-weight: 700 !important;
+            color: #111111 !important;
+            fill: #111111 !important;
+        }
+
+        .mermaid svg path,
+        .mermaid svg line,
+        .mermaid svg rect,
+        .mermaid svg polygon,
+        .mermaid svg circle {
+            stroke-width: 2.2px !important;
+        }
+
+        /* 数学公式块 */
+        .math-block {
+            background-color: var(--math-bg);
+            border: 1px solid var(--math-border);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 16px 0 22px;
+            overflow-x: auto;
+            text-align: center;
+        }
+
+        .math-block-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1px dashed var(--border-color);
+            font-size: 0.76rem;
+        }
+
+        .math-badge {
+            color: var(--accent-primary);
+            font-weight: 700;
+        }
+
+        .math-copy-btn {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.74rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        /* 原生 Markdown 源码视图 */
+        #markdown-source-view {
+            display: none;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .md-source-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .raw-md-textarea {
+            width: 100%;
+            height: 75vh;
+            font-family: "JetBrains Mono", Consolas, monospace;
+            font-size: 0.85rem;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 14px;
+            line-height: 1.6;
+        }
+
+        body.toc-collapsed .sidebar-toc {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="layout-wrapper">
+        <aside class="sidebar-toc" id="sidebarToc">
+            <div class="portal-nav-box">
+                <div class="portal-nav-title">文档中心快速导航</div>
+                <div class="portal-nav-list">
+<a href="../README.html" class="portal-nav-item" title="文档中心总览 (README)">文档中心总览 (README)</a>
+<a href="../specs/cognitive_memory_dev_spec.html" class="portal-nav-item active" title="三层认知记忆与双轨评测规范">三层认知记忆与双轨评测规范</a>
+<a href="../跨 Session 记忆数据集生成器思路.html" class="portal-nav-item" title="跨 Session 生成器总体设计">跨 Session 生成器总体设计</a>
+<a href="../记忆建模与数据集生成要求.html" class="portal-nav-item" title="记忆建模与生成要求">记忆建模与生成要求</a>
+<a href="../specs/persona_spec.html" class="portal-nav-item" title="Persona 画像建模规范">Persona 画像建模规范</a>
+<a href="../guides/cli_usage.html" class="portal-nav-item" title="CLI 命令行与流水线指南">CLI 命令行与流水线指南</a>
+<a href="../archive/defect_triage_log.html" class="portal-nav-item" title="001~150 批次缺陷治理实录">001~150 批次缺陷治理实录</a>
+<a href="../archive/memory_evolution_proposal.html" class="portal-nav-item" title="认知架构演进提案 (RFC)">认知架构演进提案 (RFC)</a>
+                </div>
+            </div>
+            <div class="toc-header">
+                <div class="toc-title">
+                    <span>本页目录大纲</span>
+                </div>
+                <button class="toc-action-btn" onclick="toggleDesktopToc()" title="收起目录">◀</button>
+            </div>
+            <div class="toc-search-box">
+                <input type="text" class="toc-search-input" id="tocSearchInput" placeholder="筛选目录章节..." oninput="filterToc()">
+            </div>
+            <nav class="toc-body">
+                <ul class="toc-list" id="tocList">
+<li class="toc-item toc-level-2"><a href="#目录大纲" class="toc-link" title="目录大纲">目录大纲</a></li>
+<li class="toc-item toc-level-2"><a href="#一-智能体定位与核心原则" class="toc-link" title="一、 智能体定位与核心原则">一、 智能体定位与核心原则</a></li>
+<li class="toc-item toc-level-2"><a href="#二-三层认知记忆中枢架构与分水岭" class="toc-link" title="二、 三层认知记忆中枢架构与分水岭">二、 三层认知记忆中枢架构与分水岭</a></li>
+<li class="toc-item toc-level-3"><a href="#21-事实记忆冷启动多轮澄清机制t3-轮" class="toc-link" title="2.1 事实记忆冷启动多轮澄清机制（$T=3$ 轮）">2.1 事实记忆冷启动多轮澄清机制（$T=3$ 轮）</a></li>
+<li class="toc-item toc-level-4"><a href="#双轨固化机制显式声明-vs-隐式归纳" class="toc-link" title="双轨固化机制（显式声明 vs 隐式归纳）：">双轨固化机制（显式声明 vs 隐式归纳）：</a></li>
+<li class="toc-item toc-level-3"><a href="#22-事实记忆全周期-6-大核心控制因子" class="toc-link" title="2.2 事实记忆全周期 6 大核心控制因子">2.2 事实记忆全周期 6 大核心控制因子</a></li>
+<li class="toc-item toc-level-2"><a href="#三-1620-轮动态生命周期时间线拓扑" class="toc-link" title="三、 16~20 轮动态生命周期时间线拓扑">三、 16~20 轮动态生命周期时间线拓扑</a></li>
+<li class="toc-item toc-level-3"><a href="#全景-20-候选生命周期槽位分布表" class="toc-link" title="全景 20 候选生命周期槽位分布表">全景 20 候选生命周期槽位分布表</a></li>
+<li class="toc-item toc-level-2"><a href="#四-五大黄金经验记忆场景深度规范" class="toc-link" title="四、 五大黄金经验记忆场景深度规范">四、 五大黄金经验记忆场景深度规范</a></li>
+<li class="toc-item toc-level-3"><a href="#场景1多意图局部突发延误隔离" class="toc-link" title="场景1：多意图局部突发延误隔离">场景1：多意图局部突发延误隔离</a></li>
+<li class="toc-item toc-level-3"><a href="#场景2重大活动提前预热试机时间推算" class="toc-link" title="场景2：重大活动提前预热试机时间推算">场景2：重大活动提前预热试机时间推算</a></li>
+<li class="toc-item toc-level-3"><a href="#场景3节假日调休周期排期避坑顺延" class="toc-link" title="场景3：节假日调休周期排期避坑顺延">场景3：节假日调休周期排期避坑顺延</a></li>
+<li class="toc-item toc-level-3"><a href="#场景4模糊多候选历史工单质量特征消歧" class="toc-link" title="场景4：模糊多候选历史工单质量特征消歧">场景4：模糊多候选历史工单质量特征消歧</a></li>
+<li class="toc-item toc-level-3"><a href="#场景5新旧工单时段撞车无缝让路接管" class="toc-link" title="场景5：新旧工单时段撞车无缝让路接管">场景5：新旧工单时段撞车无缝让路接管</a></li>
+<li class="toc-item toc-level-2"><a href="#五-双轨成败分支模拟评测引擎与量化指标" class="toc-link" title="五、 双轨成败分支模拟评测引擎与量化指标">五、 双轨成败分支模拟评测引擎与量化指标</a></li>
+<li class="toc-item toc-level-3"><a href="#核心量化指标体系" class="toc-link" title="核心量化指标体系">核心量化指标体系</a></li>
+<li class="toc-item toc-level-2"><a href="#六-物理文件组织与四元精准溯源-schema" class="toc-link" title="六、 物理文件组织与四元精准溯源 Schema">六、 物理文件组织与四元精准溯源 Schema</a></li>
+<li class="toc-item toc-level-3"><a href="#四元精准溯源标注字典ground-truth-schema" class="toc-link" title="四元精准溯源标注字典（Ground Truth Schema）">四元精准溯源标注字典（Ground Truth Schema）</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="container">
+                <div class="top-bar">
+                    <div class="nav-links">
+                        <button class="nav-btn" id="expandTocBtn" onclick="toggleDesktopToc()" style="display: none;">展开目录</button>
+                        <a href="../README.html" class="nav-btn">◀ 文档中心首页</a>
+                        <button class="nav-btn active" id="btnReadView" onclick="switchDocView('read')">阅读视图</button>
+                        <button class="nav-btn" id="btnSourceView" onclick="switchDocView('source')">Markdown 源码</button>
+                        <span style="color: var(--border-color)">|</span>
+                        <span style="font-size: 0.84rem; color: var(--text-muted);">docs/specs/cognitive_memory_dev_spec.md</span>
+                    </div>
+                    <button class="theme-switch-btn" onclick="toggleTheme()" id="themeBtn">
+                        切换暮色
+                    </button>
+                </div>
+
+                <article class="markdown-body" id="docReadView">
+<h1>“联接”Agent 跨会话三层认知记忆数据集与双轨评测引擎技术规范</h1>
+<blockquote><p><strong>文档状态</strong>：新特性开发与技术设计规范（Approved）</p>
+<p><strong>面向场景</strong>：“联接”Agent 通信保障意图参数提取（提参数）与长程记忆演进</p>
+<p><strong>会话规模</strong>：单用户生命周期规划为 <strong>16 ~ 20 轮动态会话</strong>（支持弹性扩展至 22 轮）</p>
+<p><strong>核心演进</strong>：事实记忆、工作记忆与五大黄金经验记忆全景贯通，内嵌双轨成败分支模拟评测</p></blockquote>
+<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+<h2 id="目录大纲">目录大纲</h2>
+<ul><li><a href="#一-智能体定位与核心原则" class="md-link">一、 智能体定位与核心原则</a>
+</li>
+<li><a href="#二-三层认知记忆中枢架构与分水岭" class="md-link">二、 三层认知记忆中枢架构与分水岭</a>
+</li>
+<li><a href="#三-1620-轮动态生命周期时间线拓扑" class="md-link">三、 16~20 轮动态生命周期时间线拓扑</a>
+</li>
+<li><a href="#四-五大黄金经验记忆场景深度规范" class="md-link">四、 五大黄金经验记忆场景深度规范</a>
+<ul><li><a href="#场景1多意图局部突发延误隔离" class="md-link">场景1：多意图局部突发延误隔离</a>
+</li>
+<li><a href="#场景2重大活动提前预热试机时间推算" class="md-link">场景2：重大活动提前预热试机时间推算</a>
+</li>
+<li><a href="#场景3节假日调休周期排期避坑顺延" class="md-link">场景3：节假日调休周期排期避坑顺延</a>
+</li>
+<li><a href="#场景4模糊多候选历史工单质量特征消歧" class="md-link">场景4：模糊多候选历史工单质量特征消歧</a>
+</li>
+<li><a href="#场景5新旧工单时段撞车无缝让路接管" class="md-link">场景5：新旧工单时段撞车无缝让路接管</a>
+</li>
+</ul></li>
+<li><a href="#五-双轨成败分支模拟评测引擎与量化指标" class="md-link">五、 双轨成败分支模拟评测引擎与量化指标</a>
+</li>
+<li><a href="#六-物理文件组织与四元精准溯源-schema" class="md-link">六、 物理文件组织与四元精准溯源 Schema</a>
+</li></ul>
+<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+<h2 id="一-智能体定位与核心原则">一、 智能体定位与核心原则</h2>
+<ol><li><strong>“联接”Agent 业务定位</strong>：
+<ul><li>正式命名：<strong>“联接”Agent</strong>；
+</li>
+<li>核心职责：专精于通信网络保障的<strong>意图参数提取（提参数）</strong>与精准闭环受理，严禁生成拖沓的客服推销式拉扯对话。
+</li>
+</ul></li>
+<li><strong>语言口语化与去黑话铁律</strong>：
+<ul><li>坚决杜绝生僻硬核的通信网管黑话（如“空口切片”、“相控阵天线”、“对星握手”、“微波回传链路”、“专网监控探针”）；
+</li>
+<li>全量采用真实用户与客服沟通的大白话（如“提前把网络通道占上试机”、“免得互相抢网速”、“节假日放假公司没人避免白扣费”、“两笔单子时间撞车了自动提前让路”）。
+</li>
+</ul></li>
+<li><strong>模版意图约束</strong>：
+<ul><li>严格恪守官方 T 模版规约：单个会话内为单意图或<strong>最多 2 个意图</strong>（如 T2-4，严禁捏造 3 意图以上的膨胀结构）。
+</li>
+</ul></li>
+<li><strong>评测专业称谓规范</strong>：
+<ul><li>架构与文档严禁使用戏谑词汇，统一命名为<strong>“双轨成败分支模拟评测”</strong>或<strong>“动态多分支评测”</strong>。
+</li></ul>
+</li></ol>
+<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+<h2 id="二-三层认知记忆中枢架构与分水岭">二、 三层认知记忆中枢架构与分水岭</h2>
+<p>数据集严格保证三层认知记忆的本体论纯洁性，杜绝概念混淆：</p>
+<div class="mermaid-wrapper"><div class="mermaid">
+graph TD
+    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2.5px,color:#111111;
+
+    subgraph MemoryBrain ["<b>“联接”Agent 三层认知记忆中枢</b>"]
+        FM["<b>【事实记忆 Factual】</b><br/>个人习惯/长期偏好/老规矩/别名<br/>(持久化于 memory_traces.json，来源: Memory)"]
+        WM["<b>【工作记忆 Working】</b><br/>独立历史工单物理流水账本<br/>(解耦于 working_records.jsonl，来源: WorkingRecord)"]
+        EM["<b>【经验记忆 Experiential】</b><br/>五大黄金业务推理/时钟推导/避坑裁决<br/>(沉淀于 experience_bank.json，来源: Experience)"]
+    end
+
+    UserPrompt["<b>用户当前多轮口语需求</b>"] --> Solver["<b>多槽位联合求解引擎 (Joint Slot Solver)</b>"]
+    
+    FM --> Solver
+    WM --> Solver
+    EM --> Solver
+    
+    Solver --> Output["<b>输出结构化通信保障工单</b><br/>(四元精准溯源: Turn / Memory / WorkingRecord / Experience)"]
+
+    style MemoryBrain fill:#FFFFFF,stroke:#111111,stroke-width:2.5px;
+</div></div>
+<ul><li><strong>事实记忆 (Factual Memory)</strong>：管“用户是谁、个人老规矩是啥”。负责冷启动（3轮澄清, <span class="katex-inline" data-tex="\alpha=0.0">$\alpha=0.0$</span>）与热启动（稳健2轮 <span class="katex-inline" data-tex="\alpha=0.5">$\alpha=0.5$</span>，极致1轮 <span class="katex-inline" data-tex="\alpha=1.0">$\alpha=1.0$</span>）。严禁将个人口语别名（如“晚饭后=19:30”）虚假包装成经验。
+</li>
+<li><strong>工作记忆 (Working Memory)</strong>：管真实发生的历史工单记录。通过独立的 <code>working_records.jsonl</code> 账本解耦，支撑跨期单据检索（“上周在奥体开的那单”）、变更改期（延后/提前）与多单消歧。
+</li>
+<li><strong>经验记忆 (Experiential Memory)</strong>：管无需用户交代、由智能体基于通信最佳实践主动推断的参数先验，专用于实现<strong>快速闭环（Fast Path）</strong>与<strong>复杂业务冲突解决</strong>。
+</li></ul>
+<h3 id="21-事实记忆冷启动多轮澄清机制t3-轮">2.1 事实记忆冷启动多轮澄清机制（<span class="katex-inline" data-tex="T=3">$T=3$</span> 轮）</h3>
+<p>为杜绝智能体在冷启动初期“擅自脑补通信参数”或“产生参数幻觉”，系统设置了前置质检硬门槛（Hard Gate）：在用户未建立老规矩时，智能体必须发起 3 轮严格的参数反问澄清收敛流：</p>
+<div class="mermaid-wrapper"><div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor User as <b>用户</b>
+    participant Agent as <b>“联接”Agent</b>
+
+    User->>Agent: <b>Turn 1 口语发起初步诉求（故意缺失通信参数）</b><br/>“帮我给抖音开直播做一个网络保障，今天12:30开始。”
+    Note over Agent: <b>冷启动零记忆质检硬门槛（Hard Gate）：</b><br/>反问澄清完整率 100%，严禁擅自脑补
+    Agent-->>User: <b>Turn 1 客服反问追问缺失槽位 (Request_Slot)</b><br/>“收到，已锁定抖音开直播保障。请问清晰度、时延上限和预计持续时长分别是多少呢？”
+
+    User->>Agent: <b>Turn 2 补齐参数并交代习惯 (Inform_Slot)</b><br/>“画质要1080p，时延50ms内，持续1小时。<br/>以后每天这个时段我说'老规矩'就按这个来，记住哈。”
+    Agent-->>User: <b>Turn 2 客服登记老规矩并反问确认 (Confirm_Slot)</b><br/>“收到，已为您登记老规矩习惯。确认按1080p、50ms内立即为您开通本次保障吗？”
+
+    User->>Agent: <b>Turn 3 最终闭环确认 (Confirm_Slot)</b><br/>“对，确认直接开通。”
+    Agent-->>User: <b>Turn 3 成功受理出单并固化记忆</b><br/>“好的，已按老规矩为您开通保障，祝您使用顺畅！”
+</div></div>
+<h4 id="双轨固化机制显式声明-vs-隐式归纳">双轨固化机制（显式声明 vs 隐式归纳）：</h4>
+<ol><li><strong>显式声明路径 (<code>explicit_declaration</code>)</strong>：用户在交互中主动声明规则指令（如“*以后按老规矩办*”），会话办结后触发 <code>form_memory_explicit</code>，记忆状态直接置为 <strong><code>active</code></strong>（<code>evidence_count = 1</code>）。
+</li>
+<li><strong>隐式归纳路径 (<code>implicit_induction</code>)</strong>：用户未显式交代长期偏好，首轮澄清办结后触发 <code>log_task_history</code>，记忆仅作为单次历史行为记录为 <strong><code>provisional</code>（候选/暂定状态）</strong>；直到后续会话出现第 2 次相同特征行为（<span class="katex-inline" data-tex="N \ge 2">$N \ge 2$</span>），经反问确认后才触发 <code>crystallize_implicit_memory</code> 固化为 <strong><code>active</code></strong>。
+</li></ol>
+<h3 id="22-事实记忆全周期-6-大核心控制因子">2.2 事实记忆全周期 6 大核心控制因子</h3>
+<div class="mermaid-wrapper"><div class="mermaid">
+graph TD
+    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2.5px,color:#111111;
+
+    subgraph ControlFactors ["<b>事实记忆全流程控制因子矩阵</b>"]
+        AF["<b>1. 记忆敏捷度因子 (α ∈ [0.0, 1.0])</b><br/>控制目标轮数压缩与默契梯度的总控旋钮"]
+        CH["<b>2. 冷热启动类型 (cold_hot_type)</b><br/>cold_start (无记忆澄清) / hot_start (有记忆复用)"]
+        EC["<b>3. 证据强度与状态阈值 (evidence_count)</b><br/>provisional (N=1 候选) → active (N≥2 固化)"]
+        OI["<b>4. 口语省略深度 (Omission Intensity)</b><br/>低敏捷弱省略暴露缺失槽位 vs 高敏捷深度省略"]
+        DM["<b>5. 记忆声明模式 (declaration_mode)</b><br/>explicit_declaration (显式) vs implicit_induction (隐式)"]
+        TT["<b>6. 场景时序触发类型 (storyline_trigger_type)</b><br/>time_periodic (周期型) / task_activity (任务型) / location_environment (地点型)"]
+    end
+
+    style ControlFactors fill:#FFFFFF,stroke:#111111,stroke-width:2.5px;
+</div></div>
+<ol><li><strong>记忆敏捷度因子（<code>agility_factor</code>, <span class="katex-inline" data-tex="\alpha \in [0.0, 1.0]">$\alpha \in [0.0, 1.0]$</span>）</strong>：
+<ul><li>目标轮数调制公式：<div class="math-block" data-tex="T_{\text{target}} = \text{round}\big(T_{\text{cold}} \cdot (1 - \alpha)\big)"><div class="katex-display-container" data-tex="T_{\text{target}} = \text{round}\big(T_{\text{cold}} \cdot (1 - \alpha)\big)">$$T_{\text{target}} = \text{round}\big(T_{\text{cold}} \cdot (1 - \alpha)\big)$$</div></div>
+</li>
+<li><span class="katex-inline" data-tex="\alpha = 0.0">$\alpha = 0.0$</span>（极端保守 / 冷启动澄清）：逐项追问缺失槽位，保持 <span class="katex-inline" data-tex="T = 3">$T = 3$</span> 轮；
+</li>
+<li><span class="katex-inline" data-tex="\alpha = 0.5">$\alpha = 0.5$</span>（常规稳健热启动）：调取记忆反问确认，收敛至 <span class="katex-inline" data-tex="T = 2">$T = 2$</span> 轮；
+</li>
+<li><span class="katex-inline" data-tex="\alpha = 1.0">$\alpha = 1.0$</span>（极致敏捷热启动）：秒级命中并默认直接受理出单，达成 <span class="katex-inline" data-tex="T = 1">$T = 1$</span> 轮极速闭环。
+</li>
+</ul></li>
+<li><strong>冷热启动类型标识（<code>cold_hot_type</code>）</strong>：
+<ul><li><code>cold_start</code>：冷启动，硬性约束反问澄清完整率 100%，脑补率 0%；
+</li>
+<li><code>hot_start</code>：热启动，基于记忆快速复用槽位。
+</li>
+</ul></li>
+<li><strong>证据强度与状态机计数（<code>evidence_count</code>）</strong>：
+<ul><li>记录该事实记忆被使用/验证的累计次数；
+</li>
+<li>状态转移：<code>provisional</code> (<span class="katex-inline" data-tex="N=1">$N=1$</span>) <span class="katex-inline" data-tex="\to">$\to$</span> <code>active</code> (<span class="katex-inline" data-tex="N \ge 2">$N \ge 2$</span>) <span class="katex-inline" data-tex="\to">$\to$</span> <code>reinforced</code> (<span class="katex-inline" data-tex="N &gt; 2">$N &gt; 2$</span>)。
+</li>
+</ul></li>
+<li><strong>台词口语省略深度（<code>Omission Intensity</code>）</strong>：
+<ul><li>低敏捷（<span class="katex-inline" data-tex="\alpha \le 0.3">$\alpha \le 0.3$</span>）：保留部分辅助信息，暴露关键参数缺失；
+</li>
+<li>高敏捷（<span class="katex-inline" data-tex="\alpha \ge 0.7">$\alpha \ge 0.7$</span>）：深度省略通信参数，倒逼模型必须依赖记忆补全。
+</li>
+</ul></li>
+<li><strong>记忆声明模式分流因子（<code>declaration_mode</code>）</strong>：
+<ul><li>按用户 ID 奇偶 50/50 分流：奇数用户显式声明，偶数用户隐式归纳。
+</li>
+</ul></li>
+<li><strong>场景时序触发因子（<code>storyline_trigger_type</code>）</strong>：
+<ul><li><code>time_periodic</code>（周期时间型）/ <code>task_activity</code>（任务活动型）/ <code>location_environment</code>（特定地点型）。
+</li></ul>
+</li></ol>
+<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+<h2 id="三-1620-轮动态生命周期时间线拓扑">三、 16~20 轮动态生命周期时间线拓扑</h2>
+<p>为适应更深度的认知演进，会话总量规划为 <strong>16 ~ 20 轮动态浮动</strong>（算术均值 18 轮），公式为：</p>
+
+                <div class="math-block" data-tex="\text{target\_count} = 16 + (\text{uid\_num} \pmod 5)">
+                    <div class="math-block-header">
+                        <span class="math-badge">LaTeX · 数学公式</span>
+                        <button class="math-copy-btn" onclick="copyLatex(this)" data-tex="\text{target\_count} = 16 + (\text{uid\_num} \pmod 5)">复制公式</button>
+                    </div>
+                    <div class="katex-display-container" data-tex="\text{target\_count} = 16 + (\text{uid\_num} \pmod 5)">$$\text{target\_count} = 16 + (\text{uid\_num} \pmod 5)$$</div>
+                </div>
+                
+<p>支持根据用户 ID 均匀离散分布在 <code>16, 17, 18, 19, 20</code> 轮之间。</p>
+<h3 id="全景-20-候选生命周期槽位分布表">全景 20 候选生命周期槽位分布表</h3>
+
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>序号</th><th>模版</th><th>主导记忆类型</th><th>角色与业务情境</th><th>轮数要求</th><th>关键机制与参数溯源</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>S01</strong></td><td><strong>T2-1</strong></td><td>事实记忆</td><td><strong>主线冷启动建联</strong>：用户显式立规矩，建立基线记忆 <code>MF_001</code></td><td>3 轮</td><td>冷启动严密澄清（<span class="katex-inline" data-tex="\alpha=0.0">$\alpha=0.0$</span>）</td></tr><tr><td><strong>S02</strong></td><td><strong>T3-1</strong></td><td>事实记忆</td><td><strong>支线1冷启动建联</strong>：大巴弱网转场，建立独立支线 <code>SUB_001</code></td><td>3 轮</td><td>支线代称消歧</td></tr><tr><td><strong>S03</strong></td><td><strong>T2-1</strong></td><td>事实记忆</td><td><strong>主线常规稳健热启动</strong>：呼出老规矩，Agent 反问确认</td><td>2 轮</td><td>热启动稳健复用（<span class="katex-inline" data-tex="\alpha=0.5">$\alpha=0.5$</span>）</td></tr><tr><td><strong>S04</strong></td><td><strong>T2-6</strong></td><td>工作记忆</td><td><strong>历史工单跨期复用</strong>：“按上周在奥体开的规格来”</td><td>2 轮</td><td>检索命中 <code>REC_01</code> 单据继承</td></tr><tr><td><strong>S05</strong></td><td><strong>T2-7</strong></td><td>工作记忆</td><td><strong>历史工单延期变更</strong>：“把昨天预约的单子往后推迟一小时”</td><td>2 轮</td><td>时间戳后移，时长继承</td></tr><tr><td><strong>S06</strong></td><td><strong>T2-1</strong></td><td><strong>经验记忆</strong></td><td><strong>场景3：节假日避坑顺延</strong>：预约下周一早会，遇国庆长假顺延</td><td>2 轮</td><td><code>EXP_CALENDAR_HOLIDAY_EXCEPTION_01</code></td></tr><tr><td><strong>S07</strong></td><td><strong>T2-5</strong></td><td>事实记忆</td><td><strong>主线局部时长修改</strong>：老规矩不变，现场活动延长至 180min</td><td>2 轮</td><td>基础参数复用，时长单次覆盖</td></tr><tr><td><strong>S08</strong></td><td><strong>T2-9</strong></td><td><strong>经验记忆</strong></td><td><strong>场景2：重大活动提前预热</strong>：开幕直播，自动前置30分试机</td><td>1~2 轮</td><td><code>EXP_PREWARM_BUFFER_01</code>（数学推导）</td></tr><tr><td><strong>S09</strong></td><td><strong>T2-3</strong></td><td>事实记忆</td><td><strong>恶劣天气临时纠偏</strong>：突发暴雨临时降级（仅当次生效）</td><td>2 轮</td><td>临时单次覆盖，不污染全局主线</td></tr><tr><td><strong>S10</strong></td><td><strong>T2-4</strong></td><td><strong>经验记忆</strong></td><td><strong>场景1：双意图延误隔离</strong>：上午会议拖堂，下午直播锁定不动</td><td>3 轮</td><td><code>EXP_MULTI_INTENT_PARTITION_01</code></td></tr><tr><td><strong>S11</strong></td><td><strong>T2-1</strong></td><td>事实记忆</td><td><strong>事件失效基线恢复</strong>：暴雨过去，自动无缝恢复 1080p 基线</td><td>2 轮</td><td>记忆状态机闭环</td></tr><tr><td><strong>S12</strong></td><td><strong>T2-6</strong></td><td><strong>经验记忆</strong></td><td><strong>场景4：模糊多单质量消歧</strong>：“按效果好的那次办”，排查日志</td><td>2 轮</td><td><code>EXP_ORDER_QUALITY_DISAMBIGUATION_01</code></td></tr><tr><td><strong>S13</strong></td><td><strong>T2-10</strong></td><td><strong>经验记忆</strong></td><td><strong>场景5：新旧工单撞车让路</strong>：新直播与旧单重叠，前单提前结单</td><td>2 轮</td><td><code>EXP_OVERLAPPING_ORDER_RESOLUTION_01</code></td></tr><tr><td><strong>S14</strong></td><td><strong>T2-7</strong></td><td>工作记忆</td><td><strong>历史工单提前变更</strong>：“把昨天预约的单子提前一小时开始”</td><td>2 轮</td><td>时间戳前移重算</td></tr><tr><td><strong>S15</strong></td><td><strong>T1-2</strong></td><td>事实隔离</td><td><strong>域外诉求拒识</strong>：宽带光纤装维报修，拒绝受理，隔离干扰</td><td>1 轮</td><td>意图拒识不改变记忆状态</td></tr><tr><td><strong>S16</strong></td><td><strong>T2-6</strong></td><td>工作记忆</td><td><strong>双工单时态消歧</strong>：“按之前的单子开”，候选不唯一追问消歧</td><td>3 轮</td><td>深度消歧交互</td></tr><tr><td><strong>S17</strong></td><td><strong>T2-1</strong></td><td>事实记忆</td><td><strong>支线2独立建联</strong>：酒店晚间复盘建立独立记忆 <code>SUB_002</code></td><td>3 轮</td><td>多故事线穿插隔离</td></tr><tr><td><strong>S18</strong></td><td><strong>T2-1</strong></td><td>事实记忆</td><td><strong>支线2常规复用</strong>：酒店复盘记忆复用</td><td>2 轮</td><td>支线复用强化</td></tr><tr><td><strong>S19</strong></td><td><strong>T1-1</strong></td><td>事实隔离</td><td><strong>单轮单次业务干扰</strong>：单次常规业务办结，不更新长期画像</td><td>1 轮</td><td>零记忆副作用</td></tr><tr><td><strong>S20</strong></td><td><strong>T2-1</strong></td><td>事实记忆</td><td><strong>终态极致敏捷终检</strong>：用户呼出老规矩，Agent 1 轮极速直达出单</td><td>1 轮</td><td>极致敏捷热启动（<span class="katex-inline" data-tex="\alpha=1.0">$\alpha=1.0$</span>）</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+<h2 id="四-五大黄金经验记忆场景深度规范">四、 五大黄金经验记忆场景深度规范</h2>
+<h3 id="场景1多意图局部突发延误隔离">场景1：多意图局部突发延误隔离</h3>
+<ul><li><strong>卡片标识</strong>：<code>EXP_MULTI_INTENT_PARTITION_01</code>
+</li>
+<li><strong>冲突定义</strong>：用户同时托付双意图（如上午内部会议 <span class="katex-inline" data-tex="I_1">$I_1$</span> + 下午发布直播 <span class="katex-inline" data-tex="I_2">$I_2$</span>）。<span class="katex-inline" data-tex="I_1">$I_1$</span> 突发超时严重拖堂，用户紧急修改，但要求 <span class="katex-inline" data-tex="I_2">$I_2$</span> 绝不能改错。
+</li>
+<li><strong>无经验 Slow Path (5轮)</strong>：Agent 发生意图混淆，把延误时间误当成下午直播开始时间；且漏算时长，泛泛追问，被用户严厉纠偏，拉扯 5 轮才办妥。
+</li>
+<li><strong>“联接”Agent Fast Path (3轮)</strong>：
+<ul><li>仅重算 <span class="katex-inline" data-tex="I_1">$I_1$</span> 的 <code>end_timestamp</code> 与 <code>duration</code>；
+</li>
+<li><span class="katex-inline" data-tex="I_2">$I_2$</span> 的起止时间严格冻结锁定，仅响应用户对 <span class="katex-inline" data-tex="I_2">$I_2$</span> 提出的局部时延收紧（≤30ms）；
+</li>
+<li>3 轮极速双闭环，绝不全盘推倒重来。
+</li></ul>
+</li></ul>
+<h3 id="场景2重大活动提前预热试机时间推算">场景2：重大活动提前预热试机时间推算</h3>
+<ul><li><strong>卡片标识</strong>：<code>EXP_PREWARM_BUFFER_01</code>
+</li>
+<li><strong>冲突定义</strong>：用户首轮完整给出基础保障参数（应用、业务、画质、时延）及活动原定起止时间（14:00-16:00，持续 120min），未主动提及试机预热。
+</li>
+<li><strong>无经验 Slow Path (4轮)</strong>：机械按 14:00 开通，用户在第 2 轮发现没有预留推流调试时间，急眼打断并要求提前改单，拉扯 4 轮。
+</li>
+<li><strong>“联接”Agent Fast Path (1~2轮)</strong>：
+<ul><li>自主识别重大活动并执行时间差推算：
+<div class="math-block" data-tex="S_{\text{start}} = 14:00 - 30\text{min} = 13:30, \quad D_{\text{duration}} = 120\text{min} + 30\text{min} = 150\text{min}"><div class="katex-display-container" data-tex="S_{\text{start}} = 14:00 - 30\text{min} = 13:30, \quad D_{\text{duration}} = 120\text{min} + 30\text{min} = 150\text{min}">$$S_{\text{start}} = 14:00 - 30\text{min} = 13:30, \quad D_{\text{duration}} = 120\text{min} + 30\text{min} = 150\text{min}$$</div></div>
+</li>
+<li>首轮直接为用户配置就绪或 2 轮确认闭环，省去 2 轮纠偏成本。
+</li></ul>
+</li></ul>
+<h3 id="场景3节假日调休周期排期避坑顺延">场景3：节假日调休周期排期避坑顺延</h3>
+<ul><li><strong>卡片标识</strong>：<code>EXP_CALENDAR_HOLIDAY_EXCEPTION_01</code>
+</li>
+<li><strong>冲突定义</strong>：用户预约下周一早会保障，但该日恰逢国庆节法定长假第一天。
+</li>
+<li><strong>无经验 Slow Path (4轮)</strong>：机械开通，放假当天白白扣费，用户发现后投诉退单，经历取消、重算、改期的 4 轮拉扯。
+</li>
+<li><strong>“联接”Agent Fast Path (2轮)</strong>：
+<ul><li>日历引擎识别假期冲突，主动在大白话回复中提醒放假背景；
+</li>
+<li>自动将日期顺延至节后首个工作日（10月8日周四）对应时段，2 轮优雅避坑出单。
+</li></ul>
+</li></ul>
+<h3 id="场景4模糊多候选历史工单质量特征消歧">场景4：模糊多候选历史工单质量特征消歧</h3>
+<ul><li><strong>卡片标识</strong>：<code>EXP_ORDER_QUALITY_DISAMBIGUATION_01</code>
+</li>
+<li><strong>冲突定义</strong>：用户提出“按上周效果好/没卡顿的那次办”。后台查到上周有周二（顺畅会议）和周四（网络波动直播）两张单据。
+</li>
+<li><strong>无经验 Slow Path (4~5轮)</strong>：盲猜选错单据挨骂，或者像报菜名一样把所有单据全盘向用户盘问。
+</li>
+<li><strong>“联接”Agent Fast Path (2轮)</strong>：
+<ul><li>调取工单质量运行日志，过滤掉曾有网络波动的单据，精准锁定周二零卡顿优质工单并直接调取规格；
+</li>
+<li>2 轮高效完成参数继承并闭环。
+</li></ul>
+</li></ul>
+<h3 id="场景5新旧工单时段撞车无缝让路接管">场景5：新旧工单时段撞车无缝让路接管</h3>
+<ul><li><strong>卡片标识</strong>：<code>EXP_OVERLAPPING_ORDER_RESOLUTION_01</code>
+</li>
+<li><strong>冲突定义</strong>：新申请的 15:00-17:00 直播，与之前预约的一笔日常保障（生效至 16:00）在 15:00-16:00 重叠撞车 1 小时。
+</li>
+<li><strong>无经验 Slow Path (4轮)</strong>：系统报错“时段重叠冲突”，客服直接把错误甩给用户，让用户自己去退单重申，拉扯 4 轮。
+</li>
+<li><strong>“联接”Agent Fast Path (2轮)</strong>：
+<ul><li>自动时钟裁决：协调前单在 15:00 提前交割结单，新直播单在 15:00 准时无缝激活接管通道；
+</li>
+<li>2 轮化解底层通信系统工单冲突。
+</li></ul>
+</li></ul>
+<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+<h2 id="五-双轨成败分支模拟评测引擎与量化指标">五、 双轨成败分支模拟评测引擎与量化指标</h2>
+<p>评测系统采用动态分支模拟器（Branching Simulator），根据被测模型的首轮推理质量，自动走入不同剧情线：</p>
+<div class="mermaid-wrapper"><div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor UserSim as <b>用户模拟器 (User Simulator)</b>
+    participant Agent as <b>“联接”Agent (被测模型)</b>
+    participant Judge as <b>双轨分支评测仲裁节点</b>
+
+    UserSim->>Agent: <b>Turn 1: 提出带冲突或需推理的完整基础参数保障诉求 (如 14:00-16:00 重大活动直播)</b>
+    Agent-->>Judge: <b>“联接”Agent 输出首轮答复与提取的参数字典</b>
+
+    Note over Judge: <b>双轨分支判定 (校验是否自主应用经验推导)</b>
+
+    alt <b>快速通关分支 (Fast Path)</b>
+        Judge-->>UserSim: <b>仲裁通过: 命中经验记忆 (自主推导提前 30 分钟预热)</b>
+        UserSim->>Agent: <b>Turn 2: 确认开通</b>
+        Note over Agent: <b>达成 1 至 2 轮极速自闭环 (实际评测轮数 T = 2)</b>
+    else <b>多轮纠偏分支 (Slow Path)</b>
+        Judge-->>UserSim: <b>仲裁未通过: 机械按字面受理 (未做预热推断)</b>
+        UserSim->>Agent: <b>Turn 2 紧急纠偏打断: 要求提前半小时预热调试</b>
+        Agent->>UserSim: <b>Turn 3: 客服重新计算时间并反问确认</b>
+        UserSim->>Agent: <b>Turn 4: 用户确认改单</b>
+        Note over Agent: <b>产生多轮低效拉扯 (实际评测轮数 T = 4)</b>
+    end
+
+    Note over Judge: <b>量化计分: 轮次压缩增益 TCG = (4 - T) / 4 × 100%</b>
+</div></div>
+<h3 id="核心量化指标体系">核心量化指标体系</h3>
+<ol><li><strong>轮次压缩增益 (Turn Compression Gain, TCG)</strong>：
+<div class="math-block" data-tex="\text{TCG} = \frac{T_{\text{slow}} - T_{\text{actual}}}{T_{\text{slow}}} \times 100\%"><div class="katex-display-container" data-tex="\text{TCG} = \frac{T_{\text{slow}} - T_{\text{actual}}}{T_{\text{slow}}} \times 100\%">$$\text{TCG} = \frac{T_{\text{slow}} - T_{\text{actual}}}{T_{\text{slow}}} \times 100\%$$</div></div>
+<ul><li>考核目标：五大经验场景全量综合 <span class="katex-inline" data-tex="\text{TCG} \ge 50\%">$\text{TCG} \ge 50\%$</span>。
+</li>
+</ul></li>
+<li><strong>经验槽位抽取召回率 (Experience Slot Recall)</strong>：
+<ul><li>校验模型在不依赖用户口语明示的情况下，对隐式经验参数（如预热偏移量、顺延后日期、让路交割时间）的自动推断准确率（目标 <span class="katex-inline" data-tex="\ge 90\%">$\ge 90\%$</span>）。
+</li>
+</ul></li>
+<li><strong>多意图隔离度 (Intent Partitioning Accuracy)</strong>：
+<ul><li>突变扰动发生时，非目标意图参数的受污染率严格为 <span class="katex-inline" data-tex="0\%">$0\%$</span>。
+</li></ul>
+</li></ol>
+<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+<h2 id="六-物理文件组织与四元精准溯源-schema">六、 物理文件组织与四元精准溯源 Schema</h2>
+<p>每个画像产物（如 <code>data/cognitive_samples/mobile_persona_001/</code>）目录结构如下：</p>
+<ul><li><code>experience_bank.json</code>：存储五大黄金 ReasoningBank 经验卡片；
+</li>
+<li><code>working_records.jsonl</code>：独立的已办工单流水物理账本；
+</li>
+<li><code>sessions.jsonl</code>：包含 16~20 轮标准化会话的主文件，内嵌 Fast/Slow 双轨分支元数据；
+</li>
+<li><code>memory_traces.json</code>：记录每个会话发生前后的记忆三元组演进快照。
+</li></ul>
+<h3 id="四元精准溯源标注字典ground-truth-schema">四元精准溯源标注字典（Ground Truth Schema）</h3>
+
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>溯源类型 (<code>source_type</code>)</th><th>语义解释</th><th>典型 <code>source_ref</code> 示例</th></tr></thead>
+                <tbody>
+                    <tr><td><strong><code>Turn</code></strong></td><td>用户当轮口语台词中明确提及的参数</td><td><code>&quot;U1&quot;</code>, <code>&quot;U2&quot;</code></td></tr><tr><td><strong><code>Memory</code></strong></td><td>来源于画像事实记忆库的长期老规矩与习惯</td><td><code>&quot;MF_001&quot;</code>, <code>&quot;SUB_001&quot;</code></td></tr><tr><td><strong><code>WorkingRecord</code></strong></td><td>继承自独立的已办保障工单物理账本</td><td><code>&quot;REC_mobile_persona_001_20261010_01&quot;</code></td></tr><tr><td><strong><code>Experience</code></strong></td><td>来源于五大黄金经验知识库的业务与时钟推断</td><td><code>&quot;EXP_PREWARM_BUFFER_01&quot;</code>, <code>&quot;EXP_MULTI_INTENT_PARTITION_01&quot;</code> 等</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+                </article>
+
+                <div id="markdown-source-view">
+                    <div class="md-source-toolbar">
+                        <strong>docs/specs/cognitive_memory_dev_spec.md 原生 Markdown 源码</strong>
+                        <button class="nav-btn active" onclick="copyRawMarkdown()">复制全文源码</button>
+                    </div>
+                    <textarea class="raw-md-textarea" id="rawMdArea" readonly># “联接”Agent 跨会话三层认知记忆数据集与双轨评测引擎技术规范
+
+&gt; **文档状态**：新特性开发与技术设计规范（Approved）  
+&gt; **面向场景**：“联接”Agent 通信保障意图参数提取（提参数）与长程记忆演进  
+&gt; **会话规模**：单用户生命周期规划为 **16 ~ 20 轮动态会话**（支持弹性扩展至 22 轮）  
+&gt; **核心演进**：事实记忆、工作记忆与五大黄金经验记忆全景贯通，内嵌双轨成败分支模拟评测  
+
+---
+
+## 目录大纲
+- [一、 智能体定位与核心原则](#一-智能体定位与核心原则)
+- [二、 三层认知记忆中枢架构与分水岭](#二-三层认知记忆中枢架构与分水岭)
+- [三、 16~20 轮动态生命周期时间线拓扑](#三-1620-轮动态生命周期时间线拓扑)
+- [四、 五大黄金经验记忆场景深度规范](#四-五大黄金经验记忆场景深度规范)
+  - [场景1：多意图局部突发延误隔离](#场景1多意图局部突发延误隔离)
+  - [场景2：重大活动提前预热试机时间推算](#场景2重大活动提前预热试机时间推算)
+  - [场景3：节假日调休周期排期避坑顺延](#场景3节假日调休周期排期避坑顺延)
+  - [场景4：模糊多候选历史工单质量特征消歧](#场景4模糊多候选历史工单质量特征消歧)
+  - [场景5：新旧工单时段撞车无缝让路接管](#场景5新旧工单时段撞车无缝让路接管)
+- [五、 双轨成败分支模拟评测引擎与量化指标](#五-双轨成败分支模拟评测引擎与量化指标)
+- [六、 物理文件组织与四元精准溯源 Schema](#六-物理文件组织与四元精准溯源-schema)
+
+---
+
+## 一、 智能体定位与核心原则
+
+1. **“联接”Agent 业务定位**：
+   - 正式命名：**“联接”Agent**；
+   - 核心职责：专精于通信网络保障的**意图参数提取（提参数）**与精准闭环受理，严禁生成拖沓的客服推销式拉扯对话。
+2. **语言口语化与去黑话铁律**：
+   - 坚决杜绝生僻硬核的通信网管黑话（如“空口切片”、“相控阵天线”、“对星握手”、“微波回传链路”、“专网监控探针”）；
+   - 全量采用真实用户与客服沟通的大白话（如“提前把网络通道占上试机”、“免得互相抢网速”、“节假日放假公司没人避免白扣费”、“两笔单子时间撞车了自动提前让路”）。
+3. **模版意图约束**：
+   - 严格恪守官方 T 模版规约：单个会话内为单意图或**最多 2 个意图**（如 T2-4，严禁捏造 3 意图以上的膨胀结构）。
+4. **评测专业称谓规范**：
+   - 架构与文档严禁使用戏谑词汇，统一命名为**“双轨成败分支模拟评测”**或**“动态多分支评测”**。
+
+---
+
+## 二、 三层认知记忆中枢架构与分水岭
+
+数据集严格保证三层认知记忆的本体论纯洁性，杜绝概念混淆：
+
+```mermaid
+graph TD
+    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2.5px,color:#111111;
+
+    subgraph MemoryBrain [&quot;&lt;b&gt;“联接”Agent 三层认知记忆中枢&lt;/b&gt;&quot;]
+        FM[&quot;&lt;b&gt;【事实记忆 Factual】&lt;/b&gt;&lt;br/&gt;个人习惯/长期偏好/老规矩/别名&lt;br/&gt;(持久化于 memory_traces.json，来源: Memory)&quot;]
+        WM[&quot;&lt;b&gt;【工作记忆 Working】&lt;/b&gt;&lt;br/&gt;独立历史工单物理流水账本&lt;br/&gt;(解耦于 working_records.jsonl，来源: WorkingRecord)&quot;]
+        EM[&quot;&lt;b&gt;【经验记忆 Experiential】&lt;/b&gt;&lt;br/&gt;五大黄金业务推理/时钟推导/避坑裁决&lt;br/&gt;(沉淀于 experience_bank.json，来源: Experience)&quot;]
+    end
+
+    UserPrompt[&quot;&lt;b&gt;用户当前多轮口语需求&lt;/b&gt;&quot;] --&gt; Solver[&quot;&lt;b&gt;多槽位联合求解引擎 (Joint Slot Solver)&lt;/b&gt;&quot;]
+    
+    FM --&gt; Solver
+    WM --&gt; Solver
+    EM --&gt; Solver
+    
+    Solver --&gt; Output[&quot;&lt;b&gt;输出结构化通信保障工单&lt;/b&gt;&lt;br/&gt;(四元精准溯源: Turn / Memory / WorkingRecord / Experience)&quot;]
+
+    style MemoryBrain fill:#FFFFFF,stroke:#111111,stroke-width:2.5px;
+```
+
+* **事实记忆 (Factual Memory)**：管“用户是谁、个人老规矩是啥”。负责冷启动（3轮澄清, $\alpha=0.0$）与热启动（稳健2轮 $\alpha=0.5$，极致1轮 $\alpha=1.0$）。严禁将个人口语别名（如“晚饭后=19:30”）虚假包装成经验。
+* **工作记忆 (Working Memory)**：管真实发生的历史工单记录。通过独立的 `working_records.jsonl` 账本解耦，支撑跨期单据检索（“上周在奥体开的那单”）、变更改期（延后/提前）与多单消歧。
+* **经验记忆 (Experiential Memory)**：管无需用户交代、由智能体基于通信最佳实践主动推断的参数先验，专用于实现**快速闭环（Fast Path）**与**复杂业务冲突解决**。
+
+### 2.1 事实记忆冷启动多轮澄清机制（$T=3$ 轮）
+
+为杜绝智能体在冷启动初期“擅自脑补通信参数”或“产生参数幻觉”，系统设置了前置质检硬门槛（Hard Gate）：在用户未建立老规矩时，智能体必须发起 3 轮严格的参数反问澄清收敛流：
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as &lt;b&gt;用户&lt;/b&gt;
+    participant Agent as &lt;b&gt;“联接”Agent&lt;/b&gt;
+
+    User-&gt;&gt;Agent: &lt;b&gt;Turn 1 口语发起初步诉求（故意缺失通信参数）&lt;/b&gt;&lt;br/&gt;“帮我给抖音开直播做一个网络保障，今天12:30开始。”
+    Note over Agent: &lt;b&gt;冷启动零记忆质检硬门槛（Hard Gate）：&lt;/b&gt;&lt;br/&gt;反问澄清完整率 100%，严禁擅自脑补
+    Agent--&gt;&gt;User: &lt;b&gt;Turn 1 客服反问追问缺失槽位 (Request_Slot)&lt;/b&gt;&lt;br/&gt;“收到，已锁定抖音开直播保障。请问清晰度、时延上限和预计持续时长分别是多少呢？”
+
+    User-&gt;&gt;Agent: &lt;b&gt;Turn 2 补齐参数并交代习惯 (Inform_Slot)&lt;/b&gt;&lt;br/&gt;“画质要1080p，时延50ms内，持续1小时。&lt;br/&gt;以后每天这个时段我说&#x27;老规矩&#x27;就按这个来，记住哈。”
+    Agent--&gt;&gt;User: &lt;b&gt;Turn 2 客服登记老规矩并反问确认 (Confirm_Slot)&lt;/b&gt;&lt;br/&gt;“收到，已为您登记老规矩习惯。确认按1080p、50ms内立即为您开通本次保障吗？”
+
+    User-&gt;&gt;Agent: &lt;b&gt;Turn 3 最终闭环确认 (Confirm_Slot)&lt;/b&gt;&lt;br/&gt;“对，确认直接开通。”
+    Agent--&gt;&gt;User: &lt;b&gt;Turn 3 成功受理出单并固化记忆&lt;/b&gt;&lt;br/&gt;“好的，已按老规矩为您开通保障，祝您使用顺畅！”
+```
+
+#### 双轨固化机制（显式声明 vs 隐式归纳）：
+1. **显式声明路径 (`explicit_declaration`)**：用户在交互中主动声明规则指令（如“*以后按老规矩办*”），会话办结后触发 `form_memory_explicit`，记忆状态直接置为 **`active`**（`evidence_count = 1`）。
+2. **隐式归纳路径 (`implicit_induction`)**：用户未显式交代长期偏好，首轮澄清办结后触发 `log_task_history`，记忆仅作为单次历史行为记录为 **`provisional`（候选/暂定状态）**；直到后续会话出现第 2 次相同特征行为（$N \ge 2$），经反问确认后才触发 `crystallize_implicit_memory` 固化为 **`active`**。
+
+### 2.2 事实记忆全周期 6 大核心控制因子
+
+```mermaid
+graph TD
+    classDef default fill:#FFFFFF,stroke:#111111,stroke-width:2.5px,color:#111111;
+
+    subgraph ControlFactors [&quot;&lt;b&gt;事实记忆全流程控制因子矩阵&lt;/b&gt;&quot;]
+        AF[&quot;&lt;b&gt;1. 记忆敏捷度因子 (α ∈ [0.0, 1.0])&lt;/b&gt;&lt;br/&gt;控制目标轮数压缩与默契梯度的总控旋钮&quot;]
+        CH[&quot;&lt;b&gt;2. 冷热启动类型 (cold_hot_type)&lt;/b&gt;&lt;br/&gt;cold_start (无记忆澄清) / hot_start (有记忆复用)&quot;]
+        EC[&quot;&lt;b&gt;3. 证据强度与状态阈值 (evidence_count)&lt;/b&gt;&lt;br/&gt;provisional (N=1 候选) → active (N≥2 固化)&quot;]
+        OI[&quot;&lt;b&gt;4. 口语省略深度 (Omission Intensity)&lt;/b&gt;&lt;br/&gt;低敏捷弱省略暴露缺失槽位 vs 高敏捷深度省略&quot;]
+        DM[&quot;&lt;b&gt;5. 记忆声明模式 (declaration_mode)&lt;/b&gt;&lt;br/&gt;explicit_declaration (显式) vs implicit_induction (隐式)&quot;]
+        TT[&quot;&lt;b&gt;6. 场景时序触发类型 (storyline_trigger_type)&lt;/b&gt;&lt;br/&gt;time_periodic (周期型) / task_activity (任务型) / location_environment (地点型)&quot;]
+    end
+
+    style ControlFactors fill:#FFFFFF,stroke:#111111,stroke-width:2.5px;
+```
+
+1. **记忆敏捷度因子（`agility_factor`, $\alpha \in [0.0, 1.0]$）**：
+   - 目标轮数调制公式：$$T_{\text{target}} = \text{round}\big(T_{\text{cold}} \cdot (1 - \alpha)\big)$$
+   - $\alpha = 0.0$（极端保守 / 冷启动澄清）：逐项追问缺失槽位，保持 $T = 3$ 轮；
+   - $\alpha = 0.5$（常规稳健热启动）：调取记忆反问确认，收敛至 $T = 2$ 轮；
+   - $\alpha = 1.0$（极致敏捷热启动）：秒级命中并默认直接受理出单，达成 $T = 1$ 轮极速闭环。
+2. **冷热启动类型标识（`cold_hot_type`）**：
+   - `cold_start`：冷启动，硬性约束反问澄清完整率 100%，脑补率 0%；
+   - `hot_start`：热启动，基于记忆快速复用槽位。
+3. **证据强度与状态机计数（`evidence_count`）**：
+   - 记录该事实记忆被使用/验证的累计次数；
+   - 状态转移：`provisional` ($N=1$) $\to$ `active` ($N \ge 2$) $\to$ `reinforced` ($N &gt; 2$)。
+4. **台词口语省略深度（`Omission Intensity`）**：
+   - 低敏捷（$\alpha \le 0.3$）：保留部分辅助信息，暴露关键参数缺失；
+   - 高敏捷（$\alpha \ge 0.7$）：深度省略通信参数，倒逼模型必须依赖记忆补全。
+5. **记忆声明模式分流因子（`declaration_mode`）**：
+   - 按用户 ID 奇偶 50/50 分流：奇数用户显式声明，偶数用户隐式归纳。
+6. **场景时序触发因子（`storyline_trigger_type`）**：
+   - `time_periodic`（周期时间型）/ `task_activity`（任务活动型）/ `location_environment`（特定地点型）。
+
+---
+
+## 三、 16~20 轮动态生命周期时间线拓扑
+
+为适应更深度的认知演进，会话总量规划为 **16 ~ 20 轮动态浮动**（算术均值 18 轮），公式为：
+$$\text{target\_count} = 16 + (\text{uid\_num} \pmod 5)$$
+支持根据用户 ID 均匀离散分布在 `16, 17, 18, 19, 20` 轮之间。
+
+### 全景 20 候选生命周期槽位分布表
+
+| 序号 | 模版 | 主导记忆类型 | 角色与业务情境 | 轮数要求 | 关键机制与参数溯源 |
+| :---: | :---: | :---: | :--- | :---: | :--- |
+| **S01** | **T2-1** | 事实记忆 | **主线冷启动建联**：用户显式立规矩，建立基线记忆 `MF_001` | 3 轮 | 冷启动严密澄清（$\alpha=0.0$） |
+| **S02** | **T3-1** | 事实记忆 | **支线1冷启动建联**：大巴弱网转场，建立独立支线 `SUB_001` | 3 轮 | 支线代称消歧 |
+| **S03** | **T2-1** | 事实记忆 | **主线常规稳健热启动**：呼出老规矩，Agent 反问确认 | 2 轮 | 热启动稳健复用（$\alpha=0.5$） |
+| **S04** | **T2-6** | 工作记忆 | **历史工单跨期复用**：“按上周在奥体开的规格来” | 2 轮 | 检索命中 `REC_01` 单据继承 |
+| **S05** | **T2-7** | 工作记忆 | **历史工单延期变更**：“把昨天预约的单子往后推迟一小时” | 2 轮 | 时间戳后移，时长继承 |
+| **S06** | **T2-1** | **经验记忆** | **场景3：节假日避坑顺延**：预约下周一早会，遇国庆长假顺延 | 2 轮 | `EXP_CALENDAR_HOLIDAY_EXCEPTION_01` |
+| **S07** | **T2-5** | 事实记忆 | **主线局部时长修改**：老规矩不变，现场活动延长至 180min | 2 轮 | 基础参数复用，时长单次覆盖 |
+| **S08** | **T2-9** | **经验记忆** | **场景2：重大活动提前预热**：开幕直播，自动前置30分试机 | 1~2 轮 | `EXP_PREWARM_BUFFER_01`（数学推导） |
+| **S09** | **T2-3** | 事实记忆 | **恶劣天气临时纠偏**：突发暴雨临时降级（仅当次生效） | 2 轮 | 临时单次覆盖，不污染全局主线 |
+| **S10** | **T2-4** | **经验记忆** | **场景1：双意图延误隔离**：上午会议拖堂，下午直播锁定不动 | 3 轮 | `EXP_MULTI_INTENT_PARTITION_01` |
+| **S11** | **T2-1** | 事实记忆 | **事件失效基线恢复**：暴雨过去，自动无缝恢复 1080p 基线 | 2 轮 | 记忆状态机闭环 |
+| **S12** | **T2-6** | **经验记忆** | **场景4：模糊多单质量消歧**：“按效果好的那次办”，排查日志 | 2 轮 | `EXP_ORDER_QUALITY_DISAMBIGUATION_01` |
+| **S13** | **T2-10**| **经验记忆** | **场景5：新旧工单撞车让路**：新直播与旧单重叠，前单提前结单 | 2 轮 | `EXP_OVERLAPPING_ORDER_RESOLUTION_01` |
+| **S14** | **T2-7** | 工作记忆 | **历史工单提前变更**：“把昨天预约的单子提前一小时开始” | 2 轮 | 时间戳前移重算 |
+| **S15** | **T1-2** | 事实隔离 | **域外诉求拒识**：宽带光纤装维报修，拒绝受理，隔离干扰 | 1 轮 | 意图拒识不改变记忆状态 |
+| **S16** | **T2-6** | 工作记忆 | **双工单时态消歧**：“按之前的单子开”，候选不唯一追问消歧 | 3 轮 | 深度消歧交互 |
+| **S17** | **T2-1** | 事实记忆 | **支线2独立建联**：酒店晚间复盘建立独立记忆 `SUB_002` | 3 轮 | 多故事线穿插隔离 |
+| **S18** | **T2-1** | 事实记忆 | **支线2常规复用**：酒店复盘记忆复用 | 2 轮 | 支线复用强化 |
+| **S19** | **T1-1** | 事实隔离 | **单轮单次业务干扰**：单次常规业务办结，不更新长期画像 | 1 轮 | 零记忆副作用 |
+| **S20** | **T2-1** | 事实记忆 | **终态极致敏捷终检**：用户呼出老规矩，Agent 1 轮极速直达出单 | 1 轮 | 极致敏捷热启动（$\alpha=1.0$） |
+
+---
+
+## 四、 五大黄金经验记忆场景深度规范
+
+### 场景1：多意图局部突发延误隔离
+* **卡片标识**：`EXP_MULTI_INTENT_PARTITION_01`
+* **冲突定义**：用户同时托付双意图（如上午内部会议 $I_1$ + 下午发布直播 $I_2$）。$I_1$ 突发超时严重拖堂，用户紧急修改，但要求 $I_2$ 绝不能改错。
+* **无经验 Slow Path (5轮)**：Agent 发生意图混淆，把延误时间误当成下午直播开始时间；且漏算时长，泛泛追问，被用户严厉纠偏，拉扯 5 轮才办妥。
+* **“联接”Agent Fast Path (3轮)**：
+  * 仅重算 $I_1$ 的 `end_timestamp` 与 `duration`；
+  * $I_2$ 的起止时间严格冻结锁定，仅响应用户对 $I_2$ 提出的局部时延收紧（≤30ms）；
+  * 3 轮极速双闭环，绝不全盘推倒重来。
+
+### 场景2：重大活动提前预热试机时间推算
+* **卡片标识**：`EXP_PREWARM_BUFFER_01`
+* **冲突定义**：用户首轮完整给出基础保障参数（应用、业务、画质、时延）及活动原定起止时间（14:00-16:00，持续 120min），未主动提及试机预热。
+* **无经验 Slow Path (4轮)**：机械按 14:00 开通，用户在第 2 轮发现没有预留推流调试时间，急眼打断并要求提前改单，拉扯 4 轮。
+* **“联接”Agent Fast Path (1~2轮)**：
+  * 自主识别重大活动并执行时间差推算：
+    $$S_{\text{start}} = 14:00 - 30\text{min} = 13:30, \quad D_{\text{duration}} = 120\text{min} + 30\text{min} = 150\text{min}$$
+  * 首轮直接为用户配置就绪或 2 轮确认闭环，省去 2 轮纠偏成本。
+
+### 场景3：节假日调休周期排期避坑顺延
+* **卡片标识**：`EXP_CALENDAR_HOLIDAY_EXCEPTION_01`
+* **冲突定义**：用户预约下周一早会保障，但该日恰逢国庆节法定长假第一天。
+* **无经验 Slow Path (4轮)**：机械开通，放假当天白白扣费，用户发现后投诉退单，经历取消、重算、改期的 4 轮拉扯。
+* **“联接”Agent Fast Path (2轮)**：
+  * 日历引擎识别假期冲突，主动在大白话回复中提醒放假背景；
+  * 自动将日期顺延至节后首个工作日（10月8日周四）对应时段，2 轮优雅避坑出单。
+
+### 场景4：模糊多候选历史工单质量特征消歧
+* **卡片标识**：`EXP_ORDER_QUALITY_DISAMBIGUATION_01`
+* **冲突定义**：用户提出“按上周效果好/没卡顿的那次办”。后台查到上周有周二（顺畅会议）和周四（网络波动直播）两张单据。
+* **无经验 Slow Path (4~5轮)**：盲猜选错单据挨骂，或者像报菜名一样把所有单据全盘向用户盘问。
+* **“联接”Agent Fast Path (2轮)**：
+  * 调取工单质量运行日志，过滤掉曾有网络波动的单据，精准锁定周二零卡顿优质工单并直接调取规格；
+  * 2 轮高效完成参数继承并闭环。
+
+### 场景5：新旧工单时段撞车无缝让路接管
+* **卡片标识**：`EXP_OVERLAPPING_ORDER_RESOLUTION_01`
+* **冲突定义**：新申请的 15:00-17:00 直播，与之前预约的一笔日常保障（生效至 16:00）在 15:00-16:00 重叠撞车 1 小时。
+* **无经验 Slow Path (4轮)**：系统报错“时段重叠冲突”，客服直接把错误甩给用户，让用户自己去退单重申，拉扯 4 轮。
+* **“联接”Agent Fast Path (2轮)**：
+  * 自动时钟裁决：协调前单在 15:00 提前交割结单，新直播单在 15:00 准时无缝激活接管通道；
+  * 2 轮化解底层通信系统工单冲突。
+
+---
+
+## 五、 双轨成败分支模拟评测引擎与量化指标
+
+评测系统采用动态分支模拟器（Branching Simulator），根据被测模型的首轮推理质量，自动走入不同剧情线：
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor UserSim as &lt;b&gt;用户模拟器 (User Simulator)&lt;/b&gt;
+    participant Agent as &lt;b&gt;“联接”Agent (被测模型)&lt;/b&gt;
+    participant Judge as &lt;b&gt;双轨分支评测仲裁节点&lt;/b&gt;
+
+    UserSim-&gt;&gt;Agent: &lt;b&gt;Turn 1: 提出带冲突或需推理的完整基础参数保障诉求 (如 14:00-16:00 重大活动直播)&lt;/b&gt;
+    Agent--&gt;&gt;Judge: &lt;b&gt;“联接”Agent 输出首轮答复与提取的参数字典&lt;/b&gt;
+
+    Note over Judge: &lt;b&gt;双轨分支判定 (校验是否自主应用经验推导)&lt;/b&gt;
+
+    alt &lt;b&gt;快速通关分支 (Fast Path)&lt;/b&gt;
+        Judge--&gt;&gt;UserSim: &lt;b&gt;仲裁通过: 命中经验记忆 (自主推导提前 30 分钟预热)&lt;/b&gt;
+        UserSim-&gt;&gt;Agent: &lt;b&gt;Turn 2: 确认开通&lt;/b&gt;
+        Note over Agent: &lt;b&gt;达成 1 至 2 轮极速自闭环 (实际评测轮数 T = 2)&lt;/b&gt;
+    else &lt;b&gt;多轮纠偏分支 (Slow Path)&lt;/b&gt;
+        Judge--&gt;&gt;UserSim: &lt;b&gt;仲裁未通过: 机械按字面受理 (未做预热推断)&lt;/b&gt;
+        UserSim-&gt;&gt;Agent: &lt;b&gt;Turn 2 紧急纠偏打断: 要求提前半小时预热调试&lt;/b&gt;
+        Agent-&gt;&gt;UserSim: &lt;b&gt;Turn 3: 客服重新计算时间并反问确认&lt;/b&gt;
+        UserSim-&gt;&gt;Agent: &lt;b&gt;Turn 4: 用户确认改单&lt;/b&gt;
+        Note over Agent: &lt;b&gt;产生多轮低效拉扯 (实际评测轮数 T = 4)&lt;/b&gt;
+    end
+
+    Note over Judge: &lt;b&gt;量化计分: 轮次压缩增益 TCG = (4 - T) / 4 × 100%&lt;/b&gt;
+```
+
+### 核心量化指标体系
+
+1. **轮次压缩增益 (Turn Compression Gain, TCG)**：
+   $$\text{TCG} = \frac{T_{\text{slow}} - T_{\text{actual}}}{T_{\text{slow}}} \times 100\%$$
+   * 考核目标：五大经验场景全量综合 $\text{TCG} \ge 50\%$。
+2. **经验槽位抽取召回率 (Experience Slot Recall)**：
+   * 校验模型在不依赖用户口语明示的情况下，对隐式经验参数（如预热偏移量、顺延后日期、让路交割时间）的自动推断准确率（目标 $\ge 90\%$）。
+3. **多意图隔离度 (Intent Partitioning Accuracy)**：
+   * 突变扰动发生时，非目标意图参数的受污染率严格为 $0\%$。
+
+---
+
+## 六、 物理文件组织与四元精准溯源 Schema
+
+每个画像产物（如 `data/cognitive_samples/mobile_persona_001/`）目录结构如下：
+* `experience_bank.json`：存储五大黄金 ReasoningBank 经验卡片；
+* `working_records.jsonl`：独立的已办工单流水物理账本；
+* `sessions.jsonl`：包含 16~20 轮标准化会话的主文件，内嵌 Fast/Slow 双轨分支元数据；
+* `memory_traces.json`：记录每个会话发生前后的记忆三元组演进快照。
+
+### 四元精准溯源标注字典（Ground Truth Schema）
+
+| 溯源类型 (`source_type`) | 语义解释 | 典型 `source_ref` 示例 |
+| :--- | :--- | :--- |
+| **`Turn`** | 用户当轮口语台词中明确提及的参数 | `&quot;U1&quot;`, `&quot;U2&quot;` |
+| **`Memory`** | 来源于画像事实记忆库的长期老规矩与习惯 | `&quot;MF_001&quot;`, `&quot;SUB_001&quot;` |
+| **`WorkingRecord`** | 继承自独立的已办保障工单物理账本 | `&quot;REC_mobile_persona_001_20261010_01&quot;` |
+| **`Experience`** | 来源于五大黄金经验知识库的业务与时钟推断 | `&quot;EXP_PREWARM_BUFFER_01&quot;`, `&quot;EXP_MULTI_INTENT_PARTITION_01&quot;` 等 |
+</textarea>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const htmlEl = document.documentElement;
+            const currentTheme = htmlEl.getAttribute('data-theme') || 'parchment';
+            const newTheme = currentTheme === 'parchment' ? 'twilight' : 'parchment';
+            htmlEl.setAttribute('data-theme', newTheme);
+            localStorage.setItem('doc-theme', newTheme);
+            document.getElementById('themeBtn').innerText = newTheme === 'parchment' ? '切换暮色' : '切换米纸';
+        }
+
+        function toggleDesktopToc() {
+            document.body.classList.toggle('toc-collapsed');
+            const isCollapsed = document.body.classList.contains('toc-collapsed');
+            document.getElementById('expandTocBtn').style.display = isCollapsed ? 'inline-flex' : 'none';
+        }
+
+        function switchDocView(mode) {
+            const readEl = document.getElementById('docReadView');
+            const srcEl = document.getElementById('markdown-source-view');
+            document.getElementById('btnReadView').classList.toggle('active', mode !== 'source');
+            document.getElementById('btnSourceView').classList.toggle('active', mode === 'source');
+            readEl.style.display = mode === 'source' ? 'none' : 'block';
+            srcEl.style.display = mode === 'source' ? 'block' : 'none';
+        }
+
+        function copyRawMarkdown() {
+            const area = document.getElementById('rawMdArea');
+            navigator.clipboard.writeText(area.value);
+        }
+
+        function copyCodeCard(btn) {
+            const card = btn.closest('.code-card');
+            const code = card ? card.querySelector('pre code') : null;
+            if (!code) return;
+            navigator.clipboard.writeText(code.innerText).then(() => {
+                const orig = btn.innerText;
+                btn.innerText = '已复制';
+                setTimeout(() => { btn.innerText = orig; }, 1800);
+            });
+        }
+
+        function copyLatex(btn) {
+            const tex = btn.getAttribute('data-tex');
+            if (tex) {
+                navigator.clipboard.writeText(tex).then(() => {
+                    const orig = btn.innerText;
+                    btn.innerText = '已复制 LaTeX';
+                    setTimeout(() => { btn.innerText = orig; }, 1800);
+                });
+            }
+        }
+
+        function filterToc() {
+            const kw = document.getElementById('tocSearchInput').value.trim().toLowerCase();
+            document.querySelectorAll('#tocList .toc-item').forEach(li => {
+                li.style.display = (!kw || li.innerText.toLowerCase().includes(kw)) ? 'block' : 'none';
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('doc-theme') || 'parchment';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('themeBtn').innerText = savedTheme === 'parchment' ? '切换暮色' : '切换米纸';
+
+            if (window.katex) {
+                document.querySelectorAll('.katex-inline').forEach(el => {
+                    const tex = el.getAttribute('data-tex');
+                    if (tex) {
+                        try {
+                            el.innerHTML = katex.renderToString(tex, { displayMode: false, throwOnError: false });
+                        } catch (e) {}
+                    }
+                });
+                document.querySelectorAll('.katex-display-container').forEach(el => {
+                    const tex = el.getAttribute('data-tex');
+                    if (tex) {
+                        try {
+                            el.innerHTML = katex.renderToString(tex, { displayMode: true, throwOnError: false });
+                        } catch (e) {}
+                    }
+                });
+            }
+
+            if (window.mermaid) {
+                mermaid.initialize({
+                    startOnLoad: true,
+                    theme: 'base',
+                    themeVariables: {
+                        background: '#FFFFFF',
+                        primaryColor: '#FFFFFF',
+                        primaryTextColor: '#111111',
+                        primaryBorderColor: '#111111',
+                        lineColor: '#111111',
+                        secondaryColor: '#FFFFFF',
+                        tertiaryColor: '#FFFFFF',
+                        mainBkg: '#FFFFFF',
+                        nodeBorder: '#111111',
+                        clusterBkg: '#FFFFFF',
+                        clusterBorder: '#111111',
+                        actorBkg: '#FFFFFF',
+                        actorBorder: '#111111',
+                        actorTextColor: '#111111',
+                        signalColor: '#111111',
+                        signalTextColor: '#111111',
+                        labelBoxBkgColor: '#FFFFFF',
+                        labelBoxBorderColor: '#111111',
+                        labelTextColor: '#111111',
+                        noteBkgColor: '#FFFFFF',
+                        noteBorderColor: '#111111',
+                        noteTextColor: '#111111'
+                    }
+                });
+            }
+
+            if (window.hljs) {
+                hljs.highlightAll();
+            }
+
+            const links = document.querySelectorAll('.toc-link');
+            const sections = [];
+            links.forEach(link => {
+                const targetId = decodeURIComponent(link.getAttribute('href').slice(1));
+                const section = document.getElementById(targetId);
+                if (section) {
+                    sections.push({ id: targetId, el: section, link: link });
+                }
+            });
+
+            window.addEventListener('scroll', () => {
+                const scrollPos = window.scrollY + 110;
+                let activeId = sections.length ? sections[0].id : null;
+                for (let i = 0; i < sections.length; i++) {
+                    if (sections[i].el.offsetTop <= scrollPos) {
+                        activeId = sections[i].id;
+                    }
+                }
+                links.forEach(link => {
+                    const hrefId = decodeURIComponent(link.getAttribute('href').slice(1));
+                    link.classList.toggle('active', hrefId === activeId);
+                });
+            }, { passive: true });
+        });
+    </script>
+</body>
+</html>

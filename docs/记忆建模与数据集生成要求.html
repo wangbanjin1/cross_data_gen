@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="parchment">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>记忆建模与数据集生成要求</title>
+    <!-- KaTeX 数学公式样式与渲染脚本 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css';">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js';"></script>
+    <!-- Highlight.js 代码高亮 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <!-- Mermaid.js 动态图表渲染 -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root[data-theme="parchment"] {
+            --bg-color: #f7f4ec;
+            --surface-color: #eee9dc;
+            --surface-elevated: #e6dfcf;
+            --border-color: #dcd4c0;
+            --border-subtle: #e6dfd1;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --text-muted: #718096;
+            --accent-primary: #a35d28;
+            --accent-glow: rgba(163, 93, 40, 0.08);
+            --code-bg: #eae3d2;
+            --code-text: #8d3a2b;
+            --pre-bg: #ece5d6;
+            --pre-text: #2d3748;
+            --callout-note-bg: #e5ede3;
+            --callout-note-border: #709775;
+            --callout-note-text: #2b5133;
+            --callout-warn-bg: #f5eedb;
+            --callout-warn-border: #c48a37;
+            --callout-warn-text: #704b12;
+            --callout-imp-bg: #e5eaf5;
+            --callout-imp-border: #5c7cb6;
+            --callout-imp-text: #1e3863;
+            --math-bg: #eee7d7;
+            --math-border: #c9bea6;
+            --table-header: #e4dccb;
+            --table-alt: #f1ecdf;
+            --tag-bg: #dfd5be;
+            --tag-text: #59472d;
+            --toggle-bg: #dfd6c2;
+            --card-shadow: 0 4px 18px rgba(45, 55, 72, 0.05);
+        }
+
+        :root[data-theme="twilight"] {
+            --bg-color: #1a1e24;
+            --surface-color: #232931;
+            --surface-elevated: #2c343f;
+            --border-color: #39424e;
+            --border-subtle: #2d3642;
+            --text-primary: #dce1e8;
+            --text-secondary: #b0bac6;
+            --text-muted: #707b88;
+            --accent-primary: #e09f67;
+            --accent-glow: rgba(224, 159, 103, 0.12);
+            --code-bg: #15181d;
+            --code-text: #f08d70;
+            --pre-bg: #171b21;
+            --pre-text: #cdd3dc;
+            --callout-note-bg: #202b28;
+            --callout-note-border: #4d7a68;
+            --callout-note-text: #8bbfa8;
+            --callout-warn-bg: #2b251d;
+            --callout-warn-border: #8a6c38;
+            --callout-warn-text: #d9b168;
+            --callout-imp-bg: #1d2533;
+            --callout-imp-border: #4a638c;
+            --callout-imp-text: #96b5e3;
+            --math-bg: #1f252d;
+            --math-border: #3b4654;
+            --table-header: #262e38;
+            --table-alt: #1f242c;
+            --tag-bg: #323c48;
+            --tag-text: #d2a679;
+            --toggle-bg: #323b47;
+            --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.78;
+            font-size: 15.2px;
+        }
+
+        .layout-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 侧边栏导航与目录 */
+        .sidebar-toc {
+            width: 310px;
+            background-color: var(--surface-color);
+            border-right: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            z-index: 100;
+        }
+
+        .portal-nav-box {
+            margin-bottom: 14px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .portal-nav-title {
+            font-size: 0.76rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: 6px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .portal-nav-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .portal-nav-item {
+            display: block;
+            padding: 4px 8px;
+            font-size: 0.81rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.15s;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .portal-nav-item:hover {
+            background-color: var(--surface-elevated);
+            color: var(--accent-primary);
+        }
+
+        .portal-nav-item.active {
+            background-color: var(--accent-glow);
+            color: var(--accent-primary);
+            font-weight: 700;
+            border-left: 3px solid var(--accent-primary);
+        }
+
+        .toc-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .toc-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .toc-action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            padding: 4px 6px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .toc-action-btn:hover {
+            color: var(--accent-primary);
+            background-color: var(--surface-elevated);
+        }
+
+        .toc-search-box {
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+
+        .toc-search-input {
+            width: 100%;
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-color);
+            color: var(--text-primary);
+            font-size: 0.82rem;
+            outline: none;
+        }
+
+        .toc-search-input:focus {
+            border-color: var(--accent-primary);
+        }
+
+        .toc-body {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-item {
+            margin-bottom: 3px;
+        }
+
+        .toc-item.toc-level-2 {
+            margin-top: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .toc-item.toc-level-3 {
+            padding-left: 12px;
+            font-size: 0.81rem;
+            color: var(--text-secondary);
+        }
+
+        .toc-item.toc-level-4 {
+            padding-left: 22px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .toc-link {
+            display: block;
+            padding: 4px 8px;
+            color: inherit;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.15s;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .toc-link:hover {
+            background-color: var(--surface-elevated);
+            color: var(--accent-primary);
+        }
+
+        .toc-link.active {
+            background-color: var(--accent-glow);
+            color: var(--accent-primary);
+            font-weight: 700;
+            border-left: 3px solid var(--accent-primary);
+        }
+
+        /* 主内容区域 */
+        .main-content {
+            flex: 1;
+            padding: 32px 48px 80px;
+            overflow-x: hidden;
+        }
+
+        @media (max-width: 960px) {
+            .sidebar-toc {
+                display: none;
+            }
+            .main-content {
+                padding: 20px 18px 60px;
+            }
+        }
+
+        .container {
+            max-width: 1020px;
+            margin: 0 auto;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 6px;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.84rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            border-color: var(--accent-primary);
+            color: #ffffff;
+            background-color: var(--accent-primary);
+        }
+
+        .theme-switch-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            background-color: var(--toggle-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 0.84rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Markdown 正文排版 */
+        .markdown-body {
+            color: var(--text-primary);
+        }
+
+        .markdown-body h1 {
+            font-size: 1.95rem;
+            font-weight: 800;
+            line-height: 1.35;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 2px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .markdown-body h2 {
+            font-size: 1.42rem;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-top: 42px;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-primary);
+            padding-left: 12px;
+            color: var(--text-primary);
+        }
+
+        .markdown-body h3 {
+            font-size: 1.15rem;
+            font-weight: 650;
+            line-height: 1.45;
+            margin-top: 28px;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .markdown-body h4 {
+            font-size: 1.0rem;
+            font-weight: 650;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            color: var(--accent-primary);
+        }
+
+        .markdown-body p {
+            margin-bottom: 14px;
+            line-height: 1.78;
+        }
+
+        .markdown-body ul, .markdown-body ol {
+            margin-bottom: 16px;
+            padding-left: 24px;
+        }
+
+        .markdown-body ul ul, .markdown-body ol ul, .markdown-body ul ol {
+            margin-top: 6px;
+            margin-bottom: 6px;
+        }
+
+        .markdown-body li {
+            margin-bottom: 6px;
+            line-height: 1.72;
+        }
+
+        .markdown-body strong {
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .md-link {
+            color: var(--accent-primary);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            font-weight: 600;
+        }
+
+        .md-link:hover {
+            opacity: 0.85;
+        }
+
+        .markdown-body code {
+            font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.88em;
+        }
+
+        /* 代码块带复制栏 */
+        .code-card {
+            background-color: var(--pre-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin: 16px 0 22px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+
+        .code-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 14px;
+            background-color: var(--surface-color);
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.76rem;
+        }
+
+        .code-card-lang {
+            font-family: "JetBrains Mono", Consolas, monospace;
+            font-weight: 700;
+            color: var(--accent-primary);
+            text-transform: uppercase;
+        }
+
+        .code-copy-btn {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            color: var(--text-secondary);
+            padding: 2px 8px;
+            font-size: 0.74rem;
+            cursor: pointer;
+        }
+
+        .code-copy-btn:hover {
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .markdown-body pre {
+            background-color: transparent;
+            color: var(--pre-text);
+            padding: 14px 16px;
+            overflow-x: auto;
+            margin: 0;
+            line-height: 1.55;
+        }
+
+        .markdown-body pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: 0.86rem;
+            white-space: pre;
+        }
+
+        .doc-intro {
+            background-color: var(--surface-color);
+            border-left: 4px solid var(--accent-primary);
+            padding: 14px 18px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 26px;
+            color: var(--text-secondary);
+            font-size: 0.94rem;
+        }
+
+        blockquote {
+            background-color: var(--surface-color);
+            border-left: 4px solid var(--accent-primary);
+            padding: 12px 18px;
+            margin: 16px 0;
+            border-radius: 0 6px 6px 0;
+            color: var(--text-secondary);
+        }
+
+        /* GitHub Alert Callout Cards */
+        .callout-card {
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 18px 0;
+            border-left: 4px solid var(--accent-primary);
+            background-color: var(--surface-color);
+        }
+
+        .callout-card.callout-important {
+            background-color: var(--callout-imp-bg);
+            border-color: var(--callout-imp-border);
+            color: var(--callout-imp-text);
+        }
+
+        .callout-card.callout-tip, .callout-card.callout-note {
+            background-color: var(--callout-note-bg);
+            border-color: var(--callout-note-border);
+            color: var(--callout-note-text);
+        }
+
+        .callout-card.callout-warn {
+            background-color: var(--callout-warn-bg);
+            border-color: var(--callout-warn-border);
+            color: var(--callout-warn-text);
+        }
+
+        .callout-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .callout-badge {
+            display: inline-flex;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #ffffff;
+            background-color: var(--accent-primary);
+        }
+
+        .callout-important .callout-badge { background-color: var(--callout-imp-border); }
+        .callout-tip .callout-badge, .callout-note .callout-badge { background-color: var(--callout-note-border); }
+        .callout-warn .callout-badge { background-color: var(--callout-warn-border); }
+
+        /* 表格样式 */
+        .table-wrapper {
+            margin: 18px 0 24px;
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.89rem;
+            text-align: left;
+        }
+
+        thead tr {
+            background-color: var(--table-header);
+        }
+
+        th {
+            padding: 10px 14px;
+            font-weight: 700;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            vertical-align: top;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: var(--table-alt);
+        }
+
+        /* Mermaid 图表容器：强制纯白底色 (#FFFFFF)、加粗字体、加粗线条 */
+        .mermaid-wrapper {
+            margin: 22px 0 28px;
+            padding: 24px;
+            background-color: #FFFFFF !important;
+            border: 2px solid #111111;
+            border-radius: 10px;
+            overflow-x: auto;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+        }
+
+        .mermaid {
+            background-color: #FFFFFF !important;
+            color: #111111 !important;
+            font-weight: 700 !important;
+            display: inline-block;
+            min-width: 320px;
+        }
+
+        .mermaid svg {
+            background-color: #FFFFFF !important;
+            font-weight: 700 !important;
+        }
+
+        .mermaid svg text,
+        .mermaid svg span,
+        .mermaid svg .nodeLabel,
+        .mermaid svg .edgeLabel,
+        .mermaid svg .messageText,
+        .mermaid svg .labelText,
+        .mermaid svg .loopText {
+            font-weight: 700 !important;
+            color: #111111 !important;
+            fill: #111111 !important;
+        }
+
+        .mermaid svg path,
+        .mermaid svg line,
+        .mermaid svg rect,
+        .mermaid svg polygon,
+        .mermaid svg circle {
+            stroke-width: 2.2px !important;
+        }
+
+        /* 数学公式块 */
+        .math-block {
+            background-color: var(--math-bg);
+            border: 1px solid var(--math-border);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 16px 0 22px;
+            overflow-x: auto;
+            text-align: center;
+        }
+
+        .math-block-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1px dashed var(--border-color);
+            font-size: 0.76rem;
+        }
+
+        .math-badge {
+            color: var(--accent-primary);
+            font-weight: 700;
+        }
+
+        .math-copy-btn {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.74rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        /* 原生 Markdown 源码视图 */
+        #markdown-source-view {
+            display: none;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .md-source-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .raw-md-textarea {
+            width: 100%;
+            height: 75vh;
+            font-family: "JetBrains Mono", Consolas, monospace;
+            font-size: 0.85rem;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 14px;
+            line-height: 1.6;
+        }
+
+        body.toc-collapsed .sidebar-toc {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="layout-wrapper">
+        <aside class="sidebar-toc" id="sidebarToc">
+            <div class="portal-nav-box">
+                <div class="portal-nav-title">文档中心快速导航</div>
+                <div class="portal-nav-list">
+<a href="README.html" class="portal-nav-item" title="文档中心总览 (README)">文档中心总览 (README)</a>
+<a href="specs/cognitive_memory_dev_spec.html" class="portal-nav-item" title="三层认知记忆与双轨评测规范">三层认知记忆与双轨评测规范</a>
+<a href="跨 Session 记忆数据集生成器思路.html" class="portal-nav-item" title="跨 Session 生成器总体设计">跨 Session 生成器总体设计</a>
+<a href="记忆建模与数据集生成要求.html" class="portal-nav-item active" title="记忆建模与生成要求">记忆建模与生成要求</a>
+<a href="specs/persona_spec.html" class="portal-nav-item" title="Persona 画像建模规范">Persona 画像建模规范</a>
+<a href="guides/cli_usage.html" class="portal-nav-item" title="CLI 命令行与流水线指南">CLI 命令行与流水线指南</a>
+<a href="archive/defect_triage_log.html" class="portal-nav-item" title="001~150 批次缺陷治理实录">001~150 批次缺陷治理实录</a>
+<a href="archive/memory_evolution_proposal.html" class="portal-nav-item" title="认知架构演进提案 (RFC)">认知架构演进提案 (RFC)</a>
+                </div>
+            </div>
+            <div class="toc-header">
+                <div class="toc-title">
+                    <span>本页目录大纲</span>
+                </div>
+                <button class="toc-action-btn" onclick="toggleDesktopToc()" title="收起目录">◀</button>
+            </div>
+            <div class="toc-search-box">
+                <input type="text" class="toc-search-input" id="tocSearchInput" placeholder="筛选目录章节..." oninput="filterToc()">
+            </div>
+            <nav class="toc-body">
+                <ul class="toc-list" id="tocList">
+<li class="toc-item toc-level-2"><a href="#一-记忆的核心作用" class="toc-link" title="一、 记忆的核心作用">一、 记忆的核心作用</a></li>
+<li class="toc-item toc-level-2"><a href="#二-用户事实记忆体系" class="toc-link" title="二、 用户事实记忆体系">二、 用户事实记忆体系</a></li>
+<li class="toc-item toc-level-3"><a href="#1-核心定义" class="toc-link" title="1. 核心定义">1. 核心定义</a></li>
+<li class="toc-item toc-level-3"><a href="#2-主要存储对象" class="toc-link" title="2. 主要存储对象">2. 主要存储对象</a></li>
+<li class="toc-item toc-level-3"><a href="#3-静态用户事实" class="toc-link" title="3. 静态用户事实">3. 静态用户事实</a></li>
+<li class="toc-item toc-level-3"><a href="#4-动态用户事实" class="toc-link" title="4. 动态用户事实">4. 动态用户事实</a></li>
+<li class="toc-item toc-level-4"><a href="#1-用户个性化表达" class="toc-link" title="(1) 用户个性化表达">(1) 用户个性化表达</a></li>
+<li class="toc-item toc-level-4"><a href="#2-应用业务选择偏好" class="toc-link" title="(2) 应用—业务选择偏好">(2) 应用—业务选择偏好</a></li>
+<li class="toc-item toc-level-4"><a href="#3-时间模式偏好" class="toc-link" title="(3) 时间模式偏好">(3) 时间模式偏好</a></li>
+<li class="toc-item toc-level-4"><a href="#4-体验参数偏好" class="toc-link" title="(4) 体验参数偏好">(4) 体验参数偏好</a></li>
+<li class="toc-item toc-level-2"><a href="#三-数据集生成与评测要求" class="toc-link" title="三、 数据集生成与评测要求">三、 数据集生成与评测要求</a></li>
+<li class="toc-item toc-level-3"><a href="#1-核心评测维度" class="toc-link" title="1. 核心评测维度">1. 核心评测维度</a></li>
+<li class="toc-item toc-level-3"><a href="#2-基本判断原则-golden-invariants" class="toc-link" title="2. 基本判断原则 (Golden Invariants)">2. 基本判断原则 (Golden Invariants)</a></li>
+<li class="toc-item toc-level-2"><a href="#四-记忆建模与四层-ground-truth-映射矩阵" class="toc-link" title="四、 记忆建模与四层 Ground Truth 映射矩阵">四、 记忆建模与四层 Ground Truth 映射矩阵</a></li>
+<li class="toc-item toc-level-3"><a href="#staticgt-的作用与流转路径" class="toc-link" title="staticgt 的作用与流转路径">staticgt 的作用与流转路径</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="container">
+                <div class="top-bar">
+                    <div class="nav-links">
+                        <button class="nav-btn" id="expandTocBtn" onclick="toggleDesktopToc()" style="display: none;">展开目录</button>
+                        <a href="README.html" class="nav-btn">◀ 文档中心首页</a>
+                        <button class="nav-btn active" id="btnReadView" onclick="switchDocView('read')">阅读视图</button>
+                        <button class="nav-btn" id="btnSourceView" onclick="switchDocView('source')">Markdown 源码</button>
+                        <span style="color: var(--border-color)">|</span>
+                        <span style="font-size: 0.84rem; color: var(--text-muted);">docs/记忆建模与数据集生成要求.md</span>
+                    </div>
+                    <button class="theme-switch-btn" onclick="toggleTheme()" id="themeBtn">
+                        切换暮色
+                    </button>
+                </div>
+
+                <article class="markdown-body" id="docReadView">
+<h1>记忆建模与数据集生成要求</h1>
+<blockquote><p><strong>文档定位</strong>：定义核心网智能助理在通信网络保障场景下的记忆建模理论、事实记忆边界判定、四层 Ground Truth 映射关系及正负样本生成要求。</p></blockquote>
+<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+<h2 id="一-记忆的核心作用">一、 记忆的核心作用</h2>
+<blockquote><p>核心能力要求：识别用户自定义表达；补全省略参数；识别应用和业务；处理时间表达；复用历史澄清结果；判断何时必须向用户追问。</p></blockquote>
+<p>记忆不是检索到就直接使用，而是需要结合当前输入、用户事实记忆和环境事实记忆进行判断：</p>
+<ul><li><strong>证据充分时</strong>：精准补全省略槽位；
+</li>
+<li><strong>证据不足或存在冲突时</strong>：主动向用户发起澄清追问。
+</li></ul>
+<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+<h2 id="二-用户事实记忆体系">二、 用户事实记忆体系</h2>
+<h3 id="1-核心定义">1. 核心定义</h3>
+<p>关于某个特定用户，经过明确确认或有足够历史证据，可以在适用条件和有效时间内继续使用的声明性知识。</p>
+<ul><li><strong>单次建立</strong>：用户明确声明的事实、表达映射或偏好，可以通过单次明确表达建立；
+</li>
+<li><strong>多次归纳</strong>：根据历史行为归纳的偏好，需要多次相互独立且一致的历史证据支撑；
+</li>
+<li><strong>事件区别</strong>：一次历史行为只表示某个事件曾经发生，不能直接视为用户的长期偏好；
+</li>
+<li><strong>确认隔离</strong>：严格区分“仅对本次任务的确认”与“可以在未来复用的长期记忆确认”。
+</li></ul>
+<h3 id="2-主要存储对象">2. 主要存储对象</h3>
+<p>涵盖用户固有属性、个性化表达映射、默认值偏好及纠错记录。</p>
+<ul><li><strong>用户稳定事实</strong>：套餐权益、用户明确设置的默认值等；
+</li>
+<li><strong>个性化表达映射</strong>：用户表达与标准应用、业务、时间或参数之间的映射；
+</li>
+<li><strong>行为偏好</strong>：根据多次历史行为归纳得到的、具有条件性和概率性的偏好；
+</li>
+<li><strong>历史事件</strong>：某次任务中发生过的行为（本身不等于长期偏好）。
+</li></ul>
+<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+<h3 id="3-静态用户事实">3. 静态用户事实</h3>
+<p>存储于关系型数据库，仅当取值发生变化时更新：</p>
+<ul><li><strong>用户 ID</strong>；
+</li>
+<li><strong>套餐与权益信息</strong>：已订购的业务权益、保障的业务和应用范围等。
+</li></ul>
+
+                    <div class="callout-card callout-note">
+                        <div class="callout-header">
+                            <span class="callout-badge">补充说明</span>
+                        </div>
+                        <div class="callout-content">
+                            <p>静态用户事实必须具备当前状态或生效时间，避免使用已经变更失效的旧套餐和业务权益。</p>
+                        </div>
+                    </div>
+                    
+<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+<h3 id="4-动态用户事实">4. 动态用户事实</h3>
+<p>保障单据、日志和意图交互历史记录是形成动态用户事实的原始证据来源。经过确认、归纳或纠正后，可沉淀为可复用的个性化表达、默认值和条件偏好。</p>
+<h4 id="1-用户个性化表达">(1) 用户个性化表达</h4>
+<ul><li><strong>时间表达习惯</strong>：口语词汇（如“马上”、“稍后”等），以及开始时间、结束时间、持续时间表达习惯；
+</li>
+<li><strong>参数表达映射</strong>：模糊词汇到具体通信参数的档位映射（如“清晰一点”、“时延不要太高” <span class="katex-inline" data-tex="\to">$\to$</span> 满足分辨率 <span class="katex-inline" data-tex="\ge 720\text{p}">$\ge 720\text{p}$</span> 且时延 <span class="katex-inline" data-tex="\le 80\text{ms}">$\le 80\text{ms}$</span> 等档位概念）；
+</li>
+<li><strong>应用别名与业务别名</strong>。
+</li></ul>
+
+                    <div class="callout-card callout-important">
+                        <div class="callout-header">
+                            <span class="callout-badge">重点规范</span>
+                        </div>
+                        <div class="callout-content">
+                            <p><strong>证据来源严格分级</strong>：</p>
+<p>1. 用户明确声明（例如“以后我说老业务，就是指抖音直播”）；</p>
+<p>2. 用户在澄清过程中明确确认表达的含义；</p>
+<p>3. 用户纠正 Agent 后得到最终含义；</p>
+<p>4. 多次历史会话形成稳定、一致的表达映射；</p>
+<p>5. Agent 根据任务结果推测（未经用户确认，不可作为全局稳定事实）。</p>
+<p>*用户确认本次任务参数，不一定等于确认长期表达映射。例如，用户同意本次将“高清”处理为 1080p，不代表以后“高清”始终等于 1080p。同一个表达对应多个目标取值时，需结合当前条件消歧；条件不足时必须追问。*</p>
+                        </div>
+                    </div>
+                    
+<h4 id="2-应用业务选择偏好">(2) 应用—业务选择偏好</h4>
+<p>在用户表达不完整时（如口语说“开直播”，但未指明是抖音还是快手），系统依赖选择偏好进行辅助推断：</p>
+<ul><li>业务到应用的选择偏好；
+</li>
+<li>应用到业务的选择偏好；
+</li>
+<li>应用—业务组合偏好、候选排序与排斥组合。
+</li></ul>
+
+                    <div class="callout-card callout-tip">
+                        <div class="callout-header">
+                            <span class="callout-badge">最佳实践</span>
+                        </div>
+                        <div class="callout-content">
+                            <p>必须区分用户明确指定的默认选择、根据多次历史行为归纳的常用选择、仅在特定场景下成立的条件偏好，以及仅在某次任务中出现的偶发历史选择。当多个候选证据接近时，必须向用户追问，严禁直接盲猜最高频候选。用户当前当轮明确给出的指令永远优先于历史偏好。</p>
+                        </div>
+                    </div>
+                    
+<h4 id="3-时间模式偏好">(3) 时间模式偏好</h4>
+<p>结合历史记录综合推断规律：</p>
+<ul><li>常用开始时间、结束时间、持续时间；
+</li>
+<li>日内规律、星期规律、工作日/周末规律；
+</li>
+<li>节假日、热点事件规律（仅在特定窗口期内成立）；
+</li>
+<li>周期规律：每日、每周、每月、每季度、每年。
+</li></ul>
+
+                    <div class="callout-card callout-warn">
+                        <div class="callout-header">
+                            <span class="callout-badge">注意告警</span>
+                        </div>
+                        <div class="callout-content">
+                            <p>时间模式偏好必须包含适用条件和有效时间。节假日、赛事和热点事件形成的规律属于临时偏好，事件结束后自动失效，严禁继续作为默认值使用。当当前输入与历史偏好冲突时，以当前明确表达为准。</p>
+                        </div>
+                    </div>
+                    
+<h4 id="4-体验参数偏好">(4) 体验参数偏好</h4>
+<p>针对特定业务或应用所绑定的参数集合：</p>
+<ul><li>首选值、备选值、排斥值、范围偏好、优先级偏好及多参数组合偏好。
+</li>
+<li><strong>整体性原则</strong>：多参数组合偏好应作为整体使用，不能将其中的单个参数任意拆分后混用。所有偏好均不得突破用户当前套餐权益、应用能力与业务白名单的合法范围。
+</li></ul>
+<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+<h2 id="三-数据集生成与评测要求">三、 数据集生成与评测要求</h2>
+<p>数据集构建必须兼顾<strong>“利用记忆成功补全”的正样本</strong>与<strong>“不能直接使用记忆、必须追问”的负样本</strong>。</p>
+<h3 id="1-核心评测维度">1. 核心评测维度</h3>
+
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>评测维度</th><th>覆盖子类与关键场景</th><th>负样本与追问要求</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>个性化表达理解</strong></td><td>应用别名、业务别名、时间表达、参数模糊表达、一对一/一对多映射、表达随时间更新与纠偏</td><td>未经确认的候选表达、条件不足时必须追问</td></tr><tr><td><strong>参数缺失补全</strong></td><td>业务补全应用、应用补全业务、联合补全、时间参数补全、体验参数补全、多参数组合补全</td><td>排除排斥组合、多个候选概率接近时不补全并追问</td></tr><tr><td><strong>条件偏好推断</strong></td><td>单条件/多条件联合、全局偏好、场景偏好、周期偏好、显式偏好与归纳偏好</td><td>条件不匹配、条件部分匹配但证据不足、多偏好冲突</td></tr><tr><td><strong>记忆更新与冲突</strong></td><td>记忆巩固、用户纠正、新偏好覆盖旧偏好、撤销偏好、全局偏好细化、临时规律到期</td><td>显式偏好与行为偏好冲突、用户事实与环境事实冲突、当前明确输入与历史记忆冲突</td></tr><tr><td><strong>追问决策红线</strong></td><td>无相关记忆、仅单次偶发行为、证据不足、关键参数必须确认</td><td>记忆已失效、推断结果违反业务规则或超出套餐权益时必须拒识追问</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+<h3 id="2-基本判断原则-golden-invariants">2. 基本判断原则 (Golden Invariants)</h3>
+<ol><li><strong>当前明确表达绝对优先</strong>：用户当轮明确表达 > 历史记忆与先验偏好；
+</li>
+<li><strong>显式声明优先于归纳</strong>：用户显式立规矩 > 历史多轮行为统计归纳；
+</li>
+<li><strong>环境事实决定合法性</strong>：环境事实决定推断结果当前是否真实、合法且在网络支持白名单内；
+</li>
+<li><strong>单次事件不等于长期偏好</strong>：历史偶发事件不能自动升级为长期画像；
+</li>
+<li><strong>单次任务确认不等于长期确认</strong>：单次工单参数确认不能自动升级为未来通用映射；
+</li>
+<li><strong>充分必要条件约束</strong>：只有在条件匹配、记忆有效、证据充分且无冲突时方可补全；
+</li>
+<li><strong>无法唯一确定时必须反问</strong>：存在多个接近候选时，正确决策必须是发起追问消歧，严禁脑补盲猜。
+</li></ol>
+<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+<h2 id="四-记忆建模与四层-ground-truth-映射矩阵">四、 记忆建模与四层 Ground Truth 映射矩阵</h2>
+
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>data_design 类别</th><th>对应 Ground Truth 层</th><th>对应代码字段</th><th>MT 选择路径</th><th>语义解释与约束</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>用户个性化表达</strong></td><td><code>personalization_gt.expression_mappings</code></td><td><code>expression_type: app_alias / service_alias / quality_expression / speed_expression / time_expression</code></td><td><span class="katex-inline" data-tex="\to">$\to$</span> <code>app_alias_mapping</code> / <code>service_alias_mapping</code> / <code>quality_grade_mapping</code> / <code>speed_expression_mapping</code> / <code>time_expression_mapping</code></td><td>用户口语表达与标准应用、业务、时间或参数之间的映射关系</td></tr><tr><td><strong>应用—业务选择偏好</strong></td><td><code>personalization_gt.app_business_preferences</code></td><td><code>direction: business_to_app / app_to_service</code></td><td><span class="katex-inline" data-tex="\to">$\to$</span> <code>service_to_app</code> / <code>app_to_service</code> / <code>app_service_combo</code></td><td>用户表达不完整时在某类业务下通常选择哪个应用或具体业务</td></tr><tr><td><strong>时间模式偏好</strong></td><td><code>conditional_gt</code></td><td><code>fact_type: conditional_time_preference</code></td><td><span class="katex-inline" data-tex="\to">$\to$</span> <code>daily_time_preference</code> / <code>weekly_preference</code> / <code>weekday_weekend_preference</code> / <code>temporary_preference</code> / <code>periodic_preference</code></td><td>结合历史记录判断的日内/星期/工作日周末/节假日周期规律</td></tr><tr><td><strong>体验参数偏好</strong></td><td><code>personalization_gt.experience_param_preferences</code></td><td><code>preferred_bundle / fallback_bundle / rejected_values</code></td><td><span class="katex-inline" data-tex="\to">$\to$</span> <code>preferred_value</code> / <code>fallback_value</code> / <code>rejected_value</code> / <code>multi_param_bundle</code> / <code>scope_restriction</code></td><td>针对特定应用或业务的首选值、备选值、排斥值、多参数组合</td></tr><tr><td><strong>记忆更新与冲突处理</strong></td><td><code>changeable_gt</code></td><td><code>fact_type: role_change / event_driven_change</code></td><td><span class="katex-inline" data-tex="\to">$\to$</span> <code>memory_correction</code> / <code>preference_change</code></td><td>纠正、新偏好覆盖旧偏好、临时规律到期、显式偏好与行为偏好冲突</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+<h3 id="staticgt-的作用与流转路径">static_gt 的作用与流转路径</h3>
+<p><code>static_gt</code> 不直接参与 Memory Targets 选择，其字段通过以下路径在全流水线中流转生效：</p>
+
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>字段名</th><th>流水线使用路径</th><th>核心业务说明</th></tr></thead>
+                <tbody>
+                    <tr><td><code>static_gt.identity</code></td><td><code>session_generator.py</code> <span class="katex-inline" data-tex="\to">$\to$</span> LLM prompt</td><td>用户画像静态身份描述，作为对话生成的背景上下文</td></tr><tr><td><code>static_gt.allowed_scenarios</code></td><td><code>timeline_planner.py</code> <span class="katex-inline" data-tex="\to">$\to$</span> 场景选择池</td><td>约束 APP × 业务 × 支持分辨率的合法场景组合</td></tr><tr><td><code>static_gt.frequent_apps</code></td><td>全流程白名单间接校验</td><td>常用 APP 标准名列表，用于校验和场景推导合法性</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+                </article>
+
+                <div id="markdown-source-view">
+                    <div class="md-source-toolbar">
+                        <strong>docs/记忆建模与数据集生成要求.md 原生 Markdown 源码</strong>
+                        <button class="nav-btn active" onclick="copyRawMarkdown()">复制全文源码</button>
+                    </div>
+                    <textarea class="raw-md-textarea" id="rawMdArea" readonly># 记忆建模与数据集生成要求
+
+&gt; **文档定位**：定义核心网智能助理在通信网络保障场景下的记忆建模理论、事实记忆边界判定、四层 Ground Truth 映射关系及正负样本生成要求。
+
+---
+
+## 一、 记忆的核心作用
+
+&gt; 核心能力要求：识别用户自定义表达；补全省略参数；识别应用和业务；处理时间表达；复用历史澄清结果；判断何时必须向用户追问。
+
+记忆不是检索到就直接使用，而是需要结合当前输入、用户事实记忆和环境事实记忆进行判断：
+* **证据充分时**：精准补全省略槽位；
+* **证据不足或存在冲突时**：主动向用户发起澄清追问。
+
+---
+
+## 二、 用户事实记忆体系
+
+### 1. 核心定义
+关于某个特定用户，经过明确确认或有足够历史证据，可以在适用条件和有效时间内继续使用的声明性知识。
+
+* **单次建立**：用户明确声明的事实、表达映射或偏好，可以通过单次明确表达建立；
+* **多次归纳**：根据历史行为归纳的偏好，需要多次相互独立且一致的历史证据支撑；
+* **事件区别**：一次历史行为只表示某个事件曾经发生，不能直接视为用户的长期偏好；
+* **确认隔离**：严格区分“仅对本次任务的确认”与“可以在未来复用的长期记忆确认”。
+
+### 2. 主要存储对象
+涵盖用户固有属性、个性化表达映射、默认值偏好及纠错记录。
+
+* **用户稳定事实**：套餐权益、用户明确设置的默认值等；
+* **个性化表达映射**：用户表达与标准应用、业务、时间或参数之间的映射；
+* **行为偏好**：根据多次历史行为归纳得到的、具有条件性和概率性的偏好；
+* **历史事件**：某次任务中发生过的行为（本身不等于长期偏好）。
+
+---
+
+### 3. 静态用户事实
+存储于关系型数据库，仅当取值发生变化时更新：
+* **用户 ID**；
+* **套餐与权益信息**：已订购的业务权益、保障的业务和应用范围等。
+
+&gt; [!NOTE]
+&gt; 静态用户事实必须具备当前状态或生效时间，避免使用已经变更失效的旧套餐和业务权益。
+
+---
+
+### 4. 动态用户事实
+
+保障单据、日志和意图交互历史记录是形成动态用户事实的原始证据来源。经过确认、归纳或纠正后，可沉淀为可复用的个性化表达、默认值和条件偏好。
+
+#### (1) 用户个性化表达
+* **时间表达习惯**：口语词汇（如“马上”、“稍后”等），以及开始时间、结束时间、持续时间表达习惯；
+* **参数表达映射**：模糊词汇到具体通信参数的档位映射（如“清晰一点”、“时延不要太高” $\to$ 满足分辨率 $\ge 720\text{p}$ 且时延 $\le 80\text{ms}$ 等档位概念）；
+* **应用别名与业务别名**。
+
+&gt; [!IMPORTANT]
+&gt; **证据来源严格分级**：
+&gt; 1. 用户明确声明（例如“以后我说老业务，就是指抖音直播”）；
+&gt; 2. 用户在澄清过程中明确确认表达的含义；
+&gt; 3. 用户纠正 Agent 后得到最终含义；
+&gt; 4. 多次历史会话形成稳定、一致的表达映射；
+&gt; 5. Agent 根据任务结果推测（未经用户确认，不可作为全局稳定事实）。
+&gt; 
+&gt; *用户确认本次任务参数，不一定等于确认长期表达映射。例如，用户同意本次将“高清”处理为 1080p，不代表以后“高清”始终等于 1080p。同一个表达对应多个目标取值时，需结合当前条件消歧；条件不足时必须追问。*
+
+#### (2) 应用—业务选择偏好
+在用户表达不完整时（如口语说“开直播”，但未指明是抖音还是快手），系统依赖选择偏好进行辅助推断：
+* 业务到应用的选择偏好；
+* 应用到业务的选择偏好；
+* 应用—业务组合偏好、候选排序与排斥组合。
+
+&gt; [!TIP]
+&gt; 必须区分用户明确指定的默认选择、根据多次历史行为归纳的常用选择、仅在特定场景下成立的条件偏好，以及仅在某次任务中出现的偶发历史选择。当多个候选证据接近时，必须向用户追问，严禁直接盲猜最高频候选。用户当前当轮明确给出的指令永远优先于历史偏好。
+
+#### (3) 时间模式偏好
+结合历史记录综合推断规律：
+* 常用开始时间、结束时间、持续时间；
+* 日内规律、星期规律、工作日/周末规律；
+* 节假日、热点事件规律（仅在特定窗口期内成立）；
+* 周期规律：每日、每周、每月、每季度、每年。
+
+&gt; [!WARNING]
+&gt; 时间模式偏好必须包含适用条件和有效时间。节假日、赛事和热点事件形成的规律属于临时偏好，事件结束后自动失效，严禁继续作为默认值使用。当当前输入与历史偏好冲突时，以当前明确表达为准。
+
+#### (4) 体验参数偏好
+针对特定业务或应用所绑定的参数集合：
+* 首选值、备选值、排斥值、范围偏好、优先级偏好及多参数组合偏好。
+* **整体性原则**：多参数组合偏好应作为整体使用，不能将其中的单个参数任意拆分后混用。所有偏好均不得突破用户当前套餐权益、应用能力与业务白名单的合法范围。
+
+---
+
+## 三、 数据集生成与评测要求
+
+数据集构建必须兼顾**“利用记忆成功补全”的正样本**与**“不能直接使用记忆、必须追问”的负样本**。
+
+### 1. 核心评测维度
+
+| 评测维度 | 覆盖子类与关键场景 | 负样本与追问要求 |
+| :--- | :--- | :--- |
+| **个性化表达理解** | 应用别名、业务别名、时间表达、参数模糊表达、一对一/一对多映射、表达随时间更新与纠偏 | 未经确认的候选表达、条件不足时必须追问 |
+| **参数缺失补全** | 业务补全应用、应用补全业务、联合补全、时间参数补全、体验参数补全、多参数组合补全 | 排除排斥组合、多个候选概率接近时不补全并追问 |
+| **条件偏好推断** | 单条件/多条件联合、全局偏好、场景偏好、周期偏好、显式偏好与归纳偏好 | 条件不匹配、条件部分匹配但证据不足、多偏好冲突 |
+| **记忆更新与冲突** | 记忆巩固、用户纠正、新偏好覆盖旧偏好、撤销偏好、全局偏好细化、临时规律到期 | 显式偏好与行为偏好冲突、用户事实与环境事实冲突、当前明确输入与历史记忆冲突 |
+| **追问决策红线** | 无相关记忆、仅单次偶发行为、证据不足、关键参数必须确认 | 记忆已失效、推断结果违反业务规则或超出套餐权益时必须拒识追问 |
+
+### 2. 基本判断原则 (Golden Invariants)
+
+1. **当前明确表达绝对优先**：用户当轮明确表达 &gt; 历史记忆与先验偏好；
+2. **显式声明优先于归纳**：用户显式立规矩 &gt; 历史多轮行为统计归纳；
+3. **环境事实决定合法性**：环境事实决定推断结果当前是否真实、合法且在网络支持白名单内；
+4. **单次事件不等于长期偏好**：历史偶发事件不能自动升级为长期画像；
+5. **单次任务确认不等于长期确认**：单次工单参数确认不能自动升级为未来通用映射；
+6. **充分必要条件约束**：只有在条件匹配、记忆有效、证据充分且无冲突时方可补全；
+7. **无法唯一确定时必须反问**：存在多个接近候选时，正确决策必须是发起追问消歧，严禁脑补盲猜。
+
+---
+
+## 四、 记忆建模与四层 Ground Truth 映射矩阵
+
+| data_design 类别 | 对应 Ground Truth 层 | 对应代码字段 | MT 选择路径 | 语义解释与约束 |
+| :--- | :--- | :--- | :--- | :--- |
+| **用户个性化表达** | `personalization_gt.expression_mappings` | `expression_type: app_alias / service_alias / quality_expression / speed_expression / time_expression` | $\to$ `app_alias_mapping` / `service_alias_mapping` / `quality_grade_mapping` / `speed_expression_mapping` / `time_expression_mapping` | 用户口语表达与标准应用、业务、时间或参数之间的映射关系 |
+| **应用—业务选择偏好** | `personalization_gt.app_business_preferences` | `direction: business_to_app / app_to_service` | $\to$ `service_to_app` / `app_to_service` / `app_service_combo` | 用户表达不完整时在某类业务下通常选择哪个应用或具体业务 |
+| **时间模式偏好** | `conditional_gt` | `fact_type: conditional_time_preference` | $\to$ `daily_time_preference` / `weekly_preference` / `weekday_weekend_preference` / `temporary_preference` / `periodic_preference` | 结合历史记录判断的日内/星期/工作日周末/节假日周期规律 |
+| **体验参数偏好** | `personalization_gt.experience_param_preferences` | `preferred_bundle / fallback_bundle / rejected_values` | $\to$ `preferred_value` / `fallback_value` / `rejected_value` / `multi_param_bundle` / `scope_restriction` | 针对特定应用或业务的首选值、备选值、排斥值、多参数组合 |
+| **记忆更新与冲突处理** | `changeable_gt` | `fact_type: role_change / event_driven_change` | $\to$ `memory_correction` / `preference_change` | 纠正、新偏好覆盖旧偏好、临时规律到期、显式偏好与行为偏好冲突 |
+
+### static_gt 的作用与流转路径
+
+`static_gt` 不直接参与 Memory Targets 选择，其字段通过以下路径在全流水线中流转生效：
+
+| 字段名 | 流水线使用路径 | 核心业务说明 |
+| :--- | :--- | :--- |
+| `static_gt.identity` | `session_generator.py` $\to$ LLM prompt | 用户画像静态身份描述，作为对话生成的背景上下文 |
+| `static_gt.allowed_scenarios` | `timeline_planner.py` $\to$ 场景选择池 | 约束 APP × 业务 × 支持分辨率的合法场景组合 |
+| `static_gt.frequent_apps` | 全流程白名单间接校验 | 常用 APP 标准名列表，用于校验和场景推导合法性 |
+</textarea>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const htmlEl = document.documentElement;
+            const currentTheme = htmlEl.getAttribute('data-theme') || 'parchment';
+            const newTheme = currentTheme === 'parchment' ? 'twilight' : 'parchment';
+            htmlEl.setAttribute('data-theme', newTheme);
+            localStorage.setItem('doc-theme', newTheme);
+            document.getElementById('themeBtn').innerText = newTheme === 'parchment' ? '切换暮色' : '切换米纸';
+        }
+
+        function toggleDesktopToc() {
+            document.body.classList.toggle('toc-collapsed');
+            const isCollapsed = document.body.classList.contains('toc-collapsed');
+            document.getElementById('expandTocBtn').style.display = isCollapsed ? 'inline-flex' : 'none';
+        }
+
+        function switchDocView(mode) {
+            const readEl = document.getElementById('docReadView');
+            const srcEl = document.getElementById('markdown-source-view');
+            document.getElementById('btnReadView').classList.toggle('active', mode !== 'source');
+            document.getElementById('btnSourceView').classList.toggle('active', mode === 'source');
+            readEl.style.display = mode === 'source' ? 'none' : 'block';
+            srcEl.style.display = mode === 'source' ? 'block' : 'none';
+        }
+
+        function copyRawMarkdown() {
+            const area = document.getElementById('rawMdArea');
+            navigator.clipboard.writeText(area.value);
+        }
+
+        function copyCodeCard(btn) {
+            const card = btn.closest('.code-card');
+            const code = card ? card.querySelector('pre code') : null;
+            if (!code) return;
+            navigator.clipboard.writeText(code.innerText).then(() => {
+                const orig = btn.innerText;
+                btn.innerText = '已复制';
+                setTimeout(() => { btn.innerText = orig; }, 1800);
+            });
+        }
+
+        function copyLatex(btn) {
+            const tex = btn.getAttribute('data-tex');
+            if (tex) {
+                navigator.clipboard.writeText(tex).then(() => {
+                    const orig = btn.innerText;
+                    btn.innerText = '已复制 LaTeX';
+                    setTimeout(() => { btn.innerText = orig; }, 1800);
+                });
+            }
+        }
+
+        function filterToc() {
+            const kw = document.getElementById('tocSearchInput').value.trim().toLowerCase();
+            document.querySelectorAll('#tocList .toc-item').forEach(li => {
+                li.style.display = (!kw || li.innerText.toLowerCase().includes(kw)) ? 'block' : 'none';
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('doc-theme') || 'parchment';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('themeBtn').innerText = savedTheme === 'parchment' ? '切换暮色' : '切换米纸';
+
+            if (window.katex) {
+                document.querySelectorAll('.katex-inline').forEach(el => {
+                    const tex = el.getAttribute('data-tex');
+                    if (tex) {
+                        try {
+                            el.innerHTML = katex.renderToString(tex, { displayMode: false, throwOnError: false });
+                        } catch (e) {}
+                    }
+                });
+                document.querySelectorAll('.katex-display-container').forEach(el => {
+                    const tex = el.getAttribute('data-tex');
+                    if (tex) {
+                        try {
+                            el.innerHTML = katex.renderToString(tex, { displayMode: true, throwOnError: false });
+                        } catch (e) {}
+                    }
+                });
+            }
+
+            if (window.mermaid) {
+                mermaid.initialize({
+                    startOnLoad: true,
+                    theme: 'base',
+                    themeVariables: {
+                        background: '#FFFFFF',
+                        primaryColor: '#FFFFFF',
+                        primaryTextColor: '#111111',
+                        primaryBorderColor: '#111111',
+                        lineColor: '#111111',
+                        secondaryColor: '#FFFFFF',
+                        tertiaryColor: '#FFFFFF',
+                        mainBkg: '#FFFFFF',
+                        nodeBorder: '#111111',
+                        clusterBkg: '#FFFFFF',
+                        clusterBorder: '#111111',
+                        actorBkg: '#FFFFFF',
+                        actorBorder: '#111111',
+                        actorTextColor: '#111111',
+                        signalColor: '#111111',
+                        signalTextColor: '#111111',
+                        labelBoxBkgColor: '#FFFFFF',
+                        labelBoxBorderColor: '#111111',
+                        labelTextColor: '#111111',
+                        noteBkgColor: '#FFFFFF',
+                        noteBorderColor: '#111111',
+                        noteTextColor: '#111111'
+                    }
+                });
+            }
+
+            if (window.hljs) {
+                hljs.highlightAll();
+            }
+
+            const links = document.querySelectorAll('.toc-link');
+            const sections = [];
+            links.forEach(link => {
+                const targetId = decodeURIComponent(link.getAttribute('href').slice(1));
+                const section = document.getElementById(targetId);
+                if (section) {
+                    sections.push({ id: targetId, el: section, link: link });
+                }
+            });
+
+            window.addEventListener('scroll', () => {
+                const scrollPos = window.scrollY + 110;
+                let activeId = sections.length ? sections[0].id : null;
+                for (let i = 0; i < sections.length; i++) {
+                    if (sections[i].el.offsetTop <= scrollPos) {
+                        activeId = sections[i].id;
+                    }
+                }
+                links.forEach(link => {
+                    const hrefId = decodeURIComponent(link.getAttribute('href').slice(1));
+                    link.classList.toggle('active', hrefId === activeId);
+                });
+            }, { passive: true });
+        });
+    </script>
+</body>
+</html>

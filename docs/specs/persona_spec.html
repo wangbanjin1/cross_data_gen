@@ -1,0 +1,1789 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="parchment">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persona 模板生成规范</title>
+    <!-- KaTeX 数学公式样式与渲染脚本 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css';">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js';"></script>
+    <!-- Highlight.js 代码高亮 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <!-- Mermaid.js 动态图表渲染 -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root[data-theme="parchment"] {
+            --bg-color: #f7f4ec;
+            --surface-color: #eee9dc;
+            --surface-elevated: #e6dfcf;
+            --border-color: #dcd4c0;
+            --border-subtle: #e6dfd1;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --text-muted: #718096;
+            --accent-primary: #a35d28;
+            --accent-glow: rgba(163, 93, 40, 0.08);
+            --code-bg: #eae3d2;
+            --code-text: #8d3a2b;
+            --pre-bg: #ece5d6;
+            --pre-text: #2d3748;
+            --callout-note-bg: #e5ede3;
+            --callout-note-border: #709775;
+            --callout-note-text: #2b5133;
+            --callout-warn-bg: #f5eedb;
+            --callout-warn-border: #c48a37;
+            --callout-warn-text: #704b12;
+            --callout-imp-bg: #e5eaf5;
+            --callout-imp-border: #5c7cb6;
+            --callout-imp-text: #1e3863;
+            --math-bg: #eee7d7;
+            --math-border: #c9bea6;
+            --table-header: #e4dccb;
+            --table-alt: #f1ecdf;
+            --tag-bg: #dfd5be;
+            --tag-text: #59472d;
+            --toggle-bg: #dfd6c2;
+            --card-shadow: 0 4px 18px rgba(45, 55, 72, 0.05);
+        }
+
+        :root[data-theme="twilight"] {
+            --bg-color: #1a1e24;
+            --surface-color: #232931;
+            --surface-elevated: #2c343f;
+            --border-color: #39424e;
+            --border-subtle: #2d3642;
+            --text-primary: #dce1e8;
+            --text-secondary: #b0bac6;
+            --text-muted: #707b88;
+            --accent-primary: #e09f67;
+            --accent-glow: rgba(224, 159, 103, 0.12);
+            --code-bg: #15181d;
+            --code-text: #f08d70;
+            --pre-bg: #171b21;
+            --pre-text: #cdd3dc;
+            --callout-note-bg: #202b28;
+            --callout-note-border: #4d7a68;
+            --callout-note-text: #8bbfa8;
+            --callout-warn-bg: #2b251d;
+            --callout-warn-border: #8a6c38;
+            --callout-warn-text: #d9b168;
+            --callout-imp-bg: #1d2533;
+            --callout-imp-border: #4a638c;
+            --callout-imp-text: #96b5e3;
+            --math-bg: #1f252d;
+            --math-border: #3b4654;
+            --table-header: #262e38;
+            --table-alt: #1f242c;
+            --tag-bg: #323c48;
+            --tag-text: #d2a679;
+            --toggle-bg: #323b47;
+            --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.78;
+            font-size: 15.2px;
+        }
+
+        .layout-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 侧边栏导航与目录 */
+        .sidebar-toc {
+            width: 310px;
+            background-color: var(--surface-color);
+            border-right: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            z-index: 100;
+        }
+
+        .portal-nav-box {
+            margin-bottom: 14px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .portal-nav-title {
+            font-size: 0.76rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: 6px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .portal-nav-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .portal-nav-item {
+            display: block;
+            padding: 4px 8px;
+            font-size: 0.81rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.15s;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .portal-nav-item:hover {
+            background-color: var(--surface-elevated);
+            color: var(--accent-primary);
+        }
+
+        .portal-nav-item.active {
+            background-color: var(--accent-glow);
+            color: var(--accent-primary);
+            font-weight: 700;
+            border-left: 3px solid var(--accent-primary);
+        }
+
+        .toc-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .toc-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .toc-action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            padding: 4px 6px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .toc-action-btn:hover {
+            color: var(--accent-primary);
+            background-color: var(--surface-elevated);
+        }
+
+        .toc-search-box {
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+
+        .toc-search-input {
+            width: 100%;
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-color);
+            color: var(--text-primary);
+            font-size: 0.82rem;
+            outline: none;
+        }
+
+        .toc-search-input:focus {
+            border-color: var(--accent-primary);
+        }
+
+        .toc-body {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-item {
+            margin-bottom: 3px;
+        }
+
+        .toc-item.toc-level-2 {
+            margin-top: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .toc-item.toc-level-3 {
+            padding-left: 12px;
+            font-size: 0.81rem;
+            color: var(--text-secondary);
+        }
+
+        .toc-item.toc-level-4 {
+            padding-left: 22px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .toc-link {
+            display: block;
+            padding: 4px 8px;
+            color: inherit;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.15s;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .toc-link:hover {
+            background-color: var(--surface-elevated);
+            color: var(--accent-primary);
+        }
+
+        .toc-link.active {
+            background-color: var(--accent-glow);
+            color: var(--accent-primary);
+            font-weight: 700;
+            border-left: 3px solid var(--accent-primary);
+        }
+
+        /* 主内容区域 */
+        .main-content {
+            flex: 1;
+            padding: 32px 48px 80px;
+            overflow-x: hidden;
+        }
+
+        @media (max-width: 960px) {
+            .sidebar-toc {
+                display: none;
+            }
+            .main-content {
+                padding: 20px 18px 60px;
+            }
+        }
+
+        .container {
+            max-width: 1020px;
+            margin: 0 auto;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 6px;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.84rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            border-color: var(--accent-primary);
+            color: #ffffff;
+            background-color: var(--accent-primary);
+        }
+
+        .theme-switch-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            background-color: var(--toggle-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 0.84rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Markdown 正文排版 */
+        .markdown-body {
+            color: var(--text-primary);
+        }
+
+        .markdown-body h1 {
+            font-size: 1.95rem;
+            font-weight: 800;
+            line-height: 1.35;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 2px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .markdown-body h2 {
+            font-size: 1.42rem;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-top: 42px;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-primary);
+            padding-left: 12px;
+            color: var(--text-primary);
+        }
+
+        .markdown-body h3 {
+            font-size: 1.15rem;
+            font-weight: 650;
+            line-height: 1.45;
+            margin-top: 28px;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .markdown-body h4 {
+            font-size: 1.0rem;
+            font-weight: 650;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            color: var(--accent-primary);
+        }
+
+        .markdown-body p {
+            margin-bottom: 14px;
+            line-height: 1.78;
+        }
+
+        .markdown-body ul, .markdown-body ol {
+            margin-bottom: 16px;
+            padding-left: 24px;
+        }
+
+        .markdown-body ul ul, .markdown-body ol ul, .markdown-body ul ol {
+            margin-top: 6px;
+            margin-bottom: 6px;
+        }
+
+        .markdown-body li {
+            margin-bottom: 6px;
+            line-height: 1.72;
+        }
+
+        .markdown-body strong {
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .md-link {
+            color: var(--accent-primary);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            font-weight: 600;
+        }
+
+        .md-link:hover {
+            opacity: 0.85;
+        }
+
+        .markdown-body code {
+            font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.88em;
+        }
+
+        /* 代码块带复制栏 */
+        .code-card {
+            background-color: var(--pre-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin: 16px 0 22px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+
+        .code-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 14px;
+            background-color: var(--surface-color);
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.76rem;
+        }
+
+        .code-card-lang {
+            font-family: "JetBrains Mono", Consolas, monospace;
+            font-weight: 700;
+            color: var(--accent-primary);
+            text-transform: uppercase;
+        }
+
+        .code-copy-btn {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            color: var(--text-secondary);
+            padding: 2px 8px;
+            font-size: 0.74rem;
+            cursor: pointer;
+        }
+
+        .code-copy-btn:hover {
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .markdown-body pre {
+            background-color: transparent;
+            color: var(--pre-text);
+            padding: 14px 16px;
+            overflow-x: auto;
+            margin: 0;
+            line-height: 1.55;
+        }
+
+        .markdown-body pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: 0.86rem;
+            white-space: pre;
+        }
+
+        .doc-intro {
+            background-color: var(--surface-color);
+            border-left: 4px solid var(--accent-primary);
+            padding: 14px 18px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 26px;
+            color: var(--text-secondary);
+            font-size: 0.94rem;
+        }
+
+        blockquote {
+            background-color: var(--surface-color);
+            border-left: 4px solid var(--accent-primary);
+            padding: 12px 18px;
+            margin: 16px 0;
+            border-radius: 0 6px 6px 0;
+            color: var(--text-secondary);
+        }
+
+        /* GitHub Alert Callout Cards */
+        .callout-card {
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 18px 0;
+            border-left: 4px solid var(--accent-primary);
+            background-color: var(--surface-color);
+        }
+
+        .callout-card.callout-important {
+            background-color: var(--callout-imp-bg);
+            border-color: var(--callout-imp-border);
+            color: var(--callout-imp-text);
+        }
+
+        .callout-card.callout-tip, .callout-card.callout-note {
+            background-color: var(--callout-note-bg);
+            border-color: var(--callout-note-border);
+            color: var(--callout-note-text);
+        }
+
+        .callout-card.callout-warn {
+            background-color: var(--callout-warn-bg);
+            border-color: var(--callout-warn-border);
+            color: var(--callout-warn-text);
+        }
+
+        .callout-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .callout-badge {
+            display: inline-flex;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #ffffff;
+            background-color: var(--accent-primary);
+        }
+
+        .callout-important .callout-badge { background-color: var(--callout-imp-border); }
+        .callout-tip .callout-badge, .callout-note .callout-badge { background-color: var(--callout-note-border); }
+        .callout-warn .callout-badge { background-color: var(--callout-warn-border); }
+
+        /* 表格样式 */
+        .table-wrapper {
+            margin: 18px 0 24px;
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.89rem;
+            text-align: left;
+        }
+
+        thead tr {
+            background-color: var(--table-header);
+        }
+
+        th {
+            padding: 10px 14px;
+            font-weight: 700;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            vertical-align: top;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: var(--table-alt);
+        }
+
+        /* Mermaid 图表容器：强制纯白底色 (#FFFFFF)、加粗字体、加粗线条 */
+        .mermaid-wrapper {
+            margin: 22px 0 28px;
+            padding: 24px;
+            background-color: #FFFFFF !important;
+            border: 2px solid #111111;
+            border-radius: 10px;
+            overflow-x: auto;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+        }
+
+        .mermaid {
+            background-color: #FFFFFF !important;
+            color: #111111 !important;
+            font-weight: 700 !important;
+            display: inline-block;
+            min-width: 320px;
+        }
+
+        .mermaid svg {
+            background-color: #FFFFFF !important;
+            font-weight: 700 !important;
+        }
+
+        .mermaid svg text,
+        .mermaid svg span,
+        .mermaid svg .nodeLabel,
+        .mermaid svg .edgeLabel,
+        .mermaid svg .messageText,
+        .mermaid svg .labelText,
+        .mermaid svg .loopText {
+            font-weight: 700 !important;
+            color: #111111 !important;
+            fill: #111111 !important;
+        }
+
+        .mermaid svg path,
+        .mermaid svg line,
+        .mermaid svg rect,
+        .mermaid svg polygon,
+        .mermaid svg circle {
+            stroke-width: 2.2px !important;
+        }
+
+        /* 数学公式块 */
+        .math-block {
+            background-color: var(--math-bg);
+            border: 1px solid var(--math-border);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 16px 0 22px;
+            overflow-x: auto;
+            text-align: center;
+        }
+
+        .math-block-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1px dashed var(--border-color);
+            font-size: 0.76rem;
+        }
+
+        .math-badge {
+            color: var(--accent-primary);
+            font-weight: 700;
+        }
+
+        .math-copy-btn {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.74rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        /* 原生 Markdown 源码视图 */
+        #markdown-source-view {
+            display: none;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .md-source-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .raw-md-textarea {
+            width: 100%;
+            height: 75vh;
+            font-family: "JetBrains Mono", Consolas, monospace;
+            font-size: 0.85rem;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 14px;
+            line-height: 1.6;
+        }
+
+        body.toc-collapsed .sidebar-toc {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="layout-wrapper">
+        <aside class="sidebar-toc" id="sidebarToc">
+            <div class="portal-nav-box">
+                <div class="portal-nav-title">文档中心快速导航</div>
+                <div class="portal-nav-list">
+<a href="../README.html" class="portal-nav-item" title="文档中心总览 (README)">文档中心总览 (README)</a>
+<a href="../specs/cognitive_memory_dev_spec.html" class="portal-nav-item" title="三层认知记忆与双轨评测规范">三层认知记忆与双轨评测规范</a>
+<a href="../跨 Session 记忆数据集生成器思路.html" class="portal-nav-item" title="跨 Session 生成器总体设计">跨 Session 生成器总体设计</a>
+<a href="../记忆建模与数据集生成要求.html" class="portal-nav-item" title="记忆建模与生成要求">记忆建模与生成要求</a>
+<a href="../specs/persona_spec.html" class="portal-nav-item active" title="Persona 画像建模规范">Persona 画像建模规范</a>
+<a href="../guides/cli_usage.html" class="portal-nav-item" title="CLI 命令行与流水线指南">CLI 命令行与流水线指南</a>
+<a href="../archive/defect_triage_log.html" class="portal-nav-item" title="001~150 批次缺陷治理实录">001~150 批次缺陷治理实录</a>
+<a href="../archive/memory_evolution_proposal.html" class="portal-nav-item" title="认知架构演进提案 (RFC)">认知架构演进提案 (RFC)</a>
+                </div>
+            </div>
+            <div class="toc-header">
+                <div class="toc-title">
+                    <span>本页目录大纲</span>
+                </div>
+                <button class="toc-action-btn" onclick="toggleDesktopToc()" title="收起目录">◀</button>
+            </div>
+            <div class="toc-search-box">
+                <input type="text" class="toc-search-input" id="tocSearchInput" placeholder="筛选目录章节..." oninput="filterToc()">
+            </div>
+            <nav class="toc-body">
+                <ul class="toc-list" id="tocList">
+<li class="toc-item toc-level-2"><a href="#1-概述" class="toc-link" title="1 概述">1 概述</a></li>
+<li class="toc-item toc-level-2"><a href="#2-llm-生成流程" class="toc-link" title="2 LLM 生成流程">2 LLM 生成流程</a></li>
+<li class="toc-item toc-level-3"><a href="#21-使用示例" class="toc-link" title="2.1 使用示例">2.1 使用示例</a></li>
+<li class="toc-item toc-level-2"><a href="#3-模板结构" class="toc-link" title="3 模板结构">3 模板结构</a></li>
+<li class="toc-item toc-level-2"><a href="#4-staticprofile-字段规范" class="toc-link" title="4 staticprofile 字段规范">4 staticprofile 字段规范</a></li>
+<li class="toc-item toc-level-3"><a href="#41-identity-写作规则" class="toc-link" title="4.1 identity 写作规则">4.1 identity 写作规则</a></li>
+<li class="toc-item toc-level-3"><a href="#42-apps-选择规则" class="toc-link" title="4.2 apps 选择规则">4.2 apps 选择规则</a></li>
+<li class="toc-item toc-level-2"><a href="#5-dynamicprofile-字段规范" class="toc-link" title="5 dynamicprofile 字段规范">5 dynamicprofile 字段规范</a></li>
+<li class="toc-item toc-level-3"><a href="#51-timebased" class="toc-link" title="5.1 timebased">5.1 timebased</a></li>
+<li class="toc-item toc-level-3"><a href="#52-sceneswitch" class="toc-link" title="5.2 sceneswitch">5.2 sceneswitch</a></li>
+<li class="toc-item toc-level-3"><a href="#53-rolechange" class="toc-link" title="5.3 rolechange">5.3 rolechange</a></li>
+<li class="toc-item toc-level-3"><a href="#54-eventdriven" class="toc-link" title="5.4 eventdriven">5.4 eventdriven</a></li>
+<li class="toc-item toc-level-3"><a href="#55-aliases" class="toc-link" title="5.5 aliases">5.5 aliases</a></li>
+<li class="toc-item toc-level-3"><a href="#56-timeexpressions" class="toc-link" title="5.6 timeexpressions">5.6 timeexpressions</a></li>
+<li class="toc-item toc-level-3"><a href="#57-parammappings" class="toc-link" title="5.7 parammappings">5.7 parammappings</a></li>
+<li class="toc-item toc-level-3"><a href="#58-experiencepreferences" class="toc-link" title="5.8 experiencepreferences">5.8 experiencepreferences</a></li>
+<li class="toc-item toc-level-3"><a href="#59-appservicepreferences" class="toc-link" title="5.9 appservicepreferences">5.9 appservicepreferences</a></li>
+<li class="toc-item toc-level-3"><a href="#510-conditionalpreferences" class="toc-link" title="5.10 conditionalpreferences">5.10 conditionalpreferences</a></li>
+<li class="toc-item toc-level-2"><a href="#6-模板设计检查清单" class="toc-link" title="6 模板设计检查清单">6 模板设计检查清单</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="container">
+                <div class="top-bar">
+                    <div class="nav-links">
+                        <button class="nav-btn" id="expandTocBtn" onclick="toggleDesktopToc()" style="display: none;">展开目录</button>
+                        <a href="../README.html" class="nav-btn">◀ 文档中心首页</a>
+                        <button class="nav-btn active" id="btnReadView" onclick="switchDocView('read')">阅读视图</button>
+                        <button class="nav-btn" id="btnSourceView" onclick="switchDocView('source')">Markdown 源码</button>
+                        <span style="color: var(--border-color)">|</span>
+                        <span style="font-size: 0.84rem; color: var(--text-muted);">docs/specs/persona_spec.md</span>
+                    </div>
+                    <button class="theme-switch-btn" onclick="toggleTheme()" id="themeBtn">
+                        切换暮色
+                    </button>
+                </div>
+
+                <article class="markdown-body" id="docReadView">
+<h1>Persona 模板生成规范</h1>
+<h2 id="1-概述">1 概述</h2>
+<p>生成面向核心网 Agent 的用户画像（Persona）模板，用于跨 Session 记忆数据集生成。画像模板是 <code>corenet_personas.jsonl</code> 中的单条记录，描述一个真实用户画像。</p>
+<p>画像模板可以通过两种方式获得：</p>
+
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>生成方式</th><th>说明</th><th>适用场景</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>人工设计</strong></td><td>按本规范手动编写 JSON</td><td>已有画像（如 <code>corenet_personas.jsonl</code> 中的 19 个）</td></tr><tr><td><strong>LLM 生成</strong></td><td>提供简短的人类角色描述，LLM 补全完整字段</td><td>需要批量生成新画像</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+<h2 id="2-llm-生成流程">2 LLM 生成流程</h2>
+<p>独立脚本：<code>persona_generate.py</code>（命令行脚本，解耦于 pipeline）</p>
+
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>persona_generate.py [--prompt &quot;描述&quot;] [--count N] [--mode generate|regenerate]
+  │
+  ├─ 读取 dataset_prepare/ 下的 3 个 JSON（app_config.json, app_map.json, support_matrix.json）
+  ├─ LLM 接收系统 prompt（字段规范 + 可用 APP 列表）+ 可选基础描述
+  ├─ LLM 输出完整 persona JSON (static_profile + dynamic_profile)
+  ├─ 校验: 模板设计检查清单（apps数量/time_based覆盖/evidence类型等）
+  ├─ 失败则重试（最多3次）
+  └─ 写入 corenet_personas.jsonl (JSON 数组格式)</code></pre>
+                        </div>
+                        
+<p><strong>Pipeline 调用</strong>：<code>run.py</code> 只负责从 <code>corenet_personas.jsonl</code> 加载画像模板，不生成 personas。</p>
+<p><strong>LLM 生成 vs 人工设计的区别</strong>：</p>
+<ul><li>LLM 生成时，apps 列表可能是通用名（如"视频APP"），后续 <code>persona_ground_truth.py</code> 的 <code>_resolve_app_name</code> 会 fallback 到 LLM 做映射
+</li>
+<li>人工设计时，apps 直接用中文标准名，匹配更准确
+</li>
+<li>两种方式的后续 pipeline 完全相同
+</li></ul>
+<h3 id="21-使用示例">2.1 使用示例</h3>
+<p><strong>方式1：自由生成</strong></p>
+
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>python persona_generate.py --count 3</code></pre>
+                        </div>
+                        
+<p><strong>方式2：带基础描述</strong></p>
+
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>python persona_generate.py --count 3 \
+  --prompt &quot;一个经常出差的商务人士，主要用视频通话和导航&quot; \
+  --prompt &quot;一个喜欢追剧的高中生，主要用短视频和追剧APP&quot; \
+  --prompt &quot;一个退休老人，主要用微信视频和听书&quot;</code></pre>
+                        </div>
+                        
+<p><strong>方式3：覆盖全部</strong></p>
+
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>python persona_generate.py --mode regenerate --count 10 --prompt &quot;一个外卖骑手，主要用导航和外卖APP&quot;</code></pre>
+                        </div>
+                        
+<p><strong>方式4：指定资源目录和输出路径</strong></p>
+
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>python persona_generate.py --resource-dir /path/to/dataset_prepare --output /path/to/output.jsonl</code></pre>
+                        </div>
+                        
+<p><strong>输出</strong>：生成完成后，LLM 调用的日志会显示 validation warnings（如果有），最终的 persona 文件会被写入 <code>output</code> 指定的路径（默认 <code>../PersonaMem-v2/data/corenet_personas.jsonl</code>）。</p>
+<p><strong>使用 dataset_prepare/ 资源</strong>：<code>persona_generate.py</code> 会自动读取 <code>dataset_prepare/</code> 下的 3 个 JSON：</p>
+<ul><li><code>app_config.json</code>：所有可用的 APP 名称和业务类型
+</li>
+<li><code>app_map.json</code>：APP 中文名/英文名/别名
+</li>
+<li><code>support_matrix.json</code>：APP × 业务 × 分辨率枚举
+</li></ul>
+<p>这些信息会被注入到 LLM prompt 中，让 LLM 知道能选哪些 APP，避免编造不存在的 APP。</p>
+<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+<h2 id="3-模板结构">3 模板结构</h2>
+<p>画像模板是 <code>corenet_personas.jsonl</code> 中的单条记录，包含两个顶层字段：</p>
+
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>字段名</th><th>类型</th><th>说明</th></tr></thead>
+                <tbody>
+                    <tr><td><code>static_profile</code></td><td><code>dict</code></td><td>稳定画像（不变或极少变化）</td></tr><tr><td><code>dynamic_profile</code></td><td><code>dict</code></td><td>动态画像（随时间/场景/事件变化）</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+<h2 id="4-staticprofile-字段规范">4 <code>static_profile</code> 字段规范</h2>
+
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>字段名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+                <tbody>
+                    <tr><td><code>identity</code></td><td><code>str</code></td><td>是</td><td>用户身份描述。需包含：职业/角色、核心活动特征、频率/时长、考核/目标</td></tr><tr><td><code>devices</code></td><td><code>str</code></td><td>是</td><td>使用的设备列表。需区分主力设备与备用设备</td></tr><tr><td><code>apps</code></td><td><code>list[str]</code></td><td>是</td><td>常用 APP 名称列表（中文）。建议 4-10 个，覆盖用户的核心使用场景</td></tr><tr><td><code>user_id</code></td><td><code>str</code></td><td>否</td><td>用户标识，格式 <code>USER_XXXX</code></td></tr><tr><td><code>subscription</code></td><td><code>dict</code></td><td>否</td><td>套餐信息，包含 <code>plan_name</code>, <code>status</code>, <code>services</code></td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+<h3 id="41-identity-写作规则">4.1 identity 写作规则</h3>
+
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>格式：身份 + 核心活动 + 频率/时长 + 考核/目标
+示例：
+  ✅ &quot;抖音签约的全职户外主播，主要进行城市探店、夜市和商场直播，每周直播5-6场，每场2-4小时，有平台直播时长和活动场次考核&quot;
+  ❌ &quot;全职户外主播，喜欢直播&quot;</code></pre>
+                        </div>
+                        
+<h3 id="42-apps-选择规则">4.2 apps 选择规则</h3>
+<ul><li>覆盖直播/视频类（主力）、沟通类、导航类、支付类等
+</li>
+<li>与身份场景强相关，不要堆砌无关 APP
+</li>
+<li>APP 名用中文，需匹配 <code>app_config.json</code> 中的标准名
+</li></ul>
+<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+<h2 id="5-dynamicprofile-字段规范">5 <code>dynamic_profile</code> 字段规范</h2>
+<h3 id="51-timebased">5.1 <code>time_based</code></h3>
+
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>字段名</th><th>类型</th><th>说明</th></tr></thead>
+                <tbody>
+                    <tr><td>key</td><td><code>str</code></td><td>时间段描述，格式如 "工作日下午（14:00-17:00）"</td></tr><tr><td>value</td><td><code>str</code></td><td>该时间段的典型活动和网络关注点</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+<p><strong>设计原则</strong>：</p>
+<ul><li>覆盖 3 个典型时段（下午/晚间/周末）
+</li>
+<li>每个时段的活动 + 对应的网络需求要能映射到具体的 APP+业务
+</li>
+<li>时间范围用括号标注具体时段
+</li></ul>
+
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>示例：
+  &quot;工作日晚间（18:00-22:00）&quot;: &quot;在夜市、商业街或餐饮门店进行户外直播&quot;
+  &quot;周末下午至晚间（14:00-21:00）&quot;: &quot;在商场、景区或大型活动现场进行户外直播&quot;</code></pre>
+                        </div>
+                        
+<h3 id="52-sceneswitch">5.2 <code>scene_switch</code></h3>
+
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>字段名</th><th>类型</th><th>说明</th></tr></thead>
+                <tbody>
+                    <tr><td>key</td><td><code>str</code></td><td>场景描述</td></tr><tr><td>value</td><td><code>str</code></td><td>该场景下的行为模式 + 网络关注点</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+<p><strong>设计原则</strong>：</p>
+<ul><li>覆盖 3-4 个典型场景（不同环境/状态）
+</li>
+<li>每个场景需说明：设备使用方式、主要关注的网络问题
+</li>
+<li>至少包含一个"异常/应急"场景（主链路异常等）
+</li></ul>
+
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>示例：
+  &quot;夜市/商业街&quot;: &quot;使用主力5G手机边走边播，主要关注人流密集区域的上行拥塞、小区切换和直播连续性&quot;
+  &quot;主链路异常&quot;: &quot;切换到备用5G手机或备用号码，关注直播恢复速度以及原有保障策略是否覆盖备用链路&quot;</code></pre>
+                        </div>
+                        
+<h3 id="53-rolechange">5.3 <code>role_change</code></h3>
+
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>字段名</th><th>类型</th><th>说明</th></tr></thead>
+                <tbody>
+                    <tr><td><code>from</code></td><td><code>str</code></td><td>角色变化前的状态</td></tr><tr><td><code>to</code></td><td><code>str</code></td><td>角色变化后的状态</td></tr><tr><td><code>trigger</code></td><td><code>str</code></td><td>触发角色变化的原因/事件</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+<p><strong>设计原则</strong>：</p>
+<ul><li>记录 1 个有代表性的角色变化（业余 → 专业、换岗等）
+</li>
+<li>trigger 需说明为什么网络需求会改变
+</li>
+<li>用于生成 Layer 3 changeable_gt（可变化事实）
+</li></ul>
+
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>示例：
+  from: &quot;业余探店博主，主要拍摄短视频后再上传&quot;
+  to: &quot;抖音签约的全职户外主播，需要在不同地点完成实时直播&quot;
+  trigger: &quot;签约后，内容形式从录制后上传为主转变为实时户外直播&quot;</code></pre>
+                        </div>
+                        
+<h3 id="54-eventdriven">5.4 <code>event_driven</code></h3>
+
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>字段名</th><th>类型</th><th>说明</th></tr></thead>
+                <tbody>
+                    <tr><td><code>event</code></td><td><code>str</code></td><td>事件描述</td></tr><tr><td><code>impact</code></td><td><code>str</code></td><td>事件对网络/业务的具体影响</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+<p><strong>设计原则</strong>：</p>
+<ul><li>记录 1-2 个有代表性的事件（促销季、设备更换、活动赛事等）
+</li>
+<li>impact 需说明：网络需求的变化、对业务的影响、需要采取的保障动作
+</li>
+<li>用于生成 Layer 3 changeable_gt（可变化事实），设置 valid_from/valid_to
+</li></ul>
+
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>示例：
+  event: &quot;双11商场促销活动期间进行品牌专场直播，并开启高清推流、嘉宾连麦和商品展示&quot;
+  impact: &quot;高清推流和实时连麦使上行稳定性要求高于日常探店直播...&quot;</code></pre>
+                        </div>
+                        
+<h3 id="55-aliases">5.5 <code>aliases</code></h3>
+
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>字段名</th><th>类型</th><th>说明</th></tr></thead>
+                <tbody>
+                    <tr><td><code>app_aliases</code></td><td><code>dict[str, list[str]]</code></td><td>APP 名 → 别名列表</td></tr><tr><td><code>service_aliases</code></td><td><code>dict[str, list[str]]</code></td><td>业务名 → 别名列表</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+<p><strong>设计原则</strong>：</p>
+<ul><li>每个常用 APP 提供 1-3 个自然别名
+</li>
+<li>别名要真实：用户口语中实际会说的说法（如"抖"、"阿抖"）
+</li>
+<li>排除子串别名（"抖"是"抖音"的子串，应选更长的"阿抖"）
+</li>
+<li>至少包含 2 个 APP 别名 + 1 个业务别名
+</li></ul>
+
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>示例：
+  &quot;抖音&quot;: [&quot;抖音&quot;, &quot;抖&quot;, &quot;阿抖&quot;]
+  &quot;直播推流&quot;: [&quot;直播&quot;, &quot;推流&quot;, &quot;开播&quot;]</code></pre>
+                        </div>
+                        
+<h3 id="56-timeexpressions">5.6 <code>time_expressions</code></h3>
+
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>字段名</th><th>类型</th><th>说明</th></tr></thead>
+                <tbody>
+                    <tr><td>key</td><td><code>str</code></td><td>模糊时间表达</td></tr><tr><td>value</td><td><code>dict</code></td><td>解析后的具体时间信息</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+<p><strong>设计原则</strong>：</p>
+<ul><li>提供 2-3 个用户口语中的时间表达
+</li>
+<li>覆盖 duration（时长）、relative（相对）、period（时段）等类型
+</li>
+<li>value 需包含具体的时间解析结果
+</li></ul>
+
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>示例：
+  &quot;一会儿&quot;: { &quot;duration_minutes&quot;: 30, &quot;type&quot;: &quot;duration&quot; }
+  &quot;下班前&quot;: { &quot;relative_time&quot;: &quot;before_work_end&quot;, &quot;approximate&quot;: &quot;18:00&quot; }</code></pre>
+                        </div>
+                        
+<h3 id="57-parammappings">5.7 <code>param_mappings</code></h3>
+
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>字段名</th><th>类型</th><th>说明</th></tr></thead>
+                <tbody>
+                    <tr><td>key</td><td><code>str</code></td><td>模糊质量表达（如"高清"）</td></tr><tr><td>value</td><td><code>dict</code></td><td>映射后的具体参数</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+<p><strong>设计原则</strong>：</p>
+<ul><li>提供 2-3 个用户口语中的画质/速度表达
+</li>
+<li>每个表达映射到具体的 resolution 或时延值
+</li>
+<li>这些映射将被生成 Layer 4 personalization_gt 中的 <code>expression_mappings</code>（quality_expression 类型）
+</li></ul>
+
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>示例：
+  &quot;高清&quot;: { &quot;resolution&quot;: &quot;1080p&quot; }
+  &quot;流畅&quot;: { &quot;resolution&quot;: &quot;360p&quot;, &quot;bitrate_kbps&quot;: 800 }
+  &quot;标清&quot;: { &quot;resolution&quot;: &quot;720p&quot; }</code></pre>
+                        </div>
+                        
+<h3 id="58-experiencepreferences">5.8 <code>experience_preferences</code></h3>
+
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>字段名</th><th>类型</th><th>说明</th></tr></thead>
+                <tbody>
+                    <tr><td><code>app</code></td><td><code>str</code></td><td>APP 标准名（英文）</td></tr><tr><td><code>service</code></td><td><code>str</code></td><td>业务标准名（英文）</td></tr><tr><td><code>preferred</code></td><td><code>dict</code></td><td>首选体验参数组合</td></tr><tr><td><code>fallback</code></td><td><code>dict</code></td><td>备选体验参数组合</td></tr><tr><td><code>rejected</code></td><td><code>dict</code> 或 <code>null</code></td><td>排斥的参数值</td></tr><tr><td><code>evidence</code></td><td><code>str</code></td><td>证据强度："explicit" / "behavioral"</td></tr><tr><td><code>support_count</code></td><td><code>int</code></td><td>证据数量（behavioral 时）</td></tr><tr><td><code>scope</code></td><td><code>str</code></td><td>偏好范围："long_term" / "temporary" / "scene"</td></tr><tr><td><code>applicable_conditions</code></td><td><code>str</code></td><td>适用条件描述</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+<p><strong>设计原则</strong>：</p>
+<ul><li>每个偏好覆盖一个 app+service 组合
+</li>
+<li>preferred/fallback/rejected 是"多参数组合"（resolution + 时延/上行），不是单参数
+</li>
+<li>evidence="explicit"表示用户明确说过，"behavioral"表示推断得出
+</li>
+<li>必须包含 1 个 explicit + 1 个 behavioral，测试不同证据强度的记忆形成
+</li>
+<li>用多参数组合偏好生成 Layer 4 <code>experience_param_preferences</code>，被反推为 MT（如 <code>multi_param_bundle</code>）
+</li></ul>
+
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>示例：
+  {
+    &quot;app&quot;: &quot;Douyin&quot;,
+    &quot;service&quot;: &quot;live&quot;,
+    &quot;preferred&quot;: { &quot;resolution&quot;: &quot;1080p&quot;, &quot;latency_ms&quot;: 60 },
+    &quot;fallback&quot;: { &quot;resolution&quot;: &quot;720p&quot;, &quot;latency_ms&quot;: 120 },
+    &quot;rejected&quot;: { &quot;resolution&quot;: &quot;360p&quot;, &quot;latency_ms&quot;: 200 },
+    &quot;evidence&quot;: &quot;explicit&quot;,
+    &quot;scope&quot;: &quot;long_term&quot;,
+    &quot;applicable_conditions&quot;: &quot;户外直播场景&quot;
+  }</code></pre>
+                        </div>
+                        
+<h3 id="59-appservicepreferences">5.9 <code>app_service_preferences</code></h3>
+
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>字段名</th><th>类型</th><th>说明</th></tr></thead>
+                <tbody>
+                    <tr><td><code>type</code></td><td><code>str</code></td><td>偏好类型："service_to_app" / "app_to_service" / "combo"</td></tr><tr><td><code>service</code> 或 <code>app</code></td><td><code>str</code></td><td>已知的业务名或 APP 名（英文）</td></tr><tr><td><code>preferred_apps</code> 或 <code>preferred_services</code></td><td><code>list[str]</code></td><td>候选列表</td></tr><tr><td><code>excluded_apps</code></td><td><code>list[str]</code></td><td>排除列表</td></tr><tr><td><code>evidence</code></td><td><code>str</code></td><td>"explicit" / "behavioral"</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+<p><strong>设计原则</strong>：</p>
+<ul><li>至少提供 1 个 <code>service_to_app</code>（只说业务→Agent 推断 APP）和 1 个 <code>app_to_service</code>（只说 APP→Agent 推断业务）
+</li>
+<li>preferred 列表中建议有 2-3 个候选，测试 Agent 是否能正确排序
+</li>
+<li>生成 Layer 4 <code>app_business_preferences</code>，被反推为 MT（如 <code>service_to_app</code>、<code>app_to_service</code>、<code>app_service_combo</code>）
+</li></ul>
+
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>示例：
+  {
+    &quot;type&quot;: &quot;service_to_app&quot;,
+    &quot;service&quot;: &quot;live&quot;,
+    &quot;preferred_apps&quot;: [&quot;Douyin&quot;, &quot;Kuaishou&quot;],
+    &quot;excluded_apps&quot;: [&quot;Weishi&quot;],
+    &quot;evidence&quot;: &quot;behavioral&quot;,
+    &quot;support_count&quot;: 8
+  }</code></pre>
+                        </div>
+                        
+<h3 id="510-conditionalpreferences">5.10 <code>conditional_preferences</code></h3>
+
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>字段名</th><th>类型</th><th>说明</th></tr></thead>
+                <tbody>
+                    <tr><td><code>conditions</code></td><td><code>dict</code></td><td>触发条件（location/event/time_period 等）</td></tr><tr><td><code>preference</code></td><td><code>dict</code></td><td>条件满足时的偏好参数</td></tr><tr><td><code>scope</code></td><td><code>str</code></td><td>条件范围："scene" / "temporary" / "global"</td></tr><tr><td><code>evidence</code></td><td><code>str</code></td><td>"explicit" / "behavioral"</td></tr><tr><td><code>support_count</code></td><td><code>int</code></td><td>证据数量</td></tr><tr><td><code>valid_until</code></td><td><code>str</code></td><td>有效期（仅限 temporary 场景）</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+<p><strong>设计原则</strong>：</p>
+<ul><li>覆盖 2-3 个不同条件场景（不同 location/event）
+</li>
+<li>条件需具体、可验证（如"商场室内晚高峰"、"双11商场促销"）
+</li>
+<li>scope="temporary" 时必须有 valid_until
+</li>
+<li>生成 Layer 2 <code>conditional_gt</code>（条件化真值），被反推为 MT（如 <code>temporary_preference</code>）
+</li></ul>
+
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code>示例：
+  {
+    &quot;conditions&quot;: { &quot;event&quot;: &quot;双11&quot;, &quot;location&quot;: &quot;商场&quot; },
+    &quot;preference&quot;: { &quot;resolution_preference&quot;: &quot;1080p&quot;, &quot;uplink_mbps&quot;: 15 },
+    &quot;scope&quot;: &quot;temporary&quot;,
+    &quot;evidence&quot;: &quot;explicit&quot;,
+    &quot;valid_until&quot;: &quot;2026-11-12&quot;
+  }</code></pre>
+                        </div>
+                        
+<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+<h2 id="6-模板设计检查清单">6 模板设计检查清单</h2>
+<p>生成一个新画像模板时，按以下清单逐项核对：</p>
+
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>序号</th><th>检查项</th><th>验证方法</th></tr></thead>
+                <tbody>
+                    <tr><td>1</td><td><code>static_profile.apps</code> 中至少 3 个 APP 能匹配 <code>app_config.json</code></td><td>运行生成器后 <code>frequent_apps</code> 非空</td></tr><tr><td>2</td><td><code>static_profile.identity</code> 包含角色+活动+频率</td><td>正则检查</td></tr><tr><td>3</td><td><code>dynamic_profile.time_based</code> 覆盖至少 3 个时段</td><td>检查 key 数量</td></tr><tr><td>4</td><td><code>dynamic_profile.scene_switch</code> 包含至少 1 个异常场景</td><td>检查 key 是否含"异常"/"备用"</td></tr><tr><td>5</td><td><code>dynamic_profile.aliases.app_aliases</code> 至少 2 个 APP 有别名</td><td>检查嵌套 dict 长度</td></tr><tr><td>6</td><td><code>dynamic_profile.param_mappings</code> 至少 2 个画质表达</td><td>检查嵌套 dict 长度</td></tr><tr><td>7</td><td><code>dynamic_profile.experience_preferences</code> 至少 2 条，且含 explicit+behavioral</td><td>检查 evidence 字段</td></tr><tr><td>8</td><td><code>dynamic_profile.app_service_preferences</code> 包含 service_to_app + app_to_service</td><td>检查 type 字段</td></tr><tr><td>9</td><td><code>dynamic_profile.conditional_preferences</code> 至少 1 条，含 temporary 类型</td><td>检查 scope 字段</td></tr><tr><td>10</td><td>整体一致性：apps + time_based + scene_switch 描述的活动与 identity 匹配</td><td>人工审查</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+                </article>
+
+                <div id="markdown-source-view">
+                    <div class="md-source-toolbar">
+                        <strong>docs/specs/persona_spec.md 原生 Markdown 源码</strong>
+                        <button class="nav-btn active" onclick="copyRawMarkdown()">复制全文源码</button>
+                    </div>
+                    <textarea class="raw-md-textarea" id="rawMdArea" readonly># Persona 模板生成规范
+
+## 1 概述
+
+生成面向核心网 Agent 的用户画像（Persona）模板，用于跨 Session 记忆数据集生成。画像模板是 `corenet_personas.jsonl` 中的单条记录，描述一个真实用户画像。
+
+画像模板可以通过两种方式获得：
+
+| 生成方式 | 说明 | 适用场景 |
+| ------------ | ---------------------- | ---------------------------------------- |
+| **人工设计**     | 按本规范手动编写 JSON          | 已有画像（如 `corenet_personas.jsonl` 中的 19 个） |
+| **LLM 生成**   | 提供简短的人类角色描述，LLM 补全完整字段 | 需要批量生成新画像                                |
+
+---
+
+## 2 LLM 生成流程
+
+独立脚本：`persona_generate.py`（命令行脚本，解耦于 pipeline）
+
+```
+persona_generate.py [--prompt &quot;描述&quot;] [--count N] [--mode generate|regenerate]
+  │
+  ├─ 读取 dataset_prepare/ 下的 3 个 JSON（app_config.json, app_map.json, support_matrix.json）
+  ├─ LLM 接收系统 prompt（字段规范 + 可用 APP 列表）+ 可选基础描述
+  ├─ LLM 输出完整 persona JSON (static_profile + dynamic_profile)
+  ├─ 校验: 模板设计检查清单（apps数量/time_based覆盖/evidence类型等）
+  ├─ 失败则重试（最多3次）
+  └─ 写入 corenet_personas.jsonl (JSON 数组格式)
+```
+
+**Pipeline 调用**：`run.py` 只负责从 `corenet_personas.jsonl` 加载画像模板，不生成 personas。
+
+**LLM 生成 vs 人工设计的区别**：
+
+- LLM 生成时，apps 列表可能是通用名（如&quot;视频APP&quot;），后续 `persona_ground_truth.py` 的 `_resolve_app_name` 会 fallback 到 LLM 做映射
+- 人工设计时，apps 直接用中文标准名，匹配更准确
+- 两种方式的后续 pipeline 完全相同
+
+### 2.1 使用示例
+
+**方式1：自由生成**
+
+```
+python persona_generate.py --count 3
+```
+
+**方式2：带基础描述**
+
+```
+python persona_generate.py --count 3 \
+  --prompt &quot;一个经常出差的商务人士，主要用视频通话和导航&quot; \
+  --prompt &quot;一个喜欢追剧的高中生，主要用短视频和追剧APP&quot; \
+  --prompt &quot;一个退休老人，主要用微信视频和听书&quot;
+```
+
+**方式3：覆盖全部**
+
+```
+python persona_generate.py --mode regenerate --count 10 --prompt &quot;一个外卖骑手，主要用导航和外卖APP&quot;
+```
+
+**方式4：指定资源目录和输出路径**
+
+```
+python persona_generate.py --resource-dir /path/to/dataset_prepare --output /path/to/output.jsonl
+```
+
+**输出**：生成完成后，LLM 调用的日志会显示 validation warnings（如果有），最终的 persona 文件会被写入 `output` 指定的路径（默认 `../PersonaMem-v2/data/corenet_personas.jsonl`）。
+
+**使用 dataset_prepare/ 资源**：`persona_generate.py` 会自动读取 `dataset_prepare/` 下的 3 个 JSON：
+
+- `app_config.json`：所有可用的 APP 名称和业务类型
+- `app_map.json`：APP 中文名/英文名/别名
+- `support_matrix.json`：APP × 业务 × 分辨率枚举
+
+这些信息会被注入到 LLM prompt 中，让 LLM 知道能选哪些 APP，避免编造不存在的 APP。
+
+---
+
+## 3 模板结构
+
+画像模板是 `corenet_personas.jsonl` 中的单条记录，包含两个顶层字段：
+
+| 字段名 | 类型 | 说明 |
+| ----------------- | ------ | ----------------- |
+| `static_profile`  | `dict` | 稳定画像（不变或极少变化）     |
+| `dynamic_profile` | `dict` | 动态画像（随时间/场景/事件变化） |
+
+---
+
+## 4 `static_profile` 字段规范
+
+| 字段名 | 类型 | 必填 | 说明 |
+| -------------- | ----------- | - | ----------------------------------------- |
+| `identity`     | `str`       | 是 | 用户身份描述。需包含：职业/角色、核心活动特征、频率/时长、考核/目标       |
+| `devices`      | `str`       | 是 | 使用的设备列表。需区分主力设备与备用设备                      |
+| `apps`         | `list[str]` | 是 | 常用 APP 名称列表（中文）。建议 4-10 个，覆盖用户的核心使用场景     |
+| `user_id`      | `str`       | 否 | 用户标识，格式 `USER_XXXX`                       |
+| `subscription` | `dict`      | 否 | 套餐信息，包含 `plan_name`, `status`, `services` |
+
+### 4.1 identity 写作规则
+
+```
+格式：身份 + 核心活动 + 频率/时长 + 考核/目标
+示例：
+  ✅ &quot;抖音签约的全职户外主播，主要进行城市探店、夜市和商场直播，每周直播5-6场，每场2-4小时，有平台直播时长和活动场次考核&quot;
+  ❌ &quot;全职户外主播，喜欢直播&quot;
+```
+
+### 4.2 apps 选择规则
+
+- 覆盖直播/视频类（主力）、沟通类、导航类、支付类等
+- 与身份场景强相关，不要堆砌无关 APP
+- APP 名用中文，需匹配 `app_config.json` 中的标准名
+
+---
+
+## 5 `dynamic_profile` 字段规范
+
+### 5.1 `time_based`
+
+| 字段名 | 类型 | 说明 |
+| ---------- | ----- | ------------------------------ |
+| key        | `str` | 时间段描述，格式如 &quot;工作日下午（14:00-17:00）&quot; |
+| value      | `str` | 该时间段的典型活动和网络关注点                |
+
+**设计原则**：
+
+- 覆盖 3 个典型时段（下午/晚间/周末）
+- 每个时段的活动 + 对应的网络需求要能映射到具体的 APP+业务
+- 时间范围用括号标注具体时段
+
+```
+示例：
+  &quot;工作日晚间（18:00-22:00）&quot;: &quot;在夜市、商业街或餐饮门店进行户外直播&quot;
+  &quot;周末下午至晚间（14:00-21:00）&quot;: &quot;在商场、景区或大型活动现场进行户外直播&quot;
+```
+
+### 5.2 `scene_switch`
+
+| 字段名 | 类型 | 说明 |
+| ---------- | ----- | ----------------- |
+| key        | `str` | 场景描述              |
+| value      | `str` | 该场景下的行为模式 + 网络关注点 |
+
+**设计原则**：
+
+- 覆盖 3-4 个典型场景（不同环境/状态）
+- 每个场景需说明：设备使用方式、主要关注的网络问题
+- 至少包含一个&quot;异常/应急&quot;场景（主链路异常等）
+
+```
+示例：
+  &quot;夜市/商业街&quot;: &quot;使用主力5G手机边走边播，主要关注人流密集区域的上行拥塞、小区切换和直播连续性&quot;
+  &quot;主链路异常&quot;: &quot;切换到备用5G手机或备用号码，关注直播恢复速度以及原有保障策略是否覆盖备用链路&quot;
+```
+
+### 5.3 `role_change`
+
+| 字段名 | 类型 | 说明 |
+| ---------- | ----- | ------------ |
+| `from`     | `str` | 角色变化前的状态     |
+| `to`       | `str` | 角色变化后的状态     |
+| `trigger`  | `str` | 触发角色变化的原因/事件 |
+
+**设计原则**：
+
+- 记录 1 个有代表性的角色变化（业余 → 专业、换岗等）
+- trigger 需说明为什么网络需求会改变
+- 用于生成 Layer 3 changeable_gt（可变化事实）
+
+```
+示例：
+  from: &quot;业余探店博主，主要拍摄短视频后再上传&quot;
+  to: &quot;抖音签约的全职户外主播，需要在不同地点完成实时直播&quot;
+  trigger: &quot;签约后，内容形式从录制后上传为主转变为实时户外直播&quot;
+```
+
+### 5.4 `event_driven`
+
+| 字段名 | 类型 | 说明 |
+| ---------- | ----- | ------------- |
+| `event`    | `str` | 事件描述          |
+| `impact`   | `str` | 事件对网络/业务的具体影响 |
+
+**设计原则**：
+
+- 记录 1-2 个有代表性的事件（促销季、设备更换、活动赛事等）
+- impact 需说明：网络需求的变化、对业务的影响、需要采取的保障动作
+- 用于生成 Layer 3 changeable_gt（可变化事实），设置 valid_from/valid_to
+
+```
+示例：
+  event: &quot;双11商场促销活动期间进行品牌专场直播，并开启高清推流、嘉宾连麦和商品展示&quot;
+  impact: &quot;高清推流和实时连麦使上行稳定性要求高于日常探店直播...&quot;
+```
+
+### 5.5 `aliases`
+
+| 字段名 | 类型 | 说明 |
+| ----------------- | ---------------------- | ------------ |
+| `app_aliases`     | `dict[str, list[str]]` | APP 名 → 别名列表 |
+| `service_aliases` | `dict[str, list[str]]` | 业务名 → 别名列表   |
+
+**设计原则**：
+
+- 每个常用 APP 提供 1-3 个自然别名
+- 别名要真实：用户口语中实际会说的说法（如&quot;抖&quot;、&quot;阿抖&quot;）
+- 排除子串别名（&quot;抖&quot;是&quot;抖音&quot;的子串，应选更长的&quot;阿抖&quot;）
+- 至少包含 2 个 APP 别名 + 1 个业务别名
+
+```
+示例：
+  &quot;抖音&quot;: [&quot;抖音&quot;, &quot;抖&quot;, &quot;阿抖&quot;]
+  &quot;直播推流&quot;: [&quot;直播&quot;, &quot;推流&quot;, &quot;开播&quot;]
+```
+
+### 5.6 `time_expressions`
+
+| 字段名 | 类型 | 说明 |
+| ---------- | ------ | ---------- |
+| key        | `str`  | 模糊时间表达     |
+| value      | `dict` | 解析后的具体时间信息 |
+
+**设计原则**：
+
+- 提供 2-3 个用户口语中的时间表达
+- 覆盖 duration（时长）、relative（相对）、period（时段）等类型
+- value 需包含具体的时间解析结果
+
+```
+示例：
+  &quot;一会儿&quot;: { &quot;duration_minutes&quot;: 30, &quot;type&quot;: &quot;duration&quot; }
+  &quot;下班前&quot;: { &quot;relative_time&quot;: &quot;before_work_end&quot;, &quot;approximate&quot;: &quot;18:00&quot; }
+```
+
+### 5.7 `param_mappings`
+
+| 字段名 | 类型 | 说明 |
+| ---------- | ------ | ------------- |
+| key        | `str`  | 模糊质量表达（如&quot;高清&quot;） |
+| value      | `dict` | 映射后的具体参数      |
+
+**设计原则**：
+
+- 提供 2-3 个用户口语中的画质/速度表达
+- 每个表达映射到具体的 resolution 或时延值
+- 这些映射将被生成 Layer 4 personalization_gt 中的 `expression_mappings`（quality_expression 类型）
+
+```
+示例：
+  &quot;高清&quot;: { &quot;resolution&quot;: &quot;1080p&quot; }
+  &quot;流畅&quot;: { &quot;resolution&quot;: &quot;360p&quot;, &quot;bitrate_kbps&quot;: 800 }
+  &quot;标清&quot;: { &quot;resolution&quot;: &quot;720p&quot; }
+```
+
+### 5.8 `experience_preferences`
+
+| 字段名 | 类型 | 说明 |
+| ----------------------- | --------------- | ---------------------------------------- |
+| `app`                   | `str`           | APP 标准名（英文）                              |
+| `service`               | `str`           | 业务标准名（英文）                                |
+| `preferred`             | `dict`          | 首选体验参数组合                                 |
+| `fallback`              | `dict`          | 备选体验参数组合                                 |
+| `rejected`              | `dict` 或 `null` | 排斥的参数值                                   |
+| `evidence`              | `str`           | 证据强度：&quot;explicit&quot; / &quot;behavioral&quot;           |
+| `support_count`         | `int`           | 证据数量（behavioral 时）                       |
+| `scope`                 | `str`           | 偏好范围：&quot;long_term&quot; / &quot;temporary&quot; / &quot;scene&quot; |
+| `applicable_conditions` | `str`           | 适用条件描述                                   |
+
+**设计原则**：
+
+- 每个偏好覆盖一个 app+service 组合
+- preferred/fallback/rejected 是&quot;多参数组合&quot;（resolution + 时延/上行），不是单参数
+- evidence=&quot;explicit&quot;表示用户明确说过，&quot;behavioral&quot;表示推断得出
+- 必须包含 1 个 explicit + 1 个 behavioral，测试不同证据强度的记忆形成
+- 用多参数组合偏好生成 Layer 4 `experience_param_preferences`，被反推为 MT（如 `multi_param_bundle`）
+
+```
+示例：
+  {
+    &quot;app&quot;: &quot;Douyin&quot;,
+    &quot;service&quot;: &quot;live&quot;,
+    &quot;preferred&quot;: { &quot;resolution&quot;: &quot;1080p&quot;, &quot;latency_ms&quot;: 60 },
+    &quot;fallback&quot;: { &quot;resolution&quot;: &quot;720p&quot;, &quot;latency_ms&quot;: 120 },
+    &quot;rejected&quot;: { &quot;resolution&quot;: &quot;360p&quot;, &quot;latency_ms&quot;: 200 },
+    &quot;evidence&quot;: &quot;explicit&quot;,
+    &quot;scope&quot;: &quot;long_term&quot;,
+    &quot;applicable_conditions&quot;: &quot;户外直播场景&quot;
+  }
+```
+
+### 5.9 `app_service_preferences`
+
+| 字段名 | 类型 | 说明 |
+| --------------------------------------- | ----------- | -------------------------------------------------- |
+| `type`                                  | `str`       | 偏好类型：&quot;service_to_app&quot; / &quot;app_to_service&quot; / &quot;combo&quot; |
+| `service` 或 `app`                       | `str`       | 已知的业务名或 APP 名（英文）                                  |
+| `preferred_apps` 或 `preferred_services` | `list[str]` | 候选列表                                               |
+| `excluded_apps`                         | `list[str]` | 排除列表                                               |
+| `evidence`                              | `str`       | &quot;explicit&quot; / &quot;behavioral&quot;                          |
+
+**设计原则**：
+
+- 至少提供 1 个 `service_to_app`（只说业务→Agent 推断 APP）和 1 个 `app_to_service`（只说 APP→Agent 推断业务）
+- preferred 列表中建议有 2-3 个候选，测试 Agent 是否能正确排序
+- 生成 Layer 4 `app_business_preferences`，被反推为 MT（如 `service_to_app`、`app_to_service`、`app_service_combo`）
+
+```
+示例：
+  {
+    &quot;type&quot;: &quot;service_to_app&quot;,
+    &quot;service&quot;: &quot;live&quot;,
+    &quot;preferred_apps&quot;: [&quot;Douyin&quot;, &quot;Kuaishou&quot;],
+    &quot;excluded_apps&quot;: [&quot;Weishi&quot;],
+    &quot;evidence&quot;: &quot;behavioral&quot;,
+    &quot;support_count&quot;: 8
+  }
+```
+
+### 5.10 `conditional_preferences`
+
+| 字段名 | 类型 | 说明 |
+| --------------- | ------ | ------------------------------------- |
+| `conditions`    | `dict` | 触发条件（location/event/time_period 等）    |
+| `preference`    | `dict` | 条件满足时的偏好参数                            |
+| `scope`         | `str`  | 条件范围：&quot;scene&quot; / &quot;temporary&quot; / &quot;global&quot; |
+| `evidence`      | `str`  | &quot;explicit&quot; / &quot;behavioral&quot;             |
+| `support_count` | `int`  | 证据数量                                  |
+| `valid_until`   | `str`  | 有效期（仅限 temporary 场景）                  |
+
+**设计原则**：
+
+- 覆盖 2-3 个不同条件场景（不同 location/event）
+- 条件需具体、可验证（如&quot;商场室内晚高峰&quot;、&quot;双11商场促销&quot;）
+- scope=&quot;temporary&quot; 时必须有 valid_until
+- 生成 Layer 2 `conditional_gt`（条件化真值），被反推为 MT（如 `temporary_preference`）
+
+```
+示例：
+  {
+    &quot;conditions&quot;: { &quot;event&quot;: &quot;双11&quot;, &quot;location&quot;: &quot;商场&quot; },
+    &quot;preference&quot;: { &quot;resolution_preference&quot;: &quot;1080p&quot;, &quot;uplink_mbps&quot;: 15 },
+    &quot;scope&quot;: &quot;temporary&quot;,
+    &quot;evidence&quot;: &quot;explicit&quot;,
+    &quot;valid_until&quot;: &quot;2026-11-12&quot;
+  }
+```
+
+---
+
+## 6 模板设计检查清单
+
+生成一个新画像模板时，按以下清单逐项核对：
+
+| 序号 | 检查项 | 验证方法 |
+| ------------ | ---------------------------------------------------------------------------- | ------------------------- |
+| 1            | `static_profile.apps` 中至少 3 个 APP 能匹配 `app_config.json`                      | 运行生成器后 `frequent_apps` 非空 |
+| 2            | `static_profile.identity` 包含角色+活动+频率                                         | 正则检查                      |
+| 3            | `dynamic_profile.time_based` 覆盖至少 3 个时段                                      | 检查 key 数量                 |
+| 4            | `dynamic_profile.scene_switch` 包含至少 1 个异常场景                                  | 检查 key 是否含&quot;异常&quot;/&quot;备用&quot;       |
+| 5            | `dynamic_profile.aliases.app_aliases` 至少 2 个 APP 有别名                         | 检查嵌套 dict 长度              |
+| 6            | `dynamic_profile.param_mappings` 至少 2 个画质表达                                  | 检查嵌套 dict 长度              |
+| 7            | `dynamic_profile.experience_preferences` 至少 2 条，且含 explicit+behavioral       | 检查 evidence 字段            |
+| 8            | `dynamic_profile.app_service_preferences` 包含 service_to_app + app_to_service | 检查 type 字段                |
+| 9            | `dynamic_profile.conditional_preferences` 至少 1 条，含 temporary 类型              | 检查 scope 字段               |
+| 10           | 整体一致性：apps + time_based + scene_switch 描述的活动与 identity 匹配                    | 人工审查                      |</textarea>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const htmlEl = document.documentElement;
+            const currentTheme = htmlEl.getAttribute('data-theme') || 'parchment';
+            const newTheme = currentTheme === 'parchment' ? 'twilight' : 'parchment';
+            htmlEl.setAttribute('data-theme', newTheme);
+            localStorage.setItem('doc-theme', newTheme);
+            document.getElementById('themeBtn').innerText = newTheme === 'parchment' ? '切换暮色' : '切换米纸';
+        }
+
+        function toggleDesktopToc() {
+            document.body.classList.toggle('toc-collapsed');
+            const isCollapsed = document.body.classList.contains('toc-collapsed');
+            document.getElementById('expandTocBtn').style.display = isCollapsed ? 'inline-flex' : 'none';
+        }
+
+        function switchDocView(mode) {
+            const readEl = document.getElementById('docReadView');
+            const srcEl = document.getElementById('markdown-source-view');
+            document.getElementById('btnReadView').classList.toggle('active', mode !== 'source');
+            document.getElementById('btnSourceView').classList.toggle('active', mode === 'source');
+            readEl.style.display = mode === 'source' ? 'none' : 'block';
+            srcEl.style.display = mode === 'source' ? 'block' : 'none';
+        }
+
+        function copyRawMarkdown() {
+            const area = document.getElementById('rawMdArea');
+            navigator.clipboard.writeText(area.value);
+        }
+
+        function copyCodeCard(btn) {
+            const card = btn.closest('.code-card');
+            const code = card ? card.querySelector('pre code') : null;
+            if (!code) return;
+            navigator.clipboard.writeText(code.innerText).then(() => {
+                const orig = btn.innerText;
+                btn.innerText = '已复制';
+                setTimeout(() => { btn.innerText = orig; }, 1800);
+            });
+        }
+
+        function copyLatex(btn) {
+            const tex = btn.getAttribute('data-tex');
+            if (tex) {
+                navigator.clipboard.writeText(tex).then(() => {
+                    const orig = btn.innerText;
+                    btn.innerText = '已复制 LaTeX';
+                    setTimeout(() => { btn.innerText = orig; }, 1800);
+                });
+            }
+        }
+
+        function filterToc() {
+            const kw = document.getElementById('tocSearchInput').value.trim().toLowerCase();
+            document.querySelectorAll('#tocList .toc-item').forEach(li => {
+                li.style.display = (!kw || li.innerText.toLowerCase().includes(kw)) ? 'block' : 'none';
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('doc-theme') || 'parchment';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('themeBtn').innerText = savedTheme === 'parchment' ? '切换暮色' : '切换米纸';
+
+            if (window.katex) {
+                document.querySelectorAll('.katex-inline').forEach(el => {
+                    const tex = el.getAttribute('data-tex');
+                    if (tex) {
+                        try {
+                            el.innerHTML = katex.renderToString(tex, { displayMode: false, throwOnError: false });
+                        } catch (e) {}
+                    }
+                });
+                document.querySelectorAll('.katex-display-container').forEach(el => {
+                    const tex = el.getAttribute('data-tex');
+                    if (tex) {
+                        try {
+                            el.innerHTML = katex.renderToString(tex, { displayMode: true, throwOnError: false });
+                        } catch (e) {}
+                    }
+                });
+            }
+
+            if (window.mermaid) {
+                mermaid.initialize({
+                    startOnLoad: true,
+                    theme: 'base',
+                    themeVariables: {
+                        background: '#FFFFFF',
+                        primaryColor: '#FFFFFF',
+                        primaryTextColor: '#111111',
+                        primaryBorderColor: '#111111',
+                        lineColor: '#111111',
+                        secondaryColor: '#FFFFFF',
+                        tertiaryColor: '#FFFFFF',
+                        mainBkg: '#FFFFFF',
+                        nodeBorder: '#111111',
+                        clusterBkg: '#FFFFFF',
+                        clusterBorder: '#111111',
+                        actorBkg: '#FFFFFF',
+                        actorBorder: '#111111',
+                        actorTextColor: '#111111',
+                        signalColor: '#111111',
+                        signalTextColor: '#111111',
+                        labelBoxBkgColor: '#FFFFFF',
+                        labelBoxBorderColor: '#111111',
+                        labelTextColor: '#111111',
+                        noteBkgColor: '#FFFFFF',
+                        noteBorderColor: '#111111',
+                        noteTextColor: '#111111'
+                    }
+                });
+            }
+
+            if (window.hljs) {
+                hljs.highlightAll();
+            }
+
+            const links = document.querySelectorAll('.toc-link');
+            const sections = [];
+            links.forEach(link => {
+                const targetId = decodeURIComponent(link.getAttribute('href').slice(1));
+                const section = document.getElementById(targetId);
+                if (section) {
+                    sections.push({ id: targetId, el: section, link: link });
+                }
+            });
+
+            window.addEventListener('scroll', () => {
+                const scrollPos = window.scrollY + 110;
+                let activeId = sections.length ? sections[0].id : null;
+                for (let i = 0; i < sections.length; i++) {
+                    if (sections[i].el.offsetTop <= scrollPos) {
+                        activeId = sections[i].id;
+                    }
+                }
+                links.forEach(link => {
+                    const hrefId = decodeURIComponent(link.getAttribute('href').slice(1));
+                    link.classList.toggle('active', hrefId === activeId);
+                });
+            }, { passive: true });
+        });
+    </script>
+</body>
+</html>
