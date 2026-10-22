@@ -18,6 +18,9 @@ def _sanitize_env(env: str, time_str: str = "") -> str:
         return "现场"
     # 优先匹配特定现场
     patterns = [
+        ("奥林匹克", "奥体中心多功能馆"),
+        ("奥体中心", "奥体中心多功能馆"),
+        ("会展中心", "国际会展中心"),
         ("公益赛事", "公益赛事活动现场"),
         ("外业调查", "外业调查实验现场"),
         ("音乐节", "城市音乐节现场"),
@@ -51,7 +54,7 @@ def _sanitize_env(env: str, time_str: str = "") -> str:
             if hour < 17:
                 env = env.replace("晚间", "日间").replace("夜间", "日间")
 
-    if len(env) > 10 or any(kw in env for kw in ["当", "进入", "触发", "身处", "。"]):
+    if len(env) > 14 or any(kw in env for kw in ["当", "进入", "触发", "身处", "。"]):
         return "外勤保障现场"
     return env.strip("，, 。. ")
 
@@ -102,54 +105,42 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
             eh_t = (s_plan.get("nominal_end") or tp.get("end_timestamp", "")).split("日")[-1] or "17时00分"
             dur_val = s_plan.get("base_dur") or tp.get("duration", "120min")
             if turn_idx == 1:
-                return f"帮我预约下周一（10月5日）例行周会的{app}{srv}保障，时间从{sh_t}到{eh_t}（持续{dur_val}），画质要求{res}，时延控制在{rtt}以内。"
+                return f"帮我预约下周一（10月5日，正值国庆假期）例行周会的{app}{srv}意图保障单，时间从{sh_t}到{eh_t}（持续{dur_val}），画质要求{res}，时延控制在{rtt}以内。"
             else:
-                return "等等，下周一不是国庆长假放假吗？办公室都没人开会，别空跑浪费钱了，帮我顺延到节后上班第一天（10月8日）同时段再开。"
+                return "等等，下周一（10月5日）不是国庆法定长假放假吗？办公室都没人开会，别空跑浪费钱了，帮我把意图保障单顺延到节后上班第一天（10月8日）同时段再开。"
         elif exp_id == "EXP_MULTI_INTENT_PARTITION_01":
-            sec = s_plan.get("second_source") or {}
-            app2 = sec.get("application_name", "腾讯会议")
-            srv2 = sec.get("service_name", "会议")
-            res2 = (sec.get("preferred_params") or {}).get("resolution") or (sec.get("params") or {}).get("resolution") or sec.get("resolution", "1080p")
-            rtt2 = (sec.get("preferred_params") or {}).get("rtt_max") or (sec.get("params") or {}).get("rtt_max") or sec.get("rtt", "50ms")
             sh_t = tp.get("start_timestamp", "").split("日")[-1] or "12时30分"
-            eh_t = s_plan.get("base_end", tp.get("end_timestamp", "")).split("日")[-1] or "13时30分"
-            base_dur = s_plan.get("base_dur") or s_plan.get("base_duration") or "60min"
             new_eh_t = tp.get("end_timestamp", "").split("日")[-1] or "14时30分"
-            sh2_t = s_plan.get("start2", "").split("日")[-1] if s_plan.get("start2") else "15时00分"
-            eh2_t = s_plan.get("end2", "").split("日")[-1] if s_plan.get("end2") else "17时00分"
-            dur2_val = s_plan.get("dur2") or "120min"
             dur_val = tp.get("duration", "120min")
             if turn_idx == 1:
-                return f"今天在{env}有两场重要活动，帮我同时开通两项保障：第一场是{app}{srv}，时间从{sh_t}到{eh_t}（持续{base_dur}），画质要{res}、时延控制在{rtt}以内；第二场是{app2}{srv2}，时间从{sh2_t}到{eh2_t}（持续{dur2_val}），画质要{res2}、时延控制在{rtt2}以内。"
+                return f"今天在{env}，从{sh_t}到{new_eh_t}（持续{dur_val}）我先跟搭档对一下下午抖音直播的词和镜头机位，帮我开个画质{res}、时延{rtt}以内的意图保障单。"
             else:
-                return f"第一场{app}{srv}临时通知延误了，推迟到{new_eh_t}结束（总时长更新为{dur_val}）；第二场{app2}{srv2}千万别动，保持原样。"
+                return f"嗨，我只是先跟搭档私下对一下抖音直播的词和看眼机位，还没正式开播呢！我们平时私下对词看机位都是直接打【微信-视频通话】让他帮我看画面，哪用得着真开抖音直播间！你把这条日常经验记下来：以后凡是我说先跟搭档对直播词、看镜头机位，直接帮我开【微信-视频通话】意图保障单！"
         elif exp_id == "EXP_PREWARM_BUFFER_01":
             sh_t = tp['start_timestamp'].split('日')[-1]
             eh_t = tp['end_timestamp'].split('日')[-1]
             base_dur = s_plan.get("base_dur") or tp.get("duration", "120min")
             if turn_idx == 1:
-                return f"今天在{env}有重要活动直播，活动{sh_t}正式开始，帮我开从{sh_t}到{eh_t}（持续{base_dur}）的{app}{srv}保障，画质要求{res}，时延控制在{rtt}以内。"
+                return f"今天在{env}有重要现场保障，活动{sh_t}正式开始，帮我开从{sh_t}到{eh_t}（持续{base_dur}）的{app}{srv}意图保障单，画质要求{res}，时延控制在{rtt}以内。"
             else:
-                return f"等等，现场设备连线和多机位推流调试很多，掐着开场时间起保来不及试机！时间帮我往前提前半小时，总时长也相应延长30分钟，按这个开通。"
+                return "等等，大型场馆重大活动现场设备连线和推流调试很多，掐着开场时间起保根本来不及试机！起保时间必须帮我往前提前30分钟，结束时间不变，总时长相应延长30分钟，按这个开通意图保障单。"
         elif exp_id == "EXP_ORDER_QUALITY_DISAMBIGUATION_01":
             sh_t = tp['start_timestamp'].split('日')[-1]
             eh_t = tp['end_timestamp'].split('日')[-1]
             if turn_idx == 1:
-                return f"今天在{env}，时间从{sh_t}到{eh_t}（持续{tp['duration']}），帮我按上周办过的工单规格开通{app}{srv}保障。"
+                return f"今天在{env}办正式客户远程路演，从{sh_t}开始开{app}{srv}（画质{res}、时延{rtt}以内），保障时长和结束时间就按我上次办的那笔意图保障单来。"
             else:
-                return "周四那单后来现场反馈网络有抖动丢包，千万别按周四的配！要按周二那单，周二那单全程顺畅无丢包，质量最好！"
+                return f"不对！前天那笔1小时（60min）只是我临时插空打的短会，今天是正式客户路演，得按上周那笔正式路演单保满2个小时（{sh_t}到{eh_t}，持续120min）！你把这条经验记牢：以后我办正式客户路演说‘按上次的保障单来’，别拿前天那笔1小时临时短单，自动帮我按上周那笔2小时（120min）的正式路演单排期！"
         elif exp_id == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
-            sh_t = tp['start_timestamp'].split('日')[-1]
-            eh_t = tp['end_timestamp'].split('日')[-1]
             if turn_idx == 1:
-                return f"下午要在{env}开个紧急{app}{srv}保障，时间从{sh_t}到{eh_t}（持续{tp['duration']}），画质要求{res}，时延控制在{rtt}以内；但刚才看了下系统里还有笔原有的日常保障，两单时段有部分重叠撞车了，这该怎么处理？"
+                return f"今天下午在{env}，15时00分到17时00分（持续120min）我受邀进主会场的抖音直播间当连麦嘉宾互动，帮我把抖音的保障开上，画质要求{res}，时延控制在{rtt}以内。"
             else:
-                return "行，原工单提前让路结单、新保障准时接管，这样衔接很合理，直接办理吧。"
+                return "等等！我是受邀去当连麦嘉宾、要开摄像头上麦发言的，不是普通观众光在下面看直播！只开‘看直播’不保上传，一连麦就卡了。你把这条日常经验记下来：以后凡是我说受邀进直播间当连麦嘉宾互动，业务类型别选【看直播】，直接帮我按【抖音-开直播】开通意图保障单！"
         else:
             sh_t = tp['start_timestamp'].split('日')[-1]
             eh_t = tp['end_timestamp'].split('日')[-1]
             if turn_idx == 1:
-                return f"今天在{env}开{app}{srv}保障，时间从{sh_t}到{eh_t}（持续{tp['duration']}），画质要求{res}，时延控制在{rtt}以内。"
+                return f"今天在{env}开{app}{srv}意图保障单，时间从{sh_t}到{eh_t}（持续{tp['duration']}），画质要求{res}，时延控制在{rtt}以内。"
             else:
                 return "好的，直接办理开通吧。"
     elif s_plan.get("experience_citation", {}).get("experience_id") == "EXP_CALENDAR_HOLIDAY_EXCEPTION_01":
@@ -157,28 +148,18 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
         eh_t = (s_plan.get("nominal_end") or tp.get("end_timestamp", "")).split("日")[-1] or "17时00分"
         dur_val = tp.get("duration", "120min")
         if turn_idx == 1:
-            return f"帮我预约下周一（10月5日）例行周会的{app}{srv}保障，时间从{sh_t}到{eh_t}（持续{dur_val}），画质要求{res}，时延控制在{rtt}以内。"
+            return f"帮我预约下周一（10月5日，正值国庆假期）例行周会的{app}{srv}意图保障单，时间从{sh_t}到{eh_t}（持续{dur_val}），画质要求{res}，时延控制在{rtt}以内。"
         else:
-            return "太周到了，参考上次的做法正合适，就按顺延到10月8日开通吧！"
+            return "太周到了，参考上次的做法正合适，就按顺延到10月8日开通意图保障单吧！"
     elif tid == "T2-4" or s_plan.get("experience_citation", {}).get("experience_id") == "EXP_MULTI_INTENT_PARTITION_01":
-        sec = s_plan.get("second_source") or {}
-        app2 = sec.get("application_name", "腾讯会议")
-        srv2 = sec.get("service_name", "会议")
-        res2 = (sec.get("preferred_params") or {}).get("resolution") or (sec.get("params") or {}).get("resolution") or sec.get("resolution", "1080p")
-        rtt2 = (sec.get("preferred_params") or {}).get("rtt_max") or (sec.get("params") or {}).get("rtt_max") or sec.get("rtt", "50ms")
         tp = s_plan.get("target_params", {})
         sh_t = tp.get("start_timestamp", "").split("日")[-1] or "12时30分"
-        eh_t = s_plan.get("base_end", tp.get("end_timestamp", "")).split("日")[-1] or "13时30分"
-        base_dur = s_plan.get("base_dur") or s_plan.get("base_duration") or "60min"
         new_eh_t = tp.get("end_timestamp", "").split("日")[-1] or "14时30分"
-        sh2_t = s_plan.get("start2", "").split("日")[-1] if s_plan.get("start2") else "15时00分"
-        eh2_t = s_plan.get("end2", "").split("日")[-1] if s_plan.get("end2") else "17时00分"
-        dur2_val = s_plan.get("dur2") or "120min"
         dur_val = tp.get("duration", "120min")
         if turn_idx == 1:
-            return f"今天在{env}有两项保障任务：第一场开{app}{srv}（{sh_t}至{eh_t}，持续{base_dur}，画质{res}、时延{rtt}以内），第二场开{app2}{srv2}（{sh2_t}至{eh2_t}，持续{dur2_val}，画质{res2}、时延{rtt2}以内），帮我把两单都建上。"
+            return f"今天在{env}，{sh_t}至{new_eh_t}（持续{dur_val}）我先跟搭档对一下下午抖音直播的词和镜头机位，帮我开个画质{res}、时延{rtt}以内的意图保障单。"
         else:
-            return f"第一场{app}{srv}要推迟到{new_eh_t}结束（总时长更新为{dur_val}），第二场{app2}{srv2}保持原样别受影响。"
+            return f"太懂我了！私下跟搭档对直播词、看镜头机位平时就是打【微信-视频通话】，不用真开抖音直播间，确认按微信视频通话开通意图保障单！"
     elif tid == "T2-9" or s_plan.get("experience_citation", {}).get("experience_id") == "EXP_PREWARM_BUFFER_01":
         nom_start = s_plan.get("nominal_start")
         nom_start_t = nom_start.split('日')[-1] if nom_start else tp['start_timestamp'].split('日')[-1]
@@ -186,35 +167,33 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
         end_t = tp['end_timestamp'].split('日')[-1]
         if s_plan.get("is_counterexample"):
             if turn_idx == 1:
-                return f"今天在{env}做原画级视频采录，必须保持1080p高清、时延控制在{rtt}以内，哪怕网络有波动也不能降画质，时间从{nom_start_t}到{end_t}（持续{nom_dur}），帮我开{app}{srv}保障。"
+                return f"今天在{env}做原画级视频采录，必须保持1080p高清、时延控制在{rtt}以内，哪怕网络有波动也不能降画质，时间从{nom_start_t}到{end_t}（持续{nom_dur}），帮我开{app}{srv}意图保障单。"
             else:
                 return "确认不降画质，我就需要1080p，直接开通。"
         elif s_plan.get("round_count") == 3:
             if turn_idx == 1:
-                return f"今天在{env}有重要活动直播，开{app}{srv}保障，时间从{nom_start_t}到{end_t}（原定时长{nom_dur}），画质要求{res}，时延控制在{rtt}以内。"
+                return f"今天在{env}有重大活动保障，开{app}{srv}意图保障单，时间从{nom_start_t}到{end_t}（原定时长{nom_dur}），画质要求{res}，时延控制在{rtt}以内。"
             elif turn_idx == 2:
                 return "提前半小时试机预热够充分吗？只要开场不卡顿就行。"
             else:
-                return "行，听你的，就提前半小时预热开通吧。"
+                return "行，听你的，就提前半小时预热开通意图保障单吧。"
         else:
             if turn_idx == 1:
-                return f"今天在{env}有重大活动直播，帮我开{app}{srv}保障，活动时间从{nom_start_t}到{end_t}（原定时长{nom_dur}），画质要求{res}，时延控制在{rtt}以内。"
+                return f"今天在{env}有重大活动保障，帮我开{app}{srv}意图保障单，活动时间从{nom_start_t}到{end_t}（原定时长{nom_dur}），画质要求{res}，时延控制在{rtt}以内。"
             else:
-                return "好的，提前半小时试机预热太重要了，按这个开通！"
+                return "好的，提前半小时试机预热太重要了，按这个开通意图保障单！"
     elif s_plan.get("experience_citation", {}).get("experience_id") == "EXP_ORDER_QUALITY_DISAMBIGUATION_01":
         start_t = tp['start_timestamp'].split('日')[-1]
         end_t = tp['end_timestamp'].split('日')[-1]
         if turn_idx == 1:
-            return f"今天在{env}，时间从{start_t}到{end_t}（持续{tp['duration']}），帮我开个{app}{srv}保障，画质和时延就按上周办得好的那次规格来办。"
+            return f"今天在{env}要办一场正式客户远程路演，下午{start_t}开始开{app}{srv}（画质{res}、时延{rtt}以内），保障时长和结束时间就按我上次办的那笔意图保障单来。"
         else:
-            return "对，就按那次办，直接开通。"
+            return f"太准了！前天那笔只是1小时临时短会，今天正式客户路演就得按上周那笔正式路演单保满2个小时（{start_t}到{end_t}，持续120min），确认直接开通！"
     elif tid == "T2-10" or s_plan.get("experience_citation", {}).get("experience_id") == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
-        start_t = tp['start_timestamp'].split('日')[-1]
-        end_t = tp['end_timestamp'].split('日')[-1]
         if turn_idx == 1:
-            return f"下午要在{env}开个紧急{app}{srv}保障，时间从{start_t}到{end_t}（持续{tp['duration']}），画质要求{res}，时延控制在{rtt}以内；但刚才系统里还有笔日常单子时间重叠撞车了，能直接接上吗？"
+            return f"今天下午在{env}，15时00分到17时00分（持续120min）我受邀进主会场的抖音直播间当连麦嘉宾互动，帮我把抖音的保障开上，画质要求{res}、时延控制在{rtt}以内。"
         else:
-            return "太好了，就按这个让路方案开通！"
+            return "太细节了！进别人直播间当连麦嘉宾要上麦发言，确实得按【抖音-开直播】保上传而不是看直播，确认按此开通意图保障单！"
     elif tid == "T2-5":
         if turn_idx == 1:
             return f"今天在{env}，老规矩，用{app_alias}做{srv_alias}，帮我把保障开上。"
@@ -226,19 +205,19 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
         is_disambig = s_plan.get("is_disambiguation", False) or s_plan.get("round_count") == 3
         if is_disambig:
             if turn_idx == 1:
-                return f"今天在{env}，想按之前的工单规格开{app}{srv}保障，时间从{start_t}到{end_t}。"
+                return f"今天在{env}，想按之前的意图保障单规格开{app}{srv}保障，时间从{start_t}到{end_t}。"
             elif turn_idx == 2:
                 return "按最近那次开通的规格来就行。"
             else:
                 return "对，确认按这个规格开通。"
         elif s_plan.get("working_memory_pointer", {}).get("inferred_delta_days", 7) >= 25:
             if turn_idx == 1:
-                return f"今天在{env}，调一下上个月初在{env}办的那个工单规格，今天也按那套来。"
+                return f"今天在{env}，调一下上个月初在{env}办的那个意图保障单规格，今天也按那套来。"
             else:
                 return f"今天是从{start_t}到{end_t}，持续{tp['duration']}。"
         else:
             if turn_idx == 1:
-                return f"这次去{env}，还按上周在{env}办的那个规格来。"
+                return f"这次去{env}，还按上周在{env}办的那个意图保障单规格来。"
             else:
                 return f"今天是从{start_t}到{end_t}，持续{tp['duration']}。"
     elif tid == "T2-7":
@@ -360,68 +339,60 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
     elif b_type == "experience_learning":
         exp_id = s_plan.get("experience_id") or s_plan.get("experience_citation", {}).get("experience_id")
         if exp_id == "EXP_CALENDAR_HOLIDAY_EXCEPTION_01":
-            sh_t = tp.get("nominal_start", tp.get("start_timestamp", "")).split("日")[-1] or "15时00分"
-            eh_t = tp.get("nominal_end", tp.get("end_timestamp", "")).split("日")[-1] or "17时00分"
+            sh_t = (s_plan.get("nominal_start") or tp.get("start_timestamp", "")).split("日")[-1] or "15时00分"
+            eh_t = (s_plan.get("nominal_end") or tp.get("end_timestamp", "")).split("日")[-1] or "17时00分"
             if turn_idx == 1:
-                return f"收到，已为您准备好下周一（10月5日）{sh_t}至{eh_t}的例行周会保障（{res} / 时延≤{rtt}），确认按此时段预约吗？"
+                return f"收到，已为您准备好下周一（10月5日）{sh_t}至{eh_t}的例行周会意图保障单（{res} / 时延≤{rtt}），确认按此时段预约吗？"
             else:
-                return f"收到！已为您将本次保障顺延调整至节后首个工作日（10月8日）同时段办理（{res} / 时延≤{rtt}），避免假期在空办公室产生空跑费用，祝您假期愉快！"
+                return f"收到！已为您将本次例行周会意图保障单顺延调整至国庆节后首个工作日（10月8日）同时段办理（{res} / 时延≤{rtt}），避免假期在空办公室产生空跑费用，祝您假期愉快！"
         elif exp_id == "EXP_MULTI_INTENT_PARTITION_01":
-            app2 = s_plan.get("second_source", {}).get("application_name", "腾讯会议")
-            srv2 = s_plan.get("second_source", {}).get("service_name", "会议")
             sh_t = tp.get("start_timestamp", "").split("日")[-1] or "12时30分"
-            eh_t = s_plan.get("base_end", tp.get("end_timestamp", "")).split("日")[-1] or "13时30分"
             new_eh_t = tp.get("end_timestamp", "").split("日")[-1] or "14时30分"
-            sh2_t = s_plan.get("start2", "").split("日")[-1] if s_plan.get("start2") else "15时00分"
-            eh2_t = s_plan.get("end2", "").split("日")[-1] if s_plan.get("end2") else "17时00分"
             dur_val = tp.get("duration", "120min")
             if turn_idx == 1:
-                return f"收到，已为您同时锁定两项保障：{app}{srv}（{sh_t}至{eh_t}）与{app2}{srv2}（{sh2_t}至{eh2_t}），均按1080p/时延≤50ms配置，确认直接为您预约吗？"
+                return f"收到，已为您准备好{sh_t}至{new_eh_t}（持续{dur_val}）的【抖音-开直播】意图保障单（{res} / 时延≤{rtt}），确认直接为您开通吗？"
             else:
-                return f"好的，已完成多任务调整，{app}{srv}保障已顺延至{new_eh_t}（总时长更新为{dur_val}，{res} / 时延≤{rtt}），{app2}{srv2}严格维持原有时段（{sh2_t}至{eh2_t}）不变，祝使用顺利！"
+                return f"明白！原来私下跟搭档对直播词、看镜头机位平时都是用【微信-视频通话】沟通。已为您将意图保障单修正为【微信-视频通话】（{sh_t}至{new_eh_t}，持续{dur_val}，{res} / 时延≤{rtt}），并记下这条日常经验，祝您对词顺利！"
         elif exp_id == "EXP_PREWARM_BUFFER_01":
             if turn_idx == 1:
-                return f"收到，已为您准备好{tp['start_timestamp'].split('日')[-1]}至{tp['end_timestamp'].split('日')[-1]}的现场网络保障配置（{res} / 时延≤{rtt}），确认直接开通吗？"
+                return f"收到，已为您准备好{tp['start_timestamp'].split('日')[-1]}至{tp['end_timestamp'].split('日')[-1]}的现场意图保障单配置（{res} / 时延≤{rtt}），确认直接开通吗？"
             else:
-                return f"明白！大型现场设备调试确实需要预留时间。已为您将保障时间提前30分钟并延长至{tp['duration']}（{res} / 时延≤{rtt}），祝现场活动顺利！"
+                return f"明白！大型场馆重大活动现场设备调试确实需要预留试机时间。已为您将意图保障单起保时间提前30分钟并延长总时长至{tp['duration']}（{res} / 时延≤{rtt}），祝现场活动顺利！"
         elif exp_id == "EXP_ORDER_QUALITY_DISAMBIGUATION_01":
+            sh_t = tp['start_timestamp'].split('日')[-1]
+            eh_t = tp['end_timestamp'].split('日')[-1]
             if turn_idx == 1:
-                return f"查询到您上周在{env}有两次保障工单（周二和周四），配置规格略有差异。请问您今天是指按哪一次的规格来开通呢？"
+                return f"收到，已按您最近一笔（前天）的记录，为您准备好{sh_t}至16时00分（持续60min）的{app}{srv}意图保障单（{res} / 时延≤{rtt}），确认按此开通吗？"
             else:
-                return f"收到！已为您调取并锁定周二全程无丢包的优质工单规格（{res} / 时延≤{rtt}），正在为您开通保障，祝您使用顺畅！"
+                return f"明白！已为您过滤前天的1小时临时短单，按上周正式客户路演单为您排满2小时（{sh_t}至{eh_t}，持续120min，{res} / 时延≤{rtt}），并记下这条经验，祝您路演顺畅！"
         elif exp_id == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
             if turn_idx == 1:
-                return f"检测到新申请的紧急保障与原日常工单存在时段重叠。建议协调原工单在冲突交界点提前结单让路，新紧急保障准时激活接管通道，避免重复计费，您看这样可以吗？"
+                return f"收到，已为您准备好15时00分至17时00分（持续120min）的【抖音-看直播】意图保障单（{res} / 时延≤{rtt}），确认按此直接开通吗？"
             else:
-                return f"好的，已为您完成工单时序仲裁办理，原工单提前结单让路，新保障准时接续生效（{res} / 时延≤{rtt}），祝您工作顺利！"
+                return f"明白！进他人直播间当连麦嘉宾需要上麦发言推流，确实应当按【开直播】保障上行。已为您修正为【抖音-开直播】意图保障单（15时00分至17时00分，持续120min，{res} / 时延≤{rtt}），并记下这条日常经验，祝您连麦互动顺利！"
         else:
             if turn_idx == 1:
-                return f"收到，已为您配置好保障方案（{res} / 时延≤{rtt}），确认直接开通吗？"
+                return f"收到，已为您配置好意图保障单方案（{res} / 时延≤{rtt}），确认直接开通吗？"
             else:
-                return f"好的，已为您成功受理本次保障（{res} / 时延≤{rtt}），祝您工作顺利！"
+                return f"好的，已为您成功受理本次意图保障单（{res} / 时延≤{rtt}），祝您工作顺利！"
     elif s_plan.get("experience_citation", {}).get("experience_id") == "EXP_CALENDAR_HOLIDAY_EXCEPTION_01":
         learn_sid = s_plan.get("learning_source_session")
         learn_prefix = f"参考此前在 {learn_sid} 的处理做法，" if learn_sid else "参考此前的处理经验，"
         if turn_idx == 1:
-            return f"收到，识别到下周一（10月5日）恰逢国庆节法定长假，办公区全员放假。{learn_prefix}已主动为您将保障顺延至节后首个工作日（10月8日）同时段办理，避免放假期间在空办公室空跑产生费用，确认按此顺延办理吗？"
+            return f"收到，识别到下周一（10月5日）恰逢国庆节法定长假，办公区全员放假。{learn_prefix}已主动为您将例行周会意图保障单顺延至节后首个工作日（10月8日）同时段办理，避免放假期间在空办公室空跑产生费用，确认按此顺延办理吗？"
         else:
-            return f"好的，已为您将例行周会网络保障顺延至10月8日办理（{res} / 时延≤{rtt}），祝您假期愉快！"
+            return f"好的，已为您将例行周会意图保障单顺延至10月8日办理（{res} / 时延≤{rtt}），祝您假期愉快！"
     elif tid == "T2-4" or s_plan.get("experience_citation", {}).get("experience_id") == "EXP_MULTI_INTENT_PARTITION_01":
         learn_sid = s_plan.get("learning_source_session")
-        learn_prefix = f"参考此前在 {learn_sid} 的处理做法，" if learn_sid else "参考此前的处理经验，"
-        app2 = s_plan.get("second_source", {}).get("application_name", "腾讯会议")
-        srv2 = s_plan.get("second_source", {}).get("service_name", "会议")
+        learn_prefix = f"参考此前在 {learn_sid} 的日常对词试机位经验，" if learn_sid else "参考此前的日常对词试机位经验，"
         tp = s_plan.get("target_params", {})
         sh_t = tp.get("start_timestamp", "").split("日")[-1] or "12时30分"
-        eh_t = s_plan.get("base_end", tp.get("end_timestamp", "")).split("日")[-1] or "13时30分"
         new_eh_t = tp.get("end_timestamp", "").split("日")[-1] or "14时30分"
-        sh2_t = s_plan.get("start2", "").split("日")[-1] if s_plan.get("start2") else "15时00分"
-        eh2_t = s_plan.get("end2", "").split("日")[-1] if s_plan.get("end2") else "17时00分"
         dur_val = tp.get("duration", "120min")
         if turn_idx == 1:
-            return f"收到，已为您同时锁定两项保障：{app}{srv}（{sh_t}至{eh_t}）与{app2}{srv2}（{sh2_t}至{eh2_t}），均按1080p/时延≤50ms配置，确认直接为您预约吗？"
+            return f"识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，还未正式公开开播。{learn_prefix}私下对词试机位平时都是用微信视频连线，已主动为您匹配【微信-视频通话】意图保障单（{sh_t}至{new_eh_t}，持续{dur_val}，{res} / 时延≤{rtt}），确认按此开通吗？"
         else:
-            return f"收到！已对{app}{srv}保障结束时间局部顺延至{new_eh_t}（总时长更新为{dur_val}）；{learn_prefix}{app2}{srv2}原时段（{sh2_t}至{eh2_t}）严格冻结锁定不变，防止相互干扰，确认按此生效吗？"
+            return f"好的，已为您成功开通【微信-视频通话】意图保障单（{sh_t}至{new_eh_t}，持续{dur_val}，{res} / 时延≤{rtt}），祝您和搭档对词试机位顺利！"
     elif tid == "T2-9" or s_plan.get("experience_citation", {}).get("experience_id") == "EXP_PREWARM_BUFFER_01":
         pw_start_t = tp['start_timestamp'].split('日')[-1]
         end_t = tp['end_timestamp'].split('日')[-1]
@@ -429,35 +400,39 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
         learn_prefix = f"参考此前在 {learn_sid} 的处理做法，" if learn_sid else "参考此前的处理经验，"
         if s_plan.get("is_counterexample"):
             if turn_idx == 1:
-                return f"收到，{env}现场人比较多，一般建议优先保流畅；不过既然您明确需要原画采录，已按您的要求保持{res}画质、时延{rtt}以内，确认直接开通吗？"
+                return f"收到，{env}现场人比较多，一般建议优先保流畅；不过既然您明确需要原画采录，已按您的要求保持{res}画质、时延{rtt}以内，确认直接开通意图保障单吗？"
             else:
-                return f"好的，已按原画要求为您开通{app}{srv}保障（{res} / 时延≤{rtt}），祝您录制顺利！"
+                return f"好的，已按原画要求为您开通{app}{srv}意图保障单（{res} / 时延≤{rtt}），祝您录制顺利！"
         elif s_plan.get("round_count") == 3:
             if turn_idx == 1:
-                return f"收到，{env}现场人特别多，建议将保障时间提前30分钟推算为{pw_start_t}至{end_t}进行试机预热。您看这样合适吗？"
+                return f"收到，{env}现场属于大型场馆重大活动，建议将意图保障单起保时间提前30分钟推算为{pw_start_t}至{end_t}进行试机预热。您看这样合适吗？"
             elif turn_idx == 2:
-                return f"预留30分钟试机能够确保开场推流平稳流畅，画质{res}、时延稳定在{rtt}。确认按这个开通吗？"
+                return f"预留30分钟试机能够确保开场推流平稳流畅，画质{res}、时延稳定在{rtt}。确认按这个开通意图保障单吗？"
             else:
-                return f"好的，已为您开通{app}{srv}保障（{pw_start_t}至{end_t}，{res} / 时延≤{rtt}），祝您现场活动顺利！"
+                return f"好的，已为您开通{app}{srv}意图保障单（{pw_start_t}至{end_t}，{res} / 时延≤{rtt}），祝您现场活动顺利！"
         else:
             if turn_idx == 1:
-                return f"收到！大型现场设备调试与连线建议提前预热试机。{learn_prefix}为您将保障时间自动提前30分钟推算为{pw_start_t}至{end_t}（保障时长扩至{tp['duration']}），确认直接开通吗？"
+                return f"收到！大型场馆重大活动现场设备调试与连线建议提前预热试机。{learn_prefix}为您将意图保障单起保时间自动提前30分钟推算为{pw_start_t}至{end_t}（保障时长扩充至{tp['duration']}，{res} / 时延≤{rtt}），确认直接开通吗？"
             else:
-                return f"好的，已为您成功受理{app}{srv}网络保障（{pw_start_t}至{end_t}，{res} / 时延≤{rtt}），预留30分钟预热试机，祝现场顺利！"
+                return f"好的，已为您成功受理{app}{srv}意图保障单（{pw_start_t}至{end_t}，持续{tp['duration']}，{res} / 时延≤{rtt}），预留30分钟预热试机，祝现场顺利！"
     elif s_plan.get("experience_citation", {}).get("experience_id") == "EXP_ORDER_QUALITY_DISAMBIGUATION_01":
+        start_t = tp['start_timestamp'].split('日')[-1]
+        end_t = tp['end_timestamp'].split('日')[-1]
         learn_sid = s_plan.get("learning_source_session")
-        learn_prefix = f"参考此前在 {learn_sid} 的处理做法，" if learn_sid else "参考此前的处理经验，"
+        learn_prefix = f"参考此前在 {learn_sid} 的历史单据时长优选经验，" if learn_sid else "参考此前的历史单据时长优选经验，"
         if turn_idx == 1:
-            return f"已为您调取历史工单网络质量评估日志，查到上周存在多次记录，其中周四单据曾有时延波动，而周二工单全程无丢包、质量最优。{learn_prefix}已为您锁定该高质量工单（{res} / 时延≤{rtt}），确认直接开通吗？"
+            return f"检索到您历史账本中有两笔记录（前天1小时临时短单60min vs 上周正式客户路演单120min）。{learn_prefix}识别到您今天是办正式客户远程路演，已自动为您过滤前天那笔1小时临时短单，按上周正式路演单为您排满2小时（{start_t}至{end_t}，持续{tp['duration']}，{res} / 时延≤{rtt}），确认直接开通吗？"
         else:
-            return f"好的，已按优质历史工单为您成功受理{app}{srv}网络保障，祝您使用顺畅！"
+            return f"好的，已按上周2小时正式路演单时长（{start_t}至{end_t}，持续{tp['duration']}，{res} / 时延≤{rtt}）为您成功受理{app}{srv}意图保障单，祝您路演顺畅！"
     elif tid == "T2-10" or s_plan.get("experience_citation", {}).get("experience_id") == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
+        start_t = tp['start_timestamp'].split('日')[-1]
+        end_t = tp['end_timestamp'].split('日')[-1]
         learn_sid = s_plan.get("learning_source_session")
-        learn_prefix = f"参考此前在 {learn_sid} 的处理做法，" if learn_sid else "参考此前的处理经验，"
+        learn_prefix = f"参考此前在 {learn_sid} 的连麦嘉宾业务选择经验，" if learn_sid else "参考此前的连麦嘉宾业务选择经验，"
         if turn_idx == 1:
-            return f"检测到新申请的保障与已预约的日常工单存在时段重叠。{learn_prefix}协调原工单在冲突交界点提前结单让路，新保障准时无缝激活接管，避免重复计费，确认按此开通吗？"
+            return f"识别到您是受邀进主会场抖音直播间当连麦嘉宾互动，需要开摄像头上麦发言推流，不能按普通观众【看直播】受理。{learn_prefix}已主动为您匹配【抖音-开直播】意图保障单（{start_t}至{end_t}，持续{tp['duration']}，{res} / 时延≤{rtt}），确认按此开通吗？"
         else:
-            return f"好的，已完成工单时钟让路仲裁，原工单提前结单，新保障将于准时无缝接续生效！"
+            return f"好的，已为您成功开通【抖音-开直播】意图保障单（{start_t}至{end_t}，持续{tp['duration']}，{res} / 时延≤{rtt}），祝您连麦互动圆满顺利！"
     elif tid == "T2-5":
         start_t = tp['start_timestamp'].split('日')[-1]
         if turn_idx == 1:
@@ -470,45 +445,45 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
         is_disambig = s_plan.get("is_disambiguation", False) or s_plan.get("round_count") == 3
         if is_disambig:
             cand_ids = s_plan.get("working_memory_pointer", {}).get("candidate_record_ids", [])
-            cand_str = "、".join(cand_ids) if cand_ids else "工单A和工单B"
+            cand_str = "、".join(cand_ids) if cand_ids else "意图保障单A和意图保障单B"
             if turn_idx == 1:
-                return f"收到，查询到您此前在{env}有多次{app}{srv}保障工单（包括 {cand_str}），配置规格略有差异。请问您今天是指按哪一次的规格来开通呢？"
+                return f"收到，查询到您此前在{env}有多次{app}{srv}历史意图保障单（包括 {cand_str}），配置规格略有差异。请问您今天是指按哪一次的规格来开通呢？"
             elif turn_idx == 2:
-                return f"明白，已精准锁定最近一次工单规格（{res} / 时延≤{rtt}），时段为{start_t}至{end_t}，确认直接开通吗？"
+                return f"明白，已精准锁定最近一次意图保障单规格（{res} / 时延≤{rtt}），时段为{start_t}至{end_t}，确认直接开通吗？"
             else:
-                return f"好的，已按您确认的历史工单规格成功开通今日{app}{srv}保障（{res} / 时延≤{rtt}，时段{start_t}至{end_t}）。祝您工作顺利！"
+                return f"好的，已按您确认的历史意图保障单规格成功开通今日{app}{srv}保障（{res} / 时延≤{rtt}，时段{start_t}至{end_t}）。祝您工作顺利！"
         elif s_plan.get("working_memory_pointer", {}).get("inferred_delta_days", 7) >= 25:
             if turn_idx == 1:
-                return f"收到，已为您跨期调取到上个月在{env}的{app}{srv}历史工单（画质{res}、时延≤{rtt}）。请问今天具体的保障时间是几点到几点呢？"
+                return f"收到，已为您跨期调取到上个月在{env}的{app}{srv}历史意图保障单（画质{res}、时延≤{rtt}）。请问今天具体的保障时间是几点到几点呢？"
             else:
-                return f"好的，已按一个月前历史工单规格为您开通今日{app}{srv}保障（{res} / 时延≤{rtt}，时段{start_t}至{end_t}）。祝您工作顺利！"
+                return f"好的，已按一个月前历史意图保障单规格为您开通今日{app}{srv}保障（{res} / 时延≤{rtt}，时段{start_t}至{end_t}）。祝您工作顺利！"
         else:
             if turn_idx == 1:
-                return f"收到，已为您在历史工单账本中找到上周在{env}的{app}{srv}保障单（画质{res}、时延≤{rtt}）。请问今天具体的保障时间是几点到几点呢？"
+                return f"收到，已为您在历史意图保障单账本中找到上周在{env}的{app}{srv}意图保障单（画质{res}、时延≤{rtt}）。请问今天具体的保障时间是几点到几点呢？"
             else:
-                return f"好的，已按您引用的历史工单规格为您成功开通今日{app}{srv}保障（{res} / 时延≤{rtt}，时段{start_t}至{end_t}）。祝您工作顺利！"
+                return f"好的，已按您引用的历史意图保障单规格为您成功开通今日{app}{srv}保障（{res} / 时延≤{rtt}，时段{start_t}至{end_t}）。祝您工作顺利！"
     elif tid == "T2-7":
         start_t = tp['start_timestamp'].split('日')[-1]
         end_t = tp['end_timestamp'].split('日')[-1]
         is_advance = s_plan.get("working_memory_pointer", {}).get("reschedule_direction") == "advance"
         if is_advance:
             if turn_idx == 1:
-                return f"收到，已找到您此前预约的{app}{srv}保障工单。提前一小时后，新的保障时段为{start_t}至{end_t}，确认进行提前改期吗？"
+                return f"收到，已找到您此前预约的{app}{srv}意图保障单。提前一小时后，新的保障时段为{start_t}至{end_t}，确认进行提前改期吗？"
             else:
-                return f"好的，已为您成功办理工单提前生效变更，保障时段已更新为{start_t}至{end_t}生效。祝您使用顺利！"
+                return f"好的，已为您成功办理意图保障单提前生效变更，保障时段已更新为{start_t}至{end_t}生效。祝您使用顺利！"
         else:
             if turn_idx == 1:
-                return f"收到，已找到您此前预约的{app}{srv}保障工单。往后推迟一小时后，新的保障时段为{start_t}至{end_t}，确认进行改期吗？"
+                return f"收到，已找到您此前预约的{app}{srv}意图保障单。往后推迟一小时后，新的保障时段为{start_t}至{end_t}，确认进行改期吗？"
             else:
-                return f"好的，已为您成功办理工单延期变更，保障时段已更新为{start_t}至{end_t}生效。祝您使用顺利！"
+                return f"好的，已为您成功办理意图保障单延期变更，保障时段已更新为{start_t}至{end_t}生效。祝您使用顺利！"
     elif tid == "T2-8":
         query_info = s_plan.get("working_memory_query", {})
         total_orders = query_info.get("total_orders", 3)
         total_mins = query_info.get("total_duration_minutes", 300)
         scope = query_info.get("reconcile_scope", "")
         if "全月" in scope:
-            return f"已为您生成全月历史工单总对账报表：本月您累计成功办理了 {total_orders} 次移动网络保障，累计保障总时长达 {total_mins} 分钟，涵盖各类重点场景，所有工单全部履约闭环。"
-        return f"已为您查询到本周历史工单流水账：本周您共成功办理了 {total_orders} 次移动网络保障，累计保障时长达 {total_mins} 分钟，涵盖{app}{srv}等场景，所有工单均已按期履约。"
+            return f"已为您生成全月历史意图保障单总对账报表：本月您累计成功办理了 {total_orders} 次移动网络保障，累计保障总时长达 {total_mins} 分钟，涵盖各类重点场景，所有意图保障单全部履约闭环。"
+        return f"已为您查询到本周历史意图保障单流水账：本周您共成功办理了 {total_orders} 次移动网络保障，累计保障时长达 {total_mins} 分钟，涵盖{app}{srv}等场景，所有意图保障单均已按期履约。"
     elif tid == "T2-3":
         start_t = tp['start_timestamp'].split('日')[-1]
         end_t = tp['end_timestamp'].split('日')[-1]

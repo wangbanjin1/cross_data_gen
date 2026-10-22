@@ -72,7 +72,7 @@ class BatchPipeline:
                 json.dump(persona_skeleton, f, ensure_ascii=False, indent=2)
             print(f"    - Generated Persona Skeleton -> {persona_skeleton_path.name}")
 
-        # 2. 动态规划认知记忆时间线（绑定独立工单账本与经验知识库）
+        # 2. 动态规划认知记忆时间线（绑定独立意图保障单账本与经验知识库）
         ledger_path = sample_dir / "working_records.jsonl"
         if ledger_path.exists():
             ledger_path.unlink()
@@ -112,7 +112,7 @@ class BatchPipeline:
         with open(out_sessions_json, "w", encoding="utf-8") as f:
             json.dump(rendered_sessions, f, ensure_ascii=False, indent=2)
 
-        # 4.1 独立持久化工作记忆工单流水账（working_records.jsonl / .json）严格解耦存储
+        # 4.1 独立持久化工作记忆意图保障单流水账（working_records.jsonl / .json）严格解耦存储
         working_ledger.save()
         out_records_json = sample_dir / "working_records.json"
         with open(out_records_json, "w", encoding="utf-8") as f:

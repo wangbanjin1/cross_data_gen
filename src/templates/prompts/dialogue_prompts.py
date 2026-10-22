@@ -100,27 +100,27 @@ def build_batch_dialogue_prompt(prompt_items: list[dict], identity: str, speech:
    - 第1轮 Agent: 调取原有的长期老规矩基线配置（画质、时延、原时长与起止时段），向用户反问确认；
    - 第2轮 User: 明确说明老规矩配置不变，但因现场活动拉长等原因，提出将时长延长/修改为指定时长（如“对，老规矩不变，不过今天现场活动延长了，帮我把保障时长延长到【时长】”）；
    - 第2轮 Agent: 明确确认老规矩配置不变，时长已延长并开通。
-7. 工作记忆历史工单跨期复用与消歧 (working_memory_reuse / disambiguation, T2-6):
+7. 工作记忆历史意图保障单跨期复用与消歧 (working_memory_reuse / disambiguation, T2-6):
    - 若 rounds == 3 (历史单据存在多个候选需消歧):
-     第1轮 User: 表达想按之前在该现场的工单规格开通，省略画质与时延；
-     第1轮 Agent: 告知检索到多笔历史保障单，反问用户是指哪一次（agent_action_types: ["Request_Disambiguation"]）；
-     第2轮 User: 指明选最近一次工单（user_action_types: ["Confirm_Slot", "Inform_Slot"]）；
-     第2轮 Agent: 精准定位该工单体验参数（画质、时延）并反问确认起止时段（agent_action_types: ["Confirm_Slot"]）；
+     第1轮 User: 表达想按之前在该现场的意图保障单规格开通，省略画质与时延；
+     第1轮 Agent: 告知检索到多笔历史意图保障单，反问用户是指哪一次（agent_action_types: ["Request_Disambiguation"]）；
+     第2轮 User: 指明选最近一次意图保障单（user_action_types: ["Confirm_Slot", "Inform_Slot"]）；
+     第2轮 Agent: 精准定位该意图保障单体验参数（画质、时延）并反问确认起止时段（agent_action_types: ["Confirm_Slot"]）；
      第3轮 User: 明确确认开通（user_action_types: ["Confirm_Slot"]）；
      第3轮 Agent: 确认开通并祝福收尾（agent_action_types: ["Acknowledge"]）。
    - 若 rounds == 2 (常规跨期复用):
-     第1轮 User: 表达“这次去【现场环境】，还按【相对时态，如上周/上月】在【现场】办的那个规格来”，省略画质与时延；
-     第1轮 Agent: 从工单账本检索定位目标单据，反问确认继承的体验参数，并询问今日具体时段；
+     第1轮 User: 表达“这次去【现场环境】，还按【相对时态，如上周/上月】在【现场】办的那个意图保障单规格来”，省略画质与时延；
+     第1轮 Agent: 从意图保障单账本检索定位目标单据，反问确认继承的体验参数，并询问今日具体时段；
      第2轮 User: 补充说明今日保障起止时段与时长；
      第2轮 Agent: 确认开通并祝福收尾。
 8. 工作记忆历史单据变更改期 (working_memory_reschedule, T2-7) (rounds == 2):
    - 第1轮 User: 提出把此前预约的保障往后推迟或提前（如“把昨天预约的【应用】【业务】保障提前/推迟一个小时”）；
-   - 第1轮 Agent: 调取预约工单，向用户反问确认调整后的新时段；
+   - 第1轮 Agent: 调取预约意图保障单，向用户反问确认调整后的新时段；
    - 第2轮 User: 简短确认（如“对，确认提前/修改”）；
    - 第2轮 Agent: 确认改期生效并收尾。
 9. 工作记忆对账核查 (working_memory_reconcile, T2-8) (rounds == 1):
    - 第1轮 User: 询问保障开通流水或全月总对账（如“帮我查下这周/这个月总共开了几次保障，一共多长时间？”）；
-   - 第1轮 Agent: 调取工单流水账，明确回复已开通的总次数、累计时长与明细，礼貌闭环。
+   - 第1轮 Agent: 调取意图保障单流水账，明确回复已开通的总次数、累计时长与明细，礼貌闭环。
 10. 经验记忆 ReasoningBank 主动经验提议与多轮协商 (proactive_experience, T2-9):
    - 【Turn 1 基础参数自包含原则】：经验记忆测试聚焦于“快速闭环与经验触发识别”，第1轮 User 必须一次性把基础参数（场景、应用、业务、原定起止时间、画质、时延）说清楚，不依赖此前事实记忆！
    - 若为负反例边界 (is_counterexample): 用户明确要求原画采录/强画质优先，Agent 识别经验反例规则，主动确认不强行降级，为用户保留原画并开通；
@@ -137,8 +137,8 @@ def build_batch_dialogue_prompt(prompt_items: list[dict], identity: str, speech:
      第2轮 User: 采纳建议（如“好的，提前半小时试机预热太重要了，按这个开通！”）；
      第2轮 Agent: 确认按优化方案开通并祝福收尾。
 11. 经验记忆 ReasoningBank 经验回溯与时序重叠仲裁 (empirical_recall / overlapping_resolution, T2-10) (rounds == 2):
-   - 第1轮 User: 一次性说清本次紧急保障的应用、业务、起止时间（含时长）、画质与时延，并提及与既有工单时段重叠冲突（或调取既往避坑经验）；
-   - 第1轮 Agent: 调取经验卡片，执行时钟让路仲裁（原工单交界点提前结单、新保障准时接管），向用户反问确认；
+   - 第1轮 User: 一次性说清本次紧急保障的应用、业务、起止时间（含时长）、画质与时延，并提及与既有在保意图保障单时段重叠冲突（或调取既往避坑经验）；
+   - 第1轮 Agent: 调取经验卡片，执行时钟让路仲裁（新意图保障单在交界点无缝接续起保、时长相应缩减重算），向用户反问确认；
    - 第2轮 User: 确认开通；
    - 第2轮 Agent: 确认受理并收尾。
 

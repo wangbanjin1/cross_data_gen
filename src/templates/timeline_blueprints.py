@@ -189,7 +189,14 @@ def get_session_blueprints(
     slot_test_map = {v["test_slot"]: k for k, v in exp_plan.items()}
 
     def _make_learn_slot(slot_idx, exp_id):
-        t_kind = "holiday" if exp_id == "EXP_CALENDAR_HOLIDAY_EXCEPTION_01" else ("multi_intent" if exp_id == "EXP_MULTI_INTENT_PARTITION_01" else "main")
+        if exp_id == "EXP_CALENDAR_HOLIDAY_EXCEPTION_01":
+            t_kind = "holiday"
+        elif exp_id == "EXP_MULTI_INTENT_PARTITION_01":
+            t_kind = "multi_intent"
+        elif exp_id == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
+            t_kind = "overlap"
+        else:
+            t_kind = "main"
         dur_val = ext_dur if exp_id == "EXP_MULTI_INTENT_PARTITION_01" else base_dur
         return {
             "tag": f"exp_learn_{exp_id}",
@@ -454,7 +461,7 @@ def get_session_blueprints(
             "agility_factor": 0.5,
             "time_kind": "main"
         },
-        # 12: S12 Experiential Quality Disambiguation (历史工单质量消歧迁移测试) 或 降级为工单常规复用
+        # 12: S12 Experiential Quality Disambiguation (历史意图保障单高规格优选消歧迁移测试) 或 降级为意图保障单常规复用
         ({
             "tag": "exp_quality",
             "template_id": "T2-6",
@@ -486,7 +493,7 @@ def get_session_blueprints(
             "agility_factor": None,
             "time_kind": "main"
         }),
-        # 13: S13 Experiential Overlapping Resolution (工单时序重叠仲裁迁移测试) 或 降级为工单变更
+        # 13: S13 Experiential Overlapping Resolution (意图保障单时序重叠仲裁迁移测试) 或 降级为意图保障单变更
         ({
             "tag": "exp_overlap",
             "template_id": "T2-10",
@@ -698,35 +705,20 @@ def get_session_blueprints(
             item["nominal_end"] = _m_time(nominal_date, eh_str)
             item["holiday_defer_date"] = defer_date
         elif t_kind == "multi_intent":
-            item["ref_time"] = _m_time(d_str, ref_str)
-            item["start"] = _m_time(d_str, sh_str)
-            item["end"] = _m_time(d_str, ext_eh_str)
-            item["dur"] = ext_dur
-            item["base_end"] = _m_time(d_str, eh_str)
-            item["base_dur"] = base_dur
-
-            # 动态计算第二意图起止时段：
-            # 若第一意图在晚间（sh_h >= 18），第二意图安排在下午 14:00 ~ 16:00，避免晚间跨天
-            # 若第一意图在上午或中午（sh_h < 18），第二意图安排在其顺延结束时间后 30 分钟开始（如 15:00 ~ 17:00）
-            sh_h = int(sh_str.split(':')[0])
-            if sh_h >= 18:
-                s2_str = "14:00"
-                e2_str = "16:00"
-                dur2_str = "120min"
-            else:
-                ext_h, ext_m = map(int, ext_eh_str.split(':'))
-                s2_total = ext_h * 60 + ext_m + 30
-                s2_h, s2_m = (s2_total // 60) % 24, s2_total % 60
-                e2_total = s2_total + 120
-                e2_h, e2_m = (e2_total // 60) % 24, e2_total % 60
-                s2_str = f"{s2_h:02d}:{s2_m:02d}"
-                e2_str = f"{e2_h:02d}:{e2_m:02d}"
-                dur2_str = "120min"
-            item["start2"] = _m_time(d_str, s2_str)
-            item["end2"] = _m_time(d_str, e2_str)
-            item["dur2"] = dur2_str
+            item["ref_time"] = f"{d_str}12时15分"
+            item["start"] = f"{d_str}12时30分"
+            item["base_end"] = f"{d_str}14时30分"
+            item["base_dur"] = "120min"
+            item["end"] = f"{d_str}14时30分"
+            item["dur"] = "120min"
+            item["start2"] = f"{d_str}12时30分"
+            item["end2"] = f"{d_str}14时30分"
+            item["dur2"] = "120min"
         elif t_kind == "overlap":
             item["ref_time"] = f"{d_str}14时45分"
+            item["nominal_start"] = f"{d_str}15时00分"
+            item["nominal_end"] = f"{d_str}17时00分"
+            item["nominal_dur"] = "120min"
             item["start"] = f"{d_str}15时00分"
             item["end"] = f"{d_str}17时00分"
             item["dur"] = "120min"

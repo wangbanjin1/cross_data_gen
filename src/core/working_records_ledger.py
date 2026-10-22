@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-工作记忆独立工单账本管理器 (WorkingRecordsLedger)
+工作记忆独立意图保障单账本管理器 (WorkingRecordsLedger)
 ---------------------------------------------------------------
 职责：
-1. 彻底落实架构解耦：将历史保障工单独立存储于 working_records.jsonl，
-   绝不将冗余的工单全量嵌入每轮对话的 sessions.jsonl 中；
-2. 负责每个用户生命周期内保障工单的生成、追加、持久化与结构化检索；
+1. 彻底落实架构解耦：将历史保障意图保障单独立存储于 working_records.jsonl，
+   绝不将冗余的意图保障单全量嵌入每轮对话的 sessions.jsonl 中；
+2. 负责每个用户生命周期内保障意图保障单的生成、追加、持久化与结构化检索；
 3. 为 sessions.jsonl 提供轻量化索引指针（working_memory_pointer），
    确保 Prompt 上下文精简高效，杜绝长文本剧烈膨胀。
 """
@@ -18,7 +18,7 @@ from src.core.temporal_engine import TemporalEngine
 
 
 class WorkingRecordsLedger:
-    """工作记忆工单流水账管理器"""
+    """工作记忆意图保障单流水账管理器"""
 
     def __init__(self, user_id: str, storage_path: Optional[Path] = None):
         self.user_id = user_id
@@ -29,7 +29,7 @@ class WorkingRecordsLedger:
             self.load()
 
     def load(self) -> None:
-        """从独立 working_records.jsonl 中加载所有历史工单"""
+        """从独立 working_records.jsonl 中加载所有历史意图保障单"""
         if not self.storage_path or not self.storage_path.exists():
             return
         self.records = []
@@ -58,14 +58,14 @@ class WorkingRecordsLedger:
         notes: str = ""
     ) -> Dict[str, Any]:
         """
-        根据会话规划和已完成的会话参数，生成一条标准的独立工作工单记录。
+        根据会话规划和已完成的会话参数，生成一条标准的独立工作意图保障单记录。
         """
         sid = s_plan["session_id"]
         ref_time = s_plan["reference_time"]
         tp = s_plan["target_params"]
         env = s_plan.get("scenario_env", "常规作业现场")
 
-        # 生成工单流水号：REC_{USER}_{YYYYMMDD}_{seq:02d}
+        # 生成意图保障单流水号：REC_{USER}_{YYYYMMDD}_{seq:02d}
         try:
             dt = TemporalEngine.parse_datetime(ref_time)
             date_str = dt.strftime("%Y%m%d")
@@ -100,13 +100,13 @@ class WorkingRecordsLedger:
         return record
 
     def append_record(self, record: Dict[str, Any]) -> None:
-        """追加工单并自动更新"""
+        """追加意图保障单并自动更新"""
         self.records.append(record)
         if self.storage_path:
             self.save()
 
     def get_all_records(self) -> List[Dict[str, Any]]:
-        """获取当前用户所有历史工单"""
+        """获取当前用户所有历史意图保障单"""
         return list(self.records)
 
     def find_by_id(self, record_id: str) -> Optional[Dict[str, Any]]:
@@ -117,7 +117,7 @@ class WorkingRecordsLedger:
         return None
 
     def query_prior_records(self, before_time_str: str) -> List[Dict[str, Any]]:
-        """检索指定时间点之前的所有历史有效工单（严禁未来单据倒灌）"""
+        """检索指定时间点之前的所有历史有效意图保障单（严禁未来单据倒灌）"""
         dt_before = TemporalEngine.parse_datetime(before_time_str)
         priors = []
         for r in self.records:
@@ -140,7 +140,7 @@ class WorkingRecordsLedger:
     ) -> Dict[str, Any]:
         """
         为 sessions.jsonl 构造轻量化指针（Lightweight Pointer）。
-        sessions 仅保存该指针，不冗余包含大段工单属性。
+        sessions 仅保存该指针，不冗余包含大段意图保障单属性。
         """
         rec_time = target_record.get("created_at") or target_record.get("start_timestamp")
         delta_days = TemporalEngine.calculate_delta_days(current_time, rec_time)

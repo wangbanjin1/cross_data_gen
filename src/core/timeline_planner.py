@@ -273,13 +273,16 @@ class DynamicTimelinePlanner:
                 if exp_id == "EXP_PREWARM_BUFFER_01":
                     res = src.get("preferred_params", {}).get("resolution") or "1080p"
                     rtt = src.get("preferred_params", {}).get("rtt_max") or "50ms"
+                elif exp_id == "EXP_MULTI_INTENT_PARTITION_01":
+                    res = src.get("preferred_params", {}).get("resolution") or "1080p"
+                    rtt = src.get("preferred_params", {}).get("rtt_max") or "50ms"
                 elif exp_id == "EXP_ORDER_QUALITY_DISAMBIGUATION_01":
                     prior_recs = working_ledger.query_prior_records(cfg["ref_time"])
-                    target_rec = next((r for r in prior_recs if r.get("notes") != "network_jitter"), prior_recs[0] if prior_recs else None)
+                    target_rec = next((r for r in prior_recs if r.get("duration") == "120min"), prior_recs[0] if prior_recs else None)
                     if target_rec:
                         working_memory_pointer = working_ledger.generate_session_pointer(target_rec, cfg["ref_time"])
-                        working_memory_pointer["quality_filtered"] = True
-                        working_memory_pointer["selected_order_quality"] = "flawless_zero_packet_loss"
+                        working_memory_pointer["duration_filtered"] = True
+                        working_memory_pointer["selected_order_duration"] = "formal_roadshow_120min"
                     else:
                         working_memory_pointer = {
                             "target_record_id": f"REC_{user_id}_20261010_01",
@@ -287,28 +290,13 @@ class DynamicTimelinePlanner:
                             "inferred_delta_days": 7,
                             "matched_application": src["application_name"],
                             "matched_service": src["service_name"],
-                            "inherited_slots": {"resolution": res, "rtt_max": rtt, "duration": cfg["dur"]},
-                            "quality_filtered": True,
-                            "selected_order_quality": "flawless_zero_packet_loss"
+                            "inherited_slots": {"duration": cfg["dur"]},
+                            "duration_filtered": True,
+                            "selected_order_duration": "formal_roadshow_120min"
                         }
                 elif exp_id == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
-                    prior_recs = working_ledger.query_prior_records(cfg["ref_time"])
-                    if prior_recs:
-                        target_rec = prior_recs[-1]
-                        working_memory_pointer = {
-                            "target_record_id": target_rec["record_id"],
-                            "arbitration_type": "handover_early_termination",
-                            "handover_timestamp": cfg["start"],
-                            "original_scheduled_end": target_rec.get("end_timestamp"),
-                            "conflict_resolved": True
-                        }
-                    else:
-                        working_memory_pointer = {
-                            "target_record_id": f"REC_{user_id}_PRIOR",
-                            "arbitration_type": "handover_early_termination",
-                            "handover_timestamp": cfg["start"],
-                            "conflict_resolved": True
-                        }
+                    res = src.get("preferred_params", {}).get("resolution") or "1080p"
+                    rtt = src.get("preferred_params", {}).get("rtt_max") or "50ms"
             elif template_id == "T2-6":
                 is_long_reuse = (cfg.get("tag") == "wm_long_reuse")
                 prior_recs = working_ledger.query_prior_records(cfg["ref_time"])
@@ -402,8 +390,8 @@ class DynamicTimelinePlanner:
                     "title": exp["title"],
                     "strategy_type": exp["strategy_type"],
                     "suggested_adjustments": exp.get("recommended_adjustments", {}),
-                    "condition": exp.get("condition") or "新申请保障与既有工单发生时段重叠冲突",
-                    "action": exp.get("action") or "时钟让路仲裁：原工单提前结单，新保障准时激活",
+                    "condition": exp.get("condition") or "户外公园、营地或广场活动意图保障单，收尾撤场存在边走边播移动转场与跨基站切换断流风险",
+                    "action": exp.get("action") or "保持 start_timestamp 不变，将意图保障单 end_timestamp 向后顺延30分钟，duration 增加30分钟",
                     "validity": exp.get("validity") or exp.get("applicable_boundaries", "")
                 }
 
@@ -425,8 +413,8 @@ class DynamicTimelinePlanner:
                 "trigger_condition": cfg.get("trigger_condition", main_trigger_desc if cfg["type"].startswith("main") else ""),
                 "ood_goal": cfg.get("ood_goal", ""),
                 "target_params": {
-                    "application_name": src["application_name"],
-                    "service_name": src["service_name"],
+                    "application_name": "微信" if cfg.get("experience_id") == "EXP_MULTI_INTENT_PARTITION_01" else ("抖音" if cfg.get("experience_id") == "EXP_OVERLAPPING_ORDER_RESOLUTION_01" else src["application_name"]),
+                    "service_name": "视频通话" if cfg.get("experience_id") == "EXP_MULTI_INTENT_PARTITION_01" else ("开直播" if cfg.get("experience_id") == "EXP_OVERLAPPING_ORDER_RESOLUTION_01" else src["service_name"]),
                     "resolution": res,
                     "rtt": rtt,
                     "start_timestamp": cfg["start"],
@@ -457,7 +445,7 @@ class DynamicTimelinePlanner:
                 "experience_id": cfg.get("experience_id"),
             }
 
-            # 若为真实开通的保障业务（非纯域外拒绝与对账），将单据记入工单账本
+            # 若为真实开通的保障业务（非纯域外拒绝与对账），将单据记入意图保障单账本
             if template_id not in ["T1-2", "T2-8"]:
                 new_rec = working_ledger.create_record_from_session(s_obj)
                 working_ledger.append_record(new_rec)

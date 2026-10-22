@@ -206,7 +206,7 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
             self.assertIn("T2-7", tids)  # 工作记忆：变更改期
             self.assertTrue(any(exp_tid in tids for exp_tid in ["T2-9", "T2-10", "T2-4", "T2-1"])) # 经验记忆测试
 
-            # 验证经验记忆成对学习铺垫 (Approach 2: 踩坑反思沉淀 -> 动态成败分支评测)
+            # 验证经验记忆成对学习铺垫 (Approach 2: 踩坑反思沉淀 -> 动态快速闭环与多轮澄清路径评测)
             b_types = [s["blueprint_type"] for s in planned_sessions]
             self.assertIn("experience_learning", b_types)
             learn_sids = [s["session_id"] for s in planned_sessions if s["blueprint_type"] == "experience_learning"]
@@ -316,7 +316,7 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
         self.assertEqual(t_expected_mid, 2)
 
     def test_07_experience_slow_path_branching(self):
-        """测试经验记忆双轨成败分支测试体系中的完整 4 轮 Slow Path 交互树与仲裁门"""
+        """测试经验记忆快速闭环与多轮澄清路径对比评测体系中的完整 4 轮 Slow Path 交互树与仲裁门"""
         eb = SessionAssembler._build_experience_branching(
             scenario_type="prewarm_buffer",
             exp_id="EXP_PREWARM_BUFFER_01",
@@ -332,7 +332,7 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
 
         # 2. 验证 Slow Path 评测仲裁门 (Branch Decision Gate)
         slow = eb["slow_path"]
-        self.assertEqual(slow["round_count"], 4)
+        self.assertEqual(slow["round_count"], 3)
         gate = slow.get("branch_decision_gate", {})
         self.assertEqual(gate.get("eval_turn"), 1)
         self.assertEqual(gate.get("pass_route"), "fast_path")
@@ -341,9 +341,9 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
 
         # 4. 验证 4 轮引导交互树结构完整性与逐轮 GT (Turn 1~4 逐轮对齐)
         tree = slow.get("simulator_dialogue_tree", [])
-        self.assertEqual(len(tree), 4)
+        self.assertEqual(len(tree), 3)
         turns = [t["turn"] for t in tree]
-        self.assertEqual(turns, [1, 2, 3, 4])
+        self.assertEqual(turns, [1, 2, 3])
         self.assertEqual(tree[0]["speaker"], "user")
         self.assertIn("baseline_agent_flawed_response", tree[0])
         self.assertIn("flaw_type", tree[0])
@@ -351,13 +351,13 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
         self.assertEqual(tree[1]["speaker"], "user_simulator")
         self.assertIn("expected_agent_correction", tree[1])
         self.assertIn("expected_slots_gt", tree[1])
-        self.assertEqual(tree[3]["expected_agent_correction"], tree[3].get("expected_agent_correction"))
-        self.assertIn("Acknowledge", tree[3]["agent_action_types"])
-        self.assertIn("expected_slots_gt", tree[3])
+        self.assertEqual(tree[2]["expected_agent_correction"], tree[2].get("expected_agent_correction"))
+        self.assertIn("Acknowledge", tree[2]["agent_action_types"])
+        self.assertIn("expected_slots_gt", tree[2])
 
         # 5. 验证逐轮标准金标 (turn_level_ground_truth) 完备性（包括 Turn 1 全量完整槽位）
         turn_gt = slow.get("turn_level_ground_truth", [])
-        self.assertEqual(len(turn_gt), 4)
+        self.assertEqual(len(turn_gt), 3)
         for i, tgt in enumerate(turn_gt):
             self.assertEqual(tgt["turn"], i + 1)
             self.assertIn("expected_slots_gt", tgt)
@@ -397,7 +397,7 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
         self.assertEqual(contract["scenario_type"], "prewarm_buffer")
         self.assertIn("target_ground_truth", contract)
         self.assertIn("turn_level_ground_truth", contract)
-        self.assertEqual(len(contract["turn_level_ground_truth"]), 4)
+        self.assertEqual(len(contract["turn_level_ground_truth"]), 3)
         self.assertEqual(contract["target_ground_truth"]["I1"]["slots"]["application_name"], "抖音")
         self.assertEqual(contract["target_ground_truth"]["I1"]["slots"]["timestamp"]["start_timestamp"], "2026年10月17日12时00分")
         self.assertIn("delta_reaction_matrix", contract)
@@ -408,60 +408,38 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
         self.assertIn("evaluator_prompt_template", contract)
 
     def test_08_multi_intent_5_turn_slow_path(self):
-        """测试多意图局部突发延误隔离场景符合设计规范的 5 轮 Slow Path 深度交互树与密集累积追踪"""
+        """测试直播前私下跟搭档对词看机位（选微信视频通话而非抖音开直播）场景的 3 轮多轮澄清路径交互树"""
         eb = SessionAssembler._build_experience_branching(
             scenario_type="multi_intent_partition",
             exp_id="EXP_MULTI_INTENT_PARTITION_01",
-            rule_title="多任务并行局部调整与时序因果隔离经验",
+            rule_title="直播前私下跟搭档对词与看镜头机位（使用微信视频通话而非抖音开直播）经验",
             learning_source_session="S-USER_001-06",
-            user_prompt="帮我改一下上午的微信视频通话保障，延后到12点结束；下午的保障千万别动，保持原样。",
+            user_prompt="今天12:30-14:30我先跟搭档对一下下午抖音直播的词和看眼机位，帮我开个1080p、50ms保障。",
             ctx={
-                "app": "微信", "srv": "视频通话", "res": "1080p", "rtt": "50ms", "start": "09:00", "end": "12:00", "dur": "180min",
-                "app2": "抖音", "srv2": "直播", "res2": "1080p", "rtt2": "50ms", "start2": "14:00", "end2": "16:00", "dur2": "120min"
+                "app": "微信", "srv": "视频通话", "res": "1080p", "rtt": "50ms", "start": "12:30", "end": "14:30", "dur": "120min"
             }
         )
 
-        # 1. 验证 Fast Path 为 3 轮，Slow Path 为 5 轮
-        self.assertEqual(eb["fast_path"]["round_count"], 3)
-        self.assertEqual(eb["slow_path"]["round_count"], 5)
-        self.assertEqual(eb["slow_path"]["redundant_rounds"], 2)
+        self.assertEqual(eb["fast_path"]["round_count"], 2)
+        self.assertEqual(eb["slow_path"]["round_count"], 3)
+        self.assertEqual(eb["slow_path"]["redundant_rounds"], 1)
 
-        # 2. 验证 5 轮对话树完整性与每轮 expected_slots_gt
         tree = eb["slow_path"]["simulator_dialogue_tree"]
-        self.assertEqual(len(tree), 5)
-        self.assertEqual([t["turn"] for t in tree], [1, 2, 3, 4, 5])
-        self.assertIn("Acknowledge", tree[-1]["agent_action_types"])
+        self.assertEqual(len(tree), 3)
         for node in tree:
-            self.assertIn("expected_slots_gt", node)
             self.assertIn("I1", node["expected_slots_gt"])
-            self.assertIn("I2", node["expected_slots_gt"])
 
-        # 3. 验证 Dense Cumulative Tracking 累积槽位完备性
         full_seq = eb["slow_path"]["full_slow_event_sequence"]
-        self.assertEqual(len(full_seq), 5)
-        for t in full_seq:
-            self.assertEqual(len(t["turn_intents"]), 2)
-            self.assertEqual(t["turn_intents"][0]["params"]["application_name"]["value"], "微信")
-            self.assertEqual(t["turn_intents"][1]["params"]["application_name"]["value"], "抖音")
+        self.assertEqual(len(full_seq), 3)
+        self.assertEqual(full_seq[0]["turn_intents"][0]["params"]["application_name"]["value"], "抖音")
+        self.assertEqual(full_seq[0]["turn_intents"][0]["params"]["service_name"]["value"], "开直播")
+        self.assertEqual(full_seq[1]["turn_intents"][0]["params"]["application_name"]["value"], "微信")
+        self.assertEqual(full_seq[1]["turn_intents"][0]["params"]["service_name"]["value"], "视频通话")
 
-        # 4. 验证逐轮标准金标 (turn_level_ground_truth) 覆盖 5 轮且每轮槽位完整
-        turn_gt = eb["slow_path"]["turn_level_ground_truth"]
-        self.assertEqual(len(turn_gt), 5)
-        self.assertIn("duration", turn_gt[0]["expected_slots_gt"]["I1"]["timestamp"])
-        self.assertIn("duration", turn_gt[0]["expected_slots_gt"]["I2"]["timestamp"])
-        self.assertEqual(turn_gt[-1]["intents_status"]["I1"], "resolved")
-        self.assertEqual(turn_gt[-1]["intents_status"]["I2"], "resolved")
-
-        # 5. 验证终态双闭环
-        self.assertEqual(full_seq[-1]["turn_intents"][0]["status"], "resolved")
-        self.assertEqual(full_seq[-1]["turn_intents"][1]["status"], "resolved")
-
-        # 6. 验证多意图双轨评测契约
         c = eb["interactive_eval_contract"]
-        self.assertIn("I1", c["target_ground_truth"])
-        self.assertIn("I2", c["target_ground_truth"])
-        self.assertEqual(c["target_ground_truth"]["I2"]["slots"]["service_name"], "直播")
-        self.assertIn("I2.timestamp.start_timestamp", c["delta_reaction_matrix"]["on_slot_error"]["monitored_slots"])
+        self.assertEqual(c["target_ground_truth"]["I1"]["slots"]["application_name"], "微信")
+        self.assertEqual(c["target_ground_truth"]["I1"]["slots"]["service_name"], "视频通话")
+        self.assertIn("I1.application_name", c["delta_reaction_matrix"]["on_slot_error"]["monitored_slots"])
 
     def test_09_all_scenarios_interactive_eval_contract(self):
         """测试 5 大经验场景的声明式交互评测契约 (interactive_eval_contract) 与逐轮 GT 完备性"""
@@ -497,7 +475,7 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
 
             # 验证逐轮 GT 的轮数和字段完备性
             turn_gt = c["turn_level_ground_truth"]
-            expected_turns = 5 if s_type == "multi_intent_partition" else 4
+            expected_turns = 3
             self.assertEqual(len(turn_gt), expected_turns, f"Turn GT length mismatch for {s_type}")
             for tgt in turn_gt:
                 self.assertIn("turn", tgt)

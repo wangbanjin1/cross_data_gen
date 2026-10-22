@@ -254,7 +254,7 @@ class MemoryTracker:
                 "event_type": "retrieve_working_record",
                 "record_id": rec_id,
                 "delta_days": delta_d,
-                "description": f"用户使用相对时态引用历史工单 {rec_id}（距今约 {delta_d} 天），Agent 成功定位工单并继承体验规格（{tp['resolution']}, {tp['rtt']}），反问今日起止时段。",
+                "description": f"用户使用相对时态引用历史意图保障单 {rec_id}（距今约 {delta_d} 天），Agent 成功定位意图保障单并继承体验规格（{tp['resolution']}, {tp['rtt']}），反问今日起止时段。",
                 "retrieved_slots": ["resolution", "rtt_max"]
             })
 
@@ -264,7 +264,7 @@ class MemoryTracker:
             memory_events.append({
                 "event_type": "reschedule_working_record",
                 "record_id": rec_id,
-                "description": f"用户申请对历史预约工单 {rec_id} 变更改期，Agent 定位工单并将新时段（{tp['start_timestamp']} 至 {tp['end_timestamp']}）更新生效。",
+                "description": f"用户申请对历史预约意图保障单 {rec_id} 变更改期，Agent 定位意图保障单并将新时段（{tp['start_timestamp']} 至 {tp['end_timestamp']}）更新生效。",
                 "modified_slots": ["start_timestamp", "end_timestamp"]
             })
 
@@ -274,7 +274,7 @@ class MemoryTracker:
             memory_events.append({
                 "event_type": "reconcile_working_records",
                 "total_orders": total_orders,
-                "description": f"用户发起工单流水账对账核查，Agent 检索统计已开通的 {total_orders} 次保障记录并输出清单明细。",
+                "description": f"用户发起意图保障单流水账对账核查，Agent 检索统计已开通的 {total_orders} 次保障记录并输出清单明细。",
             })
 
         elif b_type == "experience_learning":

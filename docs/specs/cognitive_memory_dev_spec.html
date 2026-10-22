@@ -997,7 +997,7 @@
 <li class="toc-item toc-level-3"><a href="#场景3节假日调休周期排期顺延" class="toc-link" title="场景3：节假日调休周期排期顺延">场景3：节假日调休周期排期顺延</a></li>
 <li class="toc-item toc-level-3"><a href="#场景4多候选历史工单运行质量消歧" class="toc-link" title="场景4：多候选历史工单运行质量消歧">场景4：多候选历史工单运行质量消歧</a></li>
 <li class="toc-item toc-level-3"><a href="#场景5新旧工单时段重叠冲突裁决" class="toc-link" title="场景5：新旧工单时段重叠冲突裁决">场景5：新旧工单时段重叠冲突裁决</a></li>
-<li class="toc-item toc-level-2"><a href="#五-双轨成败分支测试与量化指标" class="toc-link" title="五、 双轨成败分支测试与量化指标">五、 双轨成败分支测试与量化指标</a></li>
+<li class="toc-item toc-level-2"><a href="#五-快速闭环与多轮澄清路径对比评测与量化指标" class="toc-link" title="五、 快速闭环与多轮澄清路径对比评测与量化指标">五、 快速闭环与多轮澄清路径对比评测与量化指标</a></li>
 <li class="toc-item toc-level-3"><a href="#核心量化指标体系" class="toc-link" title="核心量化指标体系">核心量化指标体系</a></li>
 <li class="toc-item toc-level-2"><a href="#六-物理文件组织与四元溯源-schema" class="toc-link" title="六、 物理文件组织与四元溯源 Schema">六、 物理文件组织与四元溯源 Schema</a></li>
 <li class="toc-item toc-level-3"><a href="#四元溯源标注字典ground-truth-schema" class="toc-link" title="四元溯源标注字典（Ground Truth Schema）">四元溯源标注字典（Ground Truth Schema）</a></li>
@@ -1026,7 +1026,7 @@
 <blockquote><p><strong>文档状态</strong>：技术设计规范（Approved & Implemented）</p>
 <p><strong>面向场景</strong>：“联接”Agent 通信保障意图参数提取（提参数）与长程记忆演进</p>
 <p><strong>会话规模</strong>：单用户生命周期规划为 <strong>16 ~ 20 轮动态会话</strong>（算术均值 18 轮）</p>
-<p><strong>核心特性</strong>：覆盖事实记忆、工作记忆与五类经验记忆，支持经验会话 Turn 1 参数自包含与双轨成败分支测试（Fast/Slow Branch Evaluation）</p></blockquote>
+<p><strong>核心特性</strong>：覆盖事实记忆、工作记忆与五类经验记忆，支持经验会话 Turn 1 参数自包含与快速闭环与多轮澄清路径对比评测</p></blockquote>
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
 <h2 id="目录大纲">目录大纲</h2>
 <ul><li><a href="#一-智能体定位与核心原则" class="md-link">一、 智能体定位与核心原则</a>
@@ -1049,7 +1049,7 @@
 <li><a href="#场景5新旧工单时段重叠冲突裁决" class="md-link">场景5：新旧工单时段重叠冲突裁决</a>
 </li>
 </ul></li>
-<li><a href="#五-双轨成败分支测试与量化指标" class="md-link">五、 双轨成败分支测试与量化指标</a>
+<li><a href="#五-快速闭环与多轮澄清路径对比评测与量化指标" class="md-link">五、 快速闭环与多轮澄清路径对比评测与量化指标</a>
 </li>
 <li><a href="#六-物理文件组织与四元溯源-schema" class="md-link">六、 物理文件组织与四元溯源 Schema</a>
 </li></ul>
@@ -1072,7 +1072,7 @@
 </li>
 </ul></li>
 <li><strong>评测专业称谓规范</strong>：
-<ul><li>架构与文档统一采用正规评测术语：<strong>“双轨成败分支测试（Fast/Slow Branch Evaluation）”</strong>、<strong>“动态多分支模拟评测”</strong> 或 <strong>“树状交互评测”</strong>。
+<ul><li>架构与文档统一采用正规评测术语：<strong>“快速闭环与多轮澄清路径对比评测”</strong>、<strong>“动态多分支模拟评测”</strong> 或 <strong>“树状交互评测”</strong>。
 </li></ul>
 </li></ol>
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
@@ -1247,8 +1247,8 @@
 </li></ul>
 </li></ul>
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
-<h2 id="五-双轨成败分支测试与量化指标">五、 双轨成败分支测试与量化指标</h2>
-<p>评测系统采用双轨成败分支测试（Fast/Slow Branch Evaluation），根据被测模型的首轮推理输出，分别对照快速闭环分支与多轮纠偏分支：</p>
+<h2 id="五-快速闭环与多轮澄清路径对比评测与量化指标">五、 快速闭环与多轮澄清路径对比评测与量化指标</h2>
+<p>评测系统采用快速闭环与多轮澄清路径对比评测，根据被测模型的首轮推理输出，分别对照快速闭环分支与多轮纠偏分支：</p>
 
                         <div class="mermaid-wrapper">
                             <div class="mermaid">
@@ -1304,7 +1304,7 @@
 &gt; **文档状态**：技术设计规范（Approved &amp; Implemented）  
 &gt; **面向场景**：“联接”Agent 通信保障意图参数提取（提参数）与长程记忆演进  
 &gt; **会话规模**：单用户生命周期规划为 **16 ~ 20 轮动态会话**（算术均值 18 轮）  
-&gt; **核心特性**：覆盖事实记忆、工作记忆与五类经验记忆，支持经验会话 Turn 1 参数自包含与双轨成败分支测试（Fast/Slow Branch Evaluation）  
+&gt; **核心特性**：覆盖事实记忆、工作记忆与五类经验记忆，支持经验会话 Turn 1 参数自包含与快速闭环与多轮澄清路径对比评测  
 
 ---
 
@@ -1319,7 +1319,7 @@
   - [场景3：节假日调休周期排期顺延](#场景3节假日调休周期排期顺延)
   - [场景4：多候选历史工单运行质量消歧](#场景4多候选历史工单运行质量消歧)
   - [场景5：新旧工单时段重叠冲突裁决](#场景5新旧工单时段重叠冲突裁决)
-- [五、 双轨成败分支测试与量化指标](#五-双轨成败分支测试与量化指标)
+- [五、 快速闭环与多轮澄清路径对比评测与量化指标](#五-快速闭环与多轮澄清路径对比评测与量化指标)
 - [六、 物理文件组织与四元溯源 Schema](#六-物理文件组织与四元溯源-schema)
 
 ---
@@ -1335,7 +1335,7 @@
 3. **模板意图约束**：
    - 严格遵循 T 模板规约：单个会话内包含单意图或**最多 2 个意图**（如 T2-4）。
 4. **评测专业称谓规范**：
-   - 架构与文档统一采用正规评测术语：**“双轨成败分支测试（Fast/Slow Branch Evaluation）”**、**“动态多分支模拟评测”** 或 **“树状交互评测”**。
+   - 架构与文档统一采用正规评测术语：**“快速闭环与多轮澄清路径对比评测”**、**“动态多分支模拟评测”** 或 **“树状交互评测”**。
 
 ---
 
@@ -1515,9 +1515,9 @@ $$\text{target\_count} = 16 + (\text{uid\_num} \pmod 5)$$
 
 ---
 
-## 五、 双轨成败分支测试与量化指标
+## 五、 快速闭环与多轮澄清路径对比评测与量化指标
 
-评测系统采用双轨成败分支测试（Fast/Slow Branch Evaluation），根据被测模型的首轮推理输出，分别对照快速闭环分支与多轮纠偏分支：
+评测系统采用快速闭环与多轮澄清路径对比评测，根据被测模型的首轮推理输出，分别对照快速闭环分支与多轮纠偏分支：
 
 ```mermaid
 %%{init: {&#x27;theme&#x27;: &#x27;base&#x27;, &#x27;themeVariables&#x27;: {&#x27;background&#x27;: &#x27;#FFFFFF&#x27;, &#x27;primaryColor&#x27;: &#x27;#FFFFFF&#x27;, &#x27;primaryTextColor&#x27;: &#x27;#111111&#x27;, &#x27;primaryBorderColor&#x27;: &#x27;#111111&#x27;, &#x27;lineColor&#x27;: &#x27;#111111&#x27;, &#x27;actorBkg&#x27;: &#x27;#FFFFFF&#x27;, &#x27;actorBorder&#x27;: &#x27;#111111&#x27;, &#x27;actorTextColor&#x27;: &#x27;#111111&#x27;, &#x27;signalColor&#x27;: &#x27;#111111&#x27;, &#x27;signalTextColor&#x27;: &#x27;#111111&#x27;, &#x27;noteBkgColor&#x27;: &#x27;#FFFFFF&#x27;, &#x27;noteBorderColor&#x27;: &#x27;#111111&#x27;, &#x27;noteTextColor&#x27;: &#x27;#111111&#x27;}, &#x27;sequence&#x27;: {&#x27;actorFontWeight&#x27;: 700, &#x27;messageFontWeight&#x27;: 700, &#x27;noteFontWeight&#x27;: 700}}}%%

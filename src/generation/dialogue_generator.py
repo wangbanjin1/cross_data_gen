@@ -127,48 +127,48 @@ class DialogueGenerator:
                 )
             elif tid == "T2-6":
                 wm_ptr = s_plan.get("working_memory_pointer", {})
-                rec_id = wm_ptr.get("target_record_id", "历史工单")
+                rec_id = wm_ptr.get("target_record_id", "历史意图保障单")
                 delta_d = wm_ptr.get("inferred_delta_days", 7)
                 t1_rule = (
-                    f"【工作记忆跨期复用会话：第1轮用户表达'这次去{env}，还按上周在{env}办的那个规格来'，"
-                    f"指代历史工单({rec_id}，距今约{delta_d}天)，省略画质和时延，但提出今日保障；"
-                    f"第1轮客服从工作记忆工单账本中检索定位该单据，向用户确认继承的体验参数（画质{tp['resolution']}、时延{tp['rtt']}），并询问今日保障的具体起止时间；"
+                    f"【工作记忆跨期复用会话：第1轮用户表达'这次去{env}，还按上周在{env}办的那个意图保障单规格来'，"
+                    f"指代历史意图保障单({rec_id}，距今约{delta_d}天)，省略画质和时延，但提出今日保障；"
+                    f"第1轮客服从工作记忆意图保障单账本中检索定位该单据，向用户确认继承的体验参数（画质{tp['resolution']}、时延{tp['rtt']}），并询问今日保障的具体起止时间；"
                     f"第2轮用户补充说明今日的起止时间（{tp['start_timestamp'].split('日')[-1]}至{tp['end_timestamp'].split('日')[-1]}，持续{tp['duration']}）；"
                     f"第2轮客服确认开通并收尾祝福。】"
                 )
             elif tid == "T2-7":
                 wm_ptr = s_plan.get("working_memory_pointer", {})
-                rec_id = wm_ptr.get("target_record_id", "历史工单")
+                rec_id = wm_ptr.get("target_record_id", "历史意图保障单")
                 t1_rule = (
                     f"【工作记忆单据改期会话：第1轮用户提出把昨天预约的{tp['application_name']}{tp['service_name']}保障往后推迟一个小时；"
-                    f"第1轮客服调取预约工单({rec_id})，向用户反问确认推迟后的新时段（{tp['start_timestamp'].split('日')[-1]}至{tp['end_timestamp'].split('日')[-1]}）；"
+                    f"第1轮客服调取预约意图保障单({rec_id})，向用户反问确认推迟后的新时段（{tp['start_timestamp'].split('日')[-1]}至{tp['end_timestamp'].split('日')[-1]}）；"
                     f"第2轮用户简短确认（如'对，确认修改'）；"
-                    f"第2轮客服确认工单改期生效并收尾。】"
+                    f"第2轮客服确认意图保障单改期生效并收尾。】"
                 )
             elif tid == "T2-8":
                 t1_rule = (
                     f"【工作记忆对账核查会话（单轮）：第1轮用户询问历史保障统计（如'帮我查下这周总共开了几次保障，一共多长时间？'）；"
-                    f"第1轮客服调取历史工单流水账，明确回复已开通的总次数、累计保障时长与明细，礼貌闭环。】"
+                    f"第1轮客服调取历史意图保障单流水账，明确回复已开通的总次数、累计保障时长与明细，礼貌闭环。】"
                 )
             elif tid == "T2-9":
                 exp = s_plan.get("experience_citation", {})
-                exp_title = exp.get("title", "重大活动与大型现场提前30分钟网络预热起保经验")
+                exp_title = exp.get("title", "重大活动与大型场馆现场提前30分钟网络预热起保经验")
                 nom_s = (s_plan.get("nominal_start") or tp["start_timestamp"]).split("日")[-1]
                 nom_d = s_plan.get("nominal_dur") or s_plan.get("base_dur") or tp["duration"]
                 t1_rule = (
                     f"【经验记忆主动提议会话：当前环境为高密/重大活动现场'{env}'。第1轮用户必须一次性把基础参数说清楚（应用{tp['application_name']}、业务{tp['service_name']}、原定活动时间{nom_s}至{tp['end_timestamp'].split('日')[-1]}、原定时长{nom_d}、画质{tp['resolution']}、时延{tp['rtt']}以内），不依赖此前事实记忆；"
                     f"第1轮客服依据ReasoningBank经验卡片【{exp_title}】，主动将起保时间提前30分钟推算为{tp['start_timestamp'].split('日')[-1]}至{tp['end_timestamp'].split('日')[-1]}（保障时长扩至{tp['duration']}），询问用户是否确认开通；"
-                    f"第2轮用户确认采纳提前预热经验（如'好的，提前半小时试机预热太重要了，按这个开通！'）；"
+                    f"第2轮用户确认采纳提前预热经验（如'好的，提前半小时试机预热太重要了，按这个开通意图保障单！'）；"
                     f"第2轮客服确认按提前30分钟预热方案开通并收尾。】"
                 )
             elif tid == "T2-10":
                 exp = s_plan.get("experience_citation", {})
-                exp_title = exp.get("title", "新旧工单时段撞车无缝让路与时序重叠仲裁经验")
+                exp_title = exp.get("title", "新旧意图保障单时段撞车无缝让路与时序重叠仲裁经验")
                 t1_rule = (
-                    f"【经验记忆经验回溯/仲裁会话：第1轮用户必须一次性说清紧急保障的基础参数（应用{tp['application_name']}、业务{tp['service_name']}、时间{tp['start_timestamp'].split('日')[-1]}至{tp['end_timestamp'].split('日')[-1]}、持续{tp['duration']}、画质{tp['resolution']}、时延{tp['rtt']}以内），并提及与系统内已有日常工单时段重叠冲突；"
-                    f"第1轮客服调取经验卡片【{exp_title}】，协调原工单在交界点提前结单让路、新保障准时无缝激活接管，反问确认；"
-                    f"第2轮用户确认（如'太好了，就按这个让路方案开通！'）；"
-                    f"第2轮客服确认按时钟让路仲裁方案开通并收尾。】"
+                    f"【经验记忆经验回溯/仲裁会话：第1轮用户一次性说清紧急意图保障单的原定参数（应用{tp['application_name']}、业务{tp['service_name']}、原定时间15时00分至{tp['end_timestamp'].split('日')[-1]}、原定时长120min、画质{tp['resolution']}、时延{tp['rtt']}以内），并提及与系统内上一笔15时30分结束的在保意图保障单重叠冲突；"
+                    f"第1轮客服调取经验卡片【{exp_title}】，将新意图保障单调整为从交界点{tp['start_timestamp'].split('日')[-1]}无缝接续起保至{tp['end_timestamp'].split('日')[-1]}，总时长缩减重算为{tp['duration']}，反问确认；"
+                    f"第2轮用户确认（如'太好了，就按15时30分无缝接续起保、时长重算为90min的仲裁方案开通意图保障单！'）；"
+                    f"第2轮客服确认按时序重叠仲裁方案开通并收尾。】"
                 )
             elif tid == "X-1":
                 is_weekend = "周末" in env
@@ -429,7 +429,7 @@ class DialogueGenerator:
             if "降" in a_text or ("原画" not in a_text and "1080p" not in a_text):
                 a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
         if s_plan.get("is_disambiguation") and turn_idx == 1:
-            if "哪" not in a_text and "工单" not in a_text and "记录" not in a_text:
+            if "哪" not in a_text and "意图保障单" not in a_text and "记录" not in a_text:
                 a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
         if turn_idx == 1 and role in ["reinforcement_session", "reuse_session"] and tid not in ["T2-3", "T2-5", "T2-6", "T2-7", "T2-8", "T2-9", "T2-10", "T2-4"] and not s_plan.get("experience_citation"):
             u_text = get_fallback_user_utterance(s_plan, turn_idx, role)

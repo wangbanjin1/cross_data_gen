@@ -2,7 +2,7 @@
 """
 动态多分支交互式模拟评测引擎 (Interactive Evaluation Runner)
 面向通信保障意图提参场景，基于数据侧的声明式交互契约 (Interactive Eval Contract)
-驱动“联接”Agent 与用户模拟器 (User Simulator) 的目标差距 (Delta) 动态澄清与双轨成败分支评测。
+驱动“联接”Agent 与用户模拟器 (User Simulator) 的目标差距 (Delta) 动态澄清与快速闭环与多轮澄清路径评测。
 """
 
 import json

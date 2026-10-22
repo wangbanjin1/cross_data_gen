@@ -22,11 +22,11 @@ from typing import Optional, List, Dict, Any
 DEFAULT_EXPERIENCE_ENTRIES = [
     {
         "experience_id": "EXP_PREWARM_BUFFER_01",
-        "title": "重大活动与大型现场提前30分钟网络预热起保经验",
-        "description": "大型体育赛事、关键峰会直播或重要现场活动，设备连线与信道加固需要提前试机，直接按活动开始时间起保容易导致开场准备期卡顿掉流。",
-        "content": "识别到大型赛事直播、重要现场活动等时，主动应用前置预热经验，将起保时间提前30分钟（例如14:00活动提前至13:30起保），保障时长相应延长30分钟，实现1轮极速闭环。",
+        "title": "重大活动与大型场馆现场提前30分钟网络预热起保经验",
+        "description": "大型体育赛事、奥体中心/会展中心场馆活动、关键峰会或重要现场保障（含开直播、视频会议、视频通话等所有业务），设备连线与信道加固需要提前30分钟试机，直接按活动开始时间起保会导致准备期卡顿掉流。",
+        "content": "识别到奥体中心、会展中心、大型赛事或重大现场活动的意图保障单时（无论业务是开直播、视频会议还是视频通话），必须主动应用前置预热经验：将起保时间（start_timestamp）比用户报出的活动开始时间提前30分钟（例如14时00分提前至13时30分，19时00分提前至18时30分），结束时间（end_timestamp）保持不变，保障总时长（duration）相应增加30分钟（例如120min扩充至150min，180min扩充至210min）。",
         "trigger_conditions": {
-            "keywords": ["赛事直播", "重大活动", "开幕式", "主旨演讲", "奥体中心", "峰会", "大型活动"],
+            "keywords": ["赛事直播", "重大活动", "开幕式", "主旨演讲", "奥体中心", "会展中心", "峰会", "大型活动"],
             "risk_factors": ["开场网络拥堵", "设备准备期试机断流"]
         },
         "recommended_adjustments": {
@@ -34,92 +34,113 @@ DEFAULT_EXPERIENCE_ENTRIES = [
             "duration_add_minutes": 30,
             "strategy": "前置预热加固"
         },
-        "condition": "识别重大活动或大型直播现场，需提前预热试机",
-        "action": "起保时间提前30分钟，保障时长扩充30分钟",
-        "validity": "适用于大型外场直播、开幕式、峰会论坛等重大活动现场；普通单人日常视频通话不适用此预热规则。",
-        "applicable_boundaries": "适用于大型外场直播、开幕式、峰会论坛等重大活动现场；普通单人日常视频通话不适用此预热规则。",
-        "negative_counterexamples": "若用户明确声明“必须精准从14:00开始开通，千万不要提前开”，则遵从用户指令。",
+        "condition": "识别重大活动或大型场馆现场（含开直播、视频会议、视频通话等业务），需提前预热试机",
+        "action": "将意图保障单 start_timestamp 提前30分钟，end_timestamp 保持不变，duration 增加30分钟",
+        "validity": "适用于奥体中心、会展中心、开幕式、峰会论坛等重大活动现场的所有业务意图保障单（含开直播、视频会议、视频通话）。",
+        "applicable_boundaries": "适用于奥体中心、会展中心、开幕式、峰会论坛等重大活动现场的所有业务意图保障单（含开直播、视频会议、视频通话）。",
+        "negative_counterexamples": "若用户明确声明“必须精准从原定整点开始开通，千万不要提前30分钟预热”，则遵从用户指令。",
         "strategy_type": "prewarm_buffer"
     },
-    {
-        "experience_id": "EXP_MULTI_INTENT_PARTITION_01",
-        "title": "多任务并行局部调整与时序因果隔离经验",
-        "description": "一通对话中同时办理两笔保障任务时，若用户调整其中一个任务的时段或参数，容易错误波及另一个任务发生参数污染。",
-        "content": "先锁定被修改的目标任务单元；局部更新仅作用于目标任务，另一关键任务严格保持原有配置冻结不变，防止多任务间参数相互污染。",
-        "trigger_conditions": {
-            "keywords": ["改一下", "调整", "不变", "另一个", "第二笔", "第一笔"],
-            "risk_factors": ["多任务交叉污染", "修改扩散导致正常任务被篡改"]
+            {
+            "experience_id": "EXP_MULTI_INTENT_PARTITION_01",
+            "title": "直播前私下跟搭档对词与看镜头机位（使用微信视频通话而非抖音开直播）经验",
+            "category": "app_service_selection_disambiguation",
+            "condition": "用户提出在正式直播前先跟搭档/同事对一下抖音直播的词和镜头机位（字面带有‘抖音直播’字眼，但属于开播前私下双人对词看机位）",
+            "action": "识别私下对词看机位的真实通信载体为微信视频通话而非公开抖音开直播，主动将 application_name 设为微信、service_name 设为视频通话（画质与时延完全尊重用户自身选择）",
+            "validity": "适用于正式直播前私下与搭档对词、试镜头机位场景；若用户明确声明正式公开开播，则正常开通抖音开直播保障。",
+            "trigger_conditions": {
+                "location_keywords": ["热身区", "休息点", "现场", "街区", "采访点", "直播", "外场", "展区"],
+                "task_keywords": ["对词", "镜头", "机位", "试镜", "搭档", "彩排"],
+                "user_intent_features": ["pre_stream_partner_check", "literal_douyin_keyword_trap"]
+            },
+            "reasoning_chain": [
+                "1. 语义陷阱识别：用户提到‘跟搭档对一下抖音直播的词和镜头机位’，无经验模型极易被字面‘抖音直播’误导而提取为【抖音-开直播】；",
+                "2. 日常经验匹配：正式开播前私下跟搭档核对台词、让对方帮忙看眼镜头机位正不正，平时都是直接打【微信-视频通话】沟通，无需建公开抖音直播间；",
+                "3. 精准提参决策：尊重用户自己指定的画质（1080p）与时延（50ms）以及时段，主动将应用与业务修正为【微信-视频通话】。"
+            ],
+            "recommended_adjustments": {
+                "application_name": "微信",
+                "service_name": "视频通话",
+                "preserve_user_quality_and_time": True
+            },
+            "applicable_boundaries": "适用于私下找搭档对直播词、看镜头机位的准备阶段。",
+            "negative_counterexamples": "若用户明确说明正式公开开播，则按抖音开直播受理。",
+            "strategy_type": "app_service_selection_experience",
+            "crystallization_prompt": "你看，跟搭档私下对一下抖音直播的词和看眼机位，平时我们都是直接打微信视频通话让对方帮忙看画面，哪用得着真开抖音直播间！你把这条日常经验记下来：以后凡是我说先跟搭档对直播词、看镜头机位，别被‘抖音直播’字眼带偏，直接帮我开【微信-视频通话】保障！"
         },
-        "recommended_adjustments": {
-            "rule": "严格按任务单元进行局部更新与隔离"
-        },
-        "condition": "单次会话内包含2个及以上业务任务，用户局部改期",
-        "action": "严格按任务单元进行局部更新与时序隔离，锁定未改动任务",
-        "validity": "适用于单次会话内包含 2 个及以上业务任务的复合场景。",
-        "applicable_boundaries": "适用于单次会话内包含 2 个及以上业务任务（如上午会议 + 晚上直播）的复合场景。",
-        "negative_counterexamples": "若用户明确表示“两个任务全都改成同样的时间和规格”，则按用户指示统一更新。",
-        "strategy_type": "multi_intent_partition"
-    },
-    {
+        {
         "experience_id": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01",
         "title": "周期例行排期遇法定节假日自动顺延经验",
-        "description": "每周或每月例行安排的保障如果恰逢国家法定节假日，公司通常无人办公，机械执行会导致空跑扣费。",
-        "content": "识别到例行时段撞上法定节假日时，主动提醒避让，并将保障计划顺延至假期后的首个工作日办理，避免空跑浪费。",
+        "description": "每周例行安排的周会意图保障单如果恰逢国家法定节假日（如2026年10月01日至10月07日国庆节放假），公司无人办公，直接按原定休假日（如10月05日周一）开通会导致空跑扣费。",
+        "content": "识别到用户预约例行周会的日期处于国庆法定节假日（2026年10月01日至10月07日，例如下周一2026年10月05日）时，必须主动应用节假日避让经验：将意图保障单的起止日期（start_timestamp 和 end_timestamp 中的日期部分）自动顺延至国庆节后首个工作日 2026年10月08日，具体起止时刻与保障时长（duration）保持不变，避免放假空跑浪费。",
         "trigger_conditions": {
-            "keywords": ["国庆节", "中秋节", "元旦", "春节", "法定假日", "放假", "例行周会"],
+            "keywords": ["国庆节", "中秋节", "元旦", "春节", "法定假日", "放假", "例行周会", "10月5日", "10月05日"],
             "risk_factors": ["放假期间无人办公空跑扣费"]
         },
         "recommended_adjustments": {
-            "action": "顺延至节后首个工作日",
+            "action": "将2026年10月05日顺延至节后首个工作日2026年10月08日（时刻与时长不变）",
             "strategy": "节假日排期避让"
         },
-        "condition": "周期例行周会排期遇法定节假日冲突",
-        "action": "顺延至节后首个工作日同时段办理，避免放假期间空跑扣费",
-        "validity": "适用于工作日固定周期例会类保障；节假日演出等活动不适用。",
-        "applicable_boundaries": "适用于工作日固定周期例会类保障；节假日照常举办的文体演出或商业活动不适用避让规则。",
-        "negative_counterexamples": "若用户明确说明“国庆期间虽然放假但有突发值班，必须照常开通保障”，则遵从指令按原排期办理。",
+        "condition": "周期例行周会意图保障单排期撞上国庆法定节假日（如2026年10月05日）",
+        "action": "将 start_timestamp 与 end_timestamp 的日期从 2026年10月05日 顺延改为节后首个工作日 2026年10月08日，时刻与 duration 不变",
+        "validity": "适用于工作日固定周期例会类意图保障单；节假日演出等活动不适用。",
+        "applicable_boundaries": "适用于工作日固定周期例会类意图保障单；节假日照常举办的文体演出或商业活动不适用避让规则。",
+        "negative_counterexamples": "若用户明确说明“国庆期间虽然放假但有突发值班，必须在10月05日照常开通”，则遵从指令按原排期办理。",
         "strategy_type": "holiday_avoidance"
     },
-    {
-        "experience_id": "EXP_ORDER_QUALITY_DISAMBIGUATION_01",
-        "title": "基于历史工单网络质量日志的智能消歧经验",
-        "description": "用户模糊提及'按上周办得好的那次规格来'，历史存在多个相似工单，机械反问工单流水号会增加用户查询负担。",
-        "content": "调取历史工单的网络质量评估日志，主动剔除发生过卡顿或时延波动的异常单据，直接锁定全程零卡顿的高质量工单继承参数，快速闭环。",
-        "trigger_conditions": {
-            "keywords": ["上次好的", "不卡的那次", "体验好的", "上周顺畅的", "效果好的那次"],
-            "risk_factors": ["误继承卡顿故障工单参数", "报工单号反问增加交互成本"]
+            {
+            "experience_id": "EXP_ORDER_QUALITY_DISAMBIGUATION_01",
+            "title": "历史意图保障单模糊指代（过滤前天1小时临时短单、优选上周2小时正式路演单）消歧经验",
+            "category": "historical_order_duration_disambiguation",
+            "condition": "用户在展区/外场办正式客户路演并要求‘按上次办的保障单排时长’，且账本中存在前天1小时(60min)临时短会单与上周2小时(120min)正式路演长单",
+            "action": "过滤时间最近但属临时插曲的前天60min短单，优选匹配上周同为正式客户路演的120min长单（顺延结束时间保满2小时，画质与时延完全由用户自己指定）",
+            "validity": "适用于用户模糊指代‘按上次的保障单来’且近期穿插过临时短单的正式外场路演场景。",
+            "trigger_conditions": {
+                "location_keywords": ["外摆区", "拜访点", "商圈", "展会", "外访", "现场", "展区"],
+                "task_keywords": ["上次", "意图保障单", "路演", "客户"],
+                "user_intent_features": ["ambiguous_historical_order_ref", "recency_bias_short_order_trap"]
+            },
+            "reasoning_chain": [
+                "1. 账本候选检索：用户要求下午15:00开始办正式客户路演，时长按‘上次办的保障单’来，账本中检出前天临时短单（60min）与上周正式路演单（120min）；",
+                "2. 最近邻陷阱规避：无经验模型会因最近邻偏见直接照搬前天那笔60min（15:00-16:00）临时短单，导致2小时路演中途断保；",
+                "3. 场景时长匹配：依据日常经验过滤前天1小时临时短单，按上周正式客户路演单排满2小时（15:00-17:00，120min），画质与时延严格按用户指定值执行。"
+            ],
+            "recommended_adjustments": {
+                "duration": "120min",
+                "prefer_formal_duration_over_recent_temp": True
+            },
+            "applicable_boundaries": "适用于正式路演场景下的历史单据模糊指代。",
+            "negative_counterexamples": "若用户明确说明今天只是1小时临时短会，则按60min排期。",
+            "strategy_type": "historical_order_duration_disambiguation",
+            "crystallization_prompt": "前天那单60min只是我临时插空打的短会，今天在展区给客户做正式远程路演，时长肯定得按上周那笔正式路演单保满2个小时（120min）啊！你把这条经验记牢：以后我办正式客户路演说‘按上次的保障单来’，别机械拿最近那笔1小时临时短单，自动帮我匹配2小时（120min）的正式路演单！"
         },
-        "recommended_adjustments": {
-            "rule": "基于质量日志过滤异常工单并锁定优质工单"
+        {
+            "experience_id": "EXP_OVERLAPPING_ORDER_RESOLUTION_01",
+            "title": "受邀进他人直播间当连麦嘉宾（需按开直播保上行而非看直播）业务选择经验",
+            "category": "guest_cohost_service_selection",
+            "condition": "用户说明受邀进入主会场/他人直播间当连麦嘉宾互动（字面含‘进直播间’，但角色为上麦发言的连麦嘉宾）",
+            "action": "识别连麦嘉宾上麦发言需实时上传音视频流，不能按普通观众【看直播】受理，主动将 service_name 设为【开直播】（画质、时延与时段完全尊重用户自身选择）",
+            "validity": "适用于受邀进入他人直播间担任连麦嘉宾、上麦互动发言的场景。",
+            "trigger_conditions": {
+                "location_keywords": ["社区", "走访点", "活动现场", "户外", "调研点", "公共"],
+                "task_keywords": ["连麦", "嘉宾", "直播间", "互动", "受邀", "上麦"],
+                "user_intent_features": ["enter_other_livestream_as_guest", "uplink_cohost_service_selection"]
+            },
+            "reasoning_chain": [
+                "1. 字面陷阱识别：用户说‘受邀进主会场抖音直播间当连麦嘉宾’，无经验模型看到‘进别人直播间’极易机械归类为【看直播】；",
+                "2. 日常经验匹配：普通观众才是【看直播】，而‘当连麦嘉宾’需要打开摄像头和麦克风上麦推流，若按【看直播】只保下行会导致上麦画面卡死；",
+                "3. 业务类型锁定：保持用户自己指定的画质（1080p）、时延（50ms）与起止时段不变，主动将 service_name 锁定为【开直播】。"
+            ],
+            "recommended_adjustments": {
+                "service_name": "开直播",
+                "preserve_user_quality_and_time": True
+            },
+            "applicable_boundaries": "适用于进他人直播间当连麦嘉宾或上麦互动场景。",
+            "negative_counterexamples": "若用户明确说明只是进去旁听围观不上麦，则按看直播受理。",
+            "strategy_type": "guest_cohost_service_selection",
+            "crystallization_prompt": "你看，虽然我是进主会场别人的抖音直播间，但我是去当连麦嘉宾、要开摄像头上麦发言的！光开‘看直播’不保上传，一连麦就卡成马赛克了。你把这条日常经验记下来：以后凡是我说受邀进直播间当连麦嘉宾互动，业务类型千万别选【看直播】，直接帮我按【开直播】开通意图保障单！"
         },
-        "condition": "用户模糊指代按办得好的那次规格办理",
-        "action": "调取质量日志过滤抖动丢包单据，锁定1080p/50ms优质单",
-        "validity": "适用于历史存在同类应用多次保障记录且网络质量存在差异的情境。",
-        "applicable_boundaries": "适用于历史存在同类应用多次保障记录且网络质量存在差异的情境；若历史工单质量均一致，则需按时间就近原则办理。",
-        "negative_counterexamples": "若用户直接报出确切工单编号（如“按单号REC-01来”），则直接按指定工单执行，无需比对质量日志。",
-        "strategy_type": "quality_disambiguation"
-    },
-    {
-        "experience_id": "EXP_OVERLAPPING_ORDER_RESOLUTION_01",
-        "title": "新旧工单时段撞车无缝让路与时序重叠仲裁经验",
-        "description": "新提交的保障与正在生效或已预约的旧单据在时间上有重叠冲突，直接报错拒绝受理会导致业务断档。",
-        "content": "检测到新旧保障时段冲突时，自动在重叠交界点将前一工单提前结单让路，由新工单无缝接续保障，确保网络不中断且不重复计费。",
-        "trigger_conditions": {
-            "keywords": ["时间撞了", "提前接上", "时段冲突", "临时加单", "重叠", "接着开"],
-            "risk_factors": ["单据冲突报错拒单", "重叠时段重复计费"]
-        },
-        "recommended_adjustments": {
-            "action": "冲突交界点提前结单旧工单并无缝接续新工单",
-            "strategy": "时序重叠仲裁"
-        },
-        "condition": "新申请保障与系统内已有工单发生时段重叠冲突",
-        "action": "时钟让路仲裁：原工单在交界点提前结单，新保障准时接管",
-        "validity": "适用于同设备或同账号下新旧工单时段交叠的场景。",
-        "applicable_boundaries": "适用于同设备或同账号下新旧工单时段交叠的场景；不同独立设备的工单并行运行不受此仲裁约束。",
-        "negative_counterexamples": "若用户明确要求“两笔单子同时并行开通，各走各的”，则不进行提前结单。",
-        "strategy_type": "overlapping_resolution"
-    },
-    {
+        {
         "experience_id": "EXP_STADIUM_CONGESTION_01",
         "title": "极值与高密环境主动保流畅抗丢包经验",
         "description": "大型体育场馆、漫展或演唱会万人集聚场景下，现场人多容易发生网络拥挤，盲目开高画质易引发频繁卡顿转圈。",
