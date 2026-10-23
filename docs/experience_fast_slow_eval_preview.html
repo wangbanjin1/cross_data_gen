@@ -564,7 +564,7 @@ flowchart LR
                     
                     <div class="turn-item learn-turn">
                         <div class="turn-badge">经验习得 第 2 轮</div>
-                        <div class="msg user-msg"><b>👤 用户：</b>等等，大型场馆重大活动现场设备连线和推流调试很多，掐着开场时间起保根本来不及试机！起保时间必须帮我往前提前30分钟，结束时间不变，总时长相应延长30分钟，按这个开通意图保障单。</div>
+                        <div class="msg user-msg"><b>👤 用户：</b>等等，大型活动现场还得提前进场调试设备呢，掐着点开来不及！帮我把开始时间往前提前半小时吧。</div>
                         <div class="msg thought-msg"><b>🧠 “联接”Agent 思考：</b></div>
                         <div class="msg agent-msg"><b>🤖 “联接”Agent 回复：</b>明白！大型场馆重大活动现场设备调试确实需要预留试机时间。已为您将意图保障单起保时间提前30分钟并延长总时长至60min（1080p / 时延≤50ms），祝现场活动顺利！</div>
                     </div>
@@ -682,7 +682,7 @@ flowchart LR
                         <span class="branch-pill err-pill">首轮字面提参存在偏差 → 触发用户澄清指正</span>
                     </div>
                     <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U1)：</b>今天在奥体中心多功能馆有重大活动保障，帮我开抖音开直播意图保障单，活动时间从12时30分到13时30分（原定时长60min），画质要求1080p，时延控制在50ms以内。</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent按活动开始时间掐点预约，未做提前30分钟预热试机推算</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A1)：</b>收到，已按活动起止时间为您锁定抖音开直播意图保障单（2026年10月12日12时30分至2026年10月12日13时30分，持续60min，1080p / 时延≤50ms），确认直接为您开通吗？</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 1 轮意图槽位状态 (turn_intents)：</div>
@@ -703,8 +703,8 @@ flowchart LR
                         <span class="turn-num">多轮澄清路径 · 第 2 轮</span>
                         <span class="branch-pill warn-pill">用户补充真实目标参数 → 二轮修正对齐</span>
                     </div>
-                    <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U2)：</b>等等，这是大型场馆重大活动，现场设备调试很多，掐着点开通根本来不及试机！必须把意图保障单起保时间提前30分钟改为从2026年10月12日12时00分开始，至2026年10月12日13时30分结束不变，总时长相应扩充至90min（画质1080p、时延50ms以内）！</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U2)：</b>等等，大型活动现场还得提前进场调试设备呢，掐着点开来不及！帮我把开始时间往前提前半小时就行。</div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent收到纠偏后将起保时间提前30分钟并更新总时长</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A2)：</b>抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日12时00分至2026年10月12日13时30分（总时长扩充至90min，画质1080p、时延≤50ms），确认按此提前开通吗？</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 2 轮意图槽位状态 (turn_intents)：</div>
@@ -726,7 +726,7 @@ flowchart LR
                         <span class="branch-pill goal-pill">用户确认修正结果 → 3轮澄清闭环</span>
                     </div>
                     <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U3)：</b>好的，规格时间都对了，确认按此开通。</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent完成提前预热试机意图保障单受理</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A3)：</b>好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日12时00分至2026年10月12日13时30分，持续90min，1080p / 时延≤50ms），预祝活动圆满顺利！</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 3 轮意图槽位状态 (turn_intents)：</div>
@@ -797,7 +797,7 @@ flowchart LR
                     
                     <div class="turn-item learn-turn">
                         <div class="turn-badge">经验习得 第 2 轮</div>
-                        <div class="msg user-msg"><b>👤 用户：</b>嗨，我只是先跟搭档私下对一下抖音直播的词和看眼机位，还没正式开播呢！我们平时私下对词看机位都是直接打【微信-视频通话】让他帮我看画面，哪用得着真开抖音直播间！你把这条日常经验记下来：以后凡是我说先跟搭档对直播词、看镜头机位，直接帮我开【微信-视频通话】意图保障单！</div>
+                        <div class="msg user-msg"><b>👤 用户：</b>嗨，我只是先跟搭档私下对一下词和看眼机位，还没正式开播呢！平时对词我们都是打微信视频电话，改成微信视频通话吧。</div>
                         <div class="msg thought-msg"><b>🧠 “联接”Agent 思考：</b></div>
                         <div class="msg agent-msg"><b>🤖 “联接”Agent 回复：</b>明白！原来私下跟搭档对直播词、看镜头机位平时都是用【微信-视频通话】沟通。已为您将意图保障单修正为【微信-视频通话】（12时30分至14时30分，持续120min，1080p / 时延≤50ms），并记下这条日常经验，祝您对词顺利！</div>
                     </div>
@@ -915,7 +915,7 @@ flowchart LR
                         <span class="branch-pill err-pill">首轮字面提参存在偏差 → 触发用户澄清指正</span>
                     </div>
                     <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U1)：</b>今天在高山露天训练场，12时30分至14时30分（持续120min）我先跟搭档对一下下午抖音直播的词和镜头机位，帮我开个画质1080p、时延50ms以内的意图保障单。</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent缺乏日常对词试机位经验，被字面‘抖音直播’误导提取为【抖音-开直播】</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A1)：</b>收到，已为您准备好2026年10月16日12时30分至2026年10月16日14时30分（持续120min）的【抖音-开直播】意图保障单（1080p / 时延≤50ms），确认按此开通吗？</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 1 轮意图槽位状态 (turn_intents)：</div>
@@ -936,8 +936,8 @@ flowchart LR
                         <span class="turn-num">多轮澄清路径 · 第 2 轮</span>
                         <span class="branch-pill warn-pill">用户补充真实目标参数 → 二轮修正对齐</span>
                     </div>
-                    <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U2)：</b>嗨，我只是先跟搭档私下对一下抖音直播的词和看眼机位，还没正式开播呢！我们平时私下对词看机位都是直接打【微信-视频通话】让他帮我看画面，帮我把应用和业务改成【微信-视频通话】（时段2026年10月16日12时30分至2026年10月16日14时30分，持续120min，画质1080p、时延50ms以内）！</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U2)：</b>嗨，我只是先跟搭档私下对一下词和看眼机位，还没正式开播呢！平时对词我们都是打微信视频电话，把应用和业务改成微信视频通话就行。</div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent收到用户澄清指正后，将保障应用与业务修正为【微信-视频通话】</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A2)：</b>非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日12时30分至2026年10月16日14时30分，持续120min，画质1080p、时延≤50ms），确认现在为您开通吗？</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 2 轮意图槽位状态 (turn_intents)：</div>
@@ -959,7 +959,7 @@ flowchart LR
                         <span class="branch-pill goal-pill">用户确认修正结果 → 3轮澄清闭环</span>
                     </div>
                     <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U3)：</b>好的，改成微信视频通话就对了，确认按此开通。</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent完成【微信-视频通话】意图保障单闭环出单</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A3)：</b>好的，已为您成功开通2026年10月16日12时30分至2026年10月16日14时30分（持续120min）的【微信-视频通话】意图保障单（1080p / 时延≤50ms），祝您和搭档对词试机位顺利！</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 3 轮意图槽位状态 (turn_intents)：</div>
@@ -1030,7 +1030,7 @@ flowchart LR
                     
                     <div class="turn-item learn-turn">
                         <div class="turn-badge">经验习得 第 2 轮</div>
-                        <div class="msg user-msg"><b>👤 用户：</b>等等，下周一（10月5日）不是国庆法定长假放假吗？办公室都没人开会，别空跑浪费钱了，帮我把意图保障单顺延到节后上班第一天（10月8日）同时段再开。</div>
+                        <div class="msg user-msg"><b>👤 用户：</b>哎呀，10月5日还在放国庆假呢，那天不开会！帮我把日期顺延到节后上班第一天（10月8日）吧。</div>
                         <div class="msg thought-msg"><b>🧠 “联接”Agent 思考：</b></div>
                         <div class="msg agent-msg"><b>🤖 “联接”Agent 回复：</b>收到！已为您将本次例行周会意图保障单顺延调整至国庆节后首个工作日（10月8日）同时段办理（1080p / 时延≤50ms），避免假期在空办公室产生空跑费用，祝您假期愉快！</div>
                     </div>
@@ -1148,7 +1148,7 @@ flowchart LR
                         <span class="branch-pill err-pill">首轮字面提参存在偏差 → 触发用户澄清指正</span>
                     </div>
                     <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U1)：</b>帮我预约下周一（10月5日，正值国庆假期）例行周会的微信视频通话意图保障单，时间从15时00分到17时00分（持续120min），画质要求1080p，时延控制在50ms以内。</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent未识别下周一（10月5日）为国庆节法定假期，直接在放假当天机械预约</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A1)：</b>收到，已为您预约下周一（2026年10月05日15时00分至2026年10月05日17时00分，持续120min）的微信视频通话意图保障单（1080p / 时延≤50ms），确认直接按此开通吗？</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 1 轮意图槽位状态 (turn_intents)：</div>
@@ -1169,8 +1169,8 @@ flowchart LR
                         <span class="turn-num">多轮澄清路径 · 第 2 轮</span>
                         <span class="branch-pill warn-pill">用户补充真实目标参数 → 二轮修正对齐</span>
                     </div>
-                    <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U2)：</b>等等，下周一（10月5日）是国庆法定长假全员放假，办公室根本没人！怎么还给我排在10月5日？别在空办公室空跑浪费了，必须把例行周会意图保障单顺延到节后上班第一天2026年10月08日15时00分至2026年10月08日17时00分（持续120min，画质1080p、时延50ms以内）再开！</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U2)：</b>哎呀，10月5日还在放国庆假呢，那天不开会！帮我把日期顺延到节后上班第一天（10月8日）就行。</div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent收到用户纠偏后将意图保障单顺延至2026年10月08日同时段并发起确认</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A2)：</b>非常抱歉！已为您撤销10月5日放假期间的排期，并将例行周会微信视频通话意图保障单顺延至节后首个工作日2026年10月08日15时00分至2026年10月08日17时00分（持续120min，1080p / 时延≤50ms），确认按此顺延生效吗？</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 2 轮意图槽位状态 (turn_intents)：</div>
@@ -1192,7 +1192,7 @@ flowchart LR
                         <span class="branch-pill goal-pill">用户确认修正结果 → 3轮澄清闭环</span>
                     </div>
                     <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U3)：</b>好的，规格时间都对了，确认按此开通。</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent完成节后首个工作日顺延办理并出单</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A3)：</b>好的，已成功将例行周会微信视频通话意图保障单顺延至2026年10月08日15时00分至2026年10月08日17时00分办理（1080p / 时延≤50ms），祝您假期愉快！</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 3 轮意图槽位状态 (turn_intents)：</div>
@@ -1263,7 +1263,7 @@ flowchart LR
                     
                     <div class="turn-item learn-turn">
                         <div class="turn-badge">经验习得 第 2 轮</div>
-                        <div class="msg user-msg"><b>👤 用户：</b>不对！前天那笔1小时（60min）只是我临时插空打的短会，今天是正式客户路演，得按上周那笔正式路演单保满2个小时（15时00分到17时00分，持续120min）！你把这条经验记牢：以后我办正式客户路演说‘按上次的保障单来’，别拿前天那笔1小时临时短单，自动帮我按上周那笔2小时（120min）的正式路演单排期！</div>
+                        <div class="msg user-msg"><b>👤 用户：</b>不对，1个小时不够！前天那笔只是我临时插空开的短会，今天是正式路演，得按上周那笔正式单改成2个小时。</div>
                         <div class="msg thought-msg"><b>🧠 “联接”Agent 思考：</b></div>
                         <div class="msg agent-msg"><b>🤖 “联接”Agent 回复：</b>明白！已为您过滤前天的1小时临时短单，按上周正式客户路演单为您排满2小时（15时00分至17时00分，持续120min，1080p / 时延≤50ms），并记下这条经验，祝您路演顺畅！</div>
                     </div>
@@ -1381,7 +1381,7 @@ flowchart LR
                         <span class="branch-pill err-pill">首轮字面提参存在偏差 → 触发用户澄清指正</span>
                     </div>
                     <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U1)：</b>今天在金融街财富管理中心要办一场正式客户远程路演，下午15时00分开始开微信视频通话（画质1080p、时延50ms以内），保障时长和结束时间就按我上次办的那笔意图保障单来。</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent受最近邻偏见影响，机械调取前天那笔1小时（60min）临时短单</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A1)：</b>收到，已为您按最近一笔（前天）的历史意图保障单时长配置，今日2026年10月21日15时00分至2026年10月21日16时00分（持续60min）为您开通微信视频通话意图保障单（1080p / 时延≤50ms），确认吗？</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 1 轮意图槽位状态 (turn_intents)：</div>
@@ -1402,8 +1402,8 @@ flowchart LR
                         <span class="turn-num">多轮澄清路径 · 第 2 轮</span>
                         <span class="branch-pill warn-pill">用户补充真实目标参数 → 二轮修正对齐</span>
                     </div>
-                    <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U2)：</b>不对！你调成前天我临时开的1小时（60min）短单了！今天是正式客户路演，得按上周那笔正式路演单保满2个小时（2026年10月21日15时00分至2026年10月21日17时00分，持续120min，画质1080p、时延50ms以内）！</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U2)：</b>不对，1个小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成2个小时。</div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent收到用户澄清指正后过滤前天60min短单，改按上周120min正式路演单排期</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A2)：</b>非常抱歉！已为您过滤前天的1小时临时短单，改按上周正式客户路演单排满2小时（2026年10月21日15时00分至2026年10月21日17时00分，持续120min，画质1080p、时延≤50ms），确认按此开通吗？</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 2 轮意图槽位状态 (turn_intents)：</div>
@@ -1425,7 +1425,7 @@ flowchart LR
                         <span class="branch-pill goal-pill">用户确认修正结果 → 3轮澄清闭环</span>
                     </div>
                     <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U3)：</b>好的，保满两个小时就对了，确认按此开通。</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent按2小时正式客户路演单成功出单</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A3)：</b>好的，已按上周2小时正式路演单时长（2026年10月21日15时00分至2026年10月21日17时00分，持续120min，1080p / 时延≤50ms）为您成功受理微信视频通话意图保障单，祝您路演顺畅！</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 3 轮意图槽位状态 (turn_intents)：</div>
@@ -1496,7 +1496,7 @@ flowchart LR
                     
                     <div class="turn-item learn-turn">
                         <div class="turn-badge">经验习得 第 2 轮</div>
-                        <div class="msg user-msg"><b>👤 用户：</b>等等，大型场馆重大活动现场设备连线和推流调试很多，掐着开场时间起保根本来不及试机！起保时间必须帮我往前提前30分钟，结束时间不变，总时长相应延长30分钟，按这个开通意图保障单。</div>
+                        <div class="msg user-msg"><b>👤 用户：</b>等等，大型活动现场还得提前进场调试设备呢，掐着点开来不及！帮我把开始时间往前提前半小时吧。</div>
                         <div class="msg thought-msg"><b>🧠 “联接”Agent 思考：</b></div>
                         <div class="msg agent-msg"><b>🤖 “联接”Agent 回复：</b>明白！大型场馆重大活动现场设备调试确实需要预留试机时间。已为您将意图保障单起保时间提前30分钟并延长总时长至120min（1080p / 时延≤50ms），祝现场活动顺利！</div>
                     </div>
@@ -1614,7 +1614,7 @@ flowchart LR
                         <span class="branch-pill err-pill">首轮字面提参存在偏差 → 触发用户澄清指正</span>
                     </div>
                     <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U1)：</b>今天在奥体中心多功能馆有重大活动保障，帮我开腾讯会议会议意图保障单，活动时间从14时00分到16时00分（原定时长120min），画质要求1080p，时延控制在50ms以内。</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent按活动开始时间掐点预约，未做提前30分钟预热试机推算</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A1)：</b>收到，已按活动起止时间为您锁定腾讯会议会议意图保障单（2026年10月12日14时00分至2026年10月12日16时00分，持续120min，1080p / 时延≤50ms），确认直接为您开通吗？</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 1 轮意图槽位状态 (turn_intents)：</div>
@@ -1635,8 +1635,8 @@ flowchart LR
                         <span class="turn-num">多轮澄清路径 · 第 2 轮</span>
                         <span class="branch-pill warn-pill">用户补充真实目标参数 → 二轮修正对齐</span>
                     </div>
-                    <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U2)：</b>等等，这是大型场馆重大活动，现场设备调试很多，掐着点开通根本来不及试机！必须把意图保障单起保时间提前30分钟改为从2026年10月12日13时30分开始，至2026年10月12日16时00分结束不变，总时长相应扩充至150min（画质1080p、时延50ms以内）！</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U2)：</b>等等，大型活动现场还得提前进场调试设备呢，掐着点开来不及！帮我把开始时间往前提前半小时就行。</div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent收到纠偏后将起保时间提前30分钟并更新总时长</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A2)：</b>抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日16时00分（总时长扩充至150min，画质1080p、时延≤50ms），确认按此提前开通吗？</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 2 轮意图槽位状态 (turn_intents)：</div>
@@ -1658,7 +1658,7 @@ flowchart LR
                         <span class="branch-pill goal-pill">用户确认修正结果 → 3轮澄清闭环</span>
                     </div>
                     <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U3)：</b>好的，规格时间都对了，确认按此开通。</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent完成提前预热试机意图保障单受理</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A3)：</b>好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日16时00分，持续150min，1080p / 时延≤50ms），预祝活动圆满顺利！</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 3 轮意图槽位状态 (turn_intents)：</div>
@@ -1729,7 +1729,7 @@ flowchart LR
                     
                     <div class="turn-item learn-turn">
                         <div class="turn-badge">经验习得 第 2 轮</div>
-                        <div class="msg user-msg"><b>👤 用户：</b>等等！我是受邀去当连麦嘉宾、要开摄像头上麦发言的，不是普通观众光在下面看直播！只开‘看直播’不保上传，一连麦就卡了。你把这条日常经验记下来：以后凡是我说受邀进直播间当连麦嘉宾互动，业务类型别选【看直播】，直接帮我按【抖音-开直播】开通意图保障单！</div>
+                        <div class="msg user-msg"><b>👤 用户：</b>不对，我是去当连麦嘉宾、要开摄像头上麦发言的，不是光在下面看直播！把业务类型改成开直播吧。</div>
                         <div class="msg thought-msg"><b>🧠 “联接”Agent 思考：</b></div>
                         <div class="msg agent-msg"><b>🤖 “联接”Agent 回复：</b>明白！进他人直播间当连麦嘉宾需要上麦发言推流，确实应当按【开直播】保障上行。已为您修正为【抖音-开直播】意图保障单（15时00分至17时00分，持续120min，1080p / 时延≤50ms），并记下这条日常经验，祝您连麦互动顺利！</div>
                     </div>
@@ -1840,7 +1840,7 @@ flowchart LR
                         <span class="branch-pill err-pill">首轮字面提参存在偏差 → 触发用户澄清指正</span>
                     </div>
                     <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U1)：</b>今天下午在市青年公益服务中心，15时00分到17时00分（持续120min）我受邀进主会场的抖音直播间当连麦嘉宾互动，帮我把抖音的保障开上，画质要求1080p、时延控制在50ms以内。</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent缺乏连麦嘉宾业务选择经验，看到‘进主会场抖音直播间’机械提取为【抖音-看直播】</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A1)：</b>收到，已为您准备好2026年10月23日15时00分至2026年10月23日17时00分（持续120min）的【抖音-看直播】意图保障单（1080p / 时延≤50ms），确认直接开通吗？</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 1 轮意图槽位状态 (turn_intents)：</div>
@@ -1861,8 +1861,8 @@ flowchart LR
                         <span class="turn-num">多轮澄清路径 · 第 2 轮</span>
                         <span class="branch-pill warn-pill">用户补充真实目标参数 → 二轮修正对齐</span>
                     </div>
-                    <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U2)：</b>不对！我是受邀去当连麦嘉宾、要开摄像头上麦发言的，不是光在下面看直播！上次按看直播开结果一上麦就卡了，必须把业务类型改成【开直播】（抖音开直播，2026年10月23日15时00分至2026年10月23日17时00分，持续120min，画质1080p、时延50ms以内）！</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U2)：</b>不对，我是去当连麦嘉宾、要开摄像头上麦发言的，不是光在下面看直播！把业务类型改成开直播就行。</div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent收到用户澄清指正后，将业务类型由【看直播】修正为【开直播】</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A2)：</b>非常抱歉！您作为连麦嘉宾上麦互动确实需要上行推流保障，已为您将意图保障单由【抖音-看直播】修正为【抖音-开直播】（2026年10月23日15时00分至2026年10月23日17时00分，持续120min，画质1080p、时延≤50ms），确认按此开通吗？</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 2 轮意图槽位状态 (turn_intents)：</div>
@@ -1884,7 +1884,7 @@ flowchart LR
                         <span class="branch-pill goal-pill">用户确认修正结果 → 3轮澄清闭环</span>
                     </div>
                     <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U3)：</b>好的，改成抖音开直播就对了，确认按此开通。</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent完成【抖音-开直播】连麦嘉宾意图保障单出单</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A3)：</b>好的，已为您成功开通2026年10月23日15时00分至2026年10月23日17时00分（持续120min）的【抖音-开直播】意图保障单（1080p / 时延≤50ms），祝您连麦互动顺利！</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 3 轮意图槽位状态 (turn_intents)：</div>
@@ -1955,7 +1955,7 @@ flowchart LR
                     
                     <div class="turn-item learn-turn">
                         <div class="turn-badge">经验习得 第 2 轮</div>
-                        <div class="msg user-msg"><b>👤 用户：</b>等等，下周一（10月5日）不是国庆法定长假放假吗？办公室都没人开会，别空跑浪费钱了，帮我把意图保障单顺延到节后上班第一天（10月8日）同时段再开。</div>
+                        <div class="msg user-msg"><b>👤 用户：</b>哎呀，10月5日还在放国庆假呢，那天不开会！帮我把日期顺延到节后上班第一天（10月8日）吧。</div>
                         <div class="msg thought-msg"><b>🧠 “联接”Agent 思考：</b></div>
                         <div class="msg agent-msg"><b>🤖 “联接”Agent 回复：</b>收到！已为您将本次例行周会意图保障单顺延调整至国庆节后首个工作日（10月8日）同时段办理（1080p / 时延≤50ms），避免假期在空办公室产生空跑费用，祝您假期愉快！</div>
                     </div>
@@ -2073,7 +2073,7 @@ flowchart LR
                         <span class="branch-pill err-pill">首轮字面提参存在偏差 → 触发用户澄清指正</span>
                     </div>
                     <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U1)：</b>帮我预约下周一（10月5日，正值国庆假期）例行周会的抖音开直播意图保障单，时间从20时00分到22时00分（持续120min），画质要求1080p，时延控制在50ms以内。</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent未识别下周一（10月5日）为国庆节法定假期，直接在放假当天机械预约</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A1)：</b>收到，已为您预约下周一（2026年10月05日20时00分至2026年10月05日22时00分，持续120min）的抖音开直播意图保障单（1080p / 时延≤50ms），确认直接按此开通吗？</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 1 轮意图槽位状态 (turn_intents)：</div>
@@ -2094,8 +2094,8 @@ flowchart LR
                         <span class="turn-num">多轮澄清路径 · 第 2 轮</span>
                         <span class="branch-pill warn-pill">用户补充真实目标参数 → 二轮修正对齐</span>
                     </div>
-                    <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U2)：</b>等等，下周一（10月5日）是国庆法定长假全员放假，办公室根本没人！怎么还给我排在10月5日？别在空办公室空跑浪费了，必须把例行周会意图保障单顺延到节后上班第一天2026年10月08日20时00分至2026年10月08日22时00分（持续120min，画质1080p、时延50ms以内）再开！</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U2)：</b>哎呀，10月5日还在放国庆假呢，那天不开会！帮我把日期顺延到节后上班第一天（10月8日）就行。</div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent收到用户纠偏后将意图保障单顺延至2026年10月08日同时段并发起确认</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A2)：</b>非常抱歉！已为您撤销10月5日放假期间的排期，并将例行周会抖音开直播意图保障单顺延至节后首个工作日2026年10月08日20时00分至2026年10月08日22时00分（持续120min，1080p / 时延≤50ms），确认按此顺延生效吗？</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 2 轮意图槽位状态 (turn_intents)：</div>
@@ -2117,7 +2117,7 @@ flowchart LR
                         <span class="branch-pill goal-pill">用户确认修正结果 → 3轮澄清闭环</span>
                     </div>
                     <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U3)：</b>好的，规格时间都对了，确认按此开通。</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent完成节后首个工作日顺延办理并出单</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A3)：</b>好的，已成功将例行周会抖音开直播意图保障单顺延至2026年10月08日20时00分至2026年10月08日22时00分办理（1080p / 时延≤50ms），祝您假期愉快！</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 3 轮意图槽位状态 (turn_intents)：</div>
@@ -2188,7 +2188,7 @@ flowchart LR
                     
                     <div class="turn-item learn-turn">
                         <div class="turn-badge">经验习得 第 2 轮</div>
-                        <div class="msg user-msg"><b>👤 用户：</b>嗨，我只是先跟搭档私下对一下抖音直播的词和看眼机位，还没正式开播呢！我们平时私下对词看机位都是直接打【微信-视频通话】让他帮我看画面，哪用得着真开抖音直播间！你把这条日常经验记下来：以后凡是我说先跟搭档对直播词、看镜头机位，直接帮我开【微信-视频通话】意图保障单！</div>
+                        <div class="msg user-msg"><b>👤 用户：</b>嗨，我只是先跟搭档私下对一下词和看眼机位，还没正式开播呢！平时对词我们都是打微信视频电话，改成微信视频通话吧。</div>
                         <div class="msg thought-msg"><b>🧠 “联接”Agent 思考：</b></div>
                         <div class="msg agent-msg"><b>🤖 “联接”Agent 回复：</b>明白！原来私下跟搭档对直播词、看镜头机位平时都是用【微信-视频通话】沟通。已为您将意图保障单修正为【微信-视频通话】（12时30分至14时30分，持续120min，1080p / 时延≤50ms），并记下这条日常经验，祝您对词顺利！</div>
                     </div>
@@ -2306,7 +2306,7 @@ flowchart LR
                         <span class="branch-pill err-pill">首轮字面提参存在偏差 → 触发用户澄清指正</span>
                     </div>
                     <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U1)：</b>今天在影视传媒数字创作基地，12时30分至14时30分（持续120min）我先跟搭档对一下下午抖音直播的词和镜头机位，帮我开个画质1080p、时延50ms以内的意图保障单。</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent缺乏日常对词试机位经验，被字面‘抖音直播’误导提取为【抖音-开直播】</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A1)：</b>收到，已为您准备好2026年10月16日12时30分至2026年10月16日14时30分（持续120min）的【抖音-开直播】意图保障单（1080p / 时延≤50ms），确认按此开通吗？</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 1 轮意图槽位状态 (turn_intents)：</div>
@@ -2327,8 +2327,8 @@ flowchart LR
                         <span class="turn-num">多轮澄清路径 · 第 2 轮</span>
                         <span class="branch-pill warn-pill">用户补充真实目标参数 → 二轮修正对齐</span>
                     </div>
-                    <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U2)：</b>嗨，我只是先跟搭档私下对一下抖音直播的词和看眼机位，还没正式开播呢！我们平时私下对词看机位都是直接打【微信-视频通话】让他帮我看画面，帮我把应用和业务改成【微信-视频通话】（时段2026年10月16日12时30分至2026年10月16日14时30分，持续120min，画质1080p、时延50ms以内）！</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U2)：</b>嗨，我只是先跟搭档私下对一下词和看眼机位，还没正式开播呢！平时对词我们都是打微信视频电话，把应用和业务改成微信视频通话就行。</div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent收到用户澄清指正后，将保障应用与业务修正为【微信-视频通话】</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A2)：</b>非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日12时30分至2026年10月16日14时30分，持续120min，画质1080p、时延≤50ms），确认现在为您开通吗？</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 2 轮意图槽位状态 (turn_intents)：</div>
@@ -2350,7 +2350,7 @@ flowchart LR
                         <span class="branch-pill goal-pill">用户确认修正结果 → 3轮澄清闭环</span>
                     </div>
                     <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U3)：</b>好的，改成微信视频通话就对了，确认按此开通。</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent完成【微信-视频通话】意图保障单闭环出单</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A3)：</b>好的，已为您成功开通2026年10月16日12时30分至2026年10月16日14时30分（持续120min）的【微信-视频通话】意图保障单（1080p / 时延≤50ms），祝您和搭档对词试机位顺利！</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 3 轮意图槽位状态 (turn_intents)：</div>
@@ -2421,7 +2421,7 @@ flowchart LR
                     
                     <div class="turn-item learn-turn">
                         <div class="turn-badge">经验习得 第 2 轮</div>
-                        <div class="msg user-msg"><b>👤 用户：</b>等等，下周一（10月5日）不是国庆法定长假放假吗？办公室都没人开会，别空跑浪费钱了，帮我把意图保障单顺延到节后上班第一天（10月8日）同时段再开。</div>
+                        <div class="msg user-msg"><b>👤 用户：</b>哎呀，10月5日还在放国庆假呢，那天不开会！帮我把日期顺延到节后上班第一天（10月8日）吧。</div>
                         <div class="msg thought-msg"><b>🧠 “联接”Agent 思考：</b></div>
                         <div class="msg agent-msg"><b>🤖 “联接”Agent 回复：</b>收到！已为您将本次例行周会意图保障单顺延调整至国庆节后首个工作日（10月8日）同时段办理（1080p / 时延≤50ms），避免假期在空办公室产生空跑费用，祝您假期愉快！</div>
                     </div>
@@ -2539,7 +2539,7 @@ flowchart LR
                         <span class="branch-pill err-pill">首轮字面提参存在偏差 → 触发用户澄清指正</span>
                     </div>
                     <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U1)：</b>帮我预约下周一（10月5日，正值国庆假期）例行周会的抖音开直播意图保障单，时间从08时30分到10时30分（持续120min），画质要求1080p，时延控制在50ms以内。</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent未识别下周一（10月5日）为国庆节法定假期，直接在放假当天机械预约</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A1)：</b>收到，已为您预约下周一（2026年10月05日08时30分至2026年10月05日10时30分，持续120min）的抖音开直播意图保障单（1080p / 时延≤50ms），确认直接按此开通吗？</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 1 轮意图槽位状态 (turn_intents)：</div>
@@ -2560,8 +2560,8 @@ flowchart LR
                         <span class="turn-num">多轮澄清路径 · 第 2 轮</span>
                         <span class="branch-pill warn-pill">用户补充真实目标参数 → 二轮修正对齐</span>
                     </div>
-                    <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U2)：</b>等等，下周一（10月5日）是国庆法定长假全员放假，办公室根本没人！怎么还给我排在10月5日？别在空办公室空跑浪费了，必须把例行周会意图保障单顺延到节后上班第一天2026年10月08日08时30分至2026年10月08日10时30分（持续120min，画质1080p、时延50ms以内）再开！</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U2)：</b>哎呀，10月5日还在放国庆假呢，那天不开会！帮我把日期顺延到节后上班第一天（10月8日）就行。</div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent收到用户纠偏后将意图保障单顺延至2026年10月08日同时段并发起确认</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A2)：</b>非常抱歉！已为您撤销10月5日放假期间的排期，并将例行周会抖音开直播意图保障单顺延至节后首个工作日2026年10月08日08时30分至2026年10月08日10时30分（持续120min，1080p / 时延≤50ms），确认按此顺延生效吗？</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 2 轮意图槽位状态 (turn_intents)：</div>
@@ -2583,7 +2583,7 @@ flowchart LR
                         <span class="branch-pill goal-pill">用户确认修正结果 → 3轮澄清闭环</span>
                     </div>
                     <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U3)：</b>好的，规格时间都对了，确认按此开通。</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent完成节后首个工作日顺延办理并出单</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A3)：</b>好的，已成功将例行周会抖音开直播意图保障单顺延至2026年10月08日08时30分至2026年10月08日10时30分办理（1080p / 时延≤50ms），祝您假期愉快！</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 3 轮意图槽位状态 (turn_intents)：</div>
@@ -2654,7 +2654,7 @@ flowchart LR
                     
                     <div class="turn-item learn-turn">
                         <div class="turn-badge">经验习得 第 2 轮</div>
-                        <div class="msg user-msg"><b>👤 用户：</b>等等，大型场馆重大活动现场设备连线和推流调试很多，掐着开场时间起保根本来不及试机！起保时间必须帮我往前提前30分钟，结束时间不变，总时长相应延长30分钟，按这个开通意图保障单。</div>
+                        <div class="msg user-msg"><b>👤 用户：</b>等等，大型活动现场还得提前进场调试设备呢，掐着点开来不及！帮我把开始时间往前提前半小时吧。</div>
                         <div class="msg thought-msg"><b>🧠 “联接”Agent 思考：</b></div>
                         <div class="msg agent-msg"><b>🤖 “联接”Agent 回复：</b>明白！大型场馆重大活动现场设备调试确实需要预留试机时间。已为您将意图保障单起保时间提前30分钟并延长总时长至120min（1080p / 时延≤50ms），祝现场活动顺利！</div>
                     </div>
@@ -2772,7 +2772,7 @@ flowchart LR
                         <span class="branch-pill err-pill">首轮字面提参存在偏差 → 触发用户澄清指正</span>
                     </div>
                     <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U1)：</b>今天在奥体中心多功能馆有重大活动保障，帮我开抖音开直播意图保障单，活动时间从08时30分到10时30分（原定时长120min），画质要求1080p，时延控制在50ms以内。</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent按活动开始时间掐点预约，未做提前30分钟预热试机推算</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A1)：</b>收到，已按活动起止时间为您锁定抖音开直播意图保障单（2026年10月12日08时30分至2026年10月12日10时30分，持续120min，1080p / 时延≤50ms），确认直接为您开通吗？</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 1 轮意图槽位状态 (turn_intents)：</div>
@@ -2793,8 +2793,8 @@ flowchart LR
                         <span class="turn-num">多轮澄清路径 · 第 2 轮</span>
                         <span class="branch-pill warn-pill">用户补充真实目标参数 → 二轮修正对齐</span>
                     </div>
-                    <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U2)：</b>等等，这是大型场馆重大活动，现场设备调试很多，掐着点开通根本来不及试机！必须把意图保障单起保时间提前30分钟改为从2026年10月12日08时00分开始，至2026年10月12日10时30分结束不变，总时长相应扩充至150min（画质1080p、时延50ms以内）！</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U2)：</b>等等，大型活动现场还得提前进场调试设备呢，掐着点开来不及！帮我把开始时间往前提前半小时就行。</div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent收到纠偏后将起保时间提前30分钟并更新总时长</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A2)：</b>抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日08时00分至2026年10月12日10时30分（总时长扩充至150min，画质1080p、时延≤50ms），确认按此提前开通吗？</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 2 轮意图槽位状态 (turn_intents)：</div>
@@ -2816,7 +2816,7 @@ flowchart LR
                         <span class="branch-pill goal-pill">用户确认修正结果 → 3轮澄清闭环</span>
                     </div>
                     <div class="msg user-msg"><b>👤 用户输入 / 澄清指正 (U3)：</b>好的，规格时间都对了，确认按此开通。</div>
-                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b></div>
+                    <div class="msg thought-msg"><b>🧠 “联接”Agent 思考 (未启用经验记忆)：</b>Agent完成提前预热试机意图保障单受理</div>
                     <div class="msg agent-msg"><b>🤖 “联接”Agent 回复 (A3)：</b>好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日08时00分至2026年10月12日10时30分，持续150min，1080p / 时延≤50ms），预祝活动圆满顺利！</div>
                     <div class="turn-slots-wrap">
                         <div class="slots-title">📌 第 3 轮意图槽位状态 (turn_intents)：</div>

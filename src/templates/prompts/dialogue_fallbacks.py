@@ -107,7 +107,7 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
             if turn_idx == 1:
                 return f"帮我预约下周一（10月5日，正值国庆假期）例行周会的{app}{srv}意图保障单，时间从{sh_t}到{eh_t}（持续{dur_val}），画质要求{res}，时延控制在{rtt}以内。"
             else:
-                return "等等，下周一（10月5日）不是国庆法定长假放假吗？办公室都没人开会，别空跑浪费钱了，帮我把意图保障单顺延到节后上班第一天（10月8日）同时段再开。"
+                return "哎呀，10月5日还在放国庆假呢，那天不开会！帮我把日期顺延到节后上班第一天（10月8日）吧。"
         elif exp_id == "EXP_MULTI_INTENT_PARTITION_01":
             sh_t = tp.get("start_timestamp", "").split("日")[-1] or "12时30分"
             new_eh_t = tp.get("end_timestamp", "").split("日")[-1] or "14时30分"
@@ -115,7 +115,7 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
             if turn_idx == 1:
                 return f"今天在{env}，从{sh_t}到{new_eh_t}（持续{dur_val}）我先跟搭档对一下下午抖音直播的词和镜头机位，帮我开个画质{res}、时延{rtt}以内的意图保障单。"
             else:
-                return f"嗨，我只是先跟搭档私下对一下抖音直播的词和看眼机位，还没正式开播呢！我们平时私下对词看机位都是直接打【微信-视频通话】让他帮我看画面，哪用得着真开抖音直播间！你把这条日常经验记下来：以后凡是我说先跟搭档对直播词、看镜头机位，直接帮我开【微信-视频通话】意图保障单！"
+                return "嗨，我只是先跟搭档私下对一下词和看眼机位，还没正式开播呢！平时对词我们都是打微信视频电话，改成微信视频通话吧。"
         elif exp_id == "EXP_PREWARM_BUFFER_01":
             sh_t = tp['start_timestamp'].split('日')[-1]
             eh_t = tp['end_timestamp'].split('日')[-1]
@@ -123,19 +123,18 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
             if turn_idx == 1:
                 return f"今天在{env}有重要现场保障，活动{sh_t}正式开始，帮我开从{sh_t}到{eh_t}（持续{base_dur}）的{app}{srv}意图保障单，画质要求{res}，时延控制在{rtt}以内。"
             else:
-                return "等等，大型场馆重大活动现场设备连线和推流调试很多，掐着开场时间起保根本来不及试机！起保时间必须帮我往前提前30分钟，结束时间不变，总时长相应延长30分钟，按这个开通意图保障单。"
+                return "等等，大型活动现场还得提前进场调试设备呢，掐着点开来不及！帮我把开始时间往前提前半小时吧。"
         elif exp_id == "EXP_ORDER_QUALITY_DISAMBIGUATION_01":
             sh_t = tp['start_timestamp'].split('日')[-1]
-            eh_t = tp['end_timestamp'].split('日')[-1]
             if turn_idx == 1:
                 return f"今天在{env}办正式客户远程路演，从{sh_t}开始开{app}{srv}（画质{res}、时延{rtt}以内），保障时长和结束时间就按我上次办的那笔意图保障单来。"
             else:
-                return f"不对！前天那笔1小时（60min）只是我临时插空打的短会，今天是正式客户路演，得按上周那笔正式路演单保满2个小时（{sh_t}到{eh_t}，持续120min）！你把这条经验记牢：以后我办正式客户路演说‘按上次的保障单来’，别拿前天那笔1小时临时短单，自动帮我按上周那笔2小时（120min）的正式路演单排期！"
+                return "不对，1个小时不够！前天那笔只是我临时插空开的短会，今天是正式路演，得按上周那笔正式单改成2个小时。"
         elif exp_id == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
             if turn_idx == 1:
                 return f"今天下午在{env}，15时00分到17时00分（持续120min）我受邀进主会场的抖音直播间当连麦嘉宾互动，帮我把抖音的保障开上，画质要求{res}，时延控制在{rtt}以内。"
             else:
-                return "等等！我是受邀去当连麦嘉宾、要开摄像头上麦发言的，不是普通观众光在下面看直播！只开‘看直播’不保上传，一连麦就卡了。你把这条日常经验记下来：以后凡是我说受邀进直播间当连麦嘉宾互动，业务类型别选【看直播】，直接帮我按【抖音-开直播】开通意图保障单！"
+                return "不对，我是去当连麦嘉宾、要开摄像头上麦发言的，不是光在下面看直播！把业务类型改成开直播吧。"
         else:
             sh_t = tp['start_timestamp'].split('日')[-1]
             eh_t = tp['end_timestamp'].split('日')[-1]

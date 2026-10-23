@@ -610,9 +610,8 @@ class SessionAssembler:
             }
 
             slot_err_reply = (
-                f"嗨，我只是先跟搭档私下对一下抖音直播的词和看眼机位，还没正式开播呢！"
-                f"我们平时私下对词看机位都是直接打【微信-视频通话】让他帮我看画面，帮我把应用和业务改成【微信-视频通话】"
-                f"（时段{start}至{end}，持续{dur}，画质{res}、时延{rtt}以内）！"
+                "嗨，我只是先跟搭档私下对一下词和看眼机位，还没正式开播呢！"
+                "平时对词我们都是打微信视频电话，把应用和业务改成微信视频通话就行。"
             )
             goal_match_reply = "好的，改成微信视频通话就对了，确认按此开通。"
 
@@ -676,7 +675,7 @@ class SessionAssembler:
                 {
                     "turn": 1,
                     "user": {"utterance": tree[0]["simulator_user_prompt"], "action_types": ["Create_Intent_Request", "Inform_Slot"]},
-                    "agent": {"utterance": tree[0]["baseline_agent_flawed_response"], "action_types": ["Confirm_Slot"]},
+                    "agent": {"thought": tree[0]["agent_hypothesis"], "utterance": tree[0]["baseline_agent_flawed_response"], "action_types": ["Confirm_Slot"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
                     "turn_intents": [
@@ -686,7 +685,7 @@ class SessionAssembler:
                 {
                     "turn": 2,
                     "user": {"utterance": tree[1]["simulator_user_prompt"], "action_types": ["Revise_Intent_Request", "Inform_Slot"]},
-                    "agent": {"utterance": tree[1]["expected_agent_correction"], "action_types": ["Confirm_Slot"]},
+                    "agent": {"thought": tree[1]["agent_hypothesis"], "utterance": tree[1]["expected_agent_correction"], "action_types": ["Confirm_Slot"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
                     "turn_intents": [
@@ -696,7 +695,7 @@ class SessionAssembler:
                 {
                     "turn": 3,
                     "user": {"utterance": tree[2]["simulator_user_prompt"], "action_types": ["Confirm_Slot"]},
-                    "agent": {"utterance": tree[2]["expected_agent_correction"], "action_types": ["Acknowledge"]},
+                    "agent": {"thought": tree[2]["agent_hypothesis"], "utterance": tree[2]["expected_agent_correction"], "action_types": ["Acknowledge"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
                     "turn_intents": [
@@ -739,9 +738,8 @@ class SessionAssembler:
             nom_dur = f"{max(30, int(m_d.group(1)) - 30)}min" if m_d else "120min"
 
             slot_err_reply = (
-                f"等等，这是大型场馆重大活动，现场设备调试很多，掐着点开通根本来不及试机！"
-                f"必须把意图保障单起保时间提前30分钟改为从{start}开始，至{end}结束不变，"
-                f"总时长相应扩充至{dur}（画质{res}、时延{rtt}以内）！"
+                "等等，大型活动现场还得提前进场调试设备呢，掐着点开来不及！"
+                "帮我把开始时间往前提前半小时就行。"
             )
             goal_match_reply = "好的，规格时间都对了，确认按此开通。"
 
@@ -804,7 +802,7 @@ class SessionAssembler:
                 {
                     "turn": 1,
                     "user": {"utterance": tree[0]["simulator_user_prompt"], "action_types": ["Create_Intent_Request", "Inform_Slot"]},
-                    "agent": {"utterance": tree[0]["baseline_agent_flawed_response"], "action_types": ["Confirm_Slot"]},
+                    "agent": {"thought": tree[0]["agent_hypothesis"], "utterance": tree[0]["baseline_agent_flawed_response"], "action_types": ["Confirm_Slot"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
                     "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "missing_prewarm_buffer", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": nom_start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": nom_dur, "source_type": "Turn", "source_ref": "U1"}}}}]
@@ -812,7 +810,7 @@ class SessionAssembler:
                 {
                     "turn": 2,
                     "user": {"utterance": tree[1]["simulator_user_prompt"], "action_types": ["Revise_Intent_Request", "Inform_Slot"]},
-                    "agent": {"utterance": tree[1]["expected_agent_correction"], "action_types": ["Confirm_Slot"]},
+                    "agent": {"thought": tree[1]["agent_hypothesis"], "utterance": tree[1]["expected_agent_correction"], "action_types": ["Confirm_Slot"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
                     "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "prewarm_correction", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U2"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U2"}}}}]
@@ -820,7 +818,7 @@ class SessionAssembler:
                 {
                     "turn": 3,
                     "user": {"utterance": tree[2]["simulator_user_prompt"], "action_types": ["Confirm_Slot"]},
-                    "agent": {"utterance": tree[2]["expected_agent_correction"], "action_types": ["Acknowledge"]},
+                    "agent": {"thought": tree[2]["agent_hypothesis"], "utterance": tree[2]["expected_agent_correction"], "action_types": ["Acknowledge"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
                     "turn_intents": [{"intent_id": "I1", "status": "resolved", "closure_path": "clarification_after_correction", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U2"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U2"}}}}]
@@ -849,9 +847,8 @@ class SessionAssembler:
             holiday_dur = dur
 
             slot_err_reply = (
-                f"等等，下周一（10月5日）是国庆法定长假全员放假，办公室根本没人！怎么还给我排在10月5日？"
-                f"别在空办公室空跑浪费了，必须把例行周会意图保障单顺延到节后上班第一天"
-                f"{start}至{end}（持续{dur}，画质{res}、时延{rtt}以内）再开！"
+                "哎呀，10月5日还在放国庆假呢，那天不开会！"
+                "帮我把日期顺延到节后上班第一天（10月8日）就行。"
             )
             goal_match_reply = "好的，规格时间都对了，确认按此开通。"
 
@@ -914,7 +911,7 @@ class SessionAssembler:
                 {
                     "turn": 1,
                     "user": {"utterance": tree[0]["simulator_user_prompt"], "action_types": ["Create_Intent_Request", "Inform_Slot"]},
-                    "agent": {"utterance": tree[0]["baseline_agent_flawed_response"], "action_types": ["Confirm_Slot"]},
+                    "agent": {"thought": tree[0]["agent_hypothesis"], "utterance": tree[0]["baseline_agent_flawed_response"], "action_types": ["Confirm_Slot"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
                     "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "unaware_of_holiday_conflict", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": holiday_start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": holiday_end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": holiday_dur, "source_type": "Turn", "source_ref": "U1"}}}}]
@@ -922,7 +919,7 @@ class SessionAssembler:
                 {
                     "turn": 2,
                     "user": {"utterance": tree[1]["simulator_user_prompt"], "action_types": ["Revise_Intent_Request", "Inform_Slot"]},
-                    "agent": {"utterance": tree[1]["expected_agent_correction"], "action_types": ["Confirm_Slot"]},
+                    "agent": {"thought": tree[1]["agent_hypothesis"], "utterance": tree[1]["expected_agent_correction"], "action_types": ["Confirm_Slot"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
                     "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "holiday_deferral_confirm", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U2"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U2"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"}}}}]
@@ -930,7 +927,7 @@ class SessionAssembler:
                 {
                     "turn": 3,
                     "user": {"utterance": tree[2]["simulator_user_prompt"], "action_types": ["Confirm_Slot"]},
-                    "agent": {"utterance": tree[2]["expected_agent_correction"], "action_types": ["Acknowledge"]},
+                    "agent": {"thought": tree[2]["agent_hypothesis"], "utterance": tree[2]["expected_agent_correction"], "action_types": ["Acknowledge"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
                     "turn_intents": [{"intent_id": "I1", "status": "resolved", "closure_path": "clarification_after_correction", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U2"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U2"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"}}}}]
@@ -959,9 +956,8 @@ class SessionAssembler:
             }
 
             slot_err_reply = (
-                f"不对！你调成前天我临时开的1小时（60min）短单了！"
-                f"今天是正式客户路演，得按上周那笔正式路演单保满2个小时"
-                f"（{start}至{end}，持续{dur}，画质{res}、时延{rtt}以内）！"
+                "不对，1个小时不够！你调成前天我临时开的短单了，"
+                "今天是正式路演，得按上周那笔正式单把时长改成2个小时。"
             )
             goal_match_reply = "好的，保满两个小时就对了，确认按此开通。"
 
@@ -1024,7 +1020,7 @@ class SessionAssembler:
                 {
                     "turn": 1,
                     "user": {"utterance": tree[0]["simulator_user_prompt"], "action_types": ["Create_Intent_Request", "Inform_Slot"]},
-                    "agent": {"utterance": tree[0]["baseline_agent_flawed_response"], "action_types": ["Confirm_Slot"]},
+                    "agent": {"thought": tree[0]["agent_hypothesis"], "utterance": tree[0]["baseline_agent_flawed_response"], "action_types": ["Confirm_Slot"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
                     "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "recency_bias_short_temporary_order", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": short_flawed_end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": short_flawed_dur, "source_type": "Turn", "source_ref": "U1"}}}}]
@@ -1032,7 +1028,7 @@ class SessionAssembler:
                 {
                     "turn": 2,
                     "user": {"utterance": tree[1]["simulator_user_prompt"], "action_types": ["Revise_Intent_Request", "Inform_Slot"]},
-                    "agent": {"utterance": tree[1]["expected_agent_correction"], "action_types": ["Confirm_Slot"]},
+                    "agent": {"thought": tree[1]["agent_hypothesis"], "utterance": tree[1]["expected_agent_correction"], "action_types": ["Confirm_Slot"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
                     "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "formal_roadshow_120min_selected", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U2"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U2"}}}}]
@@ -1040,7 +1036,7 @@ class SessionAssembler:
                 {
                     "turn": 3,
                     "user": {"utterance": tree[2]["simulator_user_prompt"], "action_types": ["Confirm_Slot"]},
-                    "agent": {"utterance": tree[2]["expected_agent_correction"], "action_types": ["Acknowledge"]},
+                    "agent": {"thought": tree[2]["agent_hypothesis"], "utterance": tree[2]["expected_agent_correction"], "action_types": ["Acknowledge"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
                     "turn_intents": [{"intent_id": "I1", "status": "resolved", "closure_path": "clarification_after_correction", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U2"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U2"}}}}]
@@ -1069,9 +1065,8 @@ class SessionAssembler:
             }
 
             slot_err_reply = (
-                f"不对！我是受邀去当连麦嘉宾、要开摄像头上麦发言的，不是光在下面看直播！"
-                f"上次按看直播开结果一上麦就卡了，必须把业务类型改成【开直播】"
-                f"（抖音开直播，{start}至{end}，持续{dur}，画质{res}、时延{rtt}以内）！"
+                "不对，我是去当连麦嘉宾、要开摄像头上麦发言的，不是光在下面看直播！"
+                "把业务类型改成开直播就行。"
             )
             goal_match_reply = "好的，改成抖音开直播就对了，确认按此开通。"
 
@@ -1133,7 +1128,7 @@ class SessionAssembler:
                 {
                     "turn": 1,
                     "user": {"utterance": tree[0]["simulator_user_prompt"], "action_types": ["Create_Intent_Request", "Inform_Slot"]},
-                    "agent": {"utterance": tree[0]["baseline_agent_flawed_response"], "action_types": ["Confirm_Slot"]},
+                    "agent": {"thought": tree[0]["agent_hypothesis"], "utterance": tree[0]["baseline_agent_flawed_response"], "action_types": ["Confirm_Slot"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
                     "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "guest_cohost_misclassified_as_watch_live", "expression_level": 1, "intent": f"{app}{flawed_srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": flawed_srv, "source_type": "Turn", "source_ref": "U1"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"}}}}]
@@ -1141,7 +1136,7 @@ class SessionAssembler:
                 {
                     "turn": 2,
                     "user": {"utterance": tree[1]["simulator_user_prompt"], "action_types": ["Revise_Intent_Request", "Inform_Slot"]},
-                    "agent": {"utterance": tree[1]["expected_agent_correction"], "action_types": ["Confirm_Slot"]},
+                    "agent": {"thought": tree[1]["agent_hypothesis"], "utterance": tree[1]["expected_agent_correction"], "action_types": ["Confirm_Slot"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
                     "turn_intents": [{"intent_id": "I1", "status": "in_progress", "closure_path": "guest_cohost_openlive_corrected", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U2"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"}}}}]
@@ -1149,7 +1144,7 @@ class SessionAssembler:
                 {
                     "turn": 3,
                     "user": {"utterance": tree[2]["simulator_user_prompt"], "action_types": ["Confirm_Slot"]},
-                    "agent": {"utterance": tree[2]["expected_agent_correction"], "action_types": ["Acknowledge"]},
+                    "agent": {"thought": tree[2]["agent_hypothesis"], "utterance": tree[2]["expected_agent_correction"], "action_types": ["Acknowledge"]},
                     "related_intent_ids": ["I1"],
                     "requested_params": [],
                     "turn_intents": [{"intent_id": "I1", "status": "resolved", "closure_path": "clarification_after_correction", "expression_level": 1, "intent": f"{app}{srv}保障", "params": {"application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"}, "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U2"}, "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}}, "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}}, "timestamp": {"start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"}, "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"}, "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"}}}}]
