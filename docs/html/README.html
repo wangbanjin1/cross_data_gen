@@ -958,6 +958,7 @@
                 <div class="portal-nav-list">
 <div class="portal-group-label">总览与阅读路线</div>
 <a href="README.html" class="portal-nav-item active" title="文档中心总览与路线图">文档中心总览与路线图</a>
+<a href="experience_fast_slow_eval_preview.html" class="portal-nav-item" title="经验记忆双路径可视化对比看板">经验记忆双路径可视化对比看板</a>
 <div class="portal-group-label">第一层 · 业务与建模要求</div>
 <a href="记忆建模与数据集生成要求.html" class="portal-nav-item" title="记忆建模与生成要求">记忆建模与生成要求</a>
 <div class="portal-group-label">第二层 · 核心架构与流水线</div>
@@ -1076,21 +1077,21 @@
 <li><strong>三层认知记忆架构</strong>：
 <ul><li><strong>事实记忆 (Factual Memory)</strong>：用户长期配置画像（偏好、别名映射、长期默认参数）。
 </li>
-<li><strong>工作记忆 (Working Memory)</strong>：跨会话历史工单记录（单据复用、时间变更、多候选消歧）。
+<li><strong>工作记忆 (Working Memory)</strong>：跨会话历史意图保障单记录（单据复用、时间变更、多候选消歧）。
 </li>
-<li><strong>经验记忆 (Experiential Memory)</strong>：跨会话排障与提参策略库（<code>experiences.jsonl</code> 结构化卡片）。
+<li><strong>经验记忆 (Experiential Memory)</strong>：跨会话排障与提参策略库（<code>experience_bank.json</code> 结构化卡片）。
 </li>
 </ul></li>
-<li><strong>五类经验记忆场景</strong>：
-<ol><li><code>EXP_MULTI_INTENT_PARTITION_01</code>：多任务并行分段隔离与局部调整。
+<li><strong>五类日常经验记忆场景（聚焦应用/业务选择与时间/时长排期，画质与时延由用户自主指定）</strong>：
+<ol><li><code>EXP_PREWARM_BUFFER_01</code>：大型活动提前30分钟进场试机预热时间推算。
 </li>
-<li><code>EXP_PREWARM_BUFFER_01</code>：重大活动提前预热时间推算。
+<li><code>EXP_CALENDAR_HOLIDAY_EXCEPTION_01</code>：周期例行排期遇法定节假日自动顺延。
 </li>
-<li><code>EXP_CALENDAR_HOLIDAY_EXCEPTION_01</code>：周期例行排期遇法定节假日顺延。
+<li><code>EXP_MULTI_INTENT_PARTITION_01</code>：直播前私下跟搭档对词与看镜头机位（选用【微信-视频通话】而非【抖音-开直播】）。
 </li>
-<li><code>EXP_ORDER_QUALITY_DISAMBIGUATION_01</code>：基于历史工单运行质量的同日多单消歧。
+<li><code>EXP_ORDER_QUALITY_DISAMBIGUATION_01</code>：历史意图保障单模糊指代（过滤前天1小时临时短单、优选上周2小时正式单时长）。
 </li>
-<li><code>EXP_OVERLAPPING_ORDER_RESOLUTION_01</code>：新旧工单时段重叠冲突裁决。
+<li><code>EXP_OVERLAPPING_ORDER_RESOLUTION_01</code>：受邀进他人直播间当连麦嘉宾（选用【开直播】保上行而非【看直播】）。
 </li>
 </ol></li>
 <li><strong>会话规模与拓扑</strong>：单生命周期支持 <strong>16 ~ 20 轮动态会话</strong>演进（S01 ~ S20 动态 DAG 拓扑）。
@@ -1098,9 +1099,9 @@
 <li><strong>快速闭环与多轮澄清路径对比评测</strong>：
 <ul><li>经验应用测试会话首轮（Turn 1）基础参数自包含，重点评测模型能否识别场景特征并主动应用经验；
 </li>
-<li>对比 Fast Path（命中经验记忆：2~3 轮快速闭环）与 Slow Path（缺失经验记忆：4~5 轮澄清与纠偏）；
+<li>对比快速闭环路径（命中经验记忆：2 轮快速闭环）与多轮澄清路径（缺失经验记忆：3 轮澄清与纠偏）；
 </li>
-<li>交互轮数压缩增益：<div class="math-block" data-tex="\text{TCG} = \frac{T_{\text{Slow}} - T_{\text{Fast}}}{T_{\text{Slow}}} \times 100\% \ge 50\%"><div class="katex-display-container" data-tex="\text{TCG} = \frac{T_{\text{Slow}} - T_{\text{Fast}}}{T_{\text{Slow}}} \times 100\% \ge 50\%">$$\text{TCG} = \frac{T_{\text{Slow}} - T_{\text{Fast}}}{T_{\text{Slow}}} \times 100\% \ge 50\%$$</div></div>。
+<li>交互轮数压缩增益：<div class="math-block" data-tex="\text{TCG} = \frac{T_{\text{Slow}} - T_{\text{Fast}}}{T_{\text{Slow}}} \times 100\% = 33.33\%"><div class="katex-display-container" data-tex="\text{TCG} = \frac{T_{\text{Slow}} - T_{\text{Fast}}}{T_{\text{Slow}}} \times 100\% = 33.33\%">$$\text{TCG} = \frac{T_{\text{Slow}} - T_{\text{Fast}}}{T_{\text{Slow}}} \times 100\% = 33.33\%$$</div></div>。
 </li></ul>
 </li></ul>
 <h3 id="2-persona-画像与主支线建模规范specspersonaspecmd-基础规范">2. <a href="specs/persona_spec.html" class="md-link">Persona 画像与主/支线建模规范</a> <code>[基础规范]</code></h3>
@@ -1206,19 +1207,19 @@ docs/
 - **业务定位**：面向“联接”Agent 通信保障场景下的**意图参数提取（提参数）**与闭环受理。
 - **三层认知记忆架构**：
   - **事实记忆 (Factual Memory)**：用户长期配置画像（偏好、别名映射、长期默认参数）。
-  - **工作记忆 (Working Memory)**：跨会话历史工单记录（单据复用、时间变更、多候选消歧）。
-  - **经验记忆 (Experiential Memory)**：跨会话排障与提参策略库（`experiences.jsonl` 结构化卡片）。
-- **五类经验记忆场景**：
-  1. `EXP_MULTI_INTENT_PARTITION_01`：多任务并行分段隔离与局部调整。
-  2. `EXP_PREWARM_BUFFER_01`：重大活动提前预热时间推算。
-  3. `EXP_CALENDAR_HOLIDAY_EXCEPTION_01`：周期例行排期遇法定节假日顺延。
-  4. `EXP_ORDER_QUALITY_DISAMBIGUATION_01`：基于历史工单运行质量的同日多单消歧。
-  5. `EXP_OVERLAPPING_ORDER_RESOLUTION_01`：新旧工单时段重叠冲突裁决。
+  - **工作记忆 (Working Memory)**：跨会话历史意图保障单记录（单据复用、时间变更、多候选消歧）。
+  - **经验记忆 (Experiential Memory)**：跨会话排障与提参策略库（`experience_bank.json` 结构化卡片）。
+- **五类日常经验记忆场景（聚焦应用/业务选择与时间/时长排期，画质与时延由用户自主指定）**：
+  1. `EXP_PREWARM_BUFFER_01`：大型活动提前30分钟进场试机预热时间推算。
+  2. `EXP_CALENDAR_HOLIDAY_EXCEPTION_01`：周期例行排期遇法定节假日自动顺延。
+  3. `EXP_MULTI_INTENT_PARTITION_01`：直播前私下跟搭档对词与看镜头机位（选用【微信-视频通话】而非【抖音-开直播】）。
+  4. `EXP_ORDER_QUALITY_DISAMBIGUATION_01`：历史意图保障单模糊指代（过滤前天1小时临时短单、优选上周2小时正式单时长）。
+  5. `EXP_OVERLAPPING_ORDER_RESOLUTION_01`：受邀进他人直播间当连麦嘉宾（选用【开直播】保上行而非【看直播】）。
 - **会话规模与拓扑**：单生命周期支持 **16 ~ 20 轮动态会话**演进（S01 ~ S20 动态 DAG 拓扑）。
 - **快速闭环与多轮澄清路径对比评测**：
   - 经验应用测试会话首轮（Turn 1）基础参数自包含，重点评测模型能否识别场景特征并主动应用经验；
-  - 对比 Fast Path（命中经验记忆：2~3 轮快速闭环）与 Slow Path（缺失经验记忆：4~5 轮澄清与纠偏）；
-  - 交互轮数压缩增益：$$\text{TCG} = \frac{T_{\text{Slow}} - T_{\text{Fast}}}{T_{\text{Slow}}} \times 100\% \ge 50\%$$。
+  - 对比快速闭环路径（命中经验记忆：2 轮快速闭环）与多轮澄清路径（缺失经验记忆：3 轮澄清与纠偏）；
+  - 交互轮数压缩增益：$$\text{TCG} = \frac{T_{\text{Slow}} - T_{\text{Fast}}}{T_{\text{Slow}}} \times 100\% = 33.33\%$$。
 
 ### 2. [Persona 画像与主/支线建模规范](specs/persona_spec.md) `[基础规范]`
 - 规范 Persona 静态画像（职业、语言风格、身份背景）与动态画像（主线业务、支线保障、突发事件、干扰项池）。

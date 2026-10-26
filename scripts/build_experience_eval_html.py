@@ -881,7 +881,8 @@ function filterCards(type, val, btn) {{
 </body>
 </html>
 '''
-    out_path = Path("docs/experience_fast_slow_eval_preview.html")
+    out_path = Path("docs/html/experience_fast_slow_eval_preview.html")
+    out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(html_doc, encoding="utf-8")
     print(f"Generated {out_path} ({len(html_doc)} chars, {total_pairs} experience session pairs)")
 

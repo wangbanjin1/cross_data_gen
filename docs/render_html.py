@@ -32,6 +32,7 @@ DOCS_PORTAL_GROUPS = [
         "总览与阅读路线",
         [
             ("README.html", "文档中心总览与路线图"),
+            ("experience_fast_slow_eval_preview.html", "经验记忆双路径可视化对比看板"),
         ],
     ),
     (
@@ -430,8 +431,9 @@ def render_triage_card_page(md_path: Path, html_path: Path, docs_root: Path):
     print(f"[*] 渲染排查实录卡片页面: {md_path.relative_to(docs_root)}")
     md_text = md_path.read_text(encoding="utf-8")
 
-    rel_html = html_path.relative_to(docs_root).as_posix()
-    depth = len(html_path.relative_to(docs_root).parts) - 1
+    html_root = docs_root / "html"
+    rel_html = html_path.relative_to(html_root).as_posix()
+    depth = len(html_path.relative_to(html_root).parts) - 1
     rel_prefix = "../" * depth
     portal_links_html = build_portal_links_html(rel_prefix, rel_html)
 
@@ -2908,13 +2910,14 @@ def parse_doc_markdown(md_text: str):
 
 
 def render_general_doc_page(md_path: Path, html_path: Path, docs_root: Path):
+    html_root = docs_root / "html"
     rel_md = md_path.relative_to(docs_root).as_posix()
-    rel_html = html_path.relative_to(docs_root).as_posix()
-    depth = len(html_path.relative_to(docs_root).parts) - 1
+    rel_html = html_path.relative_to(html_root).as_posix()
+    depth = len(html_path.relative_to(html_root).parts) - 1
     rel_prefix = "../" * depth
     home_href = f"{rel_prefix}README.html"
 
-    print(f"[*] 渲染文档页面: {rel_md} -> {rel_html}")
+    print(f"[*] 渲染文档页面: {rel_md} -> html/{rel_html}")
     md_text = md_path.read_text(encoding="utf-8")
     title, toc_html, body_html = parse_doc_markdown(md_text)
     portal_links_html = build_portal_links_html(rel_prefix, rel_html)
@@ -2928,17 +2931,21 @@ def render_general_doc_page(md_path: Path, html_path: Path, docs_root: Path):
     full_html = full_html.replace("{ARTICLE_BODY}", body_html)
     full_html = full_html.replace("{RAW_MD_ESCAPED}", html.escape(md_text))
 
+    html_path.parent.mkdir(parents=True, exist_ok=True)
     html_path.write_text(full_html, encoding="utf-8")
-    print(f"[+] 完成输出: {rel_html} ({len(full_html) // 1024} KB)")
+    print(f"[+] 完成输出: html/{rel_html} ({len(full_html) // 1024} KB)")
 
     if rel_md == "README.md":
-        index_path = docs_root / "index.html"
+        index_path = html_root / "index.html"
         index_path.write_text(full_html, encoding="utf-8")
-        print(f"[+] 同步生成门户首页: index.html ({len(full_html) // 1024} KB)")
+        print(f"[+] 同步生成门户首页: html/index.html ({len(full_html) // 1024} KB)")
 
 
 def render_single_file(md_path: Path, docs_root: Path):
-    html_path = md_path.with_suffix(".html")
+    html_root = docs_root / "html"
+    rel_md = md_path.relative_to(docs_root)
+    html_path = (html_root / rel_md).with_suffix(".html")
+    html_path.parent.mkdir(parents=True, exist_ok=True)
     if md_path.name == "defect_triage_log.md":
         render_triage_card_page(md_path, html_path, docs_root)
     else:

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>记忆建模与数据集生成要求</title>
+    <title>跨会话认知记忆数据集与引擎开发文档中心</title>
     <!-- KaTeX 数学公式样式与渲染脚本 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css';">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js';"></script>
@@ -957,9 +957,10 @@
                 <div class="portal-nav-title">四层文档架构导航</div>
                 <div class="portal-nav-list">
 <div class="portal-group-label">总览与阅读路线</div>
-<a href="README.html" class="portal-nav-item" title="文档中心总览与路线图">文档中心总览与路线图</a>
+<a href="README.html" class="portal-nav-item active" title="文档中心总览与路线图">文档中心总览与路线图</a>
+<a href="experience_fast_slow_eval_preview.html" class="portal-nav-item" title="经验记忆双路径可视化对比看板">经验记忆双路径可视化对比看板</a>
 <div class="portal-group-label">第一层 · 业务与建模要求</div>
-<a href="记忆建模与数据集生成要求.html" class="portal-nav-item active" title="记忆建模与生成要求">记忆建模与生成要求</a>
+<a href="记忆建模与数据集生成要求.html" class="portal-nav-item" title="记忆建模与生成要求">记忆建模与生成要求</a>
 <div class="portal-group-label">第二层 · 核心架构与流水线</div>
 <a href="specs/cognitive_memory_dev_spec.html" class="portal-nav-item" title="三层认知记忆与双轨评测规范">三层认知记忆与双轨评测规范</a>
 <a href="跨 Session 记忆数据集生成器思路.html" class="portal-nav-item" title="跨 Session 生成流水线详设">跨 Session 生成流水线详设</a>
@@ -982,21 +983,17 @@
             </div>
             <nav class="toc-body">
                 <ul class="toc-list" id="tocList">
-<li class="toc-item toc-level-2"><a href="#一-记忆的核心作用" class="toc-link" title="一、 记忆的核心作用">一、 记忆的核心作用</a></li>
-<li class="toc-item toc-level-2"><a href="#二-用户事实记忆体系" class="toc-link" title="二、 用户事实记忆体系">二、 用户事实记忆体系</a></li>
-<li class="toc-item toc-level-3"><a href="#1-核心定义" class="toc-link" title="1. 核心定义">1. 核心定义</a></li>
-<li class="toc-item toc-level-3"><a href="#2-主要存储对象" class="toc-link" title="2. 主要存储对象">2. 主要存储对象</a></li>
-<li class="toc-item toc-level-3"><a href="#3-静态用户事实" class="toc-link" title="3. 静态用户事实">3. 静态用户事实</a></li>
-<li class="toc-item toc-level-3"><a href="#4-动态用户事实" class="toc-link" title="4. 动态用户事实">4. 动态用户事实</a></li>
-<li class="toc-item toc-level-4"><a href="#1-用户个性化表达" class="toc-link" title="(1) 用户个性化表达">(1) 用户个性化表达</a></li>
-<li class="toc-item toc-level-4"><a href="#2-应用业务选择偏好" class="toc-link" title="(2) 应用—业务选择偏好">(2) 应用—业务选择偏好</a></li>
-<li class="toc-item toc-level-4"><a href="#3-时间模式偏好" class="toc-link" title="(3) 时间模式偏好">(3) 时间模式偏好</a></li>
-<li class="toc-item toc-level-4"><a href="#4-体验参数偏好" class="toc-link" title="(4) 体验参数偏好">(4) 体验参数偏好</a></li>
-<li class="toc-item toc-level-2"><a href="#三-数据集生成与评测要求" class="toc-link" title="三、 数据集生成与评测要求">三、 数据集生成与评测要求</a></li>
-<li class="toc-item toc-level-3"><a href="#1-核心评测维度" class="toc-link" title="1. 核心评测维度">1. 核心评测维度</a></li>
-<li class="toc-item toc-level-3"><a href="#2-基本判断原则-core-invariants" class="toc-link" title="2. 基本判断原则 (Core Invariants)">2. 基本判断原则 (Core Invariants)</a></li>
-<li class="toc-item toc-level-2"><a href="#四-记忆建模与四层-ground-truth-映射矩阵" class="toc-link" title="四、 记忆建模与四层 Ground Truth 映射矩阵">四、 记忆建模与四层 Ground Truth 映射矩阵</a></li>
-<li class="toc-item toc-level-3"><a href="#staticgt-的作用与流转路径" class="toc-link" title="staticgt 的作用与流转路径">staticgt 的作用与流转路径</a></li>
+<li class="toc-item toc-level-2"><a href="#一-文档分类导航与目录索引" class="toc-link" title="一、 文档分类导航与目录索引">一、 文档分类导航与目录索引</a></li>
+<li class="toc-item toc-level-2"><a href="#二-基础系统设计与需求准则" class="toc-link" title="二、 基础系统设计与需求准则">二、 基础系统设计与需求准则</a></li>
+<li class="toc-item toc-level-3"><a href="#1-记忆建模与数据集生成要求记忆建模与数据集生成要求md" class="toc-link" title="1. [记忆建模与数据集生成要求](记忆建模与数据集生成要求.md)">1. [记忆建模与数据集生成要求](记忆建模与数据集生成要求.md)</a></li>
+<li class="toc-item toc-level-3"><a href="#2-跨-session-记忆数据集生成器思路跨20session20记忆数据集生成器思路md" class="toc-link" title="2. [跨 Session 记忆数据集生成器思路](跨%20Session%20记忆数据集生成器思路.md)">2. [跨 Session 记忆数据集生成器思路](跨%20Session%20记忆数据集生成器思路.md)</a></li>
+<li class="toc-item toc-level-2"><a href="#三-核心技术规范-specs" class="toc-link" title="三、 核心技术规范 (Specs)">三、 核心技术规范 (Specs)</a></li>
+<li class="toc-item toc-level-3"><a href="#1-联接agent-三层认知记忆与双轨评测技术规范specscognitivememorydevspecmd-核心规范" class="toc-link" title="1. [“联接”Agent 三层认知记忆与双轨评测技术规范](specs/cognitivememorydevspec.md) [核心规范]">1. [“联接”Agent 三层认知记忆与双轨评测技术规范](specs/cognitivememorydevspec.md) [核心规范]</a></li>
+<li class="toc-item toc-level-3"><a href="#2-persona-画像与主支线建模规范specspersonaspecmd-基础规范" class="toc-link" title="2. [Persona 画像与主/支线建模规范](specs/personaspec.md) [基础规范]">2. [Persona 画像与主/支线建模规范](specs/personaspec.md) [基础规范]</a></li>
+<li class="toc-item toc-level-2"><a href="#四-研发与运行指南-guides" class="toc-link" title="四、 研发与运行指南 (Guides)">四、 研发与运行指南 (Guides)</a></li>
+<li class="toc-item toc-level-3"><a href="#1-命令行使用手册与流水线指南guidescliusagemd" class="toc-link" title="1. [命令行使用手册与流水线指南](guides/cliusage.md)">1. [命令行使用手册与流水线指南](guides/cliusage.md)</a></li>
+<li class="toc-item toc-level-2"><a href="#五-历史沉淀与排查记录-archive" class="toc-link" title="五、 历史沉淀与排查记录 (Archive)">五、 历史沉淀与排查记录 (Archive)</a></li>
+<li class="toc-item toc-level-2"><a href="#六-文档维护与更新准则" class="toc-link" title="六、 文档维护与更新准则">六、 文档维护与更新准则</a></li>
                 </ul>
             </nav>
         </aside>
@@ -1010,7 +1007,7 @@
                         <button class="nav-btn active" id="btnReadView" onclick="switchDocView('read')">可视化阅读视图</button>
                         <button class="nav-btn" id="btnSourceView" onclick="switchDocView('source')">Markdown 源码</button>
                         <span style="color: var(--border-color)">|</span>
-                        <span style="font-size: 0.84rem; color: var(--text-muted);">docs/记忆建模与数据集生成要求.md</span>
+                        <span style="font-size: 0.84rem; color: var(--text-muted);">docs/README.md</span>
                     </div>
                     <button class="theme-switch-btn" onclick="toggleTheme()" id="themeBtn">
                         切换暮色
@@ -1018,321 +1015,246 @@
                 </div>
 
                 <article class="markdown-body" id="docReadView">
-<h1>记忆建模与数据集生成要求</h1>
-<blockquote><p><strong>文档定位</strong>：定义通信网络保障<strong>“联接”Agent</strong>在意图参数提取（提参数）场景下的记忆建模理论、事实记忆边界判定、四层 Ground Truth 映射关系及正负样本生成要求。</p></blockquote>
+<h1>跨会话认知记忆数据集与引擎开发文档中心</h1>
+<blockquote><p>本文档中心为<strong>“联接”Agent</strong>（面向通信网络保障<strong>意图参数提取（提参数）</strong>与闭环受理的核心智能体）跨会话认知记忆数据集与评测引擎的统一文档索引。</p></blockquote>
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
-<h2 id="一-记忆的核心作用">一、 记忆的核心作用</h2>
-<blockquote><p>核心能力要求：识别用户自定义表达；补全省略参数；识别应用和业务；处理时间表达；复用历史澄清结果；判断何时必须向用户追问。</p></blockquote>
-<p>记忆不是检索到就直接使用，而是需要结合当前输入、用户事实记忆和环境事实记忆进行判断：</p>
-<ul><li><strong>证据充分时</strong>：精准补全省略槽位；
-</li>
-<li><strong>证据不足或存在冲突时</strong>：主动向用户发起澄清追问。
-</li></ul>
+<h2 id="一-文档分类导航与目录索引">一、 文档分类导航与目录索引</h2>
+
+                        <div class="code-card">
+                            <div class="code-card-header">
+                                <span class="code-card-lang">TEXT</span>
+                                <button class="code-copy-btn" onclick="copyCodeCard(this)">复制代码</button>
+                            </div>
+                            <pre><code class="language-text">docs/
+├── README.md                              # [本文件] 文档中心导航总览与索引
+│
+├── 记忆建模与数据集生成要求.md              # 【需求标准】第一层：事实记忆建模、正负样本生成要求与追问决策准则
+├── 跨 Session 记忆数据集生成器思路.md        # 【系统设计】第二层：跨 Session 数据集生成器总体架构、流水线设计、GT建模与校验
+│
+├── specs/                                 # 【核心技术规范】
+│   ├── cognitive_memory_dev_spec.md       # 【核心规范】第二层：“联接”Agent 三层认知记忆与双轨评测技术规范 (16~20轮)
+│   └── persona_spec.md                    # 【基础规范】第三层：Persona 画像、主/支线与干扰项建模生成规范
+│
+├── guides/                                # 【研发与运行指南】
+│   └── cli_usage.md                       # 第三层：命令行工具手册、批处理流水线与数据质检操作指南
+│
+└── archive/                               # 【历史沉淀与排查记录】
+    ├── memory_evolution_proposal.md       # 第四层：认知架构立项方案 (RFC)：ReasoningBank 理论调研、α 因子推导与演进路线
+    └── defect_triage_log.md               # 第四层：001~150 早期批次数据治理实录：21 项典型生成缺陷、排查根因与修复措施</code></pre>
+                        </div>
+                        
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
-<h2 id="二-用户事实记忆体系">二、 用户事实记忆体系</h2>
-<h3 id="1-核心定义">1. 核心定义</h3>
-<p>关于某个特定用户，经过明确确认或有足够历史证据，可以在适用条件和有效时间内继续使用的声明性知识。</p>
-<ul><li><strong>单次建立</strong>：用户明确声明的事实、表达映射或偏好，可以通过单次明确表达建立；
+<h2 id="二-基础系统设计与需求准则">二、 基础系统设计与需求准则</h2>
+<h3 id="1-记忆建模与数据集生成要求记忆建模与数据集生成要求md">1. <a href="记忆建模与数据集生成要求.html" class="md-link">记忆建模与数据集生成要求</a></h3>
+<ul><li><strong>核心定位</strong>：记忆建模规范与正负样本评测基准要求。
 </li>
-<li><strong>多次归纳</strong>：根据历史行为归纳的偏好，需要多次相互独立且一致的历史证据支撑；
+<li><strong>涵盖模块</strong>：
+<ul><li><strong>用户事实记忆边界</strong>：静态事实（套餐/权益）与动态事实（个性化表达、选择偏好、时间规律、体验参数）；
 </li>
-<li><strong>事件区别</strong>：一次历史行为只表示某个事件曾经发生，不能直接视为用户的长期偏好；
+<li><strong>追问决策准则</strong>：证据不足、多候选接近、冲突场景下的必须追问条件；
 </li>
-<li><strong>确认隔离</strong>：严格区分“仅对本次任务的确认”与“可以在未来复用的长期记忆确认”。
+<li><strong>四层 Ground Truth</strong> 映射矩阵。
 </li></ul>
-<h3 id="2-主要存储对象">2. 主要存储对象</h3>
-<p>涵盖用户固有属性、个性化表达映射、默认值偏好及纠错记录。</p>
-<ul><li><strong>用户稳定事实</strong>：套餐权益、用户明确设置的默认值等；
-</li>
-<li><strong>个性化表达映射</strong>：用户表达与标准应用、业务、时间或参数之间的映射；
-</li>
-<li><strong>行为偏好</strong>：根据多次历史行为归纳得到的、具有条件性和概率性的偏好；
-</li>
-<li><strong>历史事件</strong>：某次任务中发生过的行为（本身不等于长期偏好）。
 </li></ul>
-<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
-<h3 id="3-静态用户事实">3. 静态用户事实</h3>
-<p>存储于关系型数据库，仅当取值发生变化时更新：</p>
-<ul><li><strong>用户 ID</strong>；
+<h3 id="2-跨-session-记忆数据集生成器思路跨20session20记忆数据集生成器思路md">2. <a href="跨%20Session%20记忆数据集生成器思路.html" class="md-link">跨 Session 记忆数据集生成器思路</a></h3>
+<ul><li><strong>核心定位</strong>：全流水线顶层设计文档。
 </li>
-<li><strong>套餐与权益信息</strong>：已订购的业务权益、保障的业务和应用范围等。
+<li><strong>涵盖模块</strong>：
+<ul><li><strong>流水线架构</strong>：GT 构建 <span class="katex-inline" data-tex="\to">$\to$</span> Memory Targets 规划 <span class="katex-inline" data-tex="\to">$\to$</span> 时间线编排 <span class="katex-inline" data-tex="\to">$\to$</span> 逐 Session 渲染 <span class="katex-inline" data-tex="\to">$\to$</span> 评测与一致性校验；
+</li>
+<li><strong>Session 角色 × 模板 × 轮数硬约束</strong>；
+</li>
+<li><strong>双层校验防御</strong>：结构校验 R1~R8（纯规则）与内容校验 C1~C5（语义断言）；
+</li>
+<li><strong>输入输出契约</strong>：画像骨架（<code>skeleton.json</code>）与对话记录（<code>sessions.jsonl</code>）。
 </li></ul>
-
-                    <div class="callout-card callout-note">
-                        <div class="callout-header">
-                            <span class="callout-badge">补充说明</span>
-                        </div>
-                        <div class="callout-content">
-                            <p>静态用户事实必须具备当前状态或生效时间，避免使用已经变更失效的旧套餐和业务权益。</p>
-                        </div>
-                    </div>
-                    
-<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
-<h3 id="4-动态用户事实">4. 动态用户事实</h3>
-<p>保障单据、日志和意图交互历史记录是形成动态用户事实的原始证据来源。经过确认、归纳或纠正后，可沉淀为可复用的个性化表达、默认值和条件偏好。</p>
-<h4 id="1-用户个性化表达">(1) 用户个性化表达</h4>
-<ul><li><strong>时间表达习惯</strong>：口语词汇（如“马上”、“稍后”等），以及开始时间、结束时间、持续时间表达习惯；
-</li>
-<li><strong>参数表达映射</strong>：模糊词汇到具体通信参数的档位映射（如“清晰一点”、“时延不要太高” <span class="katex-inline" data-tex="\to">$\to$</span> 满足分辨率 <span class="katex-inline" data-tex="\ge 720\text{p}">$\ge 720\text{p}$</span> 且时延 <span class="katex-inline" data-tex="\le 80\text{ms}">$\le 80\text{ms}$</span> 等档位概念）；
-</li>
-<li><strong>应用别名与业务别名</strong>。
-</li></ul>
-
-                    <div class="callout-card callout-important">
-                        <div class="callout-header">
-                            <span class="callout-badge">重点规范</span>
-                        </div>
-                        <div class="callout-content">
-                            <p><strong>证据来源严格分级</strong>：</p>
-<p>1. 用户明确声明（例如“以后我说老业务，就是指抖音直播”）；</p>
-<p>2. 用户在澄清过程中明确确认表达的含义；</p>
-<p>3. 用户纠正 Agent 后得到最终含义；</p>
-<p>4. 多次历史会话形成稳定、一致的表达映射；</p>
-<p>5. Agent 根据任务结果推测（未经用户确认，不可作为全局稳定事实）。</p>
-<p>*用户确认本次任务参数，不一定等于确认长期表达映射。例如，用户同意本次将“高清”处理为 1080p，不代表以后“高清”始终等于 1080p。同一个表达对应多个目标取值时，需结合当前条件消歧；条件不足时必须追问。*</p>
-                        </div>
-                    </div>
-                    
-<h4 id="2-应用业务选择偏好">(2) 应用—业务选择偏好</h4>
-<p>在用户表达不完整时（如口语说“开直播”，但未指明是抖音还是快手），系统依赖选择偏好进行辅助推断：</p>
-<ul><li>业务到应用的选择偏好；
-</li>
-<li>应用到业务的选择偏好；
-</li>
-<li>应用—业务组合偏好、候选排序与排斥组合。
-</li></ul>
-
-                    <div class="callout-card callout-tip">
-                        <div class="callout-header">
-                            <span class="callout-badge">最佳实践</span>
-                        </div>
-                        <div class="callout-content">
-                            <p>必须区分用户明确指定的默认选择、根据多次历史行为归纳的常用选择、仅在特定场景下成立的条件偏好，以及仅在某次任务中出现的偶发历史选择。当多个候选证据接近时，必须向用户追问，严禁直接盲猜最高频候选。用户当前当轮明确给出的指令永远优先于历史偏好。</p>
-                        </div>
-                    </div>
-                    
-<h4 id="3-时间模式偏好">(3) 时间模式偏好</h4>
-<p>结合历史记录综合推断规律：</p>
-<ul><li>常用开始时间、结束时间、持续时间；
-</li>
-<li>日内规律、星期规律、工作日/周末规律；
-</li>
-<li>节假日、热点事件规律（仅在特定窗口期内成立）；
-</li>
-<li>周期规律：每日、每周、每月、每季度、每年。
-</li></ul>
-
-                    <div class="callout-card callout-warn">
-                        <div class="callout-header">
-                            <span class="callout-badge">注意告警</span>
-                        </div>
-                        <div class="callout-content">
-                            <p>时间模式偏好必须包含适用条件和有效时间。节假日、赛事和热点事件形成的规律属于临时偏好，事件结束后自动失效，严禁继续作为默认值使用。当当前输入与历史偏好冲突时，以当前明确表达为准。</p>
-                        </div>
-                    </div>
-                    
-<h4 id="4-体验参数偏好">(4) 体验参数偏好</h4>
-<p>针对特定业务或应用所绑定的参数集合：</p>
-<ul><li>首选值、备选值、排斥值、范围偏好、优先级偏好及多参数组合偏好。
-</li>
-<li><strong>整体性原则</strong>：多参数组合偏好应作为整体使用，不能将其中的单个参数任意拆分后混用。所有偏好均不得突破用户当前套餐权益、应用能力与业务白名单的合法范围。
 </li></ul>
 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
-<h2 id="三-数据集生成与评测要求">三、 数据集生成与评测要求</h2>
-<p>数据集构建必须兼顾<strong>“利用记忆成功补全”的正样本</strong>与<strong>“不能直接使用记忆、必须追问”的负样本</strong>。</p>
-<h3 id="1-核心评测维度">1. 核心评测维度</h3>
-
-        <div class="table-wrapper">
-            <table>
-                <thead><tr><th>评测维度</th><th>覆盖子类与关键场景</th><th>负样本与追问要求</th></tr></thead>
-                <tbody>
-                    <tr><td><strong>个性化表达理解</strong></td><td>应用别名、业务别名、时间表达、参数模糊表达、一对一/一对多映射、表达随时间更新与纠偏</td><td>未经确认的候选表达、条件不足时必须追问</td></tr><tr><td><strong>参数缺失补全</strong></td><td>业务补全应用、应用补全业务、联合补全、时间参数补全、体验参数补全、多参数组合补全</td><td>排除排斥组合、多个候选概率接近时不补全并追问</td></tr><tr><td><strong>条件偏好推断</strong></td><td>单条件/多条件联合、全局偏好、场景偏好、周期偏好、显式偏好与归纳偏好</td><td>条件不匹配、条件部分匹配但证据不足、多偏好冲突</td></tr><tr><td><strong>记忆更新与冲突</strong></td><td>记忆巩固、用户纠正、新偏好覆盖旧偏好、撤销偏好、全局偏好细化、临时规律到期</td><td>显式偏好与行为偏好冲突、用户事实与环境事实冲突、当前明确输入与历史记忆冲突</td></tr><tr><td><strong>追问决策红线</strong></td><td>无相关记忆、仅单次偶发行为、证据不足、关键参数必须确认</td><td>记忆已失效、推断结果违反业务规则或超出套餐权益时必须拒识追问</td></tr>
-                </tbody>
-            </table>
-        </div>
-        
-<h3 id="2-基本判断原则-core-invariants">2. 基本判断原则 (Core Invariants)</h3>
-<ol><li><strong>当前明确表达绝对优先</strong>：用户当轮明确表达 > 历史记忆与先验偏好；
+<h2 id="三-核心技术规范-specs">三、 核心技术规范 (Specs)</h2>
+<h3 id="1-联接agent-三层认知记忆与双轨评测技术规范specscognitivememorydevspecmd-核心规范">1. <a href="specs/cognitive_memory_dev_spec.html" class="md-link">“联接”Agent 三层认知记忆与双轨评测技术规范</a> <code>[核心规范]</code></h3>
+<ul><li><strong>业务定位</strong>：面向“联接”Agent 通信保障场景下的<strong>意图参数提取（提参数）</strong>与闭环受理。
 </li>
-<li><strong>显式声明优先于归纳</strong>：用户显式立规矩 > 历史多轮行为统计归纳；
+<li><strong>三层认知记忆架构</strong>：
+<ul><li><strong>事实记忆 (Factual Memory)</strong>：用户长期配置画像（偏好、别名映射、长期默认参数）。
 </li>
-<li><strong>环境事实决定合法性</strong>：环境事实决定推断结果当前是否真实、合法且在网络支持白名单内；
+<li><strong>工作记忆 (Working Memory)</strong>：跨会话历史意图保障单记录（单据复用、时间变更、多候选消歧）。
 </li>
-<li><strong>单次事件不等于长期偏好</strong>：历史偶发事件不能自动升级为长期画像；
+<li><strong>经验记忆 (Experiential Memory)</strong>：跨会话排障与提参策略库（<code>experience_bank.json</code> 结构化卡片）。
 </li>
-<li><strong>单次任务确认不等于长期确认</strong>：单次工单参数确认不能自动升级为未来通用映射；
+</ul></li>
+<li><strong>五类日常经验记忆场景（聚焦应用/业务选择与时间/时长排期，画质与时延由用户自主指定）</strong>：
+<ol><li><code>EXP_PREWARM_BUFFER_01</code>：大型活动提前30分钟进场试机预热时间推算。
 </li>
-<li><strong>充分必要条件约束</strong>：只有在条件匹配、记忆有效、证据充分且无冲突时方可补全；
+<li><code>EXP_CALENDAR_HOLIDAY_EXCEPTION_01</code>：周期例行排期遇法定节假日自动顺延。
 </li>
-<li><strong>无法唯一确定时必须反问</strong>：存在多个接近候选时，正确决策必须是发起追问消歧，严禁脑补盲猜。
+<li><code>EXP_MULTI_INTENT_PARTITION_01</code>：直播前私下跟搭档对词与看镜头机位（选用【微信-视频通话】而非【抖音-开直播】）。
+</li>
+<li><code>EXP_ORDER_QUALITY_DISAMBIGUATION_01</code>：历史意图保障单模糊指代（过滤前天1小时临时短单、优选上周2小时正式单时长）。
+</li>
+<li><code>EXP_OVERLAPPING_ORDER_RESOLUTION_01</code>：受邀进他人直播间当连麦嘉宾（选用【开直播】保上行而非【看直播】）。
+</li>
+</ol></li>
+<li><strong>会话规模与拓扑</strong>：单生命周期支持 <strong>16 ~ 20 轮动态会话</strong>演进（S01 ~ S20 动态 DAG 拓扑）。
+</li>
+<li><strong>快速闭环与多轮澄清路径对比评测</strong>：
+<ul><li>经验应用测试会话首轮（Turn 1）基础参数自包含，重点评测模型能否识别场景特征并主动应用经验；
+</li>
+<li>对比快速闭环路径（命中经验记忆：2 轮快速闭环）与多轮澄清路径（缺失经验记忆：3 轮澄清与纠偏）；
+</li>
+<li>交互轮数压缩增益：<div class="math-block" data-tex="\text{TCG} = \frac{T_{\text{Slow}} - T_{\text{Fast}}}{T_{\text{Slow}}} \times 100\% = 33.33\%"><div class="katex-display-container" data-tex="\text{TCG} = \frac{T_{\text{Slow}} - T_{\text{Fast}}}{T_{\text{Slow}}} \times 100\% = 33.33\%">$$\text{TCG} = \frac{T_{\text{Slow}} - T_{\text{Fast}}}{T_{\text{Slow}}} \times 100\% = 33.33\%$$</div></div>。
+</li></ul>
+</li></ul>
+<h3 id="2-persona-画像与主支线建模规范specspersonaspecmd-基础规范">2. <a href="specs/persona_spec.html" class="md-link">Persona 画像与主/支线建模规范</a> <code>[基础规范]</code></h3>
+<ul><li>规范 Persona 静态画像（职业、语言风格、身份背景）与动态画像（主线业务、支线保障、突发事件、干扰项池）。
+</li>
+<li>保证生成画像的多样性、真实性与参数合理性。
+</li></ul>
+<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+<h2 id="四-研发与运行指南-guides">四、 研发与运行指南 (Guides)</h2>
+<h3 id="1-命令行使用手册与流水线指南guidescliusagemd">1. <a href="guides/cli_usage.html" class="md-link">命令行使用手册与流水线指南</a></h3>
+<ul><li><strong>端到端生成与质检</strong>：<code>python run.py --input data/personas --output data/cognitive_samples --start 0 --count 5 --verify</code>
+</li>
+<li><strong>离线确定性生成</strong>：<code>python run.py --input data/personas --output data/cognitive_samples --start 0 --count 5 --offline --verify</code>
+</li>
+<li><strong>单独执行质检</strong>：<code>python run.py --output data/cognitive_samples --verify-only</code>
+</li></ul>
+<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+<h2 id="五-历史沉淀与排查记录-archive">五、 历史沉淀与排查记录 (Archive)</h2>
+<ul><li><strong><a href="archive/memory_evolution_proposal.html" class="md-link">认知记忆演进提案规划 (memory_evolution_proposal.md)</a></strong>：三层认知记忆架构设计草案（RFC），包含 MemoryArena / ReasoningBank 理论参考、敏捷度因子 <span class="katex-inline" data-tex="\alpha">$\alpha$</span> 推导及 Phase 1~4 演进路线。
+</li>
+<li><strong><a href="archive/defect_triage_log.html" class="md-link">早期生成排查与数据治理实录 (defect_triage_log.md)</a></strong>：归档 001~150 批次生成中关于跨轮泄漏、时间倒灌、T1-1/T2-5 边界、口语自然度等 21 项典型缺陷的根因分析与修复方案。
+</li></ul>
+<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
+<h2 id="六-文档维护与更新准则">六、 文档维护与更新准则</h2>
+<ol><li><strong>唯一真值原则</strong>：
+<ul><li>系统整体思路与需求基准以顶层设计文档为准；三层认知记忆实现以 <code>specs/cognitive_memory_dev_spec.md</code> 为准；<code>archive/</code> 保留历史排查与立项背景。
+</li>
+</ul></li>
+<li><strong>命名规范</strong>：
+<ul><li>新增文档采用英文小写加下划线命名，历史顶层文档保留原名以保障兼容。
+</li>
+</ul></li>
+<li><strong>评测术语规范</strong>：
+<ul><li>所有技术文档统一使用<strong>“快速闭环与多轮澄清路径对比评测”</strong>或<strong>“动态多分支模拟评测”</strong>。
+</li>
+</ul></li>
+<li><strong>语言风格</strong>：
+<ul><li>文档表述保持严谨、简洁；业务对话示例采用自然口语表达，避免生僻底层网管专业术语（如“空口切片”、“相控阵天线”）。
+</li>
+</ul></li>
+<li><strong>Mermaid 制图规范</strong>：
+<ul><li>纯白底色 (<code>#FFFFFF</code>)、粗体文字、加粗线条（<code>stroke-width: 2px</code>）。
+</li></ul>
 </li></ol>
-<hr style="border: none; border-top: 1px solid var(--border-color); margin: 32px 0;">
-<h2 id="四-记忆建模与四层-ground-truth-映射矩阵">四、 记忆建模与四层 Ground Truth 映射矩阵</h2>
-
-        <div class="table-wrapper">
-            <table>
-                <thead><tr><th>data_design 类别</th><th>对应 Ground Truth 层</th><th>对应代码字段</th><th>MT 选择路径</th><th>语义解释与约束</th></tr></thead>
-                <tbody>
-                    <tr><td><strong>用户个性化表达</strong></td><td><code>personalization_gt.expression_mappings</code></td><td><code>expression_type: app_alias / service_alias / quality_expression / speed_expression / time_expression</code></td><td><span class="katex-inline" data-tex="\to">$\to$</span> <code>app_alias_mapping</code> / <code>service_alias_mapping</code> / <code>quality_grade_mapping</code> / <code>speed_expression_mapping</code> / <code>time_expression_mapping</code></td><td>用户口语表达与标准应用、业务、时间或参数之间的映射关系</td></tr><tr><td><strong>应用—业务选择偏好</strong></td><td><code>personalization_gt.app_business_preferences</code></td><td><code>direction: business_to_app / app_to_service</code></td><td><span class="katex-inline" data-tex="\to">$\to$</span> <code>service_to_app</code> / <code>app_to_service</code> / <code>app_service_combo</code></td><td>用户表达不完整时在某类业务下通常选择哪个应用或具体业务</td></tr><tr><td><strong>时间模式偏好</strong></td><td><code>conditional_gt</code></td><td><code>fact_type: conditional_time_preference</code></td><td><span class="katex-inline" data-tex="\to">$\to$</span> <code>daily_time_preference</code> / <code>weekly_preference</code> / <code>weekday_weekend_preference</code> / <code>temporary_preference</code> / <code>periodic_preference</code></td><td>结合历史记录判断的日内/星期/工作日周末/节假日周期规律</td></tr><tr><td><strong>体验参数偏好</strong></td><td><code>personalization_gt.experience_param_preferences</code></td><td><code>preferred_bundle / fallback_bundle / rejected_values</code></td><td><span class="katex-inline" data-tex="\to">$\to$</span> <code>preferred_value</code> / <code>fallback_value</code> / <code>rejected_value</code> / <code>multi_param_bundle</code> / <code>scope_restriction</code></td><td>针对特定应用或业务的首选值、备选值、排斥值、多参数组合</td></tr><tr><td><strong>记忆更新与冲突处理</strong></td><td><code>changeable_gt</code></td><td><code>fact_type: role_change / event_driven_change</code></td><td><span class="katex-inline" data-tex="\to">$\to$</span> <code>memory_correction</code> / <code>preference_change</code></td><td>纠正、新偏好覆盖旧偏好、临时规律到期、显式偏好与行为偏好冲突</td></tr>
-                </tbody>
-            </table>
-        </div>
-        
-<h3 id="staticgt-的作用与流转路径">static_gt 的作用与流转路径</h3>
-<p><code>static_gt</code> 不直接参与 Memory Targets 选择，其字段通过以下路径在全流水线中流转生效：</p>
-
-        <div class="table-wrapper">
-            <table>
-                <thead><tr><th>字段名</th><th>流水线使用路径</th><th>核心业务说明</th></tr></thead>
-                <tbody>
-                    <tr><td><code>static_gt.identity</code></td><td><code>session_generator.py</code> <span class="katex-inline" data-tex="\to">$\to$</span> LLM prompt</td><td>用户画像静态身份描述，作为对话生成的背景上下文</td></tr><tr><td><code>static_gt.allowed_scenarios</code></td><td><code>timeline_planner.py</code> <span class="katex-inline" data-tex="\to">$\to$</span> 场景选择池</td><td>约束 APP × 业务 × 支持分辨率的合法场景组合</td></tr><tr><td><code>static_gt.frequent_apps</code></td><td>全流程白名单间接校验</td><td>常用 APP 标准名列表，用于校验和场景推导合法性</td></tr>
-                </tbody>
-            </table>
-        </div>
-        
                 </article>
 
                 <div id="markdown-source-view">
                     <div class="md-source-toolbar">
-                        <strong>docs/记忆建模与数据集生成要求.md 原生 Markdown 源码</strong>
+                        <strong>docs/README.md 原生 Markdown 源码</strong>
                         <button class="nav-btn active" onclick="copyRawMarkdown()">复制全文源码</button>
                     </div>
-                    <textarea class="raw-md-textarea" id="rawMdArea" readonly># 记忆建模与数据集生成要求
+                    <textarea class="raw-md-textarea" id="rawMdArea" readonly># 跨会话认知记忆数据集与引擎开发文档中心
 
-&gt; **文档定位**：定义通信网络保障**“联接”Agent**在意图参数提取（提参数）场景下的记忆建模理论、事实记忆边界判定、四层 Ground Truth 映射关系及正负样本生成要求。
-
----
-
-## 一、 记忆的核心作用
-
-&gt; 核心能力要求：识别用户自定义表达；补全省略参数；识别应用和业务；处理时间表达；复用历史澄清结果；判断何时必须向用户追问。
-
-记忆不是检索到就直接使用，而是需要结合当前输入、用户事实记忆和环境事实记忆进行判断：
-* **证据充分时**：精准补全省略槽位；
-* **证据不足或存在冲突时**：主动向用户发起澄清追问。
+&gt; 本文档中心为**“联接”Agent**（面向通信网络保障**意图参数提取（提参数）**与闭环受理的核心智能体）跨会话认知记忆数据集与评测引擎的统一文档索引。
 
 ---
 
-## 二、 用户事实记忆体系
+## 一、 文档分类导航与目录索引
 
-### 1. 核心定义
-关于某个特定用户，经过明确确认或有足够历史证据，可以在适用条件和有效时间内继续使用的声明性知识。
-
-* **单次建立**：用户明确声明的事实、表达映射或偏好，可以通过单次明确表达建立；
-* **多次归纳**：根据历史行为归纳的偏好，需要多次相互独立且一致的历史证据支撑；
-* **事件区别**：一次历史行为只表示某个事件曾经发生，不能直接视为用户的长期偏好；
-* **确认隔离**：严格区分“仅对本次任务的确认”与“可以在未来复用的长期记忆确认”。
-
-### 2. 主要存储对象
-涵盖用户固有属性、个性化表达映射、默认值偏好及纠错记录。
-
-* **用户稳定事实**：套餐权益、用户明确设置的默认值等；
-* **个性化表达映射**：用户表达与标准应用、业务、时间或参数之间的映射；
-* **行为偏好**：根据多次历史行为归纳得到的、具有条件性和概率性的偏好；
-* **历史事件**：某次任务中发生过的行为（本身不等于长期偏好）。
-
----
-
-### 3. 静态用户事实
-存储于关系型数据库，仅当取值发生变化时更新：
-* **用户 ID**；
-* **套餐与权益信息**：已订购的业务权益、保障的业务和应用范围等。
-
-&gt; [!NOTE]
-&gt; 静态用户事实必须具备当前状态或生效时间，避免使用已经变更失效的旧套餐和业务权益。
+```text
+docs/
+├── README.md                              # [本文件] 文档中心导航总览与索引
+│
+├── 记忆建模与数据集生成要求.md              # 【需求标准】第一层：事实记忆建模、正负样本生成要求与追问决策准则
+├── 跨 Session 记忆数据集生成器思路.md        # 【系统设计】第二层：跨 Session 数据集生成器总体架构、流水线设计、GT建模与校验
+│
+├── specs/                                 # 【核心技术规范】
+│   ├── cognitive_memory_dev_spec.md       # 【核心规范】第二层：“联接”Agent 三层认知记忆与双轨评测技术规范 (16~20轮)
+│   └── persona_spec.md                    # 【基础规范】第三层：Persona 画像、主/支线与干扰项建模生成规范
+│
+├── guides/                                # 【研发与运行指南】
+│   └── cli_usage.md                       # 第三层：命令行工具手册、批处理流水线与数据质检操作指南
+│
+└── archive/                               # 【历史沉淀与排查记录】
+    ├── memory_evolution_proposal.md       # 第四层：认知架构立项方案 (RFC)：ReasoningBank 理论调研、α 因子推导与演进路线
+    └── defect_triage_log.md               # 第四层：001~150 早期批次数据治理实录：21 项典型生成缺陷、排查根因与修复措施
+```
 
 ---
 
-### 4. 动态用户事实
+## 二、 基础系统设计与需求准则
 
-保障单据、日志和意图交互历史记录是形成动态用户事实的原始证据来源。经过确认、归纳或纠正后，可沉淀为可复用的个性化表达、默认值和条件偏好。
+### 1. [记忆建模与数据集生成要求](记忆建模与数据集生成要求.md)
+* **核心定位**：记忆建模规范与正负样本评测基准要求。
+* **涵盖模块**：
+  * **用户事实记忆边界**：静态事实（套餐/权益）与动态事实（个性化表达、选择偏好、时间规律、体验参数）；
+  * **追问决策准则**：证据不足、多候选接近、冲突场景下的必须追问条件；
+  * **四层 Ground Truth** 映射矩阵。
 
-#### (1) 用户个性化表达
-* **时间表达习惯**：口语词汇（如“马上”、“稍后”等），以及开始时间、结束时间、持续时间表达习惯；
-* **参数表达映射**：模糊词汇到具体通信参数的档位映射（如“清晰一点”、“时延不要太高” $\to$ 满足分辨率 $\ge 720\text{p}$ 且时延 $\le 80\text{ms}$ 等档位概念）；
-* **应用别名与业务别名**。
-
-&gt; [!IMPORTANT]
-&gt; **证据来源严格分级**：
-&gt; 1. 用户明确声明（例如“以后我说老业务，就是指抖音直播”）；
-&gt; 2. 用户在澄清过程中明确确认表达的含义；
-&gt; 3. 用户纠正 Agent 后得到最终含义；
-&gt; 4. 多次历史会话形成稳定、一致的表达映射；
-&gt; 5. Agent 根据任务结果推测（未经用户确认，不可作为全局稳定事实）。
-&gt; 
-&gt; *用户确认本次任务参数，不一定等于确认长期表达映射。例如，用户同意本次将“高清”处理为 1080p，不代表以后“高清”始终等于 1080p。同一个表达对应多个目标取值时，需结合当前条件消歧；条件不足时必须追问。*
-
-#### (2) 应用—业务选择偏好
-在用户表达不完整时（如口语说“开直播”，但未指明是抖音还是快手），系统依赖选择偏好进行辅助推断：
-* 业务到应用的选择偏好；
-* 应用到业务的选择偏好；
-* 应用—业务组合偏好、候选排序与排斥组合。
-
-&gt; [!TIP]
-&gt; 必须区分用户明确指定的默认选择、根据多次历史行为归纳的常用选择、仅在特定场景下成立的条件偏好，以及仅在某次任务中出现的偶发历史选择。当多个候选证据接近时，必须向用户追问，严禁直接盲猜最高频候选。用户当前当轮明确给出的指令永远优先于历史偏好。
-
-#### (3) 时间模式偏好
-结合历史记录综合推断规律：
-* 常用开始时间、结束时间、持续时间；
-* 日内规律、星期规律、工作日/周末规律；
-* 节假日、热点事件规律（仅在特定窗口期内成立）；
-* 周期规律：每日、每周、每月、每季度、每年。
-
-&gt; [!WARNING]
-&gt; 时间模式偏好必须包含适用条件和有效时间。节假日、赛事和热点事件形成的规律属于临时偏好，事件结束后自动失效，严禁继续作为默认值使用。当当前输入与历史偏好冲突时，以当前明确表达为准。
-
-#### (4) 体验参数偏好
-针对特定业务或应用所绑定的参数集合：
-* 首选值、备选值、排斥值、范围偏好、优先级偏好及多参数组合偏好。
-* **整体性原则**：多参数组合偏好应作为整体使用，不能将其中的单个参数任意拆分后混用。所有偏好均不得突破用户当前套餐权益、应用能力与业务白名单的合法范围。
+### 2. [跨 Session 记忆数据集生成器思路](跨%20Session%20记忆数据集生成器思路.md)
+* **核心定位**：全流水线顶层设计文档。
+* **涵盖模块**：
+  * **流水线架构**：GT 构建 $\to$ Memory Targets 规划 $\to$ 时间线编排 $\to$ 逐 Session 渲染 $\to$ 评测与一致性校验；
+  * **Session 角色 × 模板 × 轮数硬约束**；
+  * **双层校验防御**：结构校验 R1~R8（纯规则）与内容校验 C1~C5（语义断言）；
+  * **输入输出契约**：画像骨架（`skeleton.json`）与对话记录（`sessions.jsonl`）。
 
 ---
 
-## 三、 数据集生成与评测要求
+## 三、 核心技术规范 (Specs)
 
-数据集构建必须兼顾**“利用记忆成功补全”的正样本**与**“不能直接使用记忆、必须追问”的负样本**。
+### 1. [“联接”Agent 三层认知记忆与双轨评测技术规范](specs/cognitive_memory_dev_spec.md) `[核心规范]`
+- **业务定位**：面向“联接”Agent 通信保障场景下的**意图参数提取（提参数）**与闭环受理。
+- **三层认知记忆架构**：
+  - **事实记忆 (Factual Memory)**：用户长期配置画像（偏好、别名映射、长期默认参数）。
+  - **工作记忆 (Working Memory)**：跨会话历史意图保障单记录（单据复用、时间变更、多候选消歧）。
+  - **经验记忆 (Experiential Memory)**：跨会话排障与提参策略库（`experience_bank.json` 结构化卡片）。
+- **五类日常经验记忆场景（聚焦应用/业务选择与时间/时长排期，画质与时延由用户自主指定）**：
+  1. `EXP_PREWARM_BUFFER_01`：大型活动提前30分钟进场试机预热时间推算。
+  2. `EXP_CALENDAR_HOLIDAY_EXCEPTION_01`：周期例行排期遇法定节假日自动顺延。
+  3. `EXP_MULTI_INTENT_PARTITION_01`：直播前私下跟搭档对词与看镜头机位（选用【微信-视频通话】而非【抖音-开直播】）。
+  4. `EXP_ORDER_QUALITY_DISAMBIGUATION_01`：历史意图保障单模糊指代（过滤前天1小时临时短单、优选上周2小时正式单时长）。
+  5. `EXP_OVERLAPPING_ORDER_RESOLUTION_01`：受邀进他人直播间当连麦嘉宾（选用【开直播】保上行而非【看直播】）。
+- **会话规模与拓扑**：单生命周期支持 **16 ~ 20 轮动态会话**演进（S01 ~ S20 动态 DAG 拓扑）。
+- **快速闭环与多轮澄清路径对比评测**：
+  - 经验应用测试会话首轮（Turn 1）基础参数自包含，重点评测模型能否识别场景特征并主动应用经验；
+  - 对比快速闭环路径（命中经验记忆：2 轮快速闭环）与多轮澄清路径（缺失经验记忆：3 轮澄清与纠偏）；
+  - 交互轮数压缩增益：$$\text{TCG} = \frac{T_{\text{Slow}} - T_{\text{Fast}}}{T_{\text{Slow}}} \times 100\% = 33.33\%$$。
 
-### 1. 核心评测维度
-
-| 评测维度 | 覆盖子类与关键场景 | 负样本与追问要求 |
-| :--- | :--- | :--- |
-| **个性化表达理解** | 应用别名、业务别名、时间表达、参数模糊表达、一对一/一对多映射、表达随时间更新与纠偏 | 未经确认的候选表达、条件不足时必须追问 |
-| **参数缺失补全** | 业务补全应用、应用补全业务、联合补全、时间参数补全、体验参数补全、多参数组合补全 | 排除排斥组合、多个候选概率接近时不补全并追问 |
-| **条件偏好推断** | 单条件/多条件联合、全局偏好、场景偏好、周期偏好、显式偏好与归纳偏好 | 条件不匹配、条件部分匹配但证据不足、多偏好冲突 |
-| **记忆更新与冲突** | 记忆巩固、用户纠正、新偏好覆盖旧偏好、撤销偏好、全局偏好细化、临时规律到期 | 显式偏好与行为偏好冲突、用户事实与环境事实冲突、当前明确输入与历史记忆冲突 |
-| **追问决策红线** | 无相关记忆、仅单次偶发行为、证据不足、关键参数必须确认 | 记忆已失效、推断结果违反业务规则或超出套餐权益时必须拒识追问 |
-
-### 2. 基本判断原则 (Core Invariants)
-
-1. **当前明确表达绝对优先**：用户当轮明确表达 &gt; 历史记忆与先验偏好；
-2. **显式声明优先于归纳**：用户显式立规矩 &gt; 历史多轮行为统计归纳；
-3. **环境事实决定合法性**：环境事实决定推断结果当前是否真实、合法且在网络支持白名单内；
-4. **单次事件不等于长期偏好**：历史偶发事件不能自动升级为长期画像；
-5. **单次任务确认不等于长期确认**：单次工单参数确认不能自动升级为未来通用映射；
-6. **充分必要条件约束**：只有在条件匹配、记忆有效、证据充分且无冲突时方可补全；
-7. **无法唯一确定时必须反问**：存在多个接近候选时，正确决策必须是发起追问消歧，严禁脑补盲猜。
+### 2. [Persona 画像与主/支线建模规范](specs/persona_spec.md) `[基础规范]`
+- 规范 Persona 静态画像（职业、语言风格、身份背景）与动态画像（主线业务、支线保障、突发事件、干扰项池）。
+- 保证生成画像的多样性、真实性与参数合理性。
 
 ---
 
-## 四、 记忆建模与四层 Ground Truth 映射矩阵
+## 四、 研发与运行指南 (Guides)
 
-| data_design 类别 | 对应 Ground Truth 层 | 对应代码字段 | MT 选择路径 | 语义解释与约束 |
-| :--- | :--- | :--- | :--- | :--- |
-| **用户个性化表达** | `personalization_gt.expression_mappings` | `expression_type: app_alias / service_alias / quality_expression / speed_expression / time_expression` | $\to$ `app_alias_mapping` / `service_alias_mapping` / `quality_grade_mapping` / `speed_expression_mapping` / `time_expression_mapping` | 用户口语表达与标准应用、业务、时间或参数之间的映射关系 |
-| **应用—业务选择偏好** | `personalization_gt.app_business_preferences` | `direction: business_to_app / app_to_service` | $\to$ `service_to_app` / `app_to_service` / `app_service_combo` | 用户表达不完整时在某类业务下通常选择哪个应用或具体业务 |
-| **时间模式偏好** | `conditional_gt` | `fact_type: conditional_time_preference` | $\to$ `daily_time_preference` / `weekly_preference` / `weekday_weekend_preference` / `temporary_preference` / `periodic_preference` | 结合历史记录判断的日内/星期/工作日周末/节假日周期规律 |
-| **体验参数偏好** | `personalization_gt.experience_param_preferences` | `preferred_bundle / fallback_bundle / rejected_values` | $\to$ `preferred_value` / `fallback_value` / `rejected_value` / `multi_param_bundle` / `scope_restriction` | 针对特定应用或业务的首选值、备选值、排斥值、多参数组合 |
-| **记忆更新与冲突处理** | `changeable_gt` | `fact_type: role_change / event_driven_change` | $\to$ `memory_correction` / `preference_change` | 纠正、新偏好覆盖旧偏好、临时规律到期、显式偏好与行为偏好冲突 |
+### 1. [命令行使用手册与流水线指南](guides/cli_usage.md)
+- **端到端生成与质检**：`python run.py --input data/personas --output data/cognitive_samples --start 0 --count 5 --verify`
+- **离线确定性生成**：`python run.py --input data/personas --output data/cognitive_samples --start 0 --count 5 --offline --verify`
+- **单独执行质检**：`python run.py --output data/cognitive_samples --verify-only`
 
-### static_gt 的作用与流转路径
+---
 
-`static_gt` 不直接参与 Memory Targets 选择，其字段通过以下路径在全流水线中流转生效：
+## 五、 历史沉淀与排查记录 (Archive)
 
-| 字段名 | 流水线使用路径 | 核心业务说明 |
-| :--- | :--- | :--- |
-| `static_gt.identity` | `session_generator.py` $\to$ LLM prompt | 用户画像静态身份描述，作为对话生成的背景上下文 |
-| `static_gt.allowed_scenarios` | `timeline_planner.py` $\to$ 场景选择池 | 约束 APP × 业务 × 支持分辨率的合法场景组合 |
-| `static_gt.frequent_apps` | 全流程白名单间接校验 | 常用 APP 标准名列表，用于校验和场景推导合法性 |
+- **[认知记忆演进提案规划 (memory_evolution_proposal.md)](archive/memory_evolution_proposal.md)**：三层认知记忆架构设计草案（RFC），包含 MemoryArena / ReasoningBank 理论参考、敏捷度因子 $\alpha$ 推导及 Phase 1~4 演进路线。
+- **[早期生成排查与数据治理实录 (defect_triage_log.md)](archive/defect_triage_log.md)**：归档 001~150 批次生成中关于跨轮泄漏、时间倒灌、T1-1/T2-5 边界、口语自然度等 21 项典型缺陷的根因分析与修复方案。
+
+---
+
+## 六、 文档维护与更新准则
+
+1. **唯一真值原则**：
+   - 系统整体思路与需求基准以顶层设计文档为准；三层认知记忆实现以 `specs/cognitive_memory_dev_spec.md` 为准；`archive/` 保留历史排查与立项背景。
+2. **命名规范**：
+   - 新增文档采用英文小写加下划线命名，历史顶层文档保留原名以保障兼容。
+3. **评测术语规范**：
+   - 所有技术文档统一使用**“快速闭环与多轮澄清路径对比评测”**或**“动态多分支模拟评测”**。
+4. **语言风格**：
+   - 文档表述保持严谨、简洁；业务对话示例采用自然口语表达，避免生僻底层网管专业术语（如“空口切片”、“相控阵天线”）。
+5. **Mermaid 制图规范**：
+   - 纯白底色 (`#FFFFFF`)、粗体文字、加粗线条（`stroke-width: 2px`）。
 </textarea>
                 </div>
             </div>
