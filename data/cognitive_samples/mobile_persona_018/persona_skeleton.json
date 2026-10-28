@@ -1,0 +1,173 @@
+{
+  "persona_id": "mobile_persona_018",
+  "category": "体育训练与赛事保障",
+  "persona_summary": "移动训练与参赛人员",
+  "static_profile": {
+    "user_id": "USER_018",
+    "identity": "一名常年在外转场训练与参赛的登山运动员，长期目标是攀登美国北喀斯喀特山脉（North Cascades）；日常在露天训练场、赛道、球场及赛事集结区活动，频繁往返客场转场途中、户外热身区与临时休息点，全程依赖手机移动核心网完成训练记录、赛事直播与团队调度。",
+    "devices": "主力为5G智能手机，辅以随身运动拍摄设备（运动相机/胸带机位），便携终端确需联网时以手机热点共享。",
+    "apps": [
+      "微信",
+      "抖音",
+      "腾讯会议",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "干脆直接、带点户外人的爽利与催促感，习惯用训练行话和赛事术语，讲话节奏快。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "信号稳住"
+      ],
+      "typical_habits": "出发前先确认路线与赛程，训练中随手记录数据，转场路上用语音和团队对齐安排；遇到弱网会先喊'信号稳住'再降画质保连通。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "傍晚户外训练收尾直播与团队调度",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处北喀斯喀特山麓露天训练场或赛事集结区边缘、基站覆盖偏弱的户外热身区与临时休息点，16:00-18:00训练收尾时段需要向团队直播训练实况并同步调度安排",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "16:00-18:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖子"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到六点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "训练收尾老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "北喀斯喀特秋季登山赛事周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "赛事周期间集结区与赛道旁人群密集、多机位同时推流，山麓基站容量紧张，需优先保证直播连通与团队即时通信，画质临时下调、时延要求收紧。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "转场大巴上的团队视频调度",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "客场转场途中在大巴或临时休息点，用手机热点接入参加团队赛前赛后调度会",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "训练录像复盘上传",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "训练结束后在临时休息点上传随身拍摄设备录制的训练片段，供教练组复盘回放",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "赛前在集结区单次与家人视频通话报平安",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "休息点单次刷短视频放松",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

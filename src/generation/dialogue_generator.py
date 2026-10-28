@@ -38,8 +38,7 @@ class DialogueGenerator:
                     # 批量调用 DeepSeek 渲染该组会话台词
                     batch_turns_map = self._render_batch_dialogue_turns(chunk, persona)
                 except Exception as e:
-                    print(f"    [Circuit Breaker] Batch LLM render failed: {e}. Switching to standard dialogue engine for remaining batches.")
-                    self.llm_circuit_breaker = True
+                    print(f"    [Batch Warning] Batch LLM render failed for chunk {i}: {e}. Falling back for this chunk only.")
                     batch_turns_map = {}
 
             for s_plan, snap_before, mem_events, gold_after in chunk:
@@ -69,7 +68,15 @@ class DialogueGenerator:
             rounds = s_plan["round_count"]
 
             if snap_before:
-                snap_str = "; ".join([f"[{k}] {v['application_name']}-{v['service_name']}({v['resolution']},{v['rtt_max']})" for k, v in snap_before.items()])
+                snap_parts = []
+                for k, v in snap_before.items():
+                    if isinstance(v, dict) and "application_name" in v:
+                        snap_parts.append(f"[{k}] {v.get('application_name')}-{v.get('service_name')}({v.get('resolution')},{v.get('rtt_max')},status={v.get('status')})")
+                    elif k == "working_records" and isinstance(v, list):
+                        snap_parts.append(f"[working_records: {len(v)} items]")
+                    elif k == "experiences" and isinstance(v, list):
+                        snap_parts.append(f"[experiences: {len(v)} items]")
+                snap_str = "; ".join(snap_parts) or "无"
             else:
                 snap_str = "无"
 
@@ -188,6 +195,14 @@ class DialogueGenerator:
                 elif s_plan.get("retrieval_challenge_type") == "negation_contrast":
                     t1_rule += f"【检索盲区变体要求(negation_contrast)：第1轮用户先用否定从句排除主线业务（如‘今天不用{s_plan.get('contrast_negated_app', '抖音')}做{s_plan.get('contrast_negated_service', '开直播')}了’），再转折提出当前诉求。】"
 
+            ref_turns = []
+            for r_idx in range(1, rounds + 1):
+                ref_turns.append({
+                    "turn": r_idx,
+                    "reference_user_utterance": get_fallback_user_utterance(s_plan, r_idx, role),
+                    "reference_agent_utterance": get_fallback_agent_utterance(s_plan, r_idx, role, r_idx == rounds),
+                })
+
             prompt_items.append({
                 "session_id": sid,
                 "rounds": rounds,
@@ -195,6 +210,7 @@ class DialogueGenerator:
                 "blueprint_type": b_type,
                 "template_id": s_plan.get("template_id", "T2-1"),
                 "turn1_requirement": t1_rule,
+                "reference_turns": ref_turns,
                 "primary_alias": primary_alias,
                 "small_memory": small_memory,
                 "small_memory_declaration": small_memory_declaration,
@@ -222,7 +238,7 @@ class DialogueGenerator:
             {"role": "system", "content": "You are a professional natural language dialogue generator for network assistant datasets. Output valid JSON only."},
             {"role": "user", "content": prompt}
         ]
-        res = self.llm.chat_json(messages, max_retries=1, enable_thinking=False)
+        res = self.llm.chat_json(messages, max_retries=2, enable_thinking=False)
         output_map = {}
         s_list = res.get("sessions", []) if isinstance(res, dict) else (res if isinstance(res, list) else [])
         if isinstance(s_list, list):
@@ -313,7 +329,9 @@ class DialogueGenerator:
         # 单轮干扰任务：必须清晰说全参数，严禁携带任何个性化表达/模糊词
         if tid == "T1-1" or s_plan.get("blueprint_type") == "distractor":
             if s_plan.get("retrieval_challenge_type") == "negation_contrast":
-                u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+                neg_app = s_plan.get("contrast_negated_app") or ""
+                if not (neg_app and neg_app in u_text and "不" in u_text):
+                    u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
             bad_dist_kws = ["清晰点就行", "不卡就行", "一会儿", "老规矩", "老时间", "照旧", "按习惯"]
             if any(kw in u_text for kw in bad_dist_kws) or tp.get("resolution", "") not in u_text or tp.get("rtt", "") not in u_text:
                 u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
@@ -353,9 +371,15 @@ class DialogueGenerator:
             if "1080p" not in u_text:
                 u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
 
-        # 证据会话首轮必须与规划的精确开始时间一致，避免模糊改写造成 turn-level 泄漏。
+        # 证据会话首轮必须包含标准应用、业务与开始时间，且严禁泄漏画质/时延/时长。
         if turn_idx == 1 and role == "evidence_session":
-            u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+            app_ok = tp.get("application_name", "") in u_text
+            srv_ok = tp.get("service_name", "") in u_text
+            start_hm = tp.get("start_timestamp", "").split("日")[-1]
+            time_ok = start_hm in u_text or start_hm.replace("时", ":").replace("分", "") in u_text or start_hm.replace("时", "点") in u_text
+            leaked = any(k and k in u_text for k in [tp.get("resolution", ""), tp.get("rtt", ""), tp.get("duration", ""), "俩小时", "两小时", "一个钟头", "60分钟", "120分钟"])
+            if not (app_ok and srv_ok and time_ok) or leaked:
+                u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
         if tid in ["T2-2", "T3-1"] and s_plan.get("small_memory_evidence_mode") == "cross_turn_clarification":
             u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
         if turn_idx == 2 and role == "reinforcement_session" and s_plan.get("small_memory_evidence_mode") == "co_occurrence" and s_plan.get("session_id", "").endswith("-03"):
@@ -420,8 +444,6 @@ class DialogueGenerator:
         if tid == "T1-2":
             a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
         if tid == "T1-1" or s_plan.get("blueprint_type") == "distractor":
-            if s_plan.get("retrieval_challenge_type") == "negation_contrast":
-                u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
             if any(kw in a_text for kw in ["记忆理解", "理解为", "按‘", "按\""]):
                 a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
         if tid in ["T2-2", "T3-1"] and s_plan.get("small_memory_evidence_mode") == "cross_turn_clarification":
@@ -442,9 +464,23 @@ class DialogueGenerator:
             if "哪" not in a_text and "意图保障单" not in a_text and "记录" not in a_text:
                 a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
         if turn_idx == 1 and role in ["reinforcement_session", "reuse_session"] and tid not in ["T2-3", "T2-5", "T2-6", "T2-7", "T2-8", "T2-9", "T2-10", "T2-4"] and not s_plan.get("experience_citation"):
-            u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
-            # 执行前必须把记忆补全出的时间与参数完整回显，不能让结构化时间凭空出现。
-            a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
+            is_imp_s03 = (role == "reinforcement_session" and s_plan.get("declaration_mode") == "implicit_induction" and s_plan.get("session_id", "").endswith("-03"))
+            challenge_type = s_plan.get("retrieval_challenge_type")
+            if is_imp_s03:
+                if tp.get("service_name", "") not in u_text or tp.get("application_name", "") in u_text:
+                    u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+            elif challenge_type == "negation_contrast":
+                neg_app = s_plan.get("contrast_negated_app") or ""
+                if not (neg_app and neg_app in u_text and "不" in u_text and tp.get("application_name", "") in u_text):
+                    u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+            elif challenge_type in ("paraphrased_alias_scene", "implicit_service_collocation"):
+                u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+            else:
+                sm_val = s_plan.get("small_memory", {}).get("value") or ""
+                if sm_val and sm_val not in u_text and tp.get("application_name", "") not in u_text:
+                    u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+            if tp.get("resolution", "") not in a_text or tp.get("rtt", "") not in a_text:
+                a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
             for bad_word in ["零卡顿", "秒开", "极速响应"]:
                 if bad_word in u_text:
                     u_text = u_text.replace(bad_word, f"{tp.get('rtt', '')}以内")

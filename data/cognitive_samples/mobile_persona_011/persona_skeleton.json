@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_011",
+  "category": "交通运输与移动出行",
+  "persona_summary": "户外视觉创作者",
+  "static_profile": {
+    "user_id": "USER_011",
+    "identity": "阿曼籍平面设计师，长期跨城采风与户外拍摄，为展览与客户项目收集视觉素材并远程交付高清设计稿；全程依赖手机4G/5G移动核心网联网，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "devices": "主力为5G智能手机，辅以便携平板与移动电源；便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "钉钉",
+      "腾讯会议",
+      "高德地图",
+      "小红书"
+    ],
+    "speech_archetype": "outdoor_creator_speaker",
+    "speech_style": {
+      "tone": "干脆利落、带现场感的行动派口吻，习惯用短句确认时间与画质，强调别掉链子。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "原画给我稳住"
+      ],
+      "typical_habits": "出发前先报时间与画质档位，现场用口头禅快速确认任务与网络状态，交付前反复核对上传进度。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "采风现场设计稿远程评审与高清交付",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在跨城采风或展览拍摄现场，于14:00-16:00与客户及协作设计师进行设计稿远程评审，并同步上传高清图片与设计稿电子单据",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯开会"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "过稿会",
+          "远程评审"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到四点"
+        ],
+        "period_aliases": [
+          "老时间下午两点",
+          "每天这个时候",
+          "采风日下午例行"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城设计展布展与客户验收周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "展馆外场与港区临时停靠点网络拥塞，跨区域切换频繁，需在高速移动与弱覆盖环境下保持评审与上传不中断",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "采风素材与电子单据回传",
+        "application_name": "抖音",
+        "service_name": "开直播",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在高速公路服务区或车站临时停靠点，向客户快速确认素材清单并上传电子单据时",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "推流",
+            "开播"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "路线共享与现场位置同步",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨城途中需与协作方实时共享位置、更新路线并语音确认会合点时",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "展馆休息间隙单次刷短视频找灵感",
+        "application_name": "小红书",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "客户临时发起单次远程沟通会",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

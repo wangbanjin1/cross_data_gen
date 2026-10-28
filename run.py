@@ -17,6 +17,7 @@ def main():
     parser.add_argument("--verify", "-v", action="store_true", help="Run verification across output folder")
     parser.add_argument("--offline", action="store_true", help="Generate offline using deterministic standard dialogue engine without LLM calls")
     parser.add_argument("--force", "-f", action="store_true", help="Force regenerate personas even if already existing")
+    parser.add_argument("--workers", "-w", type=int, default=1, help="Number of concurrent worker threads for API generation")
     args = parser.parse_args()
 
     # 如果指定了配置文件，重新加载全局配置
@@ -40,7 +41,8 @@ def main():
             start_idx=args.start,
             count=args.count,
             raw_persona_path=args.input,
-            force=args.force
+            force=args.force,
+            workers=args.workers
         )
 
 if __name__ == "__main__":

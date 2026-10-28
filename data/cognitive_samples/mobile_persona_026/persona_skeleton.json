@@ -1,0 +1,176 @@
+{
+  "persona_id": "mobile_persona_026",
+  "category": "公共事务与外勤协作",
+  "persona_summary": "户外公益与社群组织者",
+  "static_profile": {
+    "user_id": "USER_026",
+    "identity": "年轻工会成员，受布克事迹激励投身公共事务，长期在户外调研点、社区走访点与群众服务现场组织公益活动、协调志愿者、发布通知并回传材料，全程依赖手机移动核心网直接联网，不依赖固网或普通Wi-Fi。",
+    "devices": "主力为5G智能手机，辅助为便携工作终端（确需联网时使用手机热点）",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "抖音"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "干练直接、带现场号召力，习惯用短句推进协作，强调别掉链子",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "现场见"
+      ],
+      "typical_habits": "出发前先在群里对齐流程，现场边走访边用语音消息同步进度，遇到关键节点直接发起会议或直播，事后用电子表单收口"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "社区公益现场晨间协调会与材料回传",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在社区走访点或群众服务现场执行晨间公益任务时，需与志愿者小组及街道对接人召开视频会议对齐当日分工，并同步回传现场记录与电子表单材料",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "08:30-10:30",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会",
+          "小企鹅开会"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦碰头",
+          "开个短会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "开到十点半"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "晨间例行",
+          "现场老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨区公益巡访周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "连续多日跨区巡访，现场人流密集、基站负载高且移动频繁，需在通勤途中与临时服务点之间保持会议与材料回传稳定，优先保障连通与低时延",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "公益活动现场直播动员",
+        "application_name": "抖音",
+        "service_name": "开直播",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在公共活动现场需要向社群实时播报进展、动员志愿者或扩大公益影响力时发起直播",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "推流",
+            "开播"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "志愿者群即时通信与位置协调",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "外勤移动中需要快速确认志愿者位置、临时调整走访路线或一对一沟通现场情况时发起视频通话",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次任务：在临时会议区用钉钉参加街道临时组织的政策宣讲短会",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次任务：通勤途中刷短视频了解本地公益动态与社区舆情",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

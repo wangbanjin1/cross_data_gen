@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_024",
+  "category": "野外科研与农业作业",
+  "persona_summary": "野外生态调查人员",
+  "static_profile": {
+    "user_id": "USER_024",
+    "identity": "环境科学家，创办了专注气候变化健康影响的研究所，长期带队在农田、林区、河岸与生态调查样地开展野外生态调查，沿样线导航定位、采集带坐标的照片与观测数据，并在临时观测点分批回传调查记录，常走偏远采样路线、山区与临时观测点。",
+    "devices": "主力为5G智能手机，辅以便携式传感采集终端与平板；终端确需联网时统一走手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "高德地图"
+    ],
+    "speech_archetype": "field_researcher_speaker",
+    "speech_style": {
+      "tone": "干脆务实、带点野外人的直爽，讲数据讲坐标，不爱绕弯子",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先把点打上"
+      ],
+      "typical_habits": "出发前先报路线和样点，现场用短句确认坐标与回传状态，遇到弱覆盖习惯说'先存着，出去再补传'，收队前必做一次数据核对。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "样线调查远程指导与观测数据回传",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处偏远采样路线、山区林区或河岸临时观测点等弱覆盖区域，沿样线完成定位导航与样本记录后，在14:00-16:00时段与研究所团队视频通话做远程指导并分批回传带坐标的观测数据与现场图片",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "会议通",
+          "tencentmeeting"
+        ],
+        "service_aliases": [
+          "开会",
+          "进会议室",
+          "入会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "从两点弄到四点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "下午两点到四点这段"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "秋季山区样线集中采样周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "秋季集中采样周深入山区林区样线，山脊与谷底交替弱覆盖，需在移动中保持远程指导与观测数据连续回传，优先保连通与低时延",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "样点现场图片与记录即时沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在临时观测点发现异常样本或需向团队即时确认样点信息时，用微信视频通话快速对齐",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "调查记录与传感数据分批回传",
+        "application_name": "抖音",
+        "service_name": "开直播",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "每日收队前在观测点汇总样本记录与传感数据，用钉钉会议与研究所数据组核对回传清单",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "推流",
+            "开播"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "午间在临时观测点休息时单次刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次观看研究所公众科普直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

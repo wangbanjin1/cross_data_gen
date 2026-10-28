@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_023",
+  "category": "野外科研与农业作业",
+  "persona_summary": "野外生态调查人员",
+  "static_profile": {
+    "user_id": "USER_023",
+    "identity": "一名微生物学家，专注研究嗜极生物的遗传适应性，长期在偏远山区、林区、河岸与农田样地开展野外生态调查与采样，沿样线导航定位、采集带坐标的照片与观测数据，并在临时观测点分批回传调查记录，同时接受远程专家指导。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴设备（用于定位与传感数据采集），便携终端确需联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "高德地图"
+    ],
+    "speech_archetype": "field_researcher",
+    "speech_style": {
+      "tone": "务实、简洁、带野外作业的干练感，习惯用短句确认状态与时间点",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "信号稳住",
+        "按样线走"
+      ],
+      "typical_habits": "出发前先确认设备电量与信号，任务中习惯用口语化时间点约定回传节奏，遇到弱覆盖会先保定位与数据上报，再补图片回传。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "野外样线调查数据回传与远程指导",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在偏远采样路线或临时观测点完成一段样线采样后，需要将带坐标的现场照片、样本记录与传感数据分批回传，并与实验室远程专家进行即时通信与远程指导",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "15:00-17:00",
+      "application_name": "微信",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "微信",
+          "某信"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "连麦看现场",
+          "视频对一下"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到五点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "下午采样回来那阵"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "山区弱覆盖样线集中采样期",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "连续多日在偏远山区样线开展嗜极生物采样，临时观测点处于弱覆盖区域，需优先保障定位与数据上报稳定，视频通话画质临时下调以换取连接稳定性",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "临时观测点调查记录复盘会",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "当天样线采样结束后，在临时观测点与课题组复盘调查记录、核对样本编号与坐标数据",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "样线导航与定位核对",
+        "application_name": "抖音",
+        "service_name": "开直播",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "沿野外样线行进中需要与队友核对定位点、确认下一采样点路线时发起视频通话",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "推流",
+            "开播"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "任务结束后在临时观测点休息时刷短视频",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次观看同行关于嗜极生物研究的直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

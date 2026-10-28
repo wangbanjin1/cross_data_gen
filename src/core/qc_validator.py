@@ -230,8 +230,8 @@ class QCValidator:
                 p0 = s.get("intents", [{}])[0].get("params", {})
                 app = p0.get("application_name", {}).get("value", "")
                 srv = p0.get("service_name", {}).get("value", "")
-                valid_apps = [app, "微信", "钉钉", "腾讯会议", "哔哩哔哩", "抖音", "快手", "企鹅会议", "阿抖", "小破站", "某信", "绿泡泡", "v信", "WX", "企微"]
-                valid_srvs = [srv, "直播", "会议", "通话", "短视频", "开播", "视讯", "对齐开会", "推流"]
+                valid_apps = [app, "微信", "钉钉", "腾讯会议", "哔哩哔哩", "抖音", "快手", "飞书", "企鹅会议", "会议通", "阿抖", "小破站", "某信", "绿泡泡", "v信", "WX", "企微", "weixin", "douyin", "tencentmeeting", "bilibili"]
+                valid_srvs = [srv, "直播", "会议", "通话", "短视频", "开播", "视讯", "对齐开会", "推流", "碰头会", "连线", "连麦"]
                 has_app = any(a in u1 for a in valid_apps if a)
                 has_srv = any(s in u1 for s in valid_srvs if s)
                 has_scene = any(k in u1 for k in ["现场", "营地", "训练场", "岸线", "途中", "休息区", "通勤", "活动"]) or (s.get("session_meta", {}).get("scenario", {}).get("environment", "") in u1)
@@ -252,8 +252,8 @@ class QCValidator:
                 p0 = s.get("intents", [{}])[0].get("params", {})
                 app = p0.get("application_name", {}).get("value", "")
                 srv = p0.get("service_name", {}).get("value", "")
-                valid_apps = [app, "微信", "钉钉", "腾讯会议", "哔哩哔哩", "抖音", "快手", "企鹅会议", "阿抖", "小破站", "企微"]
-                valid_srvs = [srv, "直播", "会议", "通话", "短视频", "开播", "视讯", "对齐开会", "推流", "看直播", "开直播"]
+                valid_apps = [app, "微信", "钉钉", "腾讯会议", "哔哩哔哩", "抖音", "快手", "飞书", "企鹅会议", "会议通", "阿抖", "小破站", "企微", "weixin", "douyin", "tencentmeeting", "bilibili"]
+                valid_srvs = [srv, "直播", "会议", "通话", "短视频", "开播", "视讯", "对齐开会", "推流", "看直播", "开直播", "碰头会", "连线", "连麦"]
                 has_app = any(a in u1 for a in valid_apps if a)
                 has_srv = any(s in u1 for s in valid_srvs if s)
                 has_scene = any(k in u1 for k in ["现场", "营地", "训练场", "岸线", "途中", "休息区", "通勤", "活动", "研讨会", "交流会", "车间"]) or (s.get("session_meta", {}).get("scenario", {}).get("environment", "") in u1)

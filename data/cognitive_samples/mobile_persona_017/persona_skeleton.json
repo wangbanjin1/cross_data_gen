@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_017",
+  "category": "移动生活与现场协作",
+  "persona_summary": "移动文化服务人员",
+  "static_profile": {
+    "user_id": "USER_017",
+    "identity": "韩国籍儿童文学爱好者与城市图书馆移动文化服务馆员，长期关注作家李基勋（Lee Gi-hun）的作品，负责社区阅读推广、馆藏外借流转与户外文化活动执行，每周3至5次外出任务，全程依赖手机4G/5G移动核心网直连，不依赖家庭宽带或固定Wi-Fi。",
+    "devices": "主力为5G智能手机，辅助为平板电脑；便携终端需联网时以手机热点共享。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "抖音",
+      "小红书"
+    ],
+    "speech_archetype": "librarian_field_coordinator",
+    "speech_style": {
+      "tone": "温和细致、条理清晰，带一点书卷气，现场协调时干脆利落",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "孩子们等着呢"
+      ],
+      "typical_habits": "习惯先确认对方是否听清，再复述关键信息；布置任务时爱用'老规矩'概括固定流程；遇到网络波动会先问'还连着吗'再决定续传。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "社区阅读活动现场远程协作与图文发布",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在社区阅读推广活动、馆藏外借流转或户外儿童文学活动现场，需与馆内同事远程对齐书目登记与流转信息，并同步发布活动图文时触发",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "09:30-11:30",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议",
+          "小企鹅开会"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦对一下",
+          "开个短会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "开到十一点半"
+        ],
+        "period_aliases": [
+          "老规矩这个点",
+          "每周外出任务的老时间",
+          "上午九点半那场"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨区儿童文学巡展周",
+        "start_time": "2026年11月02日00时00分",
+        "end_time": "2026年11月08日23时59分",
+        "scene_description": "巡展设于跨区城市广场与临时展棚，人流密集、基站切换频繁，部分户外等候区处于弱覆盖路段，需保证音视频稳定与任务续传",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "馆藏流转信息即时通信核对",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "外借图书登记信息与馆内系统不一致，需即时与流通台同事视频核对封面与条码时",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "活动现场短视频记录与上传",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "阅读活动间隙拍摄儿童朗诵与手工环节，剪辑后上传活动宣传短视频时",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次受邀观看作家李基勋线上读者见面会直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在通勤途中浏览儿童文学推荐短视频",
+        "application_name": "小红书",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

@@ -49,10 +49,59 @@ class PersonaGenerator:
         expr_vault = getattr(Config, "expression_vault", {})
         synonyms = expr_vault.get("slot_synonyms", {})
         app_map = getattr(Config, "app_map", {})
+        support_matrix = getattr(Config, "support_matrix", {})
+
+        # 标准高频合规 (应用, 业务) 候选池，用于修复大模型偶发越界组合及避免同画像主/支线冲突
+        canonical_pairs = [
+            ("抖音", "开直播"),
+            ("微信", "视频通话"),
+            ("腾讯会议", "会议"),
+            ("抖音", "短视频"),
+            ("快手", "开直播"),
+            ("钉钉", "会议"),
+            ("哔哩哔哩", "开直播"),
+            ("快手", "短视频"),
+            ("飞书", "会议"),
+        ]
+
+        def _fix_pair(app_val: str, srv_val: str, used_apps: set, used_srvs: set = None) -> tuple[str, str, bool]:
+            changed = False
+            # 专项映射常见越界组合
+            invalid_map = {
+                ("高德地图", "视频通话"): ("微信", "视频通话"),
+                ("钉钉", "视频通话"): ("钉钉", "会议"),
+                ("微信", "会议"): ("钉钉", "会议"),
+                ("腾讯会议", "视频通话"): ("腾讯会议", "会议"),
+                ("哔哩哔哩", "短视频"): ("抖音", "短视频"),
+                ("快手", "游戏"): ("快手", "看直播"),
+            }
+            if (app_val, srv_val) in invalid_map:
+                app_val, srv_val = invalid_map[(app_val, srv_val)]
+                changed = True
+            elif app_val not in support_matrix or srv_val not in support_matrix.get(app_val, {}):
+                for c_app, c_srv in canonical_pairs:
+                    if c_app not in used_apps and (used_srvs is None or c_srv not in used_srvs):
+                        app_val, srv_val = c_app, c_srv
+                        changed = True
+                        break
+            if app_val in used_apps or (used_srvs is not None and srv_val in used_srvs):
+                for c_app, c_srv in canonical_pairs:
+                    if c_app not in used_apps and (used_srvs is None or c_srv not in used_srvs):
+                        app_val, srv_val = c_app, c_srv
+                        changed = True
+                        break
+            return app_val, srv_val, changed
 
         main_mt = sk["dynamic_profile"].get("periodic_main_storyline", {})
         app = main_mt.get("application_name", "抖音")
         srv = main_mt.get("service_name", "开直播")
+        used_apps = set()
+        used_srvs = set()
+        app, srv, main_changed = _fix_pair(app, srv, used_apps, used_srvs)
+        main_mt["application_name"] = app
+        main_mt["service_name"] = srv
+        used_apps.add(app)
+        used_srvs.add(srv)
         res = main_mt.get("preferred_params", {}).get("resolution", "1080p")
         rtt = main_mt.get("preferred_params", {}).get("rtt_max", "50ms")
         p_type = main_mt.get("period_type", "weekly")
@@ -60,6 +109,9 @@ class PersonaGenerator:
         aliases = main_mt.get("aliases", {})
         if not isinstance(aliases, dict):
             aliases = {}
+        if main_changed:
+            aliases["app_aliases"] = []
+            aliases["service_aliases"] = []
 
         # 1. 补齐 app_aliases (优先选择地道中文叫法)
         if not aliases.get("app_aliases"):
@@ -128,15 +180,23 @@ class PersonaGenerator:
         main_mt["aliases"] = aliases
         sk["dynamic_profile"]["periodic_main_storyline"] = main_mt
 
-        # 同样补齐 sub_storylines
+        # 同样补齐并规范化 sub_storylines
         for sub in sk["dynamic_profile"].get("sub_storylines", []):
             s_app = sub.get("application_name", "")
             s_srv = sub.get("service_name", "")
+            s_app, s_srv, sub_changed = _fix_pair(s_app, s_srv, used_apps, used_srvs)
+            sub["application_name"] = s_app
+            sub["service_name"] = s_srv
+            used_apps.add(s_app)
+            used_srvs.add(s_srv)
             s_res = sub.get("preferred_params", {}).get("resolution", "720p")
             s_rtt = sub.get("preferred_params", {}).get("rtt_max", "100ms")
             s_aliases = sub.get("aliases", {})
             if not isinstance(s_aliases, dict):
                 s_aliases = {}
+            if sub_changed:
+                s_aliases["app_aliases"] = []
+                s_aliases["service_aliases"] = []
             if not s_aliases.get("app_aliases"):
                 s_app_syns = []
                 for k, vlist in app_map.items():
@@ -152,5 +212,15 @@ class PersonaGenerator:
             if not s_aliases.get("rtt_aliases"):
                 s_aliases["rtt_aliases"] = [f"{s_rtt}以内", f"{s_rtt.replace('ms', '毫秒')}以内"]
             sub["aliases"] = s_aliases
+
+        # 规范化 distractor_pool
+        dist_used_apps = {app}
+        for dist in sk["dynamic_profile"].get("distractor_pool", []):
+            d_app = dist.get("application_name", "钉钉")
+            d_srv = dist.get("service_name", "会议")
+            d_app, d_srv, _ = _fix_pair(d_app, d_srv, dist_used_apps, None)
+            dist["application_name"] = d_app
+            dist["service_name"] = d_srv
+            dist_used_apps.add(d_app)
 
         return sk

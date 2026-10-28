@@ -1,0 +1,176 @@
+{
+  "persona_id": "mobile_persona_029",
+  "category": "移动生活与现场协作",
+  "persona_summary": "高频移动网络使用者",
+  "static_profile": {
+    "user_id": "USER_029",
+    "identity": "第二代移民背景的城市现场活动自由协作人，长期脱离原生文化圈层，靠移动网络在城市街区、公共活动现场与跨区域出行途中承接现场记录、位置共享与远程协作类任务；全程以手机4G/5G直接联网，不依赖家庭宽带或公司固网，便携终端需联网时用手机热点兜底。",
+    "devices": "主力为5G智能手机，辅助为可穿戴设备（智能手表/手环），必要时以手机热点为便携终端供网",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "抖音",
+      "高德地图"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "干脆利落、带点街头现场感的实用口吻，习惯用短句确认状态，不爱绕弯子",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "我这边信号还行"
+      ],
+      "typical_habits": "开口先报位置和网络状态，再确认对方能否听清看清；安排任务时喜欢把时间点、画质和时延要求一次说死，避免现场反复拉扯"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "城市现场活动远程协作与位置共享",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在城市街区或公共活动现场执行现场记录与远程协作任务时，需向异地协作方实时共享位置、上传现场照片短视频并开视频会议对齐进度，触发主线业务",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "10:00-12:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议那个",
+          "小企鹅开会"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦对进度",
+          "开个会过一下",
+          "远程碰一下"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "开到十二点"
+        ],
+        "period_aliases": [
+          "老时间十点",
+          "上午十点那场",
+          "老规矩十点到十二点"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城文化市集现场记录周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城参加文化市集，现场人流密集、基站拥塞且部分街区弱覆盖，需在移动中持续上传现场素材并与异地团队保持会议连通，优先保障连通稳定而非画质",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "现场素材即时回传与位置共享",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在户外等候区或临时停留点需要快速向协作方共享位置、确认现场情况时发起视频通话",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "现场短视频记录与发布",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "活动现场出现值得记录的片段，需即时拍摄并上传短视频到账号时触发",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时向远方亲友发起视频通话报平安",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "通勤途中单次刷短视频打发时间",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

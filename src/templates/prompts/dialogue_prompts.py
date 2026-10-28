@@ -15,8 +15,11 @@ def build_batch_dialogue_prompt(prompt_items: list[dict], identity: str, speech:
 - 语气风格: {speech.get('tone')}
 - 口头禅/表达习惯: {speech.get('catchphrases')} | {speech.get('typical_habits')}
 
-【待生成会话列表】:
+【待生成会话列表（含每个会话的精确参数基准 reference_turns）】:
 {json.dumps(prompt_items, ensure_ascii=False, indent=2)}
+
+【核心生成原则（极为重要）】：
+请结合【人物风格】（身份、语气、口头禅）对每个会话的 `reference_turns` 进行自然口语化润色渲染，生成富有个人特色的对白，同时**必须 100% 保留 `reference_turns` 中的所有核心业务锚点、应用名/指定别名、业务名/隐含动宾短语、具体时刻点、时长数值、画质档位、时延数值、否定排除从句以及意图保障单/经验规则关键信息**，严禁遗漏或篡改任何参数数值！
 
 【核心会话轮次与动作规则（严格遵守）】:
 0. 用户台词口语别名与大/小记忆点分级规则（强制遵守）:
@@ -178,7 +181,8 @@ def build_single_dialogue_prompt(s_plan: dict, persona: dict, snapshot_before: d
     if snapshot_before:
         memory_context_str = "当前已建立的记忆快照 (Memory Snapshot Before):\n"
         for mid, mval in snapshot_before.items():
-            memory_context_str += f"  - [{mid}] 应用: {mval['application_name']}, 业务: {mval['service_name']}, 画质: {mval['resolution']}, 时延: {mval['rtt_max']}, 状态: {mval.get('status')}\n"
+            if isinstance(mval, dict) and "application_name" in mval:
+                memory_context_str += f"  - [{mid}] 应用: {mval.get('application_name')}, 业务: {mval.get('service_name')}, 画质: {mval.get('resolution')}, 时延: {mval.get('rtt_max')}, 状态: {mval.get('status')}\n"
     else:
         memory_context_str = "当前记忆快照为空（首次建联会话，尚无已形成的长期记忆）。\n"
 

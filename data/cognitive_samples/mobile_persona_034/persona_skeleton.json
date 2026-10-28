@@ -1,0 +1,176 @@
+{
+  "persona_id": "mobile_persona_034",
+  "category": "技术研发与现场支持",
+  "persona_summary": "户外内容创作者",
+  "static_profile": {
+    "user_id": "USER_034",
+    "identity": "资深影视制片人，正探索区块链技术在内容分发中的潜力；日常以户外采风、活动现场拍摄与直播为主，频繁往返客户现场、设备机房外围、跨园区通勤路线与外场测试点，全程依赖手机4G/5G移动核心网直连，不依赖家庭宽带或公司固网，便携终端联网时使用手机热点。",
+    "devices": "5G智能手机（主力）＋平板电脑（辅助监看与素材粗剪）",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "抖音",
+      "快手",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "干脆利落、带现场指挥感的制片人口吻，习惯用短句确认节点，强调别掉链子",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "这条先过一遍"
+      ],
+      "typical_habits": "开工前先口头对齐时间与画质档位，遇到弱覆盖路段先问能不能续传，收工前习惯复盘上传日志"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "月末28-29号晚间月度素材封账与直播复盘推流",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每月月末28-29号例行封账冲刺与月度大复盘，20:00-22:00在临时工位或外场测试点发起直播并同步上传月度素材包",
+      "period_type": "monthly",
+      "days": [
+        "28th",
+        "29th"
+      ],
+      "time_range": "20:00-22:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点"
+        ],
+        "period_aliases": [
+          "每月月末28-29号老规矩",
+          "月底封账那两天",
+          "月末晚间例行"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城影视展会现场直播与素材回传周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城参展期间展馆内人流密集、基站拥塞，外场临时工位处于弱覆盖边缘，需优先保障直播不断流与素材分段续传，画质临时下调、时延要求收紧",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "外场拍摄间隙与后期团队视频通话核对素材",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "外场拍摄间隙需要与后期团队快速核对素材分段与上传进度时发起",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨园区通勤路上远程会议对齐客户需求",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨园区通勤路线或临时工位上接到客户需求变更，需即时入会沟通时触发",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次在设备机房外围等待故障处置时刷短视频打发时间",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在临时工位观看行业发布会直播了解区块链内容分发动态",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

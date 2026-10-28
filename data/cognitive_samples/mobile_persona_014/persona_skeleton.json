@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_014",
+  "category": "移动学习与教育协作",
+  "persona_summary": "移动教学人员",
+  "static_profile": {
+    "user_id": "USER_014",
+    "identity": "小学教师，负责班级教学与课外实践活动组织，常在校园户外区域、校际通勤途中及实习点、运动场、社会实践地或临时教学现场开展移动教学，全程以手机4G/5G直接联网，不依赖固网或普通Wi-Fi，便携终端联网时使用手机热点。",
+    "devices": "5G智能手机为主力终端，随身拍摄设备（运动相机/手机云台）为辅助采集设备",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "teacher_speaker",
+    "speech_style": {
+      "tone": "亲切干练、带点催促感，习惯用教学场景比喻，讲效率也讲稳妥",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "孩子们等着呢"
+      ],
+      "typical_habits": "布置任务前先确认网络和电量，习惯用'老时间''老规矩'指代固定安排，遇到卡顿会立刻要求切低画质保连续"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "户外实践课视频答疑与资料上传",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在校园户外区域或社会实践地组织班级实践活动时，需通过手机移动网络发起视频答疑、查看学生提交的作业并上传拍摄的教学资料，保障大文件上传与会话连续",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "14:00-16:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议那个",
+          "开会软件"
+        ],
+        "service_aliases": [
+          "开个视频会",
+          "连麦答疑",
+          "对齐一下进度"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "开到四点"
+        ],
+        "period_aliases": [
+          "老时间下午两点",
+          "每次实践课这个点",
+          "老规矩两点到四点"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "校际联合实践周户外直播连线",
+        "start_time": "2026年11月03日00时00分",
+        "end_time": "2026年11月07日23时59分",
+        "scene_description": "多校联合社会实践周，在运动场与临时教学现场之间频繁移动，弱覆盖路段多、切换频繁，需优先保证会话连续与快速恢复",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "实践现场短视频记录与班级群分享",
+        "application_name": "微信",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "实践活动间隙拍摄学生表现片段，需快速剪辑后发到班级群供家长查看",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "课后录像复盘与教研沟通",
+        "application_name": "抖音",
+        "service_name": "开直播",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "通勤途中或实习点休息时，与同年级教师一对一沟通课程录像复盘与资料共享",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "推流",
+            "开播"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时参加校外教研线上会议，仅一次",
+        "application_name": "飞书",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "午休时刷教学类短视频放松，单次行为",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

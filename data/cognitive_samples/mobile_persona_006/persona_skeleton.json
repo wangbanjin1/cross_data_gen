@@ -1,0 +1,178 @@
+{
+  "persona_id": "mobile_persona_006",
+  "category": "公共安全与移动执勤",
+  "persona_summary": "移动执勤人员",
+  "static_profile": {
+    "user_id": "USER_006",
+    "identity": "一名经验丰富的安全执勤官，长期从事国际执法协作与敏感文化环境下的现场处置工作。日常以高频外出执勤为主，每周约3至6个外出时段，活动范围覆盖夜间值守点、事故现场、应急集结区、道路与巡逻区域及临时处置现场。全程依赖手机移动核心网（4G/5G）直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi，便携终端确需联网时以手机热点兜底。核心工作包括现场取证、即时通信与事件上报、地图导航、位置共享与任务调度。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑（现场取证与画面回传时使用），两者通过手机热点或移动核心网直连。",
+    "apps": [
+      "微信",
+      "钉钉",
+      "腾讯会议",
+      "高德地图"
+    ],
+    "speech_archetype": "security_officer_speaker",
+    "speech_style": {
+      "tone": "干练、克制、指令性强，习惯用短句确认关键信息，对时间与位置表述精确，涉及跨文化协作时措辞谨慎。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "位置发我",
+        "按流程走"
+      ],
+      "typical_habits": "布置任务前先确认网络与位置状态，习惯用'老规矩'指代固定时段的例行连线，用'对齐一下'发起短会，强调消息必须及时送达、画面必须稳定回传。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "巡逻线现场取证与调度连线",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "当执勤人员身处道路巡逻线、事故现场或应急集结区等移动执勤环境，且处于09:00-11:00上午例行巡逻时段时触发；此时需通过移动核心网进行现场取证画面回传、位置共享与任务调度连线。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "09:00-11:00",
+      "application_name": "钉钉",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "钉",
+          "dingding",
+          "dingtalk"
+        ],
+        "service_aliases": [
+          "开会",
+          "进会议室",
+          "入会"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十一点",
+          "一个半小时"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "上午例行",
+          "巡逻线上的老规矩"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨区域联合执法演练周",
+        "start_time": "2026年11月02日00时00分",
+        "end_time": "2026年11月08日23时59分",
+        "scene_description": "演练周期间在城郊道路与临时集结区多点位转场，现场人员密集、基站负载高，移动核心网出现波动，需优先保障指令消息与低码率画面稳定回传。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "执法记录仪录像复盘短会",
+        "application_name": "抖音",
+        "service_name": "开直播",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "执勤结束回到值守点或临时处置现场后，需与队员复盘执法记录仪录像、对齐处置流程时触发。",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "推流",
+            "开播"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨文化协作即时沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "涉及国际执法协作或外方联络人沟通，需要面对面确认细节与文化敏感事项时触发。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次任务：在应急集结区用平板查看上级直播的演练动员会",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次任务：值守间隙在手机上刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

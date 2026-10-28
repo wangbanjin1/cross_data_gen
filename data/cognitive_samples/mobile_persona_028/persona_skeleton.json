@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_028",
+  "category": "体育训练与赛事保障",
+  "persona_summary": "移动训练与参赛人员",
+  "static_profile": {
+    "user_id": "USER_028",
+    "identity": "退役的阿尔斯特橄榄球运动员，现为青训教练兼赛事保障顾问，日常带青少年队训练、随队客场转场，晚间习惯与孙辈视频分享往昔赛场故事，并同步整理训练影像资料",
+    "devices": "主力为5G智能手机，辅助为随身运动相机与便携拍摄设备，外出时以手机热点为其他便携终端供网",
+    "apps": [
+      "微信",
+      "抖音",
+      "腾讯会议",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "athlete_speaker",
+    "speech_style": {
+      "tone": "爽朗直率、带点老派教练的絮叨，讲起旧比赛眉飞色舞，布置任务时干脆利落",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "当年我们那会儿",
+        "对齐一下"
+      ],
+      "typical_habits": "喜欢用球场行话打比方，安排事情先定时间点再说细节，习惯用'老时间''老规矩'指代固定安排"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "晚间训练影像回传与团队调度直播",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每天晚间黄金档（20:00-22:00）训练结束后，在临时休息点用手机开直播向教练组回传当日训练画面并做团队调度",
+      "period_type": "daily",
+      "days": [
+        "daily"
+      ],
+      "time_range": "20:00-22:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖子"
+        ],
+        "service_aliases": [
+          "推流",
+          "开播",
+          "拉个直播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "播到十点"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "晚间例行"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城青少年橄榄球邀请赛周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "赛事集结区与露天球场人群密集、基站负载高，转场大巴上信号切换频繁，需优先保证调度语音与低码率画面连续",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "转场大巴上的团队视频调度",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "客场转场途中接到教练组临时通知，需在大巴上快速对齐当日训练安排与人员分工",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "赛后录像复盘与孙辈视频分享",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "比赛或训练结束回到休息点，与教练组复盘录像，或与孙辈视频讲当年赛场故事",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "某次临时被拉进赛事筹备线上会议，仅此一次",
+        "application_name": "飞书",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "候场时随手刷短视频打发时间，单次行为",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

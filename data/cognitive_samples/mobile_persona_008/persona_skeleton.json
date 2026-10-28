@@ -1,0 +1,172 @@
+{
+  "persona_id": "mobile_persona_008",
+  "category": "体育训练与赛事保障",
+  "persona_summary": "移动训练与赛事人员",
+  "static_profile": {
+    "user_id": "USER_008",
+    "identity": "职业篮球得分后卫兼移动训练与赛事保障人员，长期随队客场转场、在露天球场与赛事集结区进行训练与比赛，需在移动场景中完成赛事直播、团队调度、训练视频上传与数据回放。",
+    "devices": "主力为5G智能手机，辅助为可穿戴设备（运动手表/心率带），便携终端需联网时以手机热点共享。",
+    "apps": [
+      "抖音",
+      "微信",
+      "钉钉",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "athlete_speaker",
+    "speech_style": {
+      "tone": "干脆利落、带球场口令感，习惯用短句确认与催促",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "稳住上行"
+      ],
+      "typical_habits": "开播前先口头对齐参数与分工，转场途中用语音消息同步位置，复盘时边看回放边点评。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "赛前热身与训练现场直播推流",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "客场转场抵达露天球场或赛事集结区后，10:00-12:00热身训练时段开启现场直播，向队内与粉丝同步训练实况并回传教练组",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "10:00-12:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖子"
+        ],
+        "service_aliases": [
+          "推流",
+          "开播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头"
+        ],
+        "period_aliases": [
+          "老时间",
+          "每天这个时候",
+          "热身档口"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城赛事周集结区人群密集期",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "赛事集结区与露天球场人流密集、无线环境拥塞，转场频繁，需优先保证通信连续与上行稳定",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "转场大巴团队视频调度",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "客场转场途中在移动网络下与教练组、保障团队进行视频调度与位置同步",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "训练录像复盘与数据回放",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "训练结束后上传训练视频片段并进行数据记录与回放复盘",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "临时与家人单次视频通话",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "休息点单次观看队友赛事直播",
+        "application_name": "快手",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}
