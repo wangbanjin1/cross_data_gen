@@ -135,6 +135,8 @@ class SessionAssembler:
             res["session_meta"]["memory_tier"] = s_plan.get("memory_tier", "factual_memory")
             res["session_meta"]["cold_hot_type"] = s_plan.get("cold_hot_type")
             res["session_meta"]["agility_factor"] = s_plan.get("agility_factor")
+            if s_plan.get("retrieval_challenge_type"):
+                res["session_meta"]["retrieval_challenge_type"] = s_plan.get("retrieval_challenge_type")
         return res
 
     @classmethod

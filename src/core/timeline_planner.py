@@ -443,6 +443,38 @@ class DynamicTimelinePlanner:
                 "holiday_defer_date": cfg.get("holiday_defer_date"),
                 "learning_source_session": learning_source_session,
                 "experience_id": cfg.get("experience_id"),
+                "retrieval_challenge_type": cfg.get("retrieval_challenge_type")
+                or (
+                    "negation_contrast"
+                    if cfg.get("tag") in ("evt_correct", "dist_normal", "sub1_reuse_10")
+                    else (
+                        "paraphrased_alias_scene"
+                        if cfg.get("tag") == "evt_reuse"
+                        else (
+                            "implicit_service_collocation"
+                            if cfg.get("tag") in ("main_amend", "sub2_reuse", "main_final")
+                            else None
+                        )
+                    )
+                ),
+                "contrast_negated_app": (
+                    sub_01.get("application_name", "钉钉")
+                    if cfg.get("tag") == "evt_correct"
+                    else (
+                        main_mt.get("application_name", "抖音")
+                        if cfg.get("tag") in ("dist_normal", "sub1_reuse_10")
+                        else None
+                    )
+                ),
+                "contrast_negated_service": (
+                    sub_01.get("service_name", "视频会议")
+                    if cfg.get("tag") == "evt_correct"
+                    else (
+                        main_mt.get("service_name", "开直播")
+                        if cfg.get("tag") in ("dist_normal", "sub1_reuse_10")
+                        else None
+                    )
+                ),
             }
 
             # 若为真实开通的保障业务（非纯域外拒绝与对账），将单据记入意图保障单账本

@@ -58,6 +58,40 @@ def _sanitize_env(env: str, time_str: str = "") -> str:
         return "外勤保障现场"
     return env.strip("，, 。. ")
 
+def _paraphrase_env(env: str) -> str:
+    if "大巴" in env or "转场" in env:
+        return "坐大巴车转场的路上"
+    if "驻地" in env or "酒店" in env:
+        return "外勤驻地酒店这边休息区"
+    if "现场" in env:
+        return env.replace("现场", "活动这边现场")
+    return f"{env}这边"
+
+
+def _paraphrase_period(period_type: str) -> str:
+    if period_type == "daily":
+        return "按咱们中午那个例行档期"
+    if period_type == "monthly":
+        return "按咱们每月那个固定例会档期"
+    return "按咱们每周那个固定例行档期"
+
+
+def _implicit_service_phrase(srv: str) -> str:
+    if any(k in srv for k in ("开直播", "转播", "带货", "推流")):
+        return "上麦开播推流"
+    if "看直播" in srv:
+        return "蹲直播间看直播"
+    if any(k in srv for k in ("会议", "开会", "视讯")):
+        return "搞个线上投屏远程碰头会"
+    if any(k in srv for k in ("游戏", "排位", "手游", "开黑")):
+        return "上号打把排位赛"
+    if "通话" in srv:
+        return "连线打个视频通话"
+    if "短视频" in srv:
+        return "刷会儿短视频"
+    return f"开启{srv}"
+
+
 def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
     tp = s_plan["target_params"]
     aliases = s_plan.get("aliases", {})
@@ -195,6 +229,8 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
             return "太细节了！进别人直播间当连麦嘉宾要上麦发言，确实得按【抖音-开直播】保上传而不是看直播，确认按此开通意图保障单！"
     elif tid == "T2-5":
         if turn_idx == 1:
+            if s_plan.get("retrieval_challenge_type") == "implicit_service_collocation":
+                return f"今天在{env}，老规矩，用{app_alias}{_implicit_service_phrase(srv)}，帮我把保障开上。"
             return f"今天在{env}，老规矩，用{app_alias}做{srv_alias}，帮我把保障开上。"
         else:
             return f"对，老规矩不变，不过今天现场活动延长了，帮我把保障时长延长到{tp['duration']}。"
@@ -239,12 +275,20 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
         return f"帮我查下这周总共开了几次保障，一共多长时间？"
     elif tid == "T2-3":
         if turn_idx == 1:
+            if s_plan.get("retrieval_challenge_type") == "negation_contrast" and s_plan.get("contrast_negated_app"):
+                neg_a = s_plan.get("contrast_negated_app")
+                neg_s = s_plan.get("contrast_negated_service") or "视频会议"
+                return f"今天在{env}，不用{neg_a}做{neg_s}了，老规矩用{app}做{srv}，帮我把保障开上。"
             return f"今天在{env}，老规矩，用{app}做{srv}，帮我把保障开上。"
         else:
             return f"对，不过今天现场特殊，画质临时调到{res}，时延压到{rtt}以内，今天临时按这个来。"
     elif tid == "T1-1" or b_type == "distractor":
         start_t = tp['start_timestamp'].split('日')[-1]
         end_t = tp['end_timestamp'].split('日')[-1]
+        if s_plan.get("retrieval_challenge_type") == "negation_contrast" and s_plan.get("contrast_negated_app"):
+            neg_a = s_plan.get("contrast_negated_app")
+            neg_s = s_plan.get("contrast_negated_service") or "开直播"
+            return f"你好，今天不用{neg_a}做{neg_s}了，{start_t}到{end_t}改在{app}开{srv}（开{tp['duration']}），画质要{res}，时延控制在{rtt}以内，帮我开个保障。"
         return f"你好，今天{start_t}到{end_t}要在{app}开{srv}（开{tp['duration']}），画质要{res}，时延控制在{rtt}以内，帮我开个保障。"
     elif turn_idx == 1:
         if role == "reinforcement_session" and decl_mode == "implicit_induction" and s_plan.get("session_id", "").endswith("-03"):
@@ -252,6 +296,23 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
         elif role == "evidence_session":
             return f"你好，需要给{app}{srv}做一个网络保障，时间是今天{tp['start_timestamp'].split('日')[-1]}开始。"
         elif role in ["reinforcement_session", "reuse_session"]:
+            challenge_type = s_plan.get("retrieval_challenge_type")
+            if challenge_type == "negation_contrast" and s_plan.get("contrast_negated_app"):
+                neg_a = s_plan.get("contrast_negated_app")
+                neg_s = s_plan.get("contrast_negated_service") or "开直播"
+                return f"今天不用{neg_a}做{neg_s}了，现在在{env}，老规矩改用{app}做{srv}，帮我把保障开上。"
+            if challenge_type == "paraphrased_alias_scene":
+                para_env = _paraphrase_env(env)
+                para_period = _paraphrase_period(period_type)
+                if trig_type == "time_periodic":
+                    return f"老规矩，{para_period}，在{para_env}用{app}做{srv}，帮我把保障开上。"
+                return f"老规矩，在{para_env}，用{app}做{srv}，帮我把保障开上。"
+            if challenge_type == "implicit_service_collocation":
+                imp_srv = _implicit_service_phrase(srv)
+                if s_plan.get("agility_factor") == 1.0 and trig_type == "time_periodic":
+                    time_prompt = "午间例行这个时候" if period_type == "daily" else ("每月例会这个时候" if period_type == "monthly" else "每周例行这个时候")
+                    return f"老规矩，{time_prompt}，用{app}{imp_srv}，帮我把保障开上，别掉链子。"
+                return f"老规矩，在{env}，用{app}{imp_srv}，帮我把保障开上。"
             if s_plan.get("agility_factor") == 1.0:
                 if trig_type == "time_periodic":
                     time_prompt = "午间例行这个时候" if period_type == "daily" else ("每月例会这个时候" if period_type == "monthly" else "每周例行这个时候")

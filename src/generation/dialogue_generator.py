@@ -181,6 +181,12 @@ class DialogueGenerator:
                 )
             else:
                 t1_rule = f"【常规复用/强化会话：大记忆点已生效。应用＋业务是最小表达：若小记忆类型为service_default_app，可只说业务；若为application_alias，必须说应用别名＋业务；若为画质/时延/时长/个性化周期表达，必须说标准应用＋业务＋该个性化表达。指定小记忆点='{primary_alias}'。Agent 从记忆中补全其余画质{tp['resolution']}、时延{tp['rtt']}、开始时间{tp['start_timestamp']}、结束时间{tp['end_timestamp']}和时长{tp['duration']}；不得把未说出的槽位标成 Turn 来源。】"
+                if s_plan.get("retrieval_challenge_type") == "paraphrased_alias_scene":
+                    t1_rule += "【检索盲区变体要求(paraphrased_alias_scene)：第1轮用户需使用拆词/同义近似口语来表达周期或现场（如将‘午间例行’说成‘按咱们中午那个例行档期’，将‘大巴转场途中’说成‘坐大巴车转场的路上’）。】"
+                elif s_plan.get("retrieval_challenge_type") == "implicit_service_collocation":
+                    t1_rule += "【检索盲区变体要求(implicit_service_collocation)：第1轮用户使用隐含动宾短语表达业务（如用‘上麦开播推流’代替‘开直播’，用‘搞个线上投屏远程碰头会’代替‘视频会议’）。】"
+                elif s_plan.get("retrieval_challenge_type") == "negation_contrast":
+                    t1_rule += f"【检索盲区变体要求(negation_contrast)：第1轮用户先用否定从句排除主线业务（如‘今天不用{s_plan.get('contrast_negated_app', '抖音')}做{s_plan.get('contrast_negated_service', '开直播')}了’），再转折提出当前诉求。】"
 
             prompt_items.append({
                 "session_id": sid,
@@ -306,6 +312,8 @@ class DialogueGenerator:
 
         # 单轮干扰任务：必须清晰说全参数，严禁携带任何个性化表达/模糊词
         if tid == "T1-1" or s_plan.get("blueprint_type") == "distractor":
+            if s_plan.get("retrieval_challenge_type") == "negation_contrast":
+                u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
             bad_dist_kws = ["清晰点就行", "不卡就行", "一会儿", "老规矩", "老时间", "照旧", "按习惯"]
             if any(kw in u_text for kw in bad_dist_kws) or tp.get("resolution", "") not in u_text or tp.get("rtt", "") not in u_text:
                 u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
@@ -412,6 +420,8 @@ class DialogueGenerator:
         if tid == "T1-2":
             a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
         if tid == "T1-1" or s_plan.get("blueprint_type") == "distractor":
+            if s_plan.get("retrieval_challenge_type") == "negation_contrast":
+                u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
             if any(kw in a_text for kw in ["记忆理解", "理解为", "按‘", "按\""]):
                 a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
         if tid in ["T2-2", "T3-1"] and s_plan.get("small_memory_evidence_mode") == "cross_turn_clarification":

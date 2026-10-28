@@ -495,6 +495,97 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
                 self.assertTrue(len(matrix[key]["simulator_reply"]) > 0)
 
 
+    def test_10_retrieval_blindspot_variants_and_qc(self):
+        """测试三类检索盲区挑战变体 (negation_contrast / paraphrased_alias_scene / implicit_service_collocation) 生成与100%质检通过率"""
+        from src.templates.prompts.dialogue_fallbacks import (
+            get_fallback_user_utterance,
+            get_fallback_agent_utterance,
+            get_normalized_action_types,
+        )
+
+        mock_persona = {
+            "static_profile": {
+                "user_id": "USER_BLIND_01",
+                "identity": "户外赛事主播",
+                "speech_style": {"tone": "干练", "catchphrases": "别掉链子", "typical_habits": "简洁"},
+            },
+            "dynamic_profile": {
+                "periodic_main_storyline": {
+                    "application_name": "抖音",
+                    "service_name": "开直播",
+                    "period_type": "daily",
+                    "time_range": "12:30-13:30",
+                    "preferred_params": {"resolution": "1080p", "rtt_max": "50ms"},
+                },
+                "scenario_events": [
+                    {
+                        "event_name": "大巴转场弱网保障",
+                        "scene_description": "大巴转场途中",
+                        "preference_override": {"resolution": "720p", "rtt_max": "100ms"},
+                    }
+                ],
+                "sub_storylines": [
+                    {
+                        "application_name": "钉钉",
+                        "service_name": "视频会议",
+                        "params": {"resolution": "720p", "rtt_max": "80ms"},
+                    }
+                ],
+                "distractor_pool": [
+                    {"application_name": "腾讯会议", "service_name": "视频会议"}
+                ],
+            },
+        }
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            ledger_path = Path(tmp_dir) / "working_records.jsonl"
+            ledger = WorkingRecordsLedger(user_id="USER_BLIND_01", storage_path=ledger_path)
+            exp_bank = ExperienceBank()
+            planned_sessions = DynamicTimelinePlanner.plan(
+                persona=mock_persona,
+                working_ledger=ledger,
+                experience_bank=exp_bank,
+            )
+
+            challenge_types = {s.get("retrieval_challenge_type") for s in planned_sessions if s.get("retrieval_challenge_type")}
+            self.assertIn("negation_contrast", challenge_types)
+            self.assertIn("paraphrased_alias_scene", challenge_types)
+            self.assertIn("implicit_service_collocation", challenge_types)
+
+            tracker = MemoryTracker()
+            assembled_all = []
+            for s_plan in planned_sessions:
+                snap_before, mem_events, gold_after = tracker.process_session(s_plan)
+                rounds = s_plan["round_count"]
+                role = s_plan["memory_role"]
+                events = []
+                for t_idx in range(1, rounds + 1):
+                    is_last = t_idx == rounds
+                    u_txt = get_fallback_user_utterance(s_plan, t_idx, role)
+                    a_txt = get_fallback_agent_utterance(s_plan, t_idx, role, is_last)
+                    u_acts, a_acts = get_normalized_action_types(s_plan, t_idx, role, is_last, None, None)
+                    events.append(
+                        {
+                            "turn": t_idx,
+                            "user": {"utterance": u_txt, "action_types": u_acts},
+                            "agent": {"utterance": a_txt, "action_types": a_acts},
+                            "related_intent_ids": ["I1"],
+                            "requested_params": [],
+                        }
+                    )
+                assembled = SessionAssembler.assemble(
+                    s_plan=s_plan,
+                    snapshot_before=snap_before,
+                    memory_events=mem_events,
+                    gold_after=gold_after,
+                    event_sequence=events,
+                )
+                assembled_all.append(assembled)
+
+            qc_res = QCValidator.validate_sessions(assembled_all)
+            self.assertEqual(qc_res["failed_sessions"], 0, f"QC issues: {qc_res['issues']}")
+
+
 if __name__ == "__main__":
     unittest.main()
 
