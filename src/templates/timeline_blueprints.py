@@ -681,7 +681,14 @@ def get_session_blueprints(
         if t_kind == "main":
             item["ref_time"] = _m_time(d_str, ref_str)
             item["start"] = _m_time(d_str, sh_str)
-            item["end"] = _m_time(d_str, eh_str)
+            if item.get("experience_id") == "EXP_ORDER_QUALITY_DISAMBIGUATION_01":
+                sh_m = int(sh_str.split(":")[0]) * 60 + int(sh_str.split(":")[1])
+                eh_120_m = (sh_m + 120) % (24 * 60)
+                eh_120_str = f"{eh_120_m // 60:02d}:{eh_120_m % 60:02d}"
+                item["end"] = _m_time(d_str, eh_120_str)
+                item["dur"] = "120min"
+            else:
+                item["end"] = _m_time(d_str, eh_str)
         elif t_kind == "main_amend":
             item["ref_time"] = _m_time(d_str, ref_str)
             item["start"] = _m_time(d_str, sh_str)
