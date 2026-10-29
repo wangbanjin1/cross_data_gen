@@ -938,30 +938,42 @@ class SessionAssembler:
 
         elif scenario_type == "quality_disambiguation":
             d_prefix = start.split("日")[0] + "日" if "日" in start else "2026年10月21日"
-            short_flawed_end = f"{d_prefix}16时00分" if "日" in start else "16:00"
-            short_flawed_dur = "60min"
+            m_f_dur = re.search(r"(\d+)", str(dur or "120min"))
+            f_mins = int(m_f_dur.group(1)) if m_f_dur else 120
+            t_mins = 30 if f_mins <= 60 else 60
+            short_flawed_dur = f"{t_mins}min"
+            sh_part = start.split("日")[-1] if "日" in start else start
+            m_sh = re.search(r"(\d{1,2})[时:](\d{1,2})", sh_part)
+            if m_sh:
+                t_end_tot = (int(m_sh.group(1)) * 60 + int(m_sh.group(2)) + t_mins) % (24 * 60)
+                short_flawed_end = f"{d_prefix}{t_end_tot // 60:02d}时{t_end_tot % 60:02d}分" if "日" in start else f"{t_end_tot // 60:02d}:{t_end_tot % 60:02d}"
+            else:
+                short_flawed_end = f"{d_prefix}15时00分" if "日" in start else "15:00"
+            _lbl_map = {30: ("半小时", "半小时"), 60: ("1个小时", "1小时"), 90: ("1个半小时", "1.5小时"), 120: ("2个小时", "2小时"), 180: ("3个小时", "3小时")}
+            f_spoken, f_short = _lbl_map.get(f_mins, (f"{f_mins}分钟", f"{f_mins}分钟"))
+            t_spoken, t_short = _lbl_map.get(t_mins, (f"{t_mins}分钟", f"{t_mins}分钟"))
 
-            fast_cond = "识别正式客户路演场景，自动过滤前天1小时(60min)临时短单，优选匹配上周2小时(120min)正式路演单时长，2轮快速闭环"
-            slow_cond = "Agent未启用历史单据时长消歧经验，按最近邻偏见调取前天1小时(60min)临时短单，经用户澄清指正后在3轮闭环"
+            fast_cond = f"识别正式客户路演场景，自动过滤前天{t_short}({short_flawed_dur})临时短单，优选匹配上周{f_short}({dur})正式路演单时长，2轮快速闭环"
+            slow_cond = f"Agent未启用历史单据时长消歧经验，按最近邻偏见调取前天{t_short}({short_flawed_dur})临时短单，经用户澄清指正后在3轮闭环"
             gate = {
                 "eval_turn": 1,
                 "decision_type": "historical_order_duration_disambiguation_check",
-                "pass_condition": "Agent在正式客户路演场景下过滤前天60min临时短单，按上周正式路演单排满120min (EXP_ORDER_QUALITY_DISAMBIGUATION_01)",
-                "fail_condition": "Agent因最近邻偏见机械照搬前天那笔60min临时短会单时长",
+                "pass_condition": f"Agent在正式客户路演场景下过滤前天{short_flawed_dur}临时短单，按上周正式路演单排满{dur} (EXP_ORDER_QUALITY_DISAMBIGUATION_01)",
+                "fail_condition": f"Agent因最近邻偏见机械照搬前天那笔{short_flawed_dur}临时短会单时长",
                 "key_slot_assertions": {
                     "target_intent_id": "I1",
                     "checked_source": "Experience",
-                    "expected_duration_filter": "prefer_formal_roadshow_120min_order"
+                    "expected_duration_filter": f"prefer_formal_roadshow_{dur}_order"
                 },
                 "pass_route": "fast_path",
                 "fail_route": "slow_path"
             }
 
             slot_err_reply = (
-                "不对，1个小时不够！你调成前天我临时开的短单了，"
-                "今天是正式路演，得按上周那笔正式单把时长改成2个小时。"
+                f"不对，{t_spoken}不够！你调成前天我临时开的短单了，"
+                f"今天是正式路演，得按上周那笔正式单把时长改成{f_spoken}。"
             )
-            goal_match_reply = "好的，保满两个小时就对了，确认按此开通。"
+            goal_match_reply = f"好的，保满{f_spoken}就对了，确认按此开通。"
 
             tree = [
                 {

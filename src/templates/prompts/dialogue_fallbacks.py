@@ -92,6 +92,44 @@ def _implicit_service_phrase(srv: str) -> str:
     return f"开启{srv}"
 
 
+def _dur_cn_labels(mins: int) -> tuple[str, str]:
+    mapping = {
+        30: ("半小时", "半小时"),
+        60: ("1个小时", "1小时"),
+        90: ("1个半小时", "1.5小时"),
+        120: ("2个小时", "2小时"),
+        150: ("2个半小时", "2.5小时"),
+        180: ("3个小时", "3小时"),
+    }
+    return mapping.get(mins, (f"{mins}分钟", f"{mins}分钟"))
+
+
+def _formal_and_temp_dur_info(tp: dict) -> dict:
+    formal_dur = str(tp.get("duration") or "120min")
+    m_dur = re.search(r"(\d+)", formal_dur)
+    formal_min = int(m_dur.group(1)) if m_dur else 120
+    temp_min = 30 if formal_min <= 60 else 60
+    temp_dur = f"{temp_min}min"
+    formal_spoken, formal_short = _dur_cn_labels(formal_min)
+    temp_spoken, temp_short = _dur_cn_labels(temp_min)
+    sh_t = str(tp.get("start_timestamp") or "").split("日")[-1] or "14时00分"
+    m_hm = re.search(r"(\d{1,2})时(\d{1,2})分", sh_t)
+    if m_hm:
+        tot = (int(m_hm.group(1)) * 60 + int(m_hm.group(2)) + temp_min) % (24 * 60)
+        temp_end_t = f"{tot // 60:02d}时{tot % 60:02d}分"
+    else:
+        temp_end_t = "15时00分"
+    return {
+        "formal_dur": formal_dur,
+        "formal_spoken": formal_spoken,
+        "formal_short": formal_short,
+        "temp_dur": temp_dur,
+        "temp_spoken": temp_spoken,
+        "temp_short": temp_short,
+        "temp_end_t": temp_end_t,
+    }
+
+
 def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
     tp = s_plan["target_params"]
     aliases = s_plan.get("aliases", {})
@@ -160,10 +198,11 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
                 return "等等，大型活动现场还得提前进场调试设备呢，掐着点开来不及！帮我把开始时间往前提前半小时吧。"
         elif exp_id == "EXP_ORDER_QUALITY_DISAMBIGUATION_01":
             sh_t = tp['start_timestamp'].split('日')[-1]
+            d_info = _formal_and_temp_dur_info(tp)
             if turn_idx == 1:
                 return f"今天在{env}办正式客户远程路演，从{sh_t}开始开{app}{srv}（画质{res}、时延{rtt}以内），保障时长和结束时间就按我上次办的那笔意图保障单来。"
             else:
-                return "不对，1个小时不够！前天那笔只是我临时插空开的短会，今天是正式路演，得按上周那笔正式单改成2个小时。"
+                return f"不对，{d_info['temp_spoken']}不够！前天那笔只是我临时插空开的短会，今天是正式路演，得按上周那笔正式单改成{d_info['formal_spoken']}。"
         elif exp_id == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
             if turn_idx == 1:
                 return f"今天下午在{env}，15时00分到17时00分（持续120min）我受邀进主会场的抖音直播间当连麦嘉宾互动，帮我把抖音的保障开上，画质要求{res}，时延控制在{rtt}以内。"
@@ -218,10 +257,11 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
     elif s_plan.get("experience_citation", {}).get("experience_id") == "EXP_ORDER_QUALITY_DISAMBIGUATION_01":
         start_t = tp['start_timestamp'].split('日')[-1]
         end_t = tp['end_timestamp'].split('日')[-1]
+        d_info = _formal_and_temp_dur_info(tp)
         if turn_idx == 1:
             return f"今天在{env}要办一场正式客户远程路演，下午{start_t}开始开{app}{srv}（画质{res}、时延{rtt}以内），保障时长和结束时间就按我上次办的那笔意图保障单来。"
         else:
-            return f"太准了！前天那笔只是1小时临时短会，今天正式客户路演就得按上周那笔正式路演单保满2个小时（{start_t}到{end_t}，持续120min），确认直接开通！"
+            return f"太准了！前天那笔只是{d_info['temp_short']}临时短会，今天正式客户路演就得按上周那笔正式路演单保满{d_info['formal_spoken']}（{start_t}到{end_t}，持续{d_info['formal_dur']}），确认直接开通！"
     elif tid == "T2-10" or s_plan.get("experience_citation", {}).get("experience_id") == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
         if turn_idx == 1:
             return f"今天下午在{env}，15时00分到17时00分（持续120min）我受邀进主会场的抖音直播间当连麦嘉宾互动，帮我把抖音的保障开上，画质要求{res}、时延控制在{rtt}以内。"
@@ -421,10 +461,11 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
         elif exp_id == "EXP_ORDER_QUALITY_DISAMBIGUATION_01":
             sh_t = tp['start_timestamp'].split('日')[-1]
             eh_t = tp['end_timestamp'].split('日')[-1]
+            d_info = _formal_and_temp_dur_info(tp)
             if turn_idx == 1:
-                return f"收到，已按您最近一笔（前天）的记录，为您准备好{sh_t}至16时00分（持续60min）的{app}{srv}意图保障单（{res} / 时延≤{rtt}），确认按此开通吗？"
+                return f"收到，已按您最近一笔（前天）的记录，为您准备好{sh_t}至{d_info['temp_end_t']}（持续{d_info['temp_dur']}）的{app}{srv}意图保障单（{res} / 时延≤{rtt}），确认按此开通吗？"
             else:
-                return f"明白！已为您过滤前天的1小时临时短单，按上周正式客户路演单为您排满2小时（{sh_t}至{eh_t}，持续120min，{res} / 时延≤{rtt}），并记下这条经验，祝您路演顺畅！"
+                return f"明白！已为您过滤前天的{d_info['temp_short']}临时短单，按上周正式客户路演单为您排满{d_info['formal_short']}（{sh_t}至{eh_t}，持续{d_info['formal_dur']}，{res} / 时延≤{rtt}），并记下这条经验，祝您路演顺畅！"
         elif exp_id == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
             if turn_idx == 1:
                 return f"收到，已为您准备好15时00分至17时00分（持续120min）的【抖音-看直播】意图保障单（{res} / 时延≤{rtt}），确认按此直接开通吗？"
@@ -478,12 +519,13 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
     elif s_plan.get("experience_citation", {}).get("experience_id") == "EXP_ORDER_QUALITY_DISAMBIGUATION_01":
         start_t = tp['start_timestamp'].split('日')[-1]
         end_t = tp['end_timestamp'].split('日')[-1]
+        d_info = _formal_and_temp_dur_info(tp)
         learn_sid = s_plan.get("learning_source_session")
         learn_prefix = f"参考此前在 {learn_sid} 的历史单据时长优选经验，" if learn_sid else "参考此前的历史单据时长优选经验，"
         if turn_idx == 1:
-            return f"检索到您历史账本中有两笔记录（前天1小时临时短单60min vs 上周正式客户路演单120min）。{learn_prefix}识别到您今天是办正式客户远程路演，已自动为您过滤前天那笔1小时临时短单，按上周正式路演单为您排满2小时（{start_t}至{end_t}，持续{tp['duration']}，{res} / 时延≤{rtt}），确认直接开通吗？"
+            return f"检索到您历史账本中有两笔记录（前天{d_info['temp_short']}临时短单{d_info['temp_dur']} vs 上周正式客户路演单{d_info['formal_dur']}）。{learn_prefix}识别到您今天是办正式客户远程路演，已自动为您过滤前天那笔{d_info['temp_short']}临时短单，按上周正式路演单为您排满{d_info['formal_short']}（{start_t}至{end_t}，持续{tp['duration']}，{res} / 时延≤{rtt}），确认直接开通吗？"
         else:
-            return f"好的，已按上周2小时正式路演单时长（{start_t}至{end_t}，持续{tp['duration']}，{res} / 时延≤{rtt}）为您成功受理{app}{srv}意图保障单，祝您路演顺畅！"
+            return f"好的，已按上周{d_info['formal_short']}正式路演单时长（{start_t}至{end_t}，持续{tp['duration']}，{res} / 时延≤{rtt}）为您成功受理{app}{srv}意图保障单，祝您路演顺畅！"
     elif tid == "T2-10" or s_plan.get("experience_citation", {}).get("experience_id") == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
         start_t = tp['start_timestamp'].split('日')[-1]
         end_t = tp['end_timestamp'].split('日')[-1]

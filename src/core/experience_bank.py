@@ -90,10 +90,10 @@ DEFAULT_EXPERIENCE_ENTRIES = [
     },
             {
             "experience_id": "EXP_ORDER_QUALITY_DISAMBIGUATION_01",
-            "title": "历史意图保障单模糊指代（过滤前天1小时临时短单、优选上周2小时正式路演单）消歧经验",
+            "title": "历史意图保障单模糊指代（过滤近期临时短单、优选上周正式路演单）消歧经验",
             "category": "historical_order_duration_disambiguation",
-            "condition": "用户在展区/外场办正式客户路演并要求‘按上次办的保障单排时长’，且账本中存在前天1小时(60min)临时短会单与上周2小时(120min)正式路演长单",
-            "action": "过滤时间最近但属临时插曲的前天60min短单，优选匹配上周同为正式客户路演的120min长单（顺延结束时间保满2小时，画质与时延完全由用户自己指定）",
+            "condition": "用户在展区/外场办正式客户路演并要求‘按上次办的保障单排时长’，且账本中存在近期临时短会单与上周正式路演单",
+            "action": "过滤时间最近但属临时插曲的前天临时短单，优选匹配上周同为正式客户路演的正式工单时长（画质与时延完全由用户自己指定）",
             "validity": "适用于用户模糊指代‘按上次的保障单来’且近期穿插过临时短单的正式外场路演场景。",
             "trigger_conditions": {
                 "location_keywords": ["外摆区", "拜访点", "商圈", "展会", "外访", "现场", "展区"],
@@ -101,18 +101,17 @@ DEFAULT_EXPERIENCE_ENTRIES = [
                 "user_intent_features": ["ambiguous_historical_order_ref", "recency_bias_short_order_trap"]
             },
             "reasoning_chain": [
-                "1. 账本候选检索：用户要求下午15:00开始办正式客户路演，时长按‘上次办的保障单’来，账本中检出前天临时短单（60min）与上周正式路演单（120min）；",
-                "2. 最近邻陷阱规避：无经验模型会因最近邻偏见直接照搬前天那笔60min（15:00-16:00）临时短单，导致2小时路演中途断保；",
-                "3. 场景时长匹配：依据日常经验过滤前天1小时临时短单，按上周正式客户路演单排满2小时（15:00-17:00，120min），画质与时延严格按用户指定值执行。"
+                "1. 账本候选检索：用户要求开始办正式客户路演，时长按‘上次办的保障单’来，账本中检出前天临时短单与上周正式路演单；",
+                "2. 最近邻陷阱规避：无经验模型会因最近邻偏见直接照搬前天那笔临时短单，导致正式路演中途断保；",
+                "3. 场景时长匹配：依据日常经验过滤前天临时短单，按上周正式客户路演单排满对应正式时长，画质与时延严格按用户指定值执行。"
             ],
             "recommended_adjustments": {
-                "duration": "120min",
                 "prefer_formal_duration_over_recent_temp": True
             },
             "applicable_boundaries": "适用于正式路演场景下的历史单据模糊指代。",
-            "negative_counterexamples": "若用户明确说明今天只是1小时临时短会，则按60min排期。",
+            "negative_counterexamples": "若用户明确说明今天只是临时短会，则按临时短单时长排期。",
             "strategy_type": "historical_order_duration_disambiguation",
-            "crystallization_prompt": "前天那单60min只是我临时插空打的短会，今天在展区给客户做正式远程路演，时长肯定得按上周那笔正式路演单保满2个小时（120min）啊！你把这条经验记牢：以后我办正式客户路演说‘按上次的保障单来’，别机械拿最近那笔1小时临时短单，自动帮我匹配2小时（120min）的正式路演单！"
+            "crystallization_prompt": "前天那单只是我临时插空打的短会，今天在展区给客户做正式远程路演，时长肯定得按上周那笔正式路演单来啊！你把这条经验记牢：以后我办正式客户路演说‘按上次的保障单来’，别机械拿最近那笔临时短单，自动帮我匹配上周的正式路演单时长！"
         },
         {
             "experience_id": "EXP_OVERLAPPING_ORDER_RESOLUTION_01",

@@ -278,11 +278,14 @@ class DynamicTimelinePlanner:
                     rtt = src.get("preferred_params", {}).get("rtt_max") or "50ms"
                 elif exp_id == "EXP_ORDER_QUALITY_DISAMBIGUATION_01":
                     prior_recs = working_ledger.query_prior_records(cfg["ref_time"])
-                    target_rec = next((r for r in prior_recs if r.get("duration") == "120min"), prior_recs[0] if prior_recs else None)
+                    target_rec = next(
+                        (r for r in prior_recs if r.get("duration") == cfg["dur"] and r.get("application_name") == src["application_name"]),
+                        next((r for r in prior_recs if r.get("duration") == cfg["dur"]), prior_recs[0] if prior_recs else None),
+                    )
                     if target_rec:
                         working_memory_pointer = working_ledger.generate_session_pointer(target_rec, cfg["ref_time"])
                         working_memory_pointer["duration_filtered"] = True
-                        working_memory_pointer["selected_order_duration"] = "formal_roadshow_120min"
+                        working_memory_pointer["selected_order_duration"] = f"formal_roadshow_{cfg['dur']}"
                     else:
                         working_memory_pointer = {
                             "target_record_id": f"REC_{user_id}_20261010_01",
@@ -292,7 +295,7 @@ class DynamicTimelinePlanner:
                             "matched_service": src["service_name"],
                             "inherited_slots": {"duration": cfg["dur"]},
                             "duration_filtered": True,
-                            "selected_order_duration": "formal_roadshow_120min"
+                            "selected_order_duration": f"formal_roadshow_{cfg['dur']}"
                         }
                 elif exp_id == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
                     res = src.get("preferred_params", {}).get("resolution") or "1080p"

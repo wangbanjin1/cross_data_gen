@@ -1564,14 +1564,13 @@
       },
       "experience_citation": {
         "experience_id": "EXP_ORDER_QUALITY_DISAMBIGUATION_01",
-        "title": "历史意图保障单模糊指代（过滤前天1小时临时短单、优选上周2小时正式路演单）消歧经验",
+        "title": "历史意图保障单模糊指代（过滤近期临时短单、优选上周正式路演单）消歧经验",
         "strategy_type": "historical_order_duration_disambiguation",
         "suggested_adjustments": {
-          "duration": "120min",
           "prefer_formal_duration_over_recent_temp": true
         },
-        "condition": "用户在展区/外场办正式客户路演并要求‘按上次办的保障单排时长’，且账本中存在前天1小时(60min)临时短会单与上周2小时(120min)正式路演长单",
-        "action": "过滤时间最近但属临时插曲的前天60min短单，优选匹配上周同为正式客户路演的120min长单（顺延结束时间保满2小时，画质与时延完全由用户自己指定）",
+        "condition": "用户在展区/外场办正式客户路演并要求‘按上次办的保障单排时长’，且账本中存在近期临时短会单与上周正式路演单",
+        "action": "过滤时间最近但属临时插曲的前天临时短单，优选匹配上周同为正式客户路演的正式工单时长（画质与时延完全由用户自己指定）",
         "validity": "适用于用户模糊指代‘按上次的保障单来’且近期穿插过临时短单的正式外场路演场景。"
       },
       "memory_tier": "experiential_memory",
@@ -1589,7 +1588,7 @@
           ]
         },
         "agent": {
-          "utterance": "收到，已按您最近一笔（前天）的记录，为您准备好12时30分至16时00分（持续60min）的抖音开直播意图保障单（1080p / 时延≤50ms），确认按此开通吗？",
+          "utterance": "收到，已按您最近一笔（前天）的记录，为您准备好12时30分至13时00分（持续30min）的抖音开直播意图保障单（1080p / 时延≤50ms），确认按此开通吗？",
           "action_types": [
             "Confirm_Slot",
             "Request_Slot"
@@ -1638,12 +1637,12 @@
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年09月28日14时30分",
+                  "value": "2026年09月28日13时30分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "duration": {
-                  "value": "120min",
+                  "value": "60min",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
@@ -1653,27 +1652,26 @@
         ],
         "experience_citation": {
           "experience_id": "EXP_ORDER_QUALITY_DISAMBIGUATION_01",
-          "title": "历史意图保障单模糊指代（过滤前天1小时临时短单、优选上周2小时正式路演单）消歧经验",
+          "title": "历史意图保障单模糊指代（过滤近期临时短单、优选上周正式路演单）消歧经验",
           "strategy_type": "historical_order_duration_disambiguation",
           "suggested_adjustments": {
-            "duration": "120min",
             "prefer_formal_duration_over_recent_temp": true
           },
-          "condition": "用户在展区/外场办正式客户路演并要求‘按上次办的保障单排时长’，且账本中存在前天1小时(60min)临时短会单与上周2小时(120min)正式路演长单",
-          "action": "过滤时间最近但属临时插曲的前天60min短单，优选匹配上周同为正式客户路演的120min长单（顺延结束时间保满2小时，画质与时延完全由用户自己指定）",
+          "condition": "用户在展区/外场办正式客户路演并要求‘按上次办的保障单排时长’，且账本中存在近期临时短会单与上周正式路演单",
+          "action": "过滤时间最近但属临时插曲的前天临时短单，优选匹配上周同为正式客户路演的正式工单时长（画质与时延完全由用户自己指定）",
           "validity": "适用于用户模糊指代‘按上次的保障单来’且近期穿插过临时短单的正式外场路演场景。"
         }
       },
       {
         "turn": 2,
         "user": {
-          "utterance": "不对，1个小时不够！前天那笔只是我临时插空开的短会，今天是正式路演，得按上周那笔正式单改成2个小时。",
+          "utterance": "不对，半小时不够！前天那笔只是我临时插空开的短会，今天是正式路演，得按上周那笔正式单改成1个小时。",
           "action_types": [
             "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "明白！已为您过滤前天的1小时临时短单，按上周正式客户路演单为您排满2小时（12时30分至14时30分，持续120min，1080p / 时延≤50ms），并记下这条经验，祝您路演顺畅！",
+          "utterance": "明白！已为您过滤前天的半小时临时短单，按上周正式客户路演单为您排满1小时（12时30分至13时30分，持续60min，1080p / 时延≤50ms），并记下这条经验，祝您路演顺畅！",
           "action_types": [
             "Acknowledge"
           ]
@@ -1721,12 +1719,12 @@
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年09月28日14时30分",
+                  "value": "2026年09月28日13时30分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "duration": {
-                  "value": "120min",
+                  "value": "60min",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
@@ -1775,12 +1773,12 @@
               "source_ref": "U1"
             },
             "end_timestamp": {
-              "value": "2026年09月28日14时30分",
+              "value": "2026年09月28日13时30分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
             "duration": {
-              "value": "120min",
+              "value": "60min",
               "source_type": "Turn",
               "source_ref": "U1"
             }
@@ -1813,12 +1811,12 @@
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年09月28日14时30分",
+                  "value": "2026年09月28日13时30分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "duration": {
-                  "value": "120min",
+                  "value": "60min",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
@@ -4981,24 +4979,23 @@
           "duration": "120min"
         },
         "duration_filtered": true,
-        "selected_order_duration": "formal_roadshow_120min"
+        "selected_order_duration": "formal_roadshow_60min"
       },
       "experience_citation": {
         "experience_id": "EXP_ORDER_QUALITY_DISAMBIGUATION_01",
-        "title": "历史意图保障单模糊指代（过滤前天1小时临时短单、优选上周2小时正式路演单）消歧经验",
+        "title": "历史意图保障单模糊指代（过滤近期临时短单、优选上周正式路演单）消歧经验",
         "strategy_type": "historical_order_duration_disambiguation",
         "suggested_adjustments": {
-          "duration": "120min",
           "prefer_formal_duration_over_recent_temp": true
         },
-        "condition": "用户在展区/外场办正式客户路演并要求‘按上次办的保障单排时长’，且账本中存在前天1小时(60min)临时短会单与上周2小时(120min)正式路演长单",
-        "action": "过滤时间最近但属临时插曲的前天60min短单，优选匹配上周同为正式客户路演的120min长单（顺延结束时间保满2小时，画质与时延完全由用户自己指定）",
+        "condition": "用户在展区/外场办正式客户路演并要求‘按上次办的保障单排时长’，且账本中存在近期临时短会单与上周正式路演单",
+        "action": "过滤时间最近但属临时插曲的前天临时短单，优选匹配上周同为正式客户路演的正式工单时长（画质与时延完全由用户自己指定）",
         "validity": "适用于用户模糊指代‘按上次的保障单来’且近期穿插过临时短单的正式外场路演场景。"
       },
       "experience_branching": {
         "learning_source_session": "S-USER_019-06",
         "experience_id": "EXP_ORDER_QUALITY_DISAMBIGUATION_01",
-        "rule_title": "历史意图保障单模糊指代（过滤前天1小时临时短单、优选上周2小时正式路演单）消歧经验",
+        "rule_title": "历史意图保障单模糊指代（过滤近期临时短单、优选上周正式路演单）消歧经验",
         "interactive_eval_contract": {
           "version": "1.0",
           "contract_name": "DynamicGoalDeltaReactionContract",
@@ -5045,7 +5042,7 @@
               "intents_status": {
                 "I1": "in_progress"
               },
-              "baseline_agent_flawed_response": "收到，已为您按最近一笔（前天）的历史意图保障单时长配置，今日2026年10月21日12时30分至2026年10月21日16时00分（持续60min）为您开通抖音开直播意图保障单（1080p / 时延≤50ms），确认吗？",
+              "baseline_agent_flawed_response": "收到，已为您按最近一笔（前天）的历史意图保障单时长配置，今日2026年10月21日12时30分至2026年10月21日13时00分（持续30min）为您开通抖音开直播意图保障单（1080p / 时延≤50ms），确认吗？",
               "baseline_flawed_slots": {
                 "I1": {
                   "application_name": "抖音",
@@ -5054,16 +5051,16 @@
                   "rtt": "50ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月21日12时30分",
-                    "end_timestamp": "2026年10月21日16时00分",
-                    "duration": "60min"
+                    "end_timestamp": "2026年10月21日13时00分",
+                    "duration": "30min"
                   }
                 }
               },
               "delta_from_gt": {
                 "has_error": true,
                 "error_details": [
-                  "I1.timestamp.end_timestamp: expected '2026年10月21日13时30分', got '2026年10月21日16时00分'",
-                  "I1.timestamp.duration: expected '60min', got '60min'"
+                  "I1.timestamp.end_timestamp: expected '2026年10月21日13时30分', got '2026年10月21日13时00分'",
+                  "I1.timestamp.duration: expected '60min', got '30min'"
                 ],
                 "triggered_reaction": "on_slot_error"
               },
@@ -5072,7 +5069,7 @@
             {
               "turn": 2,
               "speaker": "user_simulator",
-              "simulator_user_prompt": "不对，1个小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成2个小时。",
+              "simulator_user_prompt": "不对，半小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成1个小时。",
               "expected_agent_response": "非常抱歉！已为您过滤前天的1小时临时短单，改按上周正式客户路演单排满2小时（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，画质1080p、时延≤50ms），确认按此开通吗？",
               "expected_agent_correction": "非常抱歉！已为您过滤前天的1小时临时短单，改按上周正式客户路演单排满2小时（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，画质1080p、时延≤50ms），确认按此开通吗？",
               "expected_agent_action_types": [
@@ -5104,7 +5101,7 @@
             {
               "turn": 3,
               "speaker": "user_simulator",
-              "simulator_user_prompt": "好的，保满两个小时就对了，确认按此开通。",
+              "simulator_user_prompt": "好的，保满1个小时就对了，确认按此开通。",
               "expected_agent_response": "好的，已按上周2小时正式路演单时长（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，1080p / 时延≤50ms）为您成功受理抖音开直播意图保障单，祝您路演顺畅！",
               "expected_agent_correction": "好的，已按上周2小时正式路演单时长（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，1080p / 时延≤50ms）为您成功受理抖音开直播意图保障单，祝您路演顺畅！",
               "expected_agent_action_types": [
@@ -5146,7 +5143,7 @@
                 "Revise_Intent_Request",
                 "Inform_Slot"
               ],
-              "simulator_reply": "不对，1个小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成2个小时。"
+              "simulator_reply": "不对，半小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成1个小时。"
             },
             "on_slot_missing": {
               "description": "Agent遗漏核对今日意图保障单起止时序或时长",
@@ -5158,7 +5155,7 @@
               "user_action_types": [
                 "Inform_Slot"
               ],
-              "simulator_reply": "不对，1个小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成2个小时。"
+              "simulator_reply": "不对，半小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成1个小时。"
             },
             "on_agent_inquiry": {
               "description": "Agent询问历史意图保障单选择或具体保障时长",
@@ -5166,7 +5163,7 @@
               "user_action_types": [
                 "Inform_Slot"
               ],
-              "simulator_reply": "不对，1个小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成2个小时。"
+              "simulator_reply": "不对，半小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成1个小时。"
             },
             "on_goal_matched": {
               "description": "上周2小时(120min)正式路演单时长继承无误，用户确认受理",
@@ -5174,7 +5171,7 @@
               "user_action_types": [
                 "Confirm_Slot"
               ],
-              "simulator_reply": "好的，保满两个小时就对了，确认按此开通。"
+              "simulator_reply": "好的，保满1个小时就对了，确认按此开通。"
             }
           },
           "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的意图保障单提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出包含明确目标真值槽位的纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键槽位，触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请确认，触发 on_goal_matched 确认闭环并收尾。"
@@ -5182,7 +5179,7 @@
         "fast_path": {
           "round_count": 2,
           "closure_path": "fast_experience_closed_loop",
-          "trigger_condition": "识别正式客户路演场景，自动过滤前天1小时(60min)临时短单，优选匹配上周2小时(120min)正式路演单时长，2轮快速闭环",
+          "trigger_condition": "识别正式客户路演场景，自动过滤前天半小时(30min)临时短单，优选匹配上周1小时(60min)正式路演单时长，2轮快速闭环",
           "resolved_turn": 2,
           "key_params_source": {
             "source_type": "Experience",
@@ -5192,18 +5189,18 @@
         "slow_path": {
           "round_count": 3,
           "closure_path": "clarification_after_correction",
-          "trigger_condition": "Agent未启用历史单据时长消歧经验，按最近邻偏见调取前天1小时(60min)临时短单，经用户澄清指正后在3轮闭环",
+          "trigger_condition": "Agent未启用历史单据时长消歧经验，按最近邻偏见调取前天半小时(30min)临时短单，经用户澄清指正后在3轮闭环",
           "resolved_turn": 3,
           "redundant_rounds": 1,
           "branch_decision_gate": {
             "eval_turn": 1,
             "decision_type": "historical_order_duration_disambiguation_check",
-            "pass_condition": "Agent在正式客户路演场景下过滤前天60min临时短单，按上周正式路演单排满120min (EXP_ORDER_QUALITY_DISAMBIGUATION_01)",
-            "fail_condition": "Agent因最近邻偏见机械照搬前天那笔60min临时短会单时长",
+            "pass_condition": "Agent在正式客户路演场景下过滤前天30min临时短单，按上周正式路演单排满60min (EXP_ORDER_QUALITY_DISAMBIGUATION_01)",
+            "fail_condition": "Agent因最近邻偏见机械照搬前天那笔30min临时短会单时长",
             "key_slot_assertions": {
               "target_intent_id": "I1",
               "checked_source": "Experience",
-              "expected_duration_filter": "prefer_formal_roadshow_120min_order"
+              "expected_duration_filter": "prefer_formal_roadshow_60min_order"
             },
             "pass_route": "fast_path",
             "fail_route": "slow_path"
@@ -5254,7 +5251,7 @@
                 "intents_status": {
                   "I1": "in_progress"
                 },
-                "baseline_agent_flawed_response": "收到，已为您按最近一笔（前天）的历史意图保障单时长配置，今日2026年10月21日12时30分至2026年10月21日16时00分（持续60min）为您开通抖音开直播意图保障单（1080p / 时延≤50ms），确认吗？",
+                "baseline_agent_flawed_response": "收到，已为您按最近一笔（前天）的历史意图保障单时长配置，今日2026年10月21日12时30分至2026年10月21日13时00分（持续30min）为您开通抖音开直播意图保障单（1080p / 时延≤50ms），确认吗？",
                 "baseline_flawed_slots": {
                   "I1": {
                     "application_name": "抖音",
@@ -5263,16 +5260,16 @@
                     "rtt": "50ms",
                     "timestamp": {
                       "start_timestamp": "2026年10月21日12时30分",
-                      "end_timestamp": "2026年10月21日16时00分",
-                      "duration": "60min"
+                      "end_timestamp": "2026年10月21日13时00分",
+                      "duration": "30min"
                     }
                   }
                 },
                 "delta_from_gt": {
                   "has_error": true,
                   "error_details": [
-                    "I1.timestamp.end_timestamp: expected '2026年10月21日13时30分', got '2026年10月21日16时00分'",
-                    "I1.timestamp.duration: expected '60min', got '60min'"
+                    "I1.timestamp.end_timestamp: expected '2026年10月21日13时30分', got '2026年10月21日13时00分'",
+                    "I1.timestamp.duration: expected '60min', got '30min'"
                   ],
                   "triggered_reaction": "on_slot_error"
                 },
@@ -5281,7 +5278,7 @@
               {
                 "turn": 2,
                 "speaker": "user_simulator",
-                "simulator_user_prompt": "不对，1个小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成2个小时。",
+                "simulator_user_prompt": "不对，半小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成1个小时。",
                 "expected_agent_response": "非常抱歉！已为您过滤前天的1小时临时短单，改按上周正式客户路演单排满2小时（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，画质1080p、时延≤50ms），确认按此开通吗？",
                 "expected_agent_correction": "非常抱歉！已为您过滤前天的1小时临时短单，改按上周正式客户路演单排满2小时（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，画质1080p、时延≤50ms），确认按此开通吗？",
                 "expected_agent_action_types": [
@@ -5313,7 +5310,7 @@
               {
                 "turn": 3,
                 "speaker": "user_simulator",
-                "simulator_user_prompt": "好的，保满两个小时就对了，确认按此开通。",
+                "simulator_user_prompt": "好的，保满1个小时就对了，确认按此开通。",
                 "expected_agent_response": "好的，已按上周2小时正式路演单时长（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，1080p / 时延≤50ms）为您成功受理抖音开直播意图保障单，祝您路演顺畅！",
                 "expected_agent_correction": "好的，已按上周2小时正式路演单时长（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，1080p / 时延≤50ms）为您成功受理抖音开直播意图保障单，祝您路演顺畅！",
                 "expected_agent_action_types": [
@@ -5355,7 +5352,7 @@
                   "Revise_Intent_Request",
                   "Inform_Slot"
                 ],
-                "simulator_reply": "不对，1个小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成2个小时。"
+                "simulator_reply": "不对，半小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成1个小时。"
               },
               "on_slot_missing": {
                 "description": "Agent遗漏核对今日意图保障单起止时序或时长",
@@ -5367,7 +5364,7 @@
                 "user_action_types": [
                   "Inform_Slot"
                 ],
-                "simulator_reply": "不对，1个小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成2个小时。"
+                "simulator_reply": "不对，半小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成1个小时。"
               },
               "on_agent_inquiry": {
                 "description": "Agent询问历史意图保障单选择或具体保障时长",
@@ -5375,7 +5372,7 @@
                 "user_action_types": [
                   "Inform_Slot"
                 ],
-                "simulator_reply": "不对，1个小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成2个小时。"
+                "simulator_reply": "不对，半小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成1个小时。"
               },
               "on_goal_matched": {
                 "description": "上周2小时(120min)正式路演单时长继承无误，用户确认受理",
@@ -5383,7 +5380,7 @@
                 "user_action_types": [
                   "Confirm_Slot"
                 ],
-                "simulator_reply": "好的，保满两个小时就对了，确认按此开通。"
+                "simulator_reply": "好的，保满1个小时就对了，确认按此开通。"
               }
             },
             "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的意图保障单提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出包含明确目标真值槽位的纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键槽位，触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请确认，触发 on_goal_matched 确认闭环并收尾。"
@@ -5414,7 +5411,7 @@
               "intents_status": {
                 "I1": "in_progress"
               },
-              "baseline_agent_flawed_response": "收到，已为您按最近一笔（前天）的历史意图保障单时长配置，今日2026年10月21日12时30分至2026年10月21日16时00分（持续60min）为您开通抖音开直播意图保障单（1080p / 时延≤50ms），确认吗？",
+              "baseline_agent_flawed_response": "收到，已为您按最近一笔（前天）的历史意图保障单时长配置，今日2026年10月21日12时30分至2026年10月21日13时00分（持续30min）为您开通抖音开直播意图保障单（1080p / 时延≤50ms），确认吗？",
               "baseline_flawed_slots": {
                 "I1": {
                   "application_name": "抖音",
@@ -5423,16 +5420,16 @@
                   "rtt": "50ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月21日12时30分",
-                    "end_timestamp": "2026年10月21日16时00分",
-                    "duration": "60min"
+                    "end_timestamp": "2026年10月21日13时00分",
+                    "duration": "30min"
                   }
                 }
               },
               "delta_from_gt": {
                 "has_error": true,
                 "error_details": [
-                  "I1.timestamp.end_timestamp: expected '2026年10月21日13时30分', got '2026年10月21日16时00分'",
-                  "I1.timestamp.duration: expected '60min', got '60min'"
+                  "I1.timestamp.end_timestamp: expected '2026年10月21日13时30分', got '2026年10月21日13时00分'",
+                  "I1.timestamp.duration: expected '60min', got '30min'"
                 ],
                 "triggered_reaction": "on_slot_error"
               },
@@ -5441,7 +5438,7 @@
             {
               "turn": 2,
               "speaker": "user_simulator",
-              "simulator_user_prompt": "不对，1个小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成2个小时。",
+              "simulator_user_prompt": "不对，半小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成1个小时。",
               "expected_agent_response": "非常抱歉！已为您过滤前天的1小时临时短单，改按上周正式客户路演单排满2小时（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，画质1080p、时延≤50ms），确认按此开通吗？",
               "expected_agent_correction": "非常抱歉！已为您过滤前天的1小时临时短单，改按上周正式客户路演单排满2小时（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，画质1080p、时延≤50ms），确认按此开通吗？",
               "expected_agent_action_types": [
@@ -5473,7 +5470,7 @@
             {
               "turn": 3,
               "speaker": "user_simulator",
-              "simulator_user_prompt": "好的，保满两个小时就对了，确认按此开通。",
+              "simulator_user_prompt": "好的，保满1个小时就对了，确认按此开通。",
               "expected_agent_response": "好的，已按上周2小时正式路演单时长（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，1080p / 时延≤50ms）为您成功受理抖音开直播意图保障单，祝您路演顺畅！",
               "expected_agent_correction": "好的，已按上周2小时正式路演单时长（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，1080p / 时延≤50ms）为您成功受理抖音开直播意图保障单，祝您路演顺畅！",
               "expected_agent_action_types": [
@@ -5504,7 +5501,7 @@
               "speaker": "user",
               "simulator_user_prompt": "今天在影视传媒数字创作基地要办一场正式客户远程路演，下午12时30分开始开抖音开直播（画质1080p、时延50ms以内），保障时长和结束时间就按我上次办的那笔意图保障单来。",
               "agent_hypothesis": "Agent受最近邻偏见影响，机械调取前天那笔1小时（60min）临时短单",
-              "baseline_agent_flawed_response": "收到，已为您按最近一笔（前天）的历史意图保障单时长配置，今日2026年10月21日12时30分至2026年10月21日16时00分（持续60min）为您开通抖音开直播意图保障单（1080p / 时延≤50ms），确认吗？",
+              "baseline_agent_flawed_response": "收到，已为您按最近一笔（前天）的历史意图保障单时长配置，今日2026年10月21日12时30分至2026年10月21日13时00分（持续30min）为您开通抖音开直播意图保障单（1080p / 时延≤50ms），确认吗？",
               "expected_agent_correction": "收到，识别到今日为正式客户远程路演，已自动过滤前天1小时临时短单，按上周正式客户路演单为您排满2小时（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，1080p / 时延≤50ms），确认开通吗？",
               "expected_agent_response": "收到，识别到今日为正式客户远程路演，已自动过滤前天1小时临时短单，按上周正式客户路演单为您排满2小时（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，1080p / 时延≤50ms），确认开通吗？",
               "flaw_type": "recency_bias_short_temporary_order",
@@ -5533,16 +5530,16 @@
                   "rtt": "50ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月21日12时30分",
-                    "end_timestamp": "2026年10月21日16时00分",
-                    "duration": "60min"
+                    "end_timestamp": "2026年10月21日13时00分",
+                    "duration": "30min"
                   }
                 }
               },
               "delta_from_gt": {
                 "has_error": true,
                 "error_details": [
-                  "I1.timestamp.end_timestamp: expected '2026年10月21日13时30分', got '2026年10月21日16时00分'",
-                  "I1.timestamp.duration: expected '60min', got '60min'"
+                  "I1.timestamp.end_timestamp: expected '2026年10月21日13时30分', got '2026年10月21日13时00分'",
+                  "I1.timestamp.duration: expected '60min', got '30min'"
                 ],
                 "triggered_reaction": "on_slot_error"
               }
@@ -5550,7 +5547,7 @@
             {
               "turn": 2,
               "speaker": "user_simulator",
-              "simulator_user_prompt": "不对，1个小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成2个小时。",
+              "simulator_user_prompt": "不对，半小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成1个小时。",
               "agent_hypothesis": "Agent收到用户澄清指正后过滤前天60min短单，改按上周120min正式路演单排期",
               "expected_agent_correction": "非常抱歉！已为您过滤前天的1小时临时短单，改按上周正式客户路演单排满2小时（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，画质1080p、时延≤50ms），确认按此开通吗？",
               "agent_action_types": [
@@ -5578,7 +5575,7 @@
             {
               "turn": 3,
               "speaker": "user_simulator",
-              "simulator_user_prompt": "好的，保满两个小时就对了，确认按此开通。",
+              "simulator_user_prompt": "好的，保满1个小时就对了，确认按此开通。",
               "agent_hypothesis": "Agent按2小时正式客户路演单成功出单",
               "expected_agent_correction": "好的，已按上周2小时正式路演单时长（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，1080p / 时延≤50ms）为您成功受理抖音开直播意图保障单，祝您路演顺畅！",
               "agent_action_types": [
@@ -5611,7 +5608,7 @@
               },
               "agent": {
                 "thought": "Agent受最近邻偏见影响，机械调取前天那笔1小时（60min）临时短单",
-                "utterance": "收到，已为您按最近一笔（前天）的历史意图保障单时长配置，今日2026年10月21日12时30分至2026年10月21日16时00分（持续60min）为您开通抖音开直播意图保障单（1080p / 时延≤50ms），确认吗？",
+                "utterance": "收到，已为您按最近一笔（前天）的历史意图保障单时长配置，今日2026年10月21日12时30分至2026年10月21日13时00分（持续30min）为您开通抖音开直播意图保障单（1080p / 时延≤50ms），确认吗？",
                 "action_types": [
                   "Confirm_Slot"
                 ]
@@ -5659,12 +5656,12 @@
                         "source_ref": "U1"
                       },
                       "end_timestamp": {
-                        "value": "2026年10月21日16时00分",
+                        "value": "2026年10月21日13时00分",
                         "source_type": "Turn",
                         "source_ref": "U1"
                       },
                       "duration": {
-                        "value": "60min",
+                        "value": "30min",
                         "source_type": "Turn",
                         "source_ref": "U1"
                       }
@@ -5676,7 +5673,7 @@
             {
               "turn": 2,
               "user": {
-                "utterance": "不对，1个小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成2个小时。",
+                "utterance": "不对，半小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成1个小时。",
                 "action_types": [
                   "Revise_Intent_Request",
                   "Inform_Slot"
@@ -5749,7 +5746,7 @@
             {
               "turn": 3,
               "user": {
-                "utterance": "好的，保满两个小时就对了，确认按此开通。",
+                "utterance": "好的，保满1个小时就对了，确认按此开通。",
                 "action_types": [
                   "Confirm_Slot"
                 ]
@@ -5849,7 +5846,7 @@
           ]
         },
         "agent": {
-          "utterance": "检索到您历史账本中有两笔记录（前天1小时临时短单60min vs 上周正式客户路演单120min）。参考此前在 S-USER_019-06 的历史单据时长优选经验，识别到您今天是办正式客户远程路演，已自动为您过滤前天那笔1小时临时短单，按上周正式路演单为您排满2小时（12时30分至14时30分，持续60min，1080p / 时延≤50ms），确认直接开通吗？",
+          "utterance": "检索到您历史账本中有两笔记录（前天半小时临时短单30min vs 上周正式客户路演单60min）。参考此前在 S-USER_019-06 的历史单据时长优选经验，识别到您今天是办正式客户远程路演，已自动为您过滤前天那笔半小时临时短单，按上周正式路演单为您排满1小时（12时30分至13时30分，持续60min，1080p / 时延≤50ms），确认直接开通吗？",
           "action_types": [
             "Confirm_Slot",
             "Request_Slot"
@@ -5898,12 +5895,12 @@
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年10月21日14时30分",
+                  "value": "2026年10月21日13时30分",
                   "source_type": "Experience",
                   "source_ref": "EXP_ORDER_QUALITY_DISAMBIGUATION_01"
                 },
                 "duration": {
-                  "value": "120min",
+                  "value": "60min",
                   "source_type": "Experience",
                   "source_ref": "EXP_ORDER_QUALITY_DISAMBIGUATION_01"
                 }
@@ -5926,28 +5923,27 @@
         },
         "experience_citation": {
           "experience_id": "EXP_ORDER_QUALITY_DISAMBIGUATION_01",
-          "title": "历史意图保障单模糊指代（过滤前天1小时临时短单、优选上周2小时正式路演单）消歧经验",
+          "title": "历史意图保障单模糊指代（过滤近期临时短单、优选上周正式路演单）消歧经验",
           "strategy_type": "historical_order_duration_disambiguation",
           "suggested_adjustments": {
-            "duration": "120min",
             "prefer_formal_duration_over_recent_temp": true
           },
-          "condition": "用户在展区/外场办正式客户路演并要求‘按上次办的保障单排时长’，且账本中存在前天1小时(60min)临时短会单与上周2小时(120min)正式路演长单",
-          "action": "过滤时间最近但属临时插曲的前天60min短单，优选匹配上周同为正式客户路演的120min长单（顺延结束时间保满2小时，画质与时延完全由用户自己指定）",
+          "condition": "用户在展区/外场办正式客户路演并要求‘按上次办的保障单排时长’，且账本中存在近期临时短会单与上周正式路演单",
+          "action": "过滤时间最近但属临时插曲的前天临时短单，优选匹配上周同为正式客户路演的正式工单时长（画质与时延完全由用户自己指定）",
           "validity": "适用于用户模糊指代‘按上次的保障单来’且近期穿插过临时短单的正式外场路演场景。"
         }
       },
       {
         "turn": 2,
         "user": {
-          "utterance": "太准了！前天那笔只是1小时临时短会，今天正式客户路演就得按上周那笔正式路演单保满2个小时（12时30分到13时30分，持续120min），确认直接开通！",
+          "utterance": "太准了！前天那笔只是半小时临时短会，今天正式客户路演就得按上周那笔正式路演单保满1个小时（12时30分到13时30分，持续60min），确认直接开通！",
           "action_types": [
             "Confirm_Slot",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已按上周2小时正式路演单时长（12时30分至14时30分，持续60min，1080p / 时延≤50ms）为您成功受理抖音开直播意图保障单，祝您路演顺畅！",
+          "utterance": "好的，已按上周1小时正式路演单时长（12时30分至13时30分，持续60min，1080p / 时延≤50ms）为您成功受理抖音开直播意图保障单，祝您路演顺畅！",
           "action_types": [
             "Acknowledge"
           ]
@@ -5995,12 +5991,12 @@
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年10月21日14时30分",
+                  "value": "2026年10月21日13时30分",
                   "source_type": "Experience",
                   "source_ref": "EXP_ORDER_QUALITY_DISAMBIGUATION_01"
                 },
                 "duration": {
-                  "value": "120min",
+                  "value": "60min",
                   "source_type": "Experience",
                   "source_ref": "EXP_ORDER_QUALITY_DISAMBIGUATION_01"
                 }
@@ -6049,12 +6045,12 @@
               "source_ref": "U1"
             },
             "end_timestamp": {
-              "value": "2026年10月21日14时30分",
+              "value": "2026年10月21日13时30分",
               "source_type": "Experience",
               "source_ref": "EXP_ORDER_QUALITY_DISAMBIGUATION_01"
             },
             "duration": {
-              "value": "120min",
+              "value": "60min",
               "source_type": "Experience",
               "source_ref": "EXP_ORDER_QUALITY_DISAMBIGUATION_01"
             }
@@ -6101,12 +6097,12 @@
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年10月21日14时30分",
+                  "value": "2026年10月21日13时30分",
                   "source_type": "Experience",
                   "source_ref": "EXP_ORDER_QUALITY_DISAMBIGUATION_01"
                 },
                 "duration": {
-                  "value": "120min",
+                  "value": "60min",
                   "source_type": "Experience",
                   "source_ref": "EXP_ORDER_QUALITY_DISAMBIGUATION_01"
                 }
@@ -6135,7 +6131,7 @@
     "experience_branching": {
       "learning_source_session": "S-USER_019-06",
       "experience_id": "EXP_ORDER_QUALITY_DISAMBIGUATION_01",
-      "rule_title": "历史意图保障单模糊指代（过滤前天1小时临时短单、优选上周2小时正式路演单）消歧经验",
+      "rule_title": "历史意图保障单模糊指代（过滤近期临时短单、优选上周正式路演单）消歧经验",
       "interactive_eval_contract": {
         "version": "1.0",
         "contract_name": "DynamicGoalDeltaReactionContract",
@@ -6182,7 +6178,7 @@
             "intents_status": {
               "I1": "in_progress"
             },
-            "baseline_agent_flawed_response": "收到，已为您按最近一笔（前天）的历史意图保障单时长配置，今日2026年10月21日12时30分至2026年10月21日16时00分（持续60min）为您开通抖音开直播意图保障单（1080p / 时延≤50ms），确认吗？",
+            "baseline_agent_flawed_response": "收到，已为您按最近一笔（前天）的历史意图保障单时长配置，今日2026年10月21日12时30分至2026年10月21日13时00分（持续30min）为您开通抖音开直播意图保障单（1080p / 时延≤50ms），确认吗？",
             "baseline_flawed_slots": {
               "I1": {
                 "application_name": "抖音",
@@ -6191,16 +6187,16 @@
                 "rtt": "50ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月21日12时30分",
-                  "end_timestamp": "2026年10月21日16时00分",
-                  "duration": "60min"
+                  "end_timestamp": "2026年10月21日13时00分",
+                  "duration": "30min"
                 }
               }
             },
             "delta_from_gt": {
               "has_error": true,
               "error_details": [
-                "I1.timestamp.end_timestamp: expected '2026年10月21日13时30分', got '2026年10月21日16时00分'",
-                "I1.timestamp.duration: expected '60min', got '60min'"
+                "I1.timestamp.end_timestamp: expected '2026年10月21日13时30分', got '2026年10月21日13时00分'",
+                "I1.timestamp.duration: expected '60min', got '30min'"
               ],
               "triggered_reaction": "on_slot_error"
             },
@@ -6209,7 +6205,7 @@
           {
             "turn": 2,
             "speaker": "user_simulator",
-            "simulator_user_prompt": "不对，1个小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成2个小时。",
+            "simulator_user_prompt": "不对，半小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成1个小时。",
             "expected_agent_response": "非常抱歉！已为您过滤前天的1小时临时短单，改按上周正式客户路演单排满2小时（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，画质1080p、时延≤50ms），确认按此开通吗？",
             "expected_agent_correction": "非常抱歉！已为您过滤前天的1小时临时短单，改按上周正式客户路演单排满2小时（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，画质1080p、时延≤50ms），确认按此开通吗？",
             "expected_agent_action_types": [
@@ -6241,7 +6237,7 @@
           {
             "turn": 3,
             "speaker": "user_simulator",
-            "simulator_user_prompt": "好的，保满两个小时就对了，确认按此开通。",
+            "simulator_user_prompt": "好的，保满1个小时就对了，确认按此开通。",
             "expected_agent_response": "好的，已按上周2小时正式路演单时长（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，1080p / 时延≤50ms）为您成功受理抖音开直播意图保障单，祝您路演顺畅！",
             "expected_agent_correction": "好的，已按上周2小时正式路演单时长（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，1080p / 时延≤50ms）为您成功受理抖音开直播意图保障单，祝您路演顺畅！",
             "expected_agent_action_types": [
@@ -6283,7 +6279,7 @@
               "Revise_Intent_Request",
               "Inform_Slot"
             ],
-            "simulator_reply": "不对，1个小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成2个小时。"
+            "simulator_reply": "不对，半小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成1个小时。"
           },
           "on_slot_missing": {
             "description": "Agent遗漏核对今日意图保障单起止时序或时长",
@@ -6295,7 +6291,7 @@
             "user_action_types": [
               "Inform_Slot"
             ],
-            "simulator_reply": "不对，1个小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成2个小时。"
+            "simulator_reply": "不对，半小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成1个小时。"
           },
           "on_agent_inquiry": {
             "description": "Agent询问历史意图保障单选择或具体保障时长",
@@ -6303,7 +6299,7 @@
             "user_action_types": [
               "Inform_Slot"
             ],
-            "simulator_reply": "不对，1个小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成2个小时。"
+            "simulator_reply": "不对，半小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成1个小时。"
           },
           "on_goal_matched": {
             "description": "上周2小时(120min)正式路演单时长继承无误，用户确认受理",
@@ -6311,7 +6307,7 @@
             "user_action_types": [
               "Confirm_Slot"
             ],
-            "simulator_reply": "好的，保满两个小时就对了，确认按此开通。"
+            "simulator_reply": "好的，保满1个小时就对了，确认按此开通。"
           }
         },
         "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的意图保障单提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出包含明确目标真值槽位的纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键槽位，触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请确认，触发 on_goal_matched 确认闭环并收尾。"
@@ -6319,7 +6315,7 @@
       "fast_path": {
         "round_count": 2,
         "closure_path": "fast_experience_closed_loop",
-        "trigger_condition": "识别正式客户路演场景，自动过滤前天1小时(60min)临时短单，优选匹配上周2小时(120min)正式路演单时长，2轮快速闭环",
+        "trigger_condition": "识别正式客户路演场景，自动过滤前天半小时(30min)临时短单，优选匹配上周1小时(60min)正式路演单时长，2轮快速闭环",
         "resolved_turn": 2,
         "key_params_source": {
           "source_type": "Experience",
@@ -6329,18 +6325,18 @@
       "slow_path": {
         "round_count": 3,
         "closure_path": "clarification_after_correction",
-        "trigger_condition": "Agent未启用历史单据时长消歧经验，按最近邻偏见调取前天1小时(60min)临时短单，经用户澄清指正后在3轮闭环",
+        "trigger_condition": "Agent未启用历史单据时长消歧经验，按最近邻偏见调取前天半小时(30min)临时短单，经用户澄清指正后在3轮闭环",
         "resolved_turn": 3,
         "redundant_rounds": 1,
         "branch_decision_gate": {
           "eval_turn": 1,
           "decision_type": "historical_order_duration_disambiguation_check",
-          "pass_condition": "Agent在正式客户路演场景下过滤前天60min临时短单，按上周正式路演单排满120min (EXP_ORDER_QUALITY_DISAMBIGUATION_01)",
-          "fail_condition": "Agent因最近邻偏见机械照搬前天那笔60min临时短会单时长",
+          "pass_condition": "Agent在正式客户路演场景下过滤前天30min临时短单，按上周正式路演单排满60min (EXP_ORDER_QUALITY_DISAMBIGUATION_01)",
+          "fail_condition": "Agent因最近邻偏见机械照搬前天那笔30min临时短会单时长",
           "key_slot_assertions": {
             "target_intent_id": "I1",
             "checked_source": "Experience",
-            "expected_duration_filter": "prefer_formal_roadshow_120min_order"
+            "expected_duration_filter": "prefer_formal_roadshow_60min_order"
           },
           "pass_route": "fast_path",
           "fail_route": "slow_path"
@@ -6391,7 +6387,7 @@
               "intents_status": {
                 "I1": "in_progress"
               },
-              "baseline_agent_flawed_response": "收到，已为您按最近一笔（前天）的历史意图保障单时长配置，今日2026年10月21日12时30分至2026年10月21日16时00分（持续60min）为您开通抖音开直播意图保障单（1080p / 时延≤50ms），确认吗？",
+              "baseline_agent_flawed_response": "收到，已为您按最近一笔（前天）的历史意图保障单时长配置，今日2026年10月21日12时30分至2026年10月21日13时00分（持续30min）为您开通抖音开直播意图保障单（1080p / 时延≤50ms），确认吗？",
               "baseline_flawed_slots": {
                 "I1": {
                   "application_name": "抖音",
@@ -6400,16 +6396,16 @@
                   "rtt": "50ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月21日12时30分",
-                    "end_timestamp": "2026年10月21日16时00分",
-                    "duration": "60min"
+                    "end_timestamp": "2026年10月21日13时00分",
+                    "duration": "30min"
                   }
                 }
               },
               "delta_from_gt": {
                 "has_error": true,
                 "error_details": [
-                  "I1.timestamp.end_timestamp: expected '2026年10月21日13时30分', got '2026年10月21日16时00分'",
-                  "I1.timestamp.duration: expected '60min', got '60min'"
+                  "I1.timestamp.end_timestamp: expected '2026年10月21日13时30分', got '2026年10月21日13时00分'",
+                  "I1.timestamp.duration: expected '60min', got '30min'"
                 ],
                 "triggered_reaction": "on_slot_error"
               },
@@ -6418,7 +6414,7 @@
             {
               "turn": 2,
               "speaker": "user_simulator",
-              "simulator_user_prompt": "不对，1个小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成2个小时。",
+              "simulator_user_prompt": "不对，半小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成1个小时。",
               "expected_agent_response": "非常抱歉！已为您过滤前天的1小时临时短单，改按上周正式客户路演单排满2小时（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，画质1080p、时延≤50ms），确认按此开通吗？",
               "expected_agent_correction": "非常抱歉！已为您过滤前天的1小时临时短单，改按上周正式客户路演单排满2小时（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，画质1080p、时延≤50ms），确认按此开通吗？",
               "expected_agent_action_types": [
@@ -6450,7 +6446,7 @@
             {
               "turn": 3,
               "speaker": "user_simulator",
-              "simulator_user_prompt": "好的，保满两个小时就对了，确认按此开通。",
+              "simulator_user_prompt": "好的，保满1个小时就对了，确认按此开通。",
               "expected_agent_response": "好的，已按上周2小时正式路演单时长（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，1080p / 时延≤50ms）为您成功受理抖音开直播意图保障单，祝您路演顺畅！",
               "expected_agent_correction": "好的，已按上周2小时正式路演单时长（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，1080p / 时延≤50ms）为您成功受理抖音开直播意图保障单，祝您路演顺畅！",
               "expected_agent_action_types": [
@@ -6492,7 +6488,7 @@
                 "Revise_Intent_Request",
                 "Inform_Slot"
               ],
-              "simulator_reply": "不对，1个小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成2个小时。"
+              "simulator_reply": "不对，半小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成1个小时。"
             },
             "on_slot_missing": {
               "description": "Agent遗漏核对今日意图保障单起止时序或时长",
@@ -6504,7 +6500,7 @@
               "user_action_types": [
                 "Inform_Slot"
               ],
-              "simulator_reply": "不对，1个小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成2个小时。"
+              "simulator_reply": "不对，半小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成1个小时。"
             },
             "on_agent_inquiry": {
               "description": "Agent询问历史意图保障单选择或具体保障时长",
@@ -6512,7 +6508,7 @@
               "user_action_types": [
                 "Inform_Slot"
               ],
-              "simulator_reply": "不对，1个小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成2个小时。"
+              "simulator_reply": "不对，半小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成1个小时。"
             },
             "on_goal_matched": {
               "description": "上周2小时(120min)正式路演单时长继承无误，用户确认受理",
@@ -6520,7 +6516,7 @@
               "user_action_types": [
                 "Confirm_Slot"
               ],
-              "simulator_reply": "好的，保满两个小时就对了，确认按此开通。"
+              "simulator_reply": "好的，保满1个小时就对了，确认按此开通。"
             }
           },
           "evaluator_prompt_template": "你作为通信网络保障评测环境中的用户模拟器（User Simulator）。每轮接收'联接'Agent输出的意图保障单提参结果与话术，对比 target_ground_truth 与 turn_level_ground_truth 计算参数差分（Delta）。若存在参数错误或越权修改，触发 on_slot_error 并发出包含明确目标真值槽位的纠偏提示；若'联接'Agent发起槽位追问，触发 on_agent_inquiry 提供真值槽位；若'联接'Agent遗漏关键槽位，触发 on_slot_missing 提醒核验；若所有参数均已正确命中且 Agent 提请确认，触发 on_goal_matched 确认闭环并收尾。"
@@ -6551,7 +6547,7 @@
             "intents_status": {
               "I1": "in_progress"
             },
-            "baseline_agent_flawed_response": "收到，已为您按最近一笔（前天）的历史意图保障单时长配置，今日2026年10月21日12时30分至2026年10月21日16时00分（持续60min）为您开通抖音开直播意图保障单（1080p / 时延≤50ms），确认吗？",
+            "baseline_agent_flawed_response": "收到，已为您按最近一笔（前天）的历史意图保障单时长配置，今日2026年10月21日12时30分至2026年10月21日13时00分（持续30min）为您开通抖音开直播意图保障单（1080p / 时延≤50ms），确认吗？",
             "baseline_flawed_slots": {
               "I1": {
                 "application_name": "抖音",
@@ -6560,16 +6556,16 @@
                 "rtt": "50ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月21日12时30分",
-                  "end_timestamp": "2026年10月21日16时00分",
-                  "duration": "60min"
+                  "end_timestamp": "2026年10月21日13时00分",
+                  "duration": "30min"
                 }
               }
             },
             "delta_from_gt": {
               "has_error": true,
               "error_details": [
-                "I1.timestamp.end_timestamp: expected '2026年10月21日13时30分', got '2026年10月21日16时00分'",
-                "I1.timestamp.duration: expected '60min', got '60min'"
+                "I1.timestamp.end_timestamp: expected '2026年10月21日13时30分', got '2026年10月21日13时00分'",
+                "I1.timestamp.duration: expected '60min', got '30min'"
               ],
               "triggered_reaction": "on_slot_error"
             },
@@ -6578,7 +6574,7 @@
           {
             "turn": 2,
             "speaker": "user_simulator",
-            "simulator_user_prompt": "不对，1个小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成2个小时。",
+            "simulator_user_prompt": "不对，半小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成1个小时。",
             "expected_agent_response": "非常抱歉！已为您过滤前天的1小时临时短单，改按上周正式客户路演单排满2小时（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，画质1080p、时延≤50ms），确认按此开通吗？",
             "expected_agent_correction": "非常抱歉！已为您过滤前天的1小时临时短单，改按上周正式客户路演单排满2小时（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，画质1080p、时延≤50ms），确认按此开通吗？",
             "expected_agent_action_types": [
@@ -6610,7 +6606,7 @@
           {
             "turn": 3,
             "speaker": "user_simulator",
-            "simulator_user_prompt": "好的，保满两个小时就对了，确认按此开通。",
+            "simulator_user_prompt": "好的，保满1个小时就对了，确认按此开通。",
             "expected_agent_response": "好的，已按上周2小时正式路演单时长（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，1080p / 时延≤50ms）为您成功受理抖音开直播意图保障单，祝您路演顺畅！",
             "expected_agent_correction": "好的，已按上周2小时正式路演单时长（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，1080p / 时延≤50ms）为您成功受理抖音开直播意图保障单，祝您路演顺畅！",
             "expected_agent_action_types": [
@@ -6641,7 +6637,7 @@
             "speaker": "user",
             "simulator_user_prompt": "今天在影视传媒数字创作基地要办一场正式客户远程路演，下午12时30分开始开抖音开直播（画质1080p、时延50ms以内），保障时长和结束时间就按我上次办的那笔意图保障单来。",
             "agent_hypothesis": "Agent受最近邻偏见影响，机械调取前天那笔1小时（60min）临时短单",
-            "baseline_agent_flawed_response": "收到，已为您按最近一笔（前天）的历史意图保障单时长配置，今日2026年10月21日12时30分至2026年10月21日16时00分（持续60min）为您开通抖音开直播意图保障单（1080p / 时延≤50ms），确认吗？",
+            "baseline_agent_flawed_response": "收到，已为您按最近一笔（前天）的历史意图保障单时长配置，今日2026年10月21日12时30分至2026年10月21日13时00分（持续30min）为您开通抖音开直播意图保障单（1080p / 时延≤50ms），确认吗？",
             "expected_agent_correction": "收到，识别到今日为正式客户远程路演，已自动过滤前天1小时临时短单，按上周正式客户路演单为您排满2小时（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，1080p / 时延≤50ms），确认开通吗？",
             "expected_agent_response": "收到，识别到今日为正式客户远程路演，已自动过滤前天1小时临时短单，按上周正式客户路演单为您排满2小时（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，1080p / 时延≤50ms），确认开通吗？",
             "flaw_type": "recency_bias_short_temporary_order",
@@ -6670,16 +6666,16 @@
                 "rtt": "50ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月21日12时30分",
-                  "end_timestamp": "2026年10月21日16时00分",
-                  "duration": "60min"
+                  "end_timestamp": "2026年10月21日13时00分",
+                  "duration": "30min"
                 }
               }
             },
             "delta_from_gt": {
               "has_error": true,
               "error_details": [
-                "I1.timestamp.end_timestamp: expected '2026年10月21日13时30分', got '2026年10月21日16时00分'",
-                "I1.timestamp.duration: expected '60min', got '60min'"
+                "I1.timestamp.end_timestamp: expected '2026年10月21日13时30分', got '2026年10月21日13时00分'",
+                "I1.timestamp.duration: expected '60min', got '30min'"
               ],
               "triggered_reaction": "on_slot_error"
             }
@@ -6687,7 +6683,7 @@
           {
             "turn": 2,
             "speaker": "user_simulator",
-            "simulator_user_prompt": "不对，1个小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成2个小时。",
+            "simulator_user_prompt": "不对，半小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成1个小时。",
             "agent_hypothesis": "Agent收到用户澄清指正后过滤前天60min短单，改按上周120min正式路演单排期",
             "expected_agent_correction": "非常抱歉！已为您过滤前天的1小时临时短单，改按上周正式客户路演单排满2小时（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，画质1080p、时延≤50ms），确认按此开通吗？",
             "agent_action_types": [
@@ -6715,7 +6711,7 @@
           {
             "turn": 3,
             "speaker": "user_simulator",
-            "simulator_user_prompt": "好的，保满两个小时就对了，确认按此开通。",
+            "simulator_user_prompt": "好的，保满1个小时就对了，确认按此开通。",
             "agent_hypothesis": "Agent按2小时正式客户路演单成功出单",
             "expected_agent_correction": "好的，已按上周2小时正式路演单时长（2026年10月21日12时30分至2026年10月21日13时30分，持续60min，1080p / 时延≤50ms）为您成功受理抖音开直播意图保障单，祝您路演顺畅！",
             "agent_action_types": [
@@ -6748,7 +6744,7 @@
             },
             "agent": {
               "thought": "Agent受最近邻偏见影响，机械调取前天那笔1小时（60min）临时短单",
-              "utterance": "收到，已为您按最近一笔（前天）的历史意图保障单时长配置，今日2026年10月21日12时30分至2026年10月21日16时00分（持续60min）为您开通抖音开直播意图保障单（1080p / 时延≤50ms），确认吗？",
+              "utterance": "收到，已为您按最近一笔（前天）的历史意图保障单时长配置，今日2026年10月21日12时30分至2026年10月21日13时00分（持续30min）为您开通抖音开直播意图保障单（1080p / 时延≤50ms），确认吗？",
               "action_types": [
                 "Confirm_Slot"
               ]
@@ -6796,12 +6792,12 @@
                       "source_ref": "U1"
                     },
                     "end_timestamp": {
-                      "value": "2026年10月21日16时00分",
+                      "value": "2026年10月21日13时00分",
                       "source_type": "Turn",
                       "source_ref": "U1"
                     },
                     "duration": {
-                      "value": "60min",
+                      "value": "30min",
                       "source_type": "Turn",
                       "source_ref": "U1"
                     }
@@ -6813,7 +6809,7 @@
           {
             "turn": 2,
             "user": {
-              "utterance": "不对，1个小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成2个小时。",
+              "utterance": "不对，半小时不够！你调成前天我临时开的短单了，今天是正式路演，得按上周那笔正式单把时长改成1个小时。",
               "action_types": [
                 "Revise_Intent_Request",
                 "Inform_Slot"
@@ -6886,7 +6882,7 @@
           {
             "turn": 3,
             "user": {
-              "utterance": "好的，保满两个小时就对了，确认按此开通。",
+              "utterance": "好的，保满1个小时就对了，确认按此开通。",
               "action_types": [
                 "Confirm_Slot"
               ]
