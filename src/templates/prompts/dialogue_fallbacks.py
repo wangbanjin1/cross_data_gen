@@ -37,7 +37,7 @@ def _sanitize_env(env: str, time_str: str = "") -> str:
         ("沿海", "沿海巡逻岸线"),
         ("高山", "高山露天训练场"),
         ("大巴", "大巴转场途中"),
-        ("酒店", "驻地酒店休息区"),
+        ("酒店", "驻地酒店商务中心"),
     ]
     for kw, loc in patterns:
         if kw in env:
@@ -62,7 +62,7 @@ def _paraphrase_env(env: str) -> str:
     if "大巴" in env or "转场" in env:
         return "坐大巴车转场的路上"
     if "驻地" in env or "酒店" in env:
-        return "外勤驻地酒店这边休息区"
+        return "外勤驻地酒店这边商务中心"
     if "现场" in env:
         return env.replace("现场", "活动这边现场")
     return f"{env}这边"
@@ -240,7 +240,7 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
         is_disambig = s_plan.get("is_disambiguation", False) or s_plan.get("round_count") == 3
         if is_disambig:
             if turn_idx == 1:
-                return f"今天在{env}，想按之前的意图保障单规格开{app}{srv}保障，时间从{start_t}到{end_t}。"
+                return f"今天在{env}，想按之前的意图保障单规格开{app}{srv}保障，时间从{start_t}到{end_t}（持续{tp['duration']}）。"
             elif turn_idx == 2:
                 return "按最近那次开通的规格来就行。"
             else:

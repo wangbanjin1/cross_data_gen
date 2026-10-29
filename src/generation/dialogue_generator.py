@@ -136,13 +136,24 @@ class DialogueGenerator:
                 wm_ptr = s_plan.get("working_memory_pointer", {})
                 rec_id = wm_ptr.get("target_record_id", "历史意图保障单")
                 delta_d = wm_ptr.get("inferred_delta_days", 7)
-                t1_rule = (
-                    f"【工作记忆跨期复用会话：第1轮用户表达'这次去{env}，还按上周在{env}办的那个意图保障单规格来'，"
-                    f"指代历史意图保障单({rec_id}，距今约{delta_d}天)，省略画质和时延，但提出今日保障；"
-                    f"第1轮客服从工作记忆意图保障单账本中检索定位该单据，向用户确认继承的体验参数（画质{tp['resolution']}、时延{tp['rtt']}），并询问今日保障的具体起止时间；"
-                    f"第2轮用户补充说明今日的起止时间（{tp['start_timestamp'].split('日')[-1]}至{tp['end_timestamp'].split('日')[-1]}，持续{tp['duration']}）；"
-                    f"第2轮客服确认开通并收尾祝福。】"
-                )
+                sh_t = tp["start_timestamp"].split("日")[-1]
+                eh_t = tp["end_timestamp"].split("日")[-1]
+                if s_plan.get("is_disambiguation") or s_plan.get("round_count") == 3:
+                    t1_rule = (
+                        f"【工作记忆多单消歧会话（3轮）：第1轮用户明确给出今日保障起止时间（从{sh_t}到{eh_t}，持续{tp['duration']}）以及应用{tp['application_name']}、业务{tp['service_name']}，并表示想按之前在{env}办过的意图保障单规格来（省略画质和时延）；"
+                        f"第1轮客服从工作记忆账本中查出存在多笔历史意图保障单候选，向用户反问确认按哪一笔规格办理；"
+                        f"第2轮用户明确选定按最近那次开通的规格（{rec_id}）来；"
+                        f"第2轮客服确认继承最近一笔的画质{tp['resolution']}、时延{tp['rtt']}并汇总时段（{sh_t}至{eh_t}），请用户最终确认；"
+                        f"第3轮用户确认开通，客服收尾祝福。】"
+                    )
+                else:
+                    t1_rule = (
+                        f"【工作记忆跨期复用会话：第1轮用户表达'这次去{env}，还按上周在{env}办的那个意图保障单规格来'，"
+                        f"指代历史意图保障单({rec_id}，距今约{delta_d}天)，省略画质和时延，但提出今日保障；"
+                        f"第1轮客服从工作记忆意图保障单账本中检索定位该单据，向用户确认继承的体验参数（画质{tp['resolution']}、时延{tp['rtt']}），并询问今日保障的具体起止时间；"
+                        f"第2轮用户补充说明今日的起止时间（{sh_t}至{eh_t}，持续{tp['duration']}）；"
+                        f"第2轮客服确认开通并收尾祝福。】"
+                    )
             elif tid == "T2-7":
                 wm_ptr = s_plan.get("working_memory_pointer", {})
                 rec_id = wm_ptr.get("target_record_id", "历史意图保障单")
@@ -460,9 +471,17 @@ class DialogueGenerator:
         if s_plan.get("is_counterexample"):
             if "降" in a_text or ("原画" not in a_text and "1080p" not in a_text):
                 a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
-        if s_plan.get("is_disambiguation") and turn_idx == 1:
-            if "哪" not in a_text and "意图保障单" not in a_text and "记录" not in a_text:
-                a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
+        if s_plan.get("is_disambiguation"):
+            if turn_idx == 1:
+                sh_t = tp.get("start_timestamp", "").split("日")[-1]
+                eh_t = tp.get("end_timestamp", "").split("日")[-1]
+                if sh_t not in u_text or eh_t not in u_text:
+                    u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+                if "哪" not in a_text and "意图保障单" not in a_text and "记录" not in a_text:
+                    a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
+            elif turn_idx == 2:
+                if "最近" not in u_text and "上次" not in u_text:
+                    u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
         if turn_idx == 1 and role in ["reinforcement_session", "reuse_session"] and tid not in ["T2-3", "T2-5", "T2-6", "T2-7", "T2-8", "T2-9", "T2-10", "T2-4"] and not s_plan.get("experience_citation"):
             is_imp_s03 = (role == "reinforcement_session" and s_plan.get("declaration_mode") == "implicit_induction" and s_plan.get("session_id", "").endswith("-03"))
             challenge_type = s_plan.get("retrieval_challenge_type")

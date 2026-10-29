@@ -604,6 +604,8 @@ def get_session_blueprints(
             "dur": "90min",
             "env": "驻地酒店商务中心",
             "action": "reuse_sub_storyline_2",
+            "storyline_trigger_type": "location_environment",
+            "trigger_condition": "驻地酒店商务中心",
             "round_count": 2,
             "cold_hot_type": "hot_start",
             "agility_factor": 0.5,
