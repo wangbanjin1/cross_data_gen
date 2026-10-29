@@ -38,7 +38,11 @@ def _parse_time_range(time_range_str: str, ext_add_minutes: int = 60) -> tuple[s
         ref_tot += 24 * 60
     ref_time_str = f"{ref_tot // 60:02d}:{ref_tot % 60:02d}"
 
-    # T2-5 灵活延长 ext_add_minutes 分钟（支持 30 / 60 / 90 分钟）
+    # T2-5 灵活延长 ext_add_minutes 分钟（支持 30 / 60 / 90 分钟，且严格控制在当日 23:30 前结束，防止跨零点日期错位）
+    while ext_add_minutes > 30 and (sh * 60 + sm + base_minutes + ext_add_minutes) > 23 * 60 + 30:
+        ext_add_minutes -= 30
+    if (sh * 60 + sm + base_minutes + ext_add_minutes) >= 24 * 60:
+        ext_add_minutes = max(15, (23 * 60 + 30) - (sh * 60 + sm + base_minutes))
     ext_minutes = base_minutes + ext_add_minutes
     ext_dur_str = f"{ext_minutes}min"
     ext_end_tot = (sh * 60 + sm) + ext_minutes

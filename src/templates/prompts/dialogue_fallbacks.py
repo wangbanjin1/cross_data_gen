@@ -185,7 +185,7 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
             new_eh_t = tp.get("end_timestamp", "").split("日")[-1] or "14时30分"
             dur_val = tp.get("duration", "120min")
             if turn_idx == 1:
-                return f"今天在{env}，从{sh_t}到{new_eh_t}（持续{dur_val}）我先跟搭档对一下下午抖音直播的词和镜头机位，帮我开个画质{res}、时延{rtt}以内的意图保障单。"
+                return f"今天在{env}，从{sh_t}到{new_eh_t}（持续{dur_val}）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质{res}、时延{rtt}以内的意图保障单。"
             else:
                 return "嗨，我只是先跟搭档私下对一下词和看眼机位，还没正式开播呢！平时对词我们都是打微信视频电话，改成微信视频通话吧。"
         elif exp_id == "EXP_PREWARM_BUFFER_01":
@@ -232,7 +232,7 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
         new_eh_t = tp.get("end_timestamp", "").split("日")[-1] or "14时30分"
         dur_val = tp.get("duration", "120min")
         if turn_idx == 1:
-            return f"今天在{env}，{sh_t}至{new_eh_t}（持续{dur_val}）我先跟搭档对一下下午抖音直播的词和镜头机位，帮我开个画质{res}、时延{rtt}以内的意图保障单。"
+            return f"今天在{env}，{sh_t}至{new_eh_t}（持续{dur_val}）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质{res}、时延{rtt}以内的意图保障单。"
         else:
             return f"太懂我了！私下跟搭档对直播词、看镜头机位平时就是打【微信-视频通话】，不用真开抖音直播间，确认按微信视频通话开通意图保障单！"
     elif tid == "T2-9" or s_plan.get("experience_citation", {}).get("experience_id") == "EXP_PREWARM_BUFFER_01":
@@ -262,7 +262,7 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
         end_t = tp['end_timestamp'].split('日')[-1]
         d_info = _formal_and_temp_dur_info(tp)
         if turn_idx == 1:
-            return f"今天在{env}要办一场正式客户远程路演，下午{start_t}开始开{app}{srv}（画质{res}、时延{rtt}以内），保障时长和结束时间就按我上次办的那笔意图保障单来。"
+            return f"今天在{env}要办一场正式客户远程路演，{start_t}开始开{app}{srv}（画质{res}、时延{rtt}以内），保障时长和结束时间就按我上次办的那笔意图保障单来。"
         else:
             return f"太准了！前天那笔只是{d_info['temp_short']}临时短会，今天正式客户路演就得按上周那笔正式路演单保满{d_info['formal_spoken']}（{start_t}到{end_t}，持续{d_info['formal_dur']}），确认直接开通！"
     elif tid == "T2-10" or s_plan.get("experience_citation", {}).get("experience_id") == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
@@ -356,12 +356,12 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
             if challenge_type == "implicit_service_collocation":
                 imp_srv = _implicit_service_phrase(srv)
                 if s_plan.get("agility_factor") == 1.0 and trig_type == "time_periodic":
-                    time_prompt = "午间例行这个时候" if period_type == "daily" else ("每月例会这个时候" if period_type == "monthly" else "每周例行这个时候")
+                    time_prompt = "每天例行这个时候" if period_type == "daily" else ("每月例会这个时候" if period_type == "monthly" else "每周例行这个时候")
                     return f"老规矩，{time_prompt}，用{app}{imp_srv}，帮我把保障开上，别掉链子。"
                 return f"老规矩，在{env}，用{app}{imp_srv}，帮我把保障开上。"
             if s_plan.get("agility_factor") == 1.0:
                 if trig_type == "time_periodic":
-                    time_prompt = "午间例行这个时候" if period_type == "daily" else ("每月例会这个时候" if period_type == "monthly" else "每周例行这个时候")
+                    time_prompt = "每天例行这个时候" if period_type == "daily" else ("每月例会这个时候" if period_type == "monthly" else "每周例行这个时候")
                     return f"老规矩，{time_prompt}，用{app}做{srv}，帮我把保障开上，别掉链子。"
                 else:
                     return f"老规矩，在{env}，用{app}做{srv}，帮我把保障开上，别掉链子。"
@@ -375,7 +375,7 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
             }
             memory_hint = memory_hints.get(small_memory.get("type"), f"用{app}做{srv}")
             if trig_type == "time_periodic":
-                p_text = "午间例行" if period_type == "daily" else ("每月例会" if period_type == "monthly" else "每周例行")
+                p_text = "每天例行" if period_type == "daily" else ("每月例会" if period_type == "monthly" else "每周例行")
                 return f"老规矩，{p_text}，在{env}，{memory_hint}，帮我把保障开上。"
             else:
                 return f"老规矩，在{env}，{memory_hint}，帮我把保障开上。"

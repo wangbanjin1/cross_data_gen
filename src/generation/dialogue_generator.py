@@ -377,9 +377,9 @@ class DialogueGenerator:
                 if tp.get("duration", "") not in u_text and "延长" not in u_text and "时长" not in u_text:
                     u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
 
-        # 经验记忆负反例边界：必须坚持 1080p，严禁降画质
+        # 经验记忆负反例边界：必须坚持原画质，严禁降画质
         if s_plan.get("is_counterexample"):
-            if "1080p" not in u_text:
+            if tp.get("resolution", "1080p") not in u_text:
                 u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
 
         # 证据会话首轮必须包含标准应用、业务与开始时间，且严禁泄漏画质/时延/时长。
@@ -388,8 +388,13 @@ class DialogueGenerator:
             srv_ok = tp.get("service_name", "") in u_text
             start_hm = tp.get("start_timestamp", "").split("日")[-1]
             time_ok = start_hm in u_text or start_hm.replace("时", ":").replace("分", "") in u_text or start_hm.replace("时", "点") in u_text
-            leaked = any(k and k in u_text for k in [tp.get("resolution", ""), tp.get("rtt", ""), tp.get("duration", ""), "俩小时", "两小时", "一个钟头", "60分钟", "120分钟"])
+            leaked = any(k and k in u_text for k in [tp.get("resolution", ""), tp.get("rtt", ""), tp.get("duration", ""), "俩小时", "两小时", "一个钟头", "一个半小时", "三个小时", "60分钟", "90分钟", "120分钟", "150分钟", "180分钟"])
             if not (app_ok and srv_ok and time_ok) or leaked:
+                u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+        if turn_idx == 2 and role == "evidence_session" and tid == "T2-1":
+            dur_aliases = s_plan.get("aliases", {}).get("duration_aliases", [])
+            has_dur = tp.get("duration", "") in u_text or any(da in u_text for da in dur_aliases)
+            if tp.get("resolution", "") not in u_text or tp.get("rtt", "") not in u_text or not has_dur:
                 u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
         if tid in ["T2-2", "T3-1"] and s_plan.get("small_memory_evidence_mode") == "cross_turn_clarification":
             u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
@@ -475,13 +480,33 @@ class DialogueGenerator:
             if turn_idx == 1:
                 sh_t = tp.get("start_timestamp", "").split("日")[-1]
                 eh_t = tp.get("end_timestamp", "").split("日")[-1]
-                if sh_t not in u_text or eh_t not in u_text:
+                if sh_t not in u_text or eh_t not in u_text or tp.get("resolution", "") in u_text or tp.get("rtt", "") in u_text:
                     u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
                 if "哪" not in a_text and "意图保障单" not in a_text and "记录" not in a_text:
                     a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
             elif turn_idx == 2:
                 if "最近" not in u_text and "上次" not in u_text:
                     u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+                if tp.get("resolution", "") not in a_text or tp.get("rtt", "") not in a_text:
+                    a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
+        elif tid == "T2-6" and not s_plan.get("experience_citation"):
+            sh_t = tp.get("start_timestamp", "").split("日")[-1]
+            eh_t = tp.get("end_timestamp", "").split("日")[-1]
+            if turn_idx == 1:
+                if tp.get("resolution", "") not in a_text or tp.get("rtt", "") not in a_text:
+                    a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
+            elif turn_idx == 2:
+                if sh_t not in u_text or eh_t not in u_text or tp.get("duration", "") not in u_text:
+                    u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+        elif tid == "T2-7":
+            sh_t = tp.get("start_timestamp", "").split("日")[-1]
+            eh_t = tp.get("end_timestamp", "").split("日")[-1]
+            is_adv = s_plan.get("working_memory_pointer", {}).get("reschedule_direction") == "advance"
+            if turn_idx == 1:
+                if (is_adv and "提前" not in u_text) or (not is_adv and "推迟" not in u_text):
+                    u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+                if sh_t not in a_text or eh_t not in a_text:
+                    a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
         if turn_idx == 1 and role in ["reinforcement_session", "reuse_session"] and tid not in ["T2-3", "T2-5", "T2-6", "T2-7", "T2-8", "T2-9", "T2-10", "T2-4"] and not s_plan.get("experience_citation"):
             is_imp_s03 = (role == "reinforcement_session" and s_plan.get("declaration_mode") == "implicit_induction" and s_plan.get("session_id", "").endswith("-03"))
             challenge_type = s_plan.get("retrieval_challenge_type")

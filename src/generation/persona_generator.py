@@ -102,6 +102,12 @@ class PersonaGenerator:
             return app_val, srv_val, changed
 
         main_mt = sk["dynamic_profile"].get("periodic_main_storyline", {})
+        # 同步最新 trigger_presets 中的多样化 time_range
+        TriggerPresetManager.reload()
+        _, _, _, _, preset_time_range, _ = TriggerPresetManager.resolve_trigger_plan(pid_offset or 1, sk)
+        if preset_time_range:
+            main_mt["time_range"] = preset_time_range
+
         app = main_mt.get("application_name", "抖音")
         srv = main_mt.get("service_name", "开直播")
         used_apps = set()
@@ -111,8 +117,22 @@ class PersonaGenerator:
         main_mt["service_name"] = srv
         used_apps.add(app)
         used_srvs.add(srv)
-        res = main_mt.get("preferred_params", {}).get("resolution", "1080p")
-        rtt = main_mt.get("preferred_params", {}).get("rtt_max", "50ms")
+
+        # 多样化 preferred_params (画质与时延)，严禁全员写死 1080p / 50ms
+        supp_res_list = support_matrix.get(app, {}).get(srv, {}).get("resolutions", ["720p", "1080p"])
+        valid_res_choices = [r for r in ["720p", "1080p"] if r in supp_res_list] or ["1080p"]
+        rtt_choices = ["30ms", "50ms", "80ms", "100ms"]
+        pref_params = main_mt.get("preferred_params", {})
+        if not isinstance(pref_params, dict):
+            pref_params = {}
+        # 按人物ID哈希独立均匀分布画质与时延（避免奇偶同余耦合）
+        import hashlib
+        h_bytes = hashlib.sha256(f"{sk.get('persona_id', '')}:{app}:{srv}".encode("utf-8")).digest()
+        res = valid_res_choices[h_bytes[0] % len(valid_res_choices)]
+        rtt = rtt_choices[h_bytes[1] % len(rtt_choices)]
+        pref_params["resolution"] = res
+        pref_params["rtt_max"] = rtt
+        main_mt["preferred_params"] = pref_params
         p_type = main_mt.get("period_type", "weekly")
 
         aliases = main_mt.get("aliases", {})
@@ -138,47 +158,37 @@ class PersonaGenerator:
             srv_syns = synonyms.get("services", {}).get(srv, {}).get("general_aliases", [])
             aliases["service_aliases"] = [s for s in srv_syns if s != srv][:3] if srv_syns else [srv]
 
-        # 3. 补齐 resolution_aliases（严格对应数值档位，严禁使用混淆 2K/4K 的'顶格清晰度'）
-        if not aliases.get("resolution_aliases"):
-            if res == "1080p":
-                aliases["resolution_aliases"] = ["1080p原画", "1080p", "超清"]
-            elif res == "720p":
-                aliases["resolution_aliases"] = ["720p", "高清"]
-            elif res == "4K":
-                aliases["resolution_aliases"] = ["4K", "4K超高清"]
-            else:
-                aliases["resolution_aliases"] = [res, f"{res}清晰"]
+        # 3. 严格同步 resolution_aliases 与当前 res 档位一致
+        if res == "1080p":
+            aliases["resolution_aliases"] = ["1080p原画", "1080p", "超清"]
+        elif res == "720p":
+            aliases["resolution_aliases"] = ["720p", "高清"]
+        elif res == "4K":
+            aliases["resolution_aliases"] = ["4K", "4K超高清"]
         else:
-            cleaned_res = [r for r in aliases["resolution_aliases"] if not any(b in r for b in ["顶格", "最高", "极限", "极致", "蓝光"])]
-            if res == "1080p" and not cleaned_res:
-                cleaned_res = ["1080p原画", "1080p", "超清"]
-            aliases["resolution_aliases"] = cleaned_res or [res]
+            aliases["resolution_aliases"] = [res, f"{res}清晰"]
 
-        # 4. 补齐 rtt_aliases（严格对应时延数值档位，严禁使用夸大失真的'零卡顿'）
-        if not aliases.get("rtt_aliases"):
-            if rtt == "50ms":
-                aliases["rtt_aliases"] = ["50ms以内", "50毫秒以内", "低时延"]
-            elif rtt == "30ms":
-                aliases["rtt_aliases"] = ["30ms以内", "30毫秒以内", "超低时延"]
-            elif rtt == "100ms":
-                aliases["rtt_aliases"] = ["100ms以内", "100毫秒以内"]
-            else:
-                aliases["rtt_aliases"] = [f"{rtt}以内", rtt]
+        # 4. 严格同步 rtt_aliases 与当前 rtt 档位一致
+        if rtt == "50ms":
+            aliases["rtt_aliases"] = ["50ms以内", "50毫秒以内", "低时延"]
+        elif rtt == "30ms":
+            aliases["rtt_aliases"] = ["30ms以内", "30毫秒以内", "超低时延"]
+        elif rtt == "80ms":
+            aliases["rtt_aliases"] = ["80ms以内", "80毫秒以内"]
+        elif rtt == "100ms":
+            aliases["rtt_aliases"] = ["100ms以内", "100毫秒以内"]
         else:
-            cleaned_rtt = [r for r in aliases["rtt_aliases"] if not any(b in r for b in ["零卡顿", "秒开", "极速"])]
-            if rtt == "50ms" and not cleaned_rtt:
-                cleaned_rtt = ["50ms以内", "50毫秒以内", "低时延"]
-            aliases["rtt_aliases"] = cleaned_rtt or [f"{rtt}以内"]
+            aliases["rtt_aliases"] = [f"{rtt}以内", rtt]
 
-        # 5. 补齐 duration_aliases（根据主线 time_range 的真实时长动态匹配口语别名，禁止写死 120min）
-        tr_str = str(main_mt.get("time_range") or "14:00-16:00")
+        # 5. 严格同步 duration_aliases 与主线 time_range 的真实时长一致
+        tr_str = str(main_mt.get("time_range") or "14:00-15:30")
         m_tr = re.search(r"(\d{1,2}):(\d{2})\s*[-~至到]\s*(\d{1,2}):(\d{2})", tr_str)
         if m_tr:
             tr_mins = (int(m_tr.group(3)) * 60 + int(m_tr.group(4))) - (int(m_tr.group(1)) * 60 + int(m_tr.group(2)))
             if tr_mins <= 0:
                 tr_mins += 24 * 60
         else:
-            tr_mins = 120
+            tr_mins = 90
         dur_key = f"{tr_mins}min"
         default_dur_map = {
             "30min": ["半小时", "半个钟头", "30分钟"],
@@ -189,21 +199,19 @@ class PersonaGenerator:
             "150min": ["两个半小时", "150分钟"],
             "180min": ["三个小时", "三钟头", "180分钟"],
         }
-        if not aliases.get("duration_aliases"):
-            dur_syns = synonyms.get("duration", {}).get(dur_key, [])
-            fallbacks = default_dur_map.get(dur_key, [f"{tr_mins}分钟"])
-            aliases["duration_aliases"] = (dur_syns + fallbacks)[:4]
+        dur_syns = synonyms.get("duration", {}).get(dur_key, [])
+        fallbacks = default_dur_map.get(dur_key, [f"{tr_mins}分钟"])
+        aliases["duration_aliases"] = list(dict.fromkeys(fallbacks + dur_syns))[:4]
 
-        # 6. 补齐 period_aliases
-        if not aliases.get("period_aliases"):
-            if p_type == "daily":
-                aliases["period_aliases"] = ["每天这个时候", "老时间", "日常例行", "每天照旧", "每天这个点"]
-            elif p_type == "weekly":
-                aliases["period_aliases"] = ["每周老时间", "周例行时段", "照上周的来", "每周固定这个时候"]
-            elif p_type == "monthly":
-                aliases["period_aliases"] = ["月初例行", "每月老时间", "月度固定配置", "照旧按月度标准"]
-            else:
-                aliases["period_aliases"] = ["老规矩", "老时间", "按习惯来", "照旧"]
+        # 6. 严格同步 period_aliases（剔除旧骨架里写死的具体几点到几点口语）
+        if p_type == "daily":
+            aliases["period_aliases"] = ["每天这个时候", "老时间", "日常例行", "每天照旧"]
+        elif p_type == "weekly":
+            aliases["period_aliases"] = ["每周老时间", "周例行时段", "照上周的来", "每周固定这个时候"]
+        elif p_type == "monthly":
+            aliases["period_aliases"] = ["月初例行", "每月老时间", "月度固定配置", "照旧按月度标准"]
+        else:
+            aliases["period_aliases"] = ["老规矩", "老时间", "按习惯来", "照旧"]
 
         main_mt["aliases"] = aliases
         sk["dynamic_profile"]["periodic_main_storyline"] = main_mt
