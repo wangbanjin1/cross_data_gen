@@ -204,8 +204,11 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
             else:
                 return f"不对，{d_info['temp_spoken']}不够！前天那笔只是我临时插空开的短会，今天是正式路演，得按上周那笔正式单改成{d_info['formal_spoken']}。"
         elif exp_id == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
+            sh_t = tp.get("start_timestamp", "").split("日")[-1] or "15时00分"
+            eh_t = tp.get("end_timestamp", "").split("日")[-1] or "17时00分"
+            dur_val = tp.get("duration", "120min")
             if turn_idx == 1:
-                return f"今天下午在{env}，15时00分到17时00分（持续120min）我受邀进主会场的抖音直播间当连麦嘉宾互动，帮我把抖音的保障开上，画质要求{res}，时延控制在{rtt}以内。"
+                return f"今天在{env}，{sh_t}到{eh_t}（持续{dur_val}）我受邀进主会场的抖音直播间当连麦嘉宾互动，帮我把抖音的保障开上，画质要求{res}，时延控制在{rtt}以内。"
             else:
                 return "不对，我是去当连麦嘉宾、要开摄像头上麦发言的，不是光在下面看直播！把业务类型改成开直播吧。"
         else:
@@ -239,9 +242,9 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
         end_t = tp['end_timestamp'].split('日')[-1]
         if s_plan.get("is_counterexample"):
             if turn_idx == 1:
-                return f"今天在{env}做原画级视频采录，必须保持1080p高清、时延控制在{rtt}以内，哪怕网络有波动也不能降画质，时间从{nom_start_t}到{end_t}（持续{nom_dur}），帮我开{app}{srv}意图保障单。"
+                return f"今天在{env}做原画级视频采录，必须保持{res}高清、时延控制在{rtt}以内，哪怕网络有波动也不能降画质，时间从{nom_start_t}到{end_t}（持续{nom_dur}），帮我开{app}{srv}意图保障单。"
             else:
-                return "确认不降画质，我就需要1080p，直接开通。"
+                return f"确认不降画质，我就需要{res}，直接开通。"
         elif s_plan.get("round_count") == 3:
             if turn_idx == 1:
                 return f"今天在{env}有重大活动保障，开{app}{srv}意图保障单，时间从{nom_start_t}到{end_t}（原定时长{nom_dur}），画质要求{res}，时延控制在{rtt}以内。"
@@ -263,8 +266,11 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
         else:
             return f"太准了！前天那笔只是{d_info['temp_short']}临时短会，今天正式客户路演就得按上周那笔正式路演单保满{d_info['formal_spoken']}（{start_t}到{end_t}，持续{d_info['formal_dur']}），确认直接开通！"
     elif tid == "T2-10" or s_plan.get("experience_citation", {}).get("experience_id") == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
+        sh_t = tp.get("start_timestamp", "").split("日")[-1] or "15时00分"
+        eh_t = tp.get("end_timestamp", "").split("日")[-1] or "17时00分"
+        dur_val = tp.get("duration", "120min")
         if turn_idx == 1:
-            return f"今天下午在{env}，15时00分到17时00分（持续120min）我受邀进主会场的抖音直播间当连麦嘉宾互动，帮我把抖音的保障开上，画质要求{res}、时延控制在{rtt}以内。"
+            return f"今天在{env}，{sh_t}到{eh_t}（持续{dur_val}）我受邀进主会场的抖音直播间当连麦嘉宾互动，帮我把抖音的保障开上，画质要求{res}、时延控制在{rtt}以内。"
         else:
             return "太细节了！进别人直播间当连麦嘉宾要上麦发言，确实得按【抖音-开直播】保上传而不是看直播，确认按此开通意图保障单！"
     elif tid == "T2-5":
@@ -467,10 +473,13 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
             else:
                 return f"明白！已为您过滤前天的{d_info['temp_short']}临时短单，按上周正式客户路演单为您排满{d_info['formal_short']}（{sh_t}至{eh_t}，持续{d_info['formal_dur']}，{res} / 时延≤{rtt}），并记下这条经验，祝您路演顺畅！"
         elif exp_id == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
+            sh_t = tp.get("start_timestamp", "").split("日")[-1] or "15时00分"
+            eh_t = tp.get("end_timestamp", "").split("日")[-1] or "17时00分"
+            dur_val = tp.get("duration", "120min")
             if turn_idx == 1:
-                return f"收到，已为您准备好15时00分至17时00分（持续120min）的【抖音-看直播】意图保障单（{res} / 时延≤{rtt}），确认按此直接开通吗？"
+                return f"收到，已为您准备好{sh_t}至{eh_t}（持续{dur_val}）的【抖音-看直播】意图保障单（{res} / 时延≤{rtt}），确认按此直接开通吗？"
             else:
-                return f"明白！进他人直播间当连麦嘉宾需要上麦发言推流，确实应当按【开直播】保障上行。已为您修正为【抖音-开直播】意图保障单（15时00分至17时00分，持续120min，{res} / 时延≤{rtt}），并记下这条日常经验，祝您连麦互动顺利！"
+                return f"明白！进他人直播间当连麦嘉宾需要上麦发言推流，确实应当按【开直播】保障上行。已为您修正为【抖音-开直播】意图保障单（{sh_t}至{eh_t}，持续{dur_val}，{res} / 时延≤{rtt}），并记下这条日常经验，祝您连麦互动顺利！"
         else:
             if turn_idx == 1:
                 return f"收到，已为您配置好意图保障单方案（{res} / 时延≤{rtt}），确认直接开通吗？"
@@ -589,8 +598,10 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
     elif tid == "T2-3":
         start_t = tp['start_timestamp'].split('日')[-1]
         end_t = tp['end_timestamp'].split('日')[-1]
+        base_res = s_plan.get("base_resolution") or "1080p"
+        base_rtt = s_plan.get("base_rtt") or "50ms"
         if turn_idx == 1:
-            return f"收到，我调取到之前登记的{app}{srv}配置：画质1080p、时延50ms以内，{start_t}至{end_t}（持续{tp['duration']}），确认按这套配置开通吗？"
+            return f"收到，我调取到之前登记的{app}{srv}配置：画质{base_res}、时延{base_rtt}以内，{start_t}至{end_t}（持续{tp['duration']}），确认按这套配置开通吗？"
         else:
             return f"好的，已按现场特殊情况为您临时调整开通{app}{srv}保障：画质{res}、时延上限{rtt}，时段{start_t}至{end_t}。祝您现场顺利！"
     elif tid == "T1-1" or b_type == "distractor":

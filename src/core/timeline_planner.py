@@ -218,13 +218,21 @@ class DynamicTimelinePlanner:
         for cfg in blueprint_configs:
             learning_source_session = tag_to_sid.get(cfg.get("learning_source_session_tag"))
             src = cfg["source"]
+            base_res = src.get("preferred_params", {}).get("resolution") or src.get("params", {}).get("resolution", "1080p")
+            base_rtt = src.get("preferred_params", {}).get("rtt_max") or src.get("params", {}).get("rtt_max", "50ms")
             is_override = "override" in cfg and cfg["type"] == "event_override"
-            res = cfg["override"].get("resolution", "720p") if is_override else (
-                src.get("preferred_params", {}).get("resolution") or src.get("params", {}).get("resolution", "1080p")
-            )
-            rtt = cfg["override"].get("rtt_max", "30ms") if is_override else (
-                src.get("preferred_params", {}).get("rtt_max") or src.get("params", {}).get("rtt_max", "50ms")
-            )
+            if is_override:
+                ov_res = cfg["override"].get("resolution") or ("720p" if base_res != "720p" else "1080p")
+                if ov_res == base_res:
+                    ov_res = "720p" if base_res != "720p" else "1080p"
+                ov_rtt = cfg["override"].get("rtt_max") or ("30ms" if base_rtt != "30ms" else "50ms")
+                if ov_rtt == base_rtt:
+                    ov_rtt = "30ms" if base_rtt != "30ms" else ("80ms" if base_rtt != "80ms" else "50ms")
+                res = ov_res
+                rtt = ov_rtt
+            else:
+                res = base_res
+                rtt = base_rtt
 
             if cfg["type"].startswith("distractor"):
                 aliases = {}
@@ -271,11 +279,11 @@ class DynamicTimelinePlanner:
                     "validity": exp.get("validity") or str(exp.get("applicable_boundaries", ""))
                 }
                 if exp_id == "EXP_PREWARM_BUFFER_01":
-                    res = src.get("preferred_params", {}).get("resolution") or "1080p"
-                    rtt = src.get("preferred_params", {}).get("rtt_max") or "50ms"
+                    res = base_res
+                    rtt = base_rtt
                 elif exp_id == "EXP_MULTI_INTENT_PARTITION_01":
-                    res = src.get("preferred_params", {}).get("resolution") or "1080p"
-                    rtt = src.get("preferred_params", {}).get("rtt_max") or "50ms"
+                    res = base_res
+                    rtt = base_rtt
                 elif exp_id == "EXP_ORDER_QUALITY_DISAMBIGUATION_01":
                     prior_recs = working_ledger.query_prior_records(cfg["ref_time"])
                     target_rec = next(
@@ -298,8 +306,8 @@ class DynamicTimelinePlanner:
                             "selected_order_duration": f"formal_roadshow_{cfg['dur']}"
                         }
                 elif exp_id == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
-                    res = src.get("preferred_params", {}).get("resolution") or "1080p"
-                    rtt = src.get("preferred_params", {}).get("rtt_max") or "50ms"
+                    res = base_res
+                    rtt = base_rtt
             elif template_id == "T2-6":
                 is_long_reuse = (cfg.get("tag") == "wm_long_reuse")
                 prior_recs = working_ledger.query_prior_records(cfg["ref_time"])
@@ -371,8 +379,8 @@ class DynamicTimelinePlanner:
                         "negative_counterexamples": exp.get("negative_counterexamples", ""),
                         "counterexample_applied": True
                     }
-                    res = "1080p"
-                    rtt = "50ms"
+                    res = base_res
+                    rtt = base_rtt
                 else:
                     experience_citation = {
                         "experience_id": exp["experience_id"],
@@ -384,8 +392,8 @@ class DynamicTimelinePlanner:
                         "validity": exp.get("validity") or exp.get("applicable_boundaries", ""),
                         "negotiation_required": (round_count == 3)
                     }
-                    res = exp.get("recommended_adjustments", {}).get("resolution", "1080p")
-                    rtt = exp.get("recommended_adjustments", {}).get("rtt_max", "50ms")
+                    res = exp.get("recommended_adjustments", {}).get("resolution") or base_res
+                    rtt = exp.get("recommended_adjustments", {}).get("rtt_max") or base_rtt
             elif template_id == "T2-10":
                 exp = experience_bank.find_by_id("EXP_OVERLAPPING_ORDER_RESOLUTION_01") or experience_bank.find_by_id("EXP_SEVERE_WEATHER_01")
                 experience_citation = {
@@ -425,6 +433,8 @@ class DynamicTimelinePlanner:
                     "duration": cfg["dur"]
                 },
                 "period_type": main_mt.get("period_type", "weekly"),
+                "base_resolution": base_res,
+                "base_rtt": base_rtt,
                 "base_duration": cfg.get("base_dur", cfg["dur"]),
                 "base_end_timestamp": cfg.get("base_end", cfg["end"]),
                 "base_end": cfg.get("base_end"),

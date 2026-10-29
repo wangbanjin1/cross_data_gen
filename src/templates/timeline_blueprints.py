@@ -8,7 +8,7 @@
 import re
 from datetime import datetime
 
-def _parse_time_range(time_range_str: str) -> tuple[str, str, str, str, str, str]:
+def _parse_time_range(time_range_str: str, ext_add_minutes: int = 60) -> tuple[str, str, str, str, str, str]:
     """
     解析 time_range 字符串（如 '20:00-22:00', '08:30-10:00'），
     返回 (start_time_str, end_time_str, ref_time_str, base_dur_str, ext_end_time_str, ext_dur_str)。
@@ -19,16 +19,16 @@ def _parse_time_range(time_range_str: str) -> tuple[str, str, str, str, str, str
         e_part = m.group(2).zfill(5)
     else:
         s_part = "14:00"
-        e_part = "16:00"
+        e_part = "15:30"
 
     sh, sm = map(int, s_part.split(":"))
     eh, em = map(int, e_part.split(":"))
 
     base_minutes = (eh * 60 + em) - (sh * 60 + sm)
     if base_minutes <= 0:
-        base_minutes = 120
-        eh = (sh + 2) % 24
-        e_part = f"{eh:02d}:{sm:02d}"
+        base_minutes = 90
+        eh_tot = (sh * 60 + sm + base_minutes) % (24 * 60)
+        e_part = f"{eh_tot // 60:02d}:{eh_tot % 60:02d}"
 
     base_dur_str = f"{base_minutes}min"
 
@@ -38,8 +38,8 @@ def _parse_time_range(time_range_str: str) -> tuple[str, str, str, str, str, str
         ref_tot += 24 * 60
     ref_time_str = f"{ref_tot // 60:02d}:{ref_tot % 60:02d}"
 
-    # T2-5 延长 60 分钟
-    ext_minutes = base_minutes + 60
+    # T2-5 灵活延长 ext_add_minutes 分钟（支持 30 / 60 / 90 分钟）
+    ext_minutes = base_minutes + ext_add_minutes
     ext_dur_str = f"{ext_minutes}min"
     ext_end_tot = (sh * 60 + sm) + ext_minutes
     ext_end_time_str = f"{(ext_end_tot // 60) % 24:02d}:{ext_end_tot % 60:02d}"
@@ -148,9 +148,59 @@ def get_session_blueprints(
 
     period_type = main_mt.get("period_type", "weekly")
     days = main_mt.get("days", [])
-    time_range = main_mt.get("time_range", "14:00-16:00")
+    time_range = main_mt.get("time_range", "14:00-15:30")
 
-    sh_str, eh_str, ref_str, base_dur, ext_eh_str, ext_dur = _parse_time_range(time_range)
+    # 根据主线与支线信息生成稳定但多样化的确定性种子，避免所有用户在时长增量、支线时段、干扰项上千篇一律
+    seed_str = f"{main_mt.get('name', '')}|{time_range}|{main_env_desc}|{sub_01.get('name', '')}|{sub_02.get('name', '')}"
+    seed_val = sum((idx + 1) * ord(ch) for idx, ch in enumerate(seed_str))
+
+    ext_add_choices = [30, 60, 90]
+    ext_add_mins = main_mt.get("ext_add_minutes") or ext_add_choices[seed_val % len(ext_add_choices)]
+    sh_str, eh_str, ref_str, base_dur, ext_eh_str, ext_dur = _parse_time_range(time_range, ext_add_minutes=ext_add_mins)
+
+    # 动态解析或派生支线1、支线2与干扰会话的灵活时段、时长与环境
+    sub1_time_presets = [
+        ("18:30", "19:15", "18:15", "45min", "大巴跨城转场高速公路", "大巴转场弱网环境"),
+        ("18:45", "19:45", "18:30", "60min", "大巴跨城转场高速公路", "大巴转场弱网环境"),
+        ("17:30", "19:00", "17:15", "90min", "城际高铁移动车厢", "城际高铁转场环境"),
+        ("19:00", "20:00", "18:45", "60min", "机场摆渡候机长廊", "候机转场弱网环境"),
+        ("12:30", "13:15", "12:15", "45min", "园区通勤班车途中", "通勤班车移动环境"),
+    ]
+    sub1_s, sub1_e, sub1_ref, sub1_dur, sub1_default_env, sub1_default_trig = sub1_time_presets[seed_val % len(sub1_time_presets)]
+    if sub_01.get("time_range"):
+        sub1_s, sub1_e, sub1_ref, sub1_dur, _, _ = _parse_time_range(sub_01["time_range"])
+    sub1_env = sub_01.get("env") or sub1_default_env
+    sub1_trig = sub_01.get("trigger_condition") or sub1_default_trig
+
+    sub2_time_presets = [
+        ("20:00", "21:00", "19:45", "60min", "驻地酒店商务中心"),
+        ("20:15", "21:45", "20:00", "90min", "驻地酒店商务中心"),
+        ("20:30", "22:30", "20:15", "120min", "异地差旅酒店会议室"),
+        ("19:30", "20:15", "19:15", "45min", "联合办公共享会议间"),
+        ("21:00", "22:30", "20:45", "90min", "驻地公寓临时工作间"),
+    ]
+    sub2_s, sub2_e, sub2_ref, sub2_dur, sub2_default_env = sub2_time_presets[(seed_val // 3) % len(sub2_time_presets)]
+    if sub_02.get("time_range"):
+        sub2_s, sub2_e, sub2_ref, sub2_dur, _, _ = _parse_time_range(sub_02["time_range"])
+    sub2_env = sub_02.get("env") or sub2_default_env
+
+    ood_presets = [
+        ("10:00", "10:30", "30min", "市政政务便民大厅", "宽带光纤装维报修"),
+        ("09:30", "10:15", "45min", "社区便民综合服务站", "家庭路由器上门组网调试"),
+        ("11:00", "12:00", "60min", "政企营业厅前台", "手机国际漫游套餐退订与账单申诉"),
+        ("14:30", "15:00", "30min", "园区物业服务中心", "地下车库宽带专线移机办理"),
+        ("16:00", "16:45", "45min", "街道综合服务中心", "固话座机故障报修与移机"),
+    ]
+    ood_s, ood_e, ood_dur, ood_env, ood_goal_default = ood_presets[(seed_val // 5) % len(ood_presets)]
+
+    dist_norm_presets = [
+        ("10:00", "10:30", "30min", "街区便民服务站"),
+        ("10:30", "11:15", "45min", "临街咖啡厅休息区"),
+        ("11:00", "12:00", "60min", "商场中庭公共休息区"),
+        ("15:30", "16:30", "60min", "园区临时访客洽谈室"),
+        ("16:30", "18:00", "90min", "市民中心便民等候区"),
+    ]
+    dn_s, dn_e, dn_dur, dn_env = dist_norm_presets[(seed_val // 7) % len(dist_norm_presets)]
 
     def _m_time(d_str, t_str):
         parts = t_str.split(":")
@@ -245,12 +295,12 @@ def get_session_blueprints(
             "role": "evidence_session",
             "source": sub_01,
             "type": "sub_01",
-            "dur": "60min",
-            "env": "大巴跨城转场高速公路",
+            "dur": sub1_dur,
+            "env": sub1_env,
             "action": "disambiguate_sub_storyline_1",
             "declaration_mode": "implicit_induction",
             "storyline_trigger_type": "location_environment",
-            "trigger_condition": "大巴转场弱网环境",
+            "trigger_condition": sub1_trig,
             "round_count": 3,
             "cold_hot_type": "cold_start",
             "agility_factor": 0.0,
@@ -437,8 +487,8 @@ def get_session_blueprints(
             "role": "reuse_session",
             "source": sub_01,
             "type": "sub_01",
-            "dur": "60min",
-            "env": "大巴跨城转场高速公路",
+            "dur": sub1_dur,
+            "env": sub1_env,
             "action": "reuse_sub_storyline_1",
             "round_count": 2,
             "cold_hot_type": "hot_start",
@@ -549,10 +599,10 @@ def get_session_blueprints(
             "role": "distractor_session",
             "source": main_mt,
             "type": "distractor_ood",
-            "dur": "30min",
-            "env": "市政政务便民大厅",
+            "dur": ood_dur,
+            "env": ood_env,
             "action": "reject_out_of_domain",
-            "ood_goal": "宽带光纤装维报修",
+            "ood_goal": dist_02.get("ood_goal") or ood_goal_default,
             "round_count": 1,
             "cold_hot_type": None,
             "agility_factor": None,
@@ -582,12 +632,12 @@ def get_session_blueprints(
             "role": "evidence_session",
             "source": sub_02,
             "type": "sub_02",
-            "dur": "90min",
-            "env": "驻地酒店商务中心",
+            "dur": sub2_dur,
+            "env": sub2_env,
             "action": "establish_sub_storyline_2",
             "declaration_mode": "implicit_induction",
             "storyline_trigger_type": "location_environment",
-            "trigger_condition": "驻地酒店商务中心",
+            "trigger_condition": sub2_env,
             "round_count": 3,
             "cold_hot_type": "cold_start",
             "agility_factor": 0.0,
@@ -601,11 +651,11 @@ def get_session_blueprints(
             "role": "reuse_session",
             "source": sub_02,
             "type": "sub_02",
-            "dur": "90min",
-            "env": "驻地酒店商务中心",
+            "dur": sub2_dur,
+            "env": sub2_env,
             "action": "reuse_sub_storyline_2",
             "storyline_trigger_type": "location_environment",
-            "trigger_condition": "驻地酒店商务中心",
+            "trigger_condition": sub2_env,
             "round_count": 2,
             "cold_hot_type": "hot_start",
             "agility_factor": 0.5,
@@ -619,8 +669,8 @@ def get_session_blueprints(
             "role": "distractor_session",
             "source": dist_01,
             "type": "distractor_normal",
-            "dur": "30min",
-            "env": "街区便民服务站",
+            "dur": dn_dur,
+            "env": dist_01.get("env") or dn_env,
             "action": "single_standard_assurance",
             "round_count": 1,
             "cold_hot_type": None,
@@ -707,35 +757,35 @@ def get_session_blueprints(
             item["nominal_end"] = _m_time(nominal_date, eh_str)
             item["holiday_defer_date"] = defer_date
         elif t_kind == "multi_intent":
-            item["ref_time"] = f"{d_str}12时15分"
-            item["start"] = f"{d_str}12时30分"
-            item["base_end"] = f"{d_str}14时30分"
-            item["base_dur"] = "120min"
-            item["end"] = f"{d_str}14时30分"
-            item["dur"] = "120min"
-            item["start2"] = f"{d_str}12时30分"
-            item["end2"] = f"{d_str}14时30分"
-            item["dur2"] = "120min"
+            item["ref_time"] = _m_time(d_str, ref_str)
+            item["start"] = _m_time(d_str, sh_str)
+            item["base_end"] = _m_time(d_str, eh_str)
+            item["base_dur"] = base_dur
+            item["end"] = _m_time(d_str, eh_str)
+            item["dur"] = base_dur
+            item["start2"] = _m_time(d_str, sh_str)
+            item["end2"] = _m_time(d_str, eh_str)
+            item["dur2"] = base_dur
         elif t_kind == "overlap":
-            item["ref_time"] = f"{d_str}14时45分"
-            item["nominal_start"] = f"{d_str}15时00分"
-            item["nominal_end"] = f"{d_str}17时00分"
-            item["nominal_dur"] = "120min"
-            item["start"] = f"{d_str}15时00分"
-            item["end"] = f"{d_str}17时00分"
-            item["dur"] = "120min"
+            item["ref_time"] = _m_time(d_str, ref_str)
+            item["nominal_start"] = _m_time(d_str, sh_str)
+            item["nominal_end"] = _m_time(d_str, eh_str)
+            item["nominal_dur"] = base_dur
+            item["start"] = _m_time(d_str, sh_str)
+            item["end"] = _m_time(d_str, eh_str)
+            item["dur"] = base_dur
         elif t_kind == "sub1":
-            item["ref_time"] = f"{d_str}18时30分"
-            item["start"] = f"{d_str}18时45分"
-            item["end"] = f"{d_str}19时45分"
+            item["ref_time"] = _m_time(d_str, sub1_ref)
+            item["start"] = _m_time(d_str, sub1_s)
+            item["end"] = _m_time(d_str, sub1_e)
         elif t_kind == "sub2":
-            item["ref_time"] = f"{d_str}20时00分"
-            item["start"] = f"{d_str}20时15分"
-            item["end"] = f"{d_str}21时45分"
+            item["ref_time"] = _m_time(d_str, sub2_ref)
+            item["start"] = _m_time(d_str, sub2_s)
+            item["end"] = _m_time(d_str, sub2_e)
         elif t_kind == "dist_ood":
-            item["ref_time"] = f"{d_str}10时00分"
-            item["start"] = f"{d_str}10时00分"
-            item["end"] = f"{d_str}10时30分"
+            item["ref_time"] = _m_time(d_str, ood_s)
+            item["start"] = _m_time(d_str, ood_s)
+            item["end"] = _m_time(d_str, ood_e)
         elif t_kind == "dist_mixed":
             item["ref_time"] = f"{d_str}12时30分"
             item["start"] = f"{d_str}12时30分"
@@ -750,9 +800,9 @@ def get_session_blueprints(
             else:
                 item["env"] = "午休个人时间"
         elif t_kind == "dist_normal":
-            item["ref_time"] = f"{d_str}10时00分"
-            item["start"] = f"{d_str}10时00分"
-            item["end"] = f"{d_str}10时30分"
+            item["ref_time"] = _m_time(d_str, dn_s)
+            item["start"] = _m_time(d_str, dn_s)
+            item["end"] = _m_time(d_str, dn_e)
 
         final_blueprints.append(item)
 

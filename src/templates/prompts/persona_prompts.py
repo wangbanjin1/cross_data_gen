@@ -73,8 +73,8 @@ def build_persona_skeleton_prompt(
       "application_name": "标准APP名",
       "service_name": "标准业务名",
       "preferred_params": {{
-        "resolution": "1080p",
-        "rtt_max": "50ms"
+        "resolution": "根据业务场景从支持列表中灵活选择(如 1080p / 720p / 2160p / 540p / 360p，不要千篇一律填1080p)",
+        "rtt_max": "根据业务场景灵活选择(如 20ms / 30ms / 50ms / 80ms / 100ms，不要千篇一律填50ms)"
       }},
       "aliases": {{
         "app_aliases": ["应用口语别名1", "应用口语别名2"],

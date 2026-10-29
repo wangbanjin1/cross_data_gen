@@ -51,18 +51,27 @@ class PersonaGenerator:
         app_map = getattr(Config, "app_map", {})
         support_matrix = getattr(Config, "support_matrix", {})
 
-        # 标准高频合规 (应用, 业务) 候选池，用于修复大模型偶发越界组合及避免同画像主/支线冲突
-        canonical_pairs = [
+        # 标准多品类合规 (应用, 业务) 候选池，支持按人物 ID 轮转采样以保障全数据集应用与业务多样性
+        base_canonical_pairs = [
             ("抖音", "开直播"),
             ("微信", "视频通话"),
             ("腾讯会议", "会议"),
-            ("抖音", "短视频"),
             ("快手", "开直播"),
             ("钉钉", "会议"),
             ("哔哩哔哩", "开直播"),
-            ("快手", "短视频"),
             ("飞书", "会议"),
+            ("小红书", "开直播"),
+            ("抖音", "短视频"),
+            ("快手", "短视频"),
+            ("腾讯视频", "视频"),
+            ("哔哩哔哩", "视频"),
+            ("咪咕快游", "云游戏"),
+            ("斗鱼直播", "开直播"),
+            ("虎牙直播", "看直播"),
         ]
+        pid_m = re.search(r"(\d+)", str(sk.get("persona_id") or ""))
+        pid_offset = int(pid_m.group(1)) if pid_m else 0
+        canonical_pairs = base_canonical_pairs[pid_offset % len(base_canonical_pairs):] + base_canonical_pairs[:pid_offset % len(base_canonical_pairs)]
 
         def _fix_pair(app_val: str, srv_val: str, used_apps: set, used_srvs: set = None) -> tuple[str, str, bool]:
             changed = False
@@ -161,10 +170,29 @@ class PersonaGenerator:
                 cleaned_rtt = ["50ms以内", "50毫秒以内", "低时延"]
             aliases["rtt_aliases"] = cleaned_rtt or [f"{rtt}以内"]
 
-        # 5. 补齐 duration_aliases
+        # 5. 补齐 duration_aliases（根据主线 time_range 的真实时长动态匹配口语别名，禁止写死 120min）
+        tr_str = str(main_mt.get("time_range") or "14:00-16:00")
+        m_tr = re.search(r"(\d{1,2}):(\d{2})\s*[-~至到]\s*(\d{1,2}):(\d{2})", tr_str)
+        if m_tr:
+            tr_mins = (int(m_tr.group(3)) * 60 + int(m_tr.group(4))) - (int(m_tr.group(1)) * 60 + int(m_tr.group(2)))
+            if tr_mins <= 0:
+                tr_mins += 24 * 60
+        else:
+            tr_mins = 120
+        dur_key = f"{tr_mins}min"
+        default_dur_map = {
+            "30min": ["半小时", "半个钟头", "30分钟"],
+            "45min": ["45分钟", "三刻钟"],
+            "60min": ["一个钟头", "一小时", "60分钟"],
+            "90min": ["一个半小时", "一个半钟头", "90分钟"],
+            "120min": ["俩小时", "两钟头", "两小时"],
+            "150min": ["两个半小时", "150分钟"],
+            "180min": ["三个小时", "三钟头", "180分钟"],
+        }
         if not aliases.get("duration_aliases"):
-            dur_syns = synonyms.get("duration", {}).get("120min", [])
-            aliases["duration_aliases"] = (dur_syns + ["俩小时", "两钟头"])[:4] if dur_syns else ["俩小时", "两钟头", "两小时"]
+            dur_syns = synonyms.get("duration", {}).get(dur_key, [])
+            fallbacks = default_dur_map.get(dur_key, [f"{tr_mins}分钟"])
+            aliases["duration_aliases"] = (dur_syns + fallbacks)[:4]
 
         # 6. 补齐 period_aliases
         if not aliases.get("period_aliases"):
