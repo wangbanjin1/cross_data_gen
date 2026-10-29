@@ -4,8 +4,8 @@
   "persona_summary": "外业科研协作人员",
   "static_profile": {
     "user_id": "USER_010",
-    "identity": "一名严谨细致的实验物理学家，长期从事外业科研调查与跨机构协作，习惯在移动现场完成文献查询、观测记录与数据上传，对测量精度与数据可靠性要求极高。",
-    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时统一使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "identity": "一丝不苟的实验物理学家，长期在外业调查点、临时实验现场、博物馆外场与资料采集点之间移动，负责精密测量、观测记录与研究数据采集上传，并与团队远程复核讨论。",
+    "devices": "主力为5G智能手机，辅以平板电脑；便携终端确需联网时统一使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
     "apps": [
       "腾讯会议",
       "钉钉",
@@ -14,22 +14,22 @@
     ],
     "speech_archetype": "meticulous_researcher",
     "speech_style": {
-      "tone": "严谨克制、条理清晰，习惯用数据与参数说话，偶尔带一点实验室式的较真。",
+      "tone": "严谨克制、条理清晰，习惯先报数据再下结论，对测量细节反复确认。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
-        "数据先对齐一下",
-        "按原参数走"
+        "对齐一下",
+        "数据先传上去再说"
       ],
-      "typical_habits": "说话前先确认时间与参数档位，喜欢把'可靠''可复核'挂在嘴边，遇到弱覆盖会先问能不能续传。"
+      "typical_habits": "开口先确认时间与参数档位，习惯用'老规矩''老时间'指代固定安排，强调上传可靠与画面稳定，遇到弱覆盖会先问能否续传。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "晚间跨机构数据复核与远程讨论",
+      "name": "每日下午外业巡检与团队连线复核",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每天晚间黄金档20:00-22:00，外业调查结束后回到驻地，固定与团队进行数据复核、文献比对与远程讨论。",
+      "trigger_condition": "每天下午16:00-17:30外业巡检收尾时段，在调查点或临时实验现场用腾讯会议与团队连线复核观测结果并同步上传数据",
       "period_type": "daily",
       "days": [
         "daily"
@@ -44,14 +44,12 @@
       "aliases": {
         "app_aliases": [
           "企鹅会议",
-          "腾讯会",
-          "小企鹅开会"
+          "腾讯开会那个"
         ],
         "service_aliases": [
           "对齐开会",
-          "远程碰一下",
-          "过数据",
-          "复核会"
+          "连线复核",
+          "远程碰一下"
         ],
         "resolution_aliases": [
           "720p",
@@ -81,10 +79,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨校联合外场采集周",
+        "name": "跨校联合采样周（山区外场）",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "跨校联合外场采集周期间，团队在山区临时实验现场与博物馆外场多点位轮转，移动网络覆盖波动明显，需优先保障数据上传与短时远程讨论的连续性。",
+        "scene_description": "跨校联合采样周期间深入山区外场，移动网络覆盖波动明显，需在弱覆盖路段保障数据续传与视频连线不中断，临时下调画质并收紧时延要求。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -94,22 +92,21 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "外业采集现场视频通话核对",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "name": "采样途中钉钉视频通话确认记录",
+        "application_name": "腾讯视频",
+        "service_name": "视频",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "在采样点发现观测异常或读数偏差时，临时发起视频通话请团队远程核对现场情况。",
+        "trigger_condition": "采样途中对观测记录有疑问时，临时与同组人员视频通话核对细节",
         "aliases": {
           "app_aliases": [
-            "weixin",
-            "wx"
+            "tencentvideo",
+            "腾讯"
           ],
           "service_aliases": [
-            "打视频",
-            "连线"
+            "视频"
           ],
           "resolution_aliases": [
             "720p",
@@ -123,22 +120,22 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "跨校协作文档与任务同步",
-        "application_name": "抖音",
-        "service_name": "开直播",
+        "name": "晚间飞书协作文档与数据复核",
+        "application_name": "咪咕快游",
+        "service_name": "云游戏",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "跨机构协作任务需要同步文档、分配采集任务或确认复核结论时发起。",
+        "trigger_condition": "当天数据上传后，晚间与团队在飞书协作文档中复核数据并短会沟通",
         "aliases": {
           "app_aliases": [
-            "douyin",
-            "阿抖"
+            "migukuaiyou",
+            "咪咕游戏"
           ],
           "service_aliases": [
-            "推流",
-            "开播"
+            "玩云游戏",
+            "免下载游戏"
           ],
           "resolution_aliases": [
             "1080p原画",
@@ -154,7 +151,7 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "外业转场途中在通勤车上单次刷短视频放松",
+        "scenario": "外业休息时单次刷短视频放松",
         "application_name": "抖音",
         "service_name": "短视频",
         "params": {
@@ -165,7 +162,7 @@
       {
         "distractor_id": "DIST_02",
         "scenario": "学术活动间隙单次观看公开讲座直播",
-        "application_name": "哔哩哔哩",
+        "application_name": "微信",
         "service_name": "看直播",
         "params": {
           "resolution": "720p",

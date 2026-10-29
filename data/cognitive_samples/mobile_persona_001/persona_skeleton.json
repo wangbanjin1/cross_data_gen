@@ -4,32 +4,32 @@
   "persona_summary": "巡回活动讲者",
   "static_profile": {
     "user_id": "USER_001",
-    "identity": "前残奥高山滑雪运动员，现为励志巡回演讲者，常年跨城奔波于公益活动、校园宣讲与赛事集结区，日常在户外热身区、临时休息点及转场途中完成移动直播、流程接收与演讲片段上传。",
-    "devices": "主力为5G智能手机，辅助为平板电脑；便携终端确需联网时统一使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "identity": "前残奥高山滑雪运动员，现为励志巡回演讲者，常年跨城转场，在户外公益活动、赛事集结区与临时休息点之间移动办公，全程依赖手机移动核心网完成直播、调度与素材回传。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时统一使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
     "apps": [
-      "抖音",
       "微信",
+      "抖音",
       "腾讯会议",
       "钉钉"
     ],
     "speech_archetype": "athlete_speaker",
     "speech_style": {
-      "tone": "干脆利落、带运动员的节奏感，讲事情先给结论再补细节，习惯用训练和赛场的比喻。",
+      "tone": "干脆利落、带运动员的节奏感，讲效率不绕弯，习惯用训练场上的口令式表达",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "稳住，能上"
+        "稳住上行"
       ],
-      "typical_habits": "开播前先口头确认画质和时延档位，转场路上用语音消息同步团队，复盘时喜欢把关键片段回放一遍再下结论。"
+      "typical_habits": "开口先定时间和档位，再确认网络与设备状态；习惯把复杂流程压缩成一句口令，讲完就催着执行。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "午间公益宣讲移动直播",
+      "name": "午间户外公益演讲移动直播",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每天午间休息与午间复盘业务：12:30-13:30在户外热身区或临时休息点开直播，向线上观众同步宣讲片段并接收活动流程",
+      "trigger_condition": "每天午间休息与午间复盘业务：12:30-13:30在户外活动点或转场临时休息点开直播，同步接收活动流程并回传演讲片段与观众反馈",
       "period_type": "daily",
       "days": [
         "daily"
@@ -44,7 +44,7 @@
       "aliases": {
         "app_aliases": [
           "阿抖",
-          "抖音"
+          "抖子"
         ],
         "service_aliases": [
           "开播",
@@ -79,10 +79,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨城公益宣讲周暨赛事集结区联动直播",
+        "name": "跨城公益巡讲周暨赛事集结区联合活动",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "连续跨城转场，白天在人群密集的赛事集结区与露天场地活动，现场无线环境拥挤、上行波动大，需优先保证直播不断线。",
+        "scene_description": "连续跨城转场，活动点位于露天赛道旁与赛事集结区，人群密集、基站负载高，转场途中需保持直播与调度通信连续，临时将画质降档并收紧时延以保稳定。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -92,14 +92,14 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "转场大巴上的团队视频调度",
+        "name": "转场大巴上的团队视频调度会",
         "application_name": "腾讯会议",
         "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "客场转场途中在车上与团队对齐当天流程和人员分工时",
+        "trigger_condition": "跨城转场途中在车上与团队对齐当日流程与人员分工时发起",
         "aliases": {
           "app_aliases": [
             "tencentmeeting",
@@ -121,14 +121,14 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "训练与演讲片段回放复盘",
+        "name": "训练与演讲录像回放复盘",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "晚间在临时休息点与教练或搭档逐段回放录像、核对动作与讲稿时",
+        "trigger_condition": "晚间休息点与教练或搭档逐段回放录像、逐帧点评动作与表达时使用",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -152,9 +152,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "某次活动前临时与主办方开短会确认场地动线",
-        "application_name": "钉钉",
-        "service_name": "会议",
+        "scenario": "候场时单次刷短视频打发时间",
+        "application_name": "快手",
+        "service_name": "短视频",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -162,9 +162,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "候场时随手刷同行宣讲短视频找灵感",
-        "application_name": "快手",
-        "service_name": "短视频",
+        "scenario": "临时观看合作方公益活动的单次直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

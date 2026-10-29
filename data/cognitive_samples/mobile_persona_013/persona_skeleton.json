@@ -4,61 +4,64 @@
   "persona_summary": "移动执勤人员",
   "static_profile": {
     "user_id": "USER_013",
-    "identity": "一线警务指挥人员，具备强领导力，负责依据数据分析员的研判结果做出关键处置决策；日常在巡逻区域、夜间值守点、事故现场与应急集结区之间移动执勤，全程依赖手机移动核心网完成现场取证、即时通信、事件上报、地图导航、位置共享与任务调度。",
-    "devices": "主力为5G智能手机，辅以可穿戴设备（执法记录/定位类）；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "identity": "一线执勤警官，具备较强领导与现场决策能力，依据数据分析员的研判结果在巡逻、事故处置与应急集结现场做出关键处置决定；全程以手机移动核心网直接联网完成现场取证、即时通信、事件上报、地图导航与位置共享调度。",
+    "devices": "主力为5G智能手机，辅助为可穿戴设备（执法记录/定位腕表）；便携终端需联网时以手机热点共享。",
     "apps": [
       "微信",
       "钉钉",
       "腾讯会议",
       "高德地图"
     ],
-    "speech_archetype": "police_commander_speaker",
+    "speech_archetype": "field_commander_speaker",
     "speech_style": {
-      "tone": "干脆利落、指令式口吻，先定调再分工，强调时效与责任到人",
+      "tone": "干脆利落、指令化，带现场指挥的压迫感与信任感，先定调再分工",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "按这个口径走"
+        "按流程走",
+        "现场为准"
       ],
-      "typical_habits": "习惯用固定时间点组织复盘与调度，说话先报结论再补依据，喜欢用'老时间''老规矩'指代既定安排，对画质与时延要求会直接点名档位。"
+      "typical_habits": "习惯用短句下指令、复述确认关键信息；复盘时先讲结论再讲证据链；对时延和回传稳定性极为敏感，常以'能不能马上到''画面稳不稳'作为验收标准。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "周度夜间值守复盘与跨区调度视频会",
+      "name": "周度夜间值守复盘与跨区调度视频会商",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每周四与周日19:30-21:30固定组织夜间值守复盘与跨区调度视频会，依据数据分析员研判结果下达处置决策",
+      "trigger_condition": "每周四与周日复盘与专场互动：19:30-21:30 在夜间值守点或应急集结区，用钉钉发起跨区调度视频会议，同步现场取证与事件上报情况",
       "period_type": "weekly",
       "days": [
         "Thursday",
         "Sunday"
       ],
       "time_range": "19:30-21:30",
-      "application_name": "腾讯会议",
+      "application_name": "钉钉",
       "service_name": "会议",
       "preferred_params": {
         "resolution": "720p",
-        "rtt_max": "80ms"
+        "rtt_max": "50ms"
       },
       "aliases": {
         "app_aliases": [
-          "企鹅会议",
-          "腾讯会议"
+          "钉钉",
+          "钉一下",
+          "老钉"
         ],
         "service_aliases": [
           "对齐开会",
-          "开调度会",
-          "连麦复盘"
+          "连麦会商",
+          "视频点名"
         ],
         "resolution_aliases": [
           "720p",
           "高清"
         ],
         "rtt_aliases": [
-          "80ms以内",
-          "80毫秒以内"
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
         ],
         "duration_aliases": [
           "俩小时",
@@ -79,10 +82,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨区应急集结与事故现场联合处置周",
+        "name": "跨区大型活动安保与应急集结周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "多起事故现场与应急集结区并行，现场人员密集、移动频繁，需在弱覆盖与高移动场景下保持指挥链路稳定，优先保障消息及时送达与现场画面回传",
+        "scene_description": "多区域联动安保，现场人员密集、基站负载高，巡逻路线频繁切换，需在移动中保持画面稳定回传与指令即时送达",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -92,22 +95,22 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "巡逻车端视频调度与位置共享",
-        "application_name": "抖音",
-        "service_name": "开直播",
+        "name": "执法记录仪录像回传与复盘抽查",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "巡逻途中接到调度指令或需与值守点实时核对位置与人员车辆信息时发起",
+        "trigger_condition": "处置结束后在巡逻车或值守点，与内勤逐段核对现场录像与取证图片",
         "aliases": {
           "app_aliases": [
-            "douyin",
-            "阿抖"
+            "weixin",
+            "wx"
           ],
           "service_aliases": [
-            "推流",
-            "开播"
+            "打视频",
+            "连线"
           ],
           "resolution_aliases": [
             "720p",
@@ -121,22 +124,22 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "执法记录与现场影像复盘",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "name": "巡逻路线导航与位置共享调度",
+        "application_name": "斗鱼直播",
+        "service_name": "开直播",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "事件处置结束后与数据分析员或班组核对现场图片、执法记录并复盘关键节点时发起",
+        "trigger_condition": "接到调度指令后移动过程中共享实时位置并确认到达点位",
         "aliases": {
           "app_aliases": [
-            "weixin",
-            "wx"
+            "douyu",
+            "斗鱼"
           ],
           "service_aliases": [
-            "打视频",
-            "连线"
+            "推流",
+            "开播"
           ],
           "resolution_aliases": [
             "1080p原画",
@@ -152,9 +155,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次跨部门案情通报会，临时借用会议室大屏接入",
-        "application_name": "抖音",
-        "service_name": "开直播",
+        "scenario": "单次跨部门联合研判会，临时用腾讯会议接入上级通报",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -162,9 +165,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次休息间隙刷短视频放松，非执勤业务",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "scenario": "备勤间隙单次刷短视频放松，非任务业务",
+        "application_name": "抖音",
+        "service_name": "短视频",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

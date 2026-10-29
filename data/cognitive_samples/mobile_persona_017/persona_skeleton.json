@@ -4,8 +4,8 @@
   "persona_summary": "移动文化服务人员",
   "static_profile": {
     "user_id": "USER_017",
-    "identity": "韩国籍儿童文学爱好者与城市图书馆移动文化服务馆员，长期关注作家李基勋（Lee Gi-hun）的作品，负责社区阅读推广、馆藏外借流转与户外文化活动执行，每周3至5次外出任务，全程依赖手机4G/5G移动核心网直连，不依赖家庭宽带或固定Wi-Fi。",
-    "devices": "主力为5G智能手机，辅助为平板电脑；便携终端需联网时以手机热点共享。",
+    "identity": "韩国籍儿童文学图书馆员，长期关注作家李基勋（Lee Gi-hun）的作品，负责社区阅读推广、馆藏外借流转与户外文化活动现场服务，每周3至5次外出任务，全程依赖手机4G/5G移动核心网直接联网，不依赖固网或普通Wi-Fi。",
+    "devices": "主力5G智能手机＋辅助平板电脑，便携终端确需联网时使用手机热点",
     "apps": [
       "微信",
       "腾讯会议",
@@ -14,22 +14,22 @@
     ],
     "speech_archetype": "librarian_field_coordinator",
     "speech_style": {
-      "tone": "温和细致、条理清晰，带一点书卷气，现场协调时干脆利落",
+      "tone": "温和细致、条理清晰，带点书卷气的亲切感，现场调度时干脆利落",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
         "孩子们等着呢"
       ],
-      "typical_habits": "习惯先确认对方是否听清，再复述关键信息；布置任务时爱用'老规矩'概括固定流程；遇到网络波动会先问'还连着吗'再决定续传。"
+      "typical_habits": "习惯先确认对方是否听清再讲细节，喜欢用'老时间''老规矩'指代固定安排，遇到网络波动会立刻提醒'先别挂，我换个位置'"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "社区阅读活动现场远程协作与图文发布",
+      "name": "社区阅读活动现场远程协作与馆藏流转登记",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "在社区阅读推广活动、馆藏外借流转或户外儿童文学活动现场，需与馆内同事远程对齐书目登记与流转信息，并同步发布活动图文时触发",
+      "trigger_condition": "在社区阅读推广活动或户外文化活动现场，需与馆内同事远程协作核对馆藏外借流转信息、共享现场位置并同步活动图文时触发",
       "period_type": "task_driven",
       "days": [
         "task_specific"
@@ -50,7 +50,7 @@
         "service_aliases": [
           "对齐开会",
           "连麦对一下",
-          "开个短会"
+          "开个会同步"
         ],
         "resolution_aliases": [
           "720p",
@@ -80,10 +80,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨区儿童文学巡展周",
-        "start_time": "2026年11月02日00时00分",
-        "end_time": "2026年11月08日23时59分",
-        "scene_description": "巡展设于跨区城市广场与临时展棚，人流密集、基站切换频繁，部分户外等候区处于弱覆盖路段，需保证音视频稳定与任务续传",
+        "name": "跨区儿童文学巡展与作家李基勋作品推广周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "巡展设于多个街区户外与临时展棚，人流密集、基站负载高，移动过程中易进入弱覆盖路段，需保证音视频稳定与任务续传",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -93,14 +93,14 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "馆藏流转信息即时通信核对",
+        "name": "馆藏外借流转信息即时核对",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "外借图书登记信息与馆内系统不一致，需即时与流通台同事视频核对封面与条码时",
+        "trigger_condition": "现场登记外借或归还信息与馆内系统不一致，需即时视频核对书目与流转状态时",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -122,14 +122,14 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "活动现场短视频记录与上传",
+        "name": "活动现场图文短视频发布",
         "application_name": "抖音",
         "service_name": "短视频",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "阅读活动间隙拍摄儿童朗诵与手工环节，剪辑后上传活动宣传短视频时",
+        "trigger_condition": "阅读活动或作家作品推广环节出现亮点，需现场拍摄并上传活动图文短视频时",
         "aliases": {
           "app_aliases": [
             "douyin",
@@ -153,9 +153,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次受邀观看作家李基勋线上读者见面会直播",
-        "application_name": "哔哩哔哩",
-        "service_name": "看直播",
+        "scenario": "单次临时参加馆内线上业务培训",
+        "application_name": "钉钉",
+        "service_name": "会议",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -163,9 +163,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次在通勤途中浏览儿童文学推荐短视频",
-        "application_name": "小红书",
-        "service_name": "短视频",
+        "scenario": "午休时单次浏览儿童文学推广直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

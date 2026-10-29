@@ -4,32 +4,32 @@
   "persona_summary": "户外观赛与兴趣社群用户",
   "static_profile": {
     "user_id": "USER_016",
-    "identity": "中年高达模型爱好者兼户外观赛社群活跃分子，常在城市球场周边、观赛集结点与跨区域出行途中活动，以手机移动核心网直连完成即时通信、短视频分享与远程协作，便携拍摄设备需联网时开手机热点。",
-    "devices": "5G智能手机（主力）＋随身运动相机/便携拍摄设备（辅助，经手机热点联网）",
+    "identity": "中年高达模型爱好者兼业余观赛社群组织者，常在城市球场周边、漫展与模型交流活动现场集结同好，负责现场拍摄、社群直播与远程协作，全程依赖手机移动核心网直接联网。",
+    "devices": "主力为5G智能手机，辅以随身运动相机与便携拍摄设备，必要时开启手机热点为便携终端供网。",
     "apps": [
       "微信",
       "抖音",
-      "腾讯会议",
-      "高德地图"
+      "哔哩哔哩",
+      "腾讯会议"
     ],
     "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "爽快直接、带点老玩家腔调，喜欢用行话和固定口头禅安排事情",
+      "tone": "爽快直接、带点老玩家腔调，喜欢用行话和简称，讲效率不爱绕弯。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "原画走起"
+        "开整"
       ],
-      "typical_habits": "习惯用固定口语约定时间与画质档位，事前先'对齐一下'参数，事中反复确认'别掉链子'，事后在社群里复盘分享。"
+      "typical_habits": "习惯先确认网络和画质再开播，遇到卡顿会立刻喊'降一档'，喜欢用'老时间''月初那两天'指代固定安排。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "月初观赛社群直播连线与现场分享",
+      "name": "月初观赛社群直播与动员会",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每月月初1-2号上午例行开门红与月度动员会，社群在观赛集结点开直播连线分享现场与赛况",
+      "trigger_condition": "每月月初1-2号上午9点到10点，例行开门红与月度动员会，在户外集结点用手机开直播向社群同步当月观赛与活动安排。",
       "period_type": "monthly",
       "days": [
         "1st",
@@ -45,7 +45,7 @@
       "aliases": {
         "app_aliases": [
           "阿抖",
-          "抖子"
+          "抖家"
         ],
         "service_aliases": [
           "开播",
@@ -80,10 +80,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨城观赛周现场连线保障",
+        "name": "秋季模型展与观赛周现场协作",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "跨城观赛周期间在球场周边与出行途中人群密集、基站拥塞，需优先保证连线稳定，临时下调画质并收紧时延",
+        "scene_description": "展会与赛事叠加，现场人流密集、基站拥塞，户外临时停留点多，需在移动中保持直播与远程协作稳定。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -93,22 +93,22 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "赛后录像复盘视频通话",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "name": "赛后录像复盘远程沟通",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "观赛结束回到临时停留点，与社群伙伴视频通话复盘录像与现场细节",
+        "trigger_condition": "观赛或活动结束后当晚，与社群骨干远程复盘录像、对齐下阶段安排。",
         "aliases": {
           "app_aliases": [
-            "weixin",
-            "wx"
+            "tencentmeeting",
+            "会议通"
           ],
           "service_aliases": [
-            "打视频",
-            "连线"
+            "开会",
+            "进会议室"
           ],
           "resolution_aliases": [
             "720p",
@@ -122,22 +122,22 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "出行途中社群远程协作会议",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "name": "现场短视频即时分享",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "跨区域出行途中临时召集社群骨干开短会，对齐活动安排与分工",
+        "trigger_condition": "在活动现场拍到精彩片段后，随手剪辑上传到兴趣社群分享。",
         "aliases": {
           "app_aliases": [
-            "tencentmeeting",
-            "会议通"
+            "weixin",
+            "wx"
           ],
           "service_aliases": [
-            "开会",
-            "进会议室"
+            "打视频",
+            "连线"
           ],
           "resolution_aliases": [
             "1080p原画",
@@ -153,7 +153,7 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次在观赛集结点刷短视频打发等候时间",
+        "scenario": "临时与远方同好视频通话确认集合点",
         "application_name": "微信",
         "service_name": "视频通话",
         "params": {
@@ -163,8 +163,8 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次在出行途中看直播关注赛况",
-        "application_name": "哔哩哔哩",
+        "scenario": "出行途中单次观看赛事直播",
+        "application_name": "快手",
         "service_name": "看直播",
         "params": {
           "resolution": "720p",

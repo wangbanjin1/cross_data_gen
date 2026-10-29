@@ -8,7 +8,7 @@
       "round_count": 3,
       "intent_count": 1,
       "memory_role": "evidence_session",
-      "skeleton_signature": "T2-1|3|1|I1:抖音/开直播/1/clarified/resolved|none",
+      "skeleton_signature": "T2-1|3|1|I1:腾讯会议/会议/1/clarified/resolved|none",
       "scenario": {
         "environment": "露天高山滑雪训练基地",
         "blueprint_type": "main",
@@ -22,14 +22,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "你好，需要给抖音开直播做一个网络保障，时间是今天14时00分开始。",
+          "utterance": "你好，给腾讯会议会议做个网络保障，今天14时00分开始，别掉链子。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，已为您锁定抖音开直播保障，时间从14时00分开始。请问您需要保障的清晰度、时延上限和预计持续时长分别是多少呢？",
+          "utterance": "收到，已为您锁定腾讯会议会议保障，时间从14时00分开始。请问您需要保障的清晰度、时延上限和预计持续时长分别是多少呢？",
           "action_types": [
             "Request_Slot"
           ]
@@ -48,15 +48,15 @@
             "status": "in_progress",
             "closure_path": "clarify",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -74,13 +74,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "好的，画质用1080p，时延100ms以内，预计持续一个半小时（到15时30分）。以后我说‘特写清晰’，画质就是1080p。以后我只要在每月固定月度对账/例会说'老规矩'，就按这个来：抖音开直播、1080p、100ms以内，把这个规矩记一下哈，别掉链子。",
+          "utterance": "画质别太模糊就行，按720p开，以后也照这个标准理解。时延100ms以内，持续90min，到15时30分。以后我只要在每月固定月度对账/例会说'老规矩'，就按这个来：腾讯会议会议、720p、100ms以内，把这个规矩记一下哈，别掉链子。",
           "action_types": [
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，已为您登记老规矩习惯。确认按1080p、100ms以内立即为您开通本次保障吗？",
+          "utterance": "收到，已为您登记老规矩习惯。确认按720p、100ms以内立即为您开通本次保障吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -95,21 +95,21 @@
             "status": "in_progress",
             "closure_path": "clarify",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 }
@@ -166,21 +166,21 @@
             "status": "resolved",
             "closure_path": "clarified",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 }
@@ -220,21 +220,21 @@
         "status": "resolved",
         "closure_path": "clarified",
         "expression_level": 1,
-        "intent": "抖音开直播保障",
+        "intent": "腾讯会议会议保障",
         "params": {
           "application_name": {
-            "value": "抖音",
+            "value": "腾讯会议",
             "source_type": "Turn",
             "source_ref": "U1"
           },
           "service_name": {
-            "value": "开直播",
+            "value": "会议",
             "source_type": "Turn",
             "source_ref": "U1"
           },
           "resolution": {
             "min_value": {
-              "value": "1080p",
+              "value": "720p",
               "source_type": "Turn",
               "source_ref": "U2"
             }
@@ -275,12 +275,12 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -298,7 +298,7 @@
             "params": {
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 }
@@ -335,15 +335,15 @@
   {
     "session_id": "S-USER_025-02",
     "user_id": "USER_025",
-    "reference_time": "2026年09月16日17时15分",
+    "reference_time": "2026年09月16日18时15分",
     "session_meta": {
       "template_id": "T3-1",
       "round_count": 3,
       "intent_count": 1,
       "memory_role": "evidence_session",
-      "skeleton_signature": "T3-1|3|1|I1:腾讯会议/会议/1/clarified/resolved|none",
+      "skeleton_signature": "T3-1|3|1|I1:腾讯视频/视频/1/clarified/resolved|none",
       "scenario": {
-        "environment": "城际高铁移动车厢",
+        "environment": "大巴跨城转场高速公路",
         "blueprint_type": "sub_01",
         "memory_action": "disambiguate_sub_storyline_1"
       },
@@ -355,14 +355,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "在城际高铁移动车厢网络不太稳，帮我给腾讯会议会议开个保障，时间从今天17时30分开始。",
+          "utterance": "在大巴转场途中网络不太稳，帮我给腾讯视频视频开个保障，时间从今天18时30分开始。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，已确认是腾讯会议会议保障。请问画质、时延和持续时长有什么具体要求？",
+          "utterance": "收到，已确认是腾讯视频视频保障。请问画质、时延和持续时长有什么具体要求？",
           "action_types": [
             "Request_Slot"
           ]
@@ -381,21 +381,21 @@
             "status": "in_progress",
             "closure_path": "clarify",
             "expression_level": 1,
-            "intent": "腾讯会议会议保障",
+            "intent": "腾讯视频视频保障",
             "params": {
               "application_name": {
-                "value": "腾讯会议",
+                "value": "腾讯视频",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "会议",
+                "value": "视频",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年09月16日17时30分",
+                  "value": "2026年09月16日18时30分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
@@ -407,13 +407,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "画质按‘看得清人脸就行’来，时延控制在100ms以内，预计持续90min。",
+          "utterance": "画质只要‘看得清人脸就行’，时延控制在100ms以内，预计持续45min。",
           "action_types": [
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "问一下，您说的‘看得清人脸就行’具体是指哪种画质档位？往后也按这套标准来吗？",
+          "utterance": "请教一下，您提到的‘看得清人脸就行’具体对应哪档画质档位？以后也帮您按这个记吗？",
           "action_types": [
             "Request_Disambiguation"
           ]
@@ -430,15 +430,15 @@
             "status": "in_progress",
             "closure_path": "clarify",
             "expression_level": 1,
-            "intent": "腾讯会议会议保障",
+            "intent": "腾讯视频视频保障",
             "params": {
               "application_name": {
-                "value": "腾讯会议",
+                "value": "腾讯视频",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "会议",
+                "value": "视频",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -451,17 +451,17 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年09月16日17时30分",
+                  "value": "2026年09月16日18时30分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年09月16日19时00分",
+                  "value": "2026年09月16日19时15分",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 },
                 "duration": {
-                  "value": "90min",
+                  "value": "45min",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 }
@@ -479,7 +479,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已按您刚确认的含义记录，并为您开通腾讯会议会议保障（720p / 时延≤100ms）。祝您使用愉快！",
+          "utterance": "好的，已按您刚确认的含义记录，并为您开通腾讯视频视频保障（720p / 时延≤100ms）。祝您使用愉快！",
           "action_types": [
             "Acknowledge"
           ]
@@ -494,15 +494,15 @@
             "status": "resolved",
             "closure_path": "clarified",
             "expression_level": 1,
-            "intent": "腾讯会议会议保障",
+            "intent": "腾讯视频视频保障",
             "params": {
               "application_name": {
-                "value": "腾讯会议",
+                "value": "腾讯视频",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "会议",
+                "value": "视频",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -522,17 +522,17 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年09月16日17时30分",
+                  "value": "2026年09月16日18时30分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年09月16日19时00分",
+                  "value": "2026年09月16日19时15分",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 },
                 "duration": {
-                  "value": "90min",
+                  "value": "45min",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 }
@@ -548,15 +548,15 @@
         "status": "resolved",
         "closure_path": "clarified",
         "expression_level": 1,
-        "intent": "腾讯会议会议保障",
+        "intent": "腾讯视频视频保障",
         "params": {
           "application_name": {
-            "value": "腾讯会议",
+            "value": "腾讯视频",
             "source_type": "Turn",
             "source_ref": "U1"
           },
           "service_name": {
-            "value": "会议",
+            "value": "视频",
             "source_type": "Turn",
             "source_ref": "U1"
           },
@@ -576,17 +576,17 @@
           },
           "timestamp": {
             "start_timestamp": {
-              "value": "2026年09月16日17时30分",
+              "value": "2026年09月16日18时30分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
             "end_timestamp": {
-              "value": "2026年09月16日19时00分",
+              "value": "2026年09月16日19时15分",
               "source_type": "Turn",
               "source_ref": "U2"
             },
             "duration": {
-              "value": "90min",
+              "value": "45min",
               "source_type": "Turn",
               "source_ref": "U2"
             }
@@ -603,18 +603,18 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "腾讯会议",
+                "value": "腾讯视频",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "会议",
+                "value": "视频",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年09月16日17时30分",
+                  "value": "2026年09月16日18时30分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
@@ -633,12 +633,12 @@
               },
               "timestamp": {
                 "end_timestamp": {
-                  "value": "2026年09月16日19时00分",
+                  "value": "2026年09月16日19时15分",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 },
                 "duration": {
-                  "value": "90min",
+                  "value": "45min",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 }
@@ -670,7 +670,7 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "reinforcement_session",
-      "skeleton_signature": "T2-1|2|1|I1:抖音/开直播/1/memory_filled/resolved|none",
+      "skeleton_signature": "T2-1|2|1|I1:腾讯会议/会议/1/memory_filled/resolved|none",
       "scenario": {
         "environment": "露天高山滑雪训练基地",
         "blueprint_type": "main",
@@ -684,14 +684,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "老规矩，每月例会，在高山露天训练场，用抖音做开直播，画质按‘特写清晰’，帮我把保障开上。",
+          "utterance": "老规矩，每月例会，在高山露天训练场，用腾讯会议做会议，画质按‘别太模糊’，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，我调取到之前登记的抖音开直播配置：1080p、时延100ms以内，14时00分开始、15时30分结束，持续90min。确认按这套配置开通吗？",
+          "utterance": "收到，我调取到之前登记的腾讯会议会议配置：720p、时延100ms以内，14时00分开始、15时30分结束，持续90min。确认按这套配置开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -706,21 +706,21 @@
             "status": "in_progress",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Memory",
                   "source_ref": "MF_001"
                 }
@@ -762,7 +762,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您成功受理抖音开直播网络保障（1080p / 时延≤100ms），祝您使用愉快！",
+          "utterance": "好的，已为您成功受理腾讯会议会议网络保障（720p / 时延≤100ms），祝您使用愉快！",
           "action_types": [
             "Acknowledge"
           ]
@@ -777,21 +777,21 @@
             "status": "resolved",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Memory",
                   "source_ref": "MF_001"
                 }
@@ -831,21 +831,21 @@
         "status": "resolved",
         "closure_path": "memory_filled",
         "expression_level": 1,
-        "intent": "抖音开直播保障",
+        "intent": "腾讯会议会议保障",
         "params": {
           "application_name": {
-            "value": "抖音",
+            "value": "腾讯会议",
             "source_type": "Turn",
             "source_ref": "U1"
           },
           "service_name": {
-            "value": "开直播",
+            "value": "会议",
             "source_type": "Turn",
             "source_ref": "U1"
           },
           "resolution": {
             "min_value": {
-              "value": "1080p",
+              "value": "720p",
               "source_type": "Memory",
               "source_ref": "MF_001"
             }
@@ -886,12 +886,12 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -914,7 +914,7 @@
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Memory",
                   "source_ref": "MF_001"
                 }
@@ -945,7 +945,7 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "reuse_session",
-      "skeleton_signature": "T2-6|2|1|I1:抖音/开直播/1/working_record_reuse/resolved|none",
+      "skeleton_signature": "T2-6|2|1|I1:腾讯会议/会议/1/working_record_reuse/resolved|none",
       "scenario": {
         "environment": "露天高山滑雪训练基地",
         "blueprint_type": "working_record_reuse",
@@ -954,10 +954,10 @@
       "working_memory_pointer": {
         "target_record_id": "REC_mobile_persona_025_20260914_01",
         "inferred_delta_days": 7,
-        "matched_application": "抖音",
-        "matched_service": "开直播",
+        "matched_application": "腾讯会议",
+        "matched_service": "会议",
         "inherited_slots": {
-          "resolution": "1080p",
+          "resolution": "720p",
           "rtt_max": "100ms",
           "duration": "90min"
         }
@@ -969,10 +969,10 @@
     "working_memory_pointer": {
       "target_record_id": "REC_mobile_persona_025_20260914_01",
       "inferred_delta_days": 7,
-      "matched_application": "抖音",
-      "matched_service": "开直播",
+      "matched_application": "腾讯会议",
+      "matched_service": "会议",
       "inherited_slots": {
-        "resolution": "1080p",
+        "resolution": "720p",
         "rtt_max": "100ms",
         "duration": "90min"
       }
@@ -988,7 +988,7 @@
           ]
         },
         "agent": {
-          "utterance": "收到，已为您在历史意图保障单账本中找到上周在高山露天训练场的抖音开直播意图保障单（画质1080p、时延≤100ms）。请问今天具体的保障时间是几点到几点呢？",
+          "utterance": "收到，已为您在历史意图保障单账本中找到上周在高山露天训练场的腾讯会议会议意图保障单（画质720p、时延≤100ms）。请问今天具体的保障时间是几点到几点呢？",
           "action_types": [
             "Confirm_Slot",
             "Request_Slot"
@@ -1006,21 +1006,21 @@
             "status": "in_progress",
             "closure_path": "working_record_reuse",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20260914_01"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20260914_01"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "WorkingRecord",
                   "source_ref": "REC_mobile_persona_025_20260914_01"
                 }
@@ -1038,10 +1038,10 @@
         "working_memory_pointer": {
           "target_record_id": "REC_mobile_persona_025_20260914_01",
           "inferred_delta_days": 7,
-          "matched_application": "抖音",
-          "matched_service": "开直播",
+          "matched_application": "腾讯会议",
+          "matched_service": "会议",
           "inherited_slots": {
-            "resolution": "1080p",
+            "resolution": "720p",
             "rtt_max": "100ms",
             "duration": "90min"
           }
@@ -1057,7 +1057,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已按您引用的历史意图保障单规格为您成功开通今日抖音开直播保障（1080p / 时延≤100ms，时段14时00分至15时30分）。祝您工作顺利！",
+          "utterance": "好的，已按您引用的历史意图保障单规格为您成功开通今日腾讯会议会议保障（720p / 时延≤100ms，时段14时00分至15时30分）。祝您工作顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -1072,21 +1072,21 @@
             "status": "resolved",
             "closure_path": "working_record_reuse",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20260914_01"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20260914_01"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "WorkingRecord",
                   "source_ref": "REC_mobile_persona_025_20260914_01"
                 }
@@ -1126,21 +1126,21 @@
         "status": "resolved",
         "closure_path": "working_record_reuse",
         "expression_level": 1,
-        "intent": "抖音开直播保障",
+        "intent": "腾讯会议会议保障",
         "params": {
           "application_name": {
-            "value": "抖音",
+            "value": "腾讯会议",
             "source_type": "WorkingRecord",
             "source_ref": "REC_mobile_persona_025_20260914_01"
           },
           "service_name": {
-            "value": "开直播",
+            "value": "会议",
             "source_type": "WorkingRecord",
             "source_ref": "REC_mobile_persona_025_20260914_01"
           },
           "resolution": {
             "min_value": {
-              "value": "1080p",
+              "value": "720p",
               "source_type": "WorkingRecord",
               "source_ref": "REC_mobile_persona_025_20260914_01"
             }
@@ -1181,18 +1181,18 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20260914_01"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20260914_01"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "WorkingRecord",
                   "source_ref": "REC_mobile_persona_025_20260914_01"
                 }
@@ -1241,7 +1241,7 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "learning_session",
-      "skeleton_signature": "T2-1|2|1|I1:抖音/开直播/1/experience_crystallized/resolved|none",
+      "skeleton_signature": "T2-1|2|1|I1:腾讯会议/会议/1/experience_crystallized/resolved|none",
       "scenario": {
         "environment": "露天高山滑雪训练基地",
         "blueprint_type": "experience_learning",
@@ -1268,14 +1268,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "今天在高山露天训练场有重要现场保障，活动14时00分正式开始，帮我开从14时00分到15时30分（持续90min）的抖音开直播意图保障单，画质要求1080p，时延控制在100ms以内。",
+          "utterance": "今天在高山露天训练场有重要现场保障，活动14时00分正式开始，帮我开从14时00分到15时30分（持续90min）的腾讯会议会议意图保障单，画质要求720p，时延控制在100ms以内。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，已为您准备好14时00分至15时30分的现场意图保障单配置（1080p / 时延≤100ms），确认直接开通吗？",
+          "utterance": "收到，已为您准备好14时00分至15时30分的现场意图保障单配置（720p / 时延≤100ms），确认直接开通吗？",
           "action_types": [
             "Confirm_Slot",
             "Request_Slot"
@@ -1291,21 +1291,21 @@
             "status": "in_progress",
             "closure_path": "experience_crystallized",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
@@ -1360,7 +1360,7 @@
           ]
         },
         "agent": {
-          "utterance": "明白！大型场馆重大活动现场设备调试确实需要预留试机时间。已为您将意图保障单起保时间提前30分钟并延长总时长至90min（1080p / 时延≤100ms），祝现场活动顺利！",
+          "utterance": "明白！大型场馆重大活动现场设备调试确实需要预留试机时间。已为您将意图保障单起保时间提前30分钟并延长总时长至90min（720p / 时延≤100ms），祝现场活动顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -1375,21 +1375,21 @@
             "status": "resolved",
             "closure_path": "experience_crystallized",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
@@ -1429,21 +1429,21 @@
         "status": "resolved",
         "closure_path": "experience_crystallized",
         "expression_level": 1,
-        "intent": "抖音开直播保障",
+        "intent": "腾讯会议会议保障",
         "params": {
           "application_name": {
-            "value": "抖音",
+            "value": "腾讯会议",
             "source_type": "Turn",
             "source_ref": "U1"
           },
           "service_name": {
-            "value": "开直播",
+            "value": "会议",
             "source_type": "Turn",
             "source_ref": "U1"
           },
           "resolution": {
             "min_value": {
-              "value": "1080p",
+              "value": "720p",
               "source_type": "Turn",
               "source_ref": "U1"
             }
@@ -1484,12 +1484,12 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -1512,7 +1512,7 @@
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
@@ -1583,14 +1583,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "今天在高山露天训练场，从14时00分到15时30分（持续90min）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质1080p、时延100ms以内的意图保障单。",
+          "utterance": "今天在高山露天训练场，从14时00分到15时30分（持续90min）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质720p、时延100ms以内的意图保障单。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，已为您准备好14时00分至15时30分（持续90min）的【抖音-开直播】意图保障单（1080p / 时延≤100ms），确认直接为您开通吗？",
+          "utterance": "收到，已为您准备好14时00分至15时30分（持续90min）的【抖音-开直播】意图保障单（720p / 时延≤100ms），确认直接为您开通吗？",
           "action_types": [
             "Confirm_Slot",
             "Request_Slot"
@@ -1620,7 +1620,7 @@
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
@@ -1675,7 +1675,7 @@
           ]
         },
         "agent": {
-          "utterance": "明白！原来私下跟搭档对直播词、看镜头机位平时都是用【微信-视频通话】沟通。已为您将意图保障单修正为【微信-视频通话】（14时00分至15时30分，持续90min，1080p / 时延≤100ms），并记下这条日常经验，祝您对词顺利！",
+          "utterance": "明白！原来私下跟搭档对直播词、看镜头机位平时都是用【微信-视频通话】沟通。已为您将意图保障单修正为【微信-视频通话】（14时00分至15时30分，持续90min，720p / 时延≤100ms），并记下这条日常经验，祝您对词顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -1704,7 +1704,7 @@
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
@@ -1758,7 +1758,7 @@
           },
           "resolution": {
             "min_value": {
-              "value": "1080p",
+              "value": "720p",
               "source_type": "Turn",
               "source_ref": "U1"
             }
@@ -1827,7 +1827,7 @@
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
@@ -1871,7 +1871,7 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "reuse_session",
-      "skeleton_signature": "T2-5|2|1|I1:抖音/开直播/1/amend/resolved|none",
+      "skeleton_signature": "T2-5|2|1|I1:腾讯会议/会议/1/amend/resolved|none",
       "scenario": {
         "environment": "露天高山滑雪训练基地",
         "blueprint_type": "main",
@@ -1886,14 +1886,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "今天在高山露天训练场，老规矩，用阿抖上麦开播推流，帮我把保障开上。",
+          "utterance": "今天在露天高山滑雪训练基地，老规矩，用企鹅会议做会议，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，我调取到之前登记的抖音开直播配置：画质1080p、时延100ms以内，从14时00分开始保障，确认按这套配置开通吗？",
+          "utterance": "收到，我调取到之前登记的腾讯会议会议配置：画质720p、时延100ms以内，从14时00分开始保障，确认按这套配置开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -1908,21 +1908,21 @@
             "status": "in_progress",
             "closure_path": "amend",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Memory",
                   "source_ref": "MF_001"
                 }
@@ -1965,7 +1965,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已按老规矩为您开通抖音开直播保障：画质保持1080p、时延上限100ms，时长已延长至120min。祝您活动顺利！",
+          "utterance": "好的，已按老规矩为您开通腾讯会议会议保障：画质保持720p、时延上限100ms，时长已延长至120min。祝您活动顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -1980,21 +1980,21 @@
             "status": "resolved",
             "closure_path": "amend",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Memory",
                   "source_ref": "MF_001"
                 }
@@ -2034,21 +2034,21 @@
         "status": "resolved",
         "closure_path": "amend",
         "expression_level": 1,
-        "intent": "抖音开直播保障",
+        "intent": "腾讯会议会议保障",
         "params": {
           "application_name": {
-            "value": "抖音",
+            "value": "腾讯会议",
             "source_type": "Memory",
             "source_ref": "MF_001"
           },
           "service_name": {
-            "value": "开直播",
+            "value": "会议",
             "source_type": "Memory",
             "source_ref": "MF_001"
           },
           "resolution": {
             "min_value": {
-              "value": "1080p",
+              "value": "720p",
               "source_type": "Memory",
               "source_ref": "MF_001"
             }
@@ -2089,18 +2089,18 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Memory",
                   "source_ref": "MF_001"
                 }
@@ -2161,7 +2161,7 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "reuse_session",
-      "skeleton_signature": "T2-9|2|1|I1:抖音/开直播/1/proactive_prewarm/resolved|none",
+      "skeleton_signature": "T2-9|2|1|I1:腾讯会议/会议/1/proactive_prewarm/resolved|none",
       "scenario": {
         "environment": "奥林匹克体育中心多功能馆",
         "blueprint_type": "proactive_experience",
@@ -2190,11 +2190,11 @@
           "scenario_type": "prewarm_buffer",
           "target_ground_truth": {
             "I1": {
-              "intent": "抖音开直播保障",
+              "intent": "腾讯会议会议保障",
               "slots": {
-                "application_name": "抖音",
-                "service_name": "开直播",
-                "resolution": "1080p",
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月12日13时30分",
@@ -2208,17 +2208,17 @@
             {
               "turn": 1,
               "speaker": "user",
-              "simulator_user_prompt": "今天在奥体中心多功能馆有重大活动保障，帮我开抖音开直播意图保障单，活动时间从14时00分到15时30分（原定时长90min），画质要求1080p，时延控制在100ms以内。",
-              "expected_agent_response": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，1080p / 时延≤100ms），确认直接开通吗？",
-              "expected_agent_correction": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，1080p / 时延≤100ms），确认直接开通吗？",
+              "simulator_user_prompt": "今天在奥体中心多功能馆有重大活动保障，帮我开腾讯会议会议意图保障单，活动时间从14时00分到15时30分（原定时长90min），画质要求720p，时延控制在100ms以内。",
+              "expected_agent_response": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，720p / 时延≤100ms），确认直接开通吗？",
+              "expected_agent_correction": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，720p / 时延≤100ms），确认直接开通吗？",
               "expected_agent_action_types": [
                 "Confirm_Slot"
               ],
               "expected_slots_gt": {
                 "I1": {
-                  "application_name": "抖音",
-                  "service_name": "开直播",
-                  "resolution": "1080p",
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月12日13时30分",
@@ -2230,12 +2230,12 @@
               "intents_status": {
                 "I1": "in_progress"
               },
-              "baseline_agent_flawed_response": "收到，已按活动起止时间为您锁定抖音开直播意图保障单（2026年10月12日14时00分至2026年10月12日15时30分，持续90min，1080p / 时延≤100ms），确认直接为您开通吗？",
+              "baseline_agent_flawed_response": "收到，已按活动起止时间为您锁定腾讯会议会议意图保障单（2026年10月12日14时00分至2026年10月12日15时30分，持续90min，720p / 时延≤100ms），确认直接为您开通吗？",
               "baseline_flawed_slots": {
                 "I1": {
-                  "application_name": "抖音",
-                  "service_name": "开直播",
-                  "resolution": "1080p",
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月12日14时00分",
@@ -2258,16 +2258,16 @@
               "turn": 2,
               "speaker": "user_simulator",
               "simulator_user_prompt": "等等，大型活动现场还得提前进场调试设备呢，掐着点开来不及！帮我把开始时间往前提前半小时就行。",
-              "expected_agent_response": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质1080p、时延≤100ms），确认按此提前开通吗？",
-              "expected_agent_correction": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质1080p、时延≤100ms），确认按此提前开通吗？",
+              "expected_agent_response": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质720p、时延≤100ms），确认按此提前开通吗？",
+              "expected_agent_correction": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质720p、时延≤100ms），确认按此提前开通吗？",
               "expected_agent_action_types": [
                 "Confirm_Slot"
               ],
               "expected_slots_gt": {
                 "I1": {
-                  "application_name": "抖音",
-                  "service_name": "开直播",
-                  "resolution": "1080p",
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月12日13时30分",
@@ -2290,16 +2290,16 @@
               "turn": 3,
               "speaker": "user_simulator",
               "simulator_user_prompt": "好的，规格时间都对了，确认按此开通。",
-              "expected_agent_response": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，1080p / 时延≤100ms），预祝活动圆满顺利！",
-              "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，1080p / 时延≤100ms），预祝活动圆满顺利！",
+              "expected_agent_response": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，720p / 时延≤100ms），预祝活动圆满顺利！",
+              "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，720p / 时延≤100ms），预祝活动圆满顺利！",
               "expected_agent_action_types": [
                 "Acknowledge"
               ],
               "expected_slots_gt": {
                 "I1": {
-                  "application_name": "抖音",
-                  "service_name": "开直播",
-                  "resolution": "1080p",
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月12日13时30分",
@@ -2398,11 +2398,11 @@
             "scenario_type": "prewarm_buffer",
             "target_ground_truth": {
               "I1": {
-                "intent": "抖音开直播保障",
+                "intent": "腾讯会议会议保障",
                 "slots": {
-                  "application_name": "抖音",
-                  "service_name": "开直播",
-                  "resolution": "1080p",
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月12日13时30分",
@@ -2416,17 +2416,17 @@
               {
                 "turn": 1,
                 "speaker": "user",
-                "simulator_user_prompt": "今天在奥体中心多功能馆有重大活动保障，帮我开抖音开直播意图保障单，活动时间从14时00分到15时30分（原定时长90min），画质要求1080p，时延控制在100ms以内。",
-                "expected_agent_response": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，1080p / 时延≤100ms），确认直接开通吗？",
-                "expected_agent_correction": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，1080p / 时延≤100ms），确认直接开通吗？",
+                "simulator_user_prompt": "今天在奥体中心多功能馆有重大活动保障，帮我开腾讯会议会议意图保障单，活动时间从14时00分到15时30分（原定时长90min），画质要求720p，时延控制在100ms以内。",
+                "expected_agent_response": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，720p / 时延≤100ms），确认直接开通吗？",
+                "expected_agent_correction": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，720p / 时延≤100ms），确认直接开通吗？",
                 "expected_agent_action_types": [
                   "Confirm_Slot"
                 ],
                 "expected_slots_gt": {
                   "I1": {
-                    "application_name": "抖音",
-                    "service_name": "开直播",
-                    "resolution": "1080p",
+                    "application_name": "腾讯会议",
+                    "service_name": "会议",
+                    "resolution": "720p",
                     "rtt": "100ms",
                     "timestamp": {
                       "start_timestamp": "2026年10月12日13时30分",
@@ -2438,12 +2438,12 @@
                 "intents_status": {
                   "I1": "in_progress"
                 },
-                "baseline_agent_flawed_response": "收到，已按活动起止时间为您锁定抖音开直播意图保障单（2026年10月12日14时00分至2026年10月12日15时30分，持续90min，1080p / 时延≤100ms），确认直接为您开通吗？",
+                "baseline_agent_flawed_response": "收到，已按活动起止时间为您锁定腾讯会议会议意图保障单（2026年10月12日14时00分至2026年10月12日15时30分，持续90min，720p / 时延≤100ms），确认直接为您开通吗？",
                 "baseline_flawed_slots": {
                   "I1": {
-                    "application_name": "抖音",
-                    "service_name": "开直播",
-                    "resolution": "1080p",
+                    "application_name": "腾讯会议",
+                    "service_name": "会议",
+                    "resolution": "720p",
                     "rtt": "100ms",
                     "timestamp": {
                       "start_timestamp": "2026年10月12日14时00分",
@@ -2466,16 +2466,16 @@
                 "turn": 2,
                 "speaker": "user_simulator",
                 "simulator_user_prompt": "等等，大型活动现场还得提前进场调试设备呢，掐着点开来不及！帮我把开始时间往前提前半小时就行。",
-                "expected_agent_response": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质1080p、时延≤100ms），确认按此提前开通吗？",
-                "expected_agent_correction": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质1080p、时延≤100ms），确认按此提前开通吗？",
+                "expected_agent_response": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质720p、时延≤100ms），确认按此提前开通吗？",
+                "expected_agent_correction": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质720p、时延≤100ms），确认按此提前开通吗？",
                 "expected_agent_action_types": [
                   "Confirm_Slot"
                 ],
                 "expected_slots_gt": {
                   "I1": {
-                    "application_name": "抖音",
-                    "service_name": "开直播",
-                    "resolution": "1080p",
+                    "application_name": "腾讯会议",
+                    "service_name": "会议",
+                    "resolution": "720p",
                     "rtt": "100ms",
                     "timestamp": {
                       "start_timestamp": "2026年10月12日13时30分",
@@ -2498,16 +2498,16 @@
                 "turn": 3,
                 "speaker": "user_simulator",
                 "simulator_user_prompt": "好的，规格时间都对了，确认按此开通。",
-                "expected_agent_response": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，1080p / 时延≤100ms），预祝活动圆满顺利！",
-                "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，1080p / 时延≤100ms），预祝活动圆满顺利！",
+                "expected_agent_response": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，720p / 时延≤100ms），预祝活动圆满顺利！",
+                "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，720p / 时延≤100ms），预祝活动圆满顺利！",
                 "expected_agent_action_types": [
                   "Acknowledge"
                 ],
                 "expected_slots_gt": {
                   "I1": {
-                    "application_name": "抖音",
-                    "service_name": "开直播",
-                    "resolution": "1080p",
+                    "application_name": "腾讯会议",
+                    "service_name": "会议",
+                    "resolution": "720p",
                     "rtt": "100ms",
                     "timestamp": {
                       "start_timestamp": "2026年10月12日13时30分",
@@ -2575,17 +2575,17 @@
             {
               "turn": 1,
               "speaker": "user",
-              "simulator_user_prompt": "今天在奥体中心多功能馆有重大活动保障，帮我开抖音开直播意图保障单，活动时间从14时00分到15时30分（原定时长90min），画质要求1080p，时延控制在100ms以内。",
-              "expected_agent_response": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，1080p / 时延≤100ms），确认直接开通吗？",
-              "expected_agent_correction": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，1080p / 时延≤100ms），确认直接开通吗？",
+              "simulator_user_prompt": "今天在奥体中心多功能馆有重大活动保障，帮我开腾讯会议会议意图保障单，活动时间从14时00分到15时30分（原定时长90min），画质要求720p，时延控制在100ms以内。",
+              "expected_agent_response": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，720p / 时延≤100ms），确认直接开通吗？",
+              "expected_agent_correction": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，720p / 时延≤100ms），确认直接开通吗？",
               "expected_agent_action_types": [
                 "Confirm_Slot"
               ],
               "expected_slots_gt": {
                 "I1": {
-                  "application_name": "抖音",
-                  "service_name": "开直播",
-                  "resolution": "1080p",
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月12日13时30分",
@@ -2597,12 +2597,12 @@
               "intents_status": {
                 "I1": "in_progress"
               },
-              "baseline_agent_flawed_response": "收到，已按活动起止时间为您锁定抖音开直播意图保障单（2026年10月12日14时00分至2026年10月12日15时30分，持续90min，1080p / 时延≤100ms），确认直接为您开通吗？",
+              "baseline_agent_flawed_response": "收到，已按活动起止时间为您锁定腾讯会议会议意图保障单（2026年10月12日14时00分至2026年10月12日15时30分，持续90min，720p / 时延≤100ms），确认直接为您开通吗？",
               "baseline_flawed_slots": {
                 "I1": {
-                  "application_name": "抖音",
-                  "service_name": "开直播",
-                  "resolution": "1080p",
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月12日14时00分",
@@ -2625,16 +2625,16 @@
               "turn": 2,
               "speaker": "user_simulator",
               "simulator_user_prompt": "等等，大型活动现场还得提前进场调试设备呢，掐着点开来不及！帮我把开始时间往前提前半小时就行。",
-              "expected_agent_response": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质1080p、时延≤100ms），确认按此提前开通吗？",
-              "expected_agent_correction": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质1080p、时延≤100ms），确认按此提前开通吗？",
+              "expected_agent_response": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质720p、时延≤100ms），确认按此提前开通吗？",
+              "expected_agent_correction": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质720p、时延≤100ms），确认按此提前开通吗？",
               "expected_agent_action_types": [
                 "Confirm_Slot"
               ],
               "expected_slots_gt": {
                 "I1": {
-                  "application_name": "抖音",
-                  "service_name": "开直播",
-                  "resolution": "1080p",
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月12日13时30分",
@@ -2657,16 +2657,16 @@
               "turn": 3,
               "speaker": "user_simulator",
               "simulator_user_prompt": "好的，规格时间都对了，确认按此开通。",
-              "expected_agent_response": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，1080p / 时延≤100ms），预祝活动圆满顺利！",
-              "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，1080p / 时延≤100ms），预祝活动圆满顺利！",
+              "expected_agent_response": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，720p / 时延≤100ms），预祝活动圆满顺利！",
+              "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，720p / 时延≤100ms），预祝活动圆满顺利！",
               "expected_agent_action_types": [
                 "Acknowledge"
               ],
               "expected_slots_gt": {
                 "I1": {
-                  "application_name": "抖音",
-                  "service_name": "开直播",
-                  "resolution": "1080p",
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月12日13时30分",
@@ -2685,11 +2685,11 @@
             {
               "turn": 1,
               "speaker": "user",
-              "simulator_user_prompt": "今天在奥体中心多功能馆有重大活动保障，帮我开抖音开直播意图保障单，活动时间从14时00分到15时30分（原定时长90min），画质要求1080p，时延控制在100ms以内。",
+              "simulator_user_prompt": "今天在奥体中心多功能馆有重大活动保障，帮我开腾讯会议会议意图保障单，活动时间从14时00分到15时30分（原定时长90min），画质要求720p，时延控制在100ms以内。",
               "agent_hypothesis": "Agent按活动开始时间掐点预约，未做提前30分钟预热试机推算",
-              "baseline_agent_flawed_response": "收到，已按活动起止时间为您锁定抖音开直播意图保障单（2026年10月12日14时00分至2026年10月12日15时30分，持续90min，1080p / 时延≤100ms），确认直接为您开通吗？",
-              "expected_agent_correction": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，1080p / 时延≤100ms），确认直接开通吗？",
-              "expected_agent_response": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，1080p / 时延≤100ms），确认直接开通吗？",
+              "baseline_agent_flawed_response": "收到，已按活动起止时间为您锁定腾讯会议会议意图保障单（2026年10月12日14时00分至2026年10月12日15时30分，持续90min，720p / 时延≤100ms），确认直接为您开通吗？",
+              "expected_agent_correction": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，720p / 时延≤100ms），确认直接开通吗？",
+              "expected_agent_response": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，720p / 时延≤100ms），确认直接开通吗？",
               "flaw_type": "missing_prewarm_buffer",
               "flaw_description": "未对大型场馆重大活动现场设备调试进行前置30分钟时间差推算",
               "agent_action_types": [
@@ -2697,9 +2697,9 @@
               ],
               "expected_slots_gt": {
                 "I1": {
-                  "application_name": "抖音",
-                  "service_name": "开直播",
-                  "resolution": "1080p",
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月12日13时30分",
@@ -2710,9 +2710,9 @@
               },
               "baseline_flawed_slots": {
                 "I1": {
-                  "application_name": "抖音",
-                  "service_name": "开直播",
-                  "resolution": "1080p",
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月12日14时00分",
@@ -2735,15 +2735,15 @@
               "speaker": "user_simulator",
               "simulator_user_prompt": "等等，大型活动现场还得提前进场调试设备呢，掐着点开来不及！帮我把开始时间往前提前半小时就行。",
               "agent_hypothesis": "Agent收到纠偏后将起保时间提前30分钟并更新总时长",
-              "expected_agent_correction": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质1080p、时延≤100ms），确认按此提前开通吗？",
+              "expected_agent_correction": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质720p、时延≤100ms），确认按此提前开通吗？",
               "agent_action_types": [
                 "Confirm_Slot"
               ],
               "expected_slots_gt": {
                 "I1": {
-                  "application_name": "抖音",
-                  "service_name": "开直播",
-                  "resolution": "1080p",
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月12日13时30分",
@@ -2763,15 +2763,15 @@
               "speaker": "user_simulator",
               "simulator_user_prompt": "好的，规格时间都对了，确认按此开通。",
               "agent_hypothesis": "Agent完成提前预热试机意图保障单受理",
-              "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，1080p / 时延≤100ms），预祝活动圆满顺利！",
+              "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，720p / 时延≤100ms），预祝活动圆满顺利！",
               "agent_action_types": [
                 "Acknowledge"
               ],
               "expected_slots_gt": {
                 "I1": {
-                  "application_name": "抖音",
-                  "service_name": "开直播",
-                  "resolution": "1080p",
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月12日13时30分",
@@ -2786,7 +2786,7 @@
             {
               "turn": 1,
               "user": {
-                "utterance": "今天在奥体中心多功能馆有重大活动保障，帮我开抖音开直播意图保障单，活动时间从14时00分到15时30分（原定时长90min），画质要求1080p，时延控制在100ms以内。",
+                "utterance": "今天在奥体中心多功能馆有重大活动保障，帮我开腾讯会议会议意图保障单，活动时间从14时00分到15时30分（原定时长90min），画质要求720p，时延控制在100ms以内。",
                 "action_types": [
                   "Create_Intent_Request",
                   "Inform_Slot"
@@ -2794,7 +2794,7 @@
               },
               "agent": {
                 "thought": "Agent按活动开始时间掐点预约，未做提前30分钟预热试机推算",
-                "utterance": "收到，已按活动起止时间为您锁定抖音开直播意图保障单（2026年10月12日14时00分至2026年10月12日15时30分，持续90min，1080p / 时延≤100ms），确认直接为您开通吗？",
+                "utterance": "收到，已按活动起止时间为您锁定腾讯会议会议意图保障单（2026年10月12日14时00分至2026年10月12日15时30分，持续90min，720p / 时延≤100ms），确认直接为您开通吗？",
                 "action_types": [
                   "Confirm_Slot"
                 ]
@@ -2809,21 +2809,21 @@
                   "status": "in_progress",
                   "closure_path": "missing_prewarm_buffer",
                   "expression_level": 1,
-                  "intent": "抖音开直播保障",
+                  "intent": "腾讯会议会议保障",
                   "params": {
                     "application_name": {
-                      "value": "抖音",
+                      "value": "腾讯会议",
                       "source_type": "Turn",
                       "source_ref": "U1"
                     },
                     "service_name": {
-                      "value": "开直播",
+                      "value": "会议",
                       "source_type": "Turn",
                       "source_ref": "U1"
                     },
                     "resolution": {
                       "min_value": {
-                        "value": "1080p",
+                        "value": "720p",
                         "source_type": "Turn",
                         "source_ref": "U1"
                       }
@@ -2867,7 +2867,7 @@
               },
               "agent": {
                 "thought": "Agent收到纠偏后将起保时间提前30分钟并更新总时长",
-                "utterance": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质1080p、时延≤100ms），确认按此提前开通吗？",
+                "utterance": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质720p、时延≤100ms），确认按此提前开通吗？",
                 "action_types": [
                   "Confirm_Slot"
                 ]
@@ -2882,21 +2882,21 @@
                   "status": "in_progress",
                   "closure_path": "prewarm_correction",
                   "expression_level": 1,
-                  "intent": "抖音开直播保障",
+                  "intent": "腾讯会议会议保障",
                   "params": {
                     "application_name": {
-                      "value": "抖音",
+                      "value": "腾讯会议",
                       "source_type": "Turn",
                       "source_ref": "U1"
                     },
                     "service_name": {
-                      "value": "开直播",
+                      "value": "会议",
                       "source_type": "Turn",
                       "source_ref": "U1"
                     },
                     "resolution": {
                       "min_value": {
-                        "value": "1080p",
+                        "value": "720p",
                         "source_type": "Turn",
                         "source_ref": "U1"
                       }
@@ -2939,7 +2939,7 @@
               },
               "agent": {
                 "thought": "Agent完成提前预热试机意图保障单受理",
-                "utterance": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，1080p / 时延≤100ms），预祝活动圆满顺利！",
+                "utterance": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，720p / 时延≤100ms），预祝活动圆满顺利！",
                 "action_types": [
                   "Acknowledge"
                 ]
@@ -2954,21 +2954,21 @@
                   "status": "resolved",
                   "closure_path": "clarification_after_correction",
                   "expression_level": 1,
-                  "intent": "抖音开直播保障",
+                  "intent": "腾讯会议会议保障",
                   "params": {
                     "application_name": {
-                      "value": "抖音",
+                      "value": "腾讯会议",
                       "source_type": "Turn",
                       "source_ref": "U1"
                     },
                     "service_name": {
-                      "value": "开直播",
+                      "value": "会议",
                       "source_type": "Turn",
                       "source_ref": "U1"
                     },
                     "resolution": {
                       "min_value": {
-                        "value": "1080p",
+                        "value": "720p",
                         "source_type": "Turn",
                         "source_ref": "U1"
                       }
@@ -3031,11 +3031,11 @@
         "scenario_type": "prewarm_buffer",
         "target_ground_truth": {
           "I1": {
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "slots": {
-              "application_name": "抖音",
-              "service_name": "开直播",
-              "resolution": "1080p",
+              "application_name": "腾讯会议",
+              "service_name": "会议",
+              "resolution": "720p",
               "rtt": "100ms",
               "timestamp": {
                 "start_timestamp": "2026年10月12日13时30分",
@@ -3049,17 +3049,17 @@
           {
             "turn": 1,
             "speaker": "user",
-            "simulator_user_prompt": "今天在奥体中心多功能馆有重大活动保障，帮我开抖音开直播意图保障单，活动时间从14时00分到15时30分（原定时长90min），画质要求1080p，时延控制在100ms以内。",
-            "expected_agent_response": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，1080p / 时延≤100ms），确认直接开通吗？",
-            "expected_agent_correction": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，1080p / 时延≤100ms），确认直接开通吗？",
+            "simulator_user_prompt": "今天在奥体中心多功能馆有重大活动保障，帮我开腾讯会议会议意图保障单，活动时间从14时00分到15时30分（原定时长90min），画质要求720p，时延控制在100ms以内。",
+            "expected_agent_response": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，720p / 时延≤100ms），确认直接开通吗？",
+            "expected_agent_correction": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，720p / 时延≤100ms），确认直接开通吗？",
             "expected_agent_action_types": [
               "Confirm_Slot"
             ],
             "expected_slots_gt": {
               "I1": {
-                "application_name": "抖音",
-                "service_name": "开直播",
-                "resolution": "1080p",
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月12日13时30分",
@@ -3071,12 +3071,12 @@
             "intents_status": {
               "I1": "in_progress"
             },
-            "baseline_agent_flawed_response": "收到，已按活动起止时间为您锁定抖音开直播意图保障单（2026年10月12日14时00分至2026年10月12日15时30分，持续90min，1080p / 时延≤100ms），确认直接为您开通吗？",
+            "baseline_agent_flawed_response": "收到，已按活动起止时间为您锁定腾讯会议会议意图保障单（2026年10月12日14时00分至2026年10月12日15时30分，持续90min，720p / 时延≤100ms），确认直接为您开通吗？",
             "baseline_flawed_slots": {
               "I1": {
-                "application_name": "抖音",
-                "service_name": "开直播",
-                "resolution": "1080p",
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月12日14时00分",
@@ -3099,16 +3099,16 @@
             "turn": 2,
             "speaker": "user_simulator",
             "simulator_user_prompt": "等等，大型活动现场还得提前进场调试设备呢，掐着点开来不及！帮我把开始时间往前提前半小时就行。",
-            "expected_agent_response": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质1080p、时延≤100ms），确认按此提前开通吗？",
-            "expected_agent_correction": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质1080p、时延≤100ms），确认按此提前开通吗？",
+            "expected_agent_response": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质720p、时延≤100ms），确认按此提前开通吗？",
+            "expected_agent_correction": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质720p、时延≤100ms），确认按此提前开通吗？",
             "expected_agent_action_types": [
               "Confirm_Slot"
             ],
             "expected_slots_gt": {
               "I1": {
-                "application_name": "抖音",
-                "service_name": "开直播",
-                "resolution": "1080p",
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月12日13时30分",
@@ -3131,16 +3131,16 @@
             "turn": 3,
             "speaker": "user_simulator",
             "simulator_user_prompt": "好的，规格时间都对了，确认按此开通。",
-            "expected_agent_response": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，1080p / 时延≤100ms），预祝活动圆满顺利！",
-            "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，1080p / 时延≤100ms），预祝活动圆满顺利！",
+            "expected_agent_response": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，720p / 时延≤100ms），预祝活动圆满顺利！",
+            "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，720p / 时延≤100ms），预祝活动圆满顺利！",
             "expected_agent_action_types": [
               "Acknowledge"
             ],
             "expected_slots_gt": {
               "I1": {
-                "application_name": "抖音",
-                "service_name": "开直播",
-                "resolution": "1080p",
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月12日13时30分",
@@ -3239,11 +3239,11 @@
           "scenario_type": "prewarm_buffer",
           "target_ground_truth": {
             "I1": {
-              "intent": "抖音开直播保障",
+              "intent": "腾讯会议会议保障",
               "slots": {
-                "application_name": "抖音",
-                "service_name": "开直播",
-                "resolution": "1080p",
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月12日13时30分",
@@ -3257,17 +3257,17 @@
             {
               "turn": 1,
               "speaker": "user",
-              "simulator_user_prompt": "今天在奥体中心多功能馆有重大活动保障，帮我开抖音开直播意图保障单，活动时间从14时00分到15时30分（原定时长90min），画质要求1080p，时延控制在100ms以内。",
-              "expected_agent_response": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，1080p / 时延≤100ms），确认直接开通吗？",
-              "expected_agent_correction": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，1080p / 时延≤100ms），确认直接开通吗？",
+              "simulator_user_prompt": "今天在奥体中心多功能馆有重大活动保障，帮我开腾讯会议会议意图保障单，活动时间从14时00分到15时30分（原定时长90min），画质要求720p，时延控制在100ms以内。",
+              "expected_agent_response": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，720p / 时延≤100ms），确认直接开通吗？",
+              "expected_agent_correction": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，720p / 时延≤100ms），确认直接开通吗？",
               "expected_agent_action_types": [
                 "Confirm_Slot"
               ],
               "expected_slots_gt": {
                 "I1": {
-                  "application_name": "抖音",
-                  "service_name": "开直播",
-                  "resolution": "1080p",
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月12日13时30分",
@@ -3279,12 +3279,12 @@
               "intents_status": {
                 "I1": "in_progress"
               },
-              "baseline_agent_flawed_response": "收到，已按活动起止时间为您锁定抖音开直播意图保障单（2026年10月12日14时00分至2026年10月12日15时30分，持续90min，1080p / 时延≤100ms），确认直接为您开通吗？",
+              "baseline_agent_flawed_response": "收到，已按活动起止时间为您锁定腾讯会议会议意图保障单（2026年10月12日14时00分至2026年10月12日15时30分，持续90min，720p / 时延≤100ms），确认直接为您开通吗？",
               "baseline_flawed_slots": {
                 "I1": {
-                  "application_name": "抖音",
-                  "service_name": "开直播",
-                  "resolution": "1080p",
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月12日14时00分",
@@ -3307,16 +3307,16 @@
               "turn": 2,
               "speaker": "user_simulator",
               "simulator_user_prompt": "等等，大型活动现场还得提前进场调试设备呢，掐着点开来不及！帮我把开始时间往前提前半小时就行。",
-              "expected_agent_response": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质1080p、时延≤100ms），确认按此提前开通吗？",
-              "expected_agent_correction": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质1080p、时延≤100ms），确认按此提前开通吗？",
+              "expected_agent_response": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质720p、时延≤100ms），确认按此提前开通吗？",
+              "expected_agent_correction": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质720p、时延≤100ms），确认按此提前开通吗？",
               "expected_agent_action_types": [
                 "Confirm_Slot"
               ],
               "expected_slots_gt": {
                 "I1": {
-                  "application_name": "抖音",
-                  "service_name": "开直播",
-                  "resolution": "1080p",
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月12日13时30分",
@@ -3339,16 +3339,16 @@
               "turn": 3,
               "speaker": "user_simulator",
               "simulator_user_prompt": "好的，规格时间都对了，确认按此开通。",
-              "expected_agent_response": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，1080p / 时延≤100ms），预祝活动圆满顺利！",
-              "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，1080p / 时延≤100ms），预祝活动圆满顺利！",
+              "expected_agent_response": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，720p / 时延≤100ms），预祝活动圆满顺利！",
+              "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，720p / 时延≤100ms），预祝活动圆满顺利！",
               "expected_agent_action_types": [
                 "Acknowledge"
               ],
               "expected_slots_gt": {
                 "I1": {
-                  "application_name": "抖音",
-                  "service_name": "开直播",
-                  "resolution": "1080p",
+                  "application_name": "腾讯会议",
+                  "service_name": "会议",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月12日13时30分",
@@ -3416,17 +3416,17 @@
           {
             "turn": 1,
             "speaker": "user",
-            "simulator_user_prompt": "今天在奥体中心多功能馆有重大活动保障，帮我开抖音开直播意图保障单，活动时间从14时00分到15时30分（原定时长90min），画质要求1080p，时延控制在100ms以内。",
-            "expected_agent_response": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，1080p / 时延≤100ms），确认直接开通吗？",
-            "expected_agent_correction": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，1080p / 时延≤100ms），确认直接开通吗？",
+            "simulator_user_prompt": "今天在奥体中心多功能馆有重大活动保障，帮我开腾讯会议会议意图保障单，活动时间从14时00分到15时30分（原定时长90min），画质要求720p，时延控制在100ms以内。",
+            "expected_agent_response": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，720p / 时延≤100ms），确认直接开通吗？",
+            "expected_agent_correction": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，720p / 时延≤100ms），确认直接开通吗？",
             "expected_agent_action_types": [
               "Confirm_Slot"
             ],
             "expected_slots_gt": {
               "I1": {
-                "application_name": "抖音",
-                "service_name": "开直播",
-                "resolution": "1080p",
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月12日13时30分",
@@ -3438,12 +3438,12 @@
             "intents_status": {
               "I1": "in_progress"
             },
-            "baseline_agent_flawed_response": "收到，已按活动起止时间为您锁定抖音开直播意图保障单（2026年10月12日14时00分至2026年10月12日15时30分，持续90min，1080p / 时延≤100ms），确认直接为您开通吗？",
+            "baseline_agent_flawed_response": "收到，已按活动起止时间为您锁定腾讯会议会议意图保障单（2026年10月12日14时00分至2026年10月12日15时30分，持续90min，720p / 时延≤100ms），确认直接为您开通吗？",
             "baseline_flawed_slots": {
               "I1": {
-                "application_name": "抖音",
-                "service_name": "开直播",
-                "resolution": "1080p",
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月12日14时00分",
@@ -3466,16 +3466,16 @@
             "turn": 2,
             "speaker": "user_simulator",
             "simulator_user_prompt": "等等，大型活动现场还得提前进场调试设备呢，掐着点开来不及！帮我把开始时间往前提前半小时就行。",
-            "expected_agent_response": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质1080p、时延≤100ms），确认按此提前开通吗？",
-            "expected_agent_correction": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质1080p、时延≤100ms），确认按此提前开通吗？",
+            "expected_agent_response": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质720p、时延≤100ms），确认按此提前开通吗？",
+            "expected_agent_correction": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质720p、时延≤100ms），确认按此提前开通吗？",
             "expected_agent_action_types": [
               "Confirm_Slot"
             ],
             "expected_slots_gt": {
               "I1": {
-                "application_name": "抖音",
-                "service_name": "开直播",
-                "resolution": "1080p",
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月12日13时30分",
@@ -3498,16 +3498,16 @@
             "turn": 3,
             "speaker": "user_simulator",
             "simulator_user_prompt": "好的，规格时间都对了，确认按此开通。",
-            "expected_agent_response": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，1080p / 时延≤100ms），预祝活动圆满顺利！",
-            "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，1080p / 时延≤100ms），预祝活动圆满顺利！",
+            "expected_agent_response": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，720p / 时延≤100ms），预祝活动圆满顺利！",
+            "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，720p / 时延≤100ms），预祝活动圆满顺利！",
             "expected_agent_action_types": [
               "Acknowledge"
             ],
             "expected_slots_gt": {
               "I1": {
-                "application_name": "抖音",
-                "service_name": "开直播",
-                "resolution": "1080p",
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月12日13时30分",
@@ -3526,11 +3526,11 @@
           {
             "turn": 1,
             "speaker": "user",
-            "simulator_user_prompt": "今天在奥体中心多功能馆有重大活动保障，帮我开抖音开直播意图保障单，活动时间从14时00分到15时30分（原定时长90min），画质要求1080p，时延控制在100ms以内。",
+            "simulator_user_prompt": "今天在奥体中心多功能馆有重大活动保障，帮我开腾讯会议会议意图保障单，活动时间从14时00分到15时30分（原定时长90min），画质要求720p，时延控制在100ms以内。",
             "agent_hypothesis": "Agent按活动开始时间掐点预约，未做提前30分钟预热试机推算",
-            "baseline_agent_flawed_response": "收到，已按活动起止时间为您锁定抖音开直播意图保障单（2026年10月12日14时00分至2026年10月12日15时30分，持续90min，1080p / 时延≤100ms），确认直接为您开通吗？",
-            "expected_agent_correction": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，1080p / 时延≤100ms），确认直接开通吗？",
-            "expected_agent_response": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，1080p / 时延≤100ms），确认直接开通吗？",
+            "baseline_agent_flawed_response": "收到，已按活动起止时间为您锁定腾讯会议会议意图保障单（2026年10月12日14时00分至2026年10月12日15时30分，持续90min，720p / 时延≤100ms），确认直接为您开通吗？",
+            "expected_agent_correction": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，720p / 时延≤100ms），确认直接开通吗？",
+            "expected_agent_response": "收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间自动提前30分钟至2026年10月12日13时30分（至2026年10月12日15时30分，总时长120min，720p / 时延≤100ms），确认直接开通吗？",
             "flaw_type": "missing_prewarm_buffer",
             "flaw_description": "未对大型场馆重大活动现场设备调试进行前置30分钟时间差推算",
             "agent_action_types": [
@@ -3538,9 +3538,9 @@
             ],
             "expected_slots_gt": {
               "I1": {
-                "application_name": "抖音",
-                "service_name": "开直播",
-                "resolution": "1080p",
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月12日13时30分",
@@ -3551,9 +3551,9 @@
             },
             "baseline_flawed_slots": {
               "I1": {
-                "application_name": "抖音",
-                "service_name": "开直播",
-                "resolution": "1080p",
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月12日14时00分",
@@ -3576,15 +3576,15 @@
             "speaker": "user_simulator",
             "simulator_user_prompt": "等等，大型活动现场还得提前进场调试设备呢，掐着点开来不及！帮我把开始时间往前提前半小时就行。",
             "agent_hypothesis": "Agent收到纠偏后将起保时间提前30分钟并更新总时长",
-            "expected_agent_correction": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质1080p、时延≤100ms），确认按此提前开通吗？",
+            "expected_agent_correction": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质720p、时延≤100ms），确认按此提前开通吗？",
             "agent_action_types": [
               "Confirm_Slot"
             ],
             "expected_slots_gt": {
               "I1": {
-                "application_name": "抖音",
-                "service_name": "开直播",
-                "resolution": "1080p",
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月12日13时30分",
@@ -3604,15 +3604,15 @@
             "speaker": "user_simulator",
             "simulator_user_prompt": "好的，规格时间都对了，确认按此开通。",
             "agent_hypothesis": "Agent完成提前预热试机意图保障单受理",
-            "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，1080p / 时延≤100ms），预祝活动圆满顺利！",
+            "expected_agent_correction": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，720p / 时延≤100ms），预祝活动圆满顺利！",
             "agent_action_types": [
               "Acknowledge"
             ],
             "expected_slots_gt": {
               "I1": {
-                "application_name": "抖音",
-                "service_name": "开直播",
-                "resolution": "1080p",
+                "application_name": "腾讯会议",
+                "service_name": "会议",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月12日13时30分",
@@ -3627,7 +3627,7 @@
           {
             "turn": 1,
             "user": {
-              "utterance": "今天在奥体中心多功能馆有重大活动保障，帮我开抖音开直播意图保障单，活动时间从14时00分到15时30分（原定时长90min），画质要求1080p，时延控制在100ms以内。",
+              "utterance": "今天在奥体中心多功能馆有重大活动保障，帮我开腾讯会议会议意图保障单，活动时间从14时00分到15时30分（原定时长90min），画质要求720p，时延控制在100ms以内。",
               "action_types": [
                 "Create_Intent_Request",
                 "Inform_Slot"
@@ -3635,7 +3635,7 @@
             },
             "agent": {
               "thought": "Agent按活动开始时间掐点预约，未做提前30分钟预热试机推算",
-              "utterance": "收到，已按活动起止时间为您锁定抖音开直播意图保障单（2026年10月12日14时00分至2026年10月12日15时30分，持续90min，1080p / 时延≤100ms），确认直接为您开通吗？",
+              "utterance": "收到，已按活动起止时间为您锁定腾讯会议会议意图保障单（2026年10月12日14时00分至2026年10月12日15时30分，持续90min，720p / 时延≤100ms），确认直接为您开通吗？",
               "action_types": [
                 "Confirm_Slot"
               ]
@@ -3650,21 +3650,21 @@
                 "status": "in_progress",
                 "closure_path": "missing_prewarm_buffer",
                 "expression_level": 1,
-                "intent": "抖音开直播保障",
+                "intent": "腾讯会议会议保障",
                 "params": {
                   "application_name": {
-                    "value": "抖音",
+                    "value": "腾讯会议",
                     "source_type": "Turn",
                     "source_ref": "U1"
                   },
                   "service_name": {
-                    "value": "开直播",
+                    "value": "会议",
                     "source_type": "Turn",
                     "source_ref": "U1"
                   },
                   "resolution": {
                     "min_value": {
-                      "value": "1080p",
+                      "value": "720p",
                       "source_type": "Turn",
                       "source_ref": "U1"
                     }
@@ -3708,7 +3708,7 @@
             },
             "agent": {
               "thought": "Agent收到纠偏后将起保时间提前30分钟并更新总时长",
-              "utterance": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质1080p、时延≤100ms），确认按此提前开通吗？",
+              "utterance": "抱歉！已为您重新推算意图保障单时间，将起保时间提前30分钟调整为2026年10月12日13时30分至2026年10月12日15时30分（总时长扩充至120min，画质720p、时延≤100ms），确认按此提前开通吗？",
               "action_types": [
                 "Confirm_Slot"
               ]
@@ -3723,21 +3723,21 @@
                 "status": "in_progress",
                 "closure_path": "prewarm_correction",
                 "expression_level": 1,
-                "intent": "抖音开直播保障",
+                "intent": "腾讯会议会议保障",
                 "params": {
                   "application_name": {
-                    "value": "抖音",
+                    "value": "腾讯会议",
                     "source_type": "Turn",
                     "source_ref": "U1"
                   },
                   "service_name": {
-                    "value": "开直播",
+                    "value": "会议",
                     "source_type": "Turn",
                     "source_ref": "U1"
                   },
                   "resolution": {
                     "min_value": {
-                      "value": "1080p",
+                      "value": "720p",
                       "source_type": "Turn",
                       "source_ref": "U1"
                     }
@@ -3780,7 +3780,7 @@
             },
             "agent": {
               "thought": "Agent完成提前预热试机意图保障单受理",
-              "utterance": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，1080p / 时延≤100ms），预祝活动圆满顺利！",
+              "utterance": "好的，已为您成功受理提前30分钟预热试机意图保障单（2026年10月12日13时30分至2026年10月12日15时30分，持续120min，720p / 时延≤100ms），预祝活动圆满顺利！",
               "action_types": [
                 "Acknowledge"
               ]
@@ -3795,21 +3795,21 @@
                 "status": "resolved",
                 "closure_path": "clarification_after_correction",
                 "expression_level": 1,
-                "intent": "抖音开直播保障",
+                "intent": "腾讯会议会议保障",
                 "params": {
                   "application_name": {
-                    "value": "抖音",
+                    "value": "腾讯会议",
                     "source_type": "Turn",
                     "source_ref": "U1"
                   },
                   "service_name": {
-                    "value": "开直播",
+                    "value": "会议",
                     "source_type": "Turn",
                     "source_ref": "U1"
                   },
                   "resolution": {
                     "min_value": {
-                      "value": "1080p",
+                      "value": "720p",
                       "source_type": "Turn",
                       "source_ref": "U1"
                     }
@@ -3849,14 +3849,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "今天在奥体中心多功能馆有重大活动保障，帮我开抖音开直播意图保障单，活动时间从14时00分到15时30分（原定时长90min），画质要求1080p，时延控制在100ms以内。",
+          "utterance": "今天在奥体中心多功能馆有重大活动保障，帮我开腾讯会议会议意图保障单，活动时间从14时00分到15时30分（原定时长90min），画质要求720p，时延控制在100ms以内。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到！大型场馆重大活动现场设备调试与连线建议提前预热试机。参考此前在 S-USER_025-05 的处理做法，为您将意图保障单起保时间自动提前30分钟推算为13时30分至15时30分（保障时长扩充至120min，1080p / 时延≤100ms），确认直接开通吗？",
+          "utterance": "收到！大型场馆重大活动现场设备调试与连线建议提前预热试机。参考此前在 S-USER_025-05 的处理做法，为您将意图保障单起保时间自动提前30分钟推算为13时30分至15时30分（保障时长扩充至120min，720p / 时延≤100ms），确认直接开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -3871,21 +3871,21 @@
             "status": "in_progress",
             "closure_path": "proactive_prewarm",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
@@ -3940,7 +3940,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您成功受理抖音开直播意图保障单（13时30分至15时30分，持续120min，1080p / 时延≤100ms），预留30分钟预热试机，祝现场顺利！",
+          "utterance": "好的，已为您成功受理腾讯会议会议意图保障单（13时30分至15时30分，持续120min，720p / 时延≤100ms），预留30分钟预热试机，祝现场顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -3955,21 +3955,21 @@
             "status": "resolved",
             "closure_path": "proactive_prewarm",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
@@ -4009,21 +4009,21 @@
         "status": "resolved",
         "closure_path": "proactive_prewarm",
         "expression_level": 1,
-        "intent": "抖音开直播保障",
+        "intent": "腾讯会议会议保障",
         "params": {
           "application_name": {
-            "value": "抖音",
+            "value": "腾讯会议",
             "source_type": "Turn",
             "source_ref": "U1"
           },
           "service_name": {
-            "value": "开直播",
+            "value": "会议",
             "source_type": "Turn",
             "source_ref": "U1"
           },
           "resolution": {
             "min_value": {
-              "value": "1080p",
+              "value": "720p",
               "source_type": "Turn",
               "source_ref": "U1"
             }
@@ -4064,18 +4064,18 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
@@ -4123,7 +4123,7 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "correction_session",
-      "skeleton_signature": "T2-3|2|1|I1:抖音/开直播/4/correct/resolved|none",
+      "skeleton_signature": "T2-3|2|1|I1:腾讯会议/会议/4/correct/resolved|none",
       "scenario": {
         "environment": "沿海暴雨强对流前沿现场",
         "blueprint_type": "event_override",
@@ -4138,14 +4138,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "今天在沿海巡逻岸线，不用腾讯会议做会议了，老规矩用抖音做开直播，帮我把保障开上。",
+          "utterance": "今天在沿海暴雨强对流前沿现场，老规矩，用腾讯会议做会议，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，我调取到之前登记的抖音开直播配置：画质1080p、时延100ms以内，14时00分至15时30分（持续90min），确认按这套配置开通吗？",
+          "utterance": "收到，我调取到之前登记的腾讯会议会议配置：画质720p、时延100ms以内，14时00分至15时30分（持续90min），确认按这套配置开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -4160,21 +4160,21 @@
             "status": "in_progress",
             "closure_path": "correct",
             "expression_level": 4,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Memory",
                   "source_ref": "MF_001"
                 }
@@ -4210,14 +4210,14 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "对，不过今天现场特殊，画质临时调到720p，时延压到30ms以内，今天临时按这个来。",
+          "utterance": "对，不过今天现场特殊，画质临时调到1080p，时延压到30ms以内，今天临时按这个来。",
           "action_types": [
             "Correct_Previous_Input",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已按现场特殊情况为您临时调整开通抖音开直播保障：画质720p、时延上限30ms，时段14时00分至15时30分。祝您现场顺利！",
+          "utterance": "好的，已按现场特殊情况为您临时调整开通腾讯会议会议保障：画质1080p、时延上限30ms，时段14时00分至15时30分。祝您现场顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -4232,21 +4232,21 @@
             "status": "resolved",
             "closure_path": "correct",
             "expression_level": 4,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "resolution": {
                 "min_value": {
-                  "value": "720p",
+                  "value": "1080p",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 }
@@ -4286,21 +4286,21 @@
         "status": "resolved",
         "closure_path": "correct",
         "expression_level": 4,
-        "intent": "抖音开直播保障",
+        "intent": "腾讯会议会议保障",
         "params": {
           "application_name": {
-            "value": "抖音",
+            "value": "腾讯会议",
             "source_type": "Memory",
             "source_ref": "MF_001"
           },
           "service_name": {
-            "value": "开直播",
+            "value": "会议",
             "source_type": "Memory",
             "source_ref": "MF_001"
           },
           "resolution": {
             "min_value": {
-              "value": "720p",
+              "value": "1080p",
               "source_type": "Turn",
               "source_ref": "U2"
             }
@@ -4341,18 +4341,18 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Memory",
                   "source_ref": "MF_001"
                 }
@@ -4388,7 +4388,7 @@
             "params": {
               "resolution": {
                 "min_value": {
-                  "value": "720p",
+                  "value": "1080p",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 }
@@ -4449,7 +4449,7 @@
               "slots": {
                 "application_name": "微信",
                 "service_name": "视频通话",
-                "resolution": "1080p",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月16日14时00分",
@@ -4463,9 +4463,9 @@
             {
               "turn": 1,
               "speaker": "user",
-              "simulator_user_prompt": "今天在高山露天训练场，14时00分至15时30分（持续90min）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质1080p、时延100ms以内的意图保障单。",
-              "expected_agent_response": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，1080p / 时延≤100ms），确认按此办理吗？",
-              "expected_agent_correction": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，1080p / 时延≤100ms），确认按此办理吗？",
+              "simulator_user_prompt": "今天在高山露天训练场，14时00分至15时30分（持续90min）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质720p、时延100ms以内的意图保障单。",
+              "expected_agent_response": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，720p / 时延≤100ms），确认按此办理吗？",
+              "expected_agent_correction": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，720p / 时延≤100ms），确认按此办理吗？",
               "expected_agent_action_types": [
                 "Confirm_Slot"
               ],
@@ -4473,7 +4473,7 @@
                 "I1": {
                   "application_name": "微信",
                   "service_name": "视频通话",
-                  "resolution": "1080p",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月16日14时00分",
@@ -4485,12 +4485,12 @@
               "intents_status": {
                 "I1": "in_progress"
               },
-              "baseline_agent_flawed_response": "收到，已为您准备好2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【抖音-开直播】意图保障单（1080p / 时延≤100ms），确认按此开通吗？",
+              "baseline_agent_flawed_response": "收到，已为您准备好2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【抖音-开直播】意图保障单（720p / 时延≤100ms），确认按此开通吗？",
               "baseline_flawed_slots": {
                 "I1": {
                   "application_name": "抖音",
                   "service_name": "开直播",
-                  "resolution": "1080p",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月16日14时00分",
@@ -4513,8 +4513,8 @@
               "turn": 2,
               "speaker": "user_simulator",
               "simulator_user_prompt": "嗨，我只是先跟搭档私下对一下词和看眼机位，还没正式开播呢！平时对词我们都是打微信视频电话，把应用和业务改成微信视频通话就行。",
-              "expected_agent_response": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质1080p、时延≤100ms），确认现在为您开通吗？",
-              "expected_agent_correction": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质1080p、时延≤100ms），确认现在为您开通吗？",
+              "expected_agent_response": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质720p、时延≤100ms），确认现在为您开通吗？",
+              "expected_agent_correction": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质720p、时延≤100ms），确认现在为您开通吗？",
               "expected_agent_action_types": [
                 "Confirm_Slot"
               ],
@@ -4522,7 +4522,7 @@
                 "I1": {
                   "application_name": "微信",
                   "service_name": "视频通话",
-                  "resolution": "1080p",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月16日14时00分",
@@ -4545,8 +4545,8 @@
               "turn": 3,
               "speaker": "user_simulator",
               "simulator_user_prompt": "好的，改成微信视频通话就对了，确认按此开通。",
-              "expected_agent_response": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（1080p / 时延≤100ms），祝您和搭档对词试机位顺利！",
-              "expected_agent_correction": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（1080p / 时延≤100ms），祝您和搭档对词试机位顺利！",
+              "expected_agent_response": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（720p / 时延≤100ms），祝您和搭档对词试机位顺利！",
+              "expected_agent_correction": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（720p / 时延≤100ms），祝您和搭档对词试机位顺利！",
               "expected_agent_action_types": [
                 "Acknowledge"
               ],
@@ -4554,7 +4554,7 @@
                 "I1": {
                   "application_name": "微信",
                   "service_name": "视频通话",
-                  "resolution": "1080p",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月16日14时00分",
@@ -4660,7 +4660,7 @@
                 "slots": {
                   "application_name": "微信",
                   "service_name": "视频通话",
-                  "resolution": "1080p",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月16日14时00分",
@@ -4674,9 +4674,9 @@
               {
                 "turn": 1,
                 "speaker": "user",
-                "simulator_user_prompt": "今天在高山露天训练场，14时00分至15时30分（持续90min）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质1080p、时延100ms以内的意图保障单。",
-                "expected_agent_response": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，1080p / 时延≤100ms），确认按此办理吗？",
-                "expected_agent_correction": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，1080p / 时延≤100ms），确认按此办理吗？",
+                "simulator_user_prompt": "今天在高山露天训练场，14时00分至15时30分（持续90min）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质720p、时延100ms以内的意图保障单。",
+                "expected_agent_response": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，720p / 时延≤100ms），确认按此办理吗？",
+                "expected_agent_correction": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，720p / 时延≤100ms），确认按此办理吗？",
                 "expected_agent_action_types": [
                   "Confirm_Slot"
                 ],
@@ -4684,7 +4684,7 @@
                   "I1": {
                     "application_name": "微信",
                     "service_name": "视频通话",
-                    "resolution": "1080p",
+                    "resolution": "720p",
                     "rtt": "100ms",
                     "timestamp": {
                       "start_timestamp": "2026年10月16日14时00分",
@@ -4696,12 +4696,12 @@
                 "intents_status": {
                   "I1": "in_progress"
                 },
-                "baseline_agent_flawed_response": "收到，已为您准备好2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【抖音-开直播】意图保障单（1080p / 时延≤100ms），确认按此开通吗？",
+                "baseline_agent_flawed_response": "收到，已为您准备好2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【抖音-开直播】意图保障单（720p / 时延≤100ms），确认按此开通吗？",
                 "baseline_flawed_slots": {
                   "I1": {
                     "application_name": "抖音",
                     "service_name": "开直播",
-                    "resolution": "1080p",
+                    "resolution": "720p",
                     "rtt": "100ms",
                     "timestamp": {
                       "start_timestamp": "2026年10月16日14时00分",
@@ -4724,8 +4724,8 @@
                 "turn": 2,
                 "speaker": "user_simulator",
                 "simulator_user_prompt": "嗨，我只是先跟搭档私下对一下词和看眼机位，还没正式开播呢！平时对词我们都是打微信视频电话，把应用和业务改成微信视频通话就行。",
-                "expected_agent_response": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质1080p、时延≤100ms），确认现在为您开通吗？",
-                "expected_agent_correction": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质1080p、时延≤100ms），确认现在为您开通吗？",
+                "expected_agent_response": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质720p、时延≤100ms），确认现在为您开通吗？",
+                "expected_agent_correction": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质720p、时延≤100ms），确认现在为您开通吗？",
                 "expected_agent_action_types": [
                   "Confirm_Slot"
                 ],
@@ -4733,7 +4733,7 @@
                   "I1": {
                     "application_name": "微信",
                     "service_name": "视频通话",
-                    "resolution": "1080p",
+                    "resolution": "720p",
                     "rtt": "100ms",
                     "timestamp": {
                       "start_timestamp": "2026年10月16日14时00分",
@@ -4756,8 +4756,8 @@
                 "turn": 3,
                 "speaker": "user_simulator",
                 "simulator_user_prompt": "好的，改成微信视频通话就对了，确认按此开通。",
-                "expected_agent_response": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（1080p / 时延≤100ms），祝您和搭档对词试机位顺利！",
-                "expected_agent_correction": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（1080p / 时延≤100ms），祝您和搭档对词试机位顺利！",
+                "expected_agent_response": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（720p / 时延≤100ms），祝您和搭档对词试机位顺利！",
+                "expected_agent_correction": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（720p / 时延≤100ms），祝您和搭档对词试机位顺利！",
                 "expected_agent_action_types": [
                   "Acknowledge"
                 ],
@@ -4765,7 +4765,7 @@
                   "I1": {
                     "application_name": "微信",
                     "service_name": "视频通话",
-                    "resolution": "1080p",
+                    "resolution": "720p",
                     "rtt": "100ms",
                     "timestamp": {
                       "start_timestamp": "2026年10月16日14时00分",
@@ -4833,9 +4833,9 @@
             {
               "turn": 1,
               "speaker": "user",
-              "simulator_user_prompt": "今天在高山露天训练场，14时00分至15时30分（持续90min）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质1080p、时延100ms以内的意图保障单。",
-              "expected_agent_response": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，1080p / 时延≤100ms），确认按此办理吗？",
-              "expected_agent_correction": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，1080p / 时延≤100ms），确认按此办理吗？",
+              "simulator_user_prompt": "今天在高山露天训练场，14时00分至15时30分（持续90min）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质720p、时延100ms以内的意图保障单。",
+              "expected_agent_response": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，720p / 时延≤100ms），确认按此办理吗？",
+              "expected_agent_correction": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，720p / 时延≤100ms），确认按此办理吗？",
               "expected_agent_action_types": [
                 "Confirm_Slot"
               ],
@@ -4843,7 +4843,7 @@
                 "I1": {
                   "application_name": "微信",
                   "service_name": "视频通话",
-                  "resolution": "1080p",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月16日14时00分",
@@ -4855,12 +4855,12 @@
               "intents_status": {
                 "I1": "in_progress"
               },
-              "baseline_agent_flawed_response": "收到，已为您准备好2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【抖音-开直播】意图保障单（1080p / 时延≤100ms），确认按此开通吗？",
+              "baseline_agent_flawed_response": "收到，已为您准备好2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【抖音-开直播】意图保障单（720p / 时延≤100ms），确认按此开通吗？",
               "baseline_flawed_slots": {
                 "I1": {
                   "application_name": "抖音",
                   "service_name": "开直播",
-                  "resolution": "1080p",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月16日14时00分",
@@ -4883,8 +4883,8 @@
               "turn": 2,
               "speaker": "user_simulator",
               "simulator_user_prompt": "嗨，我只是先跟搭档私下对一下词和看眼机位，还没正式开播呢！平时对词我们都是打微信视频电话，把应用和业务改成微信视频通话就行。",
-              "expected_agent_response": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质1080p、时延≤100ms），确认现在为您开通吗？",
-              "expected_agent_correction": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质1080p、时延≤100ms），确认现在为您开通吗？",
+              "expected_agent_response": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质720p、时延≤100ms），确认现在为您开通吗？",
+              "expected_agent_correction": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质720p、时延≤100ms），确认现在为您开通吗？",
               "expected_agent_action_types": [
                 "Confirm_Slot"
               ],
@@ -4892,7 +4892,7 @@
                 "I1": {
                   "application_name": "微信",
                   "service_name": "视频通话",
-                  "resolution": "1080p",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月16日14时00分",
@@ -4915,8 +4915,8 @@
               "turn": 3,
               "speaker": "user_simulator",
               "simulator_user_prompt": "好的，改成微信视频通话就对了，确认按此开通。",
-              "expected_agent_response": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（1080p / 时延≤100ms），祝您和搭档对词试机位顺利！",
-              "expected_agent_correction": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（1080p / 时延≤100ms），祝您和搭档对词试机位顺利！",
+              "expected_agent_response": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（720p / 时延≤100ms），祝您和搭档对词试机位顺利！",
+              "expected_agent_correction": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（720p / 时延≤100ms），祝您和搭档对词试机位顺利！",
               "expected_agent_action_types": [
                 "Acknowledge"
               ],
@@ -4924,7 +4924,7 @@
                 "I1": {
                   "application_name": "微信",
                   "service_name": "视频通话",
-                  "resolution": "1080p",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月16日14时00分",
@@ -4943,11 +4943,11 @@
             {
               "turn": 1,
               "speaker": "user",
-              "simulator_user_prompt": "今天在高山露天训练场，14时00分至15时30分（持续90min）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质1080p、时延100ms以内的意图保障单。",
+              "simulator_user_prompt": "今天在高山露天训练场，14时00分至15时30分（持续90min）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质720p、时延100ms以内的意图保障单。",
               "agent_hypothesis": "Agent缺乏日常对词试机位经验，被字面‘抖音直播’误导提取为【抖音-开直播】",
-              "baseline_agent_flawed_response": "收到，已为您准备好2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【抖音-开直播】意图保障单（1080p / 时延≤100ms），确认按此开通吗？",
-              "expected_agent_correction": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，1080p / 时延≤100ms），确认按此办理吗？",
-              "expected_agent_response": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，1080p / 时延≤100ms），确认按此办理吗？",
+              "baseline_agent_flawed_response": "收到，已为您准备好2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【抖音-开直播】意图保障单（720p / 时延≤100ms），确认按此开通吗？",
+              "expected_agent_correction": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，720p / 时延≤100ms），确认按此办理吗？",
+              "expected_agent_response": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，720p / 时延≤100ms），确认按此办理吗？",
               "flaw_type": "literal_douyin_keyword_app_misattribution",
               "flaw_description": "未区分正式开播与私下找搭档对词看机位，被字面‘抖音直播’误导提取为抖音-开直播",
               "agent_action_types": [
@@ -4957,7 +4957,7 @@
                 "I1": {
                   "application_name": "微信",
                   "service_name": "视频通话",
-                  "resolution": "1080p",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月16日14时00分",
@@ -4970,7 +4970,7 @@
                 "I1": {
                   "application_name": "抖音",
                   "service_name": "开直播",
-                  "resolution": "1080p",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月16日14时00分",
@@ -4993,7 +4993,7 @@
               "speaker": "user_simulator",
               "simulator_user_prompt": "嗨，我只是先跟搭档私下对一下词和看眼机位，还没正式开播呢！平时对词我们都是打微信视频电话，把应用和业务改成微信视频通话就行。",
               "agent_hypothesis": "Agent收到用户澄清指正后，将保障应用与业务修正为【微信-视频通话】",
-              "expected_agent_correction": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质1080p、时延≤100ms），确认现在为您开通吗？",
+              "expected_agent_correction": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质720p、时延≤100ms），确认现在为您开通吗？",
               "agent_action_types": [
                 "Confirm_Slot"
               ],
@@ -5001,7 +5001,7 @@
                 "I1": {
                   "application_name": "微信",
                   "service_name": "视频通话",
-                  "resolution": "1080p",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月16日14时00分",
@@ -5021,7 +5021,7 @@
               "speaker": "user_simulator",
               "simulator_user_prompt": "好的，改成微信视频通话就对了，确认按此开通。",
               "agent_hypothesis": "Agent完成【微信-视频通话】意图保障单闭环出单",
-              "expected_agent_correction": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（1080p / 时延≤100ms），祝您和搭档对词试机位顺利！",
+              "expected_agent_correction": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（720p / 时延≤100ms），祝您和搭档对词试机位顺利！",
               "agent_action_types": [
                 "Acknowledge"
               ],
@@ -5029,7 +5029,7 @@
                 "I1": {
                   "application_name": "微信",
                   "service_name": "视频通话",
-                  "resolution": "1080p",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月16日14时00分",
@@ -5044,7 +5044,7 @@
             {
               "turn": 1,
               "user": {
-                "utterance": "今天在高山露天训练场，14时00分至15时30分（持续90min）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质1080p、时延100ms以内的意图保障单。",
+                "utterance": "今天在高山露天训练场，14时00分至15时30分（持续90min）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质720p、时延100ms以内的意图保障单。",
                 "action_types": [
                   "Create_Intent_Request",
                   "Inform_Slot"
@@ -5052,7 +5052,7 @@
               },
               "agent": {
                 "thought": "Agent缺乏日常对词试机位经验，被字面‘抖音直播’误导提取为【抖音-开直播】",
-                "utterance": "收到，已为您准备好2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【抖音-开直播】意图保障单（1080p / 时延≤100ms），确认按此开通吗？",
+                "utterance": "收到，已为您准备好2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【抖音-开直播】意图保障单（720p / 时延≤100ms），确认按此开通吗？",
                 "action_types": [
                   "Confirm_Slot"
                 ]
@@ -5081,7 +5081,7 @@
                     },
                     "resolution": {
                       "min_value": {
-                        "value": "1080p",
+                        "value": "720p",
                         "source_type": "Turn",
                         "source_ref": "U1"
                       }
@@ -5125,7 +5125,7 @@
               },
               "agent": {
                 "thought": "Agent收到用户澄清指正后，将保障应用与业务修正为【微信-视频通话】",
-                "utterance": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质1080p、时延≤100ms），确认现在为您开通吗？",
+                "utterance": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质720p、时延≤100ms），确认现在为您开通吗？",
                 "action_types": [
                   "Confirm_Slot"
                 ]
@@ -5154,7 +5154,7 @@
                     },
                     "resolution": {
                       "min_value": {
-                        "value": "1080p",
+                        "value": "720p",
                         "source_type": "Turn",
                         "source_ref": "U1"
                       }
@@ -5197,7 +5197,7 @@
               },
               "agent": {
                 "thought": "Agent完成【微信-视频通话】意图保障单闭环出单",
-                "utterance": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（1080p / 时延≤100ms），祝您和搭档对词试机位顺利！",
+                "utterance": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（720p / 时延≤100ms），祝您和搭档对词试机位顺利！",
                 "action_types": [
                   "Acknowledge"
                 ]
@@ -5226,7 +5226,7 @@
                     },
                     "resolution": {
                       "min_value": {
-                        "value": "1080p",
+                        "value": "720p",
                         "source_type": "Turn",
                         "source_ref": "U1"
                       }
@@ -5292,7 +5292,7 @@
             "slots": {
               "application_name": "微信",
               "service_name": "视频通话",
-              "resolution": "1080p",
+              "resolution": "720p",
               "rtt": "100ms",
               "timestamp": {
                 "start_timestamp": "2026年10月16日14时00分",
@@ -5306,9 +5306,9 @@
           {
             "turn": 1,
             "speaker": "user",
-            "simulator_user_prompt": "今天在高山露天训练场，14时00分至15时30分（持续90min）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质1080p、时延100ms以内的意图保障单。",
-            "expected_agent_response": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，1080p / 时延≤100ms），确认按此办理吗？",
-            "expected_agent_correction": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，1080p / 时延≤100ms），确认按此办理吗？",
+            "simulator_user_prompt": "今天在高山露天训练场，14时00分至15时30分（持续90min）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质720p、时延100ms以内的意图保障单。",
+            "expected_agent_response": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，720p / 时延≤100ms），确认按此办理吗？",
+            "expected_agent_correction": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，720p / 时延≤100ms），确认按此办理吗？",
             "expected_agent_action_types": [
               "Confirm_Slot"
             ],
@@ -5316,7 +5316,7 @@
               "I1": {
                 "application_name": "微信",
                 "service_name": "视频通话",
-                "resolution": "1080p",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月16日14时00分",
@@ -5328,12 +5328,12 @@
             "intents_status": {
               "I1": "in_progress"
             },
-            "baseline_agent_flawed_response": "收到，已为您准备好2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【抖音-开直播】意图保障单（1080p / 时延≤100ms），确认按此开通吗？",
+            "baseline_agent_flawed_response": "收到，已为您准备好2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【抖音-开直播】意图保障单（720p / 时延≤100ms），确认按此开通吗？",
             "baseline_flawed_slots": {
               "I1": {
                 "application_name": "抖音",
                 "service_name": "开直播",
-                "resolution": "1080p",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月16日14时00分",
@@ -5356,8 +5356,8 @@
             "turn": 2,
             "speaker": "user_simulator",
             "simulator_user_prompt": "嗨，我只是先跟搭档私下对一下词和看眼机位，还没正式开播呢！平时对词我们都是打微信视频电话，把应用和业务改成微信视频通话就行。",
-            "expected_agent_response": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质1080p、时延≤100ms），确认现在为您开通吗？",
-            "expected_agent_correction": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质1080p、时延≤100ms），确认现在为您开通吗？",
+            "expected_agent_response": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质720p、时延≤100ms），确认现在为您开通吗？",
+            "expected_agent_correction": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质720p、时延≤100ms），确认现在为您开通吗？",
             "expected_agent_action_types": [
               "Confirm_Slot"
             ],
@@ -5365,7 +5365,7 @@
               "I1": {
                 "application_name": "微信",
                 "service_name": "视频通话",
-                "resolution": "1080p",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月16日14时00分",
@@ -5388,8 +5388,8 @@
             "turn": 3,
             "speaker": "user_simulator",
             "simulator_user_prompt": "好的，改成微信视频通话就对了，确认按此开通。",
-            "expected_agent_response": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（1080p / 时延≤100ms），祝您和搭档对词试机位顺利！",
-            "expected_agent_correction": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（1080p / 时延≤100ms），祝您和搭档对词试机位顺利！",
+            "expected_agent_response": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（720p / 时延≤100ms），祝您和搭档对词试机位顺利！",
+            "expected_agent_correction": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（720p / 时延≤100ms），祝您和搭档对词试机位顺利！",
             "expected_agent_action_types": [
               "Acknowledge"
             ],
@@ -5397,7 +5397,7 @@
               "I1": {
                 "application_name": "微信",
                 "service_name": "视频通话",
-                "resolution": "1080p",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月16日14时00分",
@@ -5503,7 +5503,7 @@
               "slots": {
                 "application_name": "微信",
                 "service_name": "视频通话",
-                "resolution": "1080p",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月16日14时00分",
@@ -5517,9 +5517,9 @@
             {
               "turn": 1,
               "speaker": "user",
-              "simulator_user_prompt": "今天在高山露天训练场，14时00分至15时30分（持续90min）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质1080p、时延100ms以内的意图保障单。",
-              "expected_agent_response": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，1080p / 时延≤100ms），确认按此办理吗？",
-              "expected_agent_correction": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，1080p / 时延≤100ms），确认按此办理吗？",
+              "simulator_user_prompt": "今天在高山露天训练场，14时00分至15时30分（持续90min）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质720p、时延100ms以内的意图保障单。",
+              "expected_agent_response": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，720p / 时延≤100ms），确认按此办理吗？",
+              "expected_agent_correction": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，720p / 时延≤100ms），确认按此办理吗？",
               "expected_agent_action_types": [
                 "Confirm_Slot"
               ],
@@ -5527,7 +5527,7 @@
                 "I1": {
                   "application_name": "微信",
                   "service_name": "视频通话",
-                  "resolution": "1080p",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月16日14时00分",
@@ -5539,12 +5539,12 @@
               "intents_status": {
                 "I1": "in_progress"
               },
-              "baseline_agent_flawed_response": "收到，已为您准备好2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【抖音-开直播】意图保障单（1080p / 时延≤100ms），确认按此开通吗？",
+              "baseline_agent_flawed_response": "收到，已为您准备好2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【抖音-开直播】意图保障单（720p / 时延≤100ms），确认按此开通吗？",
               "baseline_flawed_slots": {
                 "I1": {
                   "application_name": "抖音",
                   "service_name": "开直播",
-                  "resolution": "1080p",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月16日14时00分",
@@ -5567,8 +5567,8 @@
               "turn": 2,
               "speaker": "user_simulator",
               "simulator_user_prompt": "嗨，我只是先跟搭档私下对一下词和看眼机位，还没正式开播呢！平时对词我们都是打微信视频电话，把应用和业务改成微信视频通话就行。",
-              "expected_agent_response": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质1080p、时延≤100ms），确认现在为您开通吗？",
-              "expected_agent_correction": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质1080p、时延≤100ms），确认现在为您开通吗？",
+              "expected_agent_response": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质720p、时延≤100ms），确认现在为您开通吗？",
+              "expected_agent_correction": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质720p、时延≤100ms），确认现在为您开通吗？",
               "expected_agent_action_types": [
                 "Confirm_Slot"
               ],
@@ -5576,7 +5576,7 @@
                 "I1": {
                   "application_name": "微信",
                   "service_name": "视频通话",
-                  "resolution": "1080p",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月16日14时00分",
@@ -5599,8 +5599,8 @@
               "turn": 3,
               "speaker": "user_simulator",
               "simulator_user_prompt": "好的，改成微信视频通话就对了，确认按此开通。",
-              "expected_agent_response": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（1080p / 时延≤100ms），祝您和搭档对词试机位顺利！",
-              "expected_agent_correction": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（1080p / 时延≤100ms），祝您和搭档对词试机位顺利！",
+              "expected_agent_response": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（720p / 时延≤100ms），祝您和搭档对词试机位顺利！",
+              "expected_agent_correction": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（720p / 时延≤100ms），祝您和搭档对词试机位顺利！",
               "expected_agent_action_types": [
                 "Acknowledge"
               ],
@@ -5608,7 +5608,7 @@
                 "I1": {
                   "application_name": "微信",
                   "service_name": "视频通话",
-                  "resolution": "1080p",
+                  "resolution": "720p",
                   "rtt": "100ms",
                   "timestamp": {
                     "start_timestamp": "2026年10月16日14时00分",
@@ -5676,9 +5676,9 @@
           {
             "turn": 1,
             "speaker": "user",
-            "simulator_user_prompt": "今天在高山露天训练场，14时00分至15时30分（持续90min）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质1080p、时延100ms以内的意图保障单。",
-            "expected_agent_response": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，1080p / 时延≤100ms），确认按此办理吗？",
-            "expected_agent_correction": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，1080p / 时延≤100ms），确认按此办理吗？",
+            "simulator_user_prompt": "今天在高山露天训练场，14时00分至15时30分（持续90min）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质720p、时延100ms以内的意图保障单。",
+            "expected_agent_response": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，720p / 时延≤100ms），确认按此办理吗？",
+            "expected_agent_correction": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，720p / 时延≤100ms），确认按此办理吗？",
             "expected_agent_action_types": [
               "Confirm_Slot"
             ],
@@ -5686,7 +5686,7 @@
               "I1": {
                 "application_name": "微信",
                 "service_name": "视频通话",
-                "resolution": "1080p",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月16日14时00分",
@@ -5698,12 +5698,12 @@
             "intents_status": {
               "I1": "in_progress"
             },
-            "baseline_agent_flawed_response": "收到，已为您准备好2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【抖音-开直播】意图保障单（1080p / 时延≤100ms），确认按此开通吗？",
+            "baseline_agent_flawed_response": "收到，已为您准备好2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【抖音-开直播】意图保障单（720p / 时延≤100ms），确认按此开通吗？",
             "baseline_flawed_slots": {
               "I1": {
                 "application_name": "抖音",
                 "service_name": "开直播",
-                "resolution": "1080p",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月16日14时00分",
@@ -5726,8 +5726,8 @@
             "turn": 2,
             "speaker": "user_simulator",
             "simulator_user_prompt": "嗨，我只是先跟搭档私下对一下词和看眼机位，还没正式开播呢！平时对词我们都是打微信视频电话，把应用和业务改成微信视频通话就行。",
-            "expected_agent_response": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质1080p、时延≤100ms），确认现在为您开通吗？",
-            "expected_agent_correction": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质1080p、时延≤100ms），确认现在为您开通吗？",
+            "expected_agent_response": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质720p、时延≤100ms），确认现在为您开通吗？",
+            "expected_agent_correction": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质720p、时延≤100ms），确认现在为您开通吗？",
             "expected_agent_action_types": [
               "Confirm_Slot"
             ],
@@ -5735,7 +5735,7 @@
               "I1": {
                 "application_name": "微信",
                 "service_name": "视频通话",
-                "resolution": "1080p",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月16日14时00分",
@@ -5758,8 +5758,8 @@
             "turn": 3,
             "speaker": "user_simulator",
             "simulator_user_prompt": "好的，改成微信视频通话就对了，确认按此开通。",
-            "expected_agent_response": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（1080p / 时延≤100ms），祝您和搭档对词试机位顺利！",
-            "expected_agent_correction": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（1080p / 时延≤100ms），祝您和搭档对词试机位顺利！",
+            "expected_agent_response": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（720p / 时延≤100ms），祝您和搭档对词试机位顺利！",
+            "expected_agent_correction": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（720p / 时延≤100ms），祝您和搭档对词试机位顺利！",
             "expected_agent_action_types": [
               "Acknowledge"
             ],
@@ -5767,7 +5767,7 @@
               "I1": {
                 "application_name": "微信",
                 "service_name": "视频通话",
-                "resolution": "1080p",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月16日14时00分",
@@ -5786,11 +5786,11 @@
           {
             "turn": 1,
             "speaker": "user",
-            "simulator_user_prompt": "今天在高山露天训练场，14时00分至15时30分（持续90min）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质1080p、时延100ms以内的意图保障单。",
+            "simulator_user_prompt": "今天在高山露天训练场，14时00分至15时30分（持续90min）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质720p、时延100ms以内的意图保障单。",
             "agent_hypothesis": "Agent缺乏日常对词试机位经验，被字面‘抖音直播’误导提取为【抖音-开直播】",
-            "baseline_agent_flawed_response": "收到，已为您准备好2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【抖音-开直播】意图保障单（1080p / 时延≤100ms），确认按此开通吗？",
-            "expected_agent_correction": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，1080p / 时延≤100ms），确认按此办理吗？",
-            "expected_agent_response": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，1080p / 时延≤100ms），确认按此办理吗？",
+            "baseline_agent_flawed_response": "收到，已为您准备好2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【抖音-开直播】意图保障单（720p / 时延≤100ms），确认按此开通吗？",
+            "expected_agent_correction": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，720p / 时延≤100ms），确认按此办理吗？",
+            "expected_agent_response": "收到，识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，结合日常经验已主动为您匹配【微信-视频通话】意图保障单（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，720p / 时延≤100ms），确认按此办理吗？",
             "flaw_type": "literal_douyin_keyword_app_misattribution",
             "flaw_description": "未区分正式开播与私下找搭档对词看机位，被字面‘抖音直播’误导提取为抖音-开直播",
             "agent_action_types": [
@@ -5800,7 +5800,7 @@
               "I1": {
                 "application_name": "微信",
                 "service_name": "视频通话",
-                "resolution": "1080p",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月16日14时00分",
@@ -5813,7 +5813,7 @@
               "I1": {
                 "application_name": "抖音",
                 "service_name": "开直播",
-                "resolution": "1080p",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月16日14时00分",
@@ -5836,7 +5836,7 @@
             "speaker": "user_simulator",
             "simulator_user_prompt": "嗨，我只是先跟搭档私下对一下词和看眼机位，还没正式开播呢！平时对词我们都是打微信视频电话，把应用和业务改成微信视频通话就行。",
             "agent_hypothesis": "Agent收到用户澄清指正后，将保障应用与业务修正为【微信-视频通话】",
-            "expected_agent_correction": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质1080p、时延≤100ms），确认现在为您开通吗？",
+            "expected_agent_correction": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质720p、时延≤100ms），确认现在为您开通吗？",
             "agent_action_types": [
               "Confirm_Slot"
             ],
@@ -5844,7 +5844,7 @@
               "I1": {
                 "application_name": "微信",
                 "service_name": "视频通话",
-                "resolution": "1080p",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月16日14时00分",
@@ -5864,7 +5864,7 @@
             "speaker": "user_simulator",
             "simulator_user_prompt": "好的，改成微信视频通话就对了，确认按此开通。",
             "agent_hypothesis": "Agent完成【微信-视频通话】意图保障单闭环出单",
-            "expected_agent_correction": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（1080p / 时延≤100ms），祝您和搭档对词试机位顺利！",
+            "expected_agent_correction": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（720p / 时延≤100ms），祝您和搭档对词试机位顺利！",
             "agent_action_types": [
               "Acknowledge"
             ],
@@ -5872,7 +5872,7 @@
               "I1": {
                 "application_name": "微信",
                 "service_name": "视频通话",
-                "resolution": "1080p",
+                "resolution": "720p",
                 "rtt": "100ms",
                 "timestamp": {
                   "start_timestamp": "2026年10月16日14时00分",
@@ -5887,7 +5887,7 @@
           {
             "turn": 1,
             "user": {
-              "utterance": "今天在高山露天训练场，14时00分至15时30分（持续90min）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质1080p、时延100ms以内的意图保障单。",
+              "utterance": "今天在高山露天训练场，14时00分至15时30分（持续90min）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质720p、时延100ms以内的意图保障单。",
               "action_types": [
                 "Create_Intent_Request",
                 "Inform_Slot"
@@ -5895,7 +5895,7 @@
             },
             "agent": {
               "thought": "Agent缺乏日常对词试机位经验，被字面‘抖音直播’误导提取为【抖音-开直播】",
-              "utterance": "收到，已为您准备好2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【抖音-开直播】意图保障单（1080p / 时延≤100ms），确认按此开通吗？",
+              "utterance": "收到，已为您准备好2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【抖音-开直播】意图保障单（720p / 时延≤100ms），确认按此开通吗？",
               "action_types": [
                 "Confirm_Slot"
               ]
@@ -5924,7 +5924,7 @@
                   },
                   "resolution": {
                     "min_value": {
-                      "value": "1080p",
+                      "value": "720p",
                       "source_type": "Turn",
                       "source_ref": "U1"
                     }
@@ -5968,7 +5968,7 @@
             },
             "agent": {
               "thought": "Agent收到用户澄清指正后，将保障应用与业务修正为【微信-视频通话】",
-              "utterance": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质1080p、时延≤100ms），确认现在为您开通吗？",
+              "utterance": "非常抱歉！原来是开播前私下跟搭档对词看机位，已为您将意图保障单由【抖音-开直播】修正为【微信-视频通话】（2026年10月16日14时00分至2026年10月16日15时30分，持续90min，画质720p、时延≤100ms），确认现在为您开通吗？",
               "action_types": [
                 "Confirm_Slot"
               ]
@@ -5997,7 +5997,7 @@
                   },
                   "resolution": {
                     "min_value": {
-                      "value": "1080p",
+                      "value": "720p",
                       "source_type": "Turn",
                       "source_ref": "U1"
                     }
@@ -6040,7 +6040,7 @@
             },
             "agent": {
               "thought": "Agent完成【微信-视频通话】意图保障单闭环出单",
-              "utterance": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（1080p / 时延≤100ms），祝您和搭档对词试机位顺利！",
+              "utterance": "好的，已为您成功开通2026年10月16日14时00分至2026年10月16日15时30分（持续90min）的【微信-视频通话】意图保障单（720p / 时延≤100ms），祝您和搭档对词试机位顺利！",
               "action_types": [
                 "Acknowledge"
               ]
@@ -6069,7 +6069,7 @@
                   },
                   "resolution": {
                     "min_value": {
-                      "value": "1080p",
+                      "value": "720p",
                       "source_type": "Turn",
                       "source_ref": "U1"
                     }
@@ -6109,14 +6109,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "今天在高山露天训练场，14时00分至15时30分（持续90min）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质1080p、时延100ms以内的意图保障单。",
+          "utterance": "今天在高山露天训练场，14时00分至15时30分（持续90min）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质720p、时延100ms以内的意图保障单。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，还未正式公开开播。参考此前在 S-USER_025-06 的日常对词试机位经验，私下对词试机位平时都是用微信视频连线，已主动为您匹配【微信-视频通话】意图保障单（14时00分至15时30分，持续90min，1080p / 时延≤100ms），确认按此开通吗？",
+          "utterance": "识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，还未正式公开开播。参考此前在 S-USER_025-06 的日常对词试机位经验，私下对词试机位平时都是用微信视频连线，已主动为您匹配【微信-视频通话】意图保障单（14时00分至15时30分，持续90min，720p / 时延≤100ms），确认按此开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -6146,7 +6146,7 @@
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
@@ -6201,7 +6201,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您成功开通【微信-视频通话】意图保障单（14时00分至15时30分，持续90min，1080p / 时延≤100ms），祝您和搭档对词试机位顺利！",
+          "utterance": "好的，已为您成功开通【微信-视频通话】意图保障单（14时00分至15时30分，持续90min，720p / 时延≤100ms），祝您和搭档对词试机位顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -6231,7 +6231,7 @@
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
@@ -6285,7 +6285,7 @@
           },
           "resolution": {
             "min_value": {
-              "value": "1080p",
+              "value": "720p",
               "source_type": "Turn",
               "source_ref": "U1"
             }
@@ -6337,7 +6337,7 @@
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
@@ -6385,7 +6385,7 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "reuse_session",
-      "skeleton_signature": "T2-1|2|1|I1:抖音/开直播/1/memory_filled/resolved|none",
+      "skeleton_signature": "T2-1|2|1|I1:腾讯会议/会议/1/memory_filled/resolved|none",
       "scenario": {
         "environment": "露天高山滑雪训练基地",
         "blueprint_type": "event_reuse",
@@ -6400,14 +6400,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "老规矩，按咱们每月那个固定例会档期，在高山露天训练场这边用抖音做开直播，帮我把保障开上。",
+          "utterance": "老规矩，按咱们每月那个固定例会档期，在高山露天训练场这边用腾讯会议做会议，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，我调取到之前登记的抖音开直播配置：1080p、时延100ms以内，14时00分开始、15时30分结束，持续90min。确认按这套配置开通吗？",
+          "utterance": "收到，我调取到之前登记的腾讯会议会议配置：画质720p、时延100ms以内，14时00分开始、15时30分结束，持续90min。确认按这套配置开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -6422,21 +6422,21 @@
             "status": "in_progress",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Memory",
                   "source_ref": "MF_001"
                 }
@@ -6478,7 +6478,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您成功受理抖音开直播网络保障（1080p / 时延≤100ms），祝您使用愉快！",
+          "utterance": "好的，已为您成功受理腾讯会议会议网络保障（720p / 时延≤100ms），祝您使用愉快！",
           "action_types": [
             "Acknowledge"
           ]
@@ -6493,21 +6493,21 @@
             "status": "resolved",
             "closure_path": "memory_filled",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Memory",
                   "source_ref": "MF_001"
                 }
@@ -6547,21 +6547,21 @@
         "status": "resolved",
         "closure_path": "memory_filled",
         "expression_level": 1,
-        "intent": "抖音开直播保障",
+        "intent": "腾讯会议会议保障",
         "params": {
           "application_name": {
-            "value": "抖音",
+            "value": "腾讯会议",
             "source_type": "Memory",
             "source_ref": "MF_001"
           },
           "service_name": {
-            "value": "开直播",
+            "value": "会议",
             "source_type": "Memory",
             "source_ref": "MF_001"
           },
           "resolution": {
             "min_value": {
-              "value": "1080p",
+              "value": "720p",
               "source_type": "Memory",
               "source_ref": "MF_001"
             }
@@ -6602,12 +6602,12 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Memory",
                 "source_ref": "MF_001"
               },
@@ -6630,7 +6630,7 @@
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "Memory",
                   "source_ref": "MF_001"
                 }
@@ -6661,7 +6661,7 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "reuse_session",
-      "skeleton_signature": "T2-6|2|1|I1:抖音/开直播/1/working_record_reuse/resolved|none",
+      "skeleton_signature": "T2-6|2|1|I1:腾讯会议/会议/1/working_record_reuse/resolved|none",
       "scenario": {
         "environment": "露天高山滑雪训练基地",
         "blueprint_type": "working_record_reuse",
@@ -6670,10 +6670,10 @@
       "working_memory_pointer": {
         "target_record_id": "REC_mobile_persona_025_20260914_01",
         "inferred_delta_days": 37,
-        "matched_application": "抖音",
-        "matched_service": "开直播",
+        "matched_application": "腾讯会议",
+        "matched_service": "会议",
         "inherited_slots": {
-          "resolution": "1080p",
+          "resolution": "720p",
           "rtt_max": "100ms",
           "duration": "90min"
         }
@@ -6685,10 +6685,10 @@
     "working_memory_pointer": {
       "target_record_id": "REC_mobile_persona_025_20260914_01",
       "inferred_delta_days": 37,
-      "matched_application": "抖音",
-      "matched_service": "开直播",
+      "matched_application": "腾讯会议",
+      "matched_service": "会议",
       "inherited_slots": {
-        "resolution": "1080p",
+        "resolution": "720p",
         "rtt_max": "100ms",
         "duration": "90min"
       }
@@ -6697,14 +6697,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "今天在高山露天训练场，调一下上个月初在高山露天训练场办的那个意图保障单规格，今天也按那套来。",
+          "utterance": "今天在露天高山滑雪训练基地，调一下上个月初在这边办的那个意图保障单规格，今天也按那套来，用企鹅会议做会议。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，已为您跨期调取到上个月在高山露天训练场的抖音开直播历史意图保障单（画质1080p、时延≤100ms）。请问今天具体的保障时间是几点到几点呢？",
+          "utterance": "收到，已为您跨期调取到上个月在露天高山滑雪训练基地的腾讯会议会议历史意图保障单（画质720p、时延≤100ms）。请问今天具体的保障时间是几点到几点呢？",
           "action_types": [
             "Confirm_Slot",
             "Request_Slot"
@@ -6722,21 +6722,21 @@
             "status": "in_progress",
             "closure_path": "working_record_reuse",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20260914_01"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20260914_01"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "WorkingRecord",
                   "source_ref": "REC_mobile_persona_025_20260914_01"
                 }
@@ -6754,10 +6754,10 @@
         "working_memory_pointer": {
           "target_record_id": "REC_mobile_persona_025_20260914_01",
           "inferred_delta_days": 37,
-          "matched_application": "抖音",
-          "matched_service": "开直播",
+          "matched_application": "腾讯会议",
+          "matched_service": "会议",
           "inherited_slots": {
-            "resolution": "1080p",
+            "resolution": "720p",
             "rtt_max": "100ms",
             "duration": "90min"
           }
@@ -6773,7 +6773,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已按一个月前历史意图保障单规格为您开通今日抖音开直播保障（1080p / 时延≤100ms，时段14时00分至15时30分）。祝您工作顺利！",
+          "utterance": "好的，已按一个月前历史意图保障单规格为您开通今日腾讯会议会议保障（720p / 时延≤100ms，时段14时00分至15时30分）。祝您工作顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -6788,21 +6788,21 @@
             "status": "resolved",
             "closure_path": "working_record_reuse",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20260914_01"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20260914_01"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "WorkingRecord",
                   "source_ref": "REC_mobile_persona_025_20260914_01"
                 }
@@ -6842,21 +6842,21 @@
         "status": "resolved",
         "closure_path": "working_record_reuse",
         "expression_level": 1,
-        "intent": "抖音开直播保障",
+        "intent": "腾讯会议会议保障",
         "params": {
           "application_name": {
-            "value": "抖音",
+            "value": "腾讯会议",
             "source_type": "WorkingRecord",
             "source_ref": "REC_mobile_persona_025_20260914_01"
           },
           "service_name": {
-            "value": "开直播",
+            "value": "会议",
             "source_type": "WorkingRecord",
             "source_ref": "REC_mobile_persona_025_20260914_01"
           },
           "resolution": {
             "min_value": {
-              "value": "1080p",
+              "value": "720p",
               "source_type": "WorkingRecord",
               "source_ref": "REC_mobile_persona_025_20260914_01"
             }
@@ -6897,18 +6897,18 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20260914_01"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20260914_01"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "WorkingRecord",
                   "source_ref": "REC_mobile_persona_025_20260914_01"
                 }
@@ -6957,7 +6957,7 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "reuse_session",
-      "skeleton_signature": "T2-7|2|1|I1:抖音/开直播/1/working_record_reschedule/resolved|none",
+      "skeleton_signature": "T2-7|2|1|I1:腾讯会议/会议/1/working_record_reschedule/resolved|none",
       "scenario": {
         "environment": "露天高山滑雪训练基地",
         "blueprint_type": "working_record_reschedule",
@@ -6966,8 +6966,8 @@
       "working_memory_pointer": {
         "target_record_id": "REC_mobile_persona_025_20261021_12",
         "inferred_delta_days": 2,
-        "matched_application": "抖音",
-        "matched_service": "开直播",
+        "matched_application": "腾讯会议",
+        "matched_service": "会议",
         "modified_slots": {
           "start_timestamp": "2026年10月23日14时00分",
           "end_timestamp": "2026年10月23日15时30分"
@@ -6981,8 +6981,8 @@
     "working_memory_pointer": {
       "target_record_id": "REC_mobile_persona_025_20261021_12",
       "inferred_delta_days": 2,
-      "matched_application": "抖音",
-      "matched_service": "开直播",
+      "matched_application": "腾讯会议",
+      "matched_service": "会议",
       "modified_slots": {
         "start_timestamp": "2026年10月23日14时00分",
         "end_timestamp": "2026年10月23日15时30分"
@@ -6993,14 +6993,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "把昨天预约的抖音开直播保障往后推迟一个小时。",
+          "utterance": "把昨天预约的腾讯会议会议保障往后推迟一个小时，时延能听清声就行。",
           "action_types": [
             "Modify_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，已找到您此前预约的抖音开直播意图保障单。往后推迟一小时后，新的保障时段为14时00分至15时30分，确认进行改期吗？",
+          "utterance": "收到，已找到您此前预约的腾讯会议会议意图保障单。往后推迟一小时后，新的保障时段为14时00分至15时30分，确认进行改期吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -7015,21 +7015,21 @@
             "status": "in_progress",
             "closure_path": "working_record_reschedule",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20261021_12"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20261021_12"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "WorkingRecord",
                   "source_ref": "REC_mobile_persona_025_20261021_12"
                 }
@@ -7064,8 +7064,8 @@
         "working_memory_pointer": {
           "target_record_id": "REC_mobile_persona_025_20261021_12",
           "inferred_delta_days": 2,
-          "matched_application": "抖音",
-          "matched_service": "开直播",
+          "matched_application": "腾讯会议",
+          "matched_service": "会议",
           "modified_slots": {
             "start_timestamp": "2026年10月23日14时00分",
             "end_timestamp": "2026年10月23日15时30分"
@@ -7097,21 +7097,21 @@
             "status": "resolved",
             "closure_path": "working_record_reschedule",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20261021_12"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20261021_12"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "WorkingRecord",
                   "source_ref": "REC_mobile_persona_025_20261021_12"
                 }
@@ -7151,21 +7151,21 @@
         "status": "resolved",
         "closure_path": "working_record_reschedule",
         "expression_level": 1,
-        "intent": "抖音开直播保障",
+        "intent": "腾讯会议会议保障",
         "params": {
           "application_name": {
-            "value": "抖音",
+            "value": "腾讯会议",
             "source_type": "WorkingRecord",
             "source_ref": "REC_mobile_persona_025_20261021_12"
           },
           "service_name": {
-            "value": "开直播",
+            "value": "会议",
             "source_type": "WorkingRecord",
             "source_ref": "REC_mobile_persona_025_20261021_12"
           },
           "resolution": {
             "min_value": {
-              "value": "1080p",
+              "value": "720p",
               "source_type": "WorkingRecord",
               "source_ref": "REC_mobile_persona_025_20261021_12"
             }
@@ -7206,18 +7206,18 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20261021_12"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20261021_12"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "WorkingRecord",
                   "source_ref": "REC_mobile_persona_025_20261021_12"
                 }
@@ -7265,7 +7265,7 @@
       "round_count": 2,
       "intent_count": 1,
       "memory_role": "reuse_session",
-      "skeleton_signature": "T2-7|2|1|I1:抖音/开直播/1/working_record_reschedule/resolved|none",
+      "skeleton_signature": "T2-7|2|1|I1:腾讯会议/会议/1/working_record_reschedule/resolved|none",
       "scenario": {
         "environment": "露天高山滑雪训练基地",
         "blueprint_type": "working_record_reschedule",
@@ -7274,8 +7274,8 @@
       "working_memory_pointer": {
         "target_record_id": "REC_mobile_persona_025_20261023_13",
         "inferred_delta_days": 3,
-        "matched_application": "抖音",
-        "matched_service": "开直播",
+        "matched_application": "腾讯会议",
+        "matched_service": "会议",
         "modified_slots": {
           "start_timestamp": "2026年10月26日14时00分",
           "end_timestamp": "2026年10月26日15时30分"
@@ -7289,8 +7289,8 @@
     "working_memory_pointer": {
       "target_record_id": "REC_mobile_persona_025_20261023_13",
       "inferred_delta_days": 3,
-      "matched_application": "抖音",
-      "matched_service": "开直播",
+      "matched_application": "腾讯会议",
+      "matched_service": "会议",
       "modified_slots": {
         "start_timestamp": "2026年10月26日14时00分",
         "end_timestamp": "2026年10月26日15时30分"
@@ -7301,14 +7301,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "把昨天预约的抖音开直播保障提前一个小时开始。",
+          "utterance": "把昨天预约的腾讯会议会议保障提前一个小时开始，时延能听清声就行。",
           "action_types": [
             "Modify_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，已找到您此前预约的抖音开直播意图保障单。提前一小时后，新的保障时段为14时00分至15时30分，确认进行提前改期吗？",
+          "utterance": "收到，已找到您此前预约的腾讯会议会议意图保障单。提前一小时后，新的保障时段为14时00分至15时30分，确认进行提前改期吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -7323,21 +7323,21 @@
             "status": "in_progress",
             "closure_path": "working_record_reschedule",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20261023_13"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20261023_13"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "WorkingRecord",
                   "source_ref": "REC_mobile_persona_025_20261023_13"
                 }
@@ -7372,8 +7372,8 @@
         "working_memory_pointer": {
           "target_record_id": "REC_mobile_persona_025_20261023_13",
           "inferred_delta_days": 3,
-          "matched_application": "抖音",
-          "matched_service": "开直播",
+          "matched_application": "腾讯会议",
+          "matched_service": "会议",
           "modified_slots": {
             "start_timestamp": "2026年10月26日14时00分",
             "end_timestamp": "2026年10月26日15时30分"
@@ -7405,21 +7405,21 @@
             "status": "resolved",
             "closure_path": "working_record_reschedule",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20261023_13"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20261023_13"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "WorkingRecord",
                   "source_ref": "REC_mobile_persona_025_20261023_13"
                 }
@@ -7459,21 +7459,21 @@
         "status": "resolved",
         "closure_path": "working_record_reschedule",
         "expression_level": 1,
-        "intent": "抖音开直播保障",
+        "intent": "腾讯会议会议保障",
         "params": {
           "application_name": {
-            "value": "抖音",
+            "value": "腾讯会议",
             "source_type": "WorkingRecord",
             "source_ref": "REC_mobile_persona_025_20261023_13"
           },
           "service_name": {
-            "value": "开直播",
+            "value": "会议",
             "source_type": "WorkingRecord",
             "source_ref": "REC_mobile_persona_025_20261023_13"
           },
           "resolution": {
             "min_value": {
-              "value": "1080p",
+              "value": "720p",
               "source_type": "WorkingRecord",
               "source_ref": "REC_mobile_persona_025_20261023_13"
             }
@@ -7514,18 +7514,18 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20261023_13"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20261023_13"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "WorkingRecord",
                   "source_ref": "REC_mobile_persona_025_20261023_13"
                 }
@@ -7637,7 +7637,7 @@
       "round_count": 3,
       "intent_count": 1,
       "memory_role": "reuse_session",
-      "skeleton_signature": "T2-6|3|1|I1:抖音/开直播/1/working_record_reuse/resolved|none",
+      "skeleton_signature": "T2-6|3|1|I1:腾讯会议/会议/1/working_record_reuse/resolved|none",
       "scenario": {
         "environment": "露天高山滑雪训练基地",
         "blueprint_type": "working_record_disambig",
@@ -7646,10 +7646,10 @@
       "working_memory_pointer": {
         "target_record_id": "REC_mobile_persona_025_20260914_01",
         "inferred_delta_days": 46,
-        "matched_application": "抖音",
-        "matched_service": "开直播",
+        "matched_application": "腾讯会议",
+        "matched_service": "会议",
         "inherited_slots": {
-          "resolution": "1080p",
+          "resolution": "720p",
           "rtt_max": "100ms",
           "duration": "90min"
         },
@@ -7666,10 +7666,10 @@
     "working_memory_pointer": {
       "target_record_id": "REC_mobile_persona_025_20260914_01",
       "inferred_delta_days": 46,
-      "matched_application": "抖音",
-      "matched_service": "开直播",
+      "matched_application": "腾讯会议",
+      "matched_service": "会议",
       "inherited_slots": {
-        "resolution": "1080p",
+        "resolution": "720p",
         "rtt_max": "100ms",
         "duration": "90min"
       },
@@ -7683,14 +7683,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "今天在高山露天训练场，想按之前的意图保障单规格开抖音开直播保障，时间从14时00分到15时30分（持续90min）。",
+          "utterance": "今天在高山露天训练场，想按之前在露天高山滑雪训练基地办过的意图保障单规格，开腾讯会议会议保障，时间从14时00分到15时30分，持续90分钟。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，查询到您此前在高山露天训练场有多次抖音开直播历史意图保障单（包括 REC_mobile_persona_025_20260914_01、REC_mobile_persona_025_20260916_02），配置规格略有差异。请问您今天是指按哪一次的规格来开通呢？",
+          "utterance": "收到，查询到您此前在高山露天训练场有多次腾讯会议会议历史意图保障单，包括 REC_mobile_persona_025_20260914_01、REC_mobile_persona_025_20260916_02，配置规格略有差异。请问您今天是指按哪一次的规格来开通呢？",
           "action_types": [
             "Request_Disambiguation"
           ]
@@ -7707,15 +7707,15 @@
             "status": "in_progress",
             "closure_path": "working_record_disambig",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -7742,10 +7742,10 @@
         "working_memory_pointer": {
           "target_record_id": "REC_mobile_persona_025_20260914_01",
           "inferred_delta_days": 46,
-          "matched_application": "抖音",
-          "matched_service": "开直播",
+          "matched_application": "腾讯会议",
+          "matched_service": "会议",
           "inherited_slots": {
-            "resolution": "1080p",
+            "resolution": "720p",
             "rtt_max": "100ms",
             "duration": "90min"
           },
@@ -7759,14 +7759,14 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "按最近那次开通的规格来就行。",
+          "utterance": "按最近那次开通的规格来就行，别掉链子。",
           "action_types": [
             "Confirm_Slot",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "明白，已精准锁定最近一次意图保障单规格（1080p / 时延≤100ms），时段为14时00分至15时30分，确认直接开通吗？",
+          "utterance": "明白，已精准锁定最近一次意图保障单规格，画质720p、时延100ms以内，时段为14时00分至15时30分，确认直接开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -7781,21 +7781,21 @@
             "status": "resolved",
             "closure_path": "working_record_reuse",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20260914_01"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20260914_01"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "WorkingRecord",
                   "source_ref": "REC_mobile_persona_025_20260914_01"
                 }
@@ -7837,7 +7837,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已按您确认的历史意图保障单规格成功开通今日抖音开直播保障（1080p / 时延≤100ms，时段14时00分至15时30分）。祝您工作顺利！",
+          "utterance": "好的，已按您确认的历史意图保障单规格成功开通今日腾讯会议会议保障，画质720p、时延100ms以内，时段14时00分至15时30分。祝您工作顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -7852,21 +7852,21 @@
             "status": "resolved",
             "closure_path": "working_record_reuse",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "腾讯会议会议保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20260914_01"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20260914_01"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "WorkingRecord",
                   "source_ref": "REC_mobile_persona_025_20260914_01"
                 }
@@ -7906,21 +7906,21 @@
         "status": "resolved",
         "closure_path": "working_record_reuse",
         "expression_level": 1,
-        "intent": "抖音开直播保障",
+        "intent": "腾讯会议会议保障",
         "params": {
           "application_name": {
-            "value": "抖音",
+            "value": "腾讯会议",
             "source_type": "WorkingRecord",
             "source_ref": "REC_mobile_persona_025_20260914_01"
           },
           "service_name": {
-            "value": "开直播",
+            "value": "会议",
             "source_type": "WorkingRecord",
             "source_ref": "REC_mobile_persona_025_20260914_01"
           },
           "resolution": {
             "min_value": {
-              "value": "1080p",
+              "value": "720p",
               "source_type": "WorkingRecord",
               "source_ref": "REC_mobile_persona_025_20260914_01"
             }
@@ -7961,12 +7961,12 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -7993,18 +7993,18 @@
             "turn": 2,
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "腾讯会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20260914_01"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "会议",
                 "source_type": "WorkingRecord",
                 "source_ref": "REC_mobile_persona_025_20260914_01"
               },
               "resolution": {
                 "min_value": {
-                  "value": "1080p",
+                  "value": "720p",
                   "source_type": "WorkingRecord",
                   "source_ref": "REC_mobile_persona_025_20260914_01"
                 }

@@ -4,8 +4,8 @@
   "persona_summary": "高频移动网络使用者",
   "static_profile": {
     "user_id": "USER_031",
-    "identity": "一位性格内向、害羞的移动网络高频使用者，习惯在户外等候区、临时停留点、兴趣活动现场及跨区域出行途中通过手机4G/5G直接联网，完成即时通信、短视频浏览上传、远程协作、地图导航与位置共享；不依赖家庭宽带或公司固网，便携终端需要联网时使用手机热点。",
-    "devices": "主力设备为5G智能手机，辅助设备为可穿戴设备（智能手表/手环），便携终端通过手机热点联网。",
+    "identity": "性格内向害羞的移动网络高频使用者，常在户外等候区、临时停留点、兴趣活动现场与城市街区之间移动，依赖手机4G/5G直接联网完成即时通信、短视频浏览上传、远程协作、地图导航与位置共享，不依赖家庭宽带或公司固网。",
+    "devices": "5G智能手机为主力终端，搭配可穿戴设备辅助消息提醒与位置记录；便携终端确需联网时使用手机热点。",
     "apps": [
       "微信",
       "抖音",
@@ -14,14 +14,14 @@
     ],
     "speech_archetype": "shy_mobile_collaborator",
     "speech_style": {
-      "tone": "说话轻声细语、略带迟疑，偏好用简短确认句表达需求，不爱长篇解释。",
+      "tone": "轻声细语、略带拘谨，表达谨慎但条理清楚，习惯先确认再行动",
       "catchphrases": [
         "老规矩",
         "别掉链子",
-        "对齐一下",
-        "还是那个点"
+        "我这边先对齐一下",
+        "还是原来的时间"
       ],
-      "typical_habits": "习惯在固定时间点前反复确认网络与设备状态，用口语化别名指代应用和业务，表达偏好时倾向直接说出画质与时延档位，但语气含蓄。"
+      "typical_habits": "说话前先想清楚，偏好用固定时间与固定流程降低沟通压力；遇到网络问题会先描述现象再请求协助，常用“老规矩”指代周期性安排。"
     }
   },
   "dynamic_profile": {
@@ -29,7 +29,7 @@
       "storyline_id": "MAIN_MT_01",
       "name": "每周三与周五晚间远程协作与现场素材同步",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每周三与周五晚间19:00-21:00，在户外等候区或临时停留点通过手机5G网络进行远程协作会议并同步现场照片与短视频素材。",
+      "trigger_condition": "每周三与周五晚间19:00-20:00固定进行远程协作会议并同步当日现场照片与短视频素材",
       "period_type": "weekly",
       "days": [
         "Wednesday",
@@ -49,8 +49,8 @@
         ],
         "service_aliases": [
           "对齐开会",
-          "远程碰一下",
-          "开个短会"
+          "线上碰一下",
+          "远程协作会"
         ],
         "resolution_aliases": [
           "720p",
@@ -82,7 +82,7 @@
         "name": "跨城兴趣展会现场协作周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "跨城参加兴趣展会，现场人流密集、基站负载高，需在展馆周边户外等候区与临时停留点进行远程协作和素材回传，网络波动明显。",
+        "scene_description": "跨城参加兴趣展会，现场人流密集、移动网络拥塞，需在展馆与户外等候区之间频繁移动，远程协作与素材回传对连续覆盖和稳定时延要求提高。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -92,14 +92,14 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "出行途中短视频素材上传与位置共享",
+        "name": "现场短视频素材回传与浏览",
         "application_name": "抖音",
         "service_name": "短视频",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "跨区域出行途中或兴趣活动现场，需要快速上传现场短视频并向同行者共享位置时触发。",
+        "trigger_condition": "户外活动现场或临时停留点拍摄并上传现场短视频、浏览兴趣内容时",
         "aliases": {
           "app_aliases": [
             "douyin",
@@ -121,14 +121,14 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "临时远程视频通话确认现场情况",
+        "name": "移动途中位置共享与即时通信",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "在户外等候区或临时停留点需要与同伴临时视频确认现场情况、路线或物料状态时触发。",
+        "trigger_condition": "跨区域出行途中与同伴共享位置、确认集合点或临时发起视频通话时",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -152,9 +152,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次在兴趣活动现场休息时刷短视频消磨时间",
-        "application_name": "抖音",
-        "service_name": "短视频",
+        "scenario": "单次临时参加线上兴趣分享直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -162,9 +162,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次临时观看兴趣活动线上直播",
-        "application_name": "快手",
-        "service_name": "看直播",
+        "scenario": "单次与远方朋友休闲游戏联机",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

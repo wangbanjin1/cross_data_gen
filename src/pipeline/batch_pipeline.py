@@ -70,7 +70,7 @@ class BatchPipeline:
 
         # 1. 扩充详细画像骨架 (DeepSeek API, thinking disabled)
         persona_skeleton_path = sample_dir / "persona_skeleton.json"
-        if persona_skeleton_path.exists():
+        if persona_skeleton_path.exists() and not force:
             with open(persona_skeleton_path, "r", encoding="utf-8") as f:
                 persona_skeleton = json.load(f)
             persona_skeleton = worker_persona_gen._enrich_skeleton(persona_skeleton)

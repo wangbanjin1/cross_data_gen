@@ -4,32 +4,32 @@
   "persona_summary": "移动训练与参赛人员",
   "static_profile": {
     "user_id": "USER_018",
-    "identity": "一名常年在外转场训练与参赛的登山运动员，长期目标是攀登美国北喀斯喀特山脉（North Cascades）；日常在露天训练场、赛道、球场及赛事集结区活动，频繁往返客场转场途中、户外热身区与临时休息点，全程依赖手机移动核心网完成训练记录、赛事直播与团队调度。",
-    "devices": "主力为5G智能手机，辅以随身运动拍摄设备（运动相机/胸带机位），便携终端确需联网时以手机热点共享。",
+    "identity": "一名常年在外转场训练与参赛的登山攀岩运动员，长期目标是攀登美国北喀斯喀特山脉；日常活动半径覆盖露天岩场、训练基地、赛事集结区与客场转场路线，全程依赖手机移动核心网完成训练记录、团队调度与视频回传。",
+    "devices": "主力为5G智能手机，辅以随身运动相机与便携拍摄设备，必要时用手机热点为便携终端供网。",
     "apps": [
       "微信",
       "抖音",
       "腾讯会议",
       "哔哩哔哩"
     ],
-    "speech_archetype": "outdoor_streamer",
+    "speech_archetype": "athlete_speaker",
     "speech_style": {
-      "tone": "干脆直接、带点户外人的爽利与催促感，习惯用训练行话和赛事术语，讲话节奏快。",
+      "tone": "干脆利落、带点户外人的直爽，习惯用训练行话和简短指令沟通，语速偏快。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "信号稳住"
+        "稳住，别断"
       ],
-      "typical_habits": "出发前先确认路线与赛程，训练中随手记录数据，转场路上用语音和团队对齐安排；遇到弱网会先喊'信号稳住'再降画质保连通。"
+      "typical_habits": "习惯在转场车上或岩场边用手机快速交代任务，先确认网络和上行，再谈细节；对时间点和画质档位记得很死，喜欢用'老时间''原画'这类固定说法。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "傍晚户外训练收尾直播与团队调度",
+      "name": "傍晚岩场训练直播与团队调度",
       "storyline_trigger_type": "location_environment",
-      "trigger_condition": "身处北喀斯喀特山麓露天训练场或赛事集结区边缘、基站覆盖偏弱的户外热身区与临时休息点，16:00-18:00训练收尾时段需要向团队直播训练实况并同步调度安排",
+      "trigger_condition": "身处北喀斯喀特山麓露天岩场或赛事集结区边缘，基站覆盖被山体遮挡、人群密集导致上行拥塞的弱网时段，按老时间开播训练实况并同步团队调度。",
       "period_type": "location_driven",
       "days": [
         "location_specific"
@@ -77,10 +77,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "北喀斯喀特秋季登山赛事周",
+        "name": "北喀斯喀特秋季登山赛赛事周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "赛事周期间集结区与赛道旁人群密集、多机位同时推流，山麓基站容量紧张，需优先保证直播连通与团队即时通信，画质临时下调、时延要求收紧。",
+        "scene_description": "赛事周期间集结区与观赛人群高度密集，山麓基站上行严重拥塞，直播需降档保连续，优先保证画面不断流。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -97,7 +97,7 @@
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "客场转场途中在大巴或临时休息点，用手机热点接入参加团队赛前赛后调度会",
+        "trigger_condition": "客场转场途中在移动大巴上临时召集教练与保障团队对齐次日赛程和装备安排。",
         "aliases": {
           "app_aliases": [
             "tencentmeeting",
@@ -119,22 +119,22 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "训练录像复盘上传",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "name": "训练录像复盘与数据回放",
+        "application_name": "快手",
+        "service_name": "短视频",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "训练结束后在临时休息点上传随身拍摄设备录制的训练片段，供教练组复盘回放",
+        "trigger_condition": "训练结束后在临时休息点上传攀爬录像，逐帧回放动作细节并做技术复盘。",
         "aliases": {
           "app_aliases": [
-            "weixin",
-            "wx"
+            "kuaishou",
+            "快手视频"
           ],
           "service_aliases": [
-            "打视频",
-            "连线"
+            "看短视频",
+            "刷视频"
           ],
           "resolution_aliases": [
             "1080p原画",
@@ -150,9 +150,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "赛前在集结区单次与家人视频通话报平安",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "scenario": "赛前在集结区休息时刷同行攀岩直播打发时间",
+        "application_name": "快手",
+        "service_name": "看直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -160,9 +160,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "休息点单次刷短视频放松",
-        "application_name": "快手",
-        "service_name": "短视频",
+        "scenario": "转场途中与家人单次视频通话报平安",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

@@ -4,33 +4,34 @@
   "persona_summary": "外勤型项目申报人员",
   "static_profile": {
     "user_id": "USER_004",
-    "identity": "外勤型项目申报人员（公益项目申报与佐证采编），长期在活动现场、街区采访点、临时拍摄地与转场途中工作，通过手机移动核心网完成素材采集、直播与云端协作，不依赖家庭宽带或公司固网。",
-    "devices": "5G智能手机（主力）＋随身拍摄设备（运动相机/口袋云台）＋便携补光与收音配件；便携终端确需联网时使用手机热点。",
+    "identity": "公益项目申报专员（grant writer），擅长利用线上平台吸引捐赠方；日常在活动现场、街区采访点、临时拍摄地与转场途中完成需求记录、佐证材料拍摄、申请文本与预算附件同步，全程以手机4G/5G直接联网，不依赖固网或普通Wi-Fi，便携终端联网时用手机热点。",
+    "devices": "主力：5G智能手机；辅助：随身拍摄设备（运动相机/口袋云台）、便携补光与领夹麦",
     "apps": [
       "抖音",
       "微信",
       "腾讯会议",
-      "飞书"
+      "飞书",
+      "哔哩哔哩"
     ],
     "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "干脆利落、带现场指挥感，习惯用短句确认节点，强调“别掉链子”和“对齐一下”。",
+      "tone": "干练务实、节奏偏快，习惯用工程化口吻交代参数与时间点，遇到网络问题先给结论再补原因",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "先保推流",
-        "这条能续上吧"
+        "先保上行",
+        "这条能续传吧"
       ],
-      "typical_habits": "开工前先口头对齐时间与画质档位，转场时反复确认上传是否中断，事后用一句话复盘参数是否达标。"
+      "typical_habits": "开播前先口头确认画质档位与时延底线，转场路上用语音给协作团队同步进度，事后用一句话复盘网络表现"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "周二周六晚间公益项目直播与素材回传",
+      "name": "周二与周六晚间公益项目路演直播与素材回传",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每周二与周六晚间20:00-22:00的公益项目申报直播档期，固定开播并同步回传佐证素材给协作团队",
+      "trigger_condition": "每周二与周六晚间20:00-22:30的公益项目路演直播，向捐赠方展示项目进展并同步申请材料",
       "period_type": "weekly",
       "days": [
         "Tuesday",
@@ -46,12 +47,11 @@
       "aliases": {
         "app_aliases": [
           "阿抖",
-          "抖家"
+          "抖音"
         ],
         "service_aliases": [
           "开播",
-          "推流",
-          "上直播"
+          "推流"
         ],
         "resolution_aliases": [
           "1080p原画",
@@ -79,10 +79,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨城公益项目考察与突发现场直播周",
+        "name": "跨城公益项目考察与捐赠方连线周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "跨城转场频繁，途经弱覆盖路段与户外突发事件现场，需优先保证上传不中断与快速恢复，画质临时下调以稳住推流。",
+        "scene_description": "连续跨城转场，途经弱覆盖路段与户外临时拍摄点，直播需在移动中保持画面稳定并支持断点续传",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -92,14 +92,14 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "转场途中素材回传与团队即时沟通",
+        "name": "转场途中协作团队视频通话对齐",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "拍摄结束转场途中，需向协作团队快速口述现场情况并确认素材是否收齐",
+        "trigger_condition": "拍摄转场或临时采访点间隙，需与协作团队快速对齐申请文本与预算附件",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -121,14 +121,14 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "申报文本与预算附件云端对齐会",
+        "name": "项目复盘与捐赠方远程会议",
         "application_name": "腾讯会议",
         "service_name": "会议",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "项目申报节点前，与协作团队在云端逐条对齐申请文本与预算附件",
+        "trigger_condition": "活动结束后或阶段性节点，与捐赠方及团队复盘素材与申报进度",
         "aliases": {
           "app_aliases": [
             "tencentmeeting",
@@ -152,8 +152,8 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次临时参加资助方线上说明会",
-        "application_name": "飞书",
+        "scenario": "候场时单次刷短视频放松",
+        "application_name": "钉钉",
         "service_name": "会议",
         "params": {
           "resolution": "720p",
@@ -162,7 +162,7 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "候场时单次刷同行公益直播参考选题",
+        "scenario": "单次观看同行公益直播参考话术",
         "application_name": "快手",
         "service_name": "看直播",
         "params": {

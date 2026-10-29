@@ -4,32 +4,32 @@
   "persona_summary": "户外公益与社群组织者",
   "static_profile": {
     "user_id": "USER_026",
-    "identity": "年轻工会成员，受布克事迹激励投身公共事务，长期在户外调研点、社区走访点与群众服务现场组织公益活动、协调志愿者、发布通知并回传材料，全程依赖手机移动核心网直接联网，不依赖固网或普通Wi-Fi。",
-    "devices": "主力为5G智能手机，辅助为便携工作终端（确需联网时使用手机热点）",
+    "identity": "年轻工会成员，受布克事迹激励投身公共事务；日常以户外公益与社群组织为主业，负责社区走访、公益现场协调、志愿者调度与政策资料查询，全程依赖手机移动核心网（4G/5G）直接联网，不依赖家庭宽带或固网。",
+    "devices": "主力为5G智能手机，辅助为便携工作终端（需联网时使用手机热点共享）",
     "apps": [
       "腾讯会议",
       "微信",
       "钉钉",
-      "抖音"
+      "飞书"
     ],
     "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "干练直接、带现场号召力，习惯用短句推进协作，强调别掉链子",
+      "tone": "干练直接、带现场指挥感，语速偏快，习惯用短句确认进度",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "现场见"
+        "现场情况我盯着"
       ],
-      "typical_habits": "出发前先在群里对齐流程，现场边走访边用语音消息同步进度，遇到关键节点直接发起会议或直播，事后用电子表单收口"
+      "typical_habits": "出发前先在群里喊一声集合，现场边走动边用语音消息同步位置，遇到关键节点会主动发起视频会议对齐，收尾时习惯回传材料并口头确认'都收到了吧'"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "社区公益现场晨间协调会与材料回传",
+      "name": "晨间外勤现场协调会与材料回传",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "在社区走访点或群众服务现场执行晨间公益任务时，需与志愿者小组及街道对接人召开视频会议对齐当日分工，并同步回传现场记录与电子表单材料",
+      "trigger_condition": "在社区走访点或公益活动现场开工前，组织志愿者与协作方召开晨间视频会议，同步当日走访路线、人员分工，并回传现场记录与电子表单",
       "period_type": "task_driven",
       "days": [
         "task_specific"
@@ -49,8 +49,9 @@
         ],
         "service_aliases": [
           "对齐开会",
-          "连麦碰头",
-          "开个短会"
+          "开个碰头会",
+          "连麦对一下",
+          "拉个会"
         ],
         "resolution_aliases": [
           "720p",
@@ -80,10 +81,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨区公益巡访周",
+        "name": "跨区公益联动周现场直播保障",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "连续多日跨区巡访，现场人流密集、基站负载高且移动频繁，需在通勤途中与临时服务点之间保持会议与材料回传稳定，优先保障连通与低时延",
+        "scene_description": "跨区公益联动周期间，多个社区走访点同时开展活动，现场人流密集、基站负载高，需在移动中稳定直播活动实况并回传材料，网络波动明显",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -93,22 +94,22 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "公益活动现场直播动员",
-        "application_name": "抖音",
-        "service_name": "开直播",
+        "name": "志愿者位置调度与即时通信",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "在公共活动现场需要向社群实时播报进展、动员志愿者或扩大公益影响力时发起直播",
+        "trigger_condition": "走访途中志愿者位置分散、需临时调整分工时，发起一对一或群组视频通话确认位置与任务",
         "aliases": {
           "app_aliases": [
-            "douyin",
-            "阿抖"
+            "weixin",
+            "wx"
           ],
           "service_aliases": [
-            "推流",
-            "开播"
+            "打视频",
+            "连线"
           ],
           "resolution_aliases": [
             "720p",
@@ -122,22 +123,22 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "志愿者群即时通信与位置协调",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "name": "活动实况直播与社群扩散",
+        "application_name": "抖音",
+        "service_name": "开直播",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "外勤移动中需要快速确认志愿者位置、临时调整走访路线或一对一沟通现场情况时发起视频通话",
+        "trigger_condition": "公益活动现场进入高潮环节或需要扩大社群影响力时，开启直播向公众展示现场并收集线上反馈",
         "aliases": {
           "app_aliases": [
-            "weixin",
-            "wx"
+            "douyin",
+            "阿抖"
           ],
           "service_aliases": [
-            "打视频",
-            "连线"
+            "推流",
+            "开播"
           ],
           "resolution_aliases": [
             "1080p原画",
@@ -153,9 +154,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次任务：在临时会议区用钉钉参加街道临时组织的政策宣讲短会",
-        "application_name": "钉钉",
-        "service_name": "会议",
+        "scenario": "午休时在通勤途中刷短视频放松",
+        "application_name": "快手",
+        "service_name": "短视频",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -163,9 +164,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次任务：通勤途中刷短视频了解本地公益动态与社区舆情",
-        "application_name": "抖音",
-        "service_name": "短视频",
+        "scenario": "晚间在家观看公益主题直播回放",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

@@ -67,7 +67,7 @@ class PersonaGenerator:
             ("哔哩哔哩", "视频"),
             ("咪咕快游", "云游戏"),
             ("斗鱼直播", "开直播"),
-            ("虎牙直播", "看直播"),
+            ("快手", "看直播"),
         ]
         pid_m = re.search(r"(\d+)", str(sk.get("persona_id") or ""))
         pid_offset = int(pid_m.group(1)) if pid_m else 0
@@ -83,6 +83,8 @@ class PersonaGenerator:
                 ("腾讯会议", "视频通话"): ("腾讯会议", "会议"),
                 ("哔哩哔哩", "短视频"): ("抖音", "短视频"),
                 ("快手", "游戏"): ("快手", "看直播"),
+                ("虎牙直播", "看直播"): ("快手", "看直播"),
+                ("虎牙直播", "开直播"): ("斗鱼直播", "开直播"),
             }
             if (app_val, srv_val) in invalid_map:
                 app_val, srv_val = invalid_map[(app_val, srv_val)]

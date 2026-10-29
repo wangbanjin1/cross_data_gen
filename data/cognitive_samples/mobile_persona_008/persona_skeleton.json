@@ -4,24 +4,24 @@
   "persona_summary": "移动训练与赛事人员",
   "static_profile": {
     "user_id": "USER_008",
-    "identity": "职业篮球得分后卫兼移动训练与赛事保障人员，长期随队客场转场、在露天球场与赛事集结区进行训练与比赛，需在移动场景中完成赛事直播、团队调度、训练视频上传与数据回放。",
-    "devices": "主力为5G智能手机，辅助为可穿戴设备（运动手表/心率带），便携终端需联网时以手机热点共享。",
+    "identity": "职业篮球得分后卫兼移动训练与赛事保障人员，长期在客场转场、户外热身区、露天球场与赛事集结区之间移动，全程依赖手机4G/5G直接联网完成赛事直播、团队调度、训练视频上传与数据回放，便携终端需联网时以手机热点兜底",
+    "devices": "主力：5G智能手机；辅助：可穿戴设备（运动手表/心率带）、便携运动相机",
     "apps": [
       "抖音",
       "微信",
-      "钉钉",
+      "腾讯会议",
       "哔哩哔哩"
     ],
     "speech_archetype": "athlete_speaker",
     "speech_style": {
-      "tone": "干脆利落、带球场口令感，习惯用短句确认与催促",
+      "tone": "干脆利落、带球场口令感，习惯用短句和行动指令，语速偏快",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "稳住上行"
+        "开整"
       ],
-      "typical_habits": "开播前先口头对齐参数与分工，转场途中用语音消息同步位置，复盘时边看回放边点评。"
+      "typical_habits": "布置任务前先确认网络和机位，习惯用口语化简称指代应用与画质档位，强调'稳'和'不断线'，复盘时爱用回放说话"
     }
   },
   "dynamic_profile": {
@@ -29,7 +29,7 @@
       "storyline_id": "MAIN_MT_01",
       "name": "赛前热身与训练现场直播推流",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "客场转场抵达露天球场或赛事集结区后，10:00-12:00热身训练时段开启现场直播，向队内与粉丝同步训练实况并回传教练组",
+      "trigger_condition": "客场转场抵达露天球场或赛事集结区后，10:00-12:00热身训练时段开启现场直播，向队内教练组与远端保障团队推流，同步完成即时通信调度与训练视频上传",
       "period_type": "task_driven",
       "days": [
         "task_specific"
@@ -48,7 +48,8 @@
         ],
         "service_aliases": [
           "推流",
-          "开播"
+          "开播",
+          "拉个直播"
         ],
         "resolution_aliases": [
           "1080p原画",
@@ -79,10 +80,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨城赛事周集结区人群密集期",
+        "name": "跨城客场赛事周（人群密集集结区）",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "赛事集结区与露天球场人流密集、无线环境拥塞，转场频繁，需优先保证通信连续与上行稳定",
+        "scene_description": "连续客场作战，赛事集结区与露天球场人群密集、基站拥塞，转场途中信号切换频繁，需优先保通信连续与上行稳定，画质临时降档",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -92,18 +93,18 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "转场大巴团队视频调度",
-        "application_name": "钉钉",
+        "name": "转场大巴上的团队视频调度会",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "客场转场途中在移动网络下与教练组、保障团队进行视频调度与位置同步",
+        "trigger_condition": "客场转场大巴途中，教练组临时召集战术对齐与人员调度，需在移动网络下稳定入会",
         "aliases": {
           "app_aliases": [
-            "dingding",
-            "钉"
+            "tencentmeeting",
+            "会议通"
           ],
           "service_aliases": [
             "开会",
@@ -122,21 +123,21 @@
       {
         "storyline_id": "SUB_02",
         "name": "训练录像复盘与数据回放",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "训练结束后上传训练视频片段并进行数据记录与回放复盘",
+        "trigger_condition": "训练结束后在临时休息点回看队内上传的训练录像与数据回放，逐帧核对动作细节",
         "aliases": {
           "app_aliases": [
-            "weixin",
-            "wx"
+            "bilibili",
+            "哔站"
           ],
           "service_aliases": [
-            "打视频",
-            "连线"
+            "观赛",
+            "刷直播"
           ],
           "resolution_aliases": [
             "1080p原画",
@@ -152,7 +153,7 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "临时与家人单次视频通话",
+        "scenario": "赛前候场时与家人单次视频通话报平安",
         "application_name": "微信",
         "service_name": "视频通话",
         "params": {
@@ -162,9 +163,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "休息点单次观看队友赛事直播",
+        "scenario": "休息点单次刷短视频放松，非训练保障任务",
         "application_name": "快手",
-        "service_name": "看直播",
+        "service_name": "短视频",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

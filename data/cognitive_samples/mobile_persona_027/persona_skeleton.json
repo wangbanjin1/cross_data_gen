@@ -4,24 +4,24 @@
   "persona_summary": "户外移动采编者",
   "static_profile": {
     "user_id": "USER_027",
-    "identity": "年轻有才华的编剧兼户外移动采编者，刚完成首部长篇剧本，日常在城市活动现场、街区采访点、临时拍摄地与转场途中进行短视频拍摄、移动直播、素材回传与云端协作，全程依赖手机4G/5G直接联网，不依赖固网或普通Wi-Fi。",
-    "devices": "主力设备为5G智能手机，辅助设备为便携拍摄终端（需联网时使用手机热点共享）",
+    "identity": "年轻有才华的编剧兼户外移动采编者，刚完成首部全长话剧，日常在城市活动现场、街区采访点、临时拍摄地与转场途中进行短视频拍摄上传、移动直播与素材回传，全程仅依赖手机4G/5G移动核心网联网，便携终端需联网时开手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携拍摄终端（通过手机热点联网）",
     "apps": [
       "抖音",
+      "快手",
       "微信",
-      "腾讯会议",
-      "飞书"
+      "腾讯会议"
     ],
     "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "干脆利落、带点文艺腔的现场感口吻，习惯用短句确认任务节点",
+      "tone": "干脆利落、带点文艺腔的现场感口吻，习惯用行话和短句确认任务状态",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "先推流再说"
+        "这条得推上去"
       ],
-      "typical_habits": "出发前先口头确认网络与参数偏好，转场途中用语音消息同步进度，遇到弱覆盖会主动要求续传或降档保稳"
+      "typical_habits": "出发前先口头确认画质和时延要求，转场时反复叮嘱上传别断，收工后习惯复盘素材回传情况"
     }
   },
   "dynamic_profile": {
@@ -29,7 +29,7 @@
       "storyline_id": "MAIN_MT_01",
       "name": "街区采访点移动直播与素材回传",
       "storyline_trigger_type": "location_environment",
-      "trigger_condition": "身处街区采访点或临时拍摄地的弱覆盖路段（如老城区窄巷、活动现场外围人流密集区），需在09:00-11:00完成现场移动直播与素材回传",
+      "trigger_condition": "身处街区采访点或临时拍摄地、转场途中及户外直播点等城市户外移动采编现场，需在移动核心网下开直播并同步回传现场素材时触发",
       "period_type": "location_driven",
       "days": [
         "location_specific"
@@ -44,12 +44,11 @@
       "aliases": {
         "app_aliases": [
           "阿抖",
-          "抖子"
+          "抖音"
         ],
         "service_aliases": [
           "开播",
-          "推流",
-          "上直播"
+          "推流"
         ],
         "resolution_aliases": [
           "720p",
@@ -78,10 +77,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "城市文化节跨区采编周",
+        "name": "跨城戏剧节现场采编周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "文化节期间跨区转场频繁，活动现场外围与临时拍摄地人流密集、基站拥塞，弱覆盖路段增多，需降档保稳确保直播与回传不中断",
+        "scene_description": "跨城戏剧节期间频繁在剧场周边街区、临时采访点与转场路段移动，弱覆盖路段增多，直播与素材回传需降档保连续",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -98,7 +97,7 @@
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "转场途中在车内或临时停留点与后期团队对齐素材版本、确认回传进度时",
+        "trigger_condition": "转场途中或临时停留点需与编辑云端协作、快速对齐素材版本时触发",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -120,14 +119,14 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "采访点远程编前会",
+        "name": "拍摄前远程选题对齐会",
         "application_name": "腾讯会议",
         "service_name": "会议",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "到达街区采访点后与编辑部远程对齐当日选题与拍摄脚本时",
+        "trigger_condition": "外出任务开始前在活动现场或临时拍摄地接入团队选题对齐会时触发",
         "aliases": {
           "app_aliases": [
             "tencentmeeting",
@@ -151,9 +150,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "收工后在临时停留点刷同行直播参考选题",
+        "scenario": "收工后在临时停留点单次刷短视频放松",
         "application_name": "快手",
-        "service_name": "看直播",
+        "service_name": "短视频",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -161,9 +160,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "等待采访对象时用手机打发时间刷短视频",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "scenario": "等待采访对象时单次观看同行直播参考画面",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

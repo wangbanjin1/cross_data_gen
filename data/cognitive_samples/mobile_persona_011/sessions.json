@@ -22,14 +22,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "你好，需要给腾讯会议会议做一个网络保障，时间是今天14时00分开始。",
+          "utterance": "你好，我这边在影视传媒数字创作基地，信号稳着呢。给腾讯会议会议做个网络保障，今天14时00分开始，别掉链子。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，已为您锁定腾讯会议会议保障，时间从14时00分开始。请问您需要保障的清晰度、时延上限和预计持续时长分别是多少呢？",
+          "utterance": "收到，您是要给腾讯会议会议做网络保障，14时00分开始，对吧？请问画质、时延上限和预计持续时长分别是多少？",
           "action_types": [
             "Request_Slot"
           ]
@@ -74,13 +74,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "好的，画质用720p，时延100ms以内，预计持续两个半小时（到16时30分）。以后我说‘别太粗糙’，画质就是720p。以后只要我提到执行【影视传媒数字创作基地】任务，就按老规矩来：腾讯会议会议、720p、100ms以内，帮我把这个习惯记好，别掉链子。",
+          "utterance": "画质别太粗糙就行，按720p开，以后也照这个标准理解。时延100ms以内，持续150min，到16时30分。以后我说‘别太粗糙’，画质就是720p。帮我把这个习惯记好，别掉链子。",
           "action_types": [
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，已为您登记老规矩习惯。确认按720p、100ms以内立即为您开通本次保障吗？",
+          "utterance": "收到，已为您登记：以后您说‘别太粗糙’，画质就是720p。本次按720p、时延100ms以内、持续150min（14时00分至16时30分）为您开通腾讯会议会议保障，确认直接开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -151,7 +151,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您成功受理本次保障，并已为您将该配置记录为长期老规矩，祝您使用愉快！",
+          "utterance": "好的，已为您成功受理本次腾讯会议会议网络保障（720p / 时延≤100ms，14时00分至16时30分），并已把‘别太粗糙’这个画质习惯记好，祝您使用愉快！",
           "action_types": [
             "Acknowledge"
           ]
@@ -335,15 +335,15 @@
   {
     "session_id": "S-USER_011-02",
     "user_id": "USER_011",
-    "reference_time": "2026年09月16日17时15分",
+    "reference_time": "2026年09月16日18时15分",
     "session_meta": {
       "template_id": "T3-1",
       "round_count": 3,
       "intent_count": 1,
       "memory_role": "evidence_session",
-      "skeleton_signature": "T3-1|3|1|I1:抖音/开直播/1/clarified/resolved|none",
+      "skeleton_signature": "T3-1|3|1|I1:微信/视频通话/1/clarified/resolved|none",
       "scenario": {
-        "environment": "城际高铁移动车厢",
+        "environment": "大巴跨城转场高速公路",
         "blueprint_type": "sub_01",
         "memory_action": "disambiguate_sub_storyline_1"
       },
@@ -355,14 +355,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "在城际高铁移动车厢网络不太稳，帮我给抖音开直播开个保障，时间从今天17时30分开始。",
+          "utterance": "在大巴转场途中网络不太稳，帮我给微信视频通话开个保障，时间从今天18时30分开始。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，已确认是抖音开直播保障。请问画质、时延和持续时长有什么具体要求？",
+          "utterance": "收到，已确认是微信视频通话保障。请问画质、时延和持续时长有什么具体要求？",
           "action_types": [
             "Request_Slot"
           ]
@@ -381,21 +381,21 @@
             "status": "in_progress",
             "closure_path": "clarify",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "微信视频通话保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "微信",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "视频通话",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年09月16日17时30分",
+                  "value": "2026年09月16日18时30分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
@@ -407,13 +407,13 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "画质只要‘基本清爽就行’，时延控制在100ms以内，预计持续90min。",
+          "utterance": "清晰度按‘基本清爽就行’开，时延控制在100ms以内，预计持续45min。",
           "action_types": [
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "确认一下，您说的‘基本清爽就行’具体指哪个画质档位？以后也按这个理解吗？",
+          "utterance": "问一下，您说的‘基本清爽就行’具体是指哪种画质档位？往后也按这套标准来吗？",
           "action_types": [
             "Request_Disambiguation"
           ]
@@ -430,15 +430,15 @@
             "status": "in_progress",
             "closure_path": "clarify",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "微信视频通话保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "微信",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "视频通话",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -451,17 +451,17 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年09月16日17时30分",
+                  "value": "2026年09月16日18时30分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年09月16日19时00分",
+                  "value": "2026年09月16日19时15分",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 },
                 "duration": {
-                  "value": "90min",
+                  "value": "45min",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 }
@@ -473,13 +473,13 @@
       {
         "turn": 3,
         "user": {
-          "utterance": "对，就是画质档位720p，往后都照这个标准记，开通吧。",
+          "utterance": "指的就是画质档位720p，以后默认按这个来，直接保上吧。",
           "action_types": [
             "Confirm_Slot"
           ]
         },
         "agent": {
-          "utterance": "好的，已按您刚确认的含义记录，并为您开通抖音开直播保障（720p / 时延≤100ms）。祝您使用愉快！",
+          "utterance": "好的，已按您刚确认的含义记录，并为您开通微信视频通话保障（720p / 时延≤100ms）。祝您使用愉快！",
           "action_types": [
             "Acknowledge"
           ]
@@ -494,15 +494,15 @@
             "status": "resolved",
             "closure_path": "clarified",
             "expression_level": 1,
-            "intent": "抖音开直播保障",
+            "intent": "微信视频通话保障",
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "微信",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "视频通话",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -522,17 +522,17 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年09月16日17时30分",
+                  "value": "2026年09月16日18时30分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年09月16日19时00分",
+                  "value": "2026年09月16日19时15分",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 },
                 "duration": {
-                  "value": "90min",
+                  "value": "45min",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 }
@@ -548,15 +548,15 @@
         "status": "resolved",
         "closure_path": "clarified",
         "expression_level": 1,
-        "intent": "抖音开直播保障",
+        "intent": "微信视频通话保障",
         "params": {
           "application_name": {
-            "value": "抖音",
+            "value": "微信",
             "source_type": "Turn",
             "source_ref": "U1"
           },
           "service_name": {
-            "value": "开直播",
+            "value": "视频通话",
             "source_type": "Turn",
             "source_ref": "U1"
           },
@@ -576,17 +576,17 @@
           },
           "timestamp": {
             "start_timestamp": {
-              "value": "2026年09月16日17时30分",
+              "value": "2026年09月16日18时30分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
             "end_timestamp": {
-              "value": "2026年09月16日19时00分",
+              "value": "2026年09月16日19时15分",
               "source_type": "Turn",
               "source_ref": "U2"
             },
             "duration": {
-              "value": "90min",
+              "value": "45min",
               "source_type": "Turn",
               "source_ref": "U2"
             }
@@ -603,18 +603,18 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "抖音",
+                "value": "微信",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "开直播",
+                "value": "视频通话",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年09月16日17时30分",
+                  "value": "2026年09月16日18时30分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
@@ -633,12 +633,12 @@
               },
               "timestamp": {
                 "end_timestamp": {
-                  "value": "2026年09月16日19时00分",
+                  "value": "2026年09月16日19时15分",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 },
                 "duration": {
-                  "value": "90min",
+                  "value": "45min",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 }
@@ -691,7 +691,7 @@
           ]
         },
         "agent": {
-          "utterance": "收到，我调取到之前登记的腾讯会议会议配置：720p、时延100ms以内，14时00分开始、16时30分结束，持续150min。确认按这套配置开通吗？",
+          "utterance": "收到，我调取到之前登记的腾讯会议会议配置：画质720p、时延100ms以内，14时00分开始、16时30分结束，持续150min。确认按这套配置开通吗？",
           "action_types": [
             "Confirm_Slot"
           ]
@@ -1057,7 +1057,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已按您引用的历史意图保障单规格为您成功开通今日腾讯会议会议保障（720p / 时延≤100ms，时段14时00分至16时30分）。祝您工作顺利！",
+          "utterance": "好的，已按您引用的历史意图保障单规格为您成功开通今日腾讯会议会议保障（720p / 时延≤100ms，14时00分至16时30分，持续150min）。祝您工作顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -1952,14 +1952,14 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "对，老规矩不变，不过今天现场活动延长了，帮我把保障时长延长到180min。",
+          "utterance": "对，老规矩不变，不过今天现场活动延长了，帮我把保障时长延长到240min。",
           "action_types": [
             "Confirm_Slot",
             "Modify_Request"
           ]
         },
         "agent": {
-          "utterance": "好的，已按老规矩为您开通腾讯会议会议保障：画质保持720p、时延上限100ms，时长已延长至180min。祝您活动顺利！",
+          "utterance": "好的，已按老规矩为您开通腾讯会议会议保障：画质保持720p、时延上限100ms，时长已延长至240min。祝您活动顺利！",
           "action_types": [
             "Acknowledge"
           ]
@@ -2007,12 +2007,12 @@
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年10月09日17时00分",
+                  "value": "2026年10月09日18时00分",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 },
                 "duration": {
-                  "value": "180min",
+                  "value": "240min",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 }
@@ -2061,12 +2061,12 @@
               "source_ref": "U1"
             },
             "end_timestamp": {
-              "value": "2026年10月09日17时00分",
+              "value": "2026年10月09日18时00分",
               "source_type": "Turn",
               "source_ref": "U2"
             },
             "duration": {
-              "value": "180min",
+              "value": "240min",
               "source_type": "Turn",
               "source_ref": "U2"
             }
@@ -2130,12 +2130,12 @@
             "params": {
               "timestamp": {
                 "end_timestamp": {
-                  "value": "2026年10月09日17时00分",
+                  "value": "2026年10月09日18时00分",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 },
                 "duration": {
-                  "value": "180min",
+                  "value": "240min",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 }
@@ -2445,7 +2445,7 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "今天在沿海巡逻岸线，不用抖音做开直播了，老规矩用腾讯会议做会议，帮我把保障开上。",
+          "utterance": "今天在沿海暴雨强对流前沿现场，老规矩，用腾讯会议做会议，帮我把保障开上。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
@@ -8041,15 +8041,15 @@
   {
     "session_id": "S-USER_011-17",
     "user_id": "USER_011",
-    "reference_time": "2026年11月02日20时45分",
+    "reference_time": "2026年11月02日20时00分",
     "session_meta": {
       "template_id": "T2-1",
       "round_count": 3,
       "intent_count": 1,
       "memory_role": "evidence_session",
-      "skeleton_signature": "T2-1|3|1|I1:微信/视频通话/1/clarified/resolved|none",
+      "skeleton_signature": "T2-1|3|1|I1:小红书/短视频/1/clarified/resolved|none",
       "scenario": {
-        "environment": "驻地公寓临时工作间",
+        "environment": "驻地酒店商务中心",
         "blueprint_type": "sub_02",
         "memory_action": "establish_sub_storyline_2"
       },
@@ -8061,14 +8061,14 @@
       {
         "turn": 1,
         "user": {
-          "utterance": "你好，需要给微信视频通话做一个网络保障，时间是今天21时00分开始。",
+          "utterance": "你好，需要给小红书短视频做一个网络保障，时间是今天20时15分开始。",
           "action_types": [
             "Create_Intent_Request",
             "Inform_Slot"
           ]
         },
         "agent": {
-          "utterance": "收到，已为您锁定微信视频通话保障，时间从21时00分开始。请问您需要保障的清晰度、时延上限和预计持续时长分别是多少呢？",
+          "utterance": "收到，已为您锁定小红书短视频保障，时间从20时15分开始。请问您需要保障的清晰度、时延上限和预计持续时长分别是多少呢？",
           "action_types": [
             "Request_Slot"
           ]
@@ -8087,21 +8087,21 @@
             "status": "in_progress",
             "closure_path": "clarify",
             "expression_level": 1,
-            "intent": "微信视频通话保障",
+            "intent": "小红书短视频保障",
             "params": {
               "application_name": {
-                "value": "微信",
+                "value": "小红书",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "视频通话",
+                "value": "短视频",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月02日21时00分",
+                  "value": "2026年11月02日20时15分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
@@ -8113,7 +8113,7 @@
       {
         "turn": 2,
         "user": {
-          "utterance": "好的，画质用1080p，时延80ms以内，预计持续90min（到22时30分）。我说‘不卡就行’，就是时延控制在80ms以内。以后只要我处于【驻地公寓临时工作间】，就按老规矩来：微信视频通话、1080p、80ms以内，帮我把这个习惯记好，别掉链子。",
+          "utterance": "好的，画质用1080p，时延80ms以内，预计持续90min（到21时45分）。以后我说‘特写清晰’，画质就是1080p。以后只要我处于【驻地酒店商务中心】，就按老规矩来：小红书短视频、1080p、80ms以内，帮我把这个习惯记好，别掉链子。",
           "action_types": [
             "Inform_Slot"
           ]
@@ -8134,15 +8134,15 @@
             "status": "in_progress",
             "closure_path": "clarify",
             "expression_level": 1,
-            "intent": "微信视频通话保障",
+            "intent": "小红书短视频保障",
             "params": {
               "application_name": {
-                "value": "微信",
+                "value": "小红书",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "视频通话",
+                "value": "短视频",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -8162,12 +8162,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月02日21时00分",
+                  "value": "2026年11月02日20时15分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月02日22时30分",
+                  "value": "2026年11月02日21时45分",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 },
@@ -8190,7 +8190,7 @@
           ]
         },
         "agent": {
-          "utterance": "好的，已为您成功受理微信视频通话网络保障（1080p / 时延≤80ms），祝您使用愉快！",
+          "utterance": "好的，已为您成功受理小红书短视频网络保障（1080p / 时延≤80ms），祝您使用愉快！",
           "action_types": [
             "Acknowledge"
           ]
@@ -8205,15 +8205,15 @@
             "status": "resolved",
             "closure_path": "clarified",
             "expression_level": 1,
-            "intent": "微信视频通话保障",
+            "intent": "小红书短视频保障",
             "params": {
               "application_name": {
-                "value": "微信",
+                "value": "小红书",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "视频通话",
+                "value": "短视频",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
@@ -8233,12 +8233,12 @@
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月02日21时00分",
+                  "value": "2026年11月02日20时15分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 },
                 "end_timestamp": {
-                  "value": "2026年11月02日22时30分",
+                  "value": "2026年11月02日21时45分",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 },
@@ -8259,15 +8259,15 @@
         "status": "resolved",
         "closure_path": "clarified",
         "expression_level": 1,
-        "intent": "微信视频通话保障",
+        "intent": "小红书短视频保障",
         "params": {
           "application_name": {
-            "value": "微信",
+            "value": "小红书",
             "source_type": "Turn",
             "source_ref": "U1"
           },
           "service_name": {
-            "value": "视频通话",
+            "value": "短视频",
             "source_type": "Turn",
             "source_ref": "U1"
           },
@@ -8287,12 +8287,12 @@
           },
           "timestamp": {
             "start_timestamp": {
-              "value": "2026年11月02日21时00分",
+              "value": "2026年11月02日20时15分",
               "source_type": "Turn",
               "source_ref": "U1"
             },
             "end_timestamp": {
-              "value": "2026年11月02日22时30分",
+              "value": "2026年11月02日21时45分",
               "source_type": "Turn",
               "source_ref": "U2"
             },
@@ -8314,18 +8314,18 @@
             "turn": 1,
             "params": {
               "application_name": {
-                "value": "微信",
+                "value": "小红书",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "service_name": {
-                "value": "视频通话",
+                "value": "短视频",
                 "source_type": "Turn",
                 "source_ref": "U1"
               },
               "timestamp": {
                 "start_timestamp": {
-                  "value": "2026年11月02日21时00分",
+                  "value": "2026年11月02日20时15分",
                   "source_type": "Turn",
                   "source_ref": "U1"
                 }
@@ -8351,7 +8351,7 @@
               },
               "timestamp": {
                 "end_timestamp": {
-                  "value": "2026年11月02日22时30分",
+                  "value": "2026年11月02日21时45分",
                   "source_type": "Turn",
                   "source_ref": "U2"
                 },

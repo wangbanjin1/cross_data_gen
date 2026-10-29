@@ -4,33 +4,32 @@
   "persona_summary": "户外视觉创作者",
   "static_profile": {
     "user_id": "USER_011",
-    "identity": "阿曼籍平面设计师，长期跨城采风与户外拍摄，为展览与客户项目收集视觉素材并远程交付高清设计稿；全程依赖手机4G/5G移动核心网联网，不依赖家庭宽带、公司固网或普通Wi-Fi。",
-    "devices": "主力为5G智能手机，辅以便携平板与移动电源；便携终端确需联网时使用手机热点。",
+    "identity": "阿曼籍平面设计师，长期跨城采风与拍摄，常驻高速公路服务区、车站、港区或机场外场等临时停靠点，以手机5G直连核心网完成远程协作与素材回传，不依赖固网或普通Wi-Fi。",
+    "devices": "主力为5G智能手机，辅以手机热点为便携终端（平板/笔记本）提供联网。",
     "apps": [
       "微信",
       "钉钉",
-      "腾讯会议",
       "高德地图",
-      "小红书"
+      "腾讯会议"
     ],
     "speech_archetype": "outdoor_creator_speaker",
     "speech_style": {
-      "tone": "干脆利落、带现场感的行动派口吻，习惯用短句确认时间与画质，强调别掉链子。",
+      "tone": "干脆利落、带点现场指挥感，习惯用短句确认进度",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "原画给我稳住"
+        "我这边信号稳着呢"
       ],
-      "typical_habits": "出发前先报时间与画质档位，现场用口头禅快速确认任务与网络状态，交付前反复核对上传进度。"
+      "typical_habits": "开工前先报位置和网络状态，任务中反复确认上传进度与定位是否及时，收尾时口头复盘一遍参数。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "采风现场设计稿远程评审与高清交付",
+      "name": "采风现场设计稿远程评审与高清素材回传",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "在跨城采风或展览拍摄现场，于14:00-16:00与客户及协作设计师进行设计稿远程评审，并同步上传高清图片与设计稿电子单据",
+      "trigger_condition": "在跨城采风或拍摄现场完成一轮素材采集后，于临时停靠点通过手机5G发起与客户的远程评审会议，同步预览设计稿并上传高清图片与源文件",
       "period_type": "task_driven",
       "days": [
         "task_specific"
@@ -45,12 +44,12 @@
       "aliases": {
         "app_aliases": [
           "企鹅会议",
-          "腾讯开会"
+          "腾讯会议"
         ],
         "service_aliases": [
           "对齐开会",
-          "过稿会",
-          "远程评审"
+          "连麦过稿",
+          "远程过稿"
         ],
         "resolution_aliases": [
           "720p",
@@ -77,10 +76,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨城设计展布展与客户验收周",
+        "name": "跨城采风季高速沿线连续作业",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "展馆外场与港区临时停靠点网络拥塞，跨区域切换频繁，需在高速移动与弱覆盖环境下保持评审与上传不中断",
+        "scene_description": "连续多日沿高速公路跨城采风，频繁在服务区与偏远路段临时停靠，基站切换密集、高速移动下覆盖波动，需优先保证评审会议不中断与素材上传不超时",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -90,22 +89,22 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "采风素材与电子单据回传",
-        "application_name": "抖音",
-        "service_name": "开直播",
+        "name": "途中与客户视频通话确认拍摄需求",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "在高速公路服务区或车站临时停靠点，向客户快速确认素材清单并上传电子单据时",
+        "trigger_condition": "跨城途中接到客户临时改稿或补拍需求，在服务区停靠时发起视频通话快速对齐画面细节",
         "aliases": {
           "app_aliases": [
-            "douyin",
-            "阿抖"
+            "weixin",
+            "wx"
           ],
           "service_aliases": [
-            "推流",
-            "开播"
+            "打视频",
+            "连线"
           ],
           "resolution_aliases": [
             "720p",
@@ -119,22 +118,22 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "路线共享与现场位置同步",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "name": "采风花絮短视频发布与直播预热",
+        "application_name": "小红书",
+        "service_name": "短视频",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "跨城途中需与协作方实时共享位置、更新路线并语音确认会合点时",
+        "trigger_condition": "拍摄间隙整理现场花絮，剪辑后上传短视频维持账号更新，并为下一场户外直播做预热",
         "aliases": {
           "app_aliases": [
-            "weixin",
-            "wx"
+            "xiaohongshu",
+            "红薯"
           ],
           "service_aliases": [
-            "打视频",
-            "连线"
+            "看短视频",
+            "刷视频"
           ],
           "resolution_aliases": [
             "1080p原画",
@@ -150,9 +149,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "展馆休息间隙单次刷短视频找灵感",
-        "application_name": "小红书",
-        "service_name": "短视频",
+        "scenario": "夜间在酒店休息时单次观看设计类直播课程",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -160,9 +159,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "客户临时发起单次远程沟通会",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "scenario": "候车时单次刷短视频打发时间",
+        "application_name": "抖音",
+        "service_name": "短视频",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

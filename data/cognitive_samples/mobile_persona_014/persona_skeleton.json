@@ -4,24 +4,25 @@
   "persona_summary": "移动教学人员",
   "static_profile": {
     "user_id": "USER_014",
-    "identity": "小学教师，负责班级教学与课外实践活动组织，常在校园户外区域、校际通勤途中及实习点、运动场、社会实践地或临时教学现场开展移动教学，全程以手机4G/5G直接联网，不依赖固网或普通Wi-Fi，便携终端联网时使用手机热点。",
-    "devices": "5G智能手机为主力终端，随身拍摄设备（运动相机/手机云台）为辅助采集设备",
+    "identity": "小学教师，负责班级教学与课外实践活动组织，常在校园户外区域、校际通勤途中、实习点、运动场及社会实践地等临时教学现场开展移动教学，需随时发布课程通知、查看学生提交、进行视频答疑并上传教学资料。",
+    "devices": "5G智能手机为主力终端，搭配随身拍摄设备（运动相机/便携摄像机）用于活动记录与教学素材采集；便携终端确需联网时使用手机热点。",
     "apps": [
       "腾讯会议",
       "微信",
       "钉钉",
       "哔哩哔哩"
     ],
-    "speech_archetype": "teacher_speaker",
+    "speech_archetype": "teacher_mobile_speaker",
     "speech_style": {
-      "tone": "亲切干练、带点催促感，习惯用教学场景比喻，讲效率也讲稳妥",
+      "tone": "亲切耐心、条理清晰，带点班级管理式的催促与叮嘱，语速适中，喜欢用教学场景比喻。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
+        "咱们抓紧",
         "孩子们等着呢"
       ],
-      "typical_habits": "布置任务前先确认网络和电量，习惯用'老时间''老规矩'指代固定安排，遇到卡顿会立刻要求切低画质保连续"
+      "typical_habits": "习惯在活动前先口头确认流程与时间点，遇到网络波动会先安抚对方再快速重连，喜欢用'老规矩'指代固定安排，用'对齐一下'发起协作确认。"
     }
   },
   "dynamic_profile": {
@@ -29,7 +30,7 @@
       "storyline_id": "MAIN_MT_01",
       "name": "户外实践课视频答疑与资料上传",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "在校园户外区域或社会实践地组织班级实践活动时，需通过手机移动网络发起视频答疑、查看学生提交的作业并上传拍摄的教学资料，保障大文件上传与会话连续",
+      "trigger_condition": "在校园户外区域、运动场或社会实践地组织完实践活动后，于14:00-15:30时段通过手机发起视频答疑并上传活动记录与教学资料，需保证大文件上传可靠与会话连续。",
       "period_type": "task_driven",
       "days": [
         "task_specific"
@@ -44,13 +45,12 @@
       "aliases": {
         "app_aliases": [
           "企鹅会议",
-          "腾讯会议那个",
-          "开会软件"
+          "腾讯会议"
         ],
         "service_aliases": [
           "开个视频会",
           "连麦答疑",
-          "对齐一下进度"
+          "对齐一下"
         ],
         "resolution_aliases": [
           "720p",
@@ -79,10 +79,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "校际联合实践周户外直播连线",
-        "start_time": "2026年11月03日00时00分",
-        "end_time": "2026年11月07日23时59分",
-        "scene_description": "多校联合社会实践周，在运动场与临时教学现场之间频繁移动，弱覆盖路段多、切换频繁，需优先保证会话连续与快速恢复",
+        "name": "校际联合社会实践周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "多校联合社会实践期间，活动地点分散在郊区实践基地与运动场，移动网络覆盖不稳定，通勤切换频繁，需临时降低画质保障会话连续与大文件续传。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -92,22 +92,22 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "实践现场短视频记录与班级群分享",
+        "name": "活动录像复盘与素材回传",
         "application_name": "微信",
-        "service_name": "短视频",
+        "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "实践活动间隙拍摄学生表现片段，需快速剪辑后发到班级群供家长查看",
+        "trigger_condition": "实践活动结束后与同事或家长代表进行录像片段复盘沟通，需快速回传素材并口头确认要点。",
         "aliases": {
           "app_aliases": [
             "weixin",
             "wx"
           ],
           "service_aliases": [
-            "看短视频",
-            "刷视频"
+            "打视频",
+            "连线"
           ],
           "resolution_aliases": [
             "720p",
@@ -121,22 +121,22 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "课后录像复盘与教研沟通",
-        "application_name": "抖音",
-        "service_name": "开直播",
+        "name": "课程通知发布与作业提交检查",
+        "application_name": "快手",
+        "service_name": "看直播",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "通勤途中或实习点休息时，与同年级教师一对一沟通课程录像复盘与资料共享",
+        "trigger_condition": "校际通勤途中或临时教学现场需快速发布课程通知、查看学生作业提交情况并做简短线上说明。",
         "aliases": {
           "app_aliases": [
-            "douyin",
-            "阿抖"
+            "kuaishou",
+            "快手视频"
           ],
           "service_aliases": [
-            "推流",
-            "开播"
+            "观赛",
+            "刷直播"
           ],
           "resolution_aliases": [
             "1080p原画",
@@ -152,9 +152,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "临时参加校外教研线上会议，仅一次",
-        "application_name": "飞书",
-        "service_name": "会议",
+        "scenario": "单次观看教学直播公开课",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -162,8 +162,8 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "午休时刷教学类短视频放松，单次行为",
-        "application_name": "抖音",
+        "scenario": "单次课间刷短视频放松",
+        "application_name": "微信",
         "service_name": "短视频",
         "params": {
           "resolution": "720p",

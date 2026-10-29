@@ -4,32 +4,32 @@
   "persona_summary": "高频移动网络使用者",
   "static_profile": {
     "user_id": "USER_020",
-    "identity": "录音棚主理人，专注基督教敬拜专辑制作，常带队在城市街区、教堂、户外敬拜活动现场及跨区域出行途中进行现场收音、远程协作与素材回传，全程以手机4G/5G直接联网，便携终端通过手机热点接入。",
-    "devices": "5G智能手机（主力）＋平板电脑（辅助，用于现场监听与素材预览）",
+    "identity": "录音棚老板，专注基督教敬拜专辑制作，常在城市街区、公共活动现场及跨区域出行途中进行移动办公与现场协作",
+    "devices": "5G智能手机为主力，平板电脑为辅助，便携终端联网时使用手机热点",
     "apps": [
       "微信",
       "腾讯会议",
       "抖音",
       "钉钉"
     ],
-    "speech_archetype": "studio_producer_speaker",
+    "speech_archetype": "studio_producer_mobile",
     "speech_style": {
-      "tone": "沉稳务实、带点现场指挥的干脆劲儿，说话喜欢先定流程再谈细节",
+      "tone": "务实干练，带点行业老手的随意，习惯用短句确认关键节点",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "先把信号稳住"
+        "先稳住信号"
       ],
-      "typical_habits": "布置任务时先确认网络与设备状态，习惯用'老时间''老规矩'指代固定流程，遇到弱覆盖会立刻要求续传或切备份方案"
+      "typical_habits": "开口先确认对方是否在线，再快速交代任务与时间点；遇到网络波动会反复强调续传和恢复"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "敬拜专辑现场收音远程监棚协作",
+      "name": "敬拜专辑现场彩排远程监棚",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "带队在教堂或户外敬拜活动现场执行敬拜专辑现场收音任务，需通过手机热点让平板与远端制作人实时连线监棚、对齐音轨与画面",
+      "trigger_condition": "在敬拜专辑录制前的现场彩排时段，于临时排练场地通过移动网络远程监看录音棚内多轨录制画面并与棚内工程师实时对齐",
       "period_type": "task_driven",
       "days": [
         "task_specific"
@@ -44,12 +44,12 @@
       "aliases": {
         "app_aliases": [
           "企鹅会议",
-          "腾讯会议"
+          "腾讯开会"
         ],
         "service_aliases": [
-          "连麦监棚",
           "对齐开会",
-          "远程监棚"
+          "连麦监棚",
+          "远程盯棚"
         ],
         "resolution_aliases": [
           "720p",
@@ -78,10 +78,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨城敬拜巡演现场收音周",
+        "name": "跨城敬拜专辑录制周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "跨城巡演期间在多地教堂与户外场地连续收音，现场人流密集、基站切换频繁，部分路段弱覆盖，需降低画质保连线稳定并确保素材续传",
+        "scene_description": "跨城录制周期间频繁在教堂、临时排练厅与户外等候区之间移动，部分路段弱覆盖，需保证监棚会议画面不中断并支持任务续传",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -91,14 +91,14 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "现场素材回传与团队即时沟通",
+        "name": "录音棚素材回传与远程审听",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "收音间隙需向棚内团队回传现场片段、共享位置并快速对齐下一段录制安排",
+        "trigger_condition": "棚内完成一轨录制后，需要快速把现场片段回传给编曲或歌手进行远程审听确认",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -120,14 +120,14 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "敬拜片段短视频宣发预览",
+        "name": "敬拜现场短视频宣发",
         "application_name": "抖音",
         "service_name": "短视频",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "录制完成后挑选敬拜片段上传预览、检查画质与音画同步，用于宣发素材初筛",
+        "trigger_condition": "彩排或录制结束后，在移动途中上传现场花絮短视频用于专辑预热宣发",
         "aliases": {
           "app_aliases": [
             "douyin",
@@ -151,9 +151,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次与器材供应商远程确认设备清单",
-        "application_name": "钉钉",
-        "service_name": "会议",
+        "scenario": "单次与乐队成员临时视频通话确认设备清单",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -161,7 +161,7 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次观看同行敬拜现场直播作参考",
+        "scenario": "单次观看同行敬拜现场直播参考舞美与机位",
         "application_name": "哔哩哔哩",
         "service_name": "看直播",
         "params": {

@@ -4,53 +4,52 @@
   "persona_summary": "移动家庭沟通用户",
   "static_profile": {
     "user_id": "USER_033",
-    "identity": "刚对音乐产生兴趣、想探索不同曲风的年轻表亲，日常高频使用手机在接送、出行和户外等候期间与家人视频通话、共享位置、上传沿途照片，常在户外等候区、临时停留点、兴趣活动现场和城市街区活动，全程以手机4G/5G直接联网，便携终端需联网时开手机热点。",
-    "devices": "5G智能手机为主力，搭配可穿戴设备（智能手表/耳机）",
+    "identity": "刚对音乐产生热情、想探索不同曲风的年轻表亲，日常在城市街区、公共活动现场与跨区域出行途中高频使用手机移动网络，进行家庭沟通、短视频浏览上传与远程协作、地图导航与位置共享，全程依赖4G/5G直连，便携终端联网时开手机热点。",
+    "devices": "5G智能手机为主力终端，搭配可穿戴设备（智能手表/耳机）辅助通知与通话",
     "apps": [
       "微信",
       "抖音",
       "哔哩哔哩",
-      "小红书"
+      "腾讯会议"
     ],
     "speech_archetype": "young_music_explorer",
     "speech_style": {
-      "tone": "轻松活泼、带点少年感的直白口吻，聊到音乐就兴奋，习惯用短句和语气词",
+      "tone": "轻快随性、带点少年感的分享欲，聊到音乐就停不下来，遇到网络卡顿会直白吐槽",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "这个曲风绝了",
         "等我发你听听"
       ],
-      "typical_habits": "喜欢边等边刷边分享，遇到喜欢的歌立刻发链接给家人朋友；约好的时间点会用'老时间''老地方'来指代，强调别卡别断"
+      "typical_habits": "喜欢边逛边拍边发，习惯用口语化的简称指代应用和业务，约好的时段会说'老时间'，对画质和卡顿有直观但朴素的表达"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "户外兴趣活动现场与家人视频通话及短视频分享",
+      "name": "午间音乐现场短视频分享与家庭连线",
       "storyline_trigger_type": "location_environment",
-      "trigger_condition": "中午11:00-13:00在户外兴趣活动现场或城市街区临时停留点等候时，用手机5G直接联网与家人视频通话、共享位置并上传沿途照片和短视频",
+      "trigger_condition": "中午11:00-13:30身处城市街区公共音乐活动现场或户外等候区、临时停留点，手机4G/5G直连，边逛边用抖音上传现场短视频，并和家里视频通话分享见闻",
       "period_type": "location_driven",
       "days": [
         "location_specific"
       ],
       "time_range": "11:00-13:30",
-      "application_name": "微信",
-      "service_name": "视频通话",
+      "application_name": "抖音",
+      "service_name": "短视频",
       "preferred_params": {
         "resolution": "1080p",
-        "rtt_max": "100ms"
+        "rtt_max": "30ms"
       },
       "aliases": {
         "app_aliases": [
-          "微信",
-          "小绿",
-          "企微那个微信"
+          "阿抖",
+          "抖子"
         ],
         "service_aliases": [
-          "打视讯",
-          "视频通话",
-          "连个视频"
+          "刷短视频",
+          "发小视频",
+          "推个片段"
         ],
         "resolution_aliases": [
           "1080p原画",
@@ -58,8 +57,9 @@
           "超清"
         ],
         "rtt_aliases": [
-          "100ms以内",
-          "100毫秒以内"
+          "30ms以内",
+          "30毫秒以内",
+          "超低时延"
         ],
         "duration_aliases": [
           "两个半小时",
@@ -78,10 +78,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨城音乐节出行周",
+        "name": "跨城音乐节周末出行季",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "跨城参加音乐节期间，白天在大型露天场地和周边街区人流密集处活动，5G覆盖波动、上行拥塞明显，视频通话与短视频上传易卡顿",
+        "scene_description": "跨城参加户外音乐节，现场人流密集、基站拥塞，户外等候区与临时停留点网络波动明显，需降低画质保证上传与通话不断线",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -91,22 +91,22 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "音乐现场短视频拍摄与上传",
-        "application_name": "抖音",
-        "service_name": "短视频",
+        "name": "家庭群视频通话报平安",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "在兴趣活动现场或街区听到喜欢的曲风时，随手拍一段并上传分享给家人朋友",
+        "trigger_condition": "在户外等候区或出行途中被家人呼叫，或到点主动在家庭群发起视频通话共享位置与沿途照片",
         "aliases": {
           "app_aliases": [
-            "douyin",
-            "阿抖"
+            "weixin",
+            "wx"
           ],
           "service_aliases": [
-            "看短视频",
-            "刷视频"
+            "打视频",
+            "连线"
           ],
           "resolution_aliases": [
             "720p",
@@ -120,22 +120,22 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "曲风探索与现场直播观看",
-        "application_name": "哔哩哔哩",
-        "service_name": "看直播",
+        "name": "音乐曲风探索与远程协作",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "户外等候或临时停留时，打开音乐区直播跟着听不同曲风、记下想探索的类型",
+        "trigger_condition": "和同好约好线上一起听歌单、聊曲风，或临时被拉进远程协作讨论，需稳定音视频",
         "aliases": {
           "app_aliases": [
-            "bilibili",
-            "哔站"
+            "tencentmeeting",
+            "会议通"
           ],
           "service_aliases": [
-            "观赛",
-            "刷直播"
+            "开会",
+            "进会议室"
           ],
           "resolution_aliases": [
             "1080p原画",
@@ -151,9 +151,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "临时被家人拉进一次家庭群视频会议商量出行安排",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "scenario": "单次在音乐活动现场用哔哩哔哩看直播学编曲",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -161,7 +161,7 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次在音乐节现场尝试开直播给朋友看演出片段",
+        "scenario": "单次在临时停留点和朋友开一局手游",
         "application_name": "快手",
         "service_name": "开直播",
         "params": {

@@ -4,34 +4,33 @@
   "persona_summary": "户外内容创作者",
   "static_profile": {
     "user_id": "USER_034",
-    "identity": "资深影视制片人，正探索区块链技术在内容分发中的潜力；日常以户外采风、活动现场拍摄与直播为主，频繁往返客户现场、设备机房外围、跨园区通勤路线与外场测试点，全程依赖手机4G/5G移动核心网直连，不依赖家庭宽带或公司固网，便携终端联网时使用手机热点。",
-    "devices": "5G智能手机（主力）＋平板电脑（辅助监看与素材粗剪）",
+    "identity": "资深影视制片人，正探索区块链技术在内容分发中的应用；长期在客户现场、设备机房外围、跨园区通勤路线及外场测试点之间移动办公，以手机4G/5G为核心接入方式，完成远程终端与日志查询、视频协作、工单处理与素材分段上传。",
+    "devices": "主力为5G智能手机，辅助为平板电脑；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
     "apps": [
       "微信",
       "腾讯会议",
       "钉钉",
       "抖音",
-      "快手",
-      "哔哩哔哩"
+      "飞书"
     ],
     "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "干脆利落、带现场指挥感的制片人口吻，习惯用短句确认节点，强调别掉链子",
+      "tone": "干练直接、带现场指挥感，习惯用短句确认节点与责任",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "这条先过一遍"
+        "先保链路"
       ],
-      "typical_habits": "开工前先口头对齐时间与画质档位，遇到弱覆盖路段先问能不能续传，收工前习惯复盘上传日志"
+      "typical_habits": "开口先确认时间窗口和网络状态，再分配任务；对上传可靠性和续传能力格外敏感，常用'老时间''月底那两天'指代固定安排。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "月末28-29号晚间月度素材封账与直播复盘推流",
+      "name": "月末素材归档与区块链分发链路联调直播",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每月月末28-29号例行封账冲刺与月度大复盘，20:00-22:00在临时工位或外场测试点发起直播并同步上传月度素材包",
+      "trigger_condition": "每月月末28-29号例行封账冲刺与月度大复盘，20:00-22:00在临时工位或外场测试点发起直播，同步演示内容分发链路并归档当月素材",
       "period_type": "monthly",
       "days": [
         "28th",
@@ -81,10 +80,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨城影视展会现场直播与素材回传周",
+        "name": "跨城影视科技展会现场直播周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "跨城参展期间展馆内人流密集、基站拥塞，外场临时工位处于弱覆盖边缘，需优先保障直播不断流与素材分段续传，画质临时下调、时延要求收紧",
+        "scene_description": "展会现场人流密集、展馆内蜂窝网络拥塞，且需在多个展台间移动直播演示区块链内容分发方案，链路波动明显",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -94,22 +93,22 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "外场拍摄间隙与后期团队视频通话核对素材",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "name": "外场测试点远程日志与终端排查",
+        "application_name": "钉钉",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "外场拍摄间隙需要与后期团队快速核对素材分段与上传进度时发起",
+        "trigger_condition": "外场测试点设备异常或需远程核对日志时，随时发起一对一视频通话排查",
         "aliases": {
           "app_aliases": [
-            "weixin",
-            "wx"
+            "dingding",
+            "钉"
           ],
           "service_aliases": [
-            "打视频",
-            "连线"
+            "开会",
+            "进会议室"
           ],
           "resolution_aliases": [
             "720p",
@@ -123,22 +122,22 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "跨园区通勤路上远程会议对齐客户需求",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "name": "制片团队月度复盘视频会议",
+        "application_name": "快手",
+        "service_name": "短视频",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "跨园区通勤路线或临时工位上接到客户需求变更，需即时入会沟通时触发",
+        "trigger_condition": "每周项目节点或客户临时对齐会，需共享素材与分发数据看板",
         "aliases": {
           "app_aliases": [
-            "tencentmeeting",
-            "会议通"
+            "kuaishou",
+            "快手视频"
           ],
           "service_aliases": [
-            "开会",
-            "进会议室"
+            "看短视频",
+            "刷视频"
           ],
           "resolution_aliases": [
             "1080p原画",
@@ -154,7 +153,7 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次在设备机房外围等待故障处置时刷短视频打发时间",
+        "scenario": "通勤路上单次刷短视频放松",
         "application_name": "快手",
         "service_name": "短视频",
         "params": {
@@ -164,7 +163,7 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次在临时工位观看行业发布会直播了解区块链内容分发动态",
+        "scenario": "活动现场单次观看同行直播参考机位",
         "application_name": "哔哩哔哩",
         "service_name": "看直播",
         "params": {

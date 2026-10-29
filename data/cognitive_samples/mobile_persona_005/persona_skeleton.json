@@ -4,32 +4,32 @@
   "persona_summary": "户外视觉创作者",
   "static_profile": {
     "user_id": "USER_005",
-    "identity": "退休音乐人兼户外视觉创作者，擅长词曲创作与制作，长期在户外演出点、展览布置区、城市采风路线及音乐节街头活动现场进行音视频采集、直播推流与作品上传，同时乐于向年轻创作者传授经验、参与现场排练指导",
-    "devices": "主力为5G智能手机，辅助为平板电脑；便携终端确需联网时以手机热点共享，全程不依赖家庭宽带、公司固网或普通Wi-Fi",
+    "identity": "退休音乐人，深耕词曲创作与音乐制作，现以户外视觉创作与现场演出指导为主业延伸，常在街区采风、展览布置区、音乐节与街头活动现场进行音视频采集、直播与作品上传，并乐于向年轻创作者传授经验",
+    "devices": "主力为5G智能手机，辅以平板电脑用于预览设计稿与素材；便携终端联网时统一使用手机热点，不依赖家庭宽带或固定Wi-Fi",
     "apps": [
       "抖音",
-      "快手",
       "微信",
-      "哔哩哔哩"
+      "哔哩哔哩",
+      "小红书"
     ],
     "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "老练随性、带点乐手江湖气，讲效率也讲人情，习惯用行话把技术参数说成大白话",
+      "tone": "老练随性、带点乐手圈的行话，语速偏快，喜欢用现场术语和比喻，对网络质量要求直白不含糊",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "推流稳住"
+        "这条线得稳住"
       ],
-      "typical_habits": "开工前先口头把画质、时延、时长交代清楚，遇到弱覆盖路段会反复叮嘱续传和恢复，习惯用'老时间''老规矩'指代固定任务安排"
+      "typical_habits": "开工前先口头确认画质和时延档位，习惯用'老时间''老规矩'指代固定任务时段，遇到弱覆盖会立刻叮嘱续传和恢复"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "清晨户外采风直播与作品上传",
+      "name": "晨间户外采风直播与作品上传",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "在户外演出点、展览布置区或城市采风路线执行现场音视频采集与直播任务，需将高清素材实时推流并同步上传云端给客户与团队",
+      "trigger_condition": "在户外演出点、展览布置区或城市采风路线执行晨间采风任务时，现场用手机开直播展示创作过程并向客户上传高清设计稿与音视频素材",
       "period_type": "task_driven",
       "days": [
         "task_specific"
@@ -47,8 +47,8 @@
           "抖家"
         ],
         "service_aliases": [
-          "推流",
-          "开播"
+          "开播",
+          "推流"
         ],
         "resolution_aliases": [
           "1080p原画",
@@ -79,10 +79,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "城市音乐节密集人群直播周",
+        "name": "秋季音乐节密集人群直播周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "音乐节现场人流密集、基站负载高且部分路段弱覆盖，直播互动需更低时延保障，画质临时下调以保证上行稳定与任务续传",
+        "scene_description": "音乐节现场人群密集、基站负载高，户外演出点与临时排练现场连接波动明显，需降低画质并收紧时延以保障直播互动与素材续传",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -92,14 +92,14 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "采风素材云端同步与团队沟通",
+        "name": "团队远程沟通与素材对齐",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "采风或展览布置间隙与客户、团队核对素材与设计稿，需快速视频沟通确认",
+        "trigger_condition": "采风或布展间隙与团队、客户临时对齐素材与拍摄计划时发起视频通话",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -121,14 +121,14 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "演出录像复盘与作品发布",
+        "name": "作品复盘与平台发布",
         "application_name": "飞书",
         "service_name": "会议",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "现场演出或排练结束后回看录像、剪辑片段并发布作品给年轻创作者参考",
+        "trigger_condition": "现场任务结束后回看采集素材、剪辑成片并发布到平台与年轻创作者交流",
         "aliases": {
           "app_aliases": [
             "feishu",
@@ -152,7 +152,7 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "临时与外地合作乐手开线上会议沟通编曲",
+        "scenario": "临时参加合作方线上会议讨论演出编排",
         "application_name": "腾讯会议",
         "service_name": "会议",
         "params": {
@@ -162,7 +162,7 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "休息时刷同行街头演出直播找灵感",
+        "scenario": "休息时刷同行直播寻找创作灵感",
         "application_name": "快手",
         "service_name": "看直播",
         "params": {

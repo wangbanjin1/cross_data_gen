@@ -4,8 +4,8 @@
   "persona_summary": "户外内容创作者",
   "static_profile": {
     "user_id": "USER_012",
-    "identity": "户外内容创作者兼新手博主，每周3至5次外出任务，在城市采风、街区采访点、临时拍摄地与活动现场之间转场，全程以5G智能手机＋随身拍摄设备直接接入移动核心网完成短视频拍摄上传、移动直播、素材回传与云端协作，不依赖固网或普通Wi-Fi。",
-    "devices": "主力：5G智能手机（拍摄、直播、热点共享）；辅助：随身拍摄设备（运动相机、无线麦克风）、便携补光与备用电源",
+    "identity": "户外内容创作者兼新手博主，每周3至5次外出任务，在城市采风、街区采访点、活动现场及临时拍摄地拍摄短视频、发起移动直播、查看互动数据并分段回传素材；全程以5G智能手机＋随身拍摄设备直接接入移动核心网，不依赖家庭宽带或固定Wi-Fi，便携终端联网时用手机热点。",
+    "devices": "5G智能手机（主力，直播与上传）＋随身拍摄设备（运动相机/口袋云台）＋手机热点为辅助终端供网",
     "apps": [
       "抖音",
       "快手",
@@ -14,14 +14,14 @@
     ],
     "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "干脆利落、带点自嘲的户外博主口吻，边说边干活，喜欢用行话和倒计时式表达",
+      "tone": "直爽利落、带点自嘲的户外博主口吻，讲效率、怕掉链子，习惯用行话报参数",
       "catchphrases": [
         "老规矩",
         "别掉链子",
-        "先推上去再说",
-        "这条得原画"
+        "对齐一下",
+        "这条得原画推上去"
       ],
-      "typical_habits": "开拍前先确认上行和画质，转场路上习惯用口头禅压缩沟通成本，遇到弱覆盖会先降画质保连续，事后复盘时爱说'对齐一下'"
+      "typical_habits": "开播前先口头确认画质和时延档位，转场路上反复叮嘱素材别断传，遇到弱覆盖会先降档保连续再补传"
     }
   },
   "dynamic_profile": {
@@ -29,7 +29,7 @@
       "storyline_id": "MAIN_MT_01",
       "name": "午间街区采风移动直播与素材回传",
       "storyline_trigger_type": "location_environment",
-      "trigger_condition": "当11:00-13:00身处街区采访点、临时拍摄地或活动现场周边人流密集的老街巷与半地下通道口等弱覆盖空间，需要边拍边推流并分段回传素材时触发",
+      "trigger_condition": "中午11:00-13:30进入街区采访点、活动现场或临时拍摄地，在楼宇遮挡与人群密集的弱覆盖路段架机开播并同步分段回传素材时触发",
       "period_type": "location_driven",
       "days": [
         "location_specific"
@@ -48,8 +48,7 @@
         ],
         "service_aliases": [
           "开播",
-          "推流",
-          "上播"
+          "推流"
         ],
         "resolution_aliases": [
           "1080p原画",
@@ -77,10 +76,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "城市老街美食节连续十天外场直播",
+        "name": "秋季城市采风节连续外拍周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "美食节主街人流爆满、摊位金属棚架与临时舞台遮挡严重，午间时段基站拥塞且部分巷口进入弱覆盖，需保证直播不断流并快速回传分段素材",
+        "scene_description": "采风节期间街区人流暴增、临时舞台与展棚密集遮挡，午间直播点周边基站拥塞，上行波动明显，需降档保连续推流",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -97,7 +96,7 @@
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "拍摄结束转场乘车或步行途中，需要与剪辑搭档视频通话对齐素材分段与回传顺序时触发",
+        "trigger_condition": "拍摄结束转场乘车或步行途中，与剪辑搭档视频通话对齐素材分段与云端目录时触发",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -119,22 +118,22 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "晚间素材复盘与成片核对",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "name": "晚间素材复盘与成片预览",
+        "application_name": "咪咕快游",
+        "service_name": "云游戏",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "当天任务收工回到临时落脚点，用手机热点回看当日成片与弹幕反馈、核对发布版本时触发",
+        "trigger_condition": "收工回到临时落脚点后，用手机流量刷成片预览、核对画质与节奏时触发",
         "aliases": {
           "app_aliases": [
-            "tencentmeeting",
-            "会议通"
+            "migukuaiyou",
+            "咪咕游戏"
           ],
           "service_aliases": [
-            "开会",
-            "进会议室"
+            "玩云游戏",
+            "免下载游戏"
           ],
           "resolution_aliases": [
             "1080p原画",
@@ -150,7 +149,7 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "临时接到合作方通知，在拍摄点用手机参加一次短会沟通脚本",
+        "scenario": "临时接到品牌方需求，单次开腾讯会议沟通脚本与投放档期",
         "application_name": "腾讯会议",
         "service_name": "会议",
         "params": {
@@ -160,7 +159,7 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "等转场车时刷同行直播找选题灵感，单次观看",
+        "scenario": "等转场车时单次刷快手看同行直播找选题灵感",
         "application_name": "快手",
         "service_name": "看直播",
         "params": {

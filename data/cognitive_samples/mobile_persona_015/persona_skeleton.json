@@ -4,8 +4,8 @@
   "persona_summary": "移动训练与参赛人员",
   "static_profile": {
     "user_id": "USER_015",
-    "identity": "海岸警卫队搜救游泳员预备队员，日常进行高强度体能训练与水上救援演练，频繁在沿海公路、巡逻岸线、临时集结区与夜间值守点之间转场，习惯用手机记录运动数据、共享位置、回传现场影像并接收团队调度通知。",
-    "devices": "主力为5G智能手机，辅助为随身运动相机与便携拍摄设备，便携终端联网时统一走手机热点。",
+    "identity": "海岸警卫队搜救游泳员候选人，日常在道路、巡逻区域、临时处置现场及夜间值守点进行高强度体能训练与赛事转场，习惯用手机移动核心网记录运动数据、查看路线赛程、上传训练视频并接收团队临时通知，便携终端联网时开热点共享。",
+    "devices": "5G智能手机（主力）＋随身运动拍摄设备（辅助）",
     "apps": [
       "微信",
       "钉钉",
@@ -14,52 +14,51 @@
     ],
     "speech_archetype": "athlete_speaker",
     "speech_style": {
-      "tone": "干脆利落、带点训练口令味，讲效率不绕弯子",
+      "tone": "干脆利落、带点训练口令味，语速偏快，喜欢用短句确认",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "按这个档走"
+        "稳住"
       ],
-      "typical_habits": "布置任务先报时间点和地点，确认参数时爱用口语档位复述一遍，遇到弱网会主动说'先保回传'。"
+      "typical_habits": "出发前先报路线和时段，训练中习惯用语音短句同步位置，收队后统一复盘上传，遇到弱覆盖会先喊'先存着，出去再传'"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "岸线巡逻与训练现场影像回传",
+      "name": "巡逻路段训练数据回传与团队位置调度",
       "storyline_trigger_type": "location_environment",
-      "trigger_condition": "上午进入沿海公路巡逻段与临时处置现场后，在岸线弱覆盖路段用手机向队内值班席回传训练与现场取证视频并同步位置",
+      "trigger_condition": "身处巡逻路段临时处置现场或夜间值守点附近的弱覆盖区域（道路弯道、桥下集结区、事故现场围挡旁），手机移动核心网信号衰减时触发",
       "period_type": "location_driven",
       "days": [
         "location_specific"
       ],
       "time_range": "10:00-11:00",
-      "application_name": "微信",
-      "service_name": "视频通话",
+      "application_name": "钉钉",
+      "service_name": "会议",
       "preferred_params": {
-        "resolution": "1080p",
-        "rtt_max": "30ms"
+        "resolution": "720p",
+        "rtt_max": "80ms"
       },
       "aliases": {
         "app_aliases": [
-          "微信",
-          "企微"
+          "钉",
+          "dingding",
+          "dingtalk"
         ],
         "service_aliases": [
-          "打视讯",
-          "连麦对画面",
-          "开视频回传"
+          "开会",
+          "进会议室",
+          "入会"
         ],
         "resolution_aliases": [
-          "1080p原画",
-          "1080p",
-          "超清"
+          "720p",
+          "高清"
         ],
         "rtt_aliases": [
-          "30ms以内",
-          "30毫秒以内",
-          "超低时延"
+          "80ms以内",
+          "80毫秒以内"
         ],
         "duration_aliases": [
           "一个钟头",
@@ -80,12 +79,12 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨城海岸救援联合演练周",
+        "name": "跨城搜救游泳选拔赛赛事周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "跨城集结到陌生海岸演练场，岸线基站稀疏、临时集结区信号抖动，需优先保证指令与画面稳定送达",
+        "scene_description": "赛事周在陌生水域与临时集结区转场，现场围挡与看台造成局部弱覆盖，需临时压低画质保证位置共享与指令及时送达",
         "preference_override": {
-          "resolution": "720p",
+          "resolution": "540p",
           "rtt_max": "30ms"
         }
       }
@@ -93,14 +92,14 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "训练录像复盘与队内讲评",
+        "name": "训练视频复盘上传",
         "application_name": "抖音",
         "service_name": "短视频",
         "preferred_params": {
-          "resolution": "720p",
+          "resolution": "1080p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "训练结束后在集结区用手机上传并回看训练片段，做动作复盘",
+        "trigger_condition": "训练结束回到集结区，用手机热点把随身拍摄设备素材上传复盘",
         "aliases": {
           "app_aliases": [
             "douyin",
@@ -111,8 +110,8 @@
             "刷视频"
           ],
           "resolution_aliases": [
-            "720p",
-            "高清"
+            "1080p原画",
+            "1080p"
           ],
           "rtt_aliases": [
             "100ms以内",
@@ -122,26 +121,26 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "值班席任务调度与位置共享",
-        "application_name": "钉钉",
-        "service_name": "会议",
+        "name": "团队临时通知与位置共享",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "preferred_params": {
-          "resolution": "1080p",
+          "resolution": "720p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "夜间值守点或临时集结区接到调度通知，进会核对路线与人员位置",
+        "trigger_condition": "夜间值守点交接班前，团队群内发起位置共享与短时视频确认",
         "aliases": {
           "app_aliases": [
-            "dingding",
-            "钉"
+            "weixin",
+            "wx"
           ],
           "service_aliases": [
-            "开会",
-            "进会议室"
+            "打视频",
+            "连线"
           ],
           "resolution_aliases": [
-            "1080p原画",
-            "1080p"
+            "720p",
+            "高清"
           ],
           "rtt_aliases": [
             "80ms以内",
@@ -153,9 +152,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次在集结区休息时刷短视频放松",
-        "application_name": "抖音",
-        "service_name": "短视频",
+        "scenario": "单次赛前动员会线上参会",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -163,9 +162,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次观看赛事直播了解对手表现",
-        "application_name": "快手",
-        "service_name": "看直播",
+        "scenario": "休息间隙刷训练教学短视频",
+        "application_name": "抖音",
+        "service_name": "短视频",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

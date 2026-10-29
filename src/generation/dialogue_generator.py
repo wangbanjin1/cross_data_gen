@@ -489,6 +489,9 @@ class DialogueGenerator:
                     u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
                 if tp.get("resolution", "") not in a_text or tp.get("rtt", "") not in a_text:
                     a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
+            elif turn_idx == 3:
+                if any(kw in u_text for kw in ["画面", "画质", "透亮", "清晰", "流畅", "时延", "延迟"]):
+                    u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
         elif tid == "T2-6" and not s_plan.get("experience_citation"):
             sh_t = tp.get("start_timestamp", "").split("日")[-1]
             eh_t = tp.get("end_timestamp", "").split("日")[-1]

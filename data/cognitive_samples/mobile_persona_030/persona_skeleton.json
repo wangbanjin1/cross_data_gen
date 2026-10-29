@@ -4,24 +4,24 @@
   "persona_summary": "通勤与实践型学生",
   "static_profile": {
     "user_id": "USER_030",
-    "identity": "一名立志成为像Henrietta Hill那样法律界知名人物的年轻女性法学生，日常往返于校园户外区域、校际通勤途中与实习点之间，高频在移动现场完成在线课程学习、资料检索、作业提交与小组协作，活动半径覆盖运动场、社会实践地与临时教学现场。",
-    "devices": "主力设备为5G智能手机，辅助设备为便携工作终端；便携终端确需联网时统一使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "identity": "一名立志成为像Henrietta Hill那样法律界知名人物的年轻女性法学生，日常往返于校园户外区域、校际通勤途中与实习点之间，高频使用手机移动核心网完成在线课程、资料检索、作业提交、视频会议与小组协作，属于典型的通勤与实践型学生。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携工作终端（需联网时通过手机热点共享网络），全程以4G/5G移动核心网直连，不依赖家庭宽带、公司固网或普通Wi-Fi。",
     "apps": [
       "腾讯会议",
       "微信",
       "哔哩哔哩",
       "钉钉"
     ],
-    "speech_archetype": "law_student_speaker",
+    "speech_archetype": "law_student_commuter",
     "speech_style": {
-      "tone": "干脆利落、带点学生气的认真劲儿，讲效率也讲规矩，习惯用法律人的条理把话说清楚",
+      "tone": "干练利落、带点学生气的认真劲儿，习惯用法律人式的条理表达，语速偏快，遇到网络问题会立刻切换到务实解决口吻。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "这条得留痕"
+        "先保任务不断"
       ],
-      "typical_habits": "在通勤和实习点之间切换时习惯先确认网络和任务状态，喜欢用'对齐一下'来发起小组同步，遇到弱网会先念叨'别掉链子'再手动续传，凡事讲证据留痕。"
+      "typical_habits": "习惯在通勤和实习间隙用碎片时间推进学习任务，说话喜欢先定框架再补细节，遇到弱网会先确认能否续传再决定是否重连，常把'稳'和'不断'挂在嘴边。"
     }
   },
   "dynamic_profile": {
@@ -29,7 +29,7 @@
       "storyline_id": "MAIN_MT_01",
       "name": "晚间实习点返程途中的在线课程与小组视频讨论",
       "storyline_trigger_type": "location_environment",
-      "trigger_condition": "20:00-22:00身处校际通勤返程路段或实习点周边临时教学现场，手机4G/5G信号在弱覆盖路段波动时，触发用腾讯会议参加小组视频讨论并同步观看在线课程、提交实践记录",
+      "trigger_condition": "结束实习点实践后，身处校际通勤途中或校园户外临时教学现场，进入移动网络覆盖波动路段（如地铁换乘通道、校车行进路段、实习点周边楼宇遮挡区）时触发，需在移动中稳定观看在线课程并参加小组视频讨论。",
       "period_type": "location_driven",
       "days": [
         "location_specific"
@@ -44,13 +44,14 @@
       "aliases": {
         "app_aliases": [
           "企鹅会议",
-          "腾讯会",
+          "腾讯会议那个",
           "小企鹅开会"
         ],
         "service_aliases": [
           "对齐开会",
           "连麦讨论",
-          "开个视频会"
+          "开个视频会",
+          "小组碰一下"
         ],
         "resolution_aliases": [
           "720p",
@@ -80,27 +81,27 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "模拟法庭实践周集中排练",
+        "name": "模拟法庭赛前集训周（跨校联合备赛）",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "模拟法庭实践周期间，晚间在临时教学现场与运动场旁空地反复走位排练，现场人员密集、信号遮挡严重，需在弱网环境下保持小组视频讨论与录像回传稳定",
+        "scene_description": "模拟法庭赛前集训周期间，晚间需在实习点与校园之间往返并参加跨校联合线上备赛会议，常处于校车行进路段与临时教学现场等弱覆盖环境，网络抖动明显，需临时下调画质并收紧时延以保障会议连续。",
         "preference_override": {
-          "resolution": "720p",
-          "rtt_max": "30ms"
+          "resolution": "540p",
+          "rtt_max": "80ms"
         }
       }
     ],
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "通勤途中观看在线课程回放",
+        "name": "通勤途中观看法律实务课程回放",
         "application_name": "抖音",
         "service_name": "短视频",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "校际通勤途中信号一般、需要快速过一遍课程要点或案例讲解片段时",
+        "trigger_condition": "在校际通勤途中或运动场、社会实践地等临时教学现场，利用碎片时间观看法律实务课程回放与案例讲解短视频。",
         "aliases": {
           "app_aliases": [
             "douyin",
@@ -122,14 +123,14 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "实习点小组即时沟通与协作文档同步",
+        "name": "实习点实践记录与小组协作文档同步",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "实习点临时需要与组员快速核对实践记录、共享协作文档并口头确认分工时",
+        "trigger_condition": "在实习点或社会实践地完成实践记录后，需与小组同学快速视频通话核对协作文档并提交作业。",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -153,9 +154,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "某次社会实践地休息间隙单次刷短视频放松",
-        "application_name": "抖音",
-        "service_name": "短视频",
+        "scenario": "某次在校园户外临时教学现场单次参加一场线上讲座直播",
+        "application_name": "微信",
+        "service_name": "看直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -163,12 +164,12 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "某次临时教学现场单次观看公开课直播",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "scenario": "某次通勤途中单次与家人进行视频通话报平安",
+        "application_name": "抖音",
+        "service_name": "开直播",
         "params": {
-          "resolution": "720p",
-          "rtt_max": "80ms"
+          "resolution": "540p",
+          "rtt_max": "100ms"
         }
       }
     ]

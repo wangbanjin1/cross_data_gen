@@ -4,8 +4,8 @@
   "persona_summary": "移动训练与参赛人员",
   "static_profile": {
     "user_id": "USER_025",
-    "identity": "U23皮划艇运动员，视Ellis Miller为偶像，日常在露天训练场、赛道及赛事集结区进行高频移动训练与参赛，全程依赖手机4G/5G直连网络完成训练数据记录、视频上传、赛事直播与团队调度。",
-    "devices": "主力为5G智能手机，辅助为可穿戴运动设备；便携终端确需联网时使用手机热点。",
+    "identity": "U23皮划艇运动员，视Ellis Miller为偶像，日常在露天训练场、赛道及赛事集结区进行高频移动训练与参赛，全程依赖手机4G/5G直接联网完成训练数据记录、视频上传、赛事直播与团队调度。",
+    "devices": "5G智能手机为主力终端，辅以可穿戴设备（运动手表/心率带），便携终端联网时使用手机热点。",
     "apps": [
       "微信",
       "抖音",
@@ -14,47 +14,47 @@
     ],
     "speech_archetype": "athlete_speaker",
     "speech_style": {
-      "tone": "干脆利落、带训练场口令感，语速偏快，习惯用短句确认任务与时间。",
+      "tone": "干脆利落、带点赛场冲劲，习惯用短句和训练行话，对网络质量要求直白不绕弯。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "按原计划走"
+        "稳住上行"
       ],
-      "typical_habits": "训练和转场中习惯先报时间点再报任务，强调网络别断、视频别糊、上传别卡；对固定周期任务喜欢说“老时间老规矩”。"
+      "typical_habits": "训练和转场途中喜欢边操作边口述需求，习惯把固定时间段的业务说成'老时间''老规矩'，对画质和时延有明确档位认知，不夸大不模糊。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "月度训练数据与赛事素材综合回传巡检",
+      "name": "月度训练数据综合对账与团队视频巡检",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每月月中15-16号例行综合对账与业务巡检，14:00-16:00在露天训练场或赛事集结区集中上传训练视频、核对运动数据并同步团队赛程。",
+      "trigger_condition": "每月月中15-16号例行综合对账与业务巡检，下午14:00-15:30在训练基地或转场休息点集中上传训练视频、回放数据并与教练团队视频对齐。",
       "period_type": "monthly",
       "days": [
         "15th",
         "16th"
       ],
       "time_range": "14:00-15:30",
-      "application_name": "抖音",
-      "service_name": "开直播",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
       "preferred_params": {
-        "resolution": "1080p",
+        "resolution": "720p",
         "rtt_max": "100ms"
       },
       "aliases": {
         "app_aliases": [
-          "阿抖",
-          "某音"
+          "企鹅会议",
+          "腾讯会议"
         ],
         "service_aliases": [
-          "开播",
-          "推流"
+          "对齐开会",
+          "连麦复盘",
+          "开个视频会"
         ],
         "resolution_aliases": [
-          "1080p原画",
-          "1080p",
-          "超清"
+          "720p",
+          "高清"
         ],
         "rtt_aliases": [
           "100ms以内",
@@ -79,10 +79,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "U23秋季赛前集训与赛事周",
+        "name": "秋季跨城赛艇邀请赛赛事周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "赛前集训与赛事周期间，赛道和集结区人群密集、移动转场频繁，弱覆盖路段增多，训练视频上传与团队调度并发压力大。",
+        "scene_description": "赛事集结区与赛道旁人群密集、基站负载高，转场途中存在弱覆盖路段，需优先保障视频上行与通信连续，画质临时下调以稳住上行带宽。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -92,22 +92,21 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "转场大巴视频调度会",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "name": "转场大巴上的团队视频调度",
+        "application_name": "腾讯视频",
+        "service_name": "视频",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "客场转场途中或临时休息点，教练临时召集团队视频调度会时使用。",
+        "trigger_condition": "客场转场途中在移动大巴上接收教练临时调度与队友位置对齐，网络以手机5G直连为主。",
         "aliases": {
           "app_aliases": [
-            "tencentmeeting",
-            "会议通"
+            "tencentvideo",
+            "腾讯"
           ],
           "service_aliases": [
-            "开会",
-            "进会议室"
+            "视频"
           ],
           "resolution_aliases": [
             "720p",
@@ -121,22 +120,22 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "训练录像复盘与即时沟通",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "name": "训练录像复盘短视频回看",
+        "application_name": "抖音",
+        "service_name": "短视频",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "训练结束后与教练或队友复盘动作细节、临时沟通赛程安排时使用。",
+        "trigger_condition": "训练结束后在户外热身区或临时休息点刷取并回看自己与偶像Ellis Miller的技术动作短视频。",
         "aliases": {
           "app_aliases": [
-            "weixin",
-            "wx"
+            "douyin",
+            "阿抖"
           ],
           "service_aliases": [
-            "打视频",
-            "连线"
+            "看短视频",
+            "刷视频"
           ],
           "resolution_aliases": [
             "1080p原画",
@@ -152,8 +151,8 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "赛前休息点单次观看赛事直播了解对手情况",
-        "application_name": "快手",
+        "scenario": "单次赛事直播观看：在赛事集结区用手机看队友比赛直播",
+        "application_name": "哔哩哔哩",
         "service_name": "看直播",
         "params": {
           "resolution": "720p",
@@ -162,9 +161,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "户外热身区单次刷短视频放松",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "scenario": "单次训练直播：临时在赛道旁开直播分享训练实况",
+        "application_name": "快手",
+        "service_name": "开直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
