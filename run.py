@@ -1,11 +1,14 @@
 import argparse
+import logging
 import sys
 from pathlib import Path
 
 if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding='utf-8')
+    sys.stdout.reconfigure(encoding="utf-8")
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
 from src.config import Config
+
 
 def main():
     parser = argparse.ArgumentParser(description="Cross-Session Memory Dataset Pipeline")
@@ -20,7 +23,6 @@ def main():
     parser.add_argument("--workers", "-w", type=int, default=1, help="Number of concurrent worker threads for API generation")
     args = parser.parse_args()
 
-    # 如果指定了配置文件，重新加载全局配置
     if args.config:
         Config.load_all(args.config)
     if args.offline:
@@ -35,15 +37,16 @@ def main():
         from src.batch_pipeline import BatchPipeline
         pipeline = BatchPipeline(
             output_dir=target_output,
-            raw_persona_path=args.input
+            raw_persona_path=args.input,
         )
         pipeline.run_batch(
             start_idx=args.start,
             count=args.count,
             raw_persona_path=args.input,
             force=args.force,
-            workers=args.workers
+            workers=args.workers,
         )
+
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,176 @@
+{
+  "persona_id": "mobile_persona_006",
+  "category": "公共安全与移动执勤",
+  "persona_summary": "移动执勤人员",
+  "static_profile": {
+    "user_id": "USER_006",
+    "identity": "国际执法经验丰富的安全官，日常以移动执勤为主，活动范围覆盖夜间值守点、事故现场、应急集结区、道路与巡逻区域，负责现场取证、即时通信、事件上报、地图导航、位置共享与任务调度，对跨文化沟通与现场处置高度敏感。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "微信",
+      "钉钉",
+      "腾讯会议",
+      "高德地图"
+    ],
+    "speech_archetype": "security_officer_speaker",
+    "speech_style": {
+      "tone": "简洁、克制、指令感强，强调时效与现场安全，偶尔夹杂跨文化执勤中的礼貌确认。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "先对齐一下",
+        "现场优先"
+      ],
+      "typical_habits": "习惯先确认位置与时限，再下达或复述任务；对画质、时延和连续覆盖有明确要求，常用口语化简称指代应用与业务。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "巡逻线现场取证与即时通信上报",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "当执勤人员进入道路巡逻区域、事故现场或应急集结区等移动执勤弱网空间，且处于09:00-11:00时段时，触发高频现场取证、即时通信与事件上报主线。",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "09:00-10:30",
+      "application_name": "微信",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "微信",
+          "企微"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "连麦",
+          "视频通话"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "一个半小时",
+          "一个半钟头",
+          "90分钟",
+          "一个半小时左右"
+        ],
+        "period_aliases": [
+          "老规矩",
+          "老时间",
+          "按习惯来",
+          "照旧"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨区域联合执法演练周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨区域联合执法演练期间，巡逻线与临时处置现场人员密集、移动频繁，现场网络覆盖波动明显，需优先保障低时延通信与稳定回传。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "执勤录像复盘与任务沟通",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "回到值守点或临时处置现场后，需要对现场录像进行复盘并与队员沟通任务安排时触发。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "巡逻路线导航与位置共享",
+        "application_name": "小红书",
+        "service_name": "开直播",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在道路巡逻区域或事故现场需要共享实时位置、确认路线与调度任务时触发。",
+        "aliases": {
+          "app_aliases": [
+            "xiaohongshu",
+            "红薯"
+          ],
+          "service_aliases": [
+            "推流",
+            "开播"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时参加跨部门线上会议",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次休息间隙刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

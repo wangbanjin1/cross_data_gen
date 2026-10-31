@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_001",
+  "category": "体育训练与赛事保障",
+  "persona_summary": "巡回活动讲者",
+  "static_profile": {
+    "user_id": "USER_001",
+    "identity": "前残奥高山滑雪运动员，现为励志巡回演讲者，常年跨城奔波于公益活动、校园宣讲与赛事集结区，白天在户外热身区、临时休息点或转场途中完成移动直播、流程接收与演讲片段上传，全程仅依赖手机4G/5G直接联网，便携终端需要联网时开手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑（经手机热点联网）",
+    "apps": [
+      "微信",
+      "抖音",
+      "腾讯会议",
+      "钉钉"
+    ],
+    "speech_archetype": "athlete_speaker",
+    "speech_style": {
+      "tone": "干脆利落、带运动员的节奏感，讲事情先给结论再补细节，习惯用训练和赛场的比喻",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "稳住，别慌"
+      ],
+      "typical_habits": "开口先确认时间和地点，再确认网络和画质，喜欢用'老时间''老规矩'指代固定安排，遇到信号问题会立刻要求降档保连续"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "午间公益宣讲移动直播与流程对齐",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每天午间休息与午间复盘业务：12:30-13:30在户外热身区或临时休息点开直播做公益宣讲，同时接收活动流程并上传演讲片段",
+      "period_type": "daily",
+      "days": [
+        "daily"
+      ],
+      "time_range": "12:30-13:30",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖子"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "一个钟头",
+          "一小时",
+          "60分钟",
+          "一个小时"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "日常例行",
+          "每天照旧"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城公益宣讲周暨赛事集结区联合活动",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "连续跨城转场，活动集中在露天赛道旁的赛事集结区，人群密集、基站负载高，转场途中信号切换频繁，需优先保证直播连续与上行稳定",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "转场大巴上的团队视频调度",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "客场转场途中在移动大巴上临时召集团队对齐当日流程与人员分工",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "训练与演讲录像回放复盘",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "晚间在临时休息点与教练或活动方连麦，逐段回放训练视频和演讲片段做复盘",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "候场时临时刷短视频打发时间，单次行为，与主线业务无关",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "临时被拉进一场线上筹备会，单次会议，非常规安排",
+        "application_name": "飞书",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}
