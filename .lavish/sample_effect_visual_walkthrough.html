@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="parchment" data-view="scroll">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>真实样本效果全景透视 — mobile_persona_001 (USER_001)</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    :root[data-theme="parchment"] {
+      --bg-page: #FBF7F0;
+      --bg-card: #FFFFFF;
+      --bg-subtle: #F5EFE4;
+      --bg-code: #F2ECE1;
+      --text-main: #2C2520;
+      --text-muted: #6B5E53;
+      --border-color: #E2D9C8;
+      --accent-primary: #8C4A27;
+      --accent-secondary: #2B6CB0;
+      --color-danger-bg: #FDF2F2;
+      --color-danger-border: #F5B7B1;
+      --color-danger-text: #922B21;
+      --color-success-bg: #F0F9F4;
+      --color-success-border: #A3E4D7;
+      --color-success-text: #1E6F50;
+      --color-warn-bg: #FEF9E7;
+      --color-warn-border: #F9E79F;
+      --color-warn-text: #7D6608;
+      --color-info-bg: #EBF5FB;
+      --color-info-border: #AED6F1;
+      --color-info-text: #1B4F72;
+      --color-purple-bg: #F5EEF8;
+      --color-purple-border: #D7BDE2;
+      --color-purple-text: #5B2C6F;
+      --shadow-sm: 0 2px 8px rgba(44, 37, 32, 0.06);
+      --shadow-md: 0 4px 16px rgba(44, 37, 32, 0.09);
+    }
+
+    :root[data-theme="github"] {
+      --bg-page: #F6F8FA;
+      --bg-card: #FFFFFF;
+      --bg-subtle: #EEF2F6;
+      --bg-code: #F6F8FA;
+      --text-main: #1F2328;
+      --text-muted: #59636E;
+      --border-color: #D0D7DE;
+      --accent-primary: #0969DA;
+      --accent-secondary: #1A7F37;
+      --color-danger-bg: #FFEBE9;
+      --color-danger-border: #FF818266;
+      --color-danger-text: #CF222E;
+      --color-success-bg: #DAFBE1;
+      --color-success-border: #4AC26B66;
+      --color-success-text: #1A7F37;
+      --color-warn-bg: #FFF8C5;
+      --color-warn-border: #D4A72C66;
+      --color-warn-text: #9A6700;
+      --color-info-bg: #DDF4FF;
+      --color-info-border: #54AEFF66;
+      --color-info-text: #0969DA;
+      --color-purple-bg: #FBEFFF;
+      --color-purple-border: #D8B9FF;
+      --color-purple-text: #8250DF;
+      --shadow-sm: 0 1px 4px rgba(31, 35, 40, 0.06);
+      --shadow-md: 0 3px 12px rgba(31, 35, 40, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      line-height: 1.65;
+      padding: 24px 16px 64px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    /* Top Bar */
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 24px;
+      position: sticky;
+      top: 12px;
+      z-index: 50;
+    }
+
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      border: 1px solid transparent;
+    }
+
+    .badge-primary {
+      background: var(--bg-subtle);
+      color: var(--accent-primary);
+      border-color: var(--border-color);
+    }
+
+    .badge-success {
+      background: var(--color-success-bg);
+      color: var(--color-success-text);
+      border-color: var(--color-success-border);
+    }
+
+    .badge-info {
+      background: var(--color-info-bg);
+      color: var(--color-info-text);
+      border-color: var(--color-info-border);
+    }
+
+    .badge-warn {
+      background: var(--color-warn-bg);
+      color: var(--color-warn-text);
+      border-color: var(--color-warn-border);
+    }
+
+    .badge-purple {
+      background: var(--color-purple-bg);
+      color: var(--color-purple-text);
+      border-color: var(--color-purple-border);
+    }
+
+    . badge-danger {
+      background: var(--color-danger-bg);
+      color: var(--color-danger-text);
+      border-color: var(--color-danger-border);
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-group {
+      display: inline-flex;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--bg-subtle);
+    }
+
+    .btn-toggle {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      padding: 6px 13px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-toggle.active {
+      background: var(--bg-card);
+      color: var(--accent-primary);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Persona & QC Hero Banner */
+    .hero-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 22px 26px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 20px;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 960px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .meta-box {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 14px 18px;
+    }
+
+    .meta-box h4 {
+      font-size: 0.92rem;
+      color: var(--accent-primary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .kv-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px 16px;
+      font-size: 0.86rem;
+    }
+
+    .kv-item span.k {
+      color: var(--text-muted);
+    }
+
+    .kv-item span.v {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    /* Timeline Ribbon */
+    .timeline-ribbon {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px dashed var(--border-color);
+    }
+
+    .timeline-ribbon-title {
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .timeline-pills {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+      gap: 8px;
+    }
+
+    .t-pill {
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-page);
+      font-size: 0.78rem;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .t-pill:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .t-pill.tier-factual {
+      border-top: 3px solid var(--accent-secondary);
+    }
+
+    .t-pill.tier-working {
+      border-top: 3px solid #D97706;
+    }
+
+    .t-pill.tier-experiential {
+      border-top: 3px solid #7C3AED;
+    }
+
+    .t-pill .sid {
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .t-pill .sdesc {
+      color: var(--text-muted);
+      font-size: 0.74rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Chapter Tabs */
+    .chapter-tabs {
+      display: none;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    :root[data-view="focus"] .chapter-tabs {
+      display: flex;
+    }
+
+    .chapter-tab {
+      padding: 9px 18px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .chapter-tab.active {
+      background: var(--accent-primary);
+      color: #FFFFFF;
+      border-color: var(--accent-primary);
+    }
+
+    /* Section Card */
+    .section-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 26px 28px;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    :root[data-view="focus"] .section-card {
+      display: none;
+    }
+
+    :root[data-view="focus"] .section-card.active-chapter {
+      display: block;
+    }
+
+    .section-header {
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 14px;
+      margin-bottom: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .section-subtitle {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Dual Comparison Columns */
+    .dual-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    @media (max-width: 860px) {
+      .dual-compare {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .compare-box {
+      border-radius: 10px;
+      padding: 16px 20px;
+      border: 1px solid transparent;
+    }
+
+    .compare-box.pain {
+      background: var(--color-danger-bg);
+      border-color: var(--color-danger-border);
+    }
+
+    .compare-box.pain h4 {
+      color: var(--color-danger-text);
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    .compare-box.target {
+      background: var(--color-success-bg);
+      border-color: var(--color-success-border);
+    }
+
+    .compare-box.target h4 {
+      color: var(--color-success-text);
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    .compare-box ul {
+      padding-left: 18px;
+      font-size: 0.88rem;
+    }
+
+    .compare-box li {
+      margin-bottom: 6px;
+    }
+
+    /* Interactive Session Switcher inside TODO #01 */
+    .sub-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .sub-tab {
+      padding: 8px 15px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-subtle);
+      color: var(--text-main);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .sub-tab.active {
+      background: var(--accent-primary);
+      color: #fff;
+      border-color: var(--accent-primary);
+    }
+
+    .session-panel {
+      display: none;
+    }
+
+    .session-panel.active {
+      display: block;
+    }
+
+    /* 3-Column Isolated Architecture View */
+    .isolation-grid {
+      display: grid;
+      grid-template-columns: 1fr 220px 1fr;
+      gap: 14px;
+      align-items: stretch;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 980px) {
+      .isolation-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .view-card {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 15px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .view-card.user-view {
+      border-top: 4px solid var(--accent-secondary);
+    }
+
+    .view-card.firewall-view {
+      border-top: 4px solid #D97706;
+      background: var(--color-warn-bg);
+      border-color: var(--color-warn-border);
+      justify-content: center;
+      text-align: center;
+    }
+
+    .view-card.agent-view {
+      border-top: 4px solid #1E6F50;
+    }
+
+    .view-card h5 {
+      font-size: 0.92rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .slot-pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .slot-pill {
+      font-size: 0.78rem;
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-family: "JetBrains Mono", Consolas, monospace;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+    }
+
+    .slot-pill.allowed {
+      background: var(--color-success-bg);
+      border-color: var(--color-success-border);
+      color: var(--color-success-text);
+    }
+
+    .slot-pill.forbidden {
+      background: var(--color-danger-bg);
+      border-color: var(--color-danger-border);
+      color: var(--color-danger-text);
+      text-decoration: line-through;
+    }
+
+    .slot-pill.reveal {
+      background: var(--color-info-bg);
+      border-color: var(--color-info-border);
+      color: var(--color-info-text);
+    }
+
+    /* Dialogue Bubbles */
+    .dialogue-box {
+      background: var(--bg-page);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .turn-block {
+      border-left: 3px solid var(--accent-primary);
+      padding-left: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .turn-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .bubble-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .avatar {
+      width: 58px;
+      flex-shrink: 0;
+      padding: 4px 0;
+      border-radius: 6px;
+      text-align: center;
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+
+    .avatar.user-av {
+      background: var(--color-info-bg);
+      color: var(--color-info-text);
+      border: 1px solid var(--color-info-border);
+    }
+
+    .avatar.agent-av {
+      background: var(--color-success-bg);
+      color: var(--color-success-text);
+      border: 1px solid var(--color-success-border);
+    }
+
+    .bubble-content {
+      flex: 1;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.9rem;
+    }
+
+    .turn-slots-bar {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border-color);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      font-size: 0.78rem;
+    }
+
+    /* Code & JSON blocks (Strictly Light Background) */
+    pre, code {
+      font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+    }
+
+    pre {
+      background: var(--bg-code);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 14px 16px;
+      overflow-x: auto;
+      font-size: 0.82rem;
+      line-height: 1.55;
+      color: var(--text-main);
+    }
+
+    /* Table Styling */
+    .data-table-wrap {
+      overflow-x: auto;
+      margin: 14px 0 20px;
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    table.data-table th,
+    table.data-table td {
+      padding: 10px 12px;
+      border: 1px solid var(--border-color);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    table.data-table th {
+      background: var(--bg-subtle);
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    /* Sliding Window Visualization */
+    .window-flow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    @media (max-width: 960px) {
+      .window-flow {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .window-flow {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .flow-step-card {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-top: 4px solid var(--accent-primary);
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .flow-step-card .step-num {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--accent-primary);
+      text-transform: uppercase;
+    }
+
+    .flow-step-card h5 {
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .sim-bar-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .sim-row {
+      display: grid;
+      grid-template-columns: 180px 1fr 68px;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+    }
+
+    .sim-track {
+      height: 10px;
+      background: var(--border-color);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .sim-fill {
+      height: 100%;
+      border-radius: 999px;
+    }
+
+    .sim-fill.high {
+      background: #1E6F50;
+    }
+
+    .sim-fill.mid {
+      background: #2B6CB0;
+    }
+
+    .sim-fill.low {
+      background: #922B21;
+    }
+
+    /* Formula Box */
+    .formula-box {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--accent-primary);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 18px 0;
+    }
+
+    .symbol-list {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border-color);
+      font-size: 0.84rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 6px 18px;
+    }
+
+    /* Experience Causal Chain Cards */
+    .causal-chain {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+      margin: 16px 0;
+    }
+
+    @media (max-width: 960px) {
+      .causal-chain {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .causal-card {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .causal-card.step-1 {
+      border-top: 4px solid #C0392B;
+    }
+
+    .causal-card.step-2 {
+      border-top: 4px solid #8E44AD;
+    }
+
+    .causal-card.step-3 {
+      border-top: 4px solid #1E6F50;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="brand-title">
+        <span>真实样本效果全景透视报告</span>
+        <span class="badge badge-primary">mobile_persona_001 (USER_001)</span>
+        <span class="badge badge-success">QC 质检 17/17 (100.0% 通过)</span>
+      </div>
+      <div class="controls">
+        <div class="btn-group" role="group" aria-label="视图模式切换">
+          <button class="btn-toggle active" onclick="setView('scroll', this)">长卷通览</button>
+          <button class="btn-toggle" onclick="setView('focus', this)">分章聚焦</button>
+        </div>
+        <div class="btn-group" role="group" aria-label="主题切换">
+          <button class="btn-toggle active" onclick="setTheme('parchment', this)">暖阳米纸</button>
+          <button class="btn-toggle" onclick="setTheme('github', this)">GitHub 简洁</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Persona & Timeline Overview -->
+    <section class="hero-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div>
+          <h2 style="font-size:1.15rem;">样本基础画像与时间线全景：巡回活动讲者（USER_001）</h2>
+          <p style="font-size:0.86rem; color:var(--text-muted);">
+            生成分支：<code>cross_memory_data @ feature/isolated-dual-rendering (ec1ef6a)</code> &nbsp;|&nbsp;
+            检索引擎分支：<code>memory_system @ feature/sliding-window-and-general-experience (9af631e)</code>
+          </p>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <span class="badge badge-info">事实记忆 8 会话</span>
+          <span class="badge badge-warn">工作记忆 5 会话</span>
+          <span class="badge badge-purple">经验记忆 4 会话</span>
+        </div>
+      </div>
+
+      <div class="hero-grid">
+        <div class="meta-box">
+          <h4><span>人物设定与主线习惯</span><span class="badge badge-primary">deepseek-flash 真实渲染</span></h4>
+          <div class="kv-list">
+            <div class="kv-item"><span class="k">身份职业：</span><span class="v">巡回活动讲者（户外/场馆巡讲）</span></div>
+            <div class="kv-item"><span class="k">常驻主场景：</span><span class="v">露天高山滑雪训练基地</span></div>
+            <div class="kv-item"><span class="k">主线应用/业务：</span><span class="v">抖音 / 开直播 (1080p, ≤50ms)</span></div>
+            <div class="kv-item"><span class="k">固定周期时间窗：</span><span class="v">12:30 - 13:30 (60min)</span></div>
+            <div class="kv-item"><span class="k">个性化表述映射：</span><span class="v">“千万别转圈” → 时延 50ms 以内</span></div>
+            <div class="kv-item"><span class="k">应用昵称代称：</span><span class="v">“阿抖” → 抖音</span></div>
+          </div>
+        </div>
+
+        <div class="meta-box">
+          <h4><span>自动化质检门禁 (QCValidator)</span><span class="badge badge-success">冷启动零泄漏率 100%</span></h4>
+          <div class="kv-list">
+            <div class="kv-item"><span class="k">premature_disclosure_check：</span><span class="v" style="color:var(--color-success-text);">PASS (0 抢答/0 泄密)</span></div>
+            <div class="kv-item"><span class="k">source_type_integrity：</span><span class="v" style="color:var(--color-success-text);">PASS (Turn/Memory 严格对齐)</span></div>
+            <div class="kv-item"><span class="k">turn_intent_isolation：</span><span class="v" style="color:var(--color-success-text);">PASS (逐轮槽位严格隔离)</span></div>
+            <div class="kv-item"><span class="k">冷/热启动平均轮次：</span><span class="v">T_cold = 3.0 轮 / T_hot = 2.0 轮</span></div>
+            <div class="kv-item"><span class="k">工作记忆账本单据数：</span><span class="v">16 笔独立意图保障单</span></div>
+            <div class="kv-item"><span class="k">向量模型：</span><span class="v">百炼 text-embedding-v4 (1024维)</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 17 Sessions Ribbon -->
+      <div class="timeline-ribbon">
+        <div class="timeline-ribbon-title">
+          <span>17 个跨会话演进轨迹（2026-09-14 至 2026-11-02）</span>
+          <span>顶部色条：蓝色=事实记忆 | 琥珀色=工作记忆 | 紫色=经验记忆</span>
+        </div>
+        <div class="timeline-pills">
+          <div class="t-pill tier-factual"><div class="sid"><span>S-01</span><span class="badge badge-info">T2-1</span></div><div class="sdesc">首次证据：建抖音直播+登记“千万别转圈”</div></div>
+          <div class="t-pill tier-factual"><div class="sid"><span>S-02</span><span class="badge badge-info">T3-1</span></div><div class="sdesc">支线1证据：腾讯会议跨轮澄清</div></div>
+          <div class="t-pill tier-factual"><div class="sid"><span>S-03</span><span class="badge badge-info">T2-1</span></div><div class="sdesc">主线强化：复用“千万别转圈”+老规矩</div></div>
+          <div class="t-pill tier-working"><div class="sid"><span>S-04</span><span class="badge badge-warn">T2-6</span></div><div class="sdesc">工作记忆：跨周引用历史意图保障单</div></div>
+          <div class="t-pill tier-experiential"><div class="sid"><span>S-05</span><span class="badge badge-purple">学习</span></div><div class="sdesc">慢路径归纳：大型活动提前30min预热</div></div>
+          <div class="t-pill tier-experiential"><div class="sid"><span>S-06</span><span class="badge badge-purple">学习</span></div><div class="sdesc">慢路径归纳：私下对词用微信视频通话</div></div>
+          <div class="t-pill tier-factual"><div class="sid"><span>S-07</span><span class="badge badge-info">T2-5</span></div><div class="sdesc">主线时长延长：60min 延至 120min</div></div>
+          <div class="t-pill tier-experiential"><div class="sid"><span>S-08</span><span class="badge badge-purple">T2-9</span></div><div class="sdesc">经验快路径：奥体中心主动提前30min</div></div>
+          <div class="t-pill tier-working"><div class="sid"><span>S-09</span><span class="badge badge-warn">T2-7</span></div><div class="sdesc">工作记忆：预约单据推迟1小时改期</div></div>
+          <div class="t-pill tier-experiential"><div class="sid"><span>S-10</span><span class="badge badge-purple">T2-4</span></div><div class="sdesc">非同类正常双意图：微信视频对词+抖音正式开播</div></div>
+          <div class="t-pill tier-factual"><div class="sid"><span>S-11</span><span class="badge badge-info">T2-3</span></div><div class="sdesc">临时覆盖：现场拥塞临时改 720p/100ms</div></div>
+          <div class="t-pill tier-working"><div class="sid"><span>S-12</span><span class="badge badge-warn">T2-8</span></div><div class="sdesc">工作记忆：阶段流水账累计核查</div></div>
+          <div class="t-pill tier-factual"><div class="sid"><span>S-13</span><span class="badge badge-info">X-1</span></div><div class="sdesc">混合诉求：一办一拒（办保障+拒充话费）</div></div>
+          <div class="t-pill tier-working"><div class="sid"><span>S-14</span><span class="badge badge-warn">T2-7</span></div><div class="sdesc">工作记忆：预约意图保障单提前1小时</div></div>
+          <div class="t-pill tier-factual"><div class="sid"><span>S-15</span><span class="badge badge-info">T1-3</span></div><div class="sdesc">同类正常双意图：抖音开直播+快手开直播并发</div></div>
+          <div class="t-pill tier-working"><div class="sid"><span>S-16</span><span class="badge badge-warn">T2-6</span></div><div class="sdesc">工作记忆消歧：多笔历史单据3轮消歧</div></div>
+          <div class="t-pill tier-factual"><div class="sid"><span>S-17</span><span class="badge badge-info">T2-1</span></div><div class="sdesc">支线2证据：驻地酒店微信视频通话</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Focus Mode Chapter Tabs -->
+    <nav class="chapter-tabs">
+      <button class="chapter-tab active" onclick="switchChapter(0, this)">一、TODO #01：信息隔离的双向渲染样本</button>
+      <button class="chapter-tab" onclick="switchChapter(1, this)">二、TODO #02：纯净短语与滑窗 Max-Pooling 检索样本</button>
+      <button class="chapter-tab" onclick="switchChapter(2, this)">三、TODO #03：慢路径触发归因与经验规则沉淀样本</button>
+    </nav>
+
+    <!-- ================================================================= -->
+    <!-- CHAPTER 1: TODO #01 INFORMATION-ISOLATED DUAL RENDERING           -->
+    <!-- ================================================================= -->
+    <section class="section-card active-chapter" id="chapter-0">
+      <div class="section-header">
+        <div>
+          <div class="section-title">一、TODO #01 实景透视：信息隔离的双向渲染（Information-Isolated Dual Rendering）</div>
+          <div class="section-subtitle">
+            物理拆分 <code>user_private_view</code> 与 <code>agent_observable_view</code>，杜绝单 Prompt 全知视角导致的 Turn 1 槽位提前泄密与跨轮抢答
+          </div>
+        </div>
+        <span class="badge badge-success">代码落点：dialogue_generator.py + qc_validator.py</span>
+      </div>
+
+      <!-- 1. Pain vs Target -->
+      <div class="dual-compare">
+        <div class="compare-box pain">
+          <h4>改造前痛点（全知单 Prompt 视角污染）</h4>
+          <ul>
+            <li><strong>全量槽位直出</strong>：直接将完整 <code>target_params</code> 塞入同一个 LLM Prompt，模型在渲染 Turn 1 时已看到全部答案。</li>
+            <li><strong>Turn 1 提前泄密</strong>：在首次证据会话（<code>evidence_session</code>）或记忆复用会话（<code>reuse_session</code>）中，User 台词经常在 Turn 1 把本应由记忆补全或 Turn 2 追问才揭晓的 <code>1080p / 50ms / 60min</code> 提前说出，导致多轮澄清与记忆补全退化为伪多轮。</li>
+          </ul>
+        </div>
+        <div class="compare-box target">
+          <h4>改造后机制（双盲视图隔离 + Turn 1 物理剥离 + QC 门禁）</h4>
+          <ul>
+            <li><strong>User 侧按轮次配给槽位</strong>：<code>user_private_view</code> 将待隐藏槽位列入 <code>turn1_forbidden_values</code>，仅在 Turn 2 开放 <code>turn2_reveal_slots</code>。</li>
+            <li><strong>Agent 侧严格受限</strong>：<code>agent_observable_view</code> 仅可见 <code>snapshot_before</code> 与用户在 Turn 1 已说出的表层信息；<code>PrematureDisclosureValidator</code> 自动扫描并拦截任何 Turn 1 抢答样本。</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Interactive Session Selector -->
+      <div class="sub-tabs">
+        <button class="sub-tab active" onclick="switchSessionTab('s01', this)">样本 A：S-USER_001-01（首次证据会话 · 隔离待追问参数）</button>
+        <button class="sub-tab" onclick="switchSessionTab('s03', this)">样本 B：S-USER_001-03（主线强化复用 · 隔离记忆补全参数）</button>
+        <button class="sub-tab" onclick="switchSessionTab('s07', this)">样本 C：S-USER_001-07（时长延长 T2-5 · 隔离 Turn 2 变更参数）</button>
+      </div>
+
+      <!-- Panel S-01 -->
+      <div class="session-panel active" id="panel-s01">
+        <div class="isolation-grid">
+          <div class="view-card user-view">
+            <h5><span>User 私有视图 (user_private_view)</span><span class="badge badge-info">S-USER_001-01</span></h5>
+            <div style="font-size:0.82rem; color:var(--text-muted);">Turn 1 允许提及 (turn1_allowed_slots)：</div>
+            <div class="slot-pill-list">
+              <span class="slot-pill allowed">app: "抖音"</span>
+              <span class="slot-pill allowed">service: "开直播"</span>
+              <span class="slot-pill allowed">start: "12时30分"</span>
+            </div>
+            <div style="font-size:0.82rem; color:var(--text-muted); margin-top:4px;">Turn 1 严禁提前泄露 (turn1_forbidden_values)：</div>
+            <div class="slot-pill-list">
+              <span class="slot-pill forbidden">resolution: "1080p"</span>
+              <span class="slot-pill forbidden">rtt: "50ms"</span>
+              <span class="slot-pill forbidden">duration: "60min"</span>
+            </div>
+            <div style="font-size:0.82rem; color:var(--text-muted); margin-top:4px;">Turn 2 被追问后才可揭晓 (turn2_reveal_slots)：</div>
+            <div class="slot-pill-list">
+              <span class="slot-pill reveal">resolution: "1080p"</span>
+              <span class="slot-pill reveal">rtt: "50ms" ("千万别转圈")</span>
+              <span class="slot-pill reveal">duration: "60min" (至13:30)</span>
+            </div>
+          </div>
+
+          <div class="view-card firewall-view">
+            <div style="font-weight:700; font-size:0.9rem; color:var(--color-warn-text);">双盲信息隔离防火墙</div>
+            <svg width="100%" height="36" viewBox="0 0 180 36" style="margin:4px auto;">
+              <line x1="15" y1="18" x2="165" y2="18" stroke="#D97706" stroke-width="2" stroke-dasharray="5,4" />
+              <polygon points="165,18 155,13 155,23" fill="#D97706" />
+              <circle cx="90" cy="18" r="11" fill="#FEF9E7" stroke="#D97706" stroke-width="2" />
+              <text x="90" y="22" text-anchor="middle" font-size="11" font-weight="bold" fill="#7D6608">QC</text>
+            </svg>
+            <div style="font-size:0.78rem; color:var(--color-warn-text);">
+              拦截 Turn 1 出现 <code>1080p / 50ms / 60min</code> 字面量或同义词，强制触发 Agent 发起 <code>Request_Slot</code>
+            </div>
+          </div>
+
+          <div class="view-card agent-view">
+            <h5><span>Agent 可观测视图 (agent_observable_view)</span><span class="badge badge-success">冷启动无先验</span></h5>
+            <div style="font-size:0.82rem; color:var(--text-muted);">会话前记忆快照 (snapshot_before)：</div>
+            <div class="slot-pill-list">
+              <span class="slot-pill">{} (首次建联，无任何先验记忆)</span>
+            </div>
+            <div style="font-size:0.82rem; color:var(--text-muted); margin-top:4px;">Turn 1 仅可观测槽位：</div>
+            <div class="slot-pill-list">
+              <span class="slot-pill allowed">app: "抖音" (U1)</span>
+              <span class="slot-pill allowed">service: "开直播" (U1)</span>
+              <span class="slot-pill allowed">start: "12时30分" (U1)</span>
+            </div>
+            <div style="font-size:0.82rem; color:var(--text-muted); margin-top:4px;">Turn 1 必然缺失槽位（驱动追问）：</div>
+            <div class="slot-pill-list">
+              <span class="slot-pill reveal">requested_params: ["resolution", "rtt", "duration"]</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dialogue-box">
+          <div class="turn-block">
+            <div class="turn-label">Turn 1 — 表层意图发起与缺失槽位追问（零泄密）</div>
+            <div class="bubble-row">
+              <div class="avatar user-av">User</div>
+              <div class="bubble-content">
+                “你好，需要给<strong>抖音</strong><strong>开直播</strong>做一个网络保障，时间是今天<strong>12时30分</strong>开始。”
+                <div class="turn-slots-bar">
+                  <span style="color:var(--text-muted);">Action:</span>
+                  <span class="badge badge-info">Create_Intent_Request</span>
+                  <span class="badge badge-info">Inform_Slot</span>
+                  <span style="color:var(--text-muted); margin-left:8px;">Turn 1 槽位溯源:</span>
+                  <span class="slot-pill allowed">抖音 [Turn: U1]</span>
+                  <span class="slot-pill allowed">开直播 [Turn: U1]</span>
+                  <span class="slot-pill allowed">12:30 [Turn: U1]</span>
+                </div>
+              </div>
+            </div>
+            <div class="bubble-row">
+              <div class="avatar agent-av">Agent</div>
+              <div class="bubble-content">
+                “收到，已为您锁定抖音开直播保障，时间从12时30分开始。<strong>请问您需要保障的清晰度、时延上限和预计持续时长分别是多少呢？</strong>”
+                <div class="turn-slots-bar">
+                  <span style="color:var(--text-muted);">Action:</span>
+                  <span class="badge badge-success">Request_Slot</span>
+                  <span style="color:var(--text-muted); margin-left:8px;">追问槽位:</span>
+                  <span class="slot-pill reveal">resolution</span>
+                  <span class="slot-pill reveal">rtt</span>
+                  <span class="slot-pill reveal">duration</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="turn-block">
+            <div class="turn-label">Turn 2 — 补充体验参数并显式声明长期习惯与个性化表述映射</div>
+            <div class="bubble-row">
+              <div class="avatar user-av">User</div>
+              <div class="bubble-content">
+                “画质用<strong>1080p</strong>，时延<strong>50ms</strong>以内，预计持续<strong>60min</strong>，到<strong>13时30分</strong>。我说<strong>‘千万别转圈’</strong>，就是时延控制在50ms以内。以后我只要每天这个时段说‘老规矩’，就按这个来：抖音开直播、1080p、50ms以内，记住这个习惯哈，别掉链子。”
+                <div class="turn-slots-bar">
+                  <span style="color:var(--text-muted);">Turn 2 新增槽位溯源:</span>
+                  <span class="slot-pill reveal">1080p [Turn: U2]</span>
+                  <span class="slot-pill reveal">50ms [Turn: U2]</span>
+                  <span class="slot-pill reveal">13:30 / 60min [Turn: U2]</span>
+                  <span class="badge badge-purple">登记 expression: 千万别转圈 → 50ms</span>
+                </div>
+              </div>
+            </div>
+            <div class="bubble-row">
+              <div class="avatar agent-av">Agent</div>
+              <div class="bubble-content">
+                “收到，已为您登记老规矩习惯。确认按1080p、50ms以内立即为您开通本次保障吗？”
+              </div>
+            </div>
+          </div>
+
+          <div class="turn-block">
+            <div class="turn-label">Turn 3 — 最终确认与长期记忆落盘</div>
+            <div class="bubble-row">
+              <div class="avatar user-av">User</div>
+              <div class="bubble-content">“对，确认直接开通。”</div>
+            </div>
+            <div class="bubble-row">
+              <div class="avatar agent-av">Agent</div>
+              <div class="bubble-content">“好的，已为您成功受理本次保障，并已为您将该配置记录为长期老规矩，祝您使用愉快！”</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel S-03 -->
+      <div class="session-panel" id="panel-s03">
+        <div class="isolation-grid">
+          <div class="view-card user-view">
+            <h5><span>User 私有视图 (user_private_view)</span><span class="badge badge-info">S-USER_001-03</span></h5>
+            <div style="font-size:0.82rem; color:var(--text-muted);">Turn 1 允许提及 (最小业务表达 + 个性化表述)：</div>
+            <div class="slot-pill-list">
+              <span class="slot-pill allowed">scene: "高山露天训练场"</span>
+              <span class="slot-pill allowed">app: "抖音"</span>
+              <span class="slot-pill allowed">service: "开直播"</span>
+              <span class="slot-pill allowed">alias: "千万别转圈"</span>
+            </div>
+            <div style="font-size:0.82rem; color:var(--text-muted); margin-top:4px;">Turn 1 严禁说出（必须由 Agent 从记忆补全）：</div>
+            <div class="slot-pill-list">
+              <span class="slot-pill forbidden">resolution: "1080p"</span>
+              <span class="slot-pill forbidden">rtt: "50ms"</span>
+              <span class="slot-pill forbidden">duration: "60min"</span>
+              <span class="slot-pill forbidden">12:30 - 13:30</span>
+            </div>
+          </div>
+
+          <div class="view-card firewall-view">
+            <div style="font-weight:700; font-size:0.9rem; color:var(--color-warn-text);">记忆补全纯净性校验</div>
+            <div style="font-size:0.78rem; color:var(--color-warn-text); margin-top:6px;">
+              强制验证所有 <code>source_type: "Memory"</code> 的槽位绝未出现在 User Turn 1 台词中，确保评测的记忆召回含金量。
+            </div>
+          </div>
+
+          <div class="view-card agent-view">
+            <h5><span>Agent 可观测视图 (agent_observable_view)</span><span class="badge badge-success">热启动 (α = 0.5)</span></h5>
+            <div style="font-size:0.82rem; color:var(--text-muted);">会话前记忆快照 (snapshot_before.MF_001)：</div>
+            <div class="slot-pill-list">
+              <span class="slot-pill reveal">抖音-开直播 (1080p, ≤50ms, 12:30-13:30, 60min)</span>
+              <span class="slot-pill reveal">千万别转圈 → 50ms</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dialogue-box">
+          <div class="turn-block">
+            <div class="turn-label">Turn 1 — 用户仅说代称与最小锚点，Agent 从记忆快照补全全部隐藏槽位</div>
+            <div class="bubble-row">
+              <div class="avatar user-av">User</div>
+              <div class="bubble-content">
+                “老规矩，每天例行，在<strong>高山露天训练场</strong>，用<strong>抖音</strong>做<strong>开直播</strong>，时延按<strong>‘千万别转圈’</strong>，帮我把保障开上。”
+                <div class="turn-slots-bar">
+                  <span style="color:var(--text-muted);">User 显式槽位:</span>
+                  <span class="slot-pill allowed">抖音 [Turn: U1]</span>
+                  <span class="slot-pill allowed">开直播 [Turn: U1]</span>
+                  <span style="color:var(--text-muted); margin-left:8px;">记忆补全槽位:</span>
+                  <span class="slot-pill reveal">1080p [Memory: MF_001]</span>
+                  <span class="slot-pill reveal">50ms [Memory: MF_001]</span>
+                  <span class="slot-pill reveal">12:30-13:30 / 60min [Memory: MF_001]</span>
+                </div>
+              </div>
+            </div>
+            <div class="bubble-row">
+              <div class="avatar agent-av">Agent</div>
+              <div class="bubble-content">
+                “收到，我调取到之前登记的抖音开直播配置：<strong>1080p、时延50ms以内，12时30分开始、13时30分结束，持续60min</strong>。确认按这套配置开通吗？”
+              </div>
+            </div>
+          </div>
+          <div class="turn-block">
+            <div class="turn-label">Turn 2 — 2 轮敏捷确认闭环</div>
+            <div class="bubble-row">
+              <div class="avatar user-av">User</div>
+              <div class="bubble-content">“好的，确认按这个配置直接开通。”</div>
+            </div>
+            <div class="bubble-row">
+              <div class="avatar agent-av">Agent</div>
+              <div class="bubble-content">“好的，已为您成功受理抖音开直播网络保障（1080p / 时延≤50ms），祝您使用愉快！”</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel S-07 -->
+      <div class="session-panel" id="panel-s07">
+        <div class="dialogue-box">
+          <div class="turn-block">
+            <div class="turn-label">Turn 1 — 隐式动宾短语（“上麦开播推流”）+ 严禁提前泄露修改后时长 120min</div>
+            <div class="bubble-row">
+              <div class="avatar user-av">User</div>
+              <div class="bubble-content">
+                “今天在高山露天训练场，老规矩，用<strong>阿抖</strong><strong>上麦开播推流</strong>，帮我把保障开上。”
+                <div class="turn-slots-bar">
+                  <span class="badge badge-warn">检索盲区挑战: implicit_service_collocation</span>
+                  <span class="slot-pill forbidden">Turn 1 禁言: 120min</span>
+                </div>
+              </div>
+            </div>
+            <div class="bubble-row">
+              <div class="avatar agent-av">Agent</div>
+              <div class="bubble-content">
+                “收到，我调取到之前登记的抖音开直播配置：画质1080p、时延50ms以内，从12时30分开始保障，确认按这套配置开通吗？”
+              </div>
+            </div>
+          </div>
+          <div class="turn-block">
+            <div class="turn-label">Turn 2 — 用户此时才提出将时长延长至 120min，Agent 更新配置并二次确认（status: in_progress）</div>
+            <div class="bubble-row">
+              <div class="avatar user-av">User</div>
+              <div class="bubble-content">
+                “对，老规矩不变，不过今天现场活动延长了，帮我把保障时长<strong>延长到120min</strong>。”
+                <div class="turn-slots-bar">
+                  <span style="color:var(--text-muted);">Action:</span>
+                  <span class="badge badge-info">Confirm_Slot</span>
+                  <span class="badge badge-info">Modify_Request</span>
+                  <span class="slot-pill reveal">duration: "120min" [Turn: U2]</span>
+                  <span class="slot-pill reveal">end_timestamp: "14时30分" [Turn: U2]</span>
+                </div>
+              </div>
+            </div>
+            <div class="bubble-row">
+              <div class="avatar agent-av">Agent</div>
+              <div class="bubble-content">
+                “收到，已为您将抖音开直播保障时长<strong>延长至120min（时段更新为12时30分至14时30分，画质保持1080p、时延≤50ms）</strong>，确认按延长后的配置开通吗？”
+                <div class="turn-slots-bar">
+                  <span style="color:var(--text-muted);">Action:</span>
+                  <span class="badge badge-success">Confirm_Slot</span>
+                  <span class="badge badge-warn">turn_intents.status: in_progress</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="turn-block">
+            <div class="turn-label">Turn 3 — 用户最终确认修订后参数，Agent 正式开通闭环（status: resolved）</div>
+            <div class="bubble-row">
+              <div class="avatar user-av">User</div>
+              <div class="bubble-content">
+                “好的，确认按延长后的120min配置开通。”
+                <div class="turn-slots-bar">
+                  <span style="color:var(--text-muted);">Action:</span>
+                  <span class="badge badge-info">Confirm_Slot</span>
+                </div>
+              </div>
+            </div>
+            <div class="bubble-row">
+              <div class="avatar agent-av">Agent</div>
+              <div class="bubble-content">
+                “好的，已按老规矩为您开通抖音开直播保障：画质保持1080p、时延上限50ms，时长已延长至120min（12时30分至14时30分）。祝您活动顺利！”
+                <div class="turn-slots-bar">
+                  <span style="color:var(--text-muted);">Action:</span>
+                  <span class="badge badge-success">Acknowledge</span>
+                  <span class="badge badge-success">turn_intents.status: resolved</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- CHAPTER 2: TODO #02 PURE PHRASE & SLIDING WINDOW MAX-POOLING      -->
+    <!-- ================================================================= -->
+    <section class="section-card" id="chapter-1">
+      <div class="section-header">
+        <div>
+          <div class="section-title">二、TODO #02 实景透视：纯净短语索引与滑动窗口 Max-Pooling 检索</div>
+          <div class="section-subtitle">
+            在 SQLite <code>vector</code> 表建立 <code>4~12</code> 字纯净短语列 <code>phrase_text</code>，配合查询侧标点切分 + 滑窗门控 Max-Pooling，彻底消除长句语义稀释与同义词硬编码
+          </div>
+        </div>
+        <span class="badge badge-info">代码落点：index.py + search.py + embedding.py</span>
+      </div>
+
+      <!-- 1. SQLite Vector Table Real Rows -->
+      <h4 style="font-size:0.96rem; margin-bottom:8px;">1. 写入 <code>memory_system</code> 后的真实 SQLite <code>vector</code> 表结构（USER_001）</h4>
+      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:10px;">
+        仅对 <code>phrase_text</code> 列调用百炼 <code>text-embedding-v4</code> 计算 1024 维向量；当某行的 <code>phrase_text</code> 被滑窗向量高分命中后，直接<strong>读取同行结构化槽位列（Row-Level Column Projection）</strong>并按需触发<strong>二阶段关联表补全</strong>：
+      </p>
+
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>memory_id</th>
+              <th>subtype</th>
+              <th>phrase_text（纯短语向量索引列）</th>
+              <th>app_col</th>
+              <th>biz_col</th>
+              <th>scene_col / time_window_col</th>
+              <th>alias_col → target_col</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>MEM_B9E54494853B</code></td>
+              <td><span class="badge badge-info">scene_preference</span></td>
+              <td><strong style="color:var(--accent-primary);">“高山露天训练场”</strong></td>
+              <td><code>douyin</code></td>
+              <td><code>openlive</code></td>
+              <td><code>scene: 高山露天训练场</code></td>
+              <td>同行关联完整配置：<code>1080p, 50ms, 60min</code></td>
+            </tr>
+            <tr>
+              <td><code>MEM_1ED7529C1A6E</code></td>
+              <td><span class="badge badge-info">periodic_preference</span></td>
+              <td><strong style="color:var(--accent-primary);">“12:30-13:30”</strong></td>
+              <td><code>douyin</code></td>
+              <td><code>openlive</code></td>
+              <td><code>time: 12:30-13:30</code></td>
+              <td><code>target: douyin:openlive</code></td>
+            </tr>
+            <tr>
+              <td><code>MEM_88767CBE7F9C</code></td>
+              <td><span class="badge badge-purple">expression</span></td>
+              <td><strong style="color:var(--accent-primary);">“千万别转圈”</strong></td>
+              <td><code>douyin</code></td>
+              <td><code>openlive</code></td>
+              <td><code>scene: 高山露天训练场</code></td>
+              <td><code>千万别转圈 → 50ms</code></td>
+            </tr>
+            <tr>
+              <td><code>MEM_EA1032A59FA0</code></td>
+              <td><span class="badge badge-success">service_to_app</span></td>
+              <td><strong style="color:var(--accent-primary);">“openlive”</strong></td>
+              <td><code>douyin</code></td>
+              <td><code>openlive</code></td>
+              <td>-</td>
+              <td>默认绑定：<code>openlive → douyin</code></td>
+            </tr>
+            <tr>
+              <td><code>MEM_CEAC6BCC81F3</code></td>
+              <td><span class="badge badge-warn">experience</span></td>
+              <td><strong style="color:var(--accent-primary);">“高山露天训练场有重要现场”</strong></td>
+              <td>-</td>
+              <td>-</td>
+              <td><code>重大活动或大型场馆现场</code></td>
+              <td><code>start_timestamp -30min, duration +30min</code></td>
+            </tr>
+            <tr>
+              <td><code>MEM_F23642C72FBE</code></td>
+              <td><span class="badge badge-warn">experience</span></td>
+              <td><strong style="color:var(--accent-primary);">“直播前私下对词看机位”</strong></td>
+              <td>-</td>
+              <td>-</td>
+              <td><code>正式直播前私下双人对词看机位</code></td>
+              <td><code>app=微信, service=视频通话</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 2. Formula & Symbol Definitions -->
+      <div class="formula-box">
+        <div style="font-weight:700; font-size:0.92rem; margin-bottom:6px;">
+          门控多窗口最大池化检索公式（Gated Multi-Window Max-Pooling Retrieval）
+        </div>
+        $$S_{\text{vec}}(Q_{\text{pos}}, r_j) = \max_{w_k \in \mathcal{W}(Q_{\text{pos}})} \left( \mathbb{I}\!\left[\cos\big(\mathbf{e}(w_k),\, \mathbf{e}(r_j.\text{phrase\_text})\big) \ge \tau_{\text{win}}\right] \cdot \cos\big(\mathbf{e}(w_k),\, \mathbf{e}(r_j.\text{phrase\_text})\big) \right)$$
+        <div class="symbol-list">
+          <div>• $Q_{\text{pos}}$：经否定子句分离过滤后的正向意图子句集合</div>
+          <div>• $\mathcal{W}(Q_{\text{pos}})$：按窗口长度 $L=8$、步长 $s=4$ 切分的滑动窗口集合</div>
+          <div>• $r_j.\text{phrase\_text}$：第 $j$ 条候选记忆记录的纯净触发短语（$4\sim 12$ 字）</div>
+          <div>• $\mathbf{e}(\cdot)$：百炼 <code>text-embedding-v4</code> 输出的 $1024$ 维归一化稠密向量</div>
+          <div>• $\tau_{\text{win}} = 0.48$：局部窗口对齐门控阈值（低于该阈值的无关局部滑窗置零，抑制多窗口噪声累加）</div>
+          <div>• $\mathbb{I}[\cdot]$：指示函数，满足门控条件时取 $1$，否则取 $0$</div>
+        </div>
+      </div>
+
+      <!-- 3. Step-by-Step Visual Dataflow -->
+      <h4 style="font-size:0.96rem; margin-bottom:8px;">2. 滑动窗口检索与同行槽位提取四步真实数据流</h4>
+      <div class="window-flow">
+        <div class="flow-step-card">
+          <div class="step-num">Step 01 · 否定分离与子句切分</div>
+          <h5>过滤否定干扰子句</h5>
+          <p style="font-size:0.82rem; color:var(--text-muted);">
+            输入：<code>“今天不用钉钉开会了，这会儿正坐大巴车去新场地的转场路上，帮我把直播推流安排上”</code>
+          </p>
+          <div class="slot-pill forbidden">剥离否定子句：今天不用钉钉开会了</div>
+          <div class="slot-pill allowed">保留正向子句：这会儿正坐大巴车去新场地的转场路上</div>
+        </div>
+
+        <div class="flow-step-card">
+          <div class="step-num">Step 02 · 8字滑窗构建</div>
+          <h5>win_size=8, step=4</h5>
+          <div class="slot-pill-list">
+            <span class="slot-pill">w1: "这会儿正坐大巴车"</span>
+            <span class="slot-pill allowed">w2: "坐大巴车去新场地"</span>
+            <span class="slot-pill allowed">w3: "去新场地的转场路"</span>
+            <span class="slot-pill">w4: "的转场路上"</span>
+            <span class="slot-pill">w5: "帮我把直播推流安"</span>
+          </div>
+          <p style="font-size:0.78rem; color:var(--text-muted); margin-top:4px;">
+            注：<code>EmbeddingProvider.embed</code> 自动按 <code>batch_size=10</code> 分批请求百炼 API。
+          </p>
+        </div>
+
+        <div class="flow-step-card">
+          <div class="step-num">Step 03 · 跨窗口 Max-Pooling</div>
+          <h5>短语对短语高精度对齐</h5>
+          <p style="font-size:0.8rem; color:var(--text-muted);">
+            对比库内纯净短语 <code>"坐大巴转场途中"</code>：
+          </p>
+          <div class="slot-pill reveal">整句长文检索 (旧)：sim = 0.412</div>
+          <div class="slot-pill allowed">滑窗 w2 命中 (新)：<strong>sim = 0.8135</strong></div>
+          <p style="font-size:0.78rem; color:var(--color-success-text); font-weight:600;">
+            余弦相似度净增 +0.4015！
+          </p>
+        </div>
+
+        <div class="flow-step-card">
+          <div class="step-num">Step 04 · 读取同行槽位列</div>
+          <h5>Row-Level Projection</h5>
+          <p style="font-size:0.8rem; color:var(--text-muted);">
+            直接从命中的向量行提取同行绑定参数：
+          </p>
+          <div class="slot-pill-list">
+            <span class="slot-pill allowed">app_col: "抖音"</span>
+            <span class="slot-pill allowed">biz_col: "openlive"</span>
+            <span class="slot-pill reveal">resolution: "720p"</span>
+            <span class="slot-pill reveal">rtt: "100ms"</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Similarity Bar Comparison -->
+      <div class="meta-box" style="margin-top:14px;">
+        <h4><span>百炼 text-embedding-v4 实测得分对比（USER_001 及基准挑战样本）</span><span class="badge badge-success">真实 API 实测值</span></h4>
+        <div class="sim-bar-wrap">
+          <div class="sim-row">
+            <span><code>S-USER_001-03</code> 命中 <code>高山露天训练场</code></span>
+            <div class="sim-track"><div class="sim-fill high" style="width:91.75%;"></div></div>
+            <strong>0.9175</strong>
+          </div>
+          <div class="sim-row">
+            <span><code>S-USER_001-03</code> 命中 <code>千万别转圈 → 50ms</code></span>
+            <div class="sim-track"><div class="sim-fill high" style="width:86.75%;"></div></div>
+            <strong>0.8675</strong>
+          </div>
+          <div class="sim-row">
+            <span><code>S-USER_001-08</code> 命中 <code>EXP_PREWARM_BUFFER_01</code></span>
+            <div class="sim-track"><div class="sim-fill high" style="width:87.56%;"></div></div>
+            <strong>0.8756</strong>
+          </div>
+          <div class="sim-row">
+            <span>滑窗 <code>坐大巴车去新场地</code> vs <code>坐大巴转场途中</code> (新)</span>
+            <div class="sim-track"><div class="sim-fill high" style="width:81.35%;"></div></div>
+            <strong>0.8135</strong>
+          </div>
+          <div class="sim-row">
+            <span>整句长 Query vs 拼接长文本 (旧基线对照)</span>
+            <div class="sim-track"><div class="sim-fill low" style="width:41.80%;"></div></div>
+            <strong style="color:var(--color-danger-text);">0.4180</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- CHAPTER 3: TODO #03 SLOW-PATH EXPERIENCE EXTRACTION               -->
+    <!-- ================================================================= -->
+    <section class="section-card" id="chapter-2">
+      <div class="section-header">
+        <div>
+          <div class="section-title">三、TODO #03 实景透视：慢路径交互归纳与参数调整规则跨会话闭环</div>
+          <div class="section-subtitle">
+            从“Agent 初始提议偏差 $\rightarrow$ 用户慢路径反驳纠偏 $\rightarrow$ 最终达成修订共识”三元因果轨迹中自动萃取结构化经验规则
+          </div>
+        </div>
+        <span class="badge badge-purple">代码落点：experience_rules.py + extractor.py + api.py</span>
+      </div>
+
+      <div class="formula-box">
+        <div style="font-weight:700; font-size:0.92rem; margin-bottom:6px;">
+          慢路径经验触发归因与参数调整规则形式化定义
+        </div>
+        $$\text{Trigger}(C_{\text{scene/task}}) \;\land\; \text{Defect}(S_{\text{init}}) \;\xrightarrow{\text{Slow-Path Correction } (U_2,\, A_2)}\; \text{AdjustmentRule}\!\left(S_{\text{init}} \mapsto S_{\text{revised}}\right)$$
+        <div class="symbol-list">
+          <div>• $C_{\text{scene/task}}$：客观场景或任务前缀特征（如大型场馆活动、直播前私下跟搭档对词看机位）</div>
+          <div>• $S_{\text{init}}$：Agent 在 Turn 1 基于表层字面给出的初始偏差槽位（如掐点起保 `12:30`、误开 `抖音-开直播`）</div>
+          <div>• $U_2$：用户在 Turn 2 给出的因果纠偏说明（<code>causal_rationale</code>）与目标修正方向</div>
+          <div>• $\text{AdjustmentRule}$：沉淀至经验记忆层的结构化参数调整规则（含 `temporal_calendar_adjustment`、`literal_trap_override`、`ledger_disambiguation_policy` 三类标准规则及动态合成扩展）</div>
+        </div>
+      </div>
+
+      <!-- Case 1: S-05 -> S-08 -->
+      <h4 style="font-size:0.96rem; margin-bottom:10px;">
+        真实闭环链路 1：时序与日历偏移调整规则（<code>S-USER_001-05</code> 慢路径归纳 $\Longrightarrow$ <code>S-USER_001-08</code> 快路径直达）
+      </h4>
+      <div class="causal-chain">
+        <div class="causal-card step-1">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong style="color:var(--color-danger-text);">阶段 ①：S-USER_001-05 慢路径纠偏</strong>
+            <span class="badge badge-warn">2026-09-25</span>
+          </div>
+          <div style="font-size:0.83rem;">
+            <p><strong>U1：</strong>“今天在高山露天训练场有重要现场保障，活动12时30分正式开始，帮我开从12时30分到13时30分（持续60min）的抖音开直播意图保障单...”</p>
+            <p style="margin-top:6px;"><strong>A1（初始偏差 $S_{\text{init}}$）：</strong>按字面掐点准备 <code>12:30-13:30 (60min)</code> 并请求确认。</p>
+            <p style="margin-top:6px; color:var(--color-danger-text); font-weight:600;">
+              <strong>U2（因果纠偏）：</strong>“等等，大型活动现场还得提前进场调试设备呢，掐着点开来不及！帮我把开始时间往前提前半小时吧。”
+            </p>
+            <p style="margin-top:6px;"><strong>A2（修订复核 Confirm_Slot）：</strong>调整为 <code>12:00-13:30 (90min)</code> 并反问确认 $\rightarrow$ <strong>U3 确认</strong> $\rightarrow$ <strong>A3 正式开通</strong>（3 轮闭环）。</p>
+          </div>
+        </div>
+
+        <div class="causal-card step-2">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong style="color:var(--color-purple-text);">阶段 ②：结构化经验规则沉淀</strong>
+            <span class="badge badge-purple">MEM_CEAC6BCC81F3</span>
+          </div>
+          <pre style="margin:0; font-size:0.76rem;">{
+  "experience_id": "EXP_PREWARM_BUFFER_01",
+  "rule_type": "temporal_calendar_adjustment",
+  "phrase_text": "高山露天训练场有重要现场",
+  "causal_rationale": "大型活动现场还得提前进场调试设备呢，掐着点开来不及！",
+  "recommended_adjustments": {
+    "start_offset_minutes": -30,
+    "duration_add_minutes": 30,
+    "strategy": "前置预热加固"
+  }
+}</pre>
+        </div>
+
+        <div class="causal-card step-3">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong style="color:var(--color-success-text);">阶段 ③：S-USER_001-08 快路径复用</strong>
+            <span class="badge badge-success">2026-10-12 (Top-1: 0.8756)</span>
+          </div>
+          <div style="font-size:0.83rem;">
+            <p><strong>U1：</strong>“今天在<strong>奥体中心多功能馆有重大活动保障</strong>，帮我开抖音开直播意图保障单，活动时间从12时30分到13时30分（原定时长60min）...”</p>
+            <p style="margin-top:6px; color:var(--color-success-text); font-weight:600;">
+              <strong>A1（主动应用参数调整规则）：</strong>“收到，识别到大型场馆重大活动现场设备需提前预热试机，已为您将意图保障单起保时间<strong>自动提前30分钟至12时00分（总时长90min）</strong>，确认直接开通吗？”
+            </p>
+            <p style="margin-top:6px;"><strong>U2：</strong>“好的，提前半小时试机预热太重要了，按这个开通！”（节省 1 轮纠偏交互）</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Case 2: S-06 -->
+      <h4 style="font-size:0.96rem; margin: 22px 0 10px;">
+        真实闭环链路 2：表层字面陷阱覆盖规则（<code>S-USER_001-06</code> 慢路径归纳 $\Longrightarrow$ <code>MEM_F23642C72FBE</code>）
+      </h4>
+      <div class="causal-chain">
+        <div class="causal-card step-1">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong style="color:var(--color-danger-text);">阶段 ①：S-USER_001-06 字面陷阱触发</strong>
+            <span class="badge badge-warn">2026-09-28</span>
+          </div>
+          <div style="font-size:0.83rem;">
+            <p><strong>U1：</strong>“今天在高山露天训练场，从12时30分到13时30分我先跟搭档<strong>对一下正式抖音直播的词和镜头机位</strong>，帮我开个画质1080p、时延50ms以内的意图保障单。”</p>
+            <p style="margin-top:6px;"><strong>A1（字面陷阱 $S_{\text{init}}$）：</strong>看到“抖音直播”字面词，误准备 <code>【抖音-开直播】</code> 并请求确认。</p>
+            <p style="margin-top:6px; color:var(--color-danger-text); font-weight:600;">
+              <strong>U2（因果纠偏）：</strong>“嗨，我只是先跟搭档私下对一下词和看眼机位，还没正式开播呢！平时对词我们都是打微信视频电话，改成微信视频通话吧。”
+            </p>
+            <p style="margin-top:6px;"><strong>A2（修订复核 Confirm_Slot）：</strong>修正为 <code>【微信-视频通话】</code> 并反问确认 $\rightarrow$ <strong>U3 确认</strong> $\rightarrow$ <strong>A3 正式开通</strong>（3 轮闭环）。</p>
+          </div>
+        </div>
+
+        <div class="causal-card step-2">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong style="color:var(--color-purple-text);">阶段 ②：字面陷阱覆盖规则沉淀</strong>
+            <span class="badge badge-purple">MEM_F23642C72FBE</span>
+          </div>
+          <pre style="margin:0; font-size:0.76rem;">{
+  "experience_id": "EXP_MULTI_INTENT_PARTITION_01",
+  "rule_type": "literal_trap_override",
+  "phrase_text": "直播前私下对词看机位",
+  "causal_rationale": "只是先跟搭档私下对一下词和看眼机位，还没正式开播呢！平时对词都是打微信视频电话",
+  "recommended_adjustments": {
+    "application_name": "微信",
+    "service_name": "视频通话",
+    "preserve_user_quality_and_time": true
+  }
+}</pre>
+        </div>
+
+        <div class="causal-card step-3">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong style="color:var(--color-success-text);">阶段 ③：后续同场景主动避坑</strong>
+            <span class="badge badge-success">S-USER_001-13 快路径闭环</span>
+          </div>
+          <div style="font-size:0.83rem;">
+            <p>当后续会话再次出现 <code>“跟搭档对一下直播的词和镜头机位”</code> 时：</p>
+            <p style="margin-top:6px; color:var(--color-success-text); font-weight:600;">
+              滑窗检索直接命中 <code>phrase_text = "直播前私下对词看机位"</code>，触发 <code>literal_trap_override</code> 参数调整规则，将表层 <code>抖音/开直播</code> 修正为真实通信载体 <code>微信/视频通话</code>，一步到位完成确认。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    function setTheme(theme, btn) {
+      document.documentElement.setAttribute('data-theme', theme);
+      const group = btn.parentElement;
+      group.querySelectorAll('.btn-toggle').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function setView(view, btn) {
+      document.documentElement.setAttribute('data-view', view);
+      const group = btn.parentElement;
+      group.querySelectorAll('.btn-toggle').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function switchChapter(idx, btn) {
+      document.querySelectorAll('.chapter-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.section-card').forEach((c, i) => {
+        if (i === idx) c.classList.add('active-chapter');
+        else c.classList.remove('active-chapter');
+      });
+    }
+
+    function switchSessionTab(panelId, btn) {
+      const parent = btn.parentElement;
+      parent.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.session-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-' + panelId).classList.add('active');
+    }
+  </script>
+</body>
+</html>

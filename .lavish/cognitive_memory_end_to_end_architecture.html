@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="parchment">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>跨会话记忆数据集生成、记忆萃取与检索注入技术方案</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}] });"></script>
+  <style>
+    /* ==========================================================================
+       1. Publication-Grade Design Tokens & Theme Palettes
+       ========================================================================== */
+    :root,
+    [data-theme="parchment"] {
+      --bg-page: #F4EFE6;
+      --bg-surface: #FCF9F2;
+      --bg-elevated: #F8F3E8;
+      --bg-subtle: #EDE6D6;
+      --bg-code: #F2ECE1;
+      --text-code: #2A241E;
+      --text-primary: #221E1A;
+      --text-secondary: #4E473F;
+      --text-muted: #7A7065;
+      --border-color: #DCD3C2;
+      --border-strong: #C4B8A3;
+      --accent-primary: #8C3B2B;
+      --accent-primary-soft: rgba(140, 59, 43, 0.10);
+      --accent-teal: #3B7A8C;
+      --accent-teal-soft: rgba(59, 122, 140, 0.12);
+      --accent-amber: #C86D2D;
+      --accent-amber-soft: rgba(200, 109, 45, 0.12);
+      --accent-sage: #498256;
+      --accent-sage-soft: rgba(73, 130, 86, 0.12);
+      --accent-violet: #6E5898;
+      --accent-violet-soft: rgba(110, 88, 152, 0.12);
+      --shadow-sm: 0 2px 6px rgba(34, 30, 26, 0.04);
+      --shadow-md: 0 6px 20px rgba(34, 30, 26, 0.07);
+      --svg-bg: #FAF6ED;
+      --svg-node: #FFFFFF;
+    }
+
+    [data-theme="github"] {
+      --bg-page: #F6F8FA;
+      --bg-surface: #FFFFFF;
+      --bg-elevated: #F6F8FA;
+      --bg-subtle: #EAEEF2;
+      --bg-code: #F6F8FA;
+      --text-code: #1F2328;
+      --text-primary: #1F2328;
+      --text-secondary: #59636E;
+      --text-muted: #656D76;
+      --border-color: #D0D7DE;
+      --border-strong: #AFB8C1;
+      --accent-primary: #0969DA;
+      --accent-primary-soft: rgba(9, 105, 218, 0.08);
+      --accent-teal: #0969DA;
+      --accent-teal-soft: rgba(9, 105, 218, 0.08);
+      --accent-amber: #9A6700;
+      --accent-amber-soft: rgba(154, 103, 0, 0.08);
+      --accent-sage: #1A7F37;
+      --accent-sage-soft: rgba(26, 127, 55, 0.08);
+      --accent-violet: #8250DF;
+      --accent-violet-soft: rgba(130, 80, 223, 0.08);
+      --shadow-sm: 0 1px 3px rgba(31, 35, 40, 0.04);
+      --shadow-md: 0 3px 12px rgba(31, 35, 40, 0.06);
+      --svg-bg: #F6F8FA;
+      --svg-node: #FFFFFF;
+    }
+
+    [data-theme="github"] h1,
+    [data-theme="github"] h2,
+    [data-theme="github"] h3,
+    [data-theme="github"] .serif-title {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    /* ==========================================================================
+       2. Base Reset & Typography
+       ========================================================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 15px;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+      line-height: 1.7;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    code, pre, .mono {
+      font-family: "JetBrains Mono", "Cascadia Code", "Fira Code", Consolas, monospace;
+    }
+
+    h1, h2, h3, .serif-title {
+      font-family: "Songti SC", "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
+      letter-spacing: -0.01em;
+    }
+
+    /* ==========================================================================
+       3. Top Sticky Toolbar
+       ========================================================================== */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: var(--bg-surface);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      padding: 0.7rem 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .brand-badge {
+      background-color: var(--accent-primary);
+      color: #FFFFFF;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 0.22rem 0.6rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .brand-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--text-primary);
+    }
+
+    .toolbar-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .control-pill-group {
+      display: inline-flex;
+      background-color: var(--bg-subtle);
+      padding: 3px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+    }
+
+    .control-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.3rem 0.7rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .control-btn:hover {
+      color: var(--text-primary);
+    }
+
+    .control-btn.active {
+      background-color: var(--bg-surface);
+      color: var(--accent-primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ==========================================================================
+       4. Main Layout (Sidebar TOC + Document Container)
+       ========================================================================== */
+    .layout-wrapper {
+      max-width: 1420px;
+      margin: 0 auto;
+      padding: 1.75rem 1.5rem 4rem;
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 2rem;
+      align-items: start;
+    }
+
+    @media (max-width: 1080px) {
+      .layout-wrapper {
+        grid-template-columns: 1fr;
+      }
+      .sidebar-toc {
+        display: none;
+      }
+    }
+
+    .sidebar-toc {
+      position: sticky;
+      top: 4.5rem;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.15rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .toc-header {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .toc-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .toc-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      font-size: 0.84rem;
+      color: var(--text-secondary);
+      padding: 0.42rem 0.6rem;
+      border-radius: 5px;
+      border-left: 3px solid transparent;
+      transition: all 0.15s ease;
+    }
+
+    .toc-link:hover {
+      background-color: var(--bg-elevated);
+      color: var(--text-primary);
+    }
+
+    .toc-link.active {
+      background-color: var(--accent-primary-soft);
+      color: var(--accent-primary);
+      border-left-color: var(--accent-primary);
+      font-weight: 600;
+    }
+
+    .toc-num {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.74rem;
+      opacity: 0.75;
+    }
+
+    .toc-meta-box {
+      margin-top: 1.1rem;
+      padding-top: 0.9rem;
+      border-top: 1px dashed var(--border-color);
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* ==========================================================================
+       5. Document Header Banner
+       ========================================================================== */
+    .doc-banner {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-top: 4px solid var(--accent-primary);
+      border-radius: 8px;
+      padding: 1.75rem 2rem;
+      margin-bottom: 1.75rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .doc-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.3;
+    }
+
+    .doc-subtitle {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      margin-top: 0.45rem;
+      max-width: 980px;
+    }
+
+    .repo-pills {
+      display: flex;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+      margin-top: 1.1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .repo-pill {
+      flex: 1;
+      min-width: 260px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      font-size: 0.8rem;
+      padding: 0.65rem 0.85rem;
+      border-radius: 6px;
+      background-color: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+    }
+
+    .repo-pill-header {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .repo-pill strong {
+      font-family: "JetBrains Mono", monospace;
+      color: var(--text-primary);
+      font-size: 0.84rem;
+    }
+
+    /* ==========================================================================
+       6. Section Cards & Callouts
+       ========================================================================== */
+    .doc-section {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.85rem 2rem;
+      margin-bottom: 1.75rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .doc-section.hidden-in-tab-mode {
+      display: none;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      padding-bottom: 0.85rem;
+      margin-bottom: 1.35rem;
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .section-title-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+    }
+
+    .section-index {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent-primary);
+      background-color: var(--accent-primary-soft);
+      padding: 0.18rem 0.55rem;
+      border-radius: 4px;
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .section-tag {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+
+    h3.sub-heading {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 1.4rem 0 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    h3.sub-heading::before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 15px;
+      background-color: var(--accent-primary);
+      border-radius: 2px;
+    }
+
+    .tcolorbox {
+      border-radius: 6px;
+      padding: 0.95rem 1.2rem;
+      margin: 1.05rem 0;
+      border: 1px solid var(--border-color);
+      border-left-width: 4px;
+      background-color: var(--bg-elevated);
+    }
+
+    .tcolorbox-title {
+      font-weight: 700;
+      font-size: 0.87rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .tcolorbox-teal { border-left-color: var(--accent-teal); background-color: var(--accent-teal-soft); }
+    .tcolorbox-teal .tcolorbox-title { color: var(--accent-teal); }
+
+    .tcolorbox-amber { border-left-color: var(--accent-amber); background-color: var(--accent-amber-soft); }
+    .tcolorbox-amber .tcolorbox-title { color: var(--accent-amber); }
+
+    .tcolorbox-crimson { border-left-color: var(--accent-primary); background-color: var(--accent-primary-soft); }
+    .tcolorbox-crimson .tcolorbox-title { color: var(--accent-primary); }
+
+    /* ==========================================================================
+       7. Tables, Grids & Code Blocks
+       ========================================================================== */
+    .table-wrap {
+      overflow-x: auto;
+      margin: 0.9rem 0;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+    }
+
+    table.arch-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+      text-align: left;
+    }
+
+    table.arch-table th {
+      background-color: var(--bg-subtle);
+      color: var(--text-primary);
+      font-weight: 700;
+      padding: 0.65rem 0.9rem;
+      border-bottom: 1px solid var(--border-strong);
+      white-space: nowrap;
+    }
+
+    table.arch-table td {
+      padding: 0.65rem 0.9rem;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      vertical-align: top;
+    }
+
+    table.arch-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    table.arch-table tr:hover td {
+      background-color: var(--bg-elevated);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.12rem 0.48rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      border-radius: 4px;
+      font-family: "JetBrains Mono", monospace;
+    }
+
+    .badge-teal { background-color: var(--accent-teal-soft); color: var(--accent-teal); border: 1px solid rgba(59,122,140,0.28); }
+    .badge-amber { background-color: var(--accent-amber-soft); color: var(--accent-amber); border: 1px solid rgba(200,109,45,0.28); }
+    .badge-sage { background-color: var(--accent-sage-soft); color: var(--accent-sage); border: 1px solid rgba(73,130,86,0.28); }
+    .badge-violet { background-color: var(--accent-violet-soft); color: var(--accent-violet); border: 1px solid rgba(110,88,152,0.28); }
+    .badge-crimson { background-color: var(--accent-primary-soft); color: var(--accent-primary); border: 1px solid rgba(140,59,43,0.28); }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.15rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.15rem;
+    }
+
+    @media (max-width: 860px) {
+      .grid-2, .grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card-box {
+      background-color: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 1.05rem 1.15rem;
+    }
+
+    .card-box-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.55rem;
+      padding-bottom: 0.45rem;
+      border-bottom: 1px solid var(--border-color);
+      font-weight: 700;
+      font-size: 0.89rem;
+      color: var(--text-primary);
+    }
+
+    pre.code-block {
+      background-color: var(--bg-code);
+      color: var(--text-code);
+      padding: 0.9rem 1.15rem;
+      border-radius: 6px;
+      font-size: 0.79rem;
+      line-height: 1.62;
+      overflow-x: auto;
+      margin: 0.6rem 0;
+      border: 1px solid var(--border-strong);
+      border-left: 3px solid var(--accent-teal);
+    }
+
+    .math-formula-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      margin-top: 0.45rem;
+    }
+
+    .math-formula-item {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-left: 3px solid var(--accent-amber);
+      border-radius: 5px;
+      padding: 0.55rem 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .math-formula-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .math-formula-eq {
+      font-size: 0.92rem;
+      color: var(--text-primary);
+      padding: 0.15rem 0;
+      overflow-x: auto;
+    }
+
+    .math-formula-note {
+      font-size: 0.77rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      border-top: 1px dashed var(--border-color);
+      padding-top: 0.3rem;
+      margin-top: 0.1rem;
+    }
+
+    .inline-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.82em;
+      background-color: var(--bg-subtle);
+      color: var(--accent-primary);
+      padding: 0.1rem 0.38rem;
+      border-radius: 3px;
+      border: 1px solid var(--border-color);
+    }
+
+    /* ==========================================================================
+       8. Flowchart & Diagram Containers (Overflow-Proof HTML + SVG Connectors)
+       ========================================================================== */
+    .diagram-frame {
+      background-color: var(--svg-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin: 1rem 0 1.35rem;
+      overflow-x: auto;
+    }
+
+    .diagram-caption {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 0.75rem;
+      font-family: "Songti SC", "Noto Serif SC", serif;
+    }
+
+    .flow-pipeline {
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) 68px minmax(220px, 1fr) 68px minmax(220px, 1fr);
+      align-items: stretch;
+      min-width: 780px;
+    }
+
+    .flow-node {
+      background-color: var(--svg-node);
+      border: 2px solid var(--border-strong);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .flow-node-amber { border-color: #C86D2D; }
+    .flow-node-teal { border-color: #3B7A8C; }
+    .flow-node-sage { border-color: #498256; }
+    .flow-node-crimson { border-color: #8C3B2B; }
+
+    .flow-node-header {
+      color: #FFFFFF;
+      font-size: 0.84rem;
+      font-weight: 700;
+      padding: 0.48rem 0.85rem;
+      text-align: center;
+      letter-spacing: 0.01em;
+    }
+
+    .flow-header-amber { background-color: #C86D2D; }
+    .flow-header-teal { background-color: #3B7A8C; }
+    .flow-header-sage { background-color: #498256; }
+    .flow-header-crimson { background-color: #8C3B2B; }
+
+    .flow-node-body {
+      padding: 0.75rem 0.9rem;
+      font-size: 0.78rem;
+      line-height: 1.55;
+      color: var(--text-secondary);
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      flex: 1;
+      overflow-wrap: break-word;
+    }
+
+    .flow-group-title {
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--text-primary);
+      margin-bottom: 0.1rem;
+    }
+
+    .flow-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .flow-connector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0 0.15rem;
+      gap: 0.2rem;
+    }
+
+    .flow-connector-label {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--accent-primary);
+      white-space: nowrap;
+    }
+
+    .flow-branch-layout {
+      display: grid;
+      grid-template-columns: 270px 56px minmax(420px, 1fr);
+      align-items: center;
+      min-width: 780px;
+    }
+
+    .flow-branch-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .flow-subbox {
+      background-color: var(--bg-elevated);
+      border: 1px solid var(--border-strong);
+      border-radius: 5px;
+      padding: 0.55rem 0.7rem;
+      margin-top: 0.25rem;
+      font-size: 0.75rem;
+    }
+
+    /* ==========================================================================
+       9. Interactive Sample Walkthrough Tabs (Section 05)
+       ========================================================================== */
+    .sample-switcher {
+      display: flex;
+      gap: 0.6rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .sample-btn {
+      flex: 1;
+      min-width: 210px;
+      text-align: left;
+      background-color: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .sample-btn:hover {
+      border-color: var(--border-strong);
+    }
+
+    .sample-btn.active {
+      background-color: var(--bg-surface);
+      border-color: var(--accent-primary);
+      border-left-width: 4px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .sample-btn-title {
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sample-btn-desc {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    .sample-panel {
+      display: none;
+    }
+
+    .sample-panel.active {
+      display: block;
+    }
+
+    .trace-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      position: relative;
+      padding-left: 1.5rem;
+      border-left: 2px solid var(--border-strong);
+      margin-left: 0.6rem;
+    }
+
+    .trace-step {
+      position: relative;
+      background-color: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 0.95rem 1.15rem;
+    }
+
+    .trace-step::before {
+      content: "";
+      position: absolute;
+      left: -1.92rem;
+      top: 1.1rem;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background-color: var(--accent-primary);
+      border: 2px solid var(--bg-surface);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================================
+       Top Sticky Bar
+       ======================================================================== -->
+  <header class="topbar">
+    <div class="brand-group">
+      <span class="brand-badge">Technical Spec</span>
+      <span class="brand-title serif-title">跨会话记忆数据集生成、记忆萃取与检索注入技术方案</span>
+    </div>
+
+    <div class="toolbar-controls">
+      <div class="control-pill-group" role="group" aria-label="阅读视图切换">
+        <button class="control-btn active" id="mode-scroll-btn" onclick="setViewMode('scroll')">长卷通览</button>
+        <button class="control-btn" id="mode-tab-btn" onclick="setViewMode('tab')">分章聚焦</button>
+      </div>
+
+      <div class="control-pill-group" role="group" aria-label="配色主题切换">
+        <button class="control-btn active" id="theme-parchment-btn" onclick="setTheme('parchment')">暖阳米纸</button>
+        <button class="control-btn" id="theme-github-btn" onclick="setTheme('github')">GitHub 简洁</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       Main Layout Wrapper
+       ======================================================================== -->
+  <div class="layout-wrapper">
+
+    <!-- Left Sticky Navigation -->
+    <aside class="sidebar-toc">
+      <div class="toc-header">目录导览 (TOC)</div>
+      <ul class="toc-list">
+        <li>
+          <a href="#sec-01" class="toc-link active" onclick="handleTocClick(event, 'sec-01')">
+            <span class="toc-num">01</span>
+            <span>整体方案架构总览</span>
+          </a>
+        </li>
+        <li>
+          <a href="#sec-02" class="toc-link" onclick="handleTocClick(event, 'sec-02')">
+            <span class="toc-num">02</span>
+            <span>跨会话记忆数据集生成</span>
+          </a>
+        </li>
+        <li>
+          <a href="#sec-03" class="toc-link" onclick="handleTocClick(event, 'sec-03')">
+            <span class="toc-num">03</span>
+            <span>三层记忆萃取与存储算法</span>
+          </a>
+        </li>
+        <li>
+          <a href="#sec-04" class="toc-link" onclick="handleTocClick(event, 'sec-04')">
+            <span class="toc-num">04</span>
+            <span>滑窗向量检索与分流注入</span>
+          </a>
+        </li>
+        <li>
+          <a href="#sec-05" class="toc-link" onclick="handleTocClick(event, 'sec-05')">
+            <span class="toc-num">05</span>
+            <span>真实样本举例</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Document Body -->
+    <main id="doc-main">
+
+      <!-- Document Header Banner -->
+      <section class="doc-banner">
+        <h1 class="doc-title">跨会话记忆数据集生成、记忆萃取与检索注入</h1>
+        <p class="doc-subtitle">
+          本方案围绕多轮对话中的长期个性化理解需求，系统构建了从<strong>跨会话记忆数据集生成</strong>（由 PersonaHub 粗粒度画像逐步扩充至多会话时间链）、<strong>三层认知记忆萃取与双索引目录存储算法</strong>（事实记忆动态演化、工作记忆静态账本、经验记忆澄清归纳），到<strong>短窗口滑动向量匹配与三层记忆差异化检索注入</strong>的完整技术闭环。
+        </p>
+
+        <div class="repo-pills">
+          <div class="repo-pill">
+            <div class="repo-pill-header">
+              <span class="badge badge-amber">模块一 · 数据集生成</span>
+              <strong>cross_memory_data</strong>
+            </div>
+            <span>从 PersonaHub 初始粗粒度用户画像出发，逐步补充完善业务偏好、口语习惯与历史工单库，构造跨周期 16~20 场会话时间链与多轮对话。</span>
+          </div>
+          <div class="repo-pill">
+            <div class="repo-pill-header">
+              <span class="badge badge-teal">模块二 · 记忆萃取与存储</span>
+              <strong>memory_system (Extraction &amp; Storage)</strong>
+            </div>
+            <span>区分三层记忆动静态生命周期（从形成、强化、艾宾浩斯遗忘衰减到冲突归档），采用分层文件夹目录配合“左列结构化槽位 + 右列短语向量”双索引落盘。</span>
+          </div>
+          <div class="repo-pill">
+            <div class="repo-pill-header">
+              <span class="badge badge-sage">模块三 · 记忆检索与注入</span>
+              <strong>memory_system (Retrieval &amp; Injection)</strong>
+            </div>
+            <span>采用 6~10 字滑动窗口向量匹配（Max-Pooling + 窗口级局部否定隔离），并针对事实记忆（二跳 SELECT）、工作记忆（动态时间窗 + 两阶段消歧）与经验记忆（一跳直达）执行差异化检索注入。</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 01: 整体方案架构总览
+           ==================================================================== -->
+      <section id="sec-01" class="doc-section">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <span class="section-index">01</span>
+            <h2 class="section-title">整体方案架构总览</h2>
+          </div>
+          <span class="section-tag">End-to-End Architecture Overview</span>
+        </div>
+
+        <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+          整套方案由三个核心环节组成：首先在<strong>数据集生成阶段</strong>，将 PersonaHub 粗粒度用户描述逐步扩充为具备长期习惯与动态事件的时间链会话集；其次在<strong>记忆萃取与存储阶段</strong>，按事实记忆（动态投票晋升与遗忘衰减）、工作记忆（静态工单流水账）与经验记忆（慢路径纠偏归纳）的动静态特性分类萃取，落盘为树形文件夹目录与 SQLite“左列结构化槽位 + 右列自然语言短语向量”双索引；最后在<strong>检索注入阶段</strong>，通过短窗口滑动向量匹配定位候选记忆，并按三层记忆各自专属的检索逻辑组装上下文注入对话理解流程。
+        </p>
+
+        <!-- Diagram 1: 3-Module Pipeline (Overflow-Proof HTML + SVG) -->
+        <div class="diagram-frame">
+          <div class="flow-pipeline">
+            <!-- Box 1 -->
+            <div class="flow-node flow-node-amber">
+              <div class="flow-node-header flow-header-amber">1. 跨会话记忆数据集生成</div>
+              <div class="flow-node-body">
+                <div>
+                  <div class="flow-group-title">画像扩充：PersonaHub → 完整骨架</div>
+                  <ul class="flow-list">
+                    <li>• 基于初始粗粒度人物描述补充职业与场景细节</li>
+                    <li>• 设定主支线应用/业务、常规时段与口语同义库</li>
+                  </ul>
+                </div>
+                <div>
+                  <div class="flow-group-title">时间链构造与多轮对话生成</div>
+                  <ul class="flow-list">
+                    <li>• 结合工作记录账本与经验库规划 16~20 场时间链</li>
+                    <li>• 追踪前后记忆状态快照并渲染自然多轮对话</li>
+                    <li>• 校验时间算术一致性与最小业务意图完整性</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Connector 1 -> 2 -->
+            <div class="flow-connector">
+              <span class="flow-connector-label">历史会话流</span>
+              <svg width="56" height="20" viewBox="0 0 56 20" xmlns="http://www.w3.org/2000/svg">
+                <line x1="2" y1="10" x2="46" y2="10" stroke="#8C3B2B" stroke-width="2.2" />
+                <polygon points="45,5 54,10 45,15" fill="#8C3B2B" />
+              </svg>
+            </div>
+
+            <!-- Box 2 -->
+            <div class="flow-node flow-node-teal">
+              <div class="flow-node-header flow-header-teal">2. 三层记忆萃取与存储算法</div>
+              <div class="flow-node-body">
+                <div>
+                  <div class="flow-group-title">记忆生命周期管理（形成→强化→衰减→归档）</div>
+                  <ul class="flow-list">
+                    <li>• 事实记忆：投票晋升强化 + 艾宾浩斯衰减 + 归档</li>
+                    <li>• 工作记忆：静态工单账本 (vote=1即生效, 零衰减)</li>
+                    <li>• 经验记忆：慢路径多轮澄清纠偏 → 规则卡归纳激活</li>
+                  </ul>
+                </div>
+                <div>
+                  <div class="flow-group-title">树形文件夹目录 + 同行双索引表</div>
+                  <ul class="flow-list">
+                    <li>• 目录树：<span class="mono">users/{uid}/memory/{type}/{subtype}</span></li>
+                    <li>• 左列结构化槽位 (SQL) + 右列 4~10字短语向量</li>
+                    <li>• 单次临时改参隔离，保护长期基线记录不被覆盖</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Connector 2 -> 3 -->
+            <div class="flow-connector">
+              <span class="flow-connector-label" style="color: var(--accent-teal);">短语向量池</span>
+              <svg width="56" height="20" viewBox="0 0 56 20" xmlns="http://www.w3.org/2000/svg">
+                <line x1="2" y1="10" x2="46" y2="10" stroke="#3B7A8C" stroke-width="2.2" />
+                <polygon points="45,5 54,10 45,15" fill="#3B7A8C" />
+              </svg>
+            </div>
+
+            <!-- Box 3 -->
+            <div class="flow-node flow-node-sage">
+              <div class="flow-node-header flow-header-sage">3. 滑窗向量检索与三层分流注入</div>
+              <div class="flow-node-body">
+                <div>
+                  <div class="flow-group-title">短窗口滑动向量匹配 (6~10字滑窗)</div>
+                  <ul class="flow-list">
+                    <li>• 步长4字切分长句 + Batch向量化 + Max-Pooling</li>
+                    <li>• 窗口级局部否定隔离 (仅淘汰含否定词的当前滑窗)</li>
+                  </ul>
+                </div>
+                <div>
+                  <div class="flow-group-title">三层记忆差异化检索与上下文注入</div>
+                  <ul class="flow-list">
+                    <li>• 事实记忆：一跳提取字段 → 二跳关联 → SQL SELECT</li>
+                    <li>• 工作记忆：相对时间窗换算 + 多列动态过滤/两轮消歧</li>
+                    <li>• 经验记忆：触发词组一跳直达 + 预热/顺延动作注入</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="diagram-caption">图 1：跨会话记忆数据集生成、三层记忆动静态萃取存储与滑窗分流检索注入全流程架构图</div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 02: 跨会话记忆数据集生成 (cross_memory_data)
+           ==================================================================== -->
+      <section id="sec-02" class="doc-section">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <span class="section-index">02</span>
+            <h2 class="section-title">跨会话记忆数据集生成</h2>
+          </div>
+          <span class="section-tag">From PersonaHub Seeds to Longitudinal Session Timelines</span>
+        </div>
+
+        <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+          为了真实模拟用户在长周期交互中“习惯逐步建立、口语高度省略、近期工单跨日指代、特殊经验动态演进”的过程，数据集生成采用<strong>从 PersonaHub 初始粗粒度画像出发、自底向上分步扩充至完整时间链</strong>的四步构造流程：
+        </p>
+
+        <div class="grid-2">
+          <div class="card-box">
+            <div class="card-box-header">
+              <span>Step 1：PersonaHub 初始粗粒度画像筛选</span>
+              <span class="badge badge-amber">初始种子</span>
+            </div>
+            <p style="font-size: 0.84rem; color: var(--text-secondary);">
+              从开源 <strong>PersonaHub</strong> 数据集中筛选具有代表性职业特征与移动通信诉求的粗粒度人物种子（<span class="mono">raw_personas.json</span>，仅包含简短的一句话人物身份背景描述，如“常在各场馆奔波的赛事主播”、“跨园区通勤的研发工程师”）。
+            </p>
+          </div>
+
+          <div class="card-box">
+            <div class="card-box-header">
+              <span>Step 2：多维结构化画像骨架扩充 (<span class="mono">PersonaGenerator</span>)</span>
+              <span class="badge badge-teal">逐步完善设定</span>
+            </div>
+            <p style="font-size: 0.84rem; color: var(--text-secondary);">
+              在粗粒度种子基础上，结合合规业务支撑矩阵与哈希均匀采样，调用大模型一步步补充完善出结构化的 <span class="mono">persona_skeleton.json</span>：明确该用户的<strong>主支线常用应用与业务类型</strong>（如抖音开直播、腾讯会议等）、<strong>默认画质与时延偏好</strong>、<strong>固定周期时段</strong>、<strong>常去场所/移动场景</strong>，并为其配备 6 大维度的<strong>个性化口语同义表述库</strong>。
+            </p>
+          </div>
+
+          <div class="card-box">
+            <div class="card-box-header">
+              <span>Step 3：跨周期会话时间链构造 (<span class="mono">DynamicTimelinePlanner</span>)</span>
+              <span class="badge badge-violet">16~20 场时间链</span>
+            </div>
+            <p style="font-size: 0.84rem; color: var(--text-secondary);">
+              依托扩充好的画像骨架，同时挂载独立的工作记录账本（<span class="mono">WorkingRecordsLedger</span>）与经验规则库（<span class="mono">ExperienceBank</span>），在跨数周的时间轴上规划 16~20 场有严格时序依赖的会话时间链：合理穿插<strong>早期偏好建立、中期临时场景覆写、历史工单跨日回溯/消歧、以及慢路径澄清学习到快路径复用的完整演进链条</strong>。
+            </p>
+          </div>
+
+          <div class="card-box">
+            <div class="card-box-header">
+              <span>Step 4：状态演进追踪与多轮对话生成 (<span class="mono">MemoryTracker</span> &amp; <span class="mono">DialogueGenerator</span>)</span>
+              <span class="badge badge-sage">对话渲染与校验</span>
+            </div>
+            <p style="font-size: 0.84rem; color: var(--text-secondary);">
+              沿构造好的时间链逐场推进，<span class="mono">MemoryTracker</span> 实时计算每场会话前后的标准记忆状态快照（<span class="mono">snapshot_before</span> / <span class="mono">gold_state_after</span>），随后调用 <span class="mono">deepseek-v4.1-flash</span> 将结构化会话蓝图渲染为自然口语多轮对话（<span class="mono">sessions.jsonl</span>），并由 <span class="mono">QCValidator</span> 校验时间算术恒等（<span class="mono">end - start == duration</span>）与最小业务意图完整性。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 03: 三层记忆萃取、生命周期算法与双索引目录存储
+           ==================================================================== -->
+      <section id="sec-03" class="doc-section">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <span class="section-index">03</span>
+            <h2 class="section-title">三层记忆萃取、生命周期算法与双索引目录存储</h2>
+          </div>
+          <span class="section-tag">Three-Tier Memory Extraction, Lifecycle Algorithms &amp; Dual-Index Storage</span>
+        </div>
+
+        <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+          每次会话结束时，系统严格区分三层记忆的<strong>动静态属性与生命周期规律</strong>，并在底层同时维护<strong>左侧结构化槽位列（供 SQL 精确过滤与整行读取）</strong>与<strong>右侧短语向量列（仅对 4~10 字高纯度自然语言短语编码 1024 维 Embedding）</strong>，配合分层文件夹目录树实现可解释、可追溯的结构化存储。
+        </p>
+
+        <h3 class="sub-heading">1. 三层记忆的动静态属性与单库双索引结构对照</h3>
+        <div class="table-wrap">
+          <table class="arch-table">
+            <thead>
+              <tr>
+                <th>记忆层级分类</th>
+                <th>动静态属性与生命周期</th>
+                <th>细分子类型 (<span class="mono">subtype</span>)</th>
+                <th>左侧：结构化槽位列 (<span class="mono">content / SQL列</span>)</th>
+                <th>右侧：短语向量列 (<span class="mono">search_text / 1024d</span>)</th>
+                <th>萃取时机与防污染机制</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. 事实记忆</strong><br><span class="badge badge-teal">factual_memory</span></td>
+                <td><strong>动态生命周期演化</strong><br>• 形成与强化 (<span class="mono">candidate → active → reinforced</span>)<br>• 艾宾浩斯遗忘衰减与热度模型<br>• 冲突更新与归档 (<span class="mono">disputed / archived</span>)</td>
+                <td>
+                  • <span class="mono">preferred_value</span> (默认参数)<br>
+                  • <span class="mono">scene_preference</span> (特定场景)<br>
+                  • <span class="mono">periodic_preference</span> (周期时间)<br>
+                  • <span class="mono">service_to_app</span> (应用业务映射)<br>
+                  • <span class="mono">expression</span> (个性化表述映射)
+                </td>
+                <td><span class="mono">app_col, biz_col, scene_col, time_window_col, alias_col, target_col</span> 以及 JSON 内的 <span class="mono">resolution, latency</span></td>
+                <td>
+                  • 周期短语（如“午间例行”）<br>
+                  • 场景短语（如“大巴转场途中”）<br>
+                  • 个性化表述（如“千万别转圈”）<br>
+                  <span style="font-size:0.75rem;color:var(--text-muted);">（剥离 JSON 键名噪声，核心短语双倍加权）</span>
+                </td>
+                <td>会话结束时通过 FastPath + LLM 双通道抽取显式声明或隐式共现；检测 <span class="mono">_TEMP_VETO_WORDS</span>（“临时、今天先、就这次”）强制标为 <span class="mono">temporary</span>，严禁覆盖长期生效记录。</td>
+              </tr>
+              <tr>
+                <td><strong>2. 工作记忆</strong><br><span class="badge badge-amber">working_memory</span></td>
+                <td><strong>静态流水账</strong><br>• <span class="mono">vote = 1</span> 即刻生效<br>• <span class="mono">decay_lambda = 0.0</span>（永久保真不衰减）</td>
+                <td><span class="mono">working_record</span><br>（历史业务记录账本）</td>
+                <td><span class="mono">record_id, created_at</span> (落单日期列 <span class="mono">YYYY-MM-DD</span>), <span class="mono">app_col, biz_col, scene_col (location), start/end_timestamp, duration, resolution, rtt</span></td>
+                <td>办理场馆/地点短语（如“园区通勤班车途中”、“露天高山滑雪训练基地”）+ 业务描述词</td>
+                <td>每次正式业务会话办结后（排除 <span class="mono">is_temporary_override</span> 临时改参单），直接提取完整业务参数与基准时间追加一条静态工单记录。</td>
+              </tr>
+              <tr>
+                <td><strong>3. 经验记忆</strong><br><span class="badge badge-crimson">experiential_memory</span></td>
+                <td><strong>归纳激活</strong><br>• 慢路径纠偏归纳后即设为 <span class="mono">active</span> 长期生效</td>
+                <td><span class="mono">experience</span><br>（场景排障与映射规则卡）</td>
+                <td><span class="mono">experience_id, domain, condition, action, recommended_adjustments</span> (如目标业务覆写、<span class="mono">start_offset_minutes=-30</span>)</td>
+                <td>触发条件关键词组（如“当连麦嘉宾上麦”、“对直播词试机位”、“奥体中心重大活动保障”）</td>
+                <td>在多轮澄清/纠偏会话（Turn 2 用户解释原因并确认调整规律）结束时，动态解析偏移参数并激活结构化经验卡片。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub-heading">2. 记忆生命周期管理算法（从形成、强化、衰减到遗忘归档）</h3>
+        <div class="grid-2">
+          <div class="card-box">
+            <div class="card-box-header">
+              <span>记忆的形成、强化与冲突归档流转机制</span>
+              <span class="badge badge-teal">Lifecycle State Machine</span>
+            </div>
+            <ul style="font-size: 0.84rem; color: var(--text-secondary); padding-left: 1.15rem; display: flex; flex-direction: column; gap: 0.45rem;">
+              <li><strong>记忆形成（显式直通 vs. 隐式初筛）：</strong>用户在对话中明确声明长期规则时（如“以后我说老规矩就按这个来”），直接赋予生效状态 <span class="mono">active</span>；普通日常对话中首次隐式出现的偏好先记为初筛候选 <span class="mono">candidate (vote=1)</span>，含“临时、就这次”的单次变更仅记为 <span class="mono">temporary</span> 隔离旁路。</li>
+              <li><strong>记忆强化（跨会话复现与关联规律沉淀）：</strong>当相同偏好在后续会话中再次复现，累计正向票数达到阈值（<span class="mono">votes ≥ 2</span>）即由 <span class="mono">candidate</span> 晋升为 <span class="mono">active</span>，三次及以上复现升级为稳固偏好 <span class="mono">reinforced</span>；同时对多次会话中稳定共现的“业务&rarr;默认应用”与“业务&rarr;固定时段”自动沉淀出关联记录（<span class="mono">service_to_app</span> / <span class="mono">periodic_preference</span>）。</li>
+              <li><strong>冲突更新与遗忘归档（Dispute &amp; Archive）：</strong>当用户显式纠偏或养成新习惯替代旧习惯时，原冲突记录转入争议状态 <span class="mono">disputed</span> 或归档状态 <span class="mono">archived</span>；长期未复用且保持率衰减至阈值以下的候选记忆同样自动归档遗忘，退出在线检索池。</li>
+            </ul>
+          </div>
+
+          <div class="card-box">
+            <div class="card-box-header">
+              <span>艾宾浩斯遗忘衰减与访问热度量化公式</span>
+              <span class="badge badge-amber">Retention &amp; Heat Model</span>
+            </div>
+            <div class="math-formula-list">
+              <div class="math-formula-item">
+                <div class="math-formula-label">
+                  <span>1. 累计强化次数与记忆稳定性因子</span>
+                  <span style="font-size: 0.78rem; color: var(--text-muted);">$\kappa = 0.8$</span>
+                </div>
+                <div class="math-formula-eq">
+                  $$n = \max(0, \text{pos\_votes} - 1) + \text{reuse\_count}, \qquad S(n) = 1.0 + \kappa \cdot \ln(1 + n)$$
+                </div>
+                <div class="math-formula-note">
+                  <strong>符号释义：</strong>$n$ 为累计有效强化次数；$\text{pos\_votes}$ 为跨会话正向提及投票数（扣除首次建档的 1 票）；$\text{reuse\_count}$ 为在线检索命中复用次数；$S(n)$ 为记忆稳定性因子；$\kappa$ 为强化增益系数（默认 $0.8$，$n$ 越大记忆越稳固）。
+                </div>
+              </div>
+
+              <div class="math-formula-item">
+                <div class="math-formula-label">
+                  <span>2. 艾宾浩斯时间保持率公式</span>
+                  <span style="font-size: 0.78rem; color: var(--text-muted);">$\lambda = 0.03/\text{d}$</span>
+                </div>
+                <div class="math-formula-eq">
+                  $$R(t, n) = \exp\!\left(-\frac{\lambda}{S(n)} \cdot \Delta\text{days}\right)$$
+                </div>
+                <div class="math-formula-note">
+                  <strong>符号释义：</strong>$R(t, n) \in (0, 1]$ 为当前时刻 $t$ 的记忆保持率；$\lambda$ 为基础遗忘衰减率（事实记忆默认 $0.03/\text{天}$，工作记忆 $\lambda=0$ 不衰减）；$\Delta\text{days}$ 为距上次更新或访问的间隔天数。
+                </div>
+              </div>
+
+              <div class="math-formula-item">
+                <div class="math-formula-label">
+                  <span>3. 7天半衰期访问热度公式</span>
+                  <span style="font-size: 0.78rem; color: var(--text-muted);">$T_{1/2} = 168\,\text{h}$</span>
+                </div>
+                <div class="math-formula-eq">
+                  $$\text{heat}_{\text{eff}} = \text{heat} \times 0.5^{\Delta\text{hours} / 168}$$
+                </div>
+                <div class="math-formula-note">
+                  <strong>符号释义：</strong>$\text{heat}_{\text{eff}}$ 为当前有效访问热度；$\text{heat}$ 为基准热度（每次检索命中触发复用回调时提升 $+0.05$，上限 $1.0$）；$\Delta\text{hours}$ 为距上次访问的小时数，$T_{1/2} = 168\,\text{h}$（7天）为热度半衰期。
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="sub-heading">3. 文件夹目录形式的结构化落盘 (<span class="mono">FileStore</span> + <span class="mono">SQLite</span>)</h3>
+        <pre class="code-block">data_root/
+├── users/
+│   └── USER_001/                                   # 用户级隔离根目录
+│       ├── memory/                                 # 认知记忆文件夹目录树 (原子写 .tmp.pid.tid -> os.replace)
+│       │   ├── preference/                         # 【1. 事实记忆】按 5 类正交子类型分目录存放
+│       │   │   ├── service_to_app/{key_hash}/
+│       │   │   ├── periodic_preference/{key_hash}/
+│       │   │   ├── preferred_value/{key_hash}/
+│       │   │   ├── scene_preference/{key_hash}/
+│       │   │   └── expression/{key_hash}/
+│       │   │       ├── memory.json                 # 结构化节点元数据、投票统计与槽位内容
+│       │   │       ├── content.md                  # 分层可读文档 (L1 Overview 摘要 + L2 Details 详情)
+│       │   │       └── history.jsonl               # 节点创建、版本强化、热度增加与艾宾浩斯衰减审计流
+│       │   └── working_memory/                     # 【2. 工作记忆】静态历史业务记录目录
+│       │       └── working_record/{key_hash}/
+│       │           ├── memory.json
+│       │           ├── content.md
+│       │           └── history.jsonl
+│       ├── agent_experience/                       # 【3. 经验记忆】场景排障与映射规则卡目录
+│       │   └── default_agent/experience/
+│       │       └── exp_rule/{key_hash}/
+│       │           ├── memory.json
+│       │           └── content.md
+│       └── sessions/                               # 原始会话归档记录 ({session_id}.json)
+└── index/
+    └── memory.db                                   # SQLite 双索引库 (左列: app/biz/scene/time/alias/target + 右列: 1024维短语向量)</pre>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 04: 短窗口滑动向量检索与三层记忆分流注入
+           ==================================================================== -->
+      <section id="sec-04" class="doc-section">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <span class="section-index">04</span>
+            <h2 class="section-title">短窗口滑动向量检索与三层记忆分流注入</h2>
+          </div>
+          <span class="section-tag">Sliding-Window Vector Matching &amp; Tiered Memory Retrieval</span>
+        </div>
+
+        <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+          在线检索不预先猜测查询哪张子表，而是将该用户的全部短语向量（单用户约 10~30 条，每条自带 <span class="inline-code">subtype</span> 标签）置于<strong>统一短语向量池</strong>。系统先通过<strong>短窗口滑动向量匹配（Sliding-Window Vector Matching）</strong>解决开放口语长句的局部语义对齐与局部否定隔离问题，随后根据命中的 <span class="inline-code">subtype</span> 标签，<strong>按三层记忆各自不同的检索逻辑分流取数并组装注入上下文</strong>。
+        </p>
+
+        <h3 class="sub-heading">1. 短窗口滑动向量匹配算法（解决无标点长句稀释与否定误伤）</h3>
+        <div class="grid-2">
+          <div class="card-box">
+            <div class="card-box-header">
+              <span>传统标点切分 / 整句 Embedding 的局限</span>
+              <span class="badge badge-crimson">痛点剖析</span>
+            </div>
+            <ul style="font-size: 0.84rem; color: var(--text-secondary); padding-left: 1.15rem; display: flex; flex-direction: column; gap: 0.4rem;">
+              <li><strong>无标点长句切不开：</strong>语音转写或口语输入常一逗到底（如<em>“今天我不去滑雪基地了改在酒店房间里趁着中午那个例行档期把抖音开直播保障开上”</em>），纯靠标点规则切分直接失效。</li>
+              <li><strong>整句向量语义被稀释：</strong>30~40 字长句包含四五个实体，整句 Embedding 与库内 4~8 字短语（如 <span class="mono">“午间例行”</span>）算余弦相似度会被拉低至阈值以下。</li>
+              <li><strong>否定词污染全局：</strong>前半句“不去滑雪基地”若不精确定界，容易误将整句判定为否定或误伤后半句的正常意图。</li>
+            </ul>
+          </div>
+
+          <div class="card-box">
+            <div class="card-box-header">
+              <span>短窗口滑窗向量匹配 + 窗口级局部否定隔离</span>
+              <span class="badge badge-sage">核心泛化算法</span>
+            </div>
+            <ul style="font-size: 0.84rem; color: var(--text-secondary); padding-left: 1.15rem; display: flex; flex-direction: column; gap: 0.4rem;">
+              <li><strong>6~10 字滑动窗口 + Max-Pooling：</strong>由于库内右侧短语长度集中在 4~10 字，采用<strong>长度 8~10 字、步长 4 字的滑动窗口</strong>切分长句（约 6~8 个短窗口，单 Batch 一次编码），每个候选短语取所有窗口的最大余弦相似度（配合双字切块跨度匹配 <span class="mono">_fuzzy_phrase_match</span>）。</li>
+              <li><strong>窗口级局部否定隔离：</strong>哪个滑窗命中了短语，仅检查<strong>该滑窗内部及前 2~3 字局部范围</strong>是否含否定词（<span class="mono">不/别/取消/改用</span>），仅淘汰被否定的当前窗口短语（施加 <span class="mono">0.15x</span> 衰减），绝不污染其他肯定窗口。</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Sliding Window Walkthrough Table -->
+        <div class="table-wrap" style="margin-top: 1rem;">
+          <table class="arch-table">
+            <thead>
+              <tr>
+                <th>滑窗序号</th>
+                <th>截取的 8~10 字原话滑动窗口</th>
+                <th>命中的库内右侧短语与最高余弦分</th>
+                <th>窗口局部正负判定与同行左列字段提取动作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="mono">窗口 #1</span></td>
+                <td><span class="inline-code">今天我不去滑雪基地了</span></td>
+                <td><span class="mono">露天高山滑雪训练基地</span> (<span class="mono">cos = 0.83</span>)</td>
+                <td><span class="badge badge-crimson">含局部否定词“不去”</span> &rarr; 窗口级局部否定淘汰（<span class="mono">negated_scenes</span>），不污染后续窗口</td>
+              </tr>
+              <tr>
+                <td><span class="mono">窗口 #3</span></td>
+                <td><span class="inline-code">了改在酒店房间里趁着</span></td>
+                <td><span class="mono">外勤驻地酒店</span> (<span class="mono">cos = 0.85</span>)</td>
+                <td><span class="badge badge-sage">肯定窗口</span> &rarr; 读取命中行左列：<span class="mono">scene_col = "外勤驻地酒店"</span></td>
+              </tr>
+              <tr>
+                <td><span class="mono">窗口 #5</span></td>
+                <td><span class="inline-code">趁着中午那个例行档期</span></td>
+                <td><span class="mono">午间例行</span> (<span class="mono">cos = 0.89</span>)</td>
+                <td><span class="badge badge-sage">肯定窗口</span> &rarr; 读取命中行左列：<span class="mono">time_window_col = "12:30-13:30"</span></td>
+              </tr>
+              <tr>
+                <td><span class="mono">窗口 #7</span></td>
+                <td><span class="inline-code">期把抖音开直播保障开上</span></td>
+                <td><span class="mono">抖音 / 开直播</span> (<span class="mono">cos = 0.91</span>)</td>
+                <td><span class="badge badge-sage">肯定窗口</span> &rarr; 读取命中行左列：<span class="mono">app_col = "douyin", biz_col = "openlive"</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub-heading">2. 三层认知记忆的差异化检索与上下文注入方案</h3>
+        <p style="font-size: 0.86rem; color: var(--text-secondary); margin-bottom: 0.85rem;">
+          滑窗匹配在统一短语向量池中命中候选节点后，系统根据节点所属的记忆层级（<span class="inline-code">factual_memory</span> / <span class="inline-code">working_memory</span> / <span class="inline-code">experiential_memory</span>），分别执行三种不同的检索与上下文组装逻辑：
+        </p>
+
+        <!-- Diagram 2: Three-Tier Differentiated Retrieval Flow (Overflow-Proof HTML + SVG) -->
+        <div class="diagram-frame">
+          <div class="flow-branch-layout">
+            <!-- Left Input Node -->
+            <div class="flow-node flow-node-teal">
+              <div class="flow-node-header flow-header-teal">统一短语向量池 + 滑窗匹配</div>
+              <div class="flow-node-body">
+                <div>
+                  <div class="flow-group-title">输入长句 → 8~10字滑窗 (步长4)</div>
+                  <ul class="flow-list">
+                    <li>• Max-Pooling 计算各滑窗最高余弦分</li>
+                    <li>• 窗口级局部否定隔离淘汰否定项</li>
+                  </ul>
+                </div>
+                <div class="flow-subbox">
+                  <div style="font-weight: 700; color: var(--accent-primary); margin-bottom: 0.25rem;">按命中的 subtype 标签三路分流：</div>
+                  <div class="mono" style="color: #3B7A8C;">1. preference (事实记忆)</div>
+                  <div class="mono" style="color: #C86D2D;">2. working_record (工作记忆)</div>
+                  <div class="mono" style="color: #8C3B2B;">3. experience (经验记忆)</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Middle 3-Way SVG Connector -->
+            <div class="flow-connector">
+              <svg width="52" height="240" viewBox="0 0 52 240" xmlns="http://www.w3.org/2000/svg">
+                <path d="M 2 90 L 44 38" stroke="#3B7A8C" stroke-width="2" fill="none" />
+                <polygon points="40,34 50,32 46,42" fill="#3B7A8C" />
+                <line x1="2" y1="120" x2="44" y2="120" stroke="#C86D2D" stroke-width="2" />
+                <polygon points="43,115 51,120 43,125" fill="#C86D2D" />
+                <path d="M 2 150 L 44 202" stroke="#8C3B2B" stroke-width="2" fill="none" />
+                <polygon points="46,198 50,208 40,206" fill="#8C3B2B" />
+              </svg>
+            </div>
+
+            <!-- Right 3 Stacked Branches -->
+            <div class="flow-branch-stack">
+              <!-- Branch 1: Factual -->
+              <div class="flow-node flow-node-teal">
+                <div class="flow-node-header flow-header-teal" style="text-align: left;">路径一：事实记忆检索 — 一跳读取左列字段 → 二跳关联表补全 → SQL SELECT 唯一主记录</div>
+                <div class="flow-node-body" style="padding: 0.55rem 0.85rem; gap: 0.2rem;">
+                  <div>• <strong>一跳提取：</strong>命中 <span class="mono">periodic_preference("午间例行")</span> 读取 <span class="mono">time_window="12:30-13:30"</span>；命中 <span class="mono">expression</span> 读取 <span class="mono">target="50ms"</span></div>
+                  <div>• <strong>二跳查询：</strong>经 <span class="mono">service_to_app / periodic_preference</span> 补全 <span class="mono">(app, biz, scene)</span>，执行 <span class="mono">select_by_slots</span> 查 <span class="mono">preferred_value</span></div>
+                  <div style="color: var(--accent-teal); font-weight: 600;">→ 融合 (相似度 + 艾宾浩斯保持率 $R(t,n)$ + 热度 + 置信度) 排序，取最高分主记录锚定当日时间戳注入</div>
+                </div>
+              </div>
+
+              <!-- Branch 2: Working -->
+              <div class="flow-node flow-node-amber">
+                <div class="flow-node-header flow-header-amber" style="text-align: left;">路径二：工作记忆检索 — 相对时间窗换算 + 多列动态拼接 SELECT + 两阶段消歧闭环</div>
+                <div class="flow-node-body" style="padding: 0.55rem 0.85rem; gap: 0.2rem;">
+                  <div>• <strong>时间换算：</strong>基于 <span class="mono">reference_time</span> 将“昨天预约”($\Delta\in[1,3]$天) / “上周”($\Delta\in[5,10]$天) / “上个月初”转为落单日期区间</div>
+                  <div>• <strong>动态过滤：</strong>排除临时单，按已提及的 <span class="mono">(日期区间 + 滑窗命中的标准 location + app + service)</span> 动态拼接 <span class="mono">WHERE SELECT</span></div>
+                  <div style="color: var(--accent-amber); font-weight: 600;">→ 规格唯一则单步回填（或执行预约改期偏移）；若查出 ≥2 种不同规格则 Turn 1 挂起追问，Turn 2 按补充特征锁定</div>
+                </div>
+              </div>
+
+              <!-- Branch 3: Experiential -->
+              <div class="flow-node flow-node-crimson">
+                <div class="flow-node-header flow-header-crimson" style="text-align: left;">路径三：经验记忆检索 — 触发词组一跳直达 &amp; 慢路径归纳 / 快路径一步闭环双分支</div>
+                <div class="flow-node-body" style="padding: 0.55rem 0.85rem; gap: 0.2rem;">
+                  <div>• <strong>分支 A (首次慢路径澄清)：</strong>未激活经验卡时 Turn 1 按字面受理，Turn 2 依用户纠偏说明锁定状态并在会话末归纳激活经验卡</div>
+                  <div>• <strong>分支 B (后续快路径直达)：</strong>首轮命中已激活 <span class="mono">experience</span> 卡片的触发条件（如“奥体中心”、“连麦嘉宾”、“<span class="mono">@HOLIDAY_DATE</span>”）</div>
+                  <div style="color: var(--accent-primary); font-weight: 600;">→ 无需二跳、无需追问，直接读取卡片左列 <span class="mono">recommended_adjustments</span>（提前30分钟预热 / 节后首个工作日顺延）一步注入</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="diagram-caption">图 2：统一短语向量池滑窗匹配与三层认知记忆差异化检索注入流程图</div>
+        </div>
+
+        <div class="grid-3">
+          <div class="card-box">
+            <div class="card-box-header">
+              <span>1. 事实记忆：一跳提取 &rarr; 二跳 SELECT</span>
+              <span class="badge badge-teal">Factual</span>
+            </div>
+            <ol style="font-size: 0.83rem; color: var(--text-secondary); padding-left: 1.15rem; display: flex; flex-direction: column; gap: 0.38rem;">
+              <li><strong>一跳提取同行字段：</strong>滑窗命中 <span class="mono">periodic_preference</span>（如“午间例行”）提取左列 <span class="mono">time_window='12:30-13:30', app='douyin', biz='openlive'</span>；命中 <span class="mono">expression</span>（如“千万别转圈”）提取 <span class="mono">target='50ms'</span> 及作用域守卫。</li>
+              <li><strong>二跳关联查询：</strong>通过 <span class="mono">service_to_app</span> 与 <span class="mono">periodic_preference</span> 补全缺省槽位，以 <span class="mono">(app, biz, scene)</span> 作为 <span class="mono">WHERE</span> 条件去 <span class="mono">preferred_value</span> 或 <span class="mono">scene_preference</span> 执行 <span class="mono">select_by_slots</span>。</li>
+              <li><strong>综合排序与唯一返回：</strong>按 $\text{Score} = 0.5\cdot\text{sim} + 0.2\cdot R(t,n) + 0.1\cdot\text{heat}_{\text{eff}} + 0.2\cdot\text{conf}$ 选出最高分主记录，将周期时段锚定到当日日期后注入。</li>
+            </ol>
+          </div>
+
+          <div class="card-box">
+            <div class="card-box-header">
+              <span>2. 工作记忆：时间换算 + 两阶段收敛</span>
+              <span class="badge badge-amber">Working</span>
+            </div>
+            <ol style="font-size: 0.83rem; color: var(--text-secondary); padding-left: 1.15rem; display: flex; flex-direction: column; gap: 0.38rem;">
+              <li><strong>时间列动态换算：</strong>基于 <span class="mono">reference_time</span> 将口语时间词换算为落单日期区间（<span class="mono">昨天预约</span> &rarr; $\Delta\in[1,3]$ 天；<span class="mono">上周</span> &rarr; $\Delta\in[5,10]$ 天；<span class="mono">上个月初</span> &rarr; 上一自然月；非常规表达由 LLM 兜底转 <span class="mono">date_range</span>）。</li>
+              <li><strong>可选列动态拼接：</strong>排除临时单（<span class="mono">not is_temporary_override</span>），提及业务/应用则加对应列过滤，提及地点则由滑窗向量转成标准 <span class="mono">location</span> 过滤。</li>
+              <li><strong>两阶段收敛闭环：</strong>若查出规格唯一则单步回填（或执行改期时间偏移 <span class="mono">reschedule_shift_minutes</span>）；若查出 <span class="mono">≥2</span> 种不同规格，<strong>Turn 1 挂起追问</strong>，<strong>Turn 2</strong> 按用户补充的“最近那次/具体特征”二次筛选锁定。</li>
+            </ol>
+          </div>
+
+          <div class="card-box">
+            <div class="card-box-header">
+              <span>3. 经验记忆：一跳直达 &amp; 双分支闭环</span>
+              <span class="badge badge-crimson">Experiential</span>
+            </div>
+            <ol style="font-size: 0.83rem; color: var(--text-secondary); padding-left: 1.15rem; display: flex; flex-direction: column; gap: 0.38rem;">
+              <li><strong>分支 A（多轮澄清归纳）：</strong>首次遇到新场景未激活经验卡时，Turn 1 按字面受理；Turn 2 根据用户纠偏说明维持已确认状态并在会话末归纳激活 <span class="mono">experience</span> 卡片。</li>
+              <li><strong>分支 B（单轮一跳直达）：</strong>后续会话首轮一旦命中已激活 <span class="mono">experience</span> 卡片的触发词组（如“连麦嘉宾”、“对一下直播词”、“奥体中心重大活动”、“@HOLIDAY_DATE”），<strong>无需二跳、无需追问</strong>，直接读取卡片左列的 <span class="mono">recommended_adjustments</span>（如改写为 <span class="mono">开直播/微信视频通话</span>、起保时间提前 30 分钟、或按法定节假日日历顺延至节后首个工作日）一步注入闭环。</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 05: 真实样本举例 (mobile_persona_001 / USER_001)
+           ==================================================================== -->
+      <section id="sec-05" class="doc-section">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <span class="section-index">05</span>
+            <h2 class="section-title">真实样本举例 (<span class="mono">mobile_persona_001</span> / <span class="mono">USER_001</span>)</h2>
+          </div>
+          <span class="section-tag">Real Sample Walkthrough</span>
+        </div>
+
+        <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+          以下数据全部取自真实样本 <span class="inline-code">mobile_persona_001</span>（<span class="inline-code">USER_001</span>），分别展示<strong>事实记忆</strong>、<strong>工作记忆</strong>与<strong>经验记忆</strong>从历史会话萃取落盘、滑窗向量检索匹配到最终上下文组装注入的完整数据流。点击下方选项卡可切换查看：
+        </p>
+
+        <div class="sample-switcher">
+          <button class="sample-btn active" onclick="selectSample('factual', this)">
+            <div class="sample-btn-title">
+              <span>示例 1：事实记忆（一跳提取 → 二跳 SELECT）</span>
+              <span class="badge badge-teal">事实记忆</span>
+            </div>
+            <div class="sample-btn-desc">S-USER_001-01 写入 → 后续会话滑窗命中召回</div>
+          </button>
+
+          <button class="sample-btn" onclick="selectSample('working', this)">
+            <div class="sample-btn-title">
+              <span>示例 2：工作记忆（时间换算 + 地点滑窗匹配）</span>
+              <span class="badge badge-amber">工作记忆</span>
+            </div>
+            <div class="sample-btn-desc">REC_mobile_persona_001_20260916_02 (通勤班车途中)</div>
+          </button>
+
+          <button class="sample-btn" onclick="selectSample('habit', this)">
+            <div class="sample-btn-title">
+              <span>示例 3：经验记忆（慢路径归纳 → 快路径一跳直达）</span>
+              <span class="badge badge-crimson">经验记忆</span>
+            </div>
+            <div class="sample-btn-desc">EXP_PREWARM_BUFFER_01 → S-USER_001-08 前置30分钟</div>
+          </button>
+        </div>
+
+        <!-- Sample Panel 1: Factual Memory -->
+        <div id="panel-factual" class="sample-panel active">
+          <div class="trace-timeline">
+            <div class="trace-step">
+              <div style="font-weight: 700; color: var(--accent-primary); margin-bottom: 0.35rem;">
+                [1] 记忆萃取与双索引落盘（源自会话 <span class="mono">S-USER_001-01</span>，参考时间：<span class="mono">2026年09月14日12时15分</span>）
+              </div>
+              <p style="font-size: 0.84rem; color: var(--text-secondary);">
+                <strong>历史对话原话：</strong><br>
+                • <span class="mono">U1</span>：“你好，需要给抖音开直播做一个网络保障，时间是今天12时30分开始。”<br>
+                • <span class="mono">U2</span>：“画质1080p，时延50ms以内，持续60min。我说‘千万别转圈’，就是时延控制在50ms以内。以后我只要每天这个时段说‘老规矩’，就按这个来：抖音开直播、1080p、50ms以内，记住这个习惯哈，别掉链子。”<br>
+                <strong>显式声明（<span class="mono">declaration_mode="explicit", vote_threshold=1</span>）直接晋升为 <span class="mono">active</span>，落盘至 <span class="mono">users/USER_001/memory/preference/</span> 目录及 SQLite 双索引表的 4 条记录：</strong>
+              </p>
+              <pre class="code-block">1. [目录: preference/service_to_app/]      memory_key = "openlive" | status = "active"
+   左列结构化字段: app_col="douyin", biz_col="openlive"
+   右列短语向量源: "openlive douyin 开直播 抖音"
+
+2. [目录: preference/periodic_preference/] memory_key = "12:30-13:30|douyin:openlive" | status = "active"
+   左列结构化字段: app_col="douyin", biz_col="openlive", time_window_col="12:30-13:30"
+   右列短语向量源: "午间例行 12:30-13:30 douyin openlive"
+
+3. [目录: preference/preferred_value/]     memory_key = "douyin|openlive" | status = "active"
+   左列结构化字段: app_col="douyin", biz_col="openlive" | content: {"resolution": "1080p", "latency": "50ms"}
+   右列短语向量源: "douyin openlive 1080p 50ms"
+
+4. [目录: preference/expression/]          memory_key = "千万别转圈" | status = "active"
+   左列结构化字段: app_col="douyin", biz_col="openlive", alias_col="千万别转圈", target_col="50ms"
+   右列短语向量源: "千万别转圈 千万别转圈 50ms 低时延 不卡顿"</pre>
+            </div>
+
+            <div class="trace-step">
+              <div style="font-weight: 700; color: var(--accent-teal); margin-bottom: 0.35rem;">
+                [2] 滑窗匹配与二跳 SELECT 检索过程（后续会话于 <span class="mono">2026年09月18日12时15分</span> 发起省略请求）
+              </div>
+              <p style="font-size: 0.84rem; color: var(--text-secondary);">
+                <strong>当前用户输入：</strong><span class="inline-code">"午间例行开播，按老规矩来，画面千万别转圈。"</span>
+              </p>
+              <pre class="code-block">Step 1 (一跳：短窗口匹配命中短语向量并读取同行左列):
+  • 滑窗命中 expression 记录 memory_key="千万别转圈" (肯定窗口)
+    → 读取左列: target_col="50ms", app_col="douyin", biz_col="openlive"
+  • 滑窗命中 "开播" -> biz="openlive"，参考时间 12:15 落入 12:30-13:30 预热窗口
+
+Step 2 (二跳：关联表补全与 SQL select_by_slots):
+  • 查 periodic_preference 匹配 (app="douyin", biz="openlive") → 补全 time_windows=["12:30-13:30"]
+  • 以 WHERE app_col='douyin' AND biz_col='openlive' 执行 select_by_slots:
+    → 唯一命中主参数记录 preferred_value[douyin|openlive] (select_sim=0.98, R(t,n)=0.96, resolution="1080p", latency="50ms")</pre>
+            </div>
+
+            <div class="trace-step">
+              <div style="font-weight: 700; color: var(--accent-sage); margin-bottom: 0.35rem;">
+                [3] 事实记忆上下文组装与注入结果
+              </div>
+              <pre class="code-block">// 检索注入模块将唯一主记录的参数与周期时段锚定到当日参考时间 (2026年09月18日12时15分)，生成注入上下文：
+# === MEMORY SYSTEM RETRIEVAL (长期记忆系统检索结果) ===
+#   [参数记忆1] preferred_value (douyin|openlive, status=active, paired_periodic='12:30-13:30|douyin:openlive'):
+#     application_name='抖音', service_name='开直播', resolution='1080p', rtt='50ms',
+#     start_timestamp='2026年09月18日12时30分', end_timestamp='2026年09月18日13时30分', duration='60min'
+#   [个性化表述1] expression (千万别转圈): 「千万别转圈」 -> '50ms' (作用域: douyin|openlive)</pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sample Panel 2: Working Memory -->
+        <div id="panel-working" class="sample-panel">
+          <div class="trace-timeline">
+            <div class="trace-step">
+              <div style="font-weight: 700; color: var(--accent-amber); margin-bottom: 0.35rem;">
+                [1] 静态流水账落盘（存放于 <span class="mono">users/USER_001/memory/working_memory/working_record/</span>，<span class="mono">vote=1, decay=0.0</span>）
+              </div>
+              <pre class="code-block">{
+  "record_id": "REC_mobile_persona_001_20260916_02",
+  "created_at": "2026年09月16日12时15分",
+  "time_window_col": "2026-09-16",
+  "application_name": "腾讯会议",
+  "service_name": "会议",
+  "start_timestamp": "2026年09月16日12时30分",
+  "end_timestamp": "2026年09月16日13时15分",
+  "duration": "45min",
+  "resolution": "720p",
+  "rtt_max": "100ms",
+  "location": "园区通勤班车途中"
+}</pre>
+            </div>
+
+            <div class="trace-step">
+              <div style="font-weight: 700; color: var(--accent-teal); margin-bottom: 0.35rem;">
+                [2] 时间窗换算 + 地点滑窗匹配 + 动态多列 SELECT
+              </div>
+              <p style="font-size: 0.84rem; color: var(--text-secondary);">
+                <strong>后续会话用户输入：</strong><span class="inline-code">"照上次在通勤班车路上办的那笔会议保障单规格，今天14:00起再办一单"</span>
+              </p>
+              <pre class="code-block">1. 时间列换算与可选列动态拼接:
+   • 识别跨期工单指代词 "上次...那笔保障单" → 换算相对日期区间 relative_date_range
+   • 滑窗截取 "在通勤班车路上" → 与右列短语向量匹配命中 scene_col (location) = "园区通勤班车途中"
+   • 提及业务 "会议" → 拼接 biz_col = "meeting"
+   • 执行动态 SQL SELECT 排除临时单后唯一锁定: REC_mobile_persona_001_20260916_02
+
+2. 组装注入的工作记忆上下文:
+   # === WORKING RECORD REUSE (工作记忆历史工单唯一命中) ===
+   #   命中工单 [REC_mobile_persona_001_20260916_02] (location='园区通勤班车途中'):
+   #   application_name='腾讯会议', service_name='会议', resolution='720p', rtt='100ms', duration='45min'
+   #   结合当轮明说起点 14:00 推算今日时间窗: start_timestamp='...14时00分', end_timestamp='...14时45分'</pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sample Panel 3: Experiential Memory -->
+        <div id="panel-habit" class="sample-panel">
+          <div class="trace-timeline">
+            <div class="trace-step">
+              <div style="font-weight: 700; color: var(--accent-primary); margin-bottom: 0.35rem;">
+                [1] 分支 A：慢路径多轮澄清归纳激活经验卡（存放于 <span class="mono">users/USER_001/agent_experience/</span>）
+              </div>
+              <p style="font-size: 0.84rem; color: var(--text-secondary);">
+                在早期慢路径会话中，Turn 1 按字面时间受理；Turn 2 用户纠偏说明<em>“大型场馆掐着点开来不及调试，以后得提前30分钟预热”</em>。会话结束时命中 <span class="mono">crystallize_trigger</span>，动态解析出 <span class="mono">-30min / +30min</span> 并激活经验卡：
+              </p>
+              <pre class="code-block">{
+  "experience_id": "EXP_PREWARM_BUFFER_01",
+  "domain": "time_scheduling",
+  "status": "active",
+  "condition": "识别重大活动或大型场馆现场（含开直播、视频会议、视频通话等业务），需提前预热试机",
+  "apply_trigger": {
+    "first_turn": [["奥体中心", "会展中心", "重大活动", "大型活动", "赛事", "峰会", "开幕式"]]
+  },
+  "recommended_adjustments": {
+    "start_offset_minutes": -30,
+    "duration_add_minutes": 30,
+    "strategy": "前置预热加固"
+  }
+}</pre>
+            </div>
+
+            <div class="trace-step">
+              <div style="font-weight: 700; color: var(--accent-sage); margin-bottom: 0.35rem;">
+                [2] 分支 B：后续会话 <span class="mono">S-USER_001-08</span> 一跳直达自动预热注入
+              </div>
+              <p style="font-size: 0.84rem; color: var(--text-secondary);">
+                <strong>场景与输入：</strong>用户在<span class="inline-code">奥林匹克体育中心多功能馆</span>现场发起原定 <span class="mono">12:30 至 13:30</span>（<span class="mono">60min</span>）的抖音开直播请求。
+              </p>
+              <pre class="code-block">• 一跳直达触发:
+  首轮话语中的 "奥林匹克体育中心" 命中已激活卡片 EXP_PREWARM_BUFFER_01 的触发词组 ("奥体中心")，无需二跳、无需追问！
+
+• 直接读取左列 recommended_adjustments 算术偏移并注入最高优先级规则:
+  # === EXPERIENCE RULE (经验记忆检索命中规则, 本轮生效, 优先级最高) ===
+  # 命中经验 [EXP_PREWARM_BUFFER_01]: 识别重大活动或大型场馆现场，需提前30分钟预热试机
+  #   start_timestamp = '2026年10月12日12时00分'  (= 用户开始时刻 12:30 -30min)
+  #   end_timestamp   = '2026年10月12日13时30分'  (保持不变)
+  #   duration        = '90min'                  (原定时长 60min +30min)</pre>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ========================================================================
+       Interactive Controller Script
+       ======================================================================== -->
+  <script>
+    function setTheme(themeName) {
+      document.documentElement.setAttribute('data-theme', themeName);
+      ['parchment', 'github'].forEach(t => {
+        const btn = document.getElementById('theme-' + t + '-btn');
+        if (btn) btn.classList.toggle('active', t === themeName);
+      });
+    }
+
+    let currentViewMode = 'scroll';
+    let activeSectionId = 'sec-01';
+
+    function setViewMode(mode) {
+      currentViewMode = mode;
+      document.getElementById('mode-scroll-btn').classList.toggle('active', mode === 'scroll');
+      document.getElementById('mode-tab-btn').classList.toggle('active', mode === 'tab');
+
+      const sections = document.querySelectorAll('.doc-section');
+      sections.forEach(sec => {
+        if (mode === 'scroll') {
+          sec.classList.remove('hidden-in-tab-mode');
+        } else {
+          sec.classList.toggle('hidden-in-tab-mode', sec.id !== activeSectionId);
+        }
+      });
+    }
+
+    function handleTocClick(event, secId) {
+      activeSectionId = secId;
+      document.querySelectorAll('.toc-link').forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + secId);
+      });
+
+      if (currentViewMode === 'tab') {
+        event.preventDefault();
+        setViewMode('tab');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function selectSample(sampleKey, btnEl) {
+      document.querySelectorAll('.sample-btn').forEach(b => b.classList.remove('active'));
+      btnEl.classList.add('active');
+
+      ['factual', 'working', 'habit'].forEach(k => {
+        const panel = document.getElementById('panel-' + k);
+        if (panel) panel.classList.toggle('active', k === sampleKey);
+      });
+    }
+
+    window.addEventListener('scroll', () => {
+      if (currentViewMode !== 'scroll') return;
+      const sections = ['sec-01', 'sec-02', 'sec-03', 'sec-04', 'sec-05'];
+      let current = sections[0];
+      for (const id of sections) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= 140) {
+          current = id;
+        }
+      }
+      activeSectionId = current;
+      document.querySelectorAll('.toc-link').forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+      });
+    });
+
+    function renderAllMath() {
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false }
+          ],
+          throwOnError: false
+        });
+      }
+    }
+    renderAllMath();
+    window.addEventListener('DOMContentLoaded', renderAllMath);
+    window.addEventListener('load', renderAllMath);
+  </script>
+</body>
+</html>

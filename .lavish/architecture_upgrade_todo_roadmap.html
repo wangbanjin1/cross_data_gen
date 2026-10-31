@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="parchment">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>认知记忆系统演进路线图与待办清单 (Architecture Evolution TODOs)</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    :root[data-theme="parchment"] {
+      --bg-page: #FBF7F0;
+      --bg-card: #FFFFFF;
+      --bg-subtle: #F3EDE2;
+      --bg-code: #F2ECE1;
+      --bg-accent: #FDF4E7;
+      --bg-success: #EDF7F1;
+      --bg-warn: #FEF6E6;
+      --bg-danger: #FDF0EF;
+      --text-main: #2A241E;
+      --text-secondary: #5C5248;
+      --text-muted: #8A7E72;
+      --border-main: #E2D9C8;
+      --border-strong: #C9B99F;
+      --primary: #8C4A27;
+      --primary-light: #F6E6DC;
+      --blue: #235789;
+      --blue-bg: #EBF3FA;
+      --green: #1F6E43;
+      --green-bg: #E8F5EE;
+      --amber: #9A5B13;
+      --amber-bg: #FDF3E3;
+      --red: #A63429;
+      --red-bg: #FDECEB;
+      --shadow: 0 2px 10px rgba(42, 36, 30, 0.05);
+    }
+
+    :root[data-theme="github"] {
+      --bg-page: #F6F8FA;
+      --bg-card: #FFFFFF;
+      --bg-subtle: #F0F3F6;
+      --bg-code: #F6F8FA;
+      --bg-accent: #EEF5FF;
+      --bg-success: #EBF8F0;
+      --bg-warn: #FFF8E6;
+      --bg-danger: #FFEFEE;
+      --text-main: #1F2328;
+      --text-secondary: #4D5562;
+      --text-muted: #6E7781;
+      --border-main: #D0D7DE;
+      --border-strong: #AFB8C1;
+      --primary: #0969DA;
+      --primary-light: #DDF4FF;
+      --blue: #0969DA;
+      --blue-bg: #DDF4FF;
+      --green: #1A7F37;
+      --green-bg: #DAFBE1;
+      --amber: #9A6700;
+      --amber-bg: #FFF8C5;
+      --red: #CF222E;
+      --red-bg: #FFEBE9;
+      --shadow: 0 1px 4px rgba(31, 35, 40, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.65;
+      padding: 28px 36px 64px;
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+
+    /* Top Header & Controls */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--border-main);
+      margin-bottom: 24px;
+    }
+
+    .title-group h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.01em;
+    }
+
+    .title-group p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 6px;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .btn.active {
+      background: var(--primary);
+      color: #FFFFFF;
+      border-color: var(--primary);
+    }
+
+    /* Quick Nav Bar */
+    .nav-strip {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .nav-pill {
+      text-decoration: none;
+      padding: 7px 14px;
+      border-radius: 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-strong);
+      color: var(--text-main);
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+
+    .nav-pill:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--bg-accent);
+    }
+
+    /* Summary Strip */
+    .summary-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 26px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-main);
+      border-radius: 10px;
+      padding: 14px 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .stat-card .label {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-weight: 600;
+    }
+
+    .stat-card .value {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-top: 4px;
+    }
+
+    .stat-card .sub {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    /* TODO Item Container */
+    .todo-card {
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-strong);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      margin-bottom: 32px;
+      overflow: hidden;
+    }
+
+    .todo-header {
+      background: var(--bg-subtle);
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border-main);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .todo-title-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .todo-badge {
+      background: var(--primary);
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.03em;
+    }
+
+    .todo-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .tag-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+    }
+
+    .tag-p0 {
+      background: var(--red-bg);
+      color: var(--red);
+      border-color: rgba(166, 52, 41, 0.25);
+    }
+
+    .tag-repo {
+      background: var(--blue-bg);
+      color: var(--blue);
+      border-color: rgba(35, 87, 137, 0.25);
+    }
+
+    .tag-paper {
+      background: var(--amber-bg);
+      color: var(--amber);
+      border-color: rgba(154, 91, 19, 0.25);
+    }
+
+    .tag-status {
+      background: var(--green-bg);
+      color: var(--green);
+      border-color: rgba(31, 110, 67, 0.25);
+    }
+
+    .todo-body {
+      padding: 24px;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 22px 0 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px dashed var(--border-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title:first-child {
+      margin-top: 0;
+    }
+
+    /* Comparison Grid */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 12px 0;
+    }
+
+    .compare-box {
+      border-radius: 10px;
+      padding: 16px 18px;
+      border: 1px solid var(--border-main);
+    }
+
+    .compare-box.pain {
+      background: var(--bg-danger);
+      border-color: rgba(166, 52, 41, 0.3);
+    }
+
+    .compare-box.target {
+      background: var(--bg-success);
+      border-color: rgba(31, 110, 67, 0.3);
+    }
+
+    .compare-box h4 {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .compare-box.pain h4 {
+      color: var(--red);
+    }
+
+    .compare-box.target h4 {
+      color: var(--green);
+    }
+
+    .compare-box ul {
+      padding-left: 18px;
+      font-size: 13.5px;
+      color: var(--text-main);
+    }
+
+    .compare-box li {
+      margin-bottom: 6px;
+    }
+
+    /* Architecture Diagram (Overflow-proof HTML + SVG Connectors) */
+    .arch-diagram {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-main);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 14px 0;
+    }
+
+    .arch-diagram-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .arch-columns {
+      display: grid;
+      grid-template-columns: 1fr 68px 1fr 68px 1.12fr;
+      align-items: stretch;
+      gap: 0;
+    }
+
+    .arch-node {
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-strong);
+      border-radius: 8px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .arch-node.user-node {
+      border-top: 4px solid var(--amber);
+    }
+
+    .arch-node.agent-node {
+      border-top: 4px solid var(--blue);
+    }
+
+    .arch-node.gate-node {
+      border-top: 4px solid var(--green);
+    }
+
+    .arch-node h5 {
+      font-size: 13.5px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text-main);
+    }
+
+    .arch-node p, .arch-node li {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    .arch-node ul {
+      padding-left: 16px;
+      margin: 6px 0;
+    }
+
+    .arch-forbidden {
+      margin-top: 8px;
+      padding: 6px 8px;
+      border-radius: 5px;
+      background: var(--red-bg);
+      color: var(--red);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .arch-allowed {
+      margin-top: 8px;
+      padding: 6px 8px;
+      border-radius: 5px;
+      background: var(--green-bg);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .arch-arrow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+      text-align: center;
+    }
+
+    .arch-arrow span {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+      line-height: 1.3;
+      margin-bottom: 4px;
+    }
+
+    /* Formula Block & Symbol Explanation */
+    .formula-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-main);
+      border-left: 4px solid var(--primary);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 12px 0;
+    }
+
+    .formula-box .math-row {
+      margin: 6px 0 10px;
+      overflow-x: auto;
+    }
+
+    .symbol-list {
+      list-style: none;
+      padding-left: 0;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px 18px;
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      border-top: 1px dashed var(--border-main);
+      padding-top: 10px;
+    }
+
+    /* Code & Sample Cards */
+    pre {
+      background: var(--bg-code);
+      border: 1px solid var(--border-main);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-family: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: var(--text-main);
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    code {
+      font-family: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+      font-size: 12.5px;
+      background: var(--bg-code);
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 13.5px;
+    }
+
+    th, td {
+      border: 1px solid var(--border-main);
+      padding: 10px 14px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--bg-subtle);
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    /* Checklist */
+    .checklist {
+      list-style: none;
+      padding-left: 0;
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-main);
+      border-radius: 8px;
+      font-size: 13.5px;
+    }
+
+    .check-box {
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--primary);
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    @media (max-width: 960px) {
+      .summary-strip {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .compare-grid {
+        grid-template-columns: 1fr;
+      }
+      .arch-columns {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .arch-arrow {
+        transform: rotate(90deg);
+        height: 40px;
+      }
+      .symbol-list {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header class="top-bar">
+    <div class="title-group">
+      <h1>认知记忆系统演进路线图与待办清单 (Architecture Evolution TODOs)</h1>
+      <p>聚焦三大基础工程夯实任务：<strong>信息隔离双向渲染</strong> · <strong>短语索引与滑动窗口检索落地</strong> · <strong>经验记忆触发建模与通用结构化萃取</strong></p>
+    </div>
+    <div class="toolbar">
+      <button class="btn active" id="btn-parchment" onclick="setTheme('parchment')">暖阳米纸</button>
+      <button class="btn" id="btn-github" onclick="setTheme('github')">GitHub 简洁</button>
+    </div>
+  </header>
+
+  <!-- Quick Navigation -->
+  <nav class="nav-strip">
+    <a class="nav-pill" href="#todo-01">TODO #01：信息隔离的双向渲染</a>
+    <a class="nav-pill" href="#todo-02">TODO #02：短语向量索引与滑动窗口检索落地</a>
+    <a class="nav-pill" href="#todo-03">TODO #03：经验记忆触发机制建模与通用结构化萃取</a>
+  </nav>
+
+  <!-- Summary Strip -->
+  <section class="summary-strip">
+    <div class="stat-card">
+      <div class="label">当前核心待办</div>
+      <div class="value">3 项 (TODO #01 ~ #03)</div>
+      <div class="sub">先打磨扎实数据生成、记忆萃取与混合检索底座</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">基线归档状态</div>
+      <div class="value">双仓已打 Tag 归档</div>
+      <div class="sub"><code>v2.0.0-three-tier-baseline</code> &amp; <code>v1.0.0-three-tier-baseline</code></div>
+    </div>
+    <div class="stat-card">
+      <div class="label">开发分支策略</div>
+      <div class="value">单特性独立分支</div>
+      <div class="sub">每个 TODO 单独拉取 <code>feature/&lt;topic&gt;</code> 验证后合入</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">架构红线准则</div>
+      <div class="value">零硬编码 / 零同义词表</div>
+      <div class="sub">纯靠短语向量匹配 + 同行结构化列 + 通用规则萃取</div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- TODO #01: 信息隔离的双向渲染 (Information-Isolated Dual-Control Rendering) -->
+  <!-- ===================================================================== -->
+  <article class="todo-card" id="todo-01">
+    <div class="todo-header">
+      <div class="todo-title-row">
+        <span class="todo-badge">TODO #01</span>
+        <h2 class="todo-title">信息隔离的双向渲染（Information-Isolated Dual-Control Rendering）</h2>
+      </div>
+      <div class="tag-row">
+        <span class="tag tag-p0">优先级：P0</span>
+        <span class="tag tag-repo">代码仓：cross_memory_data &amp; memory_system</span>
+        <span class="tag tag-paper">对标：τ²-Bench (2506.07982) / UserProxyBench (2609.38043)</span>
+        <span class="tag tag-status">状态：已完成并验证 (Implemented &amp; Verified)</span>
+      </div>
+    </div>
+
+    <div class="todo-body">
+
+      <!-- 1. 现状痛点与设计动机 -->
+      <div class="section-title">1. 现状痛点 vs. 目标机制双栏对比</div>
+      <div class="compare-grid">
+        <div class="compare-box pain">
+          <h4>❌ 现状痛点：单模型全知视角剧本渲染 (Omniscient Single-LLM Script Rendering)</h4>
+          <ul>
+            <li><strong>User / Agent 视野未物理隔离</strong>：在 <code>cross_memory_data/src/generation/dialogue_generator.py</code> 中，同一个 LLM 同时接收完整的 <code>target_params</code>（含待测答案槽位）与 <code>snapshot_before</code>（历史记忆状态），一次性生成多轮 User 和 Agent 台词。</li>
+            <li><strong>首轮过早信息泄露（Premature Disclosure）风险</strong>：由于渲染 User Turn 1 时模型同时可见最终答案（如 <code>resolution=1080p, duration=180min</code>），即便在 Prompt 中要求“禁止在第 1 轮提及画质与时长”，LLM 仍有概率在口语润色时顺带漏出答案或同义提示词。</li>
+            <li><strong>慢路径与快路径无法在线动态切换</strong>：静态 JSONL 台词写死了轮数。在端到端评测时，若被测 Agent 在本应走快路径的场次发起了追问（或反之），静态录好的 <code>Turn 2 User</code> 台词无法根据 Agent 的真实动作动态接话。</li>
+          </ul>
+        </div>
+        <div class="compare-box target">
+          <h4>✅ 目标机制：信息隔离的双向渲染 (Information-Isolated Dual-Control Rendering)</h4>
+          <ul>
+            <li><strong>物理级输入裁剪（Input-Level Information Isolation）</strong>：将会话状态显式拆分为 <strong>用户私有状态表（<code>User Private State</code>）</strong> 与 <strong>助手可见记忆状态（<code>Agent Observable Memory State</code>）</strong>，从输入字典层面物理剥离对方不该看见的字段。</li>
+            <li><strong>Turn 1 用户受限表达约束</strong>：生成或模拟 <code>User Turn 1</code> 时，输入中<strong>物理剔除</strong>本轮待通过记忆补全或待 Turn 2 澄清才揭晓的槽位，只传入本轮允许暴露的最小业务锚点与个性化表述映射（<code>expression</code>），从根源上令首轮泄露率降为 <code>0%</code>。</li>
+            <li><strong>支持快/慢双路径自适应对弈（Dual-Path Reactive Loop）</strong>：模拟用户持有条件反馈表（Conditional Response Policy）——若 Agent 在 Turn 1 已通过记忆补齐槽位并提议正确方案，User 直接确认闭环（快路径 2 轮）；若 Agent 发起追问或未触发经验调整，User 按私有状态表在 Turn 2 补充/纠偏（慢路径 2~3 轮）。</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 2. 核心架构与数据流图 -->
+      <div class="section-title">2. 防溢出架构与数据流图</div>
+      <div class="arch-diagram">
+        <div class="arch-diagram-title">图 1：信息隔离的双向状态分配与多轮交互校验流水线（离线数据合成 &amp; 在线端到端评测通用架构）</div>
+        <div class="arch-columns">
+          <!-- Left: User Private State -->
+          <div class="arch-node user-node">
+            <div>
+              <h5>👤 用户侧受控视图 (User Private State)</h5>
+              <p>驱动 <code>User Turn Renderer / Simulator</code>：</p>
+              <ul>
+                <li><strong>Turn 1 显式暴露槽位 (<code>exposed_slots_t1</code>)</strong>：仅含当前场景最小锚点（如 <code>env="奥体中心"</code>、自定义表述 <code>"开播保障"</code>）。</li>
+                <li><strong>Turn 2+ 待揭晓私有槽位 (<code>latent_private_slots</code>)</strong>：仅在 Agent 追问、消歧或未执行经验修正时才允许在 Turn 2 披露（如 <code>"提前30分钟预热"</code>、或指明选定哪笔历史工单）。</li>
+                <li><strong>人物语言风格 (<code>speech_style</code>)</strong>：语气、口头禅。</li>
+              </ul>
+            </div>
+            <div class="arch-forbidden">
+              🚫 物理屏蔽：Turn 1 严禁传入待由记忆补全的 <code>resolution / rtt / duration</code> 真值，亦不可见 Agent 内部数据库结构。
+            </div>
+          </div>
+
+          <!-- Arrow 1 -->
+          <div class="arch-arrow">
+            <span>Turn 1 隐式表达<br/>Turn 2 条件反馈</span>
+            <svg width="56" height="28" viewBox="0 0 56 28">
+              <path d="M4 10 L46 10 M40 5 L48 10 L40 15" stroke="currentColor" stroke-width="2" fill="none" />
+              <path d="M52 18 L10 18 M16 13 L8 18 L16 23" stroke="currentColor" stroke-width="2" fill="none" />
+            </svg>
+          </div>
+
+          <!-- Middle: Agent Observable State -->
+          <div class="arch-node agent-node">
+            <div>
+              <h5>🤖 助手侧受控视图 (Agent Observable State)</h5>
+              <p>驱动 <code>Agent Turn Renderer / Memory Agent</code>：</p>
+              <ul>
+                <li><strong>实时对话上下文</strong>：截至当前轮次的用户历史发言。</li>
+                <li><strong>可见记忆检索卡片 (<code>retrieved_memory_cards</code>)</strong>：
+                  <ul>
+                    <li>事实记忆（<code>active / reinforced</code> 槽位与保持率 $R(t,n)$）</li>
+                    <li>工作记忆台账（<code>working_record</code> 候选列表）</li>
+                    <li>经验记忆规则卡（<code>experience</code> 触发条件与修正规则）</li>
+                  </ul>
+                </li>
+                <li><strong>必填槽位完备性规则</strong>：缺槽位或存在多单冲突时强制走慢路径追问。</li>
+              </ul>
+            </div>
+            <div class="arch-forbidden">
+              🚫 物理屏蔽：严禁直接读取用户的 <code>ground_truth_slots</code> 答案表，只能依据用户已说出的话 + 检索到的记忆卡片推理。
+            </div>
+          </div>
+
+          <!-- Arrow 2 -->
+          <div class="arch-arrow">
+            <span>逐轮轨迹输出<br/>静态/动态拦截</span>
+            <svg width="56" height="24" viewBox="0 0 56 24">
+              <path d="M4 12 L48 12 M42 6 L50 12 L42 18" stroke="currentColor" stroke-width="2" fill="none" />
+            </svg>
+          </div>
+
+          <!-- Right: Dual Gate & Verification -->
+          <div class="arch-node gate-node">
+            <div>
+              <h5>🛡️ 双轨保真度与防泄漏守卫 (Fidelity &amp; Leakage Gate)</h5>
+              <p>基于 <code>UserProxyBench</code> 与确定性状态校验：</p>
+              <ul>
+                <li><strong>Gate 1：Turn 1 过早泄露静态拦截（Premature Disclosure Check）</strong>：扫描 <code>Turn 1 User Utterance</code>，断言其中绝不包含被标记为 <code>memory_filled</code> 或 <code>turn2_disambiguated</code> 的目标槽位字面量及数值。</li>
+                <li><strong>Gate 2：快/慢路径动作合规校验</strong>：
+                  <ul>
+                    <li>快路径场次：Agent Turn 1 必须完成记忆槽位补全并发起 <code>Confirm_Slot</code>；</li>
+                    <li>慢路径场次：Agent Turn 1 必须发起 <code>Request_Slot / Request_Disambiguation</code>，由 User Turn 2 揭晓私有槽位。</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <div class="arch-allowed">
+              ✅ 终态判定：比对对话收敛后的最终成交槽位 <code>final_slots</code> 与 <code>ground_truth_slots</code> 是否 100% 一致。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. 真实样本举例 -->
+      <div class="section-title">3. 真实样本举例：物理拆分后的输入字典与逐轮交互对比</div>
+      <div class="compare-grid">
+        <div>
+          <p style="font-size: 13px; font-weight: 700; color: var(--amber); margin-bottom: 6px;">
+            输入给 User 渲染器的受控字典（<code>user_private_view</code>）
+          </p>
+          <pre>{
+  "session_id": "S-08_implicit_reuse",
+  "turn_1_allowed_input": {
+    "scenario_env": "常规周期保障现场",
+    "exposed_expressions": ["午间例行", "老规矩"],
+    "exposed_anchors": {"application": "抖音", "service": "开直播"},
+    "strictly_hidden_in_turn_1": ["12:00~14:00", "120min", "1080p", "50ms"]
+  },
+  "turn_2_conditional_policy": {
+    "if_agent_proposes": {
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "start_window": "12:00~14:00",
+      "duration": "120min",
+      "resolution": "1080p",
+      "rtt": "50ms"
+    },
+    "then_user_action": "Confirm_Slot (简短确认开通)",
+    "else_if_agent_asks_missing_slot": "按私有状态补充缺失项并记录 Agent 记忆召回遗漏"
+  }
+}</pre>
+        </div>
+
+        <div>
+          <p style="font-size: 13px; font-weight: 700; color: var(--blue); margin-bottom: 6px;">
+            输入给 Agent 渲染器 / 被测系统的受控字典（<code>agent_observable_view</code>）
+          </p>
+          <pre>{
+  "session_id": "S-08_implicit_reuse",
+  "user_turn_1_utterance": "今天在常规周期保障现场，按‘午间例行’的时间，老规矩用抖音做开直播，帮我把保障开上。",
+  "retrieved_memory_snapshot": {
+    "periodic_preference": [
+      {"window_label": "午间例行", "time_range": "12:00-14:00", "app": "抖音", "service": "开直播", "status": "active", "retention": 0.94}
+    ],
+    "preferred_value": [
+      {"app": "抖音", "service": "开直播", "resolution": "1080p", "rtt": "50ms", "duration": "120min", "status": "reinforced", "retention": 0.96}
+    ]
+  },
+  "ground_truth_slots": "&lt;REDACTED_FROM_AGENT&gt;"
+}</pre>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 16%;">交互场景类型</th>
+            <th style="width: 28%;">Turn 1 User（仅见 <code>turn_1_allowed_input</code>）</th>
+            <th style="width: 28%;">Turn 1 Agent（仅见 <code>Turn 1 User + 记忆快照</code>）</th>
+            <th style="width: 28%;">Turn 2 User &amp; 闭环结果（受 <code>turn_2_policy</code> 约束）</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>场景 A：事实/经验快路径复用</strong><br/>（记忆库已含生效记录）</td>
+            <td>“今天在常规周期保障现场，按‘午间例行’的时间，老规矩用抖音开直播，把保障开上。”<br/><span style="color: var(--green); font-size: 12px;">✔ 物理未传入 <code>1080p/50ms/120min</code>，零泄露</span></td>
+            <td>检索命中 <code>periodic_preference</code> 与 <code>preferred_value</code>，主动补全槽位：<br/>“收到，按您‘午间例行’的老规矩，为您预约今日 <strong>12:00至14:00（持续120分钟）</strong> 的抖音开直播保障，画质 <strong>1080p</strong>、时延 <strong>50ms以内</strong>，请确认是否开通？”</td>
+            <td>匹配 <code>if_agent_proposes</code> 成功：<br/>User：“对，就按这个老规矩直接开通吧。”<br/>Agent：“已为您开通本次保障。”（<strong>快路径 2 轮闭环</strong>）</td>
+          </tr>
+          <tr>
+            <td><strong>场景 B：工作记忆多单冲突 / 经验首次沉淀慢路径</strong><br/>（记忆库存在 2 笔同场馆不同规格工单，或首次遇大型场馆）</td>
+            <td>“今天15:00到17:00去会展中心用抖音开直播，按我之前在会展中心办过的那单规格来。”<br/><span style="color: var(--green); font-size: 12px;">✔ Turn 1 隐藏具体选哪笔历史单据</span></td>
+            <td>检索 <code>working_record</code> 发现会展中心有两笔历史工单（上周五 <code>1080p/50ms</code> vs. 上周二 <code>720p/100ms</code>），触发慢路径消歧：<br/>“查到您在会展中心有两笔历史保障单：一笔是上周五的 1080p/50ms，另一笔是上周二的 720p/100ms，请问本次按哪一笔规格办理？”</td>
+            <td>匹配 <code>Request_Disambiguation</code>，启用 <code>turn_2_latent_slots</code>：<br/>User：“按最近上周五那次 1080p、50ms 的规格来。”<br/>Agent 汇总确认后在第 3 轮完成开通，并沉淀消歧经验（<strong>慢路径 3 轮闭环</strong>）。</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 4. 具体工程改造与落地步骤 -->
+      <div class="section-title">4. 分步工程落地清单（Actionable Steps）</div>
+      <ul class="checklist">
+        <li class="checklist-item">
+          <span class="check-box">1</span>
+          <div>
+            <strong>Step 1（数据侧 <code>cross_memory_data</code>）：重构视图投影函数 <code>build_isolated_views(s_plan, snapshot_before)</code></strong><br/>
+            在 <code>src/generation/dialogue_generator.py</code> 中，将原本直接传给 Prompt 的全量 <code>s_plan</code> 拆分为 <code>user_turn1_view</code>（物理剥离待由记忆补全的 <code>resolution / rtt / duration / target_app</code> 字段）、<code>agent_view</code>（仅注入 <code>snapshot_before</code> 生效记忆卡）与 <code>user_turn2_view</code>（仅在 Turn 2 传入确认或纠偏参数）。
+          </div>
+        </li>
+        <li class="checklist-item">
+          <span class="check-box">2</span>
+          <div>
+            <strong>Step 2（校验侧 <code>cross_memory_data</code>）：新增 <code>PrematureDisclosureValidator</code>（首轮过早信息泄露拦截器）</strong><br/>
+            在 <code>src/validation/qc_validator.py</code>（及 <code>dialogue_generator.py</code> 的 <code>_validate_rendered_turns</code>）中，针对所有复用/强化/消歧会话，静态扫描 <code>turns[0]["user_utterance"]</code>：凡出现本应由记忆检索或 Turn 2 澄清才产生的槽位字面量，直接判定为 <code>Premature Disclosure</code> 并触发单会话重生成。
+          </div>
+        </li>
+        <li class="checklist-item">
+          <span class="check-box">3</span>
+          <div>
+            <strong>Step 3（评测侧 <code>memory_system</code> &amp; <code>qwen_intent_rag</code>）：构建轻量级 <code>EnvironmentCoupledUserSimulator</code> 支持快/慢双路径在线对弈评测</strong><br/>
+            在评测脚本中，被测 Agent 每轮调用真实的 <code>MemorySystem.search()</code> 获取记忆上下文并生成回复；<code>UserSimulator</code> 仅持有当前测试样本的 <code>user_private_view</code>，根据被测 Agent 在 Turn 1 是“直接给出完整参数（快路径）”还是“发起反问澄清（慢路径）”动态生成 Turn 2 回复。
+          </div>
+        </li>
+      </ul>
+
+    </div>
+  </article>
+
+  <!-- ===================================================================== -->
+  <!-- TODO #02: 混合检索与短语向量索引落地 (Pure Short-Phrase Vector + Sliding Window Retrieval) -->
+  <!-- ===================================================================== -->
+  <article class="todo-card" id="todo-02">
+    <div class="todo-header">
+      <div class="todo-title-row">
+        <span class="todo-badge">TODO #02</span>
+        <h2 class="todo-title">混合检索与短语索引对齐架构规范（右列 4~10 字纯净短语向量 + 6~10 字滑动窗口 <code>Max-Pooling</code> 匹配）</h2>
+      </div>
+      <div class="tag-row">
+        <span class="tag tag-p0">优先级：P0</span>
+        <span class="tag tag-repo">代码仓：memory_system (storage/index.py &amp; retrieval/search.py)</span>
+        <span class="tag tag-paper">目标：彻底清理旧版同义词表与长句混合编码</span>
+        <span class="tag tag-status">状态：已完成并验证 (Implemented &amp; Verified)</span>
+      </div>
+    </div>
+
+    <div class="todo-body">
+
+      <!-- 1. 现状痛点与设计动机 -->
+      <div class="section-title">1. 现状痛点 vs. 目标机制双栏对比</div>
+      <div class="compare-grid">
+        <div class="compare-box pain">
+          <h4>❌ 现状痛点：长文本拼接编码 + 残留硬编码同义词表</h4>
+          <ul>
+            <li><strong>索引侧（<code>storage/index.py:48-136</code>）拼接噪声并硬塞同义词</strong>：当前 <code>build_search_text()</code> 将 <code>memory_key + description + overview + JSON 槽位</code> 全部拼成一段长文本再去编码向量；且在第 <code>63-85</code> 行残留了硬编码同义词拼接（如 <code>if "大巴" in sc: semantic_values.append("坐大巴车 通勤班车...")</code>），稀释了核心短语的向量分布。</li>
+            <li><strong>检索侧（<code>retrieval/search.py:93-112, 985</code>）整句 Embedding 与同义词追加</strong>：当前在第 <code>93-112</code> 行定义了 <code>_PARAPHRASE_SYNONYMS</code>，并在第 <code>985</code> 行直接对整条用户长句执行 <code>embed_one(expanded_query)</code>。当用户一句话包含多个子句（如地点切换 + 时段代称 + 业务代称）时，单条整句向量无法同时高置信度对齐多个独立短语记录。</li>
+          </ul>
+        </div>
+        <div class="compare-box target">
+          <h4>✅ 目标机制：4~10 字纯净短语索引 + 6~10 字滑动窗口 <code>Max-Pooling</code> 检索</h4>
+          <ul>
+            <li><strong>索引侧：左列结构化槽位 + 右列 4~10 字高纯度触发短语（<code>phrase_text</code>）</strong>：删除 <code>index.py</code> 中所有人工同义词拼接；每条记录的右侧向量列<strong>仅对 4~10 字核心触发短语</strong>编码 <code>1024</code> 维向量（<code>expression</code> 仅编码自定义短语、<code>scene_preference</code> 仅编码地点短语、<code>periodic_preference</code> 仅编码时段名称、<code>service_to_app</code> 仅编码业务短语）。</li>
+            <li><strong>检索侧：子句否定分离 + 6~10 字滑动窗口（<code>step=4</code>）批量向量化 + 跨窗口 <code>Max-Pooling</code></strong>：删除 <code>search.py</code> 中的 <code>_PARAPHRASE_SYNONYMS</code>；将用户正向子句切分为 <code>6~10</code> 字滑动窗口，单次批量调用 <code>text-embedding-v4</code>，取各窗口与库内短语向量的最大余弦相似度定位候选记录，再直接读取同行结构化槽位列并执行二阶段关联表补全。</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 2. 核心架构与数据流图 + 数学公式 -->
+      <div class="section-title">2. 防溢出架构与数据流图</div>
+      <div class="arch-diagram">
+        <div class="arch-diagram-title">图 2：从自然语言长 Query 滑动窗口切分到“向量相似度检索 + 同行槽位提取 + 二阶段关联表补全”全链路</div>
+        <div class="arch-columns">
+          <!-- Step 1: Query Windowing -->
+          <div class="arch-node user-node">
+            <div>
+              <h5>✂️ Step 1：子句切分、否定分离与滑动窗口构建</h5>
+              <p>输入用户自然语言 Query：</p>
+              <ul>
+                <li><strong>标点子句切分与否定子句分离</strong>：识别含 <code>不去 / 别用 / 取消</code> 的否定子句，将其中的实体归入负向抑制集 $W_{\text{neg}}$，不进入正向检索池。</li>
+                <li><strong>正向子句滑动窗口切分</strong>：对正向子句按窗口长度 $L \in [6, 10]$ 字、步长 $\text{step}=4$ 字切分为重叠短语窗口集合 $W_{\text{pos}} = \{w_1^+, w_2^+, \dots, w_k^+\}$。</li>
+              </ul>
+            </div>
+            <div class="arch-allowed">
+              ⚡ 单次 Batch API 调用：将 $W_{\text{pos}}$ 一次性送入 <code>text-embedding-v4</code> 获取窗口向量矩阵 $\mathbf{V}_{\text{win}} \in \mathbb{R}^{k \times 1024}$。
+            </div>
+          </div>
+
+          <!-- Arrow 1 -->
+          <div class="arch-arrow">
+            <span>跨窗口余弦<br/>Max-Pooling</span>
+            <svg width="56" height="24" viewBox="0 0 56 24">
+              <path d="M4 12 L48 12 M42 6 L50 12 L42 18" stroke="currentColor" stroke-width="2" fill="none" />
+            </svg>
+          </div>
+
+          <!-- Step 2: Pure Phrase Hit & Row Projection -->
+          <div class="arch-node agent-node">
+            <div>
+              <h5>🎯 Step 2：短语向量命中与读取同行结构化槽位列</h5>
+              <p>在 <code>memory.db</code> 双索引表上执行：</p>
+              <ul>
+                <li><strong>右列短语向量比对</strong>：库内每条记录 $r_i$ 的右列 <code>phrase_vec</code> 仅为 <code>4~10</code> 字纯净短语向量 $\mathbf{e}_i$。</li>
+                <li><strong>读取同行结构化槽位列（Row-Level Column Projection）</strong>：一旦 $\text{sim}(Q, r_i) \ge \tau_{\text{type}}$，立即读取该行左侧的 <code>app_col, biz_col, scene_col, time_window_col, target_col</code>。</li>
+              </ul>
+            </div>
+            <div class="arch-forbidden">
+              🚫 零硬编码：彻底移除 <code>_PARAPHRASE_SYNONYMS</code> 与手工同义词拼接。
+            </div>
+          </div>
+
+          <!-- Arrow 2 -->
+          <div class="arch-arrow">
+            <span>缺失槽位关联<br/>SQL 精确查询</span>
+            <svg width="56" height="24" viewBox="0 0 56 24">
+              <path d="M4 12 L48 12 M42 6 L50 12 L42 18" stroke="currentColor" stroke-width="2" fill="none" />
+            </svg>
+          </div>
+
+          <!-- Step 3: 2-Hop Completion & SQL Select -->
+          <div class="arch-node gate-node">
+            <div>
+              <h5>🔗 Step 3：二阶段关联表补全与结构化 <code>SELECT</code></h5>
+              <p>补全隐式依赖并组合最终槽位：</p>
+              <ul>
+                <li><strong>二阶段关联表补全</strong>：
+                  <ul>
+                    <li>若仅知 <code>biz_col</code> 缺 <code>app_col</code> $\rightarrow$ 查 <code>service_to_app</code> 补齐默认应用；</li>
+                    <li>若仅知 <code>(app_col, biz_col)</code> 缺时段 $\rightarrow$ 查 <code>periodic_preference</code> 补齐常驻时间窗。</li>
+                  </ul>
+                </li>
+                <li><strong>同行/跨表结构化 <code>SELECT</code></strong>：以对齐后的 <code>(app_col, biz_col, scene_col)</code> 执行 SQL 等值查询，拉取 <code>preferred_value</code>（画质/时延/时长）。</li>
+              </ul>
+            </div>
+            <div class="arch-allowed">
+              ✅ 四维综合排序后输出唯一最优事实卡片注入上下文。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mathematical Formula & Symbol Definitions -->
+      <div class="formula-box">
+        <div style="font-size: 13px; font-weight: 700; color: var(--primary);">核心计算公式：跨滑动窗口最大池化相似度与四维综合记忆评分</div>
+        <div class="math-row">
+          $$\text{sim}(Q, r_i) = \max_{w_j^+ \in W_{\text{pos}}} \frac{\mathbf{v}(w_j^+) \cdot \mathbf{e}_i}{\|\mathbf{v}(w_j^+)\|_2 \, \|\mathbf{e}_i\|_2} - \gamma \cdot \mathbb{I}\!\left(\text{entity}(r_i) \in W_{\text{neg}}\right), \qquad \text{Score}(r_i) = 0.50 \cdot \text{sim}(Q, r_i) + 0.20 \cdot R(t, n_i) + 0.10 \cdot \text{heat}_{\text{eff}}(r_i) + 0.20 \cdot \text{conf}(r_i)$$
+        </div>
+        <ul class="symbol-list">
+          <li>$\mathbf{v}(w_j^+) \in \mathbb{R}^{1024}$：Query 第 $j$ 个正向滑动窗口（长度 6~10 字，步长 4 字）的 <code>text-embedding-v4</code> 向量。</li>
+          <li>$\mathbf{e}_i \in \mathbb{R}^{1024}$：记忆库第 $i$ 行记录右侧纯净触发短语（<code>phrase_text</code>，4~10 字）的预编码向量。</li>
+          <li>$W_{\text{neg}}$ 与 $\gamma$：从否定子句分离出的被否定实体集合；命中否定集且未被后续正向子句覆盖时施加权重衰减过滤惩罚 $\gamma = 0.35$。</li>
+          <li>$R(t, n_i), \text{heat}_{\text{eff}}(r_i), \text{conf}(r_i)$：分别为该记录的 Ebbinghaus 时间保持率（基础衰减率 $\lambda=0.03\text{ d}^{-1}$）、7 天半衰期有效访问热度与状态机置信度（<code>active=0.80, reinforced=0.92</code>）。</li>
+        </ul>
+      </div>
+
+      <!-- 3. 真实样本举例 -->
+      <div class="section-title">3. 真实样本举例：从长句滑动窗口切分到结构化槽位补全的逐步数据状态</div>
+      <div class="compare-grid">
+        <div>
+          <p style="font-size: 13px; font-weight: 700; color: var(--amber); margin-bottom: 6px;">
+            输入自然语言 Query 与切分出的窗口集合
+          </p>
+          <pre>{
+  "raw_query": "今天我不去奥体中心了，改在顺义测试场，趁着午间例行那会儿，把老本行开播整上。",
+  "negated_clause_isolation": {
+    "clause": "今天我不去奥体中心了",
+    "W_neg": ["奥体中心"]
+  },
+  "positive_sliding_windows_step4": [
+    "改在顺义测试场",
+    "趁着午间例行那会",
+    "例行那会儿",
+    "把老本行开播整上"
+  ]
+}</pre>
+        </div>
+
+        <div>
+          <p style="font-size: 13px; font-weight: 700; color: var(--blue); margin-bottom: 6px;">
+            <code>memory.db</code> 命中的记录行（左结构化列 + 右纯净短语）
+          </p>
+          <pre>[
+  {
+    "row_id": "mem_expr_01", "sub_type": "expression",
+    "phrase_text": "老本行开播", "max_win_sim": 0.91,
+    "left_cols": {"alias_col": "老本行开播", "target_col": "开直播"}
+  },
+  {
+    "row_id": "mem_s2a_01", "sub_type": "service_to_app",
+    "phrase_text": "开直播", "lookup_mode": "Hop-2 Relational Completion",
+    "left_cols": {"biz_col": "开直播", "app_col": "抖音"}
+  },
+  {
+    "row_id": "mem_per_01", "sub_type": "periodic_preference",
+    "phrase_text": "午间例行", "max_win_sim": 0.89,
+    "left_cols": {"time_window_col": "12:00~14:00", "app_col": "抖音", "biz_col": "开直播"}
+  },
+  {
+    "row_id": "mem_pref_02", "sub_type": "preferred_value",
+    "lookup_mode": "SQL SELECT WHERE app_col='抖音' AND biz_col='开直播' AND scene_col='顺义测试场'",
+    "left_cols": {"app_col": "抖音", "biz_col": "开直播", "scene_col": "顺义测试场"},
+    "payload_slots": {"resolution": "1080p", "rtt": "50ms", "duration": "120min"}
+  }
+]</pre>
+        </div>
+      </div>
+
+      <!-- 4. 具体工程改造与落地步骤 -->
+      <div class="section-title">4. 分步工程落地清单（Actionable Steps）</div>
+      <ul class="checklist">
+        <li class="checklist-item">
+          <span class="check-box">1</span>
+          <div>
+            <strong>Step 1（索引层 <code>memory_system/src/memory_system/storage/index.py</code>）：新增 <code>phrase_text</code> 纯净短语构造函数并移除同义词硬编码</strong><br/>
+            删除 <code>build_search_text()</code> 第 <code>63-85</code> 行的场景同义词手工扩展逻辑；新增 <code>build_pure_phrase_text(record)</code>，严格按子类型提取 <code>4~10</code> 字核心短语（如 <code>expression -> custom_expr</code>、<code>scene_preference -> scene</code>、<code>periodic_preference -> window_label</code>、<code>service_to_app -> service</code>）作为唯一向量化文本。
+          </div>
+        </li>
+        <li class="checklist-item">
+          <span class="check-box">2</span>
+          <div>
+            <strong>Step 2（检索层 <code>memory_system/src/memory_system/retrieval/search.py</code>）：落地 <code>6~10</code> 字滑动窗口切分与批量 <code>Max-Pooling</code> 匹配</strong><br/>
+            删除第 <code>93-112</code> 行的 <code>_PARAPHRASE_SYNONYMS</code> 字典；新增 <code>_build_sliding_windows(positive_clauses, win_size=8, step=4)</code>，在 <code>search()</code> 中用单次批量 <code>embedding_provider.embed_batch(windows)</code> 替代单句 <code>embed_one(expanded_query)</code>，并对每条记录计算跨窗口最大余弦相似度。
+          </div>
+        </li>
+        <li class="checklist-item">
+          <span class="check-box">3</span>
+          <div>
+            <strong>Step 3（关联补全层 <code>retrieval/search.py</code>）：标准化“同行槽位提取 $\rightarrow$ 二阶段关联表补全 $\rightarrow$ 结构化 <code>SELECT</code>”流水线</strong><br/>
+            当窗口向量命中 <code>expression / periodic_preference / scene_preference</code> 后，统一通过 SQLite 结构化列读取同行槽位，自动触发 <code>service_to_app</code> 与 <code>periodic_preference</code> 二阶段补全，最后执行结构化过滤拉取对应场景的 <code>preferred_value</code>。
+          </div>
+        </li>
+      </ul>
+
+    </div>
+  </article>
+
+  <!-- ===================================================================== -->
+  <!-- TODO #03: 经验记忆触发机制建模与通用结构化萃取 -->
+  <!-- ===================================================================== -->
+  <article class="todo-card" id="todo-03">
+    <div class="todo-header">
+      <div class="todo-title-row">
+        <span class="todo-badge">TODO #03</span>
+        <h2 class="todo-title">经验记忆触发机制建模与通用结构化萃取（因果纠偏识别 + 三类标准参数调整规则，移除内置模板字典）</h2>
+      </div>
+      <div class="tag-row">
+        <span class="tag tag-p0">优先级：P0</span>
+        <span class="tag tag-repo">代码仓：memory_system (api.py &amp; extraction/extractor.py &amp; retrieval/search.py)</span>
+        <span class="tag tag-paper">核心：严明区分事实记忆与经验记忆边界</span>
+        <span class="tag tag-status">状态：已完成并验证 (Implemented &amp; Verified)</span>
+      </div>
+    </div>
+
+    <div class="todo-body">
+
+      <!-- 1. 现状痛点与设计动机 -->
+      <div class="section-title">1. 现状痛点 vs. 目标机制双栏对比</div>
+      <div class="compare-grid">
+        <div class="compare-box pain">
+          <h4>❌ 现状痛点：依赖 <code>api.py</code> 内置 5 类固定模板字典匹配</h4>
+          <ul>
+            <li><strong>沉淀与复用耦合了硬编码模板</strong>：在 <code>memory_system/src/memory_system/api.py:63-184</code> 中，硬编码了 <code>_BUILTIN_EXPERIENCE_TEMPLATES</code>（<code>EXP_PREWARM_BUFFER_01</code> 至 <code>05</code>），并在 <code>_process_cognitive_tier_events()</code>（第 <code>484-562</code> 行）中通过遍历 <code>crystallize_trigger</code> 关键词列表来写入固定字典。</li>
+            <li><strong>未在萃取器层建立“为何它是经验记忆而非事实记忆”的形式化判据</strong>：若不依赖外部预置模板，系统缺乏从多轮慢路径对话中自主判定“这是一条长期静态偏好（事实记忆）”还是“这是一条针对特定异常/陷阱情境的参数修正规则（经验记忆）”的通用机制。</li>
+          </ul>
+        </div>
+        <div class="compare-box target">
+          <h4>✅ 目标机制：基于“慢路径因果纠偏”识别 + 三类标准参数调整规则的通用萃取</h4>
+          <ul>
+            <li><strong>明确形式化边界（事实记忆 vs. 经验记忆）</strong>：
+              <ul>
+                <li><strong>事实记忆（Factual Memory）= 缺省槽位填充（Missing-Slot Default Filling）</strong>：Turn 1 省略了某槽位，系统根据 <code>(app, biz, scene, time_window)</code> 填入静态常数值（如 <code>1080p, 50ms</code>）。</li>
+                <li><strong>经验记忆（Experience Memory）= 带因果归因的情境参数调整规则（Context-Triggered Revision Rule）</strong>：Turn 1 虽有字面计划或常规默认值，但在特定情境下直接按字面/默认执行会出错，需对基准参数做<strong>方向性偏移、应用/业务重映射或历史工单筛选</strong>。</li>
+              </ul>
+            </li>
+            <li><strong>彻底删除 <code>_BUILTIN_EXPERIENCE_TEMPLATES</code></strong>：改由 <code>Extractor</code> 在慢路径会话结束时，根据“<strong>初始方案偏差 + 用户因果归因驳回 + 修正后成交差值 $\Delta$</strong>”自动抽取出结构化经验卡片落盘。</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 2. 核心架构与数据流图 -->
+      <div class="section-title">2. 防溢出架构与数据流图：经验记忆的触发识别、沉淀与快路径复用</div>
+      <div class="arch-diagram">
+        <div class="arch-diagram-title">图 3：经验记忆从“慢路径多轮因果纠偏归纳”到“三类标准参数调整规则落盘与快路径复用”全链路</div>
+        <div class="arch-columns">
+          <!-- Left: Slow-Path Causal Detection -->
+          <div class="arch-node user-node">
+            <div>
+              <h5>🔍 阶段 1：慢路径因果纠偏触发识别（何时划分为经验记忆？）</h5>
+              <p>当会话同时满足以下 <strong>3 个充要条件</strong> 时，识别为经验记忆沉淀事件：</p>
+              <ul>
+                <li><strong>条件 1（初始字面/默认方案偏差）</strong>：Turn 1 存在字面槽位或常规推荐方案 $P_{\text{init}}$，但包含特殊情境信号（大型场馆/恶劣天气/特定合作角色/节假日/历史多单）。</li>
+                <li><strong>条件 2（Turn 2 因果归因驳回）</strong>：用户在 Turn 2 否定或修正 $P_{\text{init}}$，并给出<strong>客观原因说明（Causal Rationale）</strong>（如“万人场馆得提前半小时进场拉流预热”、“那是私下对词不是真开播”）。</li>
+                <li><strong>条件 3（产生结构化参数差值 $\Delta$）</strong>：最终确认方案 $P_{\text{final}}$ 相比初始方案 $P_{\text{init}}$ 发生了可计算的槽位修正。</li>
+              </ul>
+            </div>
+            <div class="arch-allowed">
+              💡 若仅是 Turn 1 没说画质、Turn 2 补答“我要1080p”且无情境修正逻辑 $\rightarrow$ 归入<strong>事实记忆投票</strong>，绝不误判为经验记忆。
+            </div>
+          </div>
+
+          <!-- Arrow 1 -->
+          <div class="arch-arrow">
+            <span>对比 $P_{\text{init}} \to P_{\text{final}}$<br/>结构化归纳</span>
+            <svg width="56" height="24" viewBox="0 0 56 24">
+              <path d="M4 12 L48 12 M42 6 L50 12 L42 18" stroke="currentColor" stroke-width="2" fill="none" />
+            </svg>
+          </div>
+
+          <!-- Middle: Three Standard Adjustment Rules -->
+          <div class="arch-node agent-node">
+            <div>
+              <h5>📐 阶段 2：归纳为三类标准参数调整规则落盘</h5>
+              <p>存入 <code>experiential_memory/experience.md</code> 与 <code>memory.db</code>：</p>
+              <ul>
+                <li><strong>规则类型 A：时间与日历偏移调整（<code>temporal_calendar_adjustment</code>）</strong><br/>
+                  针对大型场馆/跨城提前预热或法定节假日顺延：记录 <code>start_offset_minutes</code>（如 <code>-30</code>）、<code>duration_add_minutes</code>（如 <code>+30</code>）或 <code>holiday_shift_policy = "next_workday"</code>。</li>
+                <li><strong>规则类型 B：字面意图陷阱修正（<code>literal_trap_override</code>）</strong><br/>
+                  针对“表面提及某业务词、实为特定协作动作”（如私下对词看机位、进直播间当连麦嘉宾）：保持画质/时延不变，将应用与业务修正为真实承载的 <code>(target_app, target_service)</code>。</li>
+                <li><strong>规则类型 C：历史工单消歧优选规则（<code>ledger_disambiguation_policy</code>）</strong><br/>
+                  针对工作记忆存在多笔冲突工单：记录过滤条件（如排除临时短单 <code>exclude_tag="temporary_short"</code>，优先匹配同性质正式工单时长）。</li>
+              </ul>
+            </div>
+            <div class="arch-forbidden">
+              🚫 零内置字典：所有触发短语与调整参数均从当前慢路径对话中实时萃取。
+            </div>
+          </div>
+
+          <!-- Arrow 2 -->
+          <div class="arch-arrow">
+            <span>后续会话命中<br/>快路径 1 跳修正</span>
+            <svg width="56" height="24" viewBox="0 0 56 24">
+              <path d="M4 12 L48 12 M42 6 L50 12 L42 18" stroke="currentColor" stroke-width="2" fill="none" />
+            </svg>
+          </div>
+
+          <!-- Right: Fast-Path Application -->
+          <div class="arch-node gate-node">
+            <div>
+              <h5>⚡ 阶段 3：后续会话快路径检索与参数直接修正</h5>
+              <p>当后续会话出现同类情境时：</p>
+              <ul>
+                <li><strong>短语向量 + 触发条件匹配</strong>：用户 Query 的滑动窗口向量命中 <code>experience</code> 记录的右列触发短语（或会话日期命中法定节假日日历）。</li>
+                <li><strong>在基准参数上原地叠加调整规则</strong>：直接读取该行经验卡片的 <code>adjustment_rule</code>，对当前会话的基准时间窗或字面槽位执行修正，输出结构化指令卡注入 Prompt。</li>
+              </ul>
+            </div>
+            <div class="arch-allowed">
+              ✅ Turn 1 助手一步给出修正后的完整方案并说明原因，用户 Turn 2 直接确认（2 轮快路径闭环）。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. 真实样本举例 -->
+      <div class="section-title">3. 真实样本举例：从慢路径纠偏对话中自动萃取经验规则卡并在后续会话快路径复用</div>
+      <div class="compare-grid">
+        <div>
+          <p style="font-size: 13px; font-weight: 700; color: var(--amber); margin-bottom: 6px;">
+            输入：Session 06 慢路径纠偏对话轨迹（首次遇到大型体育馆）
+          </p>
+          <pre>{
+  "session_id": "S-06_crystallize_prewarm",
+  "turns": [
+    {
+      "turn": 1,
+      "user": "今天19:00到21:00在奥体中心体育馆有场活动，帮我把抖音开直播保障开上，1080p、50ms。",
+      "agent_initial_plan": {
+        "app": "抖音", "service": "开直播",
+        "start_time": "19:00", "end_time": "21:00", "duration": "120min",
+        "resolution": "1080p", "rtt": "50ms"
+      },
+      "agent_utterance": "收到，为您预约今日19:00至21:00（120分钟）在奥体中心体育馆的抖音开直播保障（1080p/50ms）。考虑到奥体中心属于大型场馆，是否需要提前开启设备预热缓冲？"
+    },
+    {
+      "turn": 2,
+      "user": "对，这种万人体育馆现场网络复杂，不能卡着19:00正点开，以后凡是去大型体育馆或会展中心，都得比正式开始时间提前30分钟把保障开起来做推流测试，总时长也相应加上这30分钟变成150分钟。",
+      "agent_final_plan": {
+        "app": "抖音", "service": "开直播",
+        "start_time": "18:30", "end_time": "21:00", "duration": "150min",
+        "resolution": "1080p", "rtt": "50ms"
+      }
+    }
+  ]
+}</pre>
+        </div>
+
+        <div>
+          <p style="font-size: 13px; font-weight: 700; color: var(--blue); margin-bottom: 6px;">
+            输出：通用萃取器自动生成的结构化经验记录（存入 <code>memory.db</code>）
+          </p>
+          <pre>{
+  "memory_id": "exp_user001_s06_01",
+  "tier": "experiential_memory",
+  "sub_type": "experience",
+  "status": "active",
+  "confidence": 0.90,
+  "phrase_text": "大型体育馆 会展中心 提前预热",
+  "trigger_conditions": {
+    "scene_keywords": ["体育馆", "奥体中心", "会展中心", "大型场馆"],
+    "applicable_app": "抖音",
+    "applicable_service": "开直播"
+  },
+  "causal_rationale": "大型场馆现场网络环境复杂，需在正式活动开始前预留设备联调与推流测试缓冲时间",
+  "adjustment_rule": {
+    "rule_type": "temporal_calendar_adjustment",
+    "start_offset_minutes": -30,
+    "duration_add_minutes": 30,
+    "formula_desc": "actual_start = literal_start - 30min; actual_duration = literal_duration + 30min"
+  }
+}</pre>
+        </div>
+      </div>
+
+      <!-- 4. 具体工程改造与落地步骤 -->
+      <div class="section-title">4. 分步工程落地清单（Actionable Steps）</div>
+      <ul class="checklist">
+        <li class="checklist-item">
+          <span class="check-box">1</span>
+          <div>
+            <strong>Step 1（清理硬编码 <code>memory_system/src/memory_system/api.py</code>）：彻底删除 <code>_BUILTIN_EXPERIENCE_TEMPLATES</code> 与关键词触发分支</strong><br/>
+            移除 <code>api.py:63-184</code> 的 5 类内置模板字典，以及 <code>_process_cognitive_tier_events()</code> 中按硬编码词表写入经验的逻辑，统一交由 <code>Extractor</code> 与 <code>MemoryUpdater</code> 处理。
+          </div>
+        </li>
+        <li class="checklist-item">
+          <span class="check-box">2</span>
+          <div>
+            <strong>Step 2（通用萃取层 <code>memory_system/src/memory_system/extraction/extractor.py</code>）：实现慢路径因果纠偏识别与三类参数调整规则提取</strong><br/>
+            在 <code>Extractor</code> 中新增慢路径差值分析逻辑：当会话轮数 $\ge 2$ 且存在用户对初始方案的修正与原因说明时，提取 <code>trigger_conditions</code>、<code>causal_rationale</code> 以及属于三类标准规则之一（<code>temporal_calendar_adjustment</code> / <code>literal_trap_override</code> / <code>ledger_disambiguation_policy</code>）的 <code>adjustment_rule</code> JSON 结构，并提取 <code>4~10</code> 字核心触发短语作为右列 <code>phrase_text</code>。
+          </div>
+        </li>
+        <li class="checklist-item">
+          <span class="check-box">3</span>
+          <div>
+            <strong>Step 3（快路径检索与修正注入 <code>memory_system/src/memory_system/retrieval/search.py</code>）：实现数据驱动的经验规则匹配与参数修正计算</strong><br/>
+            在检索时通过滑动窗口短语向量 + <code>trigger_conditions</code> 匹配已激活的 <code>experience</code> 记录；命中后根据其 <code>adjustment_rule</code> 自动计算出修正后的建议起止时间、时长或目标应用/业务槽位，格式化为清晰的 <code>[已生效经验修正规则]</code> 卡片注入下游上下文。
+          </div>
+        </li>
+      </ul>
+
+    </div>
+  </article>
+
+  <script>
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.getElementById('btn-parchment').classList.toggle('active', theme === 'parchment');
+      document.getElementById('btn-github').classList.toggle('active', theme === 'github');
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "$", right: "$", display: false }
+          ],
+          throwOnError: false
+        });
+      }
+    });
+  </script>
+</body>
+</html>
