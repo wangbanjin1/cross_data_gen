@@ -56,10 +56,11 @@ def build_batch_dialogue_prompt(prompt_items: list[dict], identity: str, speech:
      * 若 small_memory_evidence_mode == "cross_turn_clarification"：第2轮用户使用模糊小记忆表达但不说对应标准值；Agent 必须开放式追问具体标准值，不能替用户猜答案；第3轮由用户亲口说出标准值并确认以后按此理解，Agent 才受理并记录。
      * 第2轮 User 明确消解歧义说明业务与参数，并严格按照 turn1_requirement 登记指定的一项小记忆；支线不得使用 service_default_app，只能登记应用昵称或画质、时延、时长、个性化时间表达；user_action_types 为 ["Inform_Slot"]。
      * 第2轮 Agent 答复已开通并收尾祝福，明确确认记录该配置与代称习惯；agent_action_types 必须为 ["Acknowledge"]。
-   - 特例4【时长变更延长 T2-5】(rounds == 2):
-     * 第1轮 User 提及老规矩保障；Agent 反问确认老规矩配置（agent_action_types 为 ["Confirm_Slot"]）。
+   - 特例4【时长变更延长 T2-5】(rounds == 3):
+     * 第1轮 User 提及老规矩保障；Agent 反问确认原老规矩基线配置（agent_action_types 为 ["Confirm_Slot"]）。
      * 第2轮 User 确认老规矩但提出因现场活动延长，要求将时长延长（user_action_types 必须包含 ["Confirm_Slot", "Modify_Request"]）。【严禁使用‘半天’、‘大半天’、‘一上午’等存在歧义的模糊词汇，必须明确说出具体数字（如‘延长到3个小时’或‘延长到180分钟’）】！
-     * 第2轮 Agent 确认时长已延长并生效；agent_action_types 必须为 ["Acknowledge"]！
+     * 第2轮 Agent 将配置更新为延长后的时长与结束时间，向用户发起最终确认（agent_action_types 必须为 ["Confirm_Slot"]，严禁在第2轮直接闭环开通！）。
+     * 第3轮 User 明确确认按延长后的配置开通（user_action_types 为 ["Confirm_Slot"]）；第3轮 Agent 确认时长已延长并正式开通生效（agent_action_types 必须为 ["Acknowledge"]）。
 
 2. 首次建联/证据会话 (evidence_session):
    - 若 declaration_mode == "explicit_declaration" (显式声明):
@@ -88,34 +89,40 @@ def build_batch_dialogue_prompt(prompt_items: list[dict], identity: str, speech:
      第2轮 User: 明确确认 Agent 提出的配置（user_action_types包含 "Confirm_Slot"，如"对，开通吧"）。
      第2轮 Agent: 明确确认已开通并收尾祝福（agent_action_types: ["Acknowledge"]）。
 
-4. 纠正覆盖与临时调整 (correction / event_override, T2-3) (rounds == 2):
+4. 纠正覆盖与临时调整 (correction / event_override, T2-3) (rounds == 3):
    - 第1轮 User: 必须严格满足“场景＋应用＋业务”的最小表达，提及当前所在现场场景（如“今天在【现场环境】”）以及老规矩需求（明确说出应用与业务，若有个性化周期表达可加上个性化周期表达），【严禁只说‘老规矩开保障’或只带个性化周期表达而不说应用和业务】！
    - 第1轮 Agent: 调取原有的长期老规矩基线配置（如 1080p、50ms以内），结合起止时段向用户反问确认；
    - 第2轮 User: 明确说明现场特殊原因（如人流密集、网络拥塞、恶劣环境），提出本次临时调整参数（如画质临时调到 720p、时延压到 30ms），明确表示“今天现场特殊，临时按这个来”；
-   - 第2轮 Agent: 确认本次单次临时调整并开通。
+   - 第2轮 Agent: 汇总本次临时调整后的参数配置向用户发起最终确认（agent_action_types: ["Confirm_Slot"]，严禁在第2轮直接闭环开通！）；
+   - 第3轮 User: 明确确认按临时调整后的配置开通（user_action_types: ["Confirm_Slot"]）；
+   - 第3轮 Agent: 确认本次单次临时调整并正式开通（agent_action_types: ["Acknowledge"]）。
 
 5. 单轮干扰项 (distractor, T1-1, T1-2, X-1):
    - T1-1 单轮单次任务 (rounds == 1): 无任何先验记忆！用户在第 1 轮必须一次性清晰、完整说清全部参数需求（应用、业务、时段、画质、时延，如'画质720p，时延控制在80ms以内'），【严禁使用‘清晰点就行’、‘不卡就行’、‘老规矩’等任何未建立的个性化记忆表达或模糊词】！Agent 直接受理开通闭环，严禁出现‘按记忆理解’等说辞；
    - T1-2 纯域外拒绝 (rounds == 1): 用户提出域外需求，Agent 礼貌拒绝；
    - X-1 混合诉求一办一拒 (rounds == 1): 用户无先验记忆，首次提出标准保障需求并附带域外需求，严禁使用未建立的个性化表达或老规矩；Agent 办理保障并明确拒绝域外需求。
-6. 时长延长与修改 (amend / extend_duration, T2-5) (rounds == 2):
+6. 时长延长与修改 (amend / extend_duration, T2-5) (rounds == 3):
    - 第1轮 User: 必须严格满足“场景＋应用＋业务＋老规矩”的最小表达（如“今天在【现场环境】，老规矩，用【应用】做【业务】，帮我把保障开上”），【严禁只说‘老规矩开保障’或只带个性化表达而不说应用和业务】！严禁在第1轮提及具体画质与时延；
    - 第1轮 Agent: 调取原有的长期老规矩基线配置（画质、时延、原时长与起止时段），向用户反问确认；
    - 第2轮 User: 明确说明老规矩配置不变，但因现场活动拉长等原因，提出将时长延长/修改为指定时长（如“对，老规矩不变，不过今天现场活动延长了，帮我把保障时长延长到【时长】”）；
-   - 第2轮 Agent: 明确确认老规矩配置不变，时长已延长并开通。
+   - 第2轮 Agent: 将配置更新为延长后的时长与结束时段，向用户发起最终确认（agent_action_types: ["Confirm_Slot"]）；
+   - 第3轮 User: 明确确认按延长后的配置开通（user_action_types: ["Confirm_Slot"]）；
+   - 第3轮 Agent: 明确确认老规矩配置不变、时长已延长并正式开通（agent_action_types: ["Acknowledge"]）。
 7. 工作记忆历史意图保障单跨期复用与消歧 (working_memory_reuse / disambiguation, T2-6):
-   - 若 rounds == 3 (历史单据存在多个候选需消歧):
+   - 若为多单消歧 (is_disambiguation, rounds == 3):
      第1轮 User: 表达想按之前在该现场的意图保障单规格开通，省略画质与时延；
      第1轮 Agent: 告知检索到多笔历史意图保障单，反问用户是指哪一次（agent_action_types: ["Request_Disambiguation"]）；
      第2轮 User: 指明选最近一次意图保障单（user_action_types: ["Confirm_Slot", "Inform_Slot"]）；
      第2轮 Agent: 精准定位该意图保障单体验参数（画质、时延）并反问确认起止时段（agent_action_types: ["Confirm_Slot"]）；
      第3轮 User: 明确确认开通（user_action_types: ["Confirm_Slot"]）；
      第3轮 Agent: 确认开通并祝福收尾（agent_action_types: ["Acknowledge"]）。
-   - 若 rounds == 2 (常规跨期复用):
+   - 若为常规跨期复用 (rounds == 3):
      第1轮 User: 表达“这次去【现场环境】，还按【相对时态，如上周/上月】在【现场】办的那个意图保障单规格来”，省略画质与时延；
-     第1轮 Agent: 从意图保障单账本检索定位目标单据，反问确认继承的体验参数，并询问今日具体时段；
-     第2轮 User: 补充说明今日保障起止时段与时长；
-     第2轮 Agent: 确认开通并祝福收尾。
+     第1轮 Agent: 从意图保障单账本检索定位目标单据，反问确认继承的体验参数，并询问今日具体时段（agent_action_types: ["Confirm_Slot", "Request_Slot"]）；
+     第2轮 User: 补充说明今日保障起止时段与时长（user_action_types: ["Inform_Slot"]）；
+     第2轮 Agent: 汇总今日完整保障配置（时段、时长及继承的画质、时延）向用户发起最终确认（agent_action_types: ["Confirm_Slot"]）；
+     第3轮 User: 明确确认开通（user_action_types: ["Confirm_Slot"]）；
+     第3轮 Agent: 确认开通并祝福收尾（agent_action_types: ["Acknowledge"]）。
 8. 工作记忆历史单据变更改期 (working_memory_reschedule, T2-7) (rounds == 2):
    - 第1轮 User: 提出把此前预约的保障往后推迟或提前（如“把昨天预约的【应用】【业务】保障提前/推迟一个小时”）；
    - 第1轮 Agent: 调取预约意图保障单，向用户反问确认调整后的新时段；
@@ -237,7 +244,7 @@ def build_single_dialogue_prompt(s_plan: dict, persona: dict, snapshot_before: d
    - T1-2 纯域外拒绝会话 (rounds == 1): Agent 必须礼貌拒绝，agent_action_types 必须为 ["Reject_Request"]；
    - X-1 混合诉求会话 (rounds == 1): Agent 办理保障同时拒绝域外诉求，agent_action_types 必须为 ["Acknowledge", "Reject_Request"]；
    - T3-1/T2-2 参数澄清与歧义消解会话 (rounds == 3 为 T3-1 跨轮澄清，rounds == 2 为 T2-2): 第1轮用户必须说出官方应用与业务，Agent 只追问缺失参数（["Request_Slot"]）；若 small_memory_evidence_mode 为 cross_turn_clarification，第2轮用户只说模糊表达，Agent 开放式追问具体标准值，不得先给候选答案（["Request_Disambiguation"]）；第3轮用户亲口给出标准值并确认长期含义，Agent 才开通并记录；支线不得登记 service_default_app；
-   - T2-5 时长延长会话 (rounds == 2): 第1轮 Agent 确认老规矩配置（["Confirm_Slot"]），第2轮用户提出延长时长（user_action_types 包含 ["Confirm_Slot", "Modify_Request"]），Agent 确认延长并生效。
+   - T2-5 时长延长会话 (rounds == 3): 第1轮 Agent 确认老规矩基线配置（["Confirm_Slot"]），第2轮用户提出延长时长（user_action_types 包含 ["Confirm_Slot", "Modify_Request"]），第2轮 Agent 更新时长并请用户最终确认（["Confirm_Slot"]），第3轮用户确认（["Confirm_Slot"]），Agent 确认延长并生效（["Acknowledge"]）。
 2. 首次建联/证据会话 (evidence_session):
    - 若 declaration_mode == "explicit_declaration" (显式声明):
      第1轮 User: 明确提出需要保障的标准应用与业务（可提开始时间，严禁结束时间/时长，严禁别名，严禁'老规矩'）；Agent 确认应用/业务并追问画质、时延、时长细节。
@@ -267,7 +274,8 @@ def build_single_dialogue_prompt(s_plan: dict, persona: dict, snapshot_before: d
    - 第1轮 User: 必须严格满足“场景＋应用＋业务”的最小表达，提及当前所在现场场景（如“今天在【{env}】”）以及老规矩需求（明确说出应用与业务，若有个性化周期表达可加上个性化周期表达），【严禁只说‘老规矩开保障’或只带个性化周期表达而不说应用和业务】！
    - 第1轮 Agent: 调取原有的长期老规矩基线配置（如 1080p、50ms以内），结合起止时段向用户反问确认；
    - 第2轮 User: 明确说明现场特殊原因（如人流密集、网络拥塞、恶劣环境），提出本次临时调整参数（如画质临时调到 720p、时延压到 30ms），明确表示“今天现场特殊，临时按这个来”；
-   - 第2轮 Agent: 确认本次单次临时调整并开通。
+   - 第2轮 Agent: 汇总本次临时调整后的参数配置向用户发起最终确认（["Confirm_Slot"]）；
+   - 第3轮 User: 明确确认按临时配置开通（["Confirm_Slot"]），第3轮 Agent 确认本次单次临时调整并正式开通（["Acknowledge"]）。
 5. 单轮干扰项 (distractor):
    - T1-1 单轮单次任务 (rounds == 1): 无任何先验记忆！用户在第 1 轮必须一次性清晰、完整说清全部参数需求（应用、业务、时段、画质、时延，如'画质{tp['resolution']}，时延控制在{tp['rtt']}以内'），【严禁使用‘清晰点就行’、‘不卡就行’、‘老规矩’等任何未建立的个性化记忆表达或模糊词】！Agent 直接受理开通闭环，严禁出现‘按记忆理解’等说辞；
    - T1-2 纯域外拒绝：用户提出域外需求，Agent 礼貌拒绝；

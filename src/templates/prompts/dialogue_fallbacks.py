@@ -178,39 +178,49 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
             dur_val = s_plan.get("base_dur") or tp.get("duration", "120min")
             if turn_idx == 1:
                 return f"帮我预约下周一（10月5日，正值国庆假期）例行周会的{app}{srv}意图保障单，时间从{sh_t}到{eh_t}（持续{dur_val}），画质要求{res}，时延控制在{rtt}以内。"
-            else:
+            elif turn_idx == 2:
                 return "哎呀，10月5日还在放国庆假呢，那天不开会！帮我把日期顺延到节后上班第一天（10月8日）吧。"
+            else:
+                return "对，确认顺延到10月8日节后首个工作日办理。"
         elif exp_id == "EXP_MULTI_INTENT_PARTITION_01":
             sh_t = tp.get("start_timestamp", "").split("日")[-1] or "12时30分"
             new_eh_t = tp.get("end_timestamp", "").split("日")[-1] or "14时30分"
             dur_val = tp.get("duration", "120min")
             if turn_idx == 1:
                 return f"今天在{env}，从{sh_t}到{new_eh_t}（持续{dur_val}）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质{res}、时延{rtt}以内的意图保障单。"
-            else:
+            elif turn_idx == 2:
                 return "嗨，我只是先跟搭档私下对一下词和看眼机位，还没正式开播呢！平时对词我们都是打微信视频电话，改成微信视频通话吧。"
-        elif exp_id == "EXP_PREWARM_BUFFER_01":
-            sh_t = tp['start_timestamp'].split('日')[-1]
-            eh_t = tp['end_timestamp'].split('日')[-1]
-            base_dur = s_plan.get("base_dur") or tp.get("duration", "120min")
-            if turn_idx == 1:
-                return f"今天在{env}有重要现场保障，活动{sh_t}正式开始，帮我开从{sh_t}到{eh_t}（持续{base_dur}）的{app}{srv}意图保障单，画质要求{res}，时延控制在{rtt}以内。"
             else:
+                return "对，改成微信视频通话就对了，确认按此开通。"
+        elif exp_id == "EXP_PREWARM_BUFFER_01":
+            nom_sh_t = (s_plan.get("nominal_start") or tp.get("start_timestamp", "")).split("日")[-1]
+            eh_t = tp["end_timestamp"].split("日")[-1]
+            base_dur = s_plan.get("nominal_dur") or s_plan.get("base_dur") or tp.get("duration", "120min")
+            if turn_idx == 1:
+                return f"今天在{env}有重要现场保障，活动{nom_sh_t}正式开始，帮我开从{nom_sh_t}到{eh_t}（持续{base_dur}）的{app}{srv}意图保障单，画质要求{res}，时延控制在{rtt}以内。"
+            elif turn_idx == 2:
                 return "等等，大型活动现场还得提前进场调试设备呢，掐着点开来不及！帮我把开始时间往前提前半小时吧。"
+            else:
+                return "好的，确认按提前半小时预热的配置开通。"
         elif exp_id == "EXP_ORDER_QUALITY_DISAMBIGUATION_01":
             sh_t = tp['start_timestamp'].split('日')[-1]
             d_info = _formal_and_temp_dur_info(tp)
             if turn_idx == 1:
                 return f"今天在{env}办正式客户远程路演，从{sh_t}开始开{app}{srv}（画质{res}、时延{rtt}以内），保障时长和结束时间就按我上次办的那笔意图保障单来。"
-            else:
+            elif turn_idx == 2:
                 return f"不对，{d_info['temp_spoken']}不够！前天那笔只是我临时插空开的短会，今天是正式路演，得按上周那笔正式单改成{d_info['formal_spoken']}。"
+            else:
+                return f"对，就按上周那笔{d_info['formal_spoken']}的正式路演单规格开通。"
         elif exp_id == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
             sh_t = tp.get("start_timestamp", "").split("日")[-1] or "15时00分"
             eh_t = tp.get("end_timestamp", "").split("日")[-1] or "17时00分"
             dur_val = tp.get("duration", "120min")
             if turn_idx == 1:
                 return f"今天在{env}，{sh_t}到{eh_t}（持续{dur_val}）我受邀进主会场的抖音直播间当连麦嘉宾互动，帮我把抖音的保障开上，画质要求{res}，时延控制在{rtt}以内。"
-            else:
+            elif turn_idx == 2:
                 return "不对，我是去当连麦嘉宾、要开摄像头上麦发言的，不是光在下面看直播！把业务类型改成开直播吧。"
+            else:
+                return "对，改成抖音开直播就对了，确认按此开通。"
         else:
             sh_t = tp['start_timestamp'].split('日')[-1]
             eh_t = tp['end_timestamp'].split('日')[-1]
@@ -278,12 +288,14 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
             if s_plan.get("retrieval_challenge_type") == "implicit_service_collocation":
                 return f"今天在{env}，老规矩，用{app_alias}{_implicit_service_phrase(srv)}，帮我把保障开上。"
             return f"今天在{env}，老规矩，用{app_alias}做{srv_alias}，帮我把保障开上。"
-        else:
+        elif turn_idx == 2:
             return f"对，老规矩不变，不过今天现场活动延长了，帮我把保障时长延长到{tp['duration']}。"
+        else:
+            return f"好的，确认按延长后的{tp['duration']}配置开通。"
     elif tid == "T2-6":
         start_t = tp['start_timestamp'].split('日')[-1]
         end_t = tp['end_timestamp'].split('日')[-1]
-        is_disambig = s_plan.get("is_disambiguation", False) or s_plan.get("round_count") == 3
+        is_disambig = s_plan.get("is_disambiguation", False)
         if is_disambig:
             if turn_idx == 1:
                 return f"今天在{env}，想按之前的意图保障单规格开{app}{srv}保障，时间从{start_t}到{end_t}（持续{tp['duration']}）。"
@@ -294,13 +306,17 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
         elif s_plan.get("working_memory_pointer", {}).get("inferred_delta_days", 7) >= 25:
             if turn_idx == 1:
                 return f"今天在{env}，调一下上个月初在{env}办的那个意图保障单规格，今天也按那套来。"
-            else:
+            elif turn_idx == 2:
                 return f"今天是从{start_t}到{end_t}，持续{tp['duration']}。"
+            else:
+                return "对，确认按这个配置开通。"
         else:
             if turn_idx == 1:
                 return f"这次去{env}，还按上周在{env}办的那个意图保障单规格来。"
-            else:
+            elif turn_idx == 2:
                 return f"今天是从{start_t}到{end_t}，持续{tp['duration']}。"
+            else:
+                return "对，确认按这个配置开通。"
     elif tid == "T2-7":
         start_t = tp['start_timestamp'].split('日')[-1]
         is_advance = s_plan.get("working_memory_pointer", {}).get("reschedule_direction") == "advance"
@@ -326,8 +342,10 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
                 neg_s = s_plan.get("contrast_negated_service") or "视频会议"
                 return f"今天在{env}，不用{neg_a}做{neg_s}了，老规矩用{app}做{srv}，帮我把保障开上。"
             return f"今天在{env}，老规矩，用{app}做{srv}，帮我把保障开上。"
-        else:
+        elif turn_idx == 2:
             return f"对，不过今天现场特殊，画质临时调到{res}，时延压到{rtt}以内，今天临时按这个来。"
+        else:
+            return "好的，确认按这个临时调整的配置开通。"
     elif tid == "T1-1" or b_type == "distractor":
         start_t = tp['start_timestamp'].split('日')[-1]
         end_t = tp['end_timestamp'].split('日')[-1]
@@ -449,40 +467,55 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
             eh_t = (s_plan.get("nominal_end") or tp.get("end_timestamp", "")).split("日")[-1] or "17时00分"
             if turn_idx == 1:
                 return f"收到，已为您准备好下周一（10月5日）{sh_t}至{eh_t}的例行周会意图保障单（{res} / 时延≤{rtt}），确认按此时段预约吗？"
+            elif turn_idx == 2 and not is_last:
+                return f"明白！10月5日确实处于国庆法定假期。已为您将例行周会意图保障单顺延调整至节后首个工作日（10月8日）{sh_t}至{eh_t}（{res} / 时延≤{rtt}），确认按此顺延方案预约吗？"
             else:
-                return f"收到！已为您将本次例行周会意图保障单顺延调整至国庆节后首个工作日（10月8日）同时段办理（{res} / 时延≤{rtt}），避免假期在空办公室产生空跑费用，祝您假期愉快！"
+                return f"好的，已为您将本次例行周会意图保障单顺延调整至国庆节后首个工作日（10月8日）同时段办理（{res} / 时延≤{rtt}），并记下这条节假日避让顺延经验，祝您假期愉快！"
         elif exp_id == "EXP_MULTI_INTENT_PARTITION_01":
             sh_t = tp.get("start_timestamp", "").split("日")[-1] or "12时30分"
             new_eh_t = tp.get("end_timestamp", "").split("日")[-1] or "14时30分"
             dur_val = tp.get("duration", "120min")
             if turn_idx == 1:
                 return f"收到，已为您准备好{sh_t}至{new_eh_t}（持续{dur_val}）的【抖音-开直播】意图保障单（{res} / 时延≤{rtt}），确认直接为您开通吗？"
+            elif turn_idx == 2 and not is_last:
+                return f"明白！原来私下跟搭档对直播词、看镜头机位平时都是用【微信-视频通话】沟通。已为您将意图保障单修正为【微信-视频通话】（{sh_t}至{new_eh_t}，持续{dur_val}，{res} / 时延≤{rtt}），确认按修改后的配置开通吗？"
             else:
-                return f"明白！原来私下跟搭档对直播词、看镜头机位平时都是用【微信-视频通话】沟通。已为您将意图保障单修正为【微信-视频通话】（{sh_t}至{new_eh_t}，持续{dur_val}，{res} / 时延≤{rtt}），并记下这条日常经验，祝您对词顺利！"
+                return f"好的，已为您成功开通【微信-视频通话】意图保障单（{sh_t}至{new_eh_t}，持续{dur_val}，{res} / 时延≤{rtt}），并记下这条日常对词试机位经验，祝您对词顺利！"
         elif exp_id == "EXP_PREWARM_BUFFER_01":
+            nom_sh_t = (s_plan.get("nominal_start") or tp.get("start_timestamp", "")).split("日")[-1]
+            pw_sh_t = tp["start_timestamp"].split("日")[-1]
+            eh_t = tp["end_timestamp"].split("日")[-1]
             if turn_idx == 1:
-                return f"收到，已为您准备好{tp['start_timestamp'].split('日')[-1]}至{tp['end_timestamp'].split('日')[-1]}的现场意图保障单配置（{res} / 时延≤{rtt}），确认直接开通吗？"
+                return f"收到，已为您准备好{nom_sh_t}至{eh_t}的现场意图保障单配置（{res} / 时延≤{rtt}），确认直接开通吗？"
+            elif turn_idx == 2 and not is_last:
+                return f"明白！大型场馆重大活动现场设备调试确实需要预留试机时间。已为您将意图保障单起保时间提前30分钟调整为{pw_sh_t}至{eh_t}（总时长扩充至{tp['duration']}，{res} / 时延≤{rtt}），确认按调整后的预热方案开通吗？"
             else:
-                return f"明白！大型场馆重大活动现场设备调试确实需要预留试机时间。已为您将意图保障单起保时间提前30分钟并延长总时长至{tp['duration']}（{res} / 时延≤{rtt}），祝现场活动顺利！"
+                return f"好的，已按提前30分钟预热方案为您开通{app}{srv}意图保障单（{pw_sh_t}至{eh_t}，持续{tp['duration']}，{res} / 时延≤{rtt}），并记下这条大型活动提前预热试机的日常经验，祝现场活动顺利！"
         elif exp_id == "EXP_ORDER_QUALITY_DISAMBIGUATION_01":
             sh_t = tp['start_timestamp'].split('日')[-1]
             eh_t = tp['end_timestamp'].split('日')[-1]
             d_info = _formal_and_temp_dur_info(tp)
             if turn_idx == 1:
                 return f"收到，已按您最近一笔（前天）的记录，为您准备好{sh_t}至{d_info['temp_end_t']}（持续{d_info['temp_dur']}）的{app}{srv}意图保障单（{res} / 时延≤{rtt}），确认按此开通吗？"
+            elif turn_idx == 2 and not is_last:
+                return f"明白！已为您过滤前天的{d_info['temp_short']}临时短单，改按上周正式客户路演单为您排满{d_info['formal_short']}（{sh_t}至{eh_t}，持续{d_info['formal_dur']}，{res} / 时延≤{rtt}），确认按此正式规格开通吗？"
             else:
-                return f"明白！已为您过滤前天的{d_info['temp_short']}临时短单，按上周正式客户路演单为您排满{d_info['formal_short']}（{sh_t}至{eh_t}，持续{d_info['formal_dur']}，{res} / 时延≤{rtt}），并记下这条经验，祝您路演顺畅！"
+                return f"好的，已按上周正式客户路演单规格为您排满{d_info['formal_short']}（{sh_t}至{eh_t}，持续{d_info['formal_dur']}，{res} / 时延≤{rtt}），并记下这条经验，祝您路演顺畅！"
         elif exp_id == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
             sh_t = tp.get("start_timestamp", "").split("日")[-1] or "15时00分"
             eh_t = tp.get("end_timestamp", "").split("日")[-1] or "17时00分"
             dur_val = tp.get("duration", "120min")
             if turn_idx == 1:
                 return f"收到，已为您准备好{sh_t}至{eh_t}（持续{dur_val}）的【抖音-看直播】意图保障单（{res} / 时延≤{rtt}），确认按此直接开通吗？"
+            elif turn_idx == 2 and not is_last:
+                return f"明白！进他人直播间当连麦嘉宾需要上麦发言推流，确实应当按【开直播】保障上行。已为您修正为【抖音-开直播】意图保障单（{sh_t}至{eh_t}，持续{dur_val}，{res} / 时延≤{rtt}），确认按修改后的配置开通吗？"
             else:
-                return f"明白！进他人直播间当连麦嘉宾需要上麦发言推流，确实应当按【开直播】保障上行。已为您修正为【抖音-开直播】意图保障单（{sh_t}至{eh_t}，持续{dur_val}，{res} / 时延≤{rtt}），并记下这条日常经验，祝您连麦互动顺利！"
+                return f"好的，已为您成功开通【抖音-开直播】意图保障单（{sh_t}至{eh_t}，持续{dur_val}，{res} / 时延≤{rtt}），并记下这条日常经验，祝您连麦互动顺利！"
         else:
             if turn_idx == 1:
                 return f"收到，已为您配置好意图保障单方案（{res} / 时延≤{rtt}），确认直接开通吗？"
+            elif turn_idx == 2 and not is_last:
+                return f"明白，已按您的要求更新意图保障单配置（{res} / 时延≤{rtt}），确认按修改后的方案开通吗？"
             else:
                 return f"好的，已为您成功受理本次意图保障单（{res} / 时延≤{rtt}），祝您工作顺利！"
     elif s_plan.get("experience_citation", {}).get("experience_id") == "EXP_CALENDAR_HOLIDAY_EXCEPTION_01":
@@ -546,14 +579,17 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
             return f"好的，已为您成功开通【抖音-开直播】意图保障单（{start_t}至{end_t}，持续{tp['duration']}，{res} / 时延≤{rtt}），祝您连麦互动圆满顺利！"
     elif tid == "T2-5":
         start_t = tp['start_timestamp'].split('日')[-1]
+        end_t = tp['end_timestamp'].split('日')[-1]
         if turn_idx == 1:
             return f"收到，我调取到之前登记的{app}{srv}配置：画质{res}、时延{rtt}以内，从{start_t}开始保障，确认按这套配置开通吗？"
+        elif turn_idx == 2 and not is_last:
+            return f"收到，已为您将{app}{srv}保障时长延长至{tp['duration']}（时段更新为{start_t}至{end_t}，画质保持{res}、时延≤{rtt}），确认按延长后的配置开通吗？"
         else:
-            return f"好的，已按老规矩为您开通{app}{srv}保障：画质保持{res}、时延上限{rtt}，时长已延长至{tp['duration']}。祝您活动顺利！"
+            return f"好的，已按老规矩为您开通{app}{srv}保障：画质保持{res}、时延上限{rtt}，时长已延长至{tp['duration']}（{start_t}至{end_t}）。祝您活动顺利！"
     elif tid == "T2-6":
         start_t = tp['start_timestamp'].split('日')[-1]
         end_t = tp['end_timestamp'].split('日')[-1]
-        is_disambig = s_plan.get("is_disambiguation", False) or s_plan.get("round_count") == 3
+        is_disambig = s_plan.get("is_disambiguation", False)
         if is_disambig:
             cand_ids = s_plan.get("working_memory_pointer", {}).get("candidate_record_ids", [])
             cand_str = "、".join(cand_ids) if cand_ids else "意图保障单A和意图保障单B"
@@ -566,11 +602,15 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
         elif s_plan.get("working_memory_pointer", {}).get("inferred_delta_days", 7) >= 25:
             if turn_idx == 1:
                 return f"收到，已为您跨期调取到上个月在{env}的{app}{srv}历史意图保障单（画质{res}、时延≤{rtt}）。请问今天具体的保障时间是几点到几点呢？"
+            elif turn_idx == 2 and not is_last:
+                return f"收到，已为您锁定今日{start_t}至{end_t}（持续{tp['duration']}）的{app}{srv}保障（继承上月历史意图保障单规格：画质{res}、时延≤{rtt}），确认按此配置开通吗？"
             else:
                 return f"好的，已按一个月前历史意图保障单规格为您开通今日{app}{srv}保障（{res} / 时延≤{rtt}，时段{start_t}至{end_t}）。祝您工作顺利！"
         else:
             if turn_idx == 1:
                 return f"收到，已为您在历史意图保障单账本中找到上周在{env}的{app}{srv}意图保障单（画质{res}、时延≤{rtt}）。请问今天具体的保障时间是几点到几点呢？"
+            elif turn_idx == 2 and not is_last:
+                return f"收到，已为您锁定今日{start_t}至{end_t}（持续{tp['duration']}）的{app}{srv}保障（继承上周历史意图保障单规格：画质{res}、时延≤{rtt}），确认按此配置开通吗？"
             else:
                 return f"好的，已按您引用的历史意图保障单规格为您成功开通今日{app}{srv}保障（{res} / 时延≤{rtt}，时段{start_t}至{end_t}）。祝您工作顺利！"
     elif tid == "T2-7":
@@ -602,6 +642,8 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
         base_rtt = s_plan.get("base_rtt") or "50ms"
         if turn_idx == 1:
             return f"收到，我调取到之前登记的{app}{srv}配置：画质{base_res}、时延{base_rtt}以内，{start_t}至{end_t}（持续{tp['duration']}），确认按这套配置开通吗？"
+        elif turn_idx == 2 and not is_last:
+            return f"明白，已针对今日现场特殊情况为您临时调整{app}{srv}保障参数：画质{res}、时延{rtt}以内，时段{start_t}至{end_t}（持续{tp['duration']}），确认按此临时配置开通吗？"
         else:
             return f"好的，已按现场特殊情况为您临时调整开通{app}{srv}保障：画质{res}、时延上限{rtt}，时段{start_t}至{end_t}。祝您现场顺利！"
     elif tid == "T1-1" or b_type == "distractor":
@@ -651,7 +693,9 @@ def get_normalized_action_types(s_plan: dict, turn_idx: int, role: str, is_last:
 
     if b_type == "experience_learning":
         if turn_idx == 1:
-            return ["Create_Intent_Request", "Inform_Slot"], ["Confirm_Slot", "Request_Slot"]
+            return ["Create_Intent_Request", "Inform_Slot"], ["Confirm_Slot"]
+        elif turn_idx == 2 and not is_last:
+            return ["Correct_Previous_Input", "Modify_Request"], ["Confirm_Slot"]
         else:
             return ["Confirm_Slot"], ["Acknowledge"]
     elif tid == "T1-2":
@@ -668,10 +712,12 @@ def get_normalized_action_types(s_plan: dict, turn_idx: int, role: str, is_last:
     elif tid == "T2-5":
         if turn_idx == 1:
             return ["Create_Intent_Request", "Inform_Slot"], ["Confirm_Slot"]
+        elif turn_idx == 2 and not is_last:
+            return ["Confirm_Slot", "Modify_Request"], ["Confirm_Slot"]
         else:
-            return ["Confirm_Slot", "Modify_Request"], ["Acknowledge"]
+            return ["Confirm_Slot"], ["Acknowledge"]
     elif tid == "T2-6":
-        is_disambig = s_plan.get("is_disambiguation", False) or s_plan.get("round_count") == 3
+        is_disambig = s_plan.get("is_disambiguation", False)
         if is_disambig:
             if turn_idx == 1:
                 return ["Create_Intent_Request", "Inform_Slot"], ["Request_Disambiguation"]
@@ -682,8 +728,10 @@ def get_normalized_action_types(s_plan: dict, turn_idx: int, role: str, is_last:
         else:
             if turn_idx == 1:
                 return ["Create_Intent_Request", "Inform_Slot"], ["Confirm_Slot", "Request_Slot"]
+            elif turn_idx == 2 and not is_last:
+                return ["Inform_Slot"], ["Confirm_Slot"]
             else:
-                return ["Confirm_Slot", "Inform_Slot"], ["Acknowledge"]
+                return ["Confirm_Slot"], ["Acknowledge"]
     elif tid == "T2-7":
         if turn_idx == 1:
             return ["Modify_Request", "Inform_Slot"], ["Confirm_Slot"]
@@ -712,8 +760,10 @@ def get_normalized_action_types(s_plan: dict, turn_idx: int, role: str, is_last:
     elif tid == "T2-3":
         if turn_idx == 1:
             return ["Create_Intent_Request", "Inform_Slot"], ["Confirm_Slot"]
+        elif turn_idx == 2 and not is_last:
+            return ["Correct_Previous_Input", "Inform_Slot"], ["Confirm_Slot"]
         else:
-            return ["Correct_Previous_Input", "Inform_Slot"], ["Acknowledge"]
+            return ["Confirm_Slot"], ["Acknowledge"]
     else:
         if role == "evidence_session" and s_plan.get("round_count") == 3:
             if turn_idx == 1:

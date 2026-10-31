@@ -128,7 +128,10 @@ class SessionAssembler:
                 round_count=s_plan["round_count"],
                 small_memory_type=(s_plan.get("small_memory") or {}).get("type"),
                 experience_citation=s_plan.get("experience_citation", {}),
-                learning_source_session=s_plan.get("learning_source_session")
+                learning_source_session=s_plan.get("learning_source_session"),
+                nominal_start=s_plan.get("nominal_start_timestamp"),
+                nominal_end=s_plan.get("nominal_end_timestamp"),
+                nominal_dur=s_plan.get("nominal_duration")
             )
 
         if isinstance(res, dict) and "session_meta" in res:
@@ -377,7 +380,7 @@ class SessionAssembler:
 
     @classmethod
     def _assemble_t2_5(cls, sid, uid, ref_time, tid, role, b_type, env, act, app, srv, res, rtt, start, end, dur, events, snap, mems, gold, base_end_ts=None, base_dur=None):
-        sig = f"T2-5|2|1|I1:{app}/{srv}/1/amend/resolved|none"
+        sig = f"T2-5|{len(events)}|1|I1:{app}/{srv}/1/amend/resolved|none"
         if not base_end_ts:
             base_end_ts = end.replace("17时00分", "16时00分") if "17时00分" in end else end
         base_dur = base_dur or "120min"
@@ -401,36 +404,34 @@ class SessionAssembler:
                 },
             }
         ]
-        slot_updates = [
+        turn_updates = [
             {
-                "intent_id": "I1",
-                "turn_updates": [
-                    {
-                        "turn": 1,
-                        "params": {
-                            "application_name": {"value": app, "source_type": "Memory", "source_ref": "MF_001"},
-                            "service_name": {"value": srv, "source_type": "Memory", "source_ref": "MF_001"},
-                            "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}},
-                            "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}},
-                            "timestamp": {
-                                "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
-                                "end_timestamp": {"value": base_end_ts, "source_type": "Turn", "source_ref": "U1"},
-                                "duration": {"value": base_dur, "source_type": "Context", "source_ref": "U1"},
-                            },
-                        },
+                "turn": 1,
+                "params": {
+                    "application_name": {"value": app, "source_type": "Memory", "source_ref": "MF_001"},
+                    "service_name": {"value": srv, "source_type": "Memory", "source_ref": "MF_001"},
+                    "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "MF_001"}},
+                    "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "MF_001"}},
+                    "timestamp": {
+                        "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
+                        "end_timestamp": {"value": base_end_ts, "source_type": "Turn", "source_ref": "U1"},
+                        "duration": {"value": base_dur, "source_type": "Context", "source_ref": "U1"},
                     },
-                    {
-                        "turn": 2,
-                        "params": {
-                            "timestamp": {
-                                "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U2"},
-                                "duration": {"value": dur, "source_type": "Turn", "source_ref": "U2"},
-                            }
-                        },
-                    },
-                ],
-            }
+                },
+            },
+            {
+                "turn": 2,
+                "params": {
+                    "timestamp": {
+                        "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U2"},
+                        "duration": {"value": dur, "source_type": "Turn", "source_ref": "U2"},
+                    }
+                },
+            },
         ]
+        if events and len(events) >= 3:
+            turn_updates.append({"turn": 3, "params": {}})
+        slot_updates = [{"intent_id": "I1", "turn_updates": turn_updates}]
         if events and len(events) >= 2:
             events[0]["requested_params"] = []
             events[0]["turn_intents"] = [
@@ -453,8 +454,23 @@ class SessionAssembler:
                     },
                 }
             ]
-            events[1]["requested_params"] = []
-            events[1]["turn_intents"] = intents
+            if len(events) >= 3:
+                events[1]["requested_params"] = []
+                events[1]["turn_intents"] = [
+                    {
+                        "intent_id": "I1",
+                        "status": "in_progress",
+                        "closure_path": "amend",
+                        "expression_level": 1,
+                        "intent": f"{app}{srv}保障",
+                        "params": intents[0]["params"],
+                    }
+                ]
+                events[2]["requested_params"] = []
+                events[2]["turn_intents"] = intents
+            else:
+                events[1]["requested_params"] = []
+                events[1]["turn_intents"] = intents
         return {
             "session_id": sid,
             "user_id": uid,
@@ -475,7 +491,7 @@ class SessionAssembler:
 
     @classmethod
     def _assemble_t2_3(cls, sid, uid, ref_time, tid, role, b_type, env, act, app, srv, res, rtt, start, end, dur, events, snap, mems, gold):
-        sig = f"T2-3|2|1|I1:{app}/{srv}/4/correct/resolved|none"
+        sig = f"T2-3|{len(events)}|1|I1:{app}/{srv}/4/correct/resolved|none"
         intents = [
             {
                 "intent_id": "I1",
@@ -499,34 +515,32 @@ class SessionAssembler:
         mf_001 = snap.get("MF_001", {}) if snap else {}
         base_res = mf_001.get("resolution", "1080p")
         base_rtt = mf_001.get("rtt_max", "50ms")
-        slot_updates = [
+        turn_updates = [
             {
-                "intent_id": "I1",
-                "turn_updates": [
-                    {
-                        "turn": 1,
-                        "params": {
-                            "application_name": {"value": app, "source_type": "Memory", "source_ref": "MF_001"},
-                            "service_name": {"value": srv, "source_type": "Memory", "source_ref": "MF_001"},
-                            "resolution": {"min_value": {"value": base_res, "source_type": "Memory", "source_ref": "MF_001"}},
-                            "rtt": {"max_value": {"value": base_rtt, "source_type": "Memory", "source_ref": "MF_001"}},
-                            "timestamp": {
-                                "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
-                                "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
-                                "duration": {"value": dur, "source_type": "Context", "source_ref": "U1"},
-                            },
-                        },
+                "turn": 1,
+                "params": {
+                    "application_name": {"value": app, "source_type": "Memory", "source_ref": "MF_001"},
+                    "service_name": {"value": srv, "source_type": "Memory", "source_ref": "MF_001"},
+                    "resolution": {"min_value": {"value": base_res, "source_type": "Memory", "source_ref": "MF_001"}},
+                    "rtt": {"max_value": {"value": base_rtt, "source_type": "Memory", "source_ref": "MF_001"}},
+                    "timestamp": {
+                        "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
+                        "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
+                        "duration": {"value": dur, "source_type": "Context", "source_ref": "U1"},
                     },
-                    {
-                        "turn": 2,
-                        "params": {
-                            "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U2"}},
-                            "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U2"}},
-                        },
-                    },
-                ],
-            }
+                },
+            },
+            {
+                "turn": 2,
+                "params": {
+                    "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U2"}},
+                    "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U2"}},
+                },
+            },
         ]
+        if events and len(events) >= 3:
+            turn_updates.append({"turn": 3, "params": {}})
+        slot_updates = [{"intent_id": "I1", "turn_updates": turn_updates}]
         if events and len(events) >= 2:
             events[0]["requested_params"] = []
             events[0]["turn_intents"] = [
@@ -549,8 +563,23 @@ class SessionAssembler:
                     },
                 }
             ]
-            events[1]["requested_params"] = []
-            events[1]["turn_intents"] = intents
+            if len(events) >= 3:
+                events[1]["requested_params"] = []
+                events[1]["turn_intents"] = [
+                    {
+                        "intent_id": "I1",
+                        "status": "in_progress",
+                        "closure_path": "correct",
+                        "expression_level": 4,
+                        "intent": f"{app}{srv}保障",
+                        "params": intents[0]["params"],
+                    }
+                ]
+                events[2]["requested_params"] = []
+                events[2]["turn_intents"] = intents
+            else:
+                events[1]["requested_params"] = []
+                events[1]["turn_intents"] = intents
         return {
             "session_id": sid,
             "user_id": uid,
@@ -1556,7 +1585,7 @@ class SessionAssembler:
         }
 
     @classmethod
-    def _assemble_standard(cls, sid, uid, ref_time, tid, role, b_type, env, act, app, srv, res, rtt, start, end, dur, events, snap, mems, gold, round_count, small_memory_type=None, experience_citation=None, learning_source_session=None):
+    def _assemble_standard(cls, sid, uid, ref_time, tid, role, b_type, env, act, app, srv, res, rtt, start, end, dur, events, snap, mems, gold, round_count, small_memory_type=None, experience_citation=None, learning_source_session=None, nominal_start=None, nominal_end=None, nominal_dur=None):
         closure_path = "direct"
         app_src, app_ref = "Turn", "U1"
         srv_src, srv_ref = "Turn", "U1"
@@ -1567,8 +1596,8 @@ class SessionAssembler:
         dur_src, dur_ref = "Context", "U1"
 
         exp_c = experience_citation or {}
-        if exp_c.get("experience_id") == "EXP_CALENDAR_HOLIDAY_EXCEPTION_01" and b_type != "experience_learning":
-            exp_id = exp_c["experience_id"]
+        exp_id = exp_c.get("experience_id")
+        if exp_id == "EXP_CALENDAR_HOLIDAY_EXCEPTION_01" and b_type != "experience_learning":
             app_src, app_ref = "Turn", "U1"
             srv_src, srv_ref = "Turn", "U1"
             res_src, res_ref = "Turn", "U1"
@@ -1581,11 +1610,18 @@ class SessionAssembler:
             closure_path = "experience_crystallized"
             app_src, app_ref = "Turn", "U1"
             srv_src, srv_ref = "Turn", "U1"
-            res_src, res_ref = "Turn", "U1"
-            rtt_src, rtt_ref = "Turn", "U1"
-            start_src, start_ref = "Turn", "U1"
-            end_src, end_ref = "Turn", "U1"
-            dur_src, dur_ref = "Turn", "U1"
+            if exp_id == "EXP_PREWARM_BUFFER_01":
+                res_src, res_ref = "Turn", "U1"
+                rtt_src, rtt_ref = "Turn", "U1"
+                start_src, start_ref = "Turn", "U2"
+                end_src, end_ref = "Turn", "U1"
+                dur_src, dur_ref = "Turn", "U2"
+            else:
+                res_src, res_ref = "Turn", "U2"
+                rtt_src, rtt_ref = "Turn", "U2"
+                start_src, start_ref = "Turn", "U1"
+                end_src, end_ref = "Turn", "U1"
+                dur_src, dur_ref = "Turn", "U1"
 
         if b_type == "main":
             if role == "evidence_session":
@@ -1669,6 +1705,9 @@ class SessionAssembler:
                     app_src, app_ref = "Turn", "U1"
                     srv_src, srv_ref = "Turn", "U1"
 
+        t1_start = (nominal_start or start) if (b_type == "experience_learning" and exp_id == "EXP_PREWARM_BUFFER_01") else start
+        t1_end = (nominal_end or end) if (b_type == "experience_learning" and exp_id == "EXP_PREWARM_BUFFER_01") else end
+        t1_dur = (nominal_dur or dur) if (b_type == "experience_learning" and exp_id == "EXP_PREWARM_BUFFER_01") else dur
         slot_updates_turn = []
         for t_idx in range(1, round_count + 1):
             if t_idx == 1:
@@ -1681,29 +1720,45 @@ class SessionAssembler:
                     t_params["timestamp"] = {
                         "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
                     }
+                elif b_type == "experience_learning" and exp_id == "EXP_PREWARM_BUFFER_01":
+                    t_params["timestamp"] = {
+                        "start_timestamp": {"value": t1_start, "source_type": "Turn", "source_ref": "U1"},
+                        "end_timestamp": {"value": t1_end, "source_type": "Turn", "source_ref": "U1"},
+                        "duration": {"value": t1_dur, "source_type": "Turn", "source_ref": "U1"},
+                    }
+                    t_params["resolution"] = {"min_value": {"value": res, "source_type": res_src, "source_ref": res_ref}}
+                    t_params["rtt"] = {"max_value": {"value": rtt, "source_type": rtt_src, "source_ref": rtt_ref}}
                 else:
                     t_params["timestamp"] = {
                         "start_timestamp": {"value": start, "source_type": start_src, "source_ref": start_ref},
                         "end_timestamp": {"value": end, "source_type": end_src, "source_ref": end_ref},
                         "duration": {"value": dur, "source_type": dur_src, "source_ref": dur_ref},
                     }
-                if role not in ["evidence_session", "correction_session"]:
-                    t_params["resolution"] = {"min_value": {"value": res, "source_type": res_src, "source_ref": res_ref}}
-                    t_params["rtt"] = {"max_value": {"value": rtt, "source_type": rtt_src, "source_ref": rtt_ref}}
+                    if role not in ["evidence_session", "correction_session"]:
+                        t_params["resolution"] = {"min_value": {"value": res, "source_type": res_src, "source_ref": res_ref}}
+                        t_params["rtt"] = {"max_value": {"value": rtt, "source_type": rtt_src, "source_ref": rtt_ref}}
                 slot_updates_turn.append({"turn": 1, "params": t_params})
             elif t_idx == 2:
                 t_params = {}
                 if role in ["evidence_session", "correction_session"]:
-                    t_params = {
-                        "resolution": {"min_value": {"value": res, "source_type": res_src, "source_ref": res_ref}},
-                        "rtt": {"max_value": {"value": rtt, "source_type": rtt_src, "source_ref": rtt_ref}},
-                    }
-                    if role == "evidence_session":
-                        # 第 2 轮用户澄清补充结束时间与持续时长
-                        t_params["timestamp"] = {
-                            "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U2"},
-                            "duration": {"value": dur, "source_type": "Turn", "source_ref": "U2"},
+                    if b_type == "experience_learning" and exp_id == "EXP_PREWARM_BUFFER_01":
+                        t_params = {
+                            "timestamp": {
+                                "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U2"},
+                                "duration": {"value": dur, "source_type": "Turn", "source_ref": "U2"},
+                            }
                         }
+                    else:
+                        t_params = {
+                            "resolution": {"min_value": {"value": res, "source_type": res_src, "source_ref": res_ref}},
+                            "rtt": {"max_value": {"value": rtt, "source_type": rtt_src, "source_ref": rtt_ref}},
+                        }
+                        if role == "evidence_session":
+                            # 第 2 轮用户澄清补充结束时间与持续时长
+                            t_params["timestamp"] = {
+                                "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U2"},
+                                "duration": {"value": dur, "source_type": "Turn", "source_ref": "U2"},
+                            }
                 slot_updates_turn.append({"turn": 2, "params": t_params})
             elif t_idx >= 3:
                 slot_updates_turn.append({"turn": t_idx, "params": {}})
@@ -1794,12 +1849,12 @@ class SessionAssembler:
                         "params": {
                             "application_name": {"value": app, "source_type": app_src, "source_ref": app_ref},
                             "service_name": {"value": srv, "source_type": srv_src, "source_ref": srv_ref},
-                            "resolution": {"min_value": {"value": res, "source_type": res_src, "source_ref": res_ref}},
-                            "rtt": {"max_value": {"value": rtt, "source_type": rtt_src, "source_ref": rtt_ref}},
+                            "resolution": {"min_value": {"value": "1080p" if (b_type == "experience_learning" and exp_id != "EXP_PREWARM_BUFFER_01") else res, "source_type": "Turn" if b_type == "experience_learning" else res_src, "source_ref": "U1" if b_type == "experience_learning" else res_ref}},
+                            "rtt": {"max_value": {"value": "50ms" if (b_type == "experience_learning" and exp_id != "EXP_PREWARM_BUFFER_01") else rtt, "source_type": "Turn" if b_type == "experience_learning" else rtt_src, "source_ref": "U1" if b_type == "experience_learning" else rtt_ref}},
                             "timestamp": {
-                                "start_timestamp": {"value": start, "source_type": start_src, "source_ref": start_ref},
-                                "end_timestamp": {"value": end, "source_type": end_src, "source_ref": end_ref},
-                                "duration": {"value": dur, "source_type": dur_src, "source_ref": dur_ref},
+                                "start_timestamp": {"value": t1_start, "source_type": "Turn" if b_type == "experience_learning" else start_src, "source_ref": "U1" if b_type == "experience_learning" else start_ref},
+                                "end_timestamp": {"value": t1_end, "source_type": "Turn" if b_type == "experience_learning" else end_src, "source_ref": "U1" if b_type == "experience_learning" else end_ref},
+                                "duration": {"value": t1_dur, "source_type": "Turn" if b_type == "experience_learning" else dur_src, "source_ref": "U1" if b_type == "experience_learning" else dur_ref},
                             },
                         },
                     }
@@ -1878,7 +1933,7 @@ class SessionAssembler:
 
         wm_ptr = working_memory_pointer or {}
         rec_id = wm_ptr.get("target_record_id") or "REC_PRIOR"
-        is_disambig = wm_ptr.get("is_disambiguation", False) or len(events) == 3
+        is_disambig = bool(wm_ptr.get("is_disambiguation", False))
 
         if is_exp:
             closure_path = "quality_disambiguated_reuse"
@@ -2023,36 +2078,43 @@ class SessionAssembler:
             ]
             events[0]["working_memory_pointer"] = wm_ptr
             events[1]["requested_params"] = []
-            events[1]["turn_intents"] = intents
+            events[1]["turn_intents"] = [
+                {
+                    "intent_id": "I1",
+                    "status": "in_progress",
+                    "closure_path": closure_path,
+                    "expression_level": 1,
+                    "intent": f"{app}{srv}保障",
+                    "params": intents[0]["params"],
+                }
+            ]
             events[2]["requested_params"] = []
             events[2]["turn_intents"] = intents
         else:
-            slot_updates = [
+            turn_updates = [
                 {
-                    "intent_id": "I1",
-                    "turn_updates": [
-                        {
-                            "turn": 1,
-                            "params": {
-                                "application_name": {"value": app, "source_type": "WorkingRecord", "source_ref": rec_id},
-                                "service_name": {"value": srv, "source_type": "WorkingRecord", "source_ref": rec_id},
-                                "resolution": {"min_value": {"value": res, "source_type": "WorkingRecord", "source_ref": rec_id}},
-                                "rtt": {"max_value": {"value": rtt, "source_type": "WorkingRecord", "source_ref": rec_id}},
-                            },
+                    "turn": 1,
+                    "params": {
+                        "application_name": {"value": app, "source_type": "WorkingRecord", "source_ref": rec_id},
+                        "service_name": {"value": srv, "source_type": "WorkingRecord", "source_ref": rec_id},
+                        "resolution": {"min_value": {"value": res, "source_type": "WorkingRecord", "source_ref": rec_id}},
+                        "rtt": {"max_value": {"value": rtt, "source_type": "WorkingRecord", "source_ref": rec_id}},
+                    },
+                },
+                {
+                    "turn": 2,
+                    "params": {
+                        "timestamp": {
+                            "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U2"},
+                            "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U2"},
+                            "duration": {"value": dur, "source_type": "Turn", "source_ref": "U2"},
                         },
-                        {
-                            "turn": 2,
-                            "params": {
-                                "timestamp": {
-                                    "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U2"},
-                                    "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U2"},
-                                    "duration": {"value": dur, "source_type": "Turn", "source_ref": "U2"},
-                                },
-                            },
-                        },
-                    ],
-                }
+                    },
+                },
             ]
+            if events and len(events) >= 3:
+                turn_updates.append({"turn": 3, "params": {}})
+            slot_updates = [{"intent_id": "I1", "turn_updates": turn_updates}]
 
             if events and len(events) >= 2:
                 events[0]["requested_params"] = ["timestamp"]
@@ -2072,8 +2134,23 @@ class SessionAssembler:
                     }
                 ]
                 events[0]["working_memory_pointer"] = wm_ptr
-                events[1]["requested_params"] = []
-                events[1]["turn_intents"] = intents
+                if len(events) >= 3:
+                    events[1]["requested_params"] = []
+                    events[1]["turn_intents"] = [
+                        {
+                            "intent_id": "I1",
+                            "status": "in_progress",
+                            "closure_path": "working_record_reuse",
+                            "expression_level": 1,
+                            "intent": f"{app}{srv}保障",
+                            "params": intents[0]["params"],
+                        }
+                    ]
+                    events[2]["requested_params"] = []
+                    events[2]["turn_intents"] = intents
+                else:
+                    events[1]["requested_params"] = []
+                    events[1]["turn_intents"] = intents
             elif events and len(events) == 1:
                 events[0]["requested_params"] = []
                 events[0]["turn_intents"] = intents

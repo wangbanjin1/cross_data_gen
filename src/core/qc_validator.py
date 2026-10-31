@@ -66,8 +66,8 @@ class QCValidator:
 
     TEMPLATE_SPEC = {
         "T1-1": [(1, 1)], "T1-2": [(1, 1)], "T1-3": [(1, 2)], "T1-4": [(1, 1)],
-        "T2-1": [(1, 1), (2, 1), (3, 1)], "T2-2": [(2, 1)], "T2-3": [(2, 1)], "T2-4": [(2, 1), (2, 2)],
-        "T2-5": [(2, 1)], "T2-6": [(2, 1), (3, 1)], "T2-7": [(2, 1)], "T2-8": [(1, 1)],
+        "T2-1": [(1, 1), (2, 1), (3, 1)], "T2-2": [(2, 1)], "T2-3": [(2, 1), (3, 1)], "T2-4": [(2, 1), (2, 2)],
+        "T2-5": [(2, 1), (3, 1)], "T2-6": [(2, 1), (3, 1)], "T2-7": [(2, 1)], "T2-8": [(1, 1)],
         "T2-9": [(2, 1), (3, 1)], "T2-10": [(2, 1)],
         "T3-1": [(3, 1)], "T3-2": [(3, 1)], "T3-3": [(3, 1)], "T3-4": [(3, 1)],
         "X-1": [(1, 2)], "X-2": [(3, 3)],
@@ -125,6 +125,14 @@ class QCValidator:
                             report["issues"].append(f"[{sid}] 第1轮 Agent 未执行反问确认动作")
                             report["rule_checks"]["multi_turn_confirmation_check"] = False
                             s_passed = False
+
+            # 2b. 验证 3 轮会话（澄清/参数修正/经验学习）：第 2 轮 Agent 必须执行反问确认（Confirm_Slot/Request_Slot/Request_Disambiguation），严禁在第 2 轮提前 Acknowledge 结束
+            if len(events) == 3:
+                t2_a_acts = events[1].get("agent", {}).get("action_types", [])
+                if "Acknowledge" in t2_a_acts or not any(act in t2_a_acts for act in ["Confirm_Slot", "Request_Slot", "Request_Disambiguation"]):
+                    report["issues"].append(f"[{sid}] 3轮会话第2轮 Agent 必须执行反问确认，不得提前 Acknowledge 结束 (实际: {t2_a_acts})")
+                    report["rule_checks"]["multi_turn_confirmation_check"] = False
+                    s_passed = False
 
             # 3. 验证会话必需字段完整性
             required_keys = ['session_id', 'user_id', 'reference_time', 'session_meta', 'event_sequence', 'intents', 'relations', 'slot_updates']
@@ -413,7 +421,7 @@ class QCValidator:
                     p0 = ev0.get("turn_intents", [{}])[0].get("params", {}) if ev0.get("turn_intents") else {}
                     if any("resolution" in p or "rtt" in p for p in p0):
                         cold_leakage_violations += 1
-                elif cht == "hot_start":
+                elif cht == "hot_start" and sm.get("template_id") not in ("T2-3", "T2-5"):
                     hot_turns.append(rc)
 
         t_cold_avg = sum(cold_turns) / len(cold_turns) if cold_turns else 3.0

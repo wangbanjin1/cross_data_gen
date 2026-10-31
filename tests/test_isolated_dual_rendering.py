@@ -167,3 +167,79 @@ def test_premature_disclosure_validator_catches_user_and_agent_turn1_leaks() -> 
     leaked_user_reinf["event_sequence"][0]["user"]["utterance"] = "今天在大巴转场途中用抖音开直播，画质1080p"
     issues_u = PrematureDisclosureValidator.check_session(leaked_user_reinf)
     assert any("User Turn 1 违反信息隔离" in msg for msg in issues_u)
+
+
+def test_three_round_confirmation_closure_for_turn2_modifications() -> None:
+    import tempfile
+    from pathlib import Path
+    from src.core.timeline_planner import DynamicTimelinePlanner
+    from src.core.working_records_ledger import WorkingRecordsLedger
+    from src.core.experience_bank import ExperienceBank
+    from src.generation.session_assembler import SessionAssembler
+    from src.templates.prompts.dialogue_fallbacks import (
+        get_fallback_user_utterance,
+        get_fallback_agent_utterance,
+        get_normalized_action_types,
+    )
+
+    mock_persona = {
+        "static_profile": {"user_id": "USER_001", "identity": "户外直播达人", "speech_style": {"tone": "自然", "catchphrases": "老规矩", "typical_habits": "简洁"}},
+        "dynamic_profile": {
+            "periodic_main_storyline": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "period_type": "daily",
+                "time_range": "12:30-13:30",
+                "preferred_params": {"resolution": "1080p", "rtt_max": "50ms"},
+            },
+            "scenario_events": [
+                {
+                    "event_name": "高山强风极限直播",
+                    "scene_description": "高山露天训练场强风加大人流拥塞",
+                    "preference_override": {"resolution": "720p", "rtt_max": "100ms"},
+                }
+            ],
+            "sub_storylines": [
+                {
+                    "application_name": "腾讯会议",
+                    "service_name": "音视频会议",
+                    "params": {"resolution": "720p", "rtt_max": "80ms"},
+                }
+            ],
+            "distractor_pool": [
+                {"application_name": "中国移动", "service_name": "宽带报修"}
+            ],
+        },
+    }
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        ledger = WorkingRecordsLedger(user_id="USER_001", storage_path=Path(tmp_dir) / "working_records.jsonl")
+        exp_bank = ExperienceBank()
+        plans = DynamicTimelinePlanner.plan(persona=mock_persona, working_ledger=ledger, experience_bank=exp_bank)
+
+    target_by_sid = {p["session_id"]: p for p in plans}
+
+    # All sessions where user introduces new/modified/corrected parameters in Turn 2 must be 3 rounds
+    for sid in ("S-USER_001-04", "S-USER_001-05", "S-USER_001-06", "S-USER_001-07", "S-USER_001-09", "S-USER_001-12"):
+        p = target_by_sid[sid]
+        assert p["round_count"] == 3, f"{sid} expected round_count=3, got {p['round_count']}"
+
+        events = []
+        for t in range(1, 4):
+            is_last = t == 3
+            u_act, a_act = get_normalized_action_types(p, t, p["memory_role"], is_last, [], [])
+            events.append({
+                "turn": t,
+                "user": {"utterance": get_fallback_user_utterance(p, t, p["memory_role"]), "action_types": u_act},
+                "agent": {"utterance": get_fallback_agent_utterance(p, t, p["memory_role"], is_last), "action_types": a_act},
+            })
+        assembled = SessionAssembler.assemble(p, {}, [], {}, events)
+        ev_seq = assembled["event_sequence"]
+        assert len(ev_seq) == 3
+        assert "Confirm_Slot" in ev_seq[1]["agent"]["action_types"]
+        assert "Acknowledge" not in ev_seq[1]["agent"]["action_types"]
+        assert ev_seq[1]["turn_intents"][0]["status"] == "in_progress"
+        assert "Confirm_Slot" in ev_seq[2]["user"]["action_types"]
+        assert "Acknowledge" in ev_seq[2]["agent"]["action_types"]
+        assert ev_seq[2]["turn_intents"][0]["status"] == "resolved"
+

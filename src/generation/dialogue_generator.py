@@ -253,17 +253,19 @@ class DialogueGenerator:
             elif tid == "T2-5":
                 base_dur = s_plan.get("base_dur") or "60min"
                 t1_rule = (
-                    f"【时长延长会话：第1轮用户必须满足最小表达，表达'今天在{env}，老规矩，用{tp['application_name']}做{tp['service_name']}，帮我把保障开上'（严禁在第1轮提及画质、时延与修改后的时长！）；"
+                    f"【时长延长会话（3轮修改再确认闭环）：第1轮用户必须满足最小表达，表达'今天在{env}，老规矩，用{tp['application_name']}做{tp['service_name']}，帮我把保障开上'（严禁在第1轮提及画质、时延与修改后的时长！）；"
                     f"第1轮客服调取原基线老规矩配置向用户确认（基线时长为{base_dur}，严禁在第1轮提前说出修改后的时长{tp['duration']}！）；"
                     f"第2轮用户确认老规矩不变，但说明因现场活动延长等原因提出将时长延长到{tp['duration']}（必须明确表述为精确时长数值，如‘{tp['duration']}’或对应小时/分钟，严禁使用‘半天’、‘大半天’、‘一上午’等有歧义口语！）；"
-                    f"第2轮客服确认按老规矩开通并将时长延长至{tp['duration']}。】"
+                    f"第2轮客服将配置更新为延长后的时长{tp['duration']}（时段{tp['start_timestamp'].split('日')[-1]}至{tp['end_timestamp'].split('日')[-1]}，画质{tp['resolution']}、时延{tp['rtt']}以内），并向用户发起最终确认（严禁在第2轮直接闭环开通！）；"
+                    f"第3轮用户明确确认按延长后的配置开通，第3轮客服正式确认开通并收尾祝福。】"
                 )
             elif tid == "T2-3":
                 t1_rule = (
-                    f"【临时纠正覆盖会话：第1轮用户必须满足最小表达，表达'今天在{env}，老规矩，用{tp['application_name']}做{tp['service_name']}，帮我把保障开上'；"
-                    f"第1轮客服反问确认老规矩；"
+                    f"【临时纠正覆盖会话（3轮纠偏再确认闭环）：第1轮用户必须满足最小表达，表达'今天在{env}，老规矩，用{tp['application_name']}做{tp['service_name']}，帮我把保障开上'；"
+                    f"第1轮客服反问确认原老规矩基线配置；"
                     f"第2轮用户说明因现场特殊临时调整画质为{tp['resolution']}、时延为{tp['rtt']}；"
-                    f"第2轮客服确认本次临时调整。】"
+                    f"第2轮客服汇总本次临时调整后的参数配置（画质{tp['resolution']}、时延{tp['rtt']}以内）并向用户发起最终确认（严禁在第2轮直接闭环开通！）；"
+                    f"第3轮用户明确确认按临时配置开通，第3轮客服正式确认开通并收尾祝福。】"
                 )
             elif tid == "T2-6":
                 wm_ptr = s_plan.get("working_memory_pointer", {})
@@ -271,7 +273,7 @@ class DialogueGenerator:
                 delta_d = wm_ptr.get("inferred_delta_days", 7)
                 sh_t = tp["start_timestamp"].split("日")[-1]
                 eh_t = tp["end_timestamp"].split("日")[-1]
-                if s_plan.get("is_disambiguation") or s_plan.get("round_count") == 3:
+                if s_plan.get("is_disambiguation"):
                     t1_rule = (
                         f"【工作记忆多单消歧会话（3轮）：第1轮用户明确给出今日保障起止时间（从{sh_t}到{eh_t}，持续{tp['duration']}）以及应用{tp['application_name']}、业务{tp['service_name']}，并表示想按之前在{env}办过的意图保障单规格来（省略画质和时延）；"
                         f"第1轮客服从工作记忆账本中查出存在多笔历史意图保障单候选，向用户反问确认按哪一笔规格办理；"
@@ -281,11 +283,12 @@ class DialogueGenerator:
                     )
                 else:
                     t1_rule = (
-                        f"【工作记忆跨期复用会话：第1轮用户表达'这次去{env}，还按上周在{env}办的那个意图保障单规格来'，"
+                        f"【工作记忆跨期复用会话（3轮补全再确认闭环）：第1轮用户表达'这次去{env}，还按上周在{env}办的那个意图保障单规格来'，"
                         f"指代历史意图保障单({rec_id}，距今约{delta_d}天)，省略画质和时延，但提出今日保障；"
                         f"第1轮客服从工作记忆意图保障单账本中检索定位该单据，向用户确认继承的体验参数（画质{tp['resolution']}、时延{tp['rtt']}），并询问今日保障的具体起止时间；"
                         f"第2轮用户补充说明今日的起止时间（{sh_t}至{eh_t}，持续{tp['duration']}）；"
-                        f"第2轮客服确认开通并收尾祝福。】"
+                        f"第2轮客服汇总今日完整保障配置（{sh_t}至{eh_t}，持续{tp['duration']}，画质{tp['resolution']}、时延{tp['rtt']}以内）向用户发起最终确认；"
+                        f"第3轮用户明确确认开通，第3轮客服正式确认开通并收尾祝福。】"
                     )
             elif tid == "T2-7":
                 wm_ptr = s_plan.get("working_memory_pointer", {})
@@ -606,6 +609,18 @@ class DialogueGenerator:
                 num = dur_m.group(1)
                 if f"{num}min" in a_text or f"{num}分钟" in a_text:
                     a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
+        elif tid == "T2-5" and turn_idx == 2 and not is_last:
+            if "确认" not in a_text or "吗" not in a_text or tp.get("duration", "") not in a_text:
+                a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
+        elif tid == "T2-5" and turn_idx == 3:
+            if any(k in u_text for k in ["延长", "min", "分钟", "小时"]) or not any(k in u_text for k in ["确认", "好", "对", "行", "可以"]):
+                u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+        if (tid == "T2-3" or s_plan.get("blueprint_type") == "event_override") and turn_idx == 2 and not is_last:
+            if "确认" not in a_text or "吗" not in a_text or tp.get("resolution", "") not in a_text or tp.get("rtt", "") not in a_text:
+                a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
+        elif (tid == "T2-3" or s_plan.get("blueprint_type") == "event_override") and turn_idx == 3:
+            if any(k in u_text for k in ["特殊", "720p", "30ms", "临时调"]) or not any(k in u_text for k in ["确认", "好", "对", "行", "可以"]):
+                u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
         if turn_idx == 2 and role == "reinforcement_session" and s_plan.get("small_memory_evidence_mode") == "co_occurrence" and s_plan.get("session_id", "").endswith("-03"):
             a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
         if s_plan.get("is_counterexample"):
@@ -635,6 +650,11 @@ class DialogueGenerator:
                     a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
             elif turn_idx == 2:
                 if sh_t not in u_text or eh_t not in u_text or tp.get("duration", "") not in u_text:
+                    u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+                if not is_last and ("确认" not in a_text or "吗" not in a_text):
+                    a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
+            elif turn_idx == 3:
+                if any(k in u_text for k in [sh_t, eh_t, "min", "分钟"]) or not any(k in u_text for k in ["确认", "好", "对", "行", "可以"]):
                     u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
         elif tid == "T2-7":
             sh_t = tp.get("start_timestamp", "").split("日")[-1]

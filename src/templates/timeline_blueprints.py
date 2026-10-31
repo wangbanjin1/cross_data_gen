@@ -249,6 +249,8 @@ def get_session_blueprints(
             t_kind = "multi_intent"
         elif exp_id == "EXP_OVERLAPPING_ORDER_RESOLUTION_01":
             t_kind = "overlap"
+        elif exp_id == "EXP_PREWARM_BUFFER_01":
+            t_kind = "prewarm"
         else:
             t_kind = "main"
         dur_val = ext_dur if exp_id == "EXP_MULTI_INTENT_PARTITION_01" else base_dur
@@ -265,7 +267,7 @@ def get_session_blueprints(
             "env": main_env_desc,
             "action": "crystallize_experience_pitfall",
             "experience_id": exp_id,
-            "round_count": 2,
+            "round_count": 3,
             "cold_hot_type": None,
             "agility_factor": None,
             "time_kind": t_kind
@@ -340,7 +342,7 @@ def get_session_blueprints(
             "dur": base_dur,
             "env": main_env_desc,
             "action": "retrieve_working_record_reuse",
-            "round_count": 2,
+            "round_count": 3,
             "cold_hot_type": None,
             "agility_factor": None,
             "time_kind": "main"
@@ -388,12 +390,12 @@ def get_session_blueprints(
             "dur": base_dur,
             "env": main_env_desc,
             "action": "retrieve_working_record_reuse",
-            "round_count": 2,
+            "round_count": 3,
             "cold_hot_type": None,
             "agility_factor": None,
             "time_kind": "main"
         }),
-        # 7: S07 Main Duration Amend (T2-5 事实记忆局部时长修改 α=0.5 - 2轮)
+        # 7: S07 Main Duration Amend (T2-5 事实记忆局部时长修改 α=0.5 - 3轮修改再确认闭环)
         {
             "tag": "main_amend",
             "template_id": "T2-5",
@@ -407,7 +409,7 @@ def get_session_blueprints(
             "action": "extend_duration_amend",
             "storyline_trigger_type": storyline_trigger_type,
             "trigger_condition": main_trigger_desc,
-            "round_count": 2,
+            "round_count": 3,
             "cold_hot_type": "hot_start",
             "agility_factor": 0.5,
             "time_kind": "main_amend"
@@ -448,7 +450,7 @@ def get_session_blueprints(
             "agility_factor": 0.5,
             "time_kind": "main"
         }),
-        # 9: S09 Event Correction (T2-3 恶劣天气临时纠正覆盖 - 作用域仅限于当前任务 - 2轮)
+        # 9: S09 Event Correction (T2-3 恶劣天气临时纠正覆盖 - 作用域仅限于当前任务 - 3轮纠偏再确认闭环)
         {
             "tag": "evt_correct",
             "template_id": "T2-3",
@@ -460,7 +462,7 @@ def get_session_blueprints(
             "env": "沿海暴雨强对流前沿现场",
             "action": "override_temporary_preference",
             "override": evt_01.get("preference_override", {"resolution": "720p", "rtt_max": "30ms"}),
-            "round_count": 2,
+            "round_count": 3,
             "cold_hot_type": "hot_start",
             "agility_factor": 0.5,
             "time_kind": "main"
@@ -542,7 +544,7 @@ def get_session_blueprints(
             "dur": base_dur,
             "env": main_env_desc,
             "action": "retrieve_working_record_reuse",
-            "round_count": 2,
+            "round_count": 3,
             "cold_hot_type": None,
             "agility_factor": None,
             "time_kind": "main"
