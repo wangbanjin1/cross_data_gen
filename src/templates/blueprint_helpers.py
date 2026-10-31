@@ -156,9 +156,17 @@ def _apply_slot_timestamp(item: dict, d_str: str, ts_ctx: dict) -> None:
         item["holiday_defer_date"] = defer_date
     elif t_kind == "multi_intent":
         item["ref_time"] = _m_time(d_str, ref_str)
-        item["start"] = item["start2"] = _m_time(d_str, sh_str)
-        item["base_end"] = item["end"] = item["end2"] = _m_time(d_str, eh_str)
-        item["base_dur"] = item["dur"] = item["dur2"] = base_dur
+        if item.get("role") == "learning_session":
+            item["start"] = item["start2"] = _m_time(d_str, sh_str)
+            item["base_end"] = item["end"] = item["end2"] = _m_time(d_str, eh_str)
+            item["base_dur"] = item["dur"] = item["dur2"] = base_dur
+        else:
+            item["start"] = _m_time(d_str, ts_ctx["pw_s_str"])
+            item["end"] = _m_time(d_str, sh_str)
+            item["dur"] = "30min"
+            item["start2"] = _m_time(d_str, sh_str)
+            item["base_end"] = item["end2"] = _m_time(d_str, eh_str)
+            item["base_dur"] = item["dur2"] = base_dur
     elif t_kind == "overlap":
         item["ref_time"] = _m_time(d_str, ref_str)
         item["nominal_start"] = item["start"] = _m_time(d_str, sh_str)
@@ -194,6 +202,21 @@ def _apply_secondary_slot_timestamp(item: dict, d_str: str, ts_ctx: dict) -> Non
     elif t_kind == "dist_normal":
         item["ref_time"] = item["start"] = _m_time(d_str, ts_ctx["dn_s"])
         item["end"] = _m_time(d_str, ts_ctx["dn_e"])
+    elif t_kind == "multi_intent_hetero":
+        item["ref_time"] = _m_time(d_str, ts_ctx["sub1_ref"])
+        item["start"] = _m_time(d_str, ts_ctx["sub1_s"])
+        item["end"] = _m_time(d_str, ts_ctx["sub1_e"])
+        item["start2"] = _m_time(d_str, ts_ctx["sh_str"])
+        item["end2"] = _m_time(d_str, ts_ctx["eh_str"])
+        item["dur2"] = ts_ctx["base_dur"]
+    elif t_kind == "multi_intent_homo":
+        item["ref_time"] = item["start"] = _m_time(d_str, ts_ctx["dn_s"])
+        item["end"] = _m_time(d_str, ts_ctx["dn_e"])
+        item["start2"] = _m_time(d_str, ts_ctx["sub1_s"])
+        item["end2"] = _m_time(d_str, ts_ctx["sub1_e"])
+        sh_m, sm_m = map(int, ts_ctx["sub1_s"].split(":"))
+        eh_m, em_m = map(int, ts_ctx["sub1_e"].split(":"))
+        item["dur2"] = f"{max(30, (eh_m * 60 + em_m) - (sh_m * 60 + sm_m))}min"
 
 
 def assign_blueprint_timestamps(

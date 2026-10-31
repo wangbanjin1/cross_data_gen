@@ -237,7 +237,7 @@ def _finalize_turn_utterances(u_text: str, a_text: str, turn_idx: int, role: str
                 u_text = u_text.replace(bad_word, "1080p原画" if tp.get("resolution") == "1080p" else tp.get("resolution", ""))
 
     exp_id = s_plan.get("experience_id") or s_plan.get("experience_citation", {}).get("experience_id")
-    if tid in ["T2-4", "T2-9", "T2-10"] or s_plan.get("memory_tier") == "experiential_memory" or s_plan.get("blueprint_type") == "experience_learning" or bool(exp_id):
+    if tid in ["T1-3", "T2-4", "T2-9", "T2-10"] or s_plan.get("memory_tier") == "experiential_memory" or s_plan.get("blueprint_type") == "experience_learning" or bool(exp_id):
         u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
         a_text = get_fallback_agent_utterance(s_plan, turn_idx, role, is_last)
 

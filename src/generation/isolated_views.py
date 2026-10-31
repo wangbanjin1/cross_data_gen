@@ -87,7 +87,7 @@ def build_isolated_views(s_plan: dict, snapshot_before: dict) -> dict:
     exp_id = s_plan.get("experience_id") or (s_plan.get("experience_citation") or {}).get("experience_id")
 
     is_single_turn_full = (
-        tid in ("T1-1", "X-1")
+        tid in ("T1-1", "T1-3", "T2-4", "X-1")
         or b_type == "distractor"
         or tid in ("T2-9", "T2-10")
         or s_plan.get("memory_tier") == "experiential_memory"

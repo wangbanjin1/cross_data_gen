@@ -309,7 +309,7 @@ class DialogueGenerator:
             elif turn_idx == 2 and tid == "T3-1":
                 req_params = ["resolution"]
 
-            rel_ids = ["I1", "I2"] if tid in ["X-1", "T2-4"] else ["I1"]
+            rel_ids = ["I1", "I2"] if tid in ["X-1", "T1-3", "T2-4"] else ["I1"]
             event_sequence.append(
                 {
                     "turn": turn_idx,

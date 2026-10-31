@@ -389,6 +389,50 @@ class DynamicTimelinePlanner:
         neg_srv = sub_01.get("service_name", "视频会议") if tag == "evt_correct" else (main_mt.get("service_name", "开直播") if tag in ("dist_normal", "sub1_reuse_10") else None)
         return challenge_type, neg_app, neg_srv
 
+    @staticmethod
+    def _resolve_second_target_params(cfg: dict, src: dict, main_mt: dict, base_res: str, base_rtt: str) -> dict | None:
+        """为多意图模版 (T1-3 / T2-4) 解析第 2 个正常意图 (I2) 的完整参数字典。"""
+        if cfg.get("template_id") not in ("T1-3", "T2-4"):
+            return None
+        mode = cfg.get("multi_intent_mode", "heterogeneous")
+        start2 = cfg.get("start2") or cfg.get("start", "")
+        end2 = cfg.get("end2") or cfg.get("end", "")
+        dur2 = cfg.get("dur2") or cfg.get("base_dur") or cfg.get("dur", "60min")
+        if mode == "homogeneous":
+            srv2 = src["service_name"]
+            peer_map = {
+                "抖音": "快手", "快手": "抖音", "哔哩哔哩": "抖音",
+                "腾讯会议": "钉钉", "钉钉": "腾讯会议", "飞书": "腾讯会议",
+                "微信": "钉钉",
+            }
+            app2 = peer_map.get(src["application_name"], "快手" if "直播" in srv2 else "钉钉")
+            return {
+                "application_name": app2, "service_name": srv2,
+                "resolution": base_res, "rtt": base_rtt,
+                "start_timestamp": start2, "end_timestamp": end2, "duration": dur2,
+            }
+        if cfg.get("experience_id") == "EXP_MULTI_INTENT_PARTITION_01":
+            app2, srv2 = main_mt.get("application_name", "抖音"), main_mt.get("service_name", "开直播")
+            if app2 == "微信" and srv2 == "视频通话":
+                app2, srv2 = "抖音", "开直播"
+            return {
+                "application_name": app2, "service_name": srv2,
+                "resolution": base_res, "rtt": base_rtt,
+                "start_timestamp": start2, "end_timestamp": end2, "duration": dur2,
+            }
+        sec = cfg.get("second_source") or main_mt
+        app2 = sec.get("application_name", "抖音")
+        srv2 = sec.get("service_name", "开直播")
+        if srv2 == src["service_name"]:
+            srv2 = "视频通话" if src["service_name"] != "视频通话" else "视频会议"
+            app2 = "微信" if srv2 == "视频通话" else "腾讯会议"
+        sec_p = sec.get("preferred_params") or sec.get("params") or {}
+        return {
+            "application_name": app2, "service_name": srv2,
+            "resolution": sec_p.get("resolution", base_res), "rtt": sec_p.get("rtt_max", base_rtt),
+            "start_timestamp": start2, "end_timestamp": end2, "duration": dur2,
+        }
+
     @classmethod
     def _build_planned_session_item(
         cls,
@@ -430,6 +474,7 @@ class DynamicTimelinePlanner:
         tag, mem_tier = cfg.get("tag"), cfg.get("memory_tier", "factual_memory")
         is_hot_factual = cfg["role"] in ["reinforcement_session", "reuse_session"] and mem_tier == "factual_memory"
         challenge_type, neg_app, neg_srv = cls._resolve_retrieval_challenge(cfg, tag, main_mt, sub_01)
+        second_tp = cls._resolve_second_target_params(cfg, src, main_mt, base_res, base_rtt)
 
         return {
             "session_id": f"S-{user_id}-{cfg['idx']:02d}", "user_id": user_id, "reference_time": cfg["ref_time"],
@@ -446,6 +491,8 @@ class DynamicTimelinePlanner:
                 "service_name": "视频通话" if cfg.get("experience_id") == "EXP_MULTI_INTENT_PARTITION_01" else ("开直播" if cfg.get("experience_id") == "EXP_OVERLAPPING_ORDER_RESOLUTION_01" else src["service_name"]),
                 "resolution": res, "rtt": rtt, "start_timestamp": cfg["start"], "end_timestamp": cfg["end"], "duration": cfg["dur"],
             },
+            "second_target_params": second_tp,
+            "multi_intent_mode": cfg.get("multi_intent_mode"),
             "period_type": main_mt.get("period_type", "weekly"),
             "base_resolution": base_res, "base_rtt": base_rtt,
             "base_duration": cfg.get("base_dur", cfg["dur"]), "base_end_timestamp": cfg.get("base_end", cfg["end"]),

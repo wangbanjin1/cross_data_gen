@@ -274,14 +274,15 @@ def _build_phase2_slots(ctx: dict) -> list[dict]:
         }
     s10 = {
         "tag": "exp_multi_intent", "template_id": "T2-4", "memory_tier": "experiential_memory", "role": "reuse_session",
-        "source": main_mt, "second_source": sub_01, "type": "multi_intent_experience", "dur": ext_dur, "base_dur": base_dur,
-        "env": main_env, "action": "multi_intent_delay_isolation", "experience_id": "EXP_MULTI_INTENT_PARTITION_01",
-        "learning_source_session_tag": "exp_learn_EXP_MULTI_INTENT_PARTITION_01", "round_count": 2,
-        "cold_hot_type": None, "agility_factor": None, "time_kind": "multi_intent",
+        "source": main_mt, "second_source": main_mt, "type": "multi_intent_experience", "multi_intent_mode": "heterogeneous",
+        "dur": "30min", "base_dur": base_dur, "env": main_env, "action": "multi_intent_delay_isolation",
+        "experience_id": "EXP_MULTI_INTENT_PARTITION_01", "learning_source_session_tag": "exp_learn_EXP_MULTI_INTENT_PARTITION_01",
+        "round_count": 2, "cold_hot_type": None, "agility_factor": None, "time_kind": "multi_intent",
     } if 10 in test_map else {
-        "tag": "sub1_reuse_10", "template_id": "T2-1", "memory_tier": "factual_memory", "role": "reuse_session",
-        "source": sub_01, "type": "sub_01", "dur": tc["sub1_dur"], "env": tc["sub1_env"],
-        "action": "reuse_sub_storyline_1", "round_count": 2, "cold_hot_type": "hot_start", "agility_factor": 0.5, "time_kind": "sub1",
+        "tag": "sub1_reuse_10", "template_id": "T2-4", "memory_tier": "factual_memory", "role": "reuse_session",
+        "source": sub_01, "second_source": main_mt, "type": "multi_intent_heterogeneous", "multi_intent_mode": "heterogeneous",
+        "dur": tc["sub1_dur"], "base_dur": base_dur, "env": tc["sub1_env"],
+        "action": "reuse_sub_storyline_1", "round_count": 2, "cold_hot_type": "hot_start", "agility_factor": 0.5, "time_kind": "multi_intent_hetero",
     }
     s12 = {
         "tag": "exp_quality", "template_id": "T2-6", "memory_tier": "experiential_memory", "role": "reuse_session",
@@ -322,15 +323,21 @@ def _build_phase3_slots(ctx: dict) -> list[dict]:
 
     return [
         {
-            "tag": "dist_ood", "template_id": "T1-2", "memory_tier": "factual_memory", "role": "distractor_session",
-            "source": main_mt, "type": "distractor_ood", "dur": tc["ood_dur"], "env": tc["ood_env"],
-            "action": "reject_out_of_domain", "ood_goal": tc["ood_goal"], "round_count": 1,
-            "cold_hot_type": None, "agility_factor": None, "time_kind": "dist_ood",
+            "tag": "multi_intent_homo", "template_id": "T1-3", "memory_tier": "factual_memory", "role": "distractor_session",
+            "source": main_mt, "second_source": dist_01, "type": "multi_intent_homogeneous", "multi_intent_mode": "homogeneous",
+            "dur": tc["dn_dur"], "env": tc["dn_env"], "action": "parallel_homogeneous_multi_intent", "round_count": 1,
+            "cold_hot_type": None, "agility_factor": None, "time_kind": "multi_intent_homo",
         },
         {
             "tag": "wm_disambig", "template_id": "T2-6", "memory_tier": "working_memory", "role": "reuse_session",
             "source": main_mt, "type": "working_record_disambig", "dur": base_dur, "env": main_env,
             "action": "disambiguate_working_record", "round_count": 3, "cold_hot_type": None, "agility_factor": None, "time_kind": "main",
+        },
+        {
+            "tag": "dist_ood", "template_id": "T1-2", "memory_tier": "factual_memory", "role": "distractor_session",
+            "source": main_mt, "type": "distractor_ood", "dur": tc["ood_dur"], "env": tc["ood_env"],
+            "action": "reject_out_of_domain", "ood_goal": tc["ood_goal"], "round_count": 1,
+            "cold_hot_type": None, "agility_factor": None, "time_kind": "dist_ood",
         },
         {
             "tag": "sub2", "template_id": "T2-1", "memory_tier": "factual_memory", "role": "evidence_session",

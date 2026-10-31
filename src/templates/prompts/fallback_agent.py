@@ -75,13 +75,26 @@ def _fallback_agent_experience_reuse(s_plan: dict, turn_idx: int, env: str, tp: 
         )
     if tid == "T2-4" or exp_id == "EXP_MULTI_INTENT_PARTITION_01":
         learn_prefix = f"参考此前在 {learn_sid} 的日常对词试机位经验，" if learn_sid else "参考此前的日常对词试机位经验，"
-        sh_t = tp.get("start_timestamp", "").split("日")[-1] or "12时30分"
-        new_eh_t = tp.get("end_timestamp", "").split("日")[-1] or "14时30分"
-        dur_val = tp.get("duration", "120min")
+        sh_t = tp.get("start_timestamp", "").split("日")[-1] or "12时00分"
+        eh_t = tp.get("end_timestamp", "").split("日")[-1] or "12时30分"
+        dur_val = tp.get("duration", "30min")
+        tp2 = s_plan.get("second_target_params") or {}
+        app2 = tp2.get("application_name") or (s_plan.get("second_source") or {}).get("application_name") or "抖音"
+        srv2 = tp2.get("service_name") or (s_plan.get("second_source") or {}).get("service_name") or "开直播"
+        res2, rtt2 = tp2.get("resolution", res), tp2.get("rtt", rtt)
+        sh2_t = (tp2.get("start_timestamp") or s_plan.get("start2") or tp.get("start_timestamp", "")).split("日")[-1] or "12时30分"
+        eh2_t = (tp2.get("end_timestamp") or s_plan.get("end2") or tp.get("end_timestamp", "")).split("日")[-1] or "14时00分"
+        dur2_val = tp2.get("duration") or s_plan.get("dur2") or s_plan.get("base_dur") or "90min"
+        if exp_id == "EXP_MULTI_INTENT_PARTITION_01" or s_plan.get("blueprint_type") == "multi_intent_experience":
+            return (
+                f"识别到您第一场（{sh_t}至{eh_t}）是在正式开播前先跟搭档私下对直播词和看镜头机位。{learn_prefix}第一笔已主动为您匹配【微信-视频通话】意图保障单（{sh_t}至{eh_t}，持续{dur_val}，{res} / 时延≤{rtt}）；第二笔正式业务为您准备好【{app2}-{srv2}】意图保障单（{sh2_t}至{eh2_t}，持续{dur2_val}，{res2} / 时延≤{rtt2}），确认按这两笔配置开通吗？"
+                if turn_idx == 1
+                else f"好的，已为您同时成功开通第一笔【微信-视频通话】（{sh_t}至{eh_t}，持续{dur_val}，{res} / 时延≤{rtt}）与第二笔【{app2}-{srv2}】（{sh2_t}至{eh2_t}，持续{dur2_val}，{res2} / 时延≤{rtt2}）两笔意图保障单，祝您对词试机位与正式活动一切顺利！"
+            )
         return (
-            f"识别到您是在正式开播前先跟搭档私下对直播词和看镜头机位，还未正式公开开播。{learn_prefix}私下对词试机位平时都是用微信视频连线，已主动为您匹配【微信-视频通话】意图保障单（{sh_t}至{new_eh_t}，持续{dur_val}，{res} / 时延≤{rtt}），确认按此开通吗？"
+            f"收到，已为您准备好两笔异构业务保障方案：第一笔【{app}-{srv}】（{sh_t}至{eh_t}，持续{dur_val}，画质{res} / 时延≤{rtt}）；第二笔【{app2}-{srv2}】（{sh2_t}至{eh2_t}，持续{dur2_val}，画质{res2} / 时延≤{rtt2}），确认按这两笔配置开通吗？"
             if turn_idx == 1
-            else f"好的，已为您成功开通【微信-视频通话】意图保障单（{sh_t}至{new_eh_t}，持续{dur_val}，{res} / 时延≤{rtt}），祝您和搭档对词试机位顺利！"
+            else f"好的，已为您成功受理并开通【{app}-{srv}】（{sh_t}至{eh_t}，{res} / 时延≤{rtt}）与【{app2}-{srv2}】（{sh2_t}至{eh2_t}，{res2} / 时延≤{rtt2}）两笔网络保障单，祝您使用愉快！"
         )
     if tid == "T2-9" or exp_id == "EXP_PREWARM_BUFFER_01":
         pw_start_t, end_t = tp["start_timestamp"].split("日")[-1], tp["end_timestamp"].split("日")[-1]
@@ -186,6 +199,18 @@ def _fallback_agent_working_and_override(s_plan: dict, turn_idx: int, is_last: b
         if turn_idx == 2 and not is_last:
             return f"明白，已针对今日现场特殊情况为您临时调整{app}{srv}保障参数：画质{res}、时延{rtt}以内，时段{start_t}至{end_t}（持续{tp['duration']}），确认按此临时配置开通吗？"
         return f"好的，已按现场特殊情况为您临时调整开通{app}{srv}保障：画质{res}、时延上限{rtt}，时段{start_t}至{end_t}。祝您现场顺利！"
+    if tid == "T1-3":
+        tp2 = s_plan.get("second_target_params") or {}
+        app2 = tp2.get("application_name") or ("快手" if app == "抖音" else "钉钉")
+        srv2 = tp2.get("service_name") or srv
+        res2, rtt2 = tp2.get("resolution", res), tp2.get("rtt", rtt)
+        sh2_t = (tp2.get("start_timestamp") or s_plan.get("start2") or tp["start_timestamp"]).split("日")[-1]
+        eh2_t = (tp2.get("end_timestamp") or s_plan.get("end2") or tp["end_timestamp"]).split("日")[-1]
+        dur2_val = tp2.get("duration") or s_plan.get("dur2") or tp["duration"]
+        return (
+            f"收到，已为您同时开通两笔同类{srv}网络保障：第一笔【{app}-{srv}】（画质{res}，时延上限{rtt}，保障时段{start_t}至{end_t}，持续{tp['duration']}）；"
+            f"第二笔【{app2}-{srv2}】（画质{res2}，时延上限{rtt2}，保障时段{sh2_t}至{eh2_t}，持续{dur2_val}）。祝您两场业务都顺利！"
+        )
     if tid == "T1-1" or b_type == "distractor":
         return f"收到，已为您开通{app}{srv}网络保障：画质{res}，时延上限{rtt}，保障时间{tp['start_timestamp']}至{tp['end_timestamp']}（共{tp['duration']}）。祝您使用顺利！"
     return None
@@ -264,6 +289,10 @@ def _get_specialized_action_types(s_plan: dict, tid: str, b_type: str, turn_idx:
         return ["Confirm_Slot"], ["Acknowledge"]
     if tid == "T1-2":
         return ["Create_Intent_Request"], ["Reject_Request"]
+    if tid == "T1-3":
+        return ["Create_Intent_Request", "Inform_Slot"], ["Acknowledge"]
+    if tid == "T2-4":
+        return (["Create_Intent_Request", "Inform_Slot"], ["Confirm_Slot"]) if turn_idx == 1 else (["Confirm_Slot"], ["Acknowledge"])
     if tid == "X-1":
         return ["Create_Intent_Request", "Inform_Slot"], ["Acknowledge", "Reject_Request"]
     if tid in ["T2-2", "T3-1"]:

@@ -84,13 +84,27 @@ def _fallback_user_experience_reuse(s_plan: dict, turn_idx: int, env: str, tp: d
             else "太周到了，参考上次的做法正合适，就按顺延到10月8日开通意图保障单吧！"
         )
     if tid == "T2-4" or exp_id == "EXP_MULTI_INTENT_PARTITION_01":
-        sh_t = tp.get("start_timestamp", "").split("日")[-1] or "12时30分"
-        new_eh_t = tp.get("end_timestamp", "").split("日")[-1] or "14时30分"
-        dur_val = tp.get("duration", "120min")
+        sh_t = tp.get("start_timestamp", "").split("日")[-1] or "12时00分"
+        eh_t = tp.get("end_timestamp", "").split("日")[-1] or "12时30分"
+        dur_val = tp.get("duration", "30min")
+        tp2 = s_plan.get("second_target_params") or {}
+        app2 = tp2.get("application_name") or (s_plan.get("second_source") or {}).get("application_name") or "抖音"
+        srv2 = tp2.get("service_name") or (s_plan.get("second_source") or {}).get("service_name") or "开直播"
+        res2 = tp2.get("resolution", res)
+        rtt2 = tp2.get("rtt", rtt)
+        sh2_t = (tp2.get("start_timestamp") or s_plan.get("start2") or tp.get("start_timestamp", "")).split("日")[-1] or "12时30分"
+        eh2_t = (tp2.get("end_timestamp") or s_plan.get("end2") or tp.get("end_timestamp", "")).split("日")[-1] or "14时00分"
+        dur2_val = tp2.get("duration") or s_plan.get("dur2") or s_plan.get("base_dur") or "90min"
+        if exp_id == "EXP_MULTI_INTENT_PARTITION_01" or s_plan.get("blueprint_type") == "multi_intent_experience":
+            return (
+                f"今天在{env}，先从{sh_t}至{eh_t}（持续{dur_val}）跟搭档对一下正式直播的词和镜头机位（画质{res}、时延{rtt}以内），接着从{sh2_t}至{eh2_t}（持续{dur2_val}）正式用{app2}开{srv2}（画质{res2}、时延{rtt2}以内），帮我把这两笔意图保障单都开上。"
+                if turn_idx == 1
+                else f"太懂我了！第一笔私下跟搭档对词试机位用【微信-视频通话】，第二笔正式业务用【{app2}-{srv2}】，确认按这两笔配置同时开通意图保障单！"
+            )
         return (
-            f"今天在{env}，{sh_t}至{new_eh_t}（持续{dur_val}）我先跟搭档对一下正式抖音直播的词和镜头机位，帮我开个画质{res}、时延{rtt}以内的意图保障单。"
+            f"今天在{env}有两项不同业务要办：先从{sh_t}至{eh_t}（持续{dur_val}）用{app}做{srv}（画质{res}、时延{rtt}以内），再从{sh2_t}至{eh2_t}（持续{dur2_val}）用{app2}做{srv2}（画质{res2}、时延{rtt2}以内），帮我把这两笔保障都开上。"
             if turn_idx == 1
-            else "太懂我了！私下跟搭档对直播词、看镜头机位平时就是打【微信-视频通话】，不用真开抖音直播间，确认按微信视频通话开通意图保障单！"
+            else f"对，第一笔【{app}-{srv}】和第二笔【{app2}-{srv2}】的参数都核对无误，确认把这两笔保障单都开通！"
         )
     if tid == "T2-9" or exp_id == "EXP_PREWARM_BUFFER_01":
         nom_start = s_plan.get("nominal_start")
@@ -177,6 +191,18 @@ def _fallback_user_working_and_override(s_plan: dict, turn_idx: int, env: str, t
         if turn_idx == 2:
             return f"对，不过今天现场特殊，画质临时调到{res}，时延压到{rtt}以内，今天临时按这个来。"
         return "好的，确认按这个临时调整的配置开通。"
+    if tid == "T1-3":
+        tp2 = s_plan.get("second_target_params") or {}
+        app2 = tp2.get("application_name") or ("快手" if app == "抖音" else "钉钉")
+        srv2 = tp2.get("service_name") or srv
+        res2, rtt2 = tp2.get("resolution", res), tp2.get("rtt", rtt)
+        sh2_t = (tp2.get("start_timestamp") or s_plan.get("start2") or tp["start_timestamp"]).split("日")[-1]
+        eh2_t = (tp2.get("end_timestamp") or s_plan.get("end2") or tp["end_timestamp"]).split("日")[-1]
+        dur2_val = tp2.get("duration") or s_plan.get("dur2") or tp["duration"]
+        return (
+            f"你好，今天在{env}有两场同类型{srv}任务要办：第一场从{start_t}到{end_t}（持续{tp['duration']}）用{app}开{srv}，画质要{res}，时延控制在{rtt}以内；"
+            f"第二场从{sh2_t}到{eh2_t}（持续{dur2_val}）用{app2}开{srv2}，画质要{res2}，时延控制在{rtt2}以内，帮我把这两笔保障同时开上。"
+        )
     if tid == "T1-1" or b_type == "distractor":
         if s_plan.get("retrieval_challenge_type") == "negation_contrast" and s_plan.get("contrast_negated_app"):
             neg_a = s_plan.get("contrast_negated_app")

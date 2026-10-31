@@ -585,6 +585,76 @@ class TestCognitiveMemoryEvolution(unittest.TestCase):
             qc_res = QCValidator.validate_sessions(assembled_all)
             self.assertEqual(qc_res["failed_sessions"], 0, f"QC issues: {qc_res['issues']}")
 
+    def test_11_dual_normal_multi_intent_homogeneous_and_heterogeneous(self):
+        """测试同类正常双意图 (T1-3 homogeneous) 与 非同类正常双意图 (T2-4 heterogeneous) 组装与校验"""
+        from src.templates.prompts.dialogue_fallbacks import (
+            get_fallback_user_utterance,
+            get_fallback_agent_utterance,
+            get_normalized_action_types,
+        )
+
+        mock_persona = {
+            "static_profile": {
+                "user_id": "USER_DUAL_01",
+                "identity": "户外赛事主播",
+                "speech_style": {"tone": "干练", "catchphrases": "别掉链子", "typical_habits": "简洁"},
+            },
+            "dynamic_profile": {
+                "periodic_main_storyline": {
+                    "application_name": "抖音",
+                    "service_name": "开直播",
+                    "period_type": "daily",
+                    "time_range": "12:30-13:30",
+                    "preferred_params": {"resolution": "1080p", "rtt_max": "50ms"},
+                },
+                "scenario_events": [],
+                "sub_storylines": [
+                    {
+                        "application_name": "钉钉",
+                        "service_name": "视频会议",
+                        "params": {"resolution": "720p", "rtt_max": "80ms"},
+                    }
+                ],
+                "distractor_pool": [{"application_name": "腾讯会议", "service_name": "视频会议"}],
+            },
+        }
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            ledger = WorkingRecordsLedger(user_id="USER_DUAL_01", storage_path=Path(tmp_dir) / "wr.jsonl")
+            planned = DynamicTimelinePlanner.plan(
+                persona=mock_persona, working_ledger=ledger, experience_bank=ExperienceBank()
+            )
+            tracker = MemoryTracker()
+            assembled_all = []
+            for s_plan in planned:
+                snap_b, mem_ev, gold_a = tracker.process_session(s_plan)
+                rounds, role = s_plan["round_count"], s_plan["memory_role"]
+                events = [
+                    {
+                        "turn": t,
+                        "user": {"utterance": get_fallback_user_utterance(s_plan, t, role), "action_types": get_normalized_action_types(s_plan, t, role, t == rounds, None, None)[0]},
+                        "agent": {"utterance": get_fallback_agent_utterance(s_plan, t, role, t == rounds), "action_types": get_normalized_action_types(s_plan, t, role, t == rounds, None, None)[1]},
+                        "related_intent_ids": ["I1", "I2"],
+                        "requested_params": [],
+                    }
+                    for t in range(1, rounds + 1)
+                ]
+                assembled_all.append(SessionAssembler.assemble(s_plan, snap_b, mem_ev, gold_a, events))
+
+            t1_3 = [s for s in assembled_all if s["session_meta"]["template_id"] == "T1-3"]
+            t2_4 = [s for s in assembled_all if s["session_meta"]["template_id"] == "T2-4"]
+            self.assertEqual(len(t1_3), 1)
+            self.assertEqual(len(t2_4), 1)
+
+            i1_h, i2_h = t1_3[0]["intents"]
+            self.assertEqual((i1_h["status"], i2_h["status"]), ("resolved", "resolved"))
+            self.assertEqual(i1_h["params"]["service_name"]["value"], i2_h["params"]["service_name"]["value"])
+            self.assertNotEqual(i1_h["params"]["application_name"]["value"], i2_h["params"]["application_name"]["value"])
+
+            i1_ht, i2_ht = t2_4[0]["intents"]
+            self.assertEqual((i1_ht["status"], i2_ht["status"]), ("resolved", "resolved"))
+            self.assertNotEqual(i1_ht["params"]["service_name"]["value"], i2_ht["params"]["service_name"]["value"])
+            self.assertNotEqual(i1_ht["params"]["application_name"]["value"], i2_ht["params"]["application_name"]["value"])
+
 
 if __name__ == "__main__":
     unittest.main()

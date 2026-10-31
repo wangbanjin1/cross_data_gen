@@ -27,6 +27,16 @@ class SessionAssembler(
         ood_goal = s_plan.get("ood_goal", "")
         if tid == "T1-2":
             return cls._assemble_t1_2(*base_args, ood_goal, *tail_args)
+        if tid == "T1-3":
+            return cls._assemble_t1_3(
+                *base_args, *tp_args, *tail_args,
+                second_target_params=s_plan.get("second_target_params"),
+                second_source=s_plan.get("second_source"),
+                multi_intent_mode=s_plan.get("multi_intent_mode", "homogeneous"),
+                start2=s_plan.get("start2"),
+                end2=s_plan.get("end2"),
+                dur2=s_plan.get("dur2"),
+            )
         if tid == "X-1":
             return cls._assemble_x_1(*base_args, ood_goal, *tp_args, *tail_args)
         if tid in ["T2-2", "T3-1"]:
@@ -47,6 +57,8 @@ class SessionAssembler(
                 *base_args, *tp_args, *tail_args,
                 experience_citation=s_plan.get("experience_citation", {}),
                 second_source=s_plan.get("second_source"),
+                second_target_params=s_plan.get("second_target_params"),
+                multi_intent_mode=s_plan.get("multi_intent_mode", "heterogeneous"),
                 learning_source_session=s_plan.get("learning_source_session"),
                 base_end=s_plan.get("base_end") or s_plan.get("base_end_timestamp"),
                 base_dur=s_plan.get("base_dur") or s_plan.get("base_duration"),
