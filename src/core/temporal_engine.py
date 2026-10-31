@@ -221,7 +221,7 @@ class TemporalEngine:
 
             try:
                 delta = cls.calculate_delta_days(current_time, rec_created)
-            except Exception:
+            except (ValueError, TypeError):
                 continue
 
             if matched_window:

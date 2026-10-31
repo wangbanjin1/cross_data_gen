@@ -128,8 +128,8 @@ class WorkingRecordsLedger:
                 dt_r = TemporalEngine.parse_datetime(t_str)
                 if dt_r < dt_before:
                     priors.append(r)
-            except Exception:
-                pass
+            except (ValueError, TypeError):
+                continue
         return priors
 
     @classmethod

@@ -142,7 +142,7 @@ class DynamicTimelinePlanner:
                 loc = re.sub(r'[，,。、\s]', '', loc)
                 if 2 <= len(loc) <= 10 and not any(k in loc for k in ["当", "进入", "触发", "需要", "时段", "办事"]):
                     return loc
-        except Exception:
+        except (ValueError, TypeError, KeyError, RuntimeError):
             pass
         return cls._extract_clean_location(raw_trig_cond, task_name)
 
