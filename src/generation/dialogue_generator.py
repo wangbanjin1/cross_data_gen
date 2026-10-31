@@ -23,6 +23,139 @@ class DialogueGenerator:
         self.llm = llm_client or LLMClient()
         self.llm_circuit_breaker = not getattr(Config, "use_llm", True)
 
+    @staticmethod
+    def build_isolated_views(s_plan: dict, snapshot_before: dict) -> dict:
+        """
+        构建信息隔离的双向渲染视图 (Information-Isolated Dual Views):
+        1. user_private_view: 物理剥离 Turn 1 禁止提前说出的槽位 (memory_filled / turn2_disambiguated)，
+           仅保留 turn1_allowed_slots 与 turn2_reveal_slots。
+        2. agent_observable_view: 物理屏蔽未公开的 Ground-Truth 答案字典，
+           Agent 在 Turn 1 仅可见 snapshot_before 与用户已说出的表层信息。
+        """
+        role = s_plan.get("memory_role", "")
+        tid = s_plan.get("template_id", "T2-1")
+        b_type = s_plan.get("blueprint_type", "")
+        tp = dict(s_plan.get("target_params") or {})
+        env = s_plan.get("scenario_env", "")
+        exp_id = s_plan.get("experience_id") or (s_plan.get("experience_citation") or {}).get("experience_id")
+
+        is_single_turn_full = (
+            tid in ("T1-1", "X-1")
+            or b_type == "distractor"
+            or tid in ("T2-9", "T2-10")
+            or s_plan.get("memory_tier") == "experiential_memory"
+            or b_type == "experience_learning"
+            or bool(exp_id)
+        )
+        is_implicit_reinf_s03 = (
+            role == "reinforcement_session"
+            and s_plan.get("declaration_mode") == "implicit_induction"
+            and str(s_plan.get("session_id", "")).endswith("-03")
+        )
+
+        if tid == "T1-2":
+            user_turn1_allowed = {"ood_goal": s_plan.get("ood_goal") or "宽带光纤装维报修"}
+            user_turn2_reveal = {}
+            user_turn1_forbidden_values = [
+                v for v in (tp.get("application_name"), tp.get("service_name"), tp.get("resolution"), tp.get("rtt"), tp.get("duration")) if v
+            ]
+        elif is_single_turn_full:
+            user_turn1_allowed = {
+                "scenario_env": env,
+                "application_name": tp.get("application_name"),
+                "service_name": tp.get("service_name"),
+                "start_timestamp": tp.get("start_timestamp"),
+                "end_timestamp": tp.get("end_timestamp"),
+                "duration": tp.get("duration"),
+                "resolution": tp.get("resolution"),
+                "rtt": tp.get("rtt"),
+            }
+            user_turn2_reveal = {}
+            user_turn1_forbidden_values = []
+        elif role == "evidence_session":
+            user_turn1_allowed = {
+                "scenario_env": env,
+                "application_name": tp.get("application_name"),
+                "service_name": tp.get("service_name"),
+                "start_timestamp": tp.get("start_timestamp"),
+            }
+            user_turn2_reveal = {
+                "resolution": tp.get("resolution"),
+                "rtt": tp.get("rtt"),
+                "duration": tp.get("duration"),
+                "end_timestamp": tp.get("end_timestamp"),
+            }
+            user_turn1_forbidden_values = [
+                v for v in (tp.get("resolution"), tp.get("rtt"), tp.get("duration")) if v
+            ]
+        elif is_implicit_reinf_s03:
+            user_turn1_allowed = {
+                "scenario_env": env,
+                "service_name": tp.get("service_name"),
+            }
+            user_turn2_reveal = {
+                "confirm_history_candidate": True,
+                "small_memory": s_plan.get("small_memory", {}),
+            }
+            user_turn1_forbidden_values = [
+                v for v in (tp.get("application_name"), tp.get("resolution"), tp.get("rtt"), tp.get("duration")) if v
+            ]
+        elif tid == "T2-3" or b_type == "event_override":
+            user_turn1_allowed = {
+                "scenario_env": env,
+                "application_name": tp.get("application_name"),
+                "service_name": tp.get("service_name"),
+            }
+            user_turn2_reveal = {
+                "temporary_resolution": tp.get("resolution"),
+                "temporary_rtt": tp.get("rtt"),
+            }
+            user_turn1_forbidden_values = [v for v in (tp.get("resolution"), tp.get("rtt")) if v]
+        elif tid == "T2-5":
+            user_turn1_allowed = {
+                "scenario_env": env,
+                "application_name": tp.get("application_name"),
+                "service_name": tp.get("service_name"),
+            }
+            user_turn2_reveal = {
+                "extended_duration": tp.get("duration"),
+                "end_timestamp": tp.get("end_timestamp"),
+            }
+            user_turn1_forbidden_values = [
+                v for v in (tp.get("resolution"), tp.get("rtt"), tp.get("duration")) if v
+            ]
+        else:
+            user_turn1_allowed = {
+                "scenario_env": env,
+                "application_name": tp.get("application_name"),
+                "service_name": tp.get("service_name"),
+                "primary_alias": (s_plan.get("small_memory") or {}).get("value") or tp.get("application_name"),
+            }
+            user_turn2_reveal = {"confirm_memory_slots": True}
+            user_turn1_forbidden_values = [v for v in (tp.get("resolution"), tp.get("rtt")) if v]
+
+        agent_turn1_forbidden_values: list[str] = []
+        if role == "evidence_session":
+            agent_turn1_forbidden_values = [
+                v for v in (tp.get("resolution"), tp.get("rtt"), tp.get("duration")) if v
+            ]
+        elif tid == "T2-5":
+            if tp.get("duration"):
+                agent_turn1_forbidden_values = [tp["duration"]]
+
+        return {
+            "user_private_view": {
+                "turn1_allowed_slots": user_turn1_allowed,
+                "turn2_reveal_slots": user_turn2_reveal,
+                "turn1_forbidden_values": user_turn1_forbidden_values,
+            },
+            "agent_observable_view": {
+                "snapshot_before": snapshot_before or {},
+                "turn1_observable_slots": user_turn1_allowed,
+                "turn1_forbidden_values": agent_turn1_forbidden_values,
+            },
+        }
+
     def generate_sessions_batch(self, session_items: list[tuple], persona: dict, batch_size: int = 5) -> list[dict]:
         """
         批量生成会话台词，大幅降低 API 调用次数与 Token 消耗。
@@ -214,6 +347,7 @@ class DialogueGenerator:
                     "reference_agent_utterance": get_fallback_agent_utterance(s_plan, r_idx, role, r_idx == rounds),
                 })
 
+            isolated_views = self.build_isolated_views(s_plan, snap_before)
             prompt_items.append({
                 "session_id": sid,
                 "rounds": rounds,
@@ -221,6 +355,7 @@ class DialogueGenerator:
                 "blueprint_type": b_type,
                 "template_id": s_plan.get("template_id", "T2-1"),
                 "turn1_requirement": t1_rule,
+                "isolated_views": isolated_views,
                 "reference_turns": ref_turns,
                 "primary_alias": primary_alias,
                 "small_memory": small_memory,
@@ -235,12 +370,10 @@ class DialogueGenerator:
                 "time": s_plan["reference_time"],
                 "env": env,
                 "active_memory": snap_str,
-                "app": tp["application_name"],
+                "app": isolated_views["user_private_view"]["turn1_allowed_slots"].get("application_name") or tp["application_name"],
                 "service": tp["service_name"],
-                "resolution": tp["resolution"],
-                "rtt": tp["rtt"],
-                "duration": tp["duration"],
-                "time_range": f"{tp['start_timestamp']} 至 {tp['end_timestamp']}",
+                "turn1_allowed_slots": isolated_views["user_private_view"]["turn1_allowed_slots"],
+                "turn2_reveal_slots": isolated_views["user_private_view"]["turn2_reveal_slots"],
                 "aliases": aliases_info
             })
 
@@ -411,18 +544,20 @@ class DialogueGenerator:
             if bad_word in u_text:
                 u_text = u_text.replace(bad_word, f"{tp.get('rtt', '')}以内")
 
-        # 常规复用/强化会话第 1 轮：大记忆点已生效，用户提及老规矩/代称时，若仍堆砌了已沉淀的画质/时延/时长，予以自然精简
+        # 常规复用/强化会话第 1 轮：物理隔离拦截 memory_filled 槽位 (resolution / rtt) 提前泄露
         if turn_idx == 1 and role in ["reinforcement_session", "reuse_session"] and tid not in ["T2-3", "T2-5", "T2-6", "T2-7", "T2-8", "T2-9", "T2-10"]:
-            has_shorthand = any(k in u_text for k in ["老规矩", "老时间", "老样子", "照旧", "按习惯", "跟上次一样"])
-            if has_shorthand:
-                patterns_to_strip = [
-                    r'，?(?:顶格清晰度|1080p原画|1080p|720p|超清|高清)[、，]?(?:零卡顿|\d+ms以内|\d+毫秒以内)[、，]?(?:俩小时|两小时|\d+分钟|\d+min)?',
-                    r'[、，]?(?:顶格清晰度|1080p原画|1080p|720p|超清|高清)',
-                    r'[、，]?(?:零卡顿|\d+ms以内|\d+毫秒以内)',
-                ]
-                for pat in patterns_to_strip:
-                    u_text = re.sub(pat, '', u_text)
-                u_text = re.sub(r'，\s*，', '，', u_text).strip("，, ")
+            patterns_to_strip = [
+                r'，?(?:顶格清晰度|1080p原画|1080p|720p|4K|4k|超清|高清)[、，]?(?:零卡顿|\d+ms以内|\d+毫秒以内|\d+ms)[、，]?(?:俩小时|两小时|\d+分钟|\d+min)?',
+                r'[、，]?(?:顶格清晰度|1080p原画|1080p|720p|4K|4k|超清|高清)',
+                r'[、，]?(?:零卡顿|\d+ms以内|\d+毫秒以内|\d+ms)',
+            ]
+            for pat in patterns_to_strip:
+                u_text = re.sub(pat, '', u_text)
+            u_text = re.sub(r'，\s*，', '，', u_text).strip("，, ")
+            if tp.get("resolution", "") and tp["resolution"] in u_text:
+                u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
+            if tp.get("rtt", "") and tp["rtt"] in u_text:
+                u_text = get_fallback_user_utterance(s_plan, turn_idx, role)
 
         # 拦截清理误将后台规划长句拼入台词的异常
         if any(bad_kw in u_text for bad_kw in ["当上午", "进入道路", "触发现场", "办事了，", "弱网空间时", "固定外勤时段"]):

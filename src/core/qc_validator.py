@@ -3,6 +3,61 @@ import re
 from pathlib import Path
 from src.config.settings import Config
 
+class PrematureDisclosureValidator:
+    """
+    信息隔离与防提前泄露验证器 (Premature Disclosure Validator):
+    校验多轮会话 Turn 1 台词是否违反信息隔离边界：
+      1. User Turn 1 不得提前说出属于 memory_filled 或 turn2_reveal_slots 的隐式参数；
+      2. Agent Turn 1 在无先验记忆或次轮变更场景下不得提前说出 Turn 2 才会揭晓的参数。
+    """
+
+    @classmethod
+    def check_session(cls, session: dict) -> list[str]:
+        issues: list[str] = []
+        sid = session.get("session_id", "unknown")
+        meta = session.get("session_meta", {})
+        role = meta.get("memory_role", "unknown")
+        tid = meta.get("template_id", "")
+        b_type = (meta.get("scenario") or {}).get("blueprint_type", "")
+        events = session.get("event_sequence", [])
+        if len(events) < 2:
+            return issues
+
+        u1 = events[0].get("user", {}).get("utterance", "")
+        a1 = events[0].get("agent", {}).get("utterance", "")
+        intents = session.get("intents", [])
+        p0 = intents[0].get("params", {}) if intents else {}
+        res_val = (p0.get("resolution") or {}).get("value", "")
+        rtt_val = (p0.get("rtt") or {}).get("value", "")
+        dur_val = ((p0.get("timestamp") or {}).get("duration") or {}).get("value", "")
+
+        # 1. Cold-start evidence_session: neither User Turn 1 nor Agent Turn 1 may disclose resolution/rtt/duration
+        if role == "evidence_session":
+            for label, val in (("resolution", res_val), ("rtt", rtt_val), ("duration", dur_val)):
+                if val and val in u1:
+                    issues.append(f"[{sid}] User Turn 1 违反信息隔离，提前泄露次轮槽位 {label}={val}: '{u1}'")
+                if val and val in a1:
+                    issues.append(f"[{sid}] Agent Turn 1 违反信息隔离，无先验记忆却提前说出 {label}={val}: '{a1}'")
+
+        # 2. Hot-start reinforcement/reuse (standard T2-1): User Turn 1 must omit memory_filled resolution & rtt
+        elif (
+            role in ("reinforcement_session", "reuse_session")
+            and tid not in ("T2-3", "T2-4", "T2-5", "T2-6", "T2-7", "T2-8", "T2-9", "T2-10")
+            and meta.get("memory_tier", "factual_memory") == "factual_memory"
+        ):
+            for label, val in (("resolution", res_val), ("rtt", rtt_val)):
+                if val and val in u1:
+                    issues.append(f"[{sid}] User Turn 1 违反信息隔离，提前说出应由记忆补全的 {label}={val}: '{u1}'")
+
+        # 3. T2-3 temporary override: User Turn 1 must not disclose Turn 2 temporary override resolution/rtt
+        elif tid == "T2-3" or b_type == "event_override":
+            for label, val in (("resolution", res_val), ("rtt", rtt_val)):
+                if val and val in u1:
+                    issues.append(f"[{sid}] T2-3 User Turn 1 提前泄露次轮临时调整参数 {label}={val}: '{u1}'")
+
+        return issues
+
+
 class QCValidator:
     """
     质量检查与规则验证器 (Quality Control & Rule Checker)
@@ -33,7 +88,8 @@ class QCValidator:
                 "turn_intent_isolation_check": True,
                 "natural_dialogue_check": True,
                 "template_semantic_alignment_check": True,
-                "template_spec_check": True
+                "template_spec_check": True,
+                "premature_disclosure_check": True,
             },
             "issues": []
         }
@@ -314,7 +370,13 @@ class QCValidator:
                     report["rule_checks"]["natural_dialogue_check"] = False
                     s_passed = False
 
-            # 14. 全量台词检查：禁止包含后台规划词'触发'
+            # 14. 全量台词检查：禁止包含后台规划词'触发'，并执行信息隔离防提前泄露检查 (PrematureDisclosureValidator)
+            disclosure_issues = PrematureDisclosureValidator.check_session(s)
+            if disclosure_issues:
+                report["issues"].extend(disclosure_issues)
+                report["rule_checks"]["premature_disclosure_check"] = False
+                s_passed = False
+
             for turn in events:
                 u_text = turn.get("user", {}).get("utterance", "")
                 a_text = turn.get("agent", {}).get("utterance", "")

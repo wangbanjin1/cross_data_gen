@@ -186,6 +186,21 @@ def build_single_dialogue_prompt(s_plan: dict, persona: dict, snapshot_before: d
     else:
         memory_context_str = "当前记忆快照为空（首次建联会话，尚无已形成的长期记忆）。\n"
 
+    if role == "evidence_session":
+        slot_visibility_str = (
+            f"- Turn 1 允许提及的表层槽位 (turn1_allowed_slots): 应用={tp['application_name']}, 业务={tp['service_name']}, 开始时间={tp['start_timestamp']}\n"
+            f"- Turn 2 才允许揭晓的参数 (turn2_reveal_slots, 严禁在 Turn 1 提前泄露): 分辨率={tp['resolution']}, 时延上限={tp['rtt']}, 结束时间={tp['end_timestamp']} (时长{tp['duration']})"
+        )
+    elif role in ("reinforcement_session", "reuse_session") and tid not in ("T2-3", "T2-5", "T2-9", "T2-10"):
+        slot_visibility_str = (
+            f"- Turn 1 用户侧允许提及 (user_private_view.turn1_allowed_slots): 应用={tp['application_name']}, 业务={tp['service_name']} (严禁用户在 Turn 1 说出画质/时延/时长，必须由 Agent 从 active_memory 检索补全)\n"
+            f"- Agent 侧可从记忆快照补全的参数 (agent_observable_view): 分辨率={tp['resolution']}, 时延上限={tp['rtt']}, 时段={tp['start_timestamp']} 至 {tp['end_timestamp']} (时长{tp['duration']})"
+        )
+    else:
+        slot_visibility_str = (
+            f"- 目标保障业务: 应用={tp['application_name']}, 业务={tp['service_name']}, 分辨率={tp['resolution']}, 时延上限={tp['rtt']}, 时段={tp['start_timestamp']} 至 {tp['end_timestamp']} (时长{tp['duration']})"
+        )
+
     return f"""请根据以下人物背景、场景环境和记忆规则，渲染一段真实、口语化的多轮人机交互对话。
 
 {SMALL_MEMORY_GUIDE}
@@ -198,13 +213,13 @@ def build_single_dialogue_prompt(s_plan: dict, persona: dict, snapshot_before: d
 【当前生效的历史记忆 (Memory Snapshot)】:
 {memory_context_str}
 
-【当前场景与网络动机】:
+【当前场景与信息隔离视图 (Information-Isolated Views)】:
 - 会话模版: {tid} (角色: {role}, 类型: {b_type})
 - 发生时间: {s_plan['reference_time']}
 - 现场环境: {env}
 - 偏好模式: {s_plan.get('declaration_mode', 'explicit_declaration')}
 - 触发类型: {s_plan.get('storyline_trigger_type', 'time_periodic')} (触发条件: {s_plan.get('trigger_condition', env)})
-- 目标保障业务: 应用={tp['application_name']}, 业务={tp['service_name']}, 分辨率={tp['resolution']}, 时延上限={tp['rtt']}, 时段={tp['start_timestamp']} 至 {tp['end_timestamp']} (时长{tp['duration']})
+{slot_visibility_str}
 {"- 域外诉求目标: " + ood_goal if ood_goal else ""}
 
 【核心会话轮次与动作规则（严格遵守）】:
