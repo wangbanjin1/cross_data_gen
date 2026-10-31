@@ -1,3 +1,7 @@
+import logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+logger = logging.getLogger(__name__)
+
 # -*- coding: utf-8 -*-
 import sys
 import json
@@ -11,9 +15,9 @@ def test_file(jsonl_path: Path):
     
     total = len(lines)
     parent_dir = jsonl_path.parent.name
-    print(f"\n=======================================================")
-    print(f"=== Verifying {total} sessions in [{parent_dir}] ===")
-    print(f"=======================================================")
+    logger.info(f"\n=======================================================")
+    logger.info(f"=== Verifying {total} sessions in [{parent_dir}] ===")
+    logger.info(f"=======================================================")
     assert 10 <= total <= 30, f"Timeline length must be between 10 and 30, got {total}"
     
     for i, line in enumerate(lines):
@@ -98,7 +102,7 @@ def test_file(jsonl_path: Path):
             app_source = params.get("application_name", {}).get("source_type", "None")
             res_source = params.get("resolution", {}).get("min_value", {}).get("source_type", "None")
         
-        print(f"[{i+1:02d}] {sid} | {ref_time} | {role:22s} | Turns: {len(events)} | Closure: {intent['closure_path']:12s} | App: {app_source:6s} | Res: {res_source:6s}")
+        logger.info(f"[{i+1:02d}] {sid} | {ref_time} | {role:22s} | Turns: {len(events)} | Closure: {intent['closure_path']:12s} | App: {app_source:6s} | Res: {res_source:6s}")
 
     # 4. 检查该文件夹下是否有配套文件
     assert (jsonl_path.parent / "persona_skeleton.json").exists(), f"Missing persona_skeleton.json in {parent_dir}"
@@ -114,12 +118,12 @@ def test_file(jsonl_path: Path):
         assert "gold_state_after" in tr, f"Trace missing gold_state_after in {parent_dir}"
     assert (jsonl_path.parent / "qc_report.json").exists(), f"Missing qc_report.json in {parent_dir}"
 
-    print(f"\n[SUCCESS] [{parent_dir}]: All {total} sessions + skeleton + memory_traces + qc_report passed 100% strict verification!")
+    logger.info(f"\n[SUCCESS] [{parent_dir}]: All {total} sessions + skeleton + memory_traces + qc_report passed 100% strict verification!")
 
 def main(output_dir: str = None):
     base_gen = Path(output_dir or "data/generated")
     session_files = list(base_gen.glob("*/sessions.jsonl"))
-    print(f"Found {len(session_files)} persona sample folders in '{base_gen}' to verify.")
+    logger.info(f"Found {len(session_files)} persona sample folders in '{base_gen}' to verify.")
     for f in sorted(session_files):
         test_file(f)
 

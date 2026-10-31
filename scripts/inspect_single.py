@@ -1,3 +1,7 @@
+import logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+logger = logging.getLogger(__name__)
+
 import json
 from pathlib import Path
 
@@ -6,7 +10,7 @@ def inspect(sample_dir):
     with open(sess_file, "r", encoding="utf-8") as f:
         sessions = [json.loads(line) for line in f]
     
-    print(f"Total sessions: {len(sessions)}")
+    logger.info(f"Total sessions: {len(sessions)}")
     for s in sessions:
         sid = s["session_id"]
         tid = s["session_meta"]["template_id"]
@@ -16,16 +20,16 @@ def inspect(sample_dir):
         app = tp.get("application_name", {}).get("value", "N/A")
         srv = tp.get("service_name", {}).get("value", "N/A")
         dur = tp.get("timestamp", {}).get("duration", {}).get("value", "N/A")
-        print(f"\n[{sid}] ({tid}, {role}) @ {ref_time} | {app}-{srv} ({dur})")
+        logger.info(f"\n[{sid}] ({tid}, {role}) @ {ref_time} | {app}-{srv} ({dur})")
         for ev in s["event_sequence"]:
             t = ev["turn"]
             u = ev["user"]["utterance"]
             u_acts = ev["user"]["action_types"]
             a = ev["agent"]["utterance"]
             a_acts = ev["agent"]["action_types"]
-            print(f"  Turn {t}:")
-            print(f"    User ({u_acts}): {u}")
-            print(f"    Agent ({a_acts}): {a}")
+            logger.info(f"  Turn {t}:")
+            logger.info(f"    User ({u_acts}): {u}")
+            logger.info(f"    Agent ({a_acts}): {a}")
 
 if __name__ == "__main__":
     inspect("data/test_gen/mobile_persona_001")

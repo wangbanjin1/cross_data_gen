@@ -2,6 +2,10 @@
 """
 批量刷新 cognitive_samples 中的 experience_branching (包含完整 4 轮 slow path 交互树与仲裁门)
 """
+import logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+logger = logging.getLogger(__name__)
+
 import json
 import sys
 from pathlib import Path
@@ -80,7 +84,7 @@ def refresh():
             s['experience_branching'] = new_eb
             s['session_meta']['experience_branching'] = new_eb
             updated_count += 1
-            print(f"Updated {p_dir.name} | {s['session_id']} | {exp_id} | tree_turns={len(new_eb['slow_path']['simulator_dialogue_tree'])}")
+            logger.info(f"Updated {p_dir.name} | {s['session_id']} | {exp_id} | tree_turns={len(new_eb['slow_path']['simulator_dialogue_tree'])}")
 
         # 保存更新后的 sessions.jsonl 与 sessions.json
         with open(s_jsonl, 'w', encoding='utf-8') as f:
@@ -89,7 +93,7 @@ def refresh():
         with open(s_json, 'w', encoding='utf-8') as f:
             json.dump(sessions, f, ensure_ascii=False, indent=2)
 
-    print(f"\n[SUCCESS] Total updated experience test sessions: {updated_count}")
+    logger.info(f"\n[SUCCESS] Total updated experience test sessions: {updated_count}")
 
 if __name__ == '__main__':
     refresh()

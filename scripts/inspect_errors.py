@@ -1,3 +1,7 @@
+import logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+logger = logging.getLogger(__name__)
+
 import json
 import os
 
@@ -44,4 +48,4 @@ if __name__ == "__main__":
         ("mobile_persona_019", [1, 4]),
         ("mobile_persona_017", [1]),
     ])
-    print("Done writing to scripts/inspection_result.txt")
+    logger.info("Done writing to scripts/inspection_result.txt")

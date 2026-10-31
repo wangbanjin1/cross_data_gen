@@ -1,8 +1,17 @@
+import hashlib
 import re
+
 from src.config.settings import Config
 from src.generation.llm_client import LLMClient
-from src.templates.prompts.persona_prompts import build_persona_skeleton_prompt
+from src.templates.prompts import (
+    BASE_CANONICAL_PAIRS,
+    DEFAULT_DURATION_ALIAS_MAP,
+    INVALID_APP_SERVICE_MAP,
+    PERSONA_SKELETON_SYSTEM_PROMPT,
+    build_persona_skeleton_prompt,
+)
 from src.templates.trigger_presets import TriggerPresetManager
+
 
 class PersonaGenerator:
     """
@@ -16,12 +25,11 @@ class PersonaGenerator:
         self.support_matrix = getattr(Config, "support_matrix", {})
 
     def generate_skeleton(self, raw_persona: dict) -> dict:
-        num_match = re.search(r'\d+', raw_persona.get("persona_id", ""))
+        num_match = re.search(r"\d+", raw_persona.get("persona_id", ""))
         uid_num = int(num_match.group()) if num_match else 1
         forced_decl_mode, forced_trig_type, period_type_hint, days_hint, time_range_hint, trig_instruction = (
             TriggerPresetManager.resolve_trigger_plan(uid_num, raw_persona)
         )
-
         prompt = build_persona_skeleton_prompt(
             raw_persona=raw_persona,
             forced_decl_mode=forced_decl_mode,
@@ -29,162 +37,74 @@ class PersonaGenerator:
             trig_instruction=trig_instruction,
             period_type_hint=period_type_hint,
             days_hint=days_hint,
-            time_range_hint=time_range_hint
+            time_range_hint=time_range_hint,
         )
-
         messages = [
-            {"role": "system", "content": "You are a professional dataset engineer for network agent memory systems."},
-            {"role": "user", "content": prompt}
+            {"role": "system", "content": PERSONA_SKELETON_SYSTEM_PROMPT},
+            {"role": "user", "content": prompt},
         ]
         res = self.llm.chat_json(messages)
         return self._enrich_skeleton(res)
 
-    def _enrich_skeleton(self, sk: dict) -> dict:
-        """
-        后置校验并补齐 6 大维度口语别名，确保每一个画像骨架都具备高质量行话库。
-        """
-        if not isinstance(sk, dict) or "dynamic_profile" not in sk:
-            return sk
+    @staticmethod
+    def _fix_app_service_pair(
+        app_val: str,
+        srv_val: str,
+        used_apps: set,
+        used_srvs: set | None,
+        canonical_pairs: list[tuple[str, str]],
+        support_matrix: dict,
+    ) -> tuple[str, str, bool]:
+        changed = False
+        if (app_val, srv_val) in INVALID_APP_SERVICE_MAP:
+            app_val, srv_val = INVALID_APP_SERVICE_MAP[(app_val, srv_val)]
+            changed = True
+        elif app_val not in support_matrix or srv_val not in support_matrix.get(app_val, {}):
+            for c_app, c_srv in canonical_pairs:
+                if c_app not in used_apps and (used_srvs is None or c_srv not in used_srvs):
+                    app_val, srv_val = c_app, c_srv
+                    changed = True
+                    break
+        if app_val in used_apps or (used_srvs is not None and srv_val in used_srvs):
+            for c_app, c_srv in canonical_pairs:
+                if c_app not in used_apps and (used_srvs is None or c_srv not in used_srvs):
+                    app_val, srv_val = c_app, c_srv
+                    changed = True
+                    break
+        return app_val, srv_val, changed
 
-        expr_vault = getattr(Config, "expression_vault", {})
-        synonyms = expr_vault.get("slot_synonyms", {})
-        app_map = getattr(Config, "app_map", {})
-        support_matrix = getattr(Config, "support_matrix", {})
-
-        # 标准多品类合规 (应用, 业务) 候选池，支持按人物 ID 轮转采样以保障全数据集应用与业务多样性
-        base_canonical_pairs = [
-            ("抖音", "开直播"),
-            ("微信", "视频通话"),
-            ("腾讯会议", "会议"),
-            ("快手", "开直播"),
-            ("钉钉", "会议"),
-            ("哔哩哔哩", "开直播"),
-            ("飞书", "会议"),
-            ("小红书", "开直播"),
-            ("抖音", "短视频"),
-            ("快手", "短视频"),
-            ("腾讯视频", "视频"),
-            ("哔哩哔哩", "视频"),
-            ("咪咕快游", "云游戏"),
-            ("斗鱼直播", "开直播"),
-            ("快手", "看直播"),
-        ]
-        pid_m = re.search(r"(\d+)", str(sk.get("persona_id") or ""))
-        pid_offset = int(pid_m.group(1)) if pid_m else 0
-        canonical_pairs = base_canonical_pairs[pid_offset % len(base_canonical_pairs):] + base_canonical_pairs[:pid_offset % len(base_canonical_pairs)]
-
-        def _fix_pair(app_val: str, srv_val: str, used_apps: set, used_srvs: set = None) -> tuple[str, str, bool]:
-            changed = False
-            # 专项映射常见越界组合
-            invalid_map = {
-                ("高德地图", "视频通话"): ("微信", "视频通话"),
-                ("钉钉", "视频通话"): ("钉钉", "会议"),
-                ("微信", "会议"): ("钉钉", "会议"),
-                ("腾讯会议", "视频通话"): ("腾讯会议", "会议"),
-                ("哔哩哔哩", "短视频"): ("抖音", "短视频"),
-                ("快手", "游戏"): ("快手", "看直播"),
-                ("虎牙直播", "看直播"): ("快手", "看直播"),
-                ("虎牙直播", "开直播"): ("斗鱼直播", "开直播"),
-            }
-            if (app_val, srv_val) in invalid_map:
-                app_val, srv_val = invalid_map[(app_val, srv_val)]
-                changed = True
-            elif app_val not in support_matrix or srv_val not in support_matrix.get(app_val, {}):
-                for c_app, c_srv in canonical_pairs:
-                    if c_app not in used_apps and (used_srvs is None or c_srv not in used_srvs):
-                        app_val, srv_val = c_app, c_srv
-                        changed = True
-                        break
-            if app_val in used_apps or (used_srvs is not None and srv_val in used_srvs):
-                for c_app, c_srv in canonical_pairs:
-                    if c_app not in used_apps and (used_srvs is None or c_srv not in used_srvs):
-                        app_val, srv_val = c_app, c_srv
-                        changed = True
-                        break
-            return app_val, srv_val, changed
-
-        main_mt = sk["dynamic_profile"].get("periodic_main_storyline", {})
-        # 同步最新 trigger_presets 中的多样化 time_range
-        TriggerPresetManager.reload()
-        _, _, _, _, preset_time_range, _ = TriggerPresetManager.resolve_trigger_plan(pid_offset or 1, sk)
-        if preset_time_range:
-            main_mt["time_range"] = preset_time_range
-
-        app = main_mt.get("application_name", "抖音")
-        srv = main_mt.get("service_name", "开直播")
-        used_apps = set()
-        used_srvs = set()
-        app, srv, main_changed = _fix_pair(app, srv, used_apps, used_srvs)
-        main_mt["application_name"] = app
-        main_mt["service_name"] = srv
-        used_apps.add(app)
-        used_srvs.add(srv)
-
-        # 多样化 preferred_params (画质与时延)，严禁全员写死 1080p / 50ms
-        supp_res_list = support_matrix.get(app, {}).get(srv, {}).get("resolutions", ["720p", "1080p"])
-        valid_res_choices = [r for r in ["720p", "1080p"] if r in supp_res_list] or ["1080p"]
-        rtt_choices = ["30ms", "50ms", "80ms", "100ms"]
-        pref_params = main_mt.get("preferred_params", {})
-        if not isinstance(pref_params, dict):
-            pref_params = {}
-        # 按人物ID哈希独立均匀分布画质与时延（避免奇偶同余耦合）
-        import hashlib
-        h_bytes = hashlib.sha256(f"{sk.get('persona_id', '')}:{app}:{srv}".encode("utf-8")).digest()
-        res = valid_res_choices[h_bytes[0] % len(valid_res_choices)]
-        rtt = rtt_choices[h_bytes[1] % len(rtt_choices)]
-        pref_params["resolution"] = res
-        pref_params["rtt_max"] = rtt
-        main_mt["preferred_params"] = pref_params
-        p_type = main_mt.get("period_type", "weekly")
-
-        aliases = main_mt.get("aliases", {})
-        if not isinstance(aliases, dict):
-            aliases = {}
-        if main_changed:
-            aliases["app_aliases"] = []
-            aliases["service_aliases"] = []
-
-        # 1. 补齐 app_aliases (优先选择地道中文叫法)
+    @staticmethod
+    def _populate_main_aliases(aliases: dict, app: str, srv: str, res: str, rtt: str, p_type: str, time_range_str: str, app_map: dict, synonyms: dict) -> dict:
         if not aliases.get("app_aliases"):
             app_aliases_found = []
-            for k, val_list in app_map.items():
+            for val_list in app_map.values():
                 if app in val_list:
-                    cn_aliases = [a for a in val_list if a != app and re.search(r'[\u4e00-\u9fa5]', a)]
+                    cn_aliases = [a for a in val_list if a != app and re.search(r"[\u4e00-\u9fa5]", a)]
                     other_aliases = [a for a in val_list if a != app and a not in cn_aliases]
                     app_aliases_found = cn_aliases + other_aliases
                     break
             aliases["app_aliases"] = app_aliases_found[:3] if app_aliases_found else [app]
 
-        # 2. 补齐 service_aliases
         if not aliases.get("service_aliases"):
             srv_syns = synonyms.get("services", {}).get(srv, {}).get("general_aliases", [])
             aliases["service_aliases"] = [s for s in srv_syns if s != srv][:3] if srv_syns else [srv]
 
-        # 3. 严格同步 resolution_aliases 与当前 res 档位一致
-        if res == "1080p":
-            aliases["resolution_aliases"] = ["1080p原画", "1080p", "超清"]
-        elif res == "720p":
-            aliases["resolution_aliases"] = ["720p", "高清"]
-        elif res == "4K":
-            aliases["resolution_aliases"] = ["4K", "4K超高清"]
-        else:
-            aliases["resolution_aliases"] = [res, f"{res}清晰"]
+        res_alias_map = {
+            "1080p": ["1080p原画", "1080p", "超清"],
+            "720p": ["720p", "高清"],
+            "4K": ["4K", "4K超高清"],
+        }
+        aliases["resolution_aliases"] = res_alias_map.get(res, [res, f"{res}清晰"])
 
-        # 4. 严格同步 rtt_aliases 与当前 rtt 档位一致
-        if rtt == "50ms":
-            aliases["rtt_aliases"] = ["50ms以内", "50毫秒以内", "低时延"]
-        elif rtt == "30ms":
-            aliases["rtt_aliases"] = ["30ms以内", "30毫秒以内", "超低时延"]
-        elif rtt == "80ms":
-            aliases["rtt_aliases"] = ["80ms以内", "80毫秒以内"]
-        elif rtt == "100ms":
-            aliases["rtt_aliases"] = ["100ms以内", "100毫秒以内"]
-        else:
-            aliases["rtt_aliases"] = [f"{rtt}以内", rtt]
+        rtt_alias_map = {
+            "50ms": ["50ms以内", "50毫秒以内", "低时延"],
+            "30ms": ["30ms以内", "30毫秒以内", "超低时延"],
+            "80ms": ["80ms以内", "80毫秒以内"],
+            "100ms": ["100ms以内", "100毫秒以内"],
+        }
+        aliases["rtt_aliases"] = rtt_alias_map.get(rtt, [f"{rtt}以内", rtt])
 
-        # 5. 严格同步 duration_aliases 与主线 time_range 的真实时长一致
-        tr_str = str(main_mt.get("time_range") or "14:00-15:30")
-        m_tr = re.search(r"(\d{1,2}):(\d{2})\s*[-~至到]\s*(\d{1,2}):(\d{2})", tr_str)
+        m_tr = re.search(r"(\d{1,2}):(\d{2})\s*[-~至到]\s*(\d{1,2}):(\d{2})", time_range_str)
         if m_tr:
             tr_mins = (int(m_tr.group(3)) * 60 + int(m_tr.group(4))) - (int(m_tr.group(1)) * 60 + int(m_tr.group(2)))
             if tr_mins <= 0:
@@ -192,37 +112,36 @@ class PersonaGenerator:
         else:
             tr_mins = 90
         dur_key = f"{tr_mins}min"
-        default_dur_map = {
-            "30min": ["半小时", "半个钟头", "30分钟"],
-            "45min": ["45分钟", "三刻钟"],
-            "60min": ["一个钟头", "一小时", "60分钟"],
-            "90min": ["一个半小时", "一个半钟头", "90分钟"],
-            "120min": ["俩小时", "两钟头", "两小时"],
-            "150min": ["两个半小时", "150分钟"],
-            "180min": ["三个小时", "三钟头", "180分钟"],
-        }
         dur_syns = synonyms.get("duration", {}).get(dur_key, [])
-        fallbacks = default_dur_map.get(dur_key, [f"{tr_mins}分钟"])
+        fallbacks = DEFAULT_DURATION_ALIAS_MAP.get(dur_key, [f"{tr_mins}分钟"])
         aliases["duration_aliases"] = list(dict.fromkeys(fallbacks + dur_syns))[:4]
 
-        # 6. 严格同步 period_aliases（剔除旧骨架里写死的具体几点到几点口语）
-        if p_type == "daily":
-            aliases["period_aliases"] = ["每天这个时候", "老时间", "日常例行", "每天照旧"]
-        elif p_type == "weekly":
-            aliases["period_aliases"] = ["每周老时间", "周例行时段", "照上周的来", "每周固定这个时候"]
-        elif p_type == "monthly":
-            aliases["period_aliases"] = ["月初例行", "每月老时间", "月度固定配置", "照旧按月度标准"]
-        else:
-            aliases["period_aliases"] = ["老规矩", "老时间", "按习惯来", "照旧"]
+        period_alias_map = {
+            "daily": ["每天这个时候", "老时间", "日常例行", "每天照旧"],
+            "weekly": ["每周老时间", "周例行时段", "照上周的来", "每周固定这个时候"],
+            "monthly": ["月初例行", "每月老时间", "月度固定配置", "照旧按月度标准"],
+        }
+        aliases["period_aliases"] = period_alias_map.get(p_type, ["老规矩", "老时间", "按习惯来", "照旧"])
+        return aliases
 
-        main_mt["aliases"] = aliases
-        sk["dynamic_profile"]["periodic_main_storyline"] = main_mt
-
-        # 同样补齐并规范化 sub_storylines
+    @classmethod
+    def _enrich_sub_and_distractors(
+        cls,
+        sk: dict,
+        main_app: str,
+        used_apps: set,
+        used_srvs: set,
+        canonical_pairs: list[tuple[str, str]],
+        support_matrix: dict,
+        app_map: dict,
+        synonyms: dict,
+    ) -> None:
         for sub in sk["dynamic_profile"].get("sub_storylines", []):
             s_app = sub.get("application_name", "")
             s_srv = sub.get("service_name", "")
-            s_app, s_srv, sub_changed = _fix_pair(s_app, s_srv, used_apps, used_srvs)
+            s_app, s_srv, sub_changed = cls._fix_app_service_pair(
+                s_app, s_srv, used_apps, used_srvs, canonical_pairs, support_matrix
+            )
             sub["application_name"] = s_app
             sub["service_name"] = s_srv
             used_apps.add(s_app)
@@ -237,7 +156,7 @@ class PersonaGenerator:
                 s_aliases["service_aliases"] = []
             if not s_aliases.get("app_aliases"):
                 s_app_syns = []
-                for k, vlist in app_map.items():
+                for vlist in app_map.values():
                     if s_app in vlist:
                         s_app_syns = [a for a in vlist if a != s_app]
                         break
@@ -246,19 +165,92 @@ class PersonaGenerator:
                 s_srv_syns = synonyms.get("services", {}).get(s_srv, {}).get("general_aliases", [])
                 s_aliases["service_aliases"] = [s for s in s_srv_syns if s != s_srv][:2] if s_srv_syns else [s_srv]
             if not s_aliases.get("resolution_aliases"):
-                s_aliases["resolution_aliases"] = ["1080p原画", "1080p"] if s_res == "1080p" else [s_res, "高清" if s_res == "720p" else s_res]
+                s_aliases["resolution_aliases"] = (
+                    ["1080p原画", "1080p"] if s_res == "1080p" else [s_res, "高清" if s_res == "720p" else s_res]
+                )
             if not s_aliases.get("rtt_aliases"):
                 s_aliases["rtt_aliases"] = [f"{s_rtt}以内", f"{s_rtt.replace('ms', '毫秒')}以内"]
             sub["aliases"] = s_aliases
 
-        # 规范化 distractor_pool
-        dist_used_apps = {app}
+        dist_used_apps = {main_app}
         for dist in sk["dynamic_profile"].get("distractor_pool", []):
             d_app = dist.get("application_name", "钉钉")
             d_srv = dist.get("service_name", "会议")
-            d_app, d_srv, _ = _fix_pair(d_app, d_srv, dist_used_apps, None)
+            d_app, d_srv, _ = cls._fix_app_service_pair(
+                d_app, d_srv, dist_used_apps, None, canonical_pairs, support_matrix
+            )
             dist["application_name"] = d_app
             dist["service_name"] = d_srv
             dist_used_apps.add(d_app)
 
+    def _enrich_skeleton(self, sk: dict) -> dict:
+        """后置校验并补齐 6 大维度口语别名，确保每一个画像骨架都具备高质量个性化表述映射库。"""
+        if not isinstance(sk, dict) or "dynamic_profile" not in sk:
+            return sk
+
+        expr_vault = getattr(Config, "expression_vault", {})
+        synonyms = expr_vault.get("slot_synonyms", {})
+        app_map = getattr(Config, "app_map", {})
+        support_matrix = getattr(Config, "support_matrix", {})
+
+        pid_m = re.search(r"(\d+)", str(sk.get("persona_id") or ""))
+        pid_offset = int(pid_m.group(1)) if pid_m else 0
+        rot = pid_offset % len(BASE_CANONICAL_PAIRS)
+        canonical_pairs = BASE_CANONICAL_PAIRS[rot:] + BASE_CANONICAL_PAIRS[:rot]
+
+        main_mt = sk["dynamic_profile"].get("periodic_main_storyline", {})
+        TriggerPresetManager.reload()
+        _, _, _, _, preset_time_range, _ = TriggerPresetManager.resolve_trigger_plan(pid_offset or 1, sk)
+        if preset_time_range:
+            main_mt["time_range"] = preset_time_range
+
+        used_apps, used_srvs = set(), set()
+        app, srv, main_changed = self._fix_app_service_pair(
+            main_mt.get("application_name", "抖音"),
+            main_mt.get("service_name", "开直播"),
+            used_apps,
+            used_srvs,
+            canonical_pairs,
+            support_matrix,
+        )
+        main_mt["application_name"] = app
+        main_mt["service_name"] = srv
+        used_apps.add(app)
+        used_srvs.add(srv)
+
+        supp_res_list = support_matrix.get(app, {}).get(srv, {}).get("resolutions", ["720p", "1080p"])
+        valid_res_choices = [r for r in ["720p", "1080p"] if r in supp_res_list] or ["1080p"]
+        rtt_choices = ["30ms", "50ms", "80ms", "100ms"]
+        pref_params = main_mt.get("preferred_params", {})
+        if not isinstance(pref_params, dict):
+            pref_params = {}
+        h_bytes = hashlib.sha256(f"{sk.get('persona_id', '')}:{app}:{srv}".encode("utf-8")).digest()
+        res = valid_res_choices[h_bytes[0] % len(valid_res_choices)]
+        rtt = rtt_choices[h_bytes[1] % len(rtt_choices)]
+        pref_params["resolution"] = res
+        pref_params["rtt_max"] = rtt
+        main_mt["preferred_params"] = pref_params
+
+        aliases = main_mt.get("aliases", {})
+        if not isinstance(aliases, dict):
+            aliases = {}
+        if main_changed:
+            aliases["app_aliases"] = []
+            aliases["service_aliases"] = []
+
+        main_mt["aliases"] = self._populate_main_aliases(
+            aliases,
+            app,
+            srv,
+            res,
+            rtt,
+            main_mt.get("period_type", "weekly"),
+            str(main_mt.get("time_range") or "14:00-15:30"),
+            app_map,
+            synonyms,
+        )
+        sk["dynamic_profile"]["periodic_main_storyline"] = main_mt
+        self._enrich_sub_and_distractors(
+            sk, app, used_apps, used_srvs, canonical_pairs, support_matrix, app_map, synonyms
+        )
         return sk

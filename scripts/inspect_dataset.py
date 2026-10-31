@@ -1,10 +1,14 @@
+import logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+logger = logging.getLogger(__name__)
+
 import json
 from pathlib import Path
 
 def main(output_dir: str = None):
     base = Path(output_dir or "data/generated")
     skeletons = sorted(base.glob("*/persona_skeleton.json"))
-    print(f"Total skeletons found in '{base}': {len(skeletons)}")
+    logger.info(f"Total skeletons found in '{base}': {len(skeletons)}")
     
     mode_counts = {}
     trig_counts = {}
@@ -21,11 +25,11 @@ def main(output_dir: str = None):
         mode_counts[mode] = mode_counts.get(mode, 0) + 1
         trig_counts[trig] = trig_counts.get(trig, 0) + 1
 
-        print(f"[{pid}] Mode: {mode:20s} | Trigger: {trig:20s} | Cond: {cond}")
+        logger.info(f"[{pid}] Mode: {mode:20s} | Trigger: {trig:20s} | Cond: {cond}")
 
-    print("\n--- Summary ---")
-    print("Declaration Modes:", mode_counts)
-    print("Storyline Triggers:", trig_counts)
+    logger.info("\n--- Summary ---")
+    logger.info("Declaration Modes:", mode_counts)
+    logger.info("Storyline Triggers:", trig_counts)
 
 if __name__ == "__main__":
     import argparse

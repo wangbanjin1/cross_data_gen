@@ -4,6 +4,10 @@
 面向通信保障意图提参场景，基于数据侧的声明式交互契约 (Interactive Eval Contract)
 驱动“联接”Agent 与用户模拟器 (User Simulator) 的目标差距 (Delta) 动态澄清与快速闭环与多轮澄清路径评测。
 """
+import logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+logger = logging.getLogger(__name__)
+
 
 import json
 import sys
@@ -241,12 +245,12 @@ def main():
 
     data_dir = Path(args.data)
     if not data_dir.exists():
-        print(f"[ERROR] 目录不存在: {data_dir}")
+        logger.info(f"[ERROR] 目录不存在: {data_dir}")
         sys.exit(1)
 
-    print("=" * 70)
-    print("  '联接'Agent 动态多分支交互式模拟评测 (Interactive Benchmark)")
-    print("=" * 70)
+    logger.info("=" * 70)
+    logger.info("  '联接'Agent 动态多分支交互式模拟评测 (Interactive Benchmark)")
+    logger.info("=" * 70)
 
     total_sessions = 0
     success_count = 0
@@ -271,16 +275,16 @@ def main():
                 if res["final_status"] == "resolved":
                     success_count += 1
                 sum_tcg += res["tcg_percentage"]
-                print(f"[PASS] {p_dir.name} | {res['session_id']} | 场景: {res['scenario_type']:<26} | Fast={res['fast_rounds']} Slow={res['slow_rounds']} | TCG={res['tcg_percentage']}% | 终态={res['final_status']}")
+                logger.info(f"[PASS] {p_dir.name} | {res['session_id']} | 场景: {res['scenario_type']:<26} | Fast={res['fast_rounds']} Slow={res['slow_rounds']} | TCG={res['tcg_percentage']}% | 终态={res['final_status']}")
 
-    print("-" * 70)
+    logger.info("-" * 70)
     if total_sessions > 0:
         avg_tcg = round(sum_tcg / total_sessions, 2)
         sr = round(success_count / total_sessions * 100.0, 1)
-        print(f"[SUMMARY] 评测会话数: {total_sessions} | 闭环成功率: {sr}% | 平均交互轮数压缩率 (TCG): {avg_tcg}%")
+        logger.info(f"[SUMMARY] 评测会话数: {total_sessions} | 闭环成功率: {sr}% | 平均交互轮数压缩率 (TCG): {avg_tcg}%")
     else:
-        print("[INFO] 当前暂无已嵌入交互评测契约的经验测试会话，生成后即可跑分。")
-    print("=" * 70)
+        logger.info("[INFO] 当前暂无已嵌入交互评测契约的经验测试会话，生成后即可跑分。")
+    logger.info("=" * 70)
 
 
 if __name__ == "__main__":

@@ -1,3 +1,7 @@
+import logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+logger = logging.getLogger(__name__)
+
 import json
 import glob
 import os
@@ -5,7 +9,7 @@ import re
 
 def scan_all_x1():
     dirs = sorted(glob.glob("data/generated/mobile_persona_*"))
-    print(f"Total personas: {len(dirs)}")
+    logger.info(f"Total personas: {len(dirs)}")
 
     results = []
     no_time_point = [] # 用户没说具体点点分分
@@ -46,9 +50,9 @@ def scan_all_x1():
                 if not has_dur_val:
                     no_duration.append(pid)
 
-    print(f"Total X-1 sessions: {len(results)}")
-    print(f"X-1 sessions where user didn't mention specific time point (e.g. 12:30): {len(no_time_point)} / {len(results)}")
-    print(f"X-1 sessions where user didn't mention duration: {len(no_duration)} / {len(results)}")
+    logger.info(f"Total X-1 sessions: {len(results)}")
+    logger.info(f"X-1 sessions where user didn't mention specific time point (e.g. 12:30): {len(no_time_point)} / {len(results)}")
+    logger.info(f"X-1 sessions where user didn't mention duration: {len(no_duration)} / {len(results)}")
 
     with open("scripts/x1_scan_report.txt", "w", encoding="utf-8") as out:
         for r in results:

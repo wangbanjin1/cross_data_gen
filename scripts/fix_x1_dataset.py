@@ -1,3 +1,7 @@
+import logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+logger = logging.getLogger(__name__)
+
 import json
 import glob
 import os
@@ -9,7 +13,7 @@ from src.core.qc_validator import QCValidator
 
 def fix_x1_sessions(dry_run=False):
     dirs = sorted(glob.glob("data/generated/mobile_persona_*"))
-    print(f"Total personas: {len(dirs)}")
+    logger.info(f"Total personas: {len(dirs)}")
 
     modified_count = 0
     qc_pass_count = 0
@@ -117,9 +121,9 @@ def fix_x1_sessions(dry_run=False):
                 if p_modified:
                     modified_count += 1
                     if modified_count <= 5 or pid in ['mobile_persona_001', 'mobile_persona_003', 'mobile_persona_006']:
-                        print(f"[{pid} {s['session_id']}]")
-                        print(f"  Old User: {orig_u}")
-                        print(f"  New User: {new_u}")
+                        logger.info(f"[{pid} {s['session_id']}]")
+                        logger.info(f"  Old User: {orig_u}")
+                        logger.info(f"  New User: {new_u}")
 
         if p_modified and not dry_run:
             with open(sess_file, "w", encoding="utf-8") as f:
@@ -139,13 +143,13 @@ def fix_x1_sessions(dry_run=False):
             if qc_rep.get("failed_sessions", 0) == 0:
                 qc_pass_count += 1
             else:
-                print(f"[!] QC Failed on {pid}: {qc_rep.get('issues')}")
+                logger.info(f"[!] QC Failed on {pid}: {qc_rep.get('issues')}")
         else:
             qc_pass_count += 1
 
-    print("\n" + "="*50)
-    print(f"Total X-1 sessions modified: {modified_count}")
-    print(f"Total QC passed personas: {qc_pass_count}/{len(dirs)}")
+    logger.info("\n" + "="*50)
+    logger.info(f"Total X-1 sessions modified: {modified_count}")
+    logger.info(f"Total QC passed personas: {qc_pass_count}/{len(dirs)}")
 
 if __name__ == '__main__':
     fix_x1_sessions(dry_run=False)

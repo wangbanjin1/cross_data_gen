@@ -1,3 +1,7 @@
+import logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+logger = logging.getLogger(__name__)
+
 import json
 import glob
 import os
@@ -17,7 +21,7 @@ def parse_date_from_ref(ref_time_str):
 
 def fix_all_generated_data():
     persona_dirs = sorted(glob.glob("data/generated/mobile_persona_*"))
-    print(f"Total persona dirs found: {len(persona_dirs)}")
+    logger.info(f"Total persona dirs found: {len(persona_dirs)}")
 
     stats = {
         "x1_fixed": 0,
@@ -162,12 +166,12 @@ def fix_all_generated_data():
         else:
             stats["qc_passed_personas"] += 1
 
-    print("\n================== 修复完成统计 ==================")
-    print(f"X-1 '工作日说周末' 修复数量: {stats['x1_fixed']}")
-    print(f"S-03 隐式偏好业务锚点补充数量: {stats['t21_s03_fixed']}")
-    print(f"T2-5 '半天' 歧义口语修复数量: {stats['t25_half_day_fixed']}")
-    print(f"U2 漏说时长补全数量: {stats['u2_missing_dur_fixed']}")
-    print(f"质检全通过 Persona 数量: {stats['qc_passed_personas']}/{len(persona_dirs)}")
+    logger.info("\n================== 修复完成统计 ==================")
+    logger.info(f"X-1 '工作日说周末' 修复数量: {stats['x1_fixed']}")
+    logger.info(f"S-03 隐式偏好业务锚点补充数量: {stats['t21_s03_fixed']}")
+    logger.info(f"T2-5 '半天' 歧义口语修复数量: {stats['t25_half_day_fixed']}")
+    logger.info(f"U2 漏说时长补全数量: {stats['u2_missing_dur_fixed']}")
+    logger.info(f"质检全通过 Persona 数量: {stats['qc_passed_personas']}/{len(persona_dirs)}")
 
 if __name__ == "__main__":
     fix_all_generated_data()

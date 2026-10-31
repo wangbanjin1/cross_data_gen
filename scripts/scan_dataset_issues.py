@@ -1,3 +1,7 @@
+import logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+logger = logging.getLogger(__name__)
+
 import json
 import glob
 import os
@@ -16,7 +20,7 @@ def parse_date_from_ref(ref_time_str):
 
 def scan_dataset():
     persona_dirs = sorted(glob.glob("data/generated/mobile_persona_*"))
-    print(f"Total persona dirs found: {len(persona_dirs)}")
+    logger.info(f"Total persona dirs found: {len(persona_dirs)}")
 
     x1_weekday_with_weekend_word = []
     t21_s03_implicit = []
@@ -77,17 +81,17 @@ def scan_dataset():
                             "user_utterance": u_utt
                         })
 
-    print(f"\n1. X-1 with '周末' on weekday: {len(x1_weekday_with_weekend_word)} occurrences")
+    logger.info(f"\n1. X-1 with '周末' on weekday: {len(x1_weekday_with_weekend_word)} occurrences")
     for item in x1_weekday_with_weekend_word[:10]:
-        print(f"   {item['persona']} {item['session_id']} (weekday={item['weekday']}, {item['ref_time']}): {item['user_utterance'][:50]}...")
+        logger.info(f"   {item['persona']} {item['session_id']} (weekday={item['weekday']}, {item['ref_time']}): {item['user_utterance'][:50]}...")
 
-    print(f"\n2. S-03 T2-1 implicit '按上次的来': {len(t21_s03_implicit)} occurrences")
+    logger.info(f"\n2. S-03 T2-1 implicit '按上次的来': {len(t21_s03_implicit)} occurrences")
     for item in t21_s03_implicit[:10]:
-        print(f"   {item['persona']} {item['session_id']}: {item['user_utterance']}")
+        logger.info(f"   {item['persona']} {item['session_id']}: {item['user_utterance']}")
 
-    print(f"\n3. T2-5 with '半天': {len(t25_half_day)} occurrences")
+    logger.info(f"\n3. T2-5 with '半天': {len(t25_half_day)} occurrences")
     for item in t25_half_day:
-        print(f"   {item['persona']} {item['session_id']}: {item['user_utterance']}")
+        logger.info(f"   {item['persona']} {item['session_id']}: {item['user_utterance']}")
 
 if __name__ == "__main__":
     scan_dataset()

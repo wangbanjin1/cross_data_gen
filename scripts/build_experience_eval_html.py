@@ -1,3 +1,7 @@
+import logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+logger = logging.getLogger(__name__)
+
 import json
 from pathlib import Path
 import html
@@ -884,7 +888,7 @@ function filterCards(type, val, btn) {{
     out_path = Path("docs/html/experience_fast_slow_eval_preview.html")
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(html_doc, encoding="utf-8")
-    print(f"Generated {out_path} ({len(html_doc)} chars, {total_pairs} experience session pairs)")
+    logger.info(f"Generated {out_path} ({len(html_doc)} chars, {total_pairs} experience session pairs)")
 
 
 if __name__ == "__main__":

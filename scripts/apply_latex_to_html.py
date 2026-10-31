@@ -1,3 +1,7 @@
+import logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+logger = logging.getLogger(__name__)
+
 import sys
 import re
 import json
@@ -44,9 +48,9 @@ new_katex_head = """    <!-- KaTeX 本地与多重 CDN 双通道高可用样式�
 
 if old_mathjax in content:
     content = content.replace(old_mathjax, new_katex_head)
-    print("[+] 替换 <head> KaTeX 引用成功")
+    logger.info("[+] 替换 <head> KaTeX 引用成功")
 else:
-    print("[!] 警告: 未精确匹配 old_mathjax，尝试正则替换")
+    logger.info("[!] 警告: 未精确匹配 old_mathjax，尝试正则替换")
     content = re.sub(r'<!-- MathJax.*?<script id="MathJax-script".*?</script>', new_katex_head, content, flags=re.DOTALL)
 
 # 2. 增强 .math-block 样式
@@ -121,9 +125,9 @@ new_math_css = """        /* 数学公式容器增强样式 (LaTeX 渲染专用)
 
 if old_math_css in content:
     content = content.replace(old_math_css, new_math_css)
-    print("[+] 替换 .math-block 增强 CSS 成功")
+    logger.info("[+] 替换 .math-block 增强 CSS 成功")
 else:
-    print("[!] 警告: 未精确匹配 old_math_css")
+    logger.info("[!] 警告: 未精确匹配 old_math_css")
 
 # 3. 完善 TOC 目录大纲
 old_toc_work = """                    <li class="toc-item toc-level-2"><a href="#工作记忆工单账本检索" class="toc-link">工作记忆工单账本检索</a></li>
@@ -137,7 +141,7 @@ new_toc_work = """                    <li class="toc-item toc-level-2"><a href="
 
 if old_toc_work in content:
     content = content.replace(old_toc_work, new_toc_work)
-    print("[+] 更新 TOC 大纲（增加时态相对指称小节）成功")
+    logger.info("[+] 更新 TOC 大纲（增加时态相对指称小节）成功")
 
 # 4. 更新“交互指标两条线”背景描述（包含 $\to$ 公式渲染）
 old_lines_intro = """                    <!-- 交互指标两条线 -->
@@ -159,7 +163,7 @@ new_lines_intro = f"""                    <!-- 交互指标两条线 -->
 
 if old_lines_intro in content:
     content = content.replace(old_lines_intro, new_lines_intro)
-    print("[+] 更新交互指标两条线描述成功")
+    logger.info("[+] 更新交互指标两条线描述成功")
 
 # 5. 更新核心评测指标公式（TCG, CSCR, ERRA, EMTAR 全部渲染并附带复制按钮）
 old_metrics_block = re.search(r'<h3 id="核心评测指标公式">.*?</div>\s*(?=<!-- 工作记忆工单账本检索 -->)', content, re.DOTALL)
@@ -242,9 +246,9 @@ if old_metrics_block:
                         </p>
                     </div>\n\n                    """
     content = content[:old_metrics_block.start()] + new_metrics_section + content[old_metrics_block.end():]
-    print("[+] 更新 4 项评测指标公式渲染块（TCG, CSCR, ERRA, EMTAR）成功")
+    logger.info("[+] 更新 4 项评测指标公式渲染块（TCG, CSCR, ERRA, EMTAR）成功")
 else:
-    print("[!] 错误: 未找到旧指标公式块")
+    logger.info("[!] 错误: 未找到旧指标公式块")
 
 # 6. 在工作记忆中插入“时态相对指称计算与检索逻辑”小节
 old_records_h3 = """                    <h3 id="历史工单流水账结构">历史工单流水账结构</h3>"""
@@ -268,7 +272,7 @@ temporal_calc_section = f"""                    <h3 id="时态相对指称计算
 
 if old_records_h3 in content:
     content = content.replace(old_records_h3, temporal_calc_section, 1)
-    print("[+] 插入“时态相对指称计算与检索逻辑”及行内公式成功")
+    logger.info("[+] 插入“时态相对指称计算与检索逻辑”及行内公式成功")
 
 # 7. 更新“经验记忆本体定义”（插入 Experience 四元组形式化定义公式）
 old_exp_def = """                    <h3 id="经验记忆本体定义">经验记忆本体定义</h3>
@@ -290,7 +294,7 @@ new_exp_def = f"""                    <h3 id="经验记忆本体定义">经验�
 
 if old_exp_def in content:
     content = content.replace(old_exp_def, new_exp_def)
-    print("[+] 插入“经验记忆本体定义”四元组公式成功")
+    logger.info("[+] 插入“经验记忆本体定义”四元组公式成功")
 
 # 8. 在底部的 JavaScript 中注入 copyLatex 函数
 old_script_tail = """            // 代码高亮初始化
@@ -327,10 +331,10 @@ new_script_tail = """            // 代码高亮初始化
 
 if old_script_tail in content:
     content = content.replace(old_script_tail, new_script_tail)
-    print("[+] 注入 copyLatex 交互脚本成功")
+    logger.info("[+] 注入 copyLatex 交互脚本成功")
 
 # 写入文件
 with open(html_path, 'w', encoding='utf-8') as f:
     f.write(content)
 
-print(f"[✓] 成功更新 {html_path}，所有数学公式均已完成 LaTeX 格式规范化与 KaTeX 预渲染！")
+logger.info(f"[✓] 成功更新 {html_path}，所有数学公式均已完成 LaTeX 格式规范化与 KaTeX 预渲染！")

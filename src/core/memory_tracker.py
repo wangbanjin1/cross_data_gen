@@ -5,15 +5,18 @@ def _small_memory_mapping(small: dict) -> dict:
     """将规划的小记忆写成可解释的结构；业务维度保存业务到默认应用的映射。"""
     if small.get("type") == "service_default_app":
         return {
-            "service_default_apps": [{
-                "service_name": small.get("value"),
-                "application_name": small.get("normalized_value"),
-                "scope_condition": small.get("scope_condition"),
-            }]
+            "service_default_apps": [
+                {
+                    "service_name": small.get("value"),
+                    "application_name": small.get("normalized_value"),
+                    "scope_condition": small.get("scope_condition"),
+                }
+            ]
         }
     if small.get("alias_key") and small.get("value"):
         return {small["alias_key"]: [small["value"]]}
     return {}
+
 
 class MemoryTracker:
     """
@@ -31,292 +34,243 @@ class MemoryTracker:
     def get_snapshot_before(self) -> dict:
         return copy.deepcopy(self.active_memories)
 
+    def _track_main_storyline(self, s_plan: dict, role: str, tp: dict, ref_time: str, decl_mode: str, memory_events: list[dict]) -> None:
+        trig_type = s_plan.get("storyline_trigger_type", "time_periodic")
+        trig_cond = s_plan.get("trigger_condition", "每周常规周期时段")
+        scope_val = "weekly_cycle" if trig_type == "time_periodic" else ("task_mission" if trig_type == "task_activity" else "location_boundary")
+        small = s_plan.get("small_memory", {})
+        selected_alias_map = _small_memory_mapping(small)
+
+        if role == "evidence_session":
+            is_explicit = decl_mode == "explicit_declaration"
+            self.active_memories["MF_001"] = {
+                "memory_id": "MF_001",
+                "category": "periodic_main_storyline",
+                "storyline_trigger_type": trig_type,
+                "trigger_condition": trig_cond,
+                "declaration_mode": "explicit_declaration" if is_explicit else "implicit_induction",
+                "application_name": tp["application_name"],
+                "service_name": tp["service_name"],
+                "resolution": tp["resolution"],
+                "rtt_max": tp["rtt"],
+                "start_time": tp["start_timestamp"].split("日")[-1],
+                "end_time": tp["end_timestamp"].split("日")[-1],
+                "duration": tp["duration"],
+                "alias_mapping": selected_alias_map if is_explicit else {},
+                "scope": scope_val,
+                "status": "active" if is_explicit else "provisional",
+                "evidence_count": 1,
+                "first_declared_at": ref_time,
+                "last_reinforced_at": ref_time,
+            }
+            memory_events.append(
+                {
+                    "event_type": "form_memory_explicit" if is_explicit else "log_task_history",
+                    "memory_id": "MF_001",
+                    "description": (
+                        f"用户首次明确显式声明长期偏好（触发条件：{trig_cond}）：{tp['application_name']}{tp['service_name']}（{tp['resolution']}, {tp['rtt']}），设立老规矩指令，登记个性化别名小记忆点。"
+                        if is_explicit
+                        else f"用户在场景（{trig_cond}）发生单次保障行为：{tp['application_name']}{tp['service_name']}，未显式声明长期偏好，记录单次历史日志（防单次行为过拟合）。"
+                    ),
+                    "target_slots": ["application_name", "service_name", "resolution", "rtt_max"],
+                }
+            )
+        elif role in ["reinforcement_session", "reuse_session"] and "MF_001" in self.active_memories:
+            prev_status = self.active_memories["MF_001"].get("status")
+            self.active_memories["MF_001"]["evidence_count"] += 1
+            self.active_memories["MF_001"]["last_reinforced_at"] = ref_time
+            if prev_status == "provisional":
+                self.active_memories["MF_001"]["status"] = "active"
+                if small.get("alias_key") and small.get("value"):
+                    self.active_memories["MF_001"]["alias_mapping"] = _small_memory_mapping(small)
+                memory_events.append(
+                    {
+                        "event_type": "crystallize_implicit_memory",
+                        "memory_id": "MF_001",
+                        "description": f"用户再次在相似场景（{trig_cond}）发起相同配置，满足隐式归纳证据阈值(N>=2)，经Agent反问确认，正式固化为长期老规矩。",
+                        "retrieved_slots": ["application_name", "service_name", "resolution", "rtt_max"],
+                    }
+                )
+            else:
+                memory_events.append(
+                    {
+                        "event_type": "reinforce_memory",
+                        "memory_id": "MF_001",
+                        "description": f"用户在（{trig_cond}）省略参数复用主线记忆，Agent 成功补全并经用户确认，证据强度增至 {self.active_memories['MF_001']['evidence_count']} 次。",
+                        "retrieved_slots": ["application_name", "service_name", "resolution", "rtt_max"],
+                    }
+                )
+
+    def _track_sub_storyline(self, s_plan: dict, b_type: str, role: str, tp: dict, ref_time: str, memory_events: list[dict]) -> None:
+        is_sub1 = b_type == "sub_01"
+        mem_id = "SUB_001" if is_sub1 else "SUB_002"
+        cat = "sub_storyline_transit" if is_sub1 else "sub_storyline_hotel"
+        scope = "transit_evening" if is_sub1 else "hotel_evening_review"
+        small_map = _small_memory_mapping(s_plan.get("small_memory", {}))
+        if role == "evidence_session":
+            self.active_memories[mem_id] = {
+                "memory_id": mem_id,
+                "category": cat,
+                "application_name": tp["application_name"],
+                "service_name": tp["service_name"],
+                "resolution": tp["resolution"],
+                "rtt_max": tp["rtt"],
+                "start_time": tp["start_timestamp"].split("日")[-1],
+                "duration": tp["duration"],
+                "alias_mapping": small_map,
+                "scope": scope,
+                "status": "active",
+                "evidence_count": 1,
+                "first_declared_at": ref_time,
+                "last_reinforced_at": ref_time,
+            }
+            desc = (
+                f"建立支线1条件记忆：{tp['application_name']}{tp['service_name']}在转场大巴上采用（{tp['resolution']}, {tp['rtt']}），登记代称小记忆点。"
+                if is_sub1
+                else f"建立支线2条件记忆：酒店休息复盘录像采用（{tp['resolution']}, {tp['rtt']}），登记代称小记忆点。"
+            )
+            memory_events.append(
+                {
+                    "event_type": "form_memory",
+                    "memory_id": mem_id,
+                    "description": desc,
+                    "target_slots": ["application_name", "service_name", "resolution", "rtt_max"],
+                }
+            )
+        elif role in ["reinforcement_session", "reuse_session"] and mem_id in self.active_memories:
+            self.active_memories[mem_id]["evidence_count"] += 1
+            self.active_memories[mem_id]["last_reinforced_at"] = ref_time
+            label = "支线1转场视频调度" if is_sub1 else "支线2酒店复盘"
+            memory_events.append(
+                {
+                    "event_type": "reinforce_memory",
+                    "memory_id": mem_id,
+                    "description": f"{label}记忆复用成功，证据次数达 {self.active_memories[mem_id]['evidence_count']} 次。",
+                    "retrieved_slots": ["application_name", "service_name", "resolution", "rtt_max"],
+                }
+            )
+
+    def _track_working_and_experience_events(self, s_plan: dict, b_type: str, tp: dict, ref_time: str, memory_events: list[dict]) -> None:
+        if b_type == "event_override":
+            memory_events.append(
+                {
+                    "event_type": "temporary_correction",
+                    "description": f"用户因现场特殊临时主动调整本次参数为（{tp['resolution']}, {tp['rtt']}），仅本次生效，原长期记忆保持有效。",
+                    "modified_slots": {"resolution": tp["resolution"], "rtt_max": tp["rtt"]},
+                }
+            )
+        elif b_type == "event_reuse" and "MF_001" in self.active_memories:
+            self.active_memories["MF_001"]["evidence_count"] += 1
+            self.active_memories["MF_001"]["last_reinforced_at"] = ref_time
+            memory_events.append(
+                {
+                    "event_type": "reinforce_memory",
+                    "memory_id": "MF_001",
+                    "description": f"单次纠正结束后，会话正常复用原长期主线记忆 MF_001（{self.active_memories['MF_001']['resolution']}, {self.active_memories['MF_001']['rtt_max']}）。",
+                    "retrieved_slots": ["application_name", "service_name", "resolution", "rtt_max"],
+                }
+            )
+        elif b_type == "main_recovery":
+            if "MF_001" in self.active_memories:
+                self.active_memories["MF_001"]["status"] = "active"
+                self.active_memories["MF_001"]["evidence_count"] += 1
+                self.active_memories["MF_001"]["last_reinforced_at"] = ref_time
+            memory_events.append({"event_type": "reinforce_memory", "memory_id": "MF_001", "description": "成功复用原长期主线偏好配置。"})
+        elif b_type == "working_record_reuse":
+            wm_ptr = s_plan.get("working_memory_pointer", {})
+            rec_id = wm_ptr.get("target_record_id", "REC_PRIOR")
+            delta_d = wm_ptr.get("inferred_delta_days", 7)
+            memory_events.append(
+                {
+                    "event_type": "retrieve_working_record",
+                    "record_id": rec_id,
+                    "delta_days": delta_d,
+                    "description": f"用户使用相对时态引用历史意图保障单 {rec_id}（距今约 {delta_d} 天），Agent 成功定位意图保障单并继承体验规格（{tp['resolution']}, {tp['rtt']}），反问今日起止时段。",
+                    "retrieved_slots": ["resolution", "rtt_max"],
+                }
+            )
+        elif b_type == "working_record_reschedule":
+            rec_id = s_plan.get("working_memory_pointer", {}).get("target_record_id", "REC_PRIOR")
+            memory_events.append(
+                {
+                    "event_type": "reschedule_working_record",
+                    "record_id": rec_id,
+                    "description": f"用户申请对历史预约意图保障单 {rec_id} 变更改期，Agent 定位意图保障单并将新时段（{tp['start_timestamp']} 至 {tp['end_timestamp']}）更新生效。",
+                    "modified_slots": ["start_timestamp", "end_timestamp"],
+                }
+            )
+        elif b_type == "working_record_reconcile":
+            total_orders = s_plan.get("working_memory_query", {}).get("total_orders", 0)
+            memory_events.append(
+                {
+                    "event_type": "reconcile_working_records",
+                    "total_orders": total_orders,
+                    "description": f"用户发起意图保障单流水账对账核查，Agent 检索统计已开通的 {total_orders} 次保障记录并输出清单明细。",
+                }
+            )
+
+    def _track_experiential_and_distractor_events(self, s_plan: dict, b_type: str, tp: dict, memory_events: list[dict]) -> None:
+        if b_type == "experience_learning":
+            exp_id = s_plan.get("experience_id") or s_plan.get("experience_citation", {}).get("experience_id", "EXP_01")
+            exp_title = s_plan.get("experience_citation", {}).get("title", "专家避坑经验")
+            memory_events.append(
+                {
+                    "event_type": "crystallize_experience",
+                    "experience_id": exp_id,
+                    "description": f"用户针对历史踩坑故障进行严肃反馈与经验指示，Agent 深刻反思并沉淀【{exp_title}】({exp_id})入经验库。",
+                    "crystallized_slots": ["experience_policy", "trigger_conditions"],
+                }
+            )
+            self.active_memories.setdefault("active_experiences", [])
+            if exp_id not in self.active_memories["active_experiences"]:
+                self.active_memories["active_experiences"].append(exp_id)
+        elif b_type == "proactive_experience":
+            exp_id = s_plan.get("experience_citation", {}).get("experience_id", "EXP_STADIUM_CONGESTION_01")
+            memory_events.append(
+                {
+                    "event_type": "proactive_experience_suggestion",
+                    "experience_id": exp_id,
+                    "description": f"Agent 识别到高密人流现场风险，主动调取 ReasoningBank 经验卡片 {exp_id} 提议稳定性优先方案（{tp['resolution']}, {tp['rtt']}），用户采纳闭环。",
+                    "suggested_slots": ["resolution", "rtt_max"],
+                }
+            )
+        elif b_type == "empirical_recall":
+            exp_id = s_plan.get("experience_citation", {}).get("experience_id", "EXP_SEVERE_WEATHER_01")
+            memory_events.append(
+                {
+                    "event_type": "empirical_recall",
+                    "experience_id": exp_id,
+                    "description": f"用户在恶劣天气下调取既往抗衰落经验方案 {exp_id}，Agent 调取经验卡片并向用户反问确认加固参数（{tp['resolution']}, {tp['rtt']}）。",
+                    "retrieved_slots": ["resolution", "rtt_max"],
+                }
+            )
+        elif b_type in ["distractor", "distractor_ood", "distractor_mixed"]:
+            memory_events.append({"event_type": "no_memory_change", "description": "单次任务业务或域外诉求，与长期偏好无关，不发生记忆变更。"})
+
     def process_session(self, s_plan: dict) -> tuple[dict, list[dict], dict]:
         snapshot_before = self.get_snapshot_before()
         b_type = s_plan["blueprint_type"]
         role = s_plan["memory_role"]
         tp = s_plan["target_params"]
         ref_time = s_plan["reference_time"]
-        memory_events = []
-
         decl_mode = s_plan.get("declaration_mode", "explicit_declaration")
+        memory_events: list[dict] = []
 
         if b_type == "main":
-            trig_type = s_plan.get("storyline_trigger_type", "time_periodic")
-            trig_cond = s_plan.get("trigger_condition", "每周常规周期时段")
-            scope_val = "weekly_cycle" if trig_type == "time_periodic" else ("task_mission" if trig_type == "task_activity" else "location_boundary")
-
-            small = s_plan.get("small_memory", {})
-            selected_alias_map = _small_memory_mapping(small)
-
-            if role == "evidence_session":
-                if decl_mode == "explicit_declaration":
-                    # 主线记忆显式初建 (One-shot)
-                    mem_item = {
-                        "memory_id": "MF_001",
-                        "category": "periodic_main_storyline",
-                        "storyline_trigger_type": trig_type,
-                        "trigger_condition": trig_cond,
-                        "declaration_mode": "explicit_declaration",
-                        "application_name": tp["application_name"],
-                        "service_name": tp["service_name"],
-                        "resolution": tp["resolution"],
-                        "rtt_max": tp["rtt"],
-                        "start_time": tp["start_timestamp"].split("日")[-1],
-                        "end_time": tp["end_timestamp"].split("日")[-1],
-                        "duration": tp["duration"],
-                        "alias_mapping": selected_alias_map,
-                        "scope": scope_val,
-                        "status": "active",
-                        "evidence_count": 1,
-                        "first_declared_at": ref_time,
-                        "last_reinforced_at": ref_time
-                    }
-                    self.active_memories["MF_001"] = mem_item
-                    memory_events.append({
-                        "event_type": "form_memory_explicit",
-                        "memory_id": "MF_001",
-                        "description": f"用户首次明确显式声明长期偏好（触发条件：{trig_cond}）：{tp['application_name']}{tp['service_name']}（{tp['resolution']}, {tp['rtt']}），设立老规矩指令，登记个性化别名小记忆点。",
-                        "target_slots": ["application_name", "service_name", "resolution", "rtt_max"]
-                    })
-                else:
-                    # 隐式归纳路径：首次仅作为任务历史日志 (provisional)，防止单次行为过拟合
-                    mem_item = {
-                        "memory_id": "MF_001",
-                        "category": "periodic_main_storyline",
-                        "storyline_trigger_type": trig_type,
-                        "trigger_condition": trig_cond,
-                        "declaration_mode": "implicit_induction",
-                        "application_name": tp["application_name"],
-                        "service_name": tp["service_name"],
-                        "resolution": tp["resolution"],
-                        "rtt_max": tp["rtt"],
-                        "start_time": tp["start_timestamp"].split("日")[-1],
-                        "end_time": tp["end_timestamp"].split("日")[-1],
-                        "duration": tp["duration"],
-                        "alias_mapping": {},
-                        "scope": scope_val,
-                        "status": "provisional",  # 候选/待归纳状态
-                        "evidence_count": 1,
-                        "first_declared_at": ref_time,
-                        "last_reinforced_at": ref_time
-                    }
-                    self.active_memories["MF_001"] = mem_item
-                    memory_events.append({
-                        "event_type": "log_task_history",
-                        "memory_id": "MF_001",
-                        "description": f"用户在场景（{trig_cond}）发生单次保障行为：{tp['application_name']}{tp['service_name']}，未显式声明长期偏好，记录单次历史日志（防单次行为过拟合）。",
-                        "target_slots": ["application_name", "service_name", "resolution", "rtt_max"]
-                    })
-            elif role in ["reinforcement_session", "reuse_session"]:
-                # 主线记忆强化或复用
-                if "MF_001" in self.active_memories:
-                    prev_status = self.active_memories["MF_001"].get("status")
-                    self.active_memories["MF_001"]["evidence_count"] += 1
-                    self.active_memories["MF_001"]["last_reinforced_at"] = ref_time
-
-                    if prev_status == "provisional":
-                        # 隐式归纳满足证据阈值 (N>=2)，正式固化为 active 长期老规矩
-                        self.active_memories["MF_001"]["status"] = "active"
-                        small = s_plan.get("small_memory", {})
-                        if small.get("alias_key") and small.get("value"):
-                            self.active_memories["MF_001"]["alias_mapping"] = _small_memory_mapping(small)
-                        memory_events.append({
-                            "event_type": "crystallize_implicit_memory",
-                            "memory_id": "MF_001",
-                            "description": f"用户再次在相似场景（{trig_cond}）发起相同配置，满足隐式归纳证据阈值(N>=2)，经Agent反问确认，正式固化为长期老规矩。",
-                            "retrieved_slots": ["application_name", "service_name", "resolution", "rtt_max"]
-                        })
-                    else:
-                        memory_events.append({
-                            "event_type": "reinforce_memory",
-                            "memory_id": "MF_001",
-                            "description": f"用户在（{trig_cond}）省略参数复用主线记忆，Agent 成功补全并经用户确认，证据强度增至 {self.active_memories['MF_001']['evidence_count']} 次。",
-                            "retrieved_slots": ["application_name", "service_name", "resolution", "rtt_max"]
-                        })
-
-        elif b_type == "sub_01":
-            p_aliases = s_plan.get("aliases", {})
-            small = s_plan.get("small_memory", {})
-            sub1_map = _small_memory_mapping(small)
-            if role == "evidence_session":
-                mem_item = {
-                    "memory_id": "SUB_001",
-                    "category": "sub_storyline_transit",
-                    "application_name": tp["application_name"],
-                    "service_name": tp["service_name"],
-                    "resolution": tp["resolution"],
-                    "rtt_max": tp["rtt"],
-                    "start_time": tp["start_timestamp"].split("日")[-1],
-                    "duration": tp["duration"],
-                    "alias_mapping": sub1_map,
-                    "scope": "transit_evening",
-                    "status": "active",
-                    "evidence_count": 1,
-                    "first_declared_at": ref_time,
-                    "last_reinforced_at": ref_time
-                }
-                self.active_memories["SUB_001"] = mem_item
-                memory_events.append({
-                    "event_type": "form_memory",
-                    "memory_id": "SUB_001",
-                    "description": f"建立支线1条件记忆：{tp['application_name']}{tp['service_name']}在转场大巴上采用（{tp['resolution']}, {tp['rtt']}），登记代称小记忆点。",
-                    "target_slots": ["application_name", "service_name", "resolution", "rtt_max"]
-                })
-            elif role in ["reinforcement_session", "reuse_session"]:
-                if "SUB_001" in self.active_memories:
-                    self.active_memories["SUB_001"]["evidence_count"] += 1
-                    self.active_memories["SUB_001"]["last_reinforced_at"] = ref_time
-                    memory_events.append({
-                        "event_type": "reinforce_memory",
-                        "memory_id": "SUB_001",
-                        "description": f"支线1转场视频调度记忆复用成功，证据次数达 {self.active_memories['SUB_001']['evidence_count']} 次。",
-                        "retrieved_slots": ["application_name", "service_name", "resolution", "rtt_max"]
-                    })
-
-        elif b_type == "sub_02":
-            p_aliases = s_plan.get("aliases", {})
-            small = s_plan.get("small_memory", {})
-            sub2_map = _small_memory_mapping(small)
-            if role == "evidence_session":
-                mem_item = {
-                    "memory_id": "SUB_002",
-                    "category": "sub_storyline_hotel",
-                    "application_name": tp["application_name"],
-                    "service_name": tp["service_name"],
-                    "resolution": tp["resolution"],
-                    "rtt_max": tp["rtt"],
-                    "start_time": tp["start_timestamp"].split("日")[-1],
-                    "duration": tp["duration"],
-                    "alias_mapping": sub2_map,
-                    "scope": "hotel_evening_review",
-                    "status": "active",
-                    "evidence_count": 1,
-                    "first_declared_at": ref_time,
-                    "last_reinforced_at": ref_time
-                }
-                self.active_memories["SUB_002"] = mem_item
-                memory_events.append({
-                    "event_type": "form_memory",
-                    "memory_id": "SUB_002",
-                    "description": f"建立支线2条件记忆：酒店休息复盘录像采用（{tp['resolution']}, {tp['rtt']}），登记代称小记忆点。",
-                    "target_slots": ["application_name", "service_name", "resolution", "rtt_max"]
-                })
-            elif role in ["reinforcement_session", "reuse_session"]:
-                if "SUB_002" in self.active_memories:
-                    self.active_memories["SUB_002"]["evidence_count"] += 1
-                    self.active_memories["SUB_002"]["last_reinforced_at"] = ref_time
-                    memory_events.append({
-                        "event_type": "reinforce_memory",
-                        "memory_id": "SUB_002",
-                        "description": f"支线2酒店复盘记忆复用成功，证据次数达 {self.active_memories['SUB_002']['evidence_count']} 次。",
-                        "retrieved_slots": ["application_name", "service_name", "resolution", "rtt_max"]
-                    })
-
-        elif b_type == "event_override":
-            # 场景化临时事件纠正覆盖：属于单次/当天纠正，不破坏全局长期记忆 MF_001
-            memory_events.append({
-                "event_type": "temporary_correction",
-                "description": f"用户因现场特殊临时主动调整本次参数为（{tp['resolution']}, {tp['rtt']}），仅本次生效，原长期记忆保持有效。",
-                "modified_slots": {"resolution": tp["resolution"], "rtt_max": tp["rtt"]}
-            })
-
-        elif b_type == "event_reuse":
-            # 临时事件次日复用：已结束单次临时纠正，恢复按原长期主线记忆 MF_001 执行
-            if "MF_001" in self.active_memories:
-                self.active_memories["MF_001"]["evidence_count"] += 1
-                self.active_memories["MF_001"]["last_reinforced_at"] = ref_time
-                memory_events.append({
-                    "event_type": "reinforce_memory",
-                    "memory_id": "MF_001",
-                    "description": f"单次纠正结束后，会话正常复用原长期主线记忆 MF_001（{self.active_memories['MF_001']['resolution']}, {self.active_memories['MF_001']['rtt_max']}）。",
-                    "retrieved_slots": ["application_name", "service_name", "resolution", "rtt_max"]
-                })
-
-        elif b_type == "main_recovery":
-            # 主线记忆常规复用
-            if "MF_001" in self.active_memories:
-                self.active_memories["MF_001"]["status"] = "active"
-                self.active_memories["MF_001"]["evidence_count"] += 1
-                self.active_memories["MF_001"]["last_reinforced_at"] = ref_time
-
-            memory_events.append({
-                "event_type": "reinforce_memory",
-                "memory_id": "MF_001",
-                "description": "成功复用原长期主线偏好配置。"
-            })
-
-        elif b_type == "working_record_reuse":
-            wm_ptr = s_plan.get("working_memory_pointer", {})
-            rec_id = wm_ptr.get("target_record_id", "REC_PRIOR")
-            delta_d = wm_ptr.get("inferred_delta_days", 7)
-            memory_events.append({
-                "event_type": "retrieve_working_record",
-                "record_id": rec_id,
-                "delta_days": delta_d,
-                "description": f"用户使用相对时态引用历史意图保障单 {rec_id}（距今约 {delta_d} 天），Agent 成功定位意图保障单并继承体验规格（{tp['resolution']}, {tp['rtt']}），反问今日起止时段。",
-                "retrieved_slots": ["resolution", "rtt_max"]
-            })
-
-        elif b_type == "working_record_reschedule":
-            wm_ptr = s_plan.get("working_memory_pointer", {})
-            rec_id = wm_ptr.get("target_record_id", "REC_PRIOR")
-            memory_events.append({
-                "event_type": "reschedule_working_record",
-                "record_id": rec_id,
-                "description": f"用户申请对历史预约意图保障单 {rec_id} 变更改期，Agent 定位意图保障单并将新时段（{tp['start_timestamp']} 至 {tp['end_timestamp']}）更新生效。",
-                "modified_slots": ["start_timestamp", "end_timestamp"]
-            })
-
-        elif b_type == "working_record_reconcile":
-            wm_qry = s_plan.get("working_memory_query", {})
-            total_orders = wm_qry.get("total_orders", 0)
-            memory_events.append({
-                "event_type": "reconcile_working_records",
-                "total_orders": total_orders,
-                "description": f"用户发起意图保障单流水账对账核查，Agent 检索统计已开通的 {total_orders} 次保障记录并输出清单明细。",
-            })
-
-        elif b_type == "experience_learning":
-            exp_id = s_plan.get("experience_id") or s_plan.get("experience_citation", {}).get("experience_id", "EXP_01")
-            exp_title = s_plan.get("experience_citation", {}).get("title", "专家避坑经验")
-            memory_events.append({
-                "event_type": "crystallize_experience",
-                "experience_id": exp_id,
-                "description": f"用户针对历史踩坑故障进行严肃反馈与经验指示，Agent 深刻反思并沉淀【{exp_title}】({exp_id})入经验库。",
-                "crystallized_slots": ["experience_policy", "trigger_conditions"]
-            })
-            if "active_experiences" not in self.active_memories:
-                self.active_memories["active_experiences"] = []
-            if exp_id not in self.active_memories["active_experiences"]:
-                self.active_memories["active_experiences"].append(exp_id)
-
-
-        elif b_type == "proactive_experience":
-            exp = s_plan.get("experience_citation", {})
-            exp_id = exp.get("experience_id", "EXP_STADIUM_CONGESTION_01")
-            memory_events.append({
-                "event_type": "proactive_experience_suggestion",
-                "experience_id": exp_id,
-                "description": f"Agent 识别到高密人流现场风险，主动调取 ReasoningBank 经验卡片 {exp_id} 提议稳定性优先方案（{tp['resolution']}, {tp['rtt']}），用户采纳闭环。",
-                "suggested_slots": ["resolution", "rtt_max"]
-            })
-
-        elif b_type == "empirical_recall":
-            exp = s_plan.get("experience_citation", {})
-            exp_id = exp.get("experience_id", "EXP_SEVERE_WEATHER_01")
-            memory_events.append({
-                "event_type": "empirical_recall",
-                "experience_id": exp_id,
-                "description": f"用户在恶劣天气下调取既往抗衰落经验方案 {exp_id}，Agent 调取经验卡片并向用户反问确认加固参数（{tp['resolution']}, {tp['rtt']}）。",
-                "retrieved_slots": ["resolution", "rtt_max"]
-            })
-
-        elif b_type in ["distractor", "distractor_ood", "distractor_mixed"]:
-            memory_events.append({
-                "event_type": "no_memory_change",
-                "description": "单次任务业务或域外诉求，与长期偏好无关，不发生记忆变更。"
-            })
+            self._track_main_storyline(s_plan, role, tp, ref_time, decl_mode, memory_events)
+        elif b_type in ["sub_01", "sub_02"]:
+            self._track_sub_storyline(s_plan, b_type, role, tp, ref_time, memory_events)
+        elif b_type in [
+            "event_override",
+            "event_reuse",
+            "main_recovery",
+            "working_record_reuse",
+            "working_record_reschedule",
+            "working_record_reconcile",
+        ]:
+            self._track_working_and_experience_events(s_plan, b_type, tp, ref_time, memory_events)
+        else:
+            self._track_experiential_and_distractor_events(s_plan, b_type, tp, memory_events)
 
         gold_after = copy.deepcopy(self.active_memories)
         return snapshot_before, memory_events, gold_after

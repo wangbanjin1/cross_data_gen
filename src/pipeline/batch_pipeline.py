@@ -1,21 +1,22 @@
-import os
-import sys
-import json
-import time
-import argparse
-import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import json
+import logging
 from pathlib import Path
+import threading
+import time
 
 from src.config.settings import Config
-from src.generation.llm_client import LLMClient
-from src.generation.persona_generator import PersonaGenerator
-from src.generation.dialogue_generator import DialogueGenerator
-from src.core.timeline_planner import DynamicTimelinePlanner
+from src.core.experience_bank import ExperienceBank
 from src.core.memory_tracker import MemoryTracker
 from src.core.qc_validator import QCValidator
+from src.core.timeline_planner import DynamicTimelinePlanner
 from src.core.working_records_ledger import WorkingRecordsLedger
-from src.core.experience_bank import ExperienceBank
+from src.generation.dialogue_generator import DialogueGenerator
+from src.generation.llm_client import LLMClient
+from src.generation.persona_generator import PersonaGenerator
+
+logger = logging.getLogger(__name__)
+
 
 class BatchPipeline:
     """
@@ -48,27 +49,14 @@ class BatchPipeline:
         with open(self.ckpt_path, "w", encoding="utf-8") as f:
             json.dump(self.checkpoint, f, ensure_ascii=False, indent=2)
 
-    def process_single_persona(self, raw_persona: dict, force: bool = False, llm: LLMClient = None) -> dict:
-        pid = raw_persona.get("persona_id")
-        worker_llm = llm or self.llm
-        worker_persona_gen = PersonaGenerator(worker_llm) if llm else self.persona_gen
-        worker_dialogue_gen = DialogueGenerator(worker_llm) if llm else self.dialogue_gen
-
-        # 每个样本独立文件夹
-        sample_dir = self.output_dir / pid
-        sample_dir.mkdir(parents=True, exist_ok=True)
-
-        if not force and pid in self.checkpoint["completed_personas"] and (sample_dir / "sessions.jsonl").exists():
-            print(f"[-] Persona {pid} already completed in {sample_dir}, skipping.")
-            return {"calls": 0, "total_tokens": 0, "cost_rmb": 0.0}
-
-        print(f"\n=======================================================")
-        print(f"[+] Processing Persona {pid} ({raw_persona.get('persona_summary')})...")
-        print(f"    Output Folder -> {sample_dir}")
-        t0 = time.time()
-        worker_llm.reset_usage()
-
-        # 1. 扩充详细画像骨架 (DeepSeek API, thinking disabled)
+    @staticmethod
+    def _load_or_generate_skeleton(
+        pid: str,
+        raw_persona: dict,
+        sample_dir: Path,
+        force: bool,
+        worker_persona_gen: PersonaGenerator,
+    ) -> dict:
         persona_skeleton_path = sample_dir / "persona_skeleton.json"
         if persona_skeleton_path.exists() and not force:
             with open(persona_skeleton_path, "r", encoding="utf-8") as f:
@@ -76,92 +64,122 @@ class BatchPipeline:
             persona_skeleton = worker_persona_gen._enrich_skeleton(persona_skeleton)
             with open(persona_skeleton_path, "w", encoding="utf-8") as f:
                 json.dump(persona_skeleton, f, ensure_ascii=False, indent=2)
-            print(f"    - [{pid}] Loaded & Enriched existing Persona Skeleton -> {persona_skeleton_path.name}")
-        else:
-            persona_skeleton = worker_persona_gen.generate_skeleton(raw_persona)
-            with open(persona_skeleton_path, "w", encoding="utf-8") as f:
-                json.dump(persona_skeleton, f, ensure_ascii=False, indent=2)
-            print(f"    - [{pid}] Generated Persona Skeleton via DeepSeek API -> {persona_skeleton_path.name}")
+            logger.info("    - [%s] Loaded & Enriched existing Persona Skeleton -> %s", pid, persona_skeleton_path.name)
+            return persona_skeleton
 
-        # 2. 动态规划认知记忆时间线（绑定独立意图保障单账本与经验知识库）
+        persona_skeleton = worker_persona_gen.generate_skeleton(raw_persona)
+        with open(persona_skeleton_path, "w", encoding="utf-8") as f:
+            json.dump(persona_skeleton, f, ensure_ascii=False, indent=2)
+        logger.info("    - [%s] Generated Persona Skeleton via DeepSeek API -> %s", pid, persona_skeleton_path.name)
+        return persona_skeleton
+
+    @staticmethod
+    def _persist_persona_outputs(
+        sample_dir: Path,
+        rendered_sessions: list[dict],
+        working_ledger: WorkingRecordsLedger,
+        experience_bank: ExperienceBank,
+        memory_traces: list[dict],
+    ) -> dict:
+        out_sessions_path = sample_dir / "sessions.jsonl"
+        with open(out_sessions_path, "w", encoding="utf-8") as f:
+            for s in rendered_sessions:
+                f.write(json.dumps(s, ensure_ascii=False) + "\n")
+
+        with open(sample_dir / "sessions.json", "w", encoding="utf-8") as f:
+            json.dump(rendered_sessions, f, ensure_ascii=False, indent=2)
+
+        working_ledger.save()
+        with open(sample_dir / "working_records.json", "w", encoding="utf-8") as f:
+            json.dump(working_ledger.get_all_records(), f, ensure_ascii=False, indent=2)
+        logger.info(
+            "    - Saved decoupled Working Records Ledger (%d records) -> working_records.jsonl",
+            len(working_ledger.get_all_records()),
+        )
+
+        with open(sample_dir / "experience_bank.json", "w", encoding="utf-8") as f:
+            json.dump(experience_bank.get_all_experiences(), f, ensure_ascii=False, indent=2)
+
+        with open(sample_dir / "memory_traces.json", "w", encoding="utf-8") as f:
+            json.dump(memory_traces, f, ensure_ascii=False, indent=2)
+
+        qc_report = QCValidator.validate_sessions(rendered_sessions, memory_traces=memory_traces)
+        with open(sample_dir / "qc_report.json", "w", encoding="utf-8") as f:
+            json.dump(qc_report, f, ensure_ascii=False, indent=2)
+        return qc_report
+
+    def process_single_persona(self, raw_persona: dict, force: bool = False, llm: LLMClient = None) -> dict:
+        pid = raw_persona.get("persona_id")
+        worker_llm = llm or self.llm
+        worker_persona_gen = PersonaGenerator(worker_llm) if llm else self.persona_gen
+        worker_dialogue_gen = DialogueGenerator(worker_llm) if llm else self.dialogue_gen
+
+        sample_dir = self.output_dir / pid
+        sample_dir.mkdir(parents=True, exist_ok=True)
+        if not force and pid in self.checkpoint["completed_personas"] and (sample_dir / "sessions.jsonl").exists():
+            logger.info("[-] Persona %s already completed in %s, skipping.", pid, sample_dir)
+            return {"calls": 0, "total_tokens": 0, "cost_rmb": 0.0}
+
+        logger.info("[+] Processing Persona %s (%s) -> %s", pid, raw_persona.get("persona_summary"), sample_dir)
+        t0 = time.time()
+        worker_llm.reset_usage()
+        persona_skeleton = self._load_or_generate_skeleton(pid, raw_persona, sample_dir, force, worker_persona_gen)
+
         ledger_path = sample_dir / "working_records.jsonl"
         if ledger_path.exists():
             ledger_path.unlink()
         working_ledger = WorkingRecordsLedger(user_id=pid, storage_path=ledger_path)
         experience_bank = ExperienceBank()
         active_llm = worker_llm if getattr(Config, "use_llm", True) else None
-        timeline = DynamicTimelinePlanner.plan(persona_skeleton, llm=active_llm, working_ledger=working_ledger, experience_bank=experience_bank)
-        print(f"    - [{pid}] Planned {len(timeline)} sessions across timeline (including working memory & experiential memory).")
+        timeline = DynamicTimelinePlanner.plan(
+            persona_skeleton, llm=active_llm, working_ledger=working_ledger, experience_bank=experience_bank
+        )
+        logger.info("    - [%s] Planned %d sessions across timeline.", pid, len(timeline))
 
-        # 3. 计算记忆状态演进与批次渲染
         memory_tracker = MemoryTracker()
-        planned_items = []
-        memory_traces = []
-
+        planned_items, memory_traces = [], []
         for s_plan in timeline:
             snap_before, mem_events, gold_after = memory_tracker.process_session(s_plan)
             planned_items.append((s_plan, snap_before, mem_events, gold_after))
-            memory_traces.append({
-                "session_id": s_plan["session_id"],
-                "reference_time": s_plan["reference_time"],
-                "memory_role": s_plan["memory_role"],
-                "blueprint_type": s_plan["blueprint_type"],
-                "snapshot_before": snap_before,
-                "memory_events": mem_events,
-                "gold_state_after": gold_after
-            })
+            memory_traces.append(
+                {
+                    "session_id": s_plan["session_id"],
+                    "reference_time": s_plan["reference_time"],
+                    "memory_role": s_plan["memory_role"],
+                    "blueprint_type": s_plan["blueprint_type"],
+                    "snapshot_before": snap_before,
+                    "memory_events": mem_events,
+                    "gold_state_after": gold_after,
+                }
+            )
 
-        print(f"    - [{pid}] Batch rendering {len(timeline)} sessions with DeepSeek Flash (thinking disabled)...")
-        rendered_sessions = worker_dialogue_gen.generate_sessions_batch(planned_items, persona_skeleton, batch_size=self.batch_size)
-
-        # 4. 保存标准对话 sessions.jsonl 与 sessions.json（轻量级索引，严格解耦）
-        out_sessions_path = sample_dir / "sessions.jsonl"
-        with open(out_sessions_path, "w", encoding="utf-8") as f:
-            for s in rendered_sessions:
-                f.write(json.dumps(s, ensure_ascii=False) + "\n")
-
-        out_sessions_json = sample_dir / "sessions.json"
-        with open(out_sessions_json, "w", encoding="utf-8") as f:
-            json.dump(rendered_sessions, f, ensure_ascii=False, indent=2)
-
-        # 4.1 独立持久化工作记忆意图保障单流水账（working_records.jsonl / .json）严格解耦存储
-        working_ledger.save()
-        out_records_json = sample_dir / "working_records.json"
-        with open(out_records_json, "w", encoding="utf-8") as f:
-            json.dump(working_ledger.get_all_records(), f, ensure_ascii=False, indent=2)
-        print(f"    - Saved decoupled Working Records Ledger ({len(working_ledger.get_all_records())} records) -> working_records.jsonl")
-
-        # 4.2 保存经验记忆库快照 experience_bank.json
-        out_exp_json = sample_dir / "experience_bank.json"
-        with open(out_exp_json, "w", encoding="utf-8") as f:
-            json.dump(experience_bank.get_all_experiences(), f, ensure_ascii=False, indent=2)
-
-        # 5. 保存评测记忆萃取能力的 memory_traces.json
-        out_traces_path = sample_dir / "memory_traces.json"
-        with open(out_traces_path, "w", encoding="utf-8") as f:
-            json.dump(memory_traces, f, ensure_ascii=False, indent=2)
-
-        # 6. 执行自动化质检并保存报告
-        qc_report = QCValidator.validate_sessions(rendered_sessions, memory_traces=memory_traces)
-        out_qc_path = sample_dir / "qc_report.json"
-        with open(out_qc_path, "w", encoding="utf-8") as f:
-            json.dump(qc_report, f, ensure_ascii=False, indent=2)
-
-        # 7. 统计耗时与调用花销
+        logger.info("    - [%s] Batch rendering %d sessions with DeepSeek Flash...", pid, len(timeline))
+        rendered_sessions = worker_dialogue_gen.generate_sessions_batch(
+            planned_items, persona_skeleton, batch_size=self.batch_size
+        )
+        qc_report = self._persist_persona_outputs(
+            sample_dir, rendered_sessions, working_ledger, experience_bank, memory_traces
+        )
         usage = worker_llm.get_usage()
-        elapsed = time.time() - t0
-        print(f"    [{pid} Cost & Tokens] Calls: {usage['calls']} | Tokens: {usage['total_tokens']} (In: {usage['total_prompt_tokens']}, Out: {usage['completion_tokens']}) | Cost: RMB {usage['cost_rmb']:.4f}")
-        print(f"    [{pid} QC Report] Pass Rate: {qc_report['pass_rate']} ({qc_report['passed_sessions']}/{qc_report['total_sessions']})")
+        logger.info(
+            "    [%s Cost & QC] Calls: %d | Tokens: %d | Cost: RMB %.4f | Pass Rate: %s (%d/%d)",
+            pid,
+            usage["calls"],
+            usage["total_tokens"],
+            usage["cost_rmb"],
+            qc_report["pass_rate"],
+            qc_report["passed_sessions"],
+            qc_report["total_sessions"],
+        )
         if qc_report["issues"]:
-            print(f"    [!] {pid} QC Warnings/Issues: {qc_report['issues']}")
+            logger.warning("    [!] %s QC Warnings/Issues: %s", pid, qc_report["issues"])
 
-        # 8. 记录检查点
         with self.ckpt_lock:
             if pid not in self.checkpoint["completed_personas"]:
                 self.checkpoint["completed_personas"].append(pid)
                 self.checkpoint["completed_personas"].sort()
             self._save_checkpoint()
-        print(f"    [SUCCESS] {pid} finished in {elapsed:.1f}s -> {sample_dir}")
+        logger.info("    [SUCCESS] %s finished in %.1fs -> %s", pid, time.time() - t0, sample_dir)
         return usage
 
     def run_batch(self, start_idx: int = None, count: int = None, raw_persona_path: str = None, force: bool = False, workers: int = 1):
@@ -177,19 +195,16 @@ class BatchPipeline:
             personas = data.get("personas", [])
 
         target_personas = personas[start_idx : start_idx + count]
-        print(f"=======================================================")
-        print(f"[*] Starting Batch Pipeline")
-        print(f"    Total in Raw File: {len(personas)}")
-        print(f"    Target Range: [{start_idx} : {start_idx + count}] ({len(target_personas)} personas)")
-        print(f"    Model: {self.llm.model} | Base URL: {self.llm.base_url}")
-        print(f"    Batch Size: {self.batch_size} sessions/call | Workers: {workers}")
-        print(f"    Output Directory: {self.output_dir.resolve()}")
-        print(f"=======================================================")
+        logger.info("=======================================================")
+        logger.info("[*] Starting Batch Pipeline")
+        logger.info("    Total in Raw File: %d", len(personas))
+        logger.info("    Target Range: [%d : %d] (%d personas)", start_idx, start_idx + count, len(target_personas))
+        logger.info("    Model: %s | Base URL: %s", self.llm.model, self.llm.base_url)
+        logger.info("    Batch Size: %d sessions/call | Workers: %d", self.batch_size, workers)
+        logger.info("    Output Directory: %s", self.output_dir.resolve())
+        logger.info("=======================================================")
 
-        total_calls = 0
-        total_tokens = 0
-        total_cost = 0.0
-
+        total_calls, total_tokens, total_cost = 0, 0, 0.0
         if workers > 1:
             def _worker(p_item):
                 w_llm = LLMClient(model=self.model, base_url=self.base_url)
@@ -204,23 +219,24 @@ class BatchPipeline:
                         total_calls += u.get("calls", 0)
                         total_tokens += u.get("total_tokens", 0)
                         total_cost += u.get("cost_rmb", 0.0)
-                    except Exception as e:
-                        print(f"[ERROR] Failed processing persona {p.get('persona_id')}: {e}")
-                        import traceback
-                        traceback.print_exc()
+                    except Exception:
+                        logger.exception("[ERROR] Failed processing persona %s", p.get("persona_id"))
         else:
-            for idx, p in enumerate(target_personas, start=start_idx + 1):
+            for p in target_personas:
                 try:
                     u = self.process_single_persona(p, force=force)
                     total_calls += u.get("calls", 0)
                     total_tokens += u.get("total_tokens", 0)
                     total_cost += u.get("cost_rmb", 0.0)
-                except Exception as e:
-                    print(f"[ERROR] Failed processing persona {p.get('persona_id')}: {e}")
-                    import traceback
-                    traceback.print_exc()
+                except Exception:
+                    logger.exception("[ERROR] Failed processing persona %s", p.get("persona_id"))
 
-        print(f"\n=======================================================")
-        print(f"=== Batch Finished! Processed {len(target_personas)} personas ===")
-        print(f"=== Total API Calls: {total_calls} | Total Tokens: {total_tokens} | Total Cost: RMB {total_cost:.4f} ===")
-        print(f"=======================================================\n")
+        logger.info("=======================================================")
+        logger.info("=== Batch Finished! Processed %d personas ===", len(target_personas))
+        logger.info(
+            "=== Total API Calls: %d | Total Tokens: %d | Total Cost: RMB %.4f ===",
+            total_calls,
+            total_tokens,
+            total_cost,
+        )
+        logger.info("=======================================================")

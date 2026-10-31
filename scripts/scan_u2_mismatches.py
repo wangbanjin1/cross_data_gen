@@ -1,3 +1,7 @@
+import logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+logger = logging.getLogger(__name__)
+
 import json
 import glob
 import os
@@ -39,10 +43,10 @@ def scan_u2_timestamp_mismatch():
                                         "end_val": end_ts.get("value"),
                                         "u_utt": u_utt
                                     })
-    print(f"Total U2 timestamp mismatches: {len(mismatches)}")
+    logger.info(f"Total U2 timestamp mismatches: {len(mismatches)}")
     for m in mismatches[:10]:
-        print(f"  {m['persona']} {m['session_id']}: dur={m['dur_val']}, end={m['end_val']}")
-        print(f"     U2: {m['u_utt']}")
+        logger.info(f"  {m['persona']} {m['session_id']}: dur={m['dur_val']}, end={m['end_val']}")
+        logger.info(f"     U2: {m['u_utt']}")
 
 if __name__ == "__main__":
     scan_u2_timestamp_mismatch()

@@ -1,8 +1,11 @@
-import os
 import json
-import time
+import logging
+import os
 import re
+import time
 from openai import OpenAI
+
+logger = logging.getLogger(__name__)
 
 # 加载根目录 .env 文件（如有）
 _env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), ".env")
@@ -17,8 +20,6 @@ if os.path.exists(_env_path):
 DEFAULT_KEY = "sk-" + "64eb2c33b048436aac67a7cb5cf315d4"
 DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY", DEFAULT_KEY)
 DEEPSEEK_BASE_URL = os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
-
-
 
 
 class LLMClient:
@@ -47,17 +48,14 @@ class LLMClient:
 
     def get_usage(self, is_peak: bool = False) -> dict:
         total_prompt = self.prompt_cache_miss_tokens + self.prompt_cache_hit_tokens
-        # DeepSeek-V4.1-Flash 精确阶梯定价:
-        # 空闲时段: Cache Hit: 0.02元/M, Cache Miss: 1.0元/M, Output: 4.0元/M
-        # 高峰时段: Cache Hit: 0.04元/M, Cache Miss: 2.0元/M, Output: 8.0元/M
         hit_rate = 0.04 if is_peak else 0.02
         miss_rate = 2.0 if is_peak else 1.0
         out_rate = 8.0 if is_peak else 4.0
 
         cost_rmb = (
-            (self.prompt_cache_hit_tokens / 1_000_000) * hit_rate +
-            (self.prompt_cache_miss_tokens / 1_000_000) * miss_rate +
-            (self.completion_tokens / 1_000_000) * out_rate
+            (self.prompt_cache_hit_tokens / 1_000_000) * hit_rate
+            + (self.prompt_cache_miss_tokens / 1_000_000) * miss_rate
+            + (self.completion_tokens / 1_000_000) * out_rate
         )
         return {
             "calls": self.total_calls,
@@ -66,7 +64,7 @@ class LLMClient:
             "total_prompt_tokens": total_prompt,
             "completion_tokens": self.completion_tokens,
             "total_tokens": total_prompt + self.completion_tokens,
-            "cost_rmb": round(cost_rmb, 5)
+            "cost_rmb": round(cost_rmb, 5),
         }
 
     def chat(self, messages: list[dict], max_retries: int = 3, temperature: float = 0.5, enable_thinking: bool = False) -> str:
@@ -86,7 +84,6 @@ class LLMClient:
 
                 response = self.client.chat.completions.create(**kwargs)
 
-                # 记录 Token 消耗
                 if hasattr(response, "usage") and response.usage:
                     u = response.usage
                     self.total_calls += 1
@@ -101,31 +98,32 @@ class LLMClient:
 
                 return response.choices[0].message.content
             except Exception as e:
-                print(f"      [LLM Retry] Attempt {attempt + 1}/{max_retries} failed: {e}. Retrying in {2 * (attempt + 1)}s...")
+                logger.warning(
+                    "      [LLM Retry] Attempt %d/%d failed: %s. Retrying in %ds...",
+                    attempt + 1,
+                    max_retries,
+                    e,
+                    2 * (attempt + 1),
+                )
                 time.sleep(2 * (attempt + 1))
                 if attempt == max_retries - 1:
-                    raise RuntimeError(f"DeepSeek API call failed after {max_retries} attempts: {e}")
+                    raise RuntimeError(f"DeepSeek API call failed after {max_retries} attempts: {e}") from e
 
     def chat_json(self, messages: list[dict], max_retries: int = 3, enable_thinking: bool = False) -> dict:
         raw_text = self.chat(messages, max_retries=max_retries, temperature=0.3, enable_thinking=enable_thinking)
-        # 提取可能的 markdown ```json 代码块
         match = re.search(r"```(?:json)?\s*([\s\S]*?)\s*```", raw_text)
-        if match:
-            clean_text = match.group(1).strip()
-        else:
-            clean_text = raw_text.strip()
+        clean_text = match.group(1).strip() if match else raw_text.strip()
 
         try:
             return json.loads(clean_text)
-        except Exception:
-            # 尝试宽松抽取首尾大括号或中括号
-            first_brace = clean_text.find('{')
-            last_brace = clean_text.rfind('}')
-            first_bracket = clean_text.find('[')
-            last_bracket = clean_text.rfind(']')
+        except Exception as err:
+            first_brace = clean_text.find("{")
+            last_brace = clean_text.rfind("}")
+            first_bracket = clean_text.find("[")
+            last_bracket = clean_text.rfind("]")
 
             if first_brace != -1 and last_brace != -1 and (first_bracket == -1 or first_brace < first_bracket):
-                return json.loads(clean_text[first_brace:last_brace+1])
-            elif first_bracket != -1 and last_bracket != -1:
-                return json.loads(clean_text[first_bracket:last_bracket+1])
-            raise ValueError(f"Failed to parse JSON from LLM output:\n{raw_text}")
+                return json.loads(clean_text[first_brace : last_brace + 1])
+            if first_bracket != -1 and last_bracket != -1:
+                return json.loads(clean_text[first_bracket : last_bracket + 1])
+            raise ValueError(f"Failed to parse JSON from LLM output:\n{raw_text}") from err

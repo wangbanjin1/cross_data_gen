@@ -3,6 +3,74 @@
 from __future__ import annotations
 
 
+def _resolve_user_private_slots(s_plan: dict, role: str, tid: str, b_type: str, tp: dict, env: str, is_single_turn_full: bool, is_implicit_reinf_s03: bool) -> tuple[dict, dict, list[str]]:
+    if tid == "T1-2":
+        return (
+            {"ood_goal": s_plan.get("ood_goal") or "宽带光纤装维报修"},
+            {},
+            [v for v in (tp.get("application_name"), tp.get("service_name"), tp.get("resolution"), tp.get("rtt"), tp.get("duration")) if v],
+        )
+    if is_single_turn_full:
+        return (
+            {
+                "scenario_env": env,
+                "application_name": tp.get("application_name"),
+                "service_name": tp.get("service_name"),
+                "start_timestamp": tp.get("start_timestamp"),
+                "end_timestamp": tp.get("end_timestamp"),
+                "duration": tp.get("duration"),
+                "resolution": tp.get("resolution"),
+                "rtt": tp.get("rtt"),
+            },
+            {},
+            [],
+        )
+    if role == "evidence_session":
+        return (
+            {
+                "scenario_env": env,
+                "application_name": tp.get("application_name"),
+                "service_name": tp.get("service_name"),
+                "start_timestamp": tp.get("start_timestamp"),
+            },
+            {
+                "resolution": tp.get("resolution"),
+                "rtt": tp.get("rtt"),
+                "duration": tp.get("duration"),
+                "end_timestamp": tp.get("end_timestamp"),
+            },
+            [v for v in (tp.get("resolution"), tp.get("rtt"), tp.get("duration")) if v],
+        )
+    if is_implicit_reinf_s03:
+        return (
+            {"scenario_env": env, "service_name": tp.get("service_name")},
+            {"confirm_history_candidate": True, "small_memory": s_plan.get("small_memory", {})},
+            [v for v in (tp.get("application_name"), tp.get("resolution"), tp.get("rtt"), tp.get("duration")) if v],
+        )
+    if tid == "T2-3" or b_type == "event_override":
+        return (
+            {"scenario_env": env, "application_name": tp.get("application_name"), "service_name": tp.get("service_name")},
+            {"temporary_resolution": tp.get("resolution"), "temporary_rtt": tp.get("rtt")},
+            [v for v in (tp.get("resolution"), tp.get("rtt")) if v],
+        )
+    if tid == "T2-5":
+        return (
+            {"scenario_env": env, "application_name": tp.get("application_name"), "service_name": tp.get("service_name")},
+            {"extended_duration": tp.get("duration"), "end_timestamp": tp.get("end_timestamp")},
+            [v for v in (tp.get("resolution"), tp.get("rtt"), tp.get("duration")) if v],
+        )
+    return (
+        {
+            "scenario_env": env,
+            "application_name": tp.get("application_name"),
+            "service_name": tp.get("service_name"),
+            "primary_alias": (s_plan.get("small_memory") or {}).get("value") or tp.get("application_name"),
+        },
+        {"confirm_memory_slots": True},
+        [v for v in (tp.get("resolution"), tp.get("rtt")) if v],
+    )
+
+
 def build_isolated_views(s_plan: dict, snapshot_before: dict) -> dict:
     """
     构建信息隔离的双向渲染视图 (Information-Isolated Dual Views):
@@ -31,96 +99,15 @@ def build_isolated_views(s_plan: dict, snapshot_before: dict) -> dict:
         and s_plan.get("declaration_mode") == "implicit_induction"
         and str(s_plan.get("session_id", "")).endswith("-03")
     )
-
-    if tid == "T1-2":
-        user_turn1_allowed = {"ood_goal": s_plan.get("ood_goal") or "宽带光纤装维报修"}
-        user_turn2_reveal = {}
-        user_turn1_forbidden_values = [
-            v for v in (tp.get("application_name"), tp.get("service_name"), tp.get("resolution"), tp.get("rtt"), tp.get("duration")) if v
-        ]
-    elif is_single_turn_full:
-        user_turn1_allowed = {
-            "scenario_env": env,
-            "application_name": tp.get("application_name"),
-            "service_name": tp.get("service_name"),
-            "start_timestamp": tp.get("start_timestamp"),
-            "end_timestamp": tp.get("end_timestamp"),
-            "duration": tp.get("duration"),
-            "resolution": tp.get("resolution"),
-            "rtt": tp.get("rtt"),
-        }
-        user_turn2_reveal = {}
-        user_turn1_forbidden_values = []
-    elif role == "evidence_session":
-        user_turn1_allowed = {
-            "scenario_env": env,
-            "application_name": tp.get("application_name"),
-            "service_name": tp.get("service_name"),
-            "start_timestamp": tp.get("start_timestamp"),
-        }
-        user_turn2_reveal = {
-            "resolution": tp.get("resolution"),
-            "rtt": tp.get("rtt"),
-            "duration": tp.get("duration"),
-            "end_timestamp": tp.get("end_timestamp"),
-        }
-        user_turn1_forbidden_values = [
-            v for v in (tp.get("resolution"), tp.get("rtt"), tp.get("duration")) if v
-        ]
-    elif is_implicit_reinf_s03:
-        user_turn1_allowed = {
-            "scenario_env": env,
-            "service_name": tp.get("service_name"),
-        }
-        user_turn2_reveal = {
-            "confirm_history_candidate": True,
-            "small_memory": s_plan.get("small_memory", {}),
-        }
-        user_turn1_forbidden_values = [
-            v for v in (tp.get("application_name"), tp.get("resolution"), tp.get("rtt"), tp.get("duration")) if v
-        ]
-    elif tid == "T2-3" or b_type == "event_override":
-        user_turn1_allowed = {
-            "scenario_env": env,
-            "application_name": tp.get("application_name"),
-            "service_name": tp.get("service_name"),
-        }
-        user_turn2_reveal = {
-            "temporary_resolution": tp.get("resolution"),
-            "temporary_rtt": tp.get("rtt"),
-        }
-        user_turn1_forbidden_values = [v for v in (tp.get("resolution"), tp.get("rtt")) if v]
-    elif tid == "T2-5":
-        user_turn1_allowed = {
-            "scenario_env": env,
-            "application_name": tp.get("application_name"),
-            "service_name": tp.get("service_name"),
-        }
-        user_turn2_reveal = {
-            "extended_duration": tp.get("duration"),
-            "end_timestamp": tp.get("end_timestamp"),
-        }
-        user_turn1_forbidden_values = [
-            v for v in (tp.get("resolution"), tp.get("rtt"), tp.get("duration")) if v
-        ]
-    else:
-        user_turn1_allowed = {
-            "scenario_env": env,
-            "application_name": tp.get("application_name"),
-            "service_name": tp.get("service_name"),
-            "primary_alias": (s_plan.get("small_memory") or {}).get("value") or tp.get("application_name"),
-        }
-        user_turn2_reveal = {"confirm_memory_slots": True}
-        user_turn1_forbidden_values = [v for v in (tp.get("resolution"), tp.get("rtt")) if v]
+    user_turn1_allowed, user_turn2_reveal, user_turn1_forbidden_values = _resolve_user_private_slots(
+        s_plan, role, tid, b_type, tp, env, is_single_turn_full, is_implicit_reinf_s03
+    )
 
     agent_turn1_forbidden_values: list[str] = []
     if role == "evidence_session":
-        agent_turn1_forbidden_values = [
-            v for v in (tp.get("resolution"), tp.get("rtt"), tp.get("duration")) if v
-        ]
-    elif tid == "T2-5":
-        if tp.get("duration"):
-            agent_turn1_forbidden_values = [tp["duration"]]
+        agent_turn1_forbidden_values = [v for v in (tp.get("resolution"), tp.get("rtt"), tp.get("duration")) if v]
+    elif tid == "T2-5" and tp.get("duration"):
+        agent_turn1_forbidden_values = [tp["duration"]]
 
     return {
         "user_private_view": {
