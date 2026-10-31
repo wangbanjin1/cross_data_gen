@@ -259,7 +259,8 @@ def get_fallback_agent_utterance(s_plan: dict, turn_idx: int, role: str, is_last
     if tid == "T1-2":
         return f"抱歉，本智能助手仅提供手机移动网络加速与保障服务，暂不支持办理{ood_goal or '宽带光纤装维报修'}业务，建议您联系宽带专线处理。"
     if tid == "X-1":
-        return f"好的，已为您成功受理{app}{srv}网络保障（{res} / 时延≤{rtt}）；另外关于{ood_goal or '手机话费充值与账单查询'}，目前暂不支持在线代办，请前往掌上营业厅查看。"
+        start_t, end_t = tp["start_timestamp"].split("日")[-1], tp["end_timestamp"].split("日")[-1]
+        return f"好的，已为您成功受理{start_t}至{end_t}（持续{tp['duration']}）的{app}{srv}网络保障（{res} / 时延≤{rtt}）；另外关于{ood_goal or '手机话费充值与账单查询'}，目前暂不支持在线代办，请前往掌上营业厅查看。"
     if tid in ["T2-2", "T3-1"]:
         if turn_idx == 1:
             return f"收到，已确认是{app}{srv}保障。请问画质、时延和持续时长有什么具体要求？"

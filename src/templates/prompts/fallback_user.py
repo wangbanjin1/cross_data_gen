@@ -40,12 +40,13 @@ def _fallback_user_experience_learning(s_plan: dict, turn_idx: int, env: str, tp
         return "对，改成微信视频通话就对了，确认按此开通。"
     if exp_id == "EXP_PREWARM_BUFFER_01":
         nom_sh_t = (s_plan.get("nominal_start") or tp.get("start_timestamp", "")).split("日")[-1]
+        pw_sh_t = tp["start_timestamp"].split("日")[-1]
         eh_t = tp["end_timestamp"].split("日")[-1]
         base_dur = s_plan.get("nominal_dur") or s_plan.get("base_dur") or tp.get("duration", "120min")
         if turn_idx == 1:
             return f"今天在{env}有重要现场保障，活动{nom_sh_t}正式开始，帮我开从{nom_sh_t}到{eh_t}（持续{base_dur}）的{app}{srv}意图保障单，画质要求{res}，时延控制在{rtt}以内。"
         if turn_idx == 2:
-            return "等等，大型活动现场还得提前进场调试设备呢，掐着点开来不及！帮我把开始时间往前提前半小时吧。"
+            return f"等等，大型活动现场还得提前进场调试设备呢，掐着点开来不及！帮我把开始时间往前提前半小时（改从{pw_sh_t}到{eh_t}，总时长扩充到{tp['duration']}）吧。"
         return "好的，确认按提前半小时预热的配置开通。"
     if exp_id == "EXP_ORDER_QUALITY_DISAMBIGUATION_01":
         sh_t = tp["start_timestamp"].split("日")[-1]
@@ -313,7 +314,8 @@ def get_fallback_user_utterance(s_plan: dict, turn_idx: int, role: str) -> str:
     if tid == "T1-2":
         return f"你好，现场这边网络好像有问题，能帮我安排师傅处理一下{ood_goal or '宽带光纤装维报修'}吗？"
     if tid == "X-1":
-        return f"帮我办理一下今天{tp['start_timestamp'].split('日')[-1]}的{app_alias}{srv_alias}网络保障，另外顺便帮我查询一下{ood_goal or '手机话费充值与账单查询'}。"
+        start_t, end_t = tp["start_timestamp"].split("日")[-1], tp["end_timestamp"].split("日")[-1]
+        return f"今天在{env}，帮我办理从{start_t}到{end_t}（持续{tp['duration']}）的{app}{srv}网络保障，画质要求{res}，时延控制在{rtt}以内；另外顺便帮我查询一下{ood_goal or '手机话费充值与账单查询'}。"
     if tid in ["T2-2", "T3-1"]:
         if turn_idx == 1:
             return f"在{env}网络不太稳，帮我给{app}{srv}开个保障，时间从今天{tp['start_timestamp'].split('日')[-1]}开始。"

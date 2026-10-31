@@ -255,24 +255,23 @@ class FactualAssemblerMixin:
                 slot_updates_turn.append({"turn": 1, "params": t_params})
             elif t_idx == 2:
                 t_params = {}
-                if role in ["evidence_session", "correction_session"]:
-                    if is_prewarm_learn:
-                        t_params = {
-                            "timestamp": {
-                                "start_timestamp": {"value": vals["start"], "source_type": "Turn", "source_ref": "U2"},
-                                "duration": {"value": vals["dur"], "source_type": "Turn", "source_ref": "U2"},
-                            }
+                if is_prewarm_learn:
+                    t_params = {
+                        "timestamp": {
+                            "start_timestamp": {"value": vals["start"], "source_type": "Turn", "source_ref": "U2"},
+                            "duration": {"value": vals["dur"], "source_type": "Turn", "source_ref": "U2"},
                         }
-                    else:
-                        t_params = {
-                            "resolution": {"min_value": {"value": vals["res"], "source_type": src["res"][0], "source_ref": src["res"][1]}},
-                            "rtt": {"max_value": {"value": vals["rtt"], "source_type": src["rtt"][0], "source_ref": src["rtt"][1]}},
+                    }
+                elif role in ["evidence_session", "correction_session"]:
+                    t_params = {
+                        "resolution": {"min_value": {"value": vals["res"], "source_type": src["res"][0], "source_ref": src["res"][1]}},
+                        "rtt": {"max_value": {"value": vals["rtt"], "source_type": src["rtt"][0], "source_ref": src["rtt"][1]}},
+                    }
+                    if role == "evidence_session":
+                        t_params["timestamp"] = {
+                            "end_timestamp": {"value": vals["end"], "source_type": "Turn", "source_ref": "U2"},
+                            "duration": {"value": vals["dur"], "source_type": "Turn", "source_ref": "U2"},
                         }
-                        if role == "evidence_session":
-                            t_params["timestamp"] = {
-                                "end_timestamp": {"value": vals["end"], "source_type": "Turn", "source_ref": "U2"},
-                                "duration": {"value": vals["dur"], "source_type": "Turn", "source_ref": "U2"},
-                            }
                 slot_updates_turn.append({"turn": 2, "params": t_params})
             else:
                 slot_updates_turn.append({"turn": t_idx, "params": {}})

@@ -175,10 +175,11 @@ class DialogueGenerator:
         if tid == "X-1":
             is_weekend = "周末" in env
             time_constraint = "用户可表述为‘周末午休’；" if is_weekend else "由于当前是工作日（周一至周五），用户台词严禁出现‘周末’字样！只能表述为‘午休’或‘今天中午午休’；"
+            sh_t, eh_t = tp["start_timestamp"].split("日")[-1], tp["end_timestamp"].split("日")[-1]
             return (
                 f"【混合诉求（一办一拒）：单轮干扰会话，无先验记忆。当前环境为'{env}'，{time_constraint}"
-                f"关键时间要求：用户必须在台词中明确说明具体的保障时段范围（必须包含明确的起止时间点，如‘12点30分到13点30分’或‘12:30至13:30’）以及持续时长（如‘持续60分钟’或‘开60分钟’），严禁只说‘午休’、‘中午’或‘刷会儿’等无法确定起止点的模糊词汇！"
-                f"用户首次提出业务需求，同时提出域外需求'{s_plan.get('ood_goal') or '手机话费充值与账单查询'}'；"
+                f"关键参数与时间要求：用户必须在台词中完整说出应用名({tp['application_name']})、业务名({tp['service_name']})、精确起止时间点（从{sh_t}到{eh_t}）、持续时长（持续{tp['duration']}）、画质({tp['resolution']})以及时延({tp['rtt']}以内)，缺一不可！"
+                f"用户同时提出域外需求'{s_plan.get('ood_goal') or '手机话费充值与账单查询'}'；"
                 f"严禁使用未建立过的个性化表达或老规矩；Agent 正常受理域内业务，并明确礼貌拒绝办理域外需求。】"
             )
         t1_rule = f"【常规复用/强化会话：大记忆点已生效。应用＋业务是最小表达：若小记忆类型为service_default_app，可只说业务；若为application_alias，必须说应用别名＋业务；若为画质/时延/时长/个性化周期表达，必须说标准应用＋业务＋该个性化表达。指定小记忆点='{primary_alias}'。Agent 从记忆中补全其余画质{tp['resolution']}、时延{tp['rtt']}、开始时间{tp['start_timestamp']}、结束时间{tp['end_timestamp']}和时长{tp['duration']}；不得把未说出的槽位标成 Turn 来源。】"

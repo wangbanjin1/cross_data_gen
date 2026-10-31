@@ -135,11 +135,11 @@ class SessionAssembler(
                 *tail_args,
                 round_count=s_plan["round_count"],
                 small_memory_type=(s_plan.get("small_memory") or {}).get("type"),
-                experience_citation=s_plan.get("experience_citation", {}),
+                experience_citation=s_plan.get("experience_citation") or ({"experience_id": s_plan["experience_id"]} if s_plan.get("experience_id") else {}),
                 learning_source_session=s_plan.get("learning_source_session"),
-                nominal_start=s_plan.get("nominal_start_timestamp"),
-                nominal_end=s_plan.get("nominal_end_timestamp"),
-                nominal_dur=s_plan.get("nominal_duration"),
+                nominal_start=s_plan.get("nominal_start") or s_plan.get("nominal_start_timestamp"),
+                nominal_end=s_plan.get("nominal_end") or s_plan.get("nominal_end_timestamp"),
+                nominal_dur=s_plan.get("nominal_dur") or s_plan.get("nominal_duration"),
             )
         if isinstance(res, dict) and "session_meta" in res:
             res["session_meta"]["memory_tier"] = s_plan.get("memory_tier", "factual_memory")

@@ -247,3 +247,98 @@ def test_three_round_confirmation_closure_for_turn2_modifications() -> None:
         assert "Acknowledge" in ev_seq[2]["agent"]["action_types"]
         assert ev_seq[2]["turn_intents"][0]["status"] == "resolved"
 
+
+def test_x1_and_prewarm_experience_learning_alignment() -> None:
+    from src.generation.session_assembler import SessionAssembler
+    from src.generation.turn_normalizer import normalize_dialogue_turn
+    from src.templates.blueprint_specs import make_experience_learn_slot
+
+    # 1. Verify EXP_PREWARM_BUFFER_01 learning slot isolates venue from daily main_env_desc
+    learn_slot = make_experience_learn_slot(
+        "EXP_PREWARM_BUFFER_01",
+        {"application_name": "腾讯会议", "service_name": "音视频会议"},
+        {"application_name": "抖音", "service_name": "看直播"},
+        "150min",
+        "180min",
+        "文创园数字演播中心",
+    )
+    assert learn_slot["env"] == "奥林匹克体育中心多功能馆"
+
+    # 2. Verify EXP_PREWARM_BUFFER_01 learning session Turn 1 GT uses nominal_start/nominal_dur
+    #    and Turn 2 user utterance states prewarmed start and expanded duration
+    prewarm_plan = {
+        "session_id": "S-USER_012-06",
+        "user_id": "USER_012",
+        "reference_time": "2026年09月28日 10时30分",
+        "memory_role": "learning_session",
+        "memory_tier": "experiential_memory",
+        "blueprint_type": "experience_learning",
+        "template_id": "T2-1",
+        "round_count": 3,
+        "intent_count": 1,
+        "memory_action": "crystallize_experience_pitfall",
+        "skeleton_signature": "T2-1|3|1|exp",
+        "scenario_env": "奥林匹克体育中心多功能馆",
+        "experience_id": "EXP_PREWARM_BUFFER_01",
+        "nominal_start": "2026年09月28日 11时00分",
+        "nominal_end": "2026年09月28日 13时30分",
+        "nominal_dur": "150min",
+        "base_dur": "150min",
+        "target_params": {
+            "application_name": "腾讯会议",
+            "service_name": "音视频会议",
+            "resolution": "1080p",
+            "rtt": "50ms",
+            "start_timestamp": "2026年09月28日 10时30分",
+            "end_timestamp": "2026年09月28日 13时30分",
+            "duration": "180min",
+        },
+    }
+    events = []
+    for t in range(1, 4):
+        is_last = t == 3
+        u_txt, u_acts, a_txt, a_acts = normalize_dialogue_turn({}, t, "learning_session", is_last, prewarm_plan)
+        events.append({"turn": t, "user": {"utterance": u_txt, "action_types": u_acts}, "agent": {"utterance": a_txt, "action_types": a_acts}})
+
+    assembled = SessionAssembler.assemble(prewarm_plan, {}, [], {}, events)
+    t1_ts = assembled["event_sequence"][0]["turn_intents"][0]["params"]["timestamp"]
+    t2_ts = assembled["event_sequence"][1]["turn_intents"][0]["params"]["timestamp"]
+    assert t1_ts["start_timestamp"]["value"] == "2026年09月28日 11时00分"
+    assert t1_ts["duration"]["value"] == "150min"
+    assert t2_ts["start_timestamp"]["value"] == "2026年09月28日 10时30分"
+    assert t2_ts["duration"]["value"] == "180min"
+    assert "10时30分" in events[1]["user"]["utterance"]
+    assert "180min" in events[1]["user"]["utterance"]
+
+    # 3. Verify X-1 normalizer replaces incomplete LLM utterance with complete target_params
+    x1_plan = {
+        "session_id": "S-USER_029-07",
+        "user_id": "USER_029",
+        "reference_time": "2026年09月10日 10时30分",
+        "memory_role": "distractor_session",
+        "memory_tier": "factual_memory",
+        "blueprint_type": "distractor_mixed",
+        "template_id": "X-1",
+        "round_count": 1,
+        "intent_count": 2,
+        "scenario_env": "今天午休",
+        "ood_goal": "手机话费充值与账单查询",
+        "target_params": {
+            "application_name": "王者荣耀",
+            "service_name": "游戏加速",
+            "resolution": "1080p",
+            "rtt": "30ms",
+            "start_timestamp": "2026年09月10日 10时30分",
+            "end_timestamp": "2026年09月10日 11时15分",
+            "duration": "45min",
+        },
+    }
+    bad_llm_turn = {
+        "user_utterance": "今天中午午休想玩王者荣耀游戏加速，12点30分到13点30分（共60分钟），顺便查话费",
+        "agent_utterance": "好的，已为您受理。",
+    }
+    u_x1, _, _, _ = normalize_dialogue_turn(bad_llm_turn, 1, "distractor_session", True, x1_plan)
+    assert "10时30分" in u_x1 and "11时15分" in u_x1 and "45min" in u_x1
+    assert "1080p" in u_x1 and "30ms" in u_x1
+
+

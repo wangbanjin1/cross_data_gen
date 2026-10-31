@@ -150,6 +150,7 @@ def make_experience_learn_slot(exp_id: str, main_mt: dict, sub_01: dict, base_du
     }
     t_kind = time_kind_map.get(exp_id, "main")
     dur_val = ext_dur if exp_id == "EXP_MULTI_INTENT_PARTITION_01" else base_dur
+    env_val = "奥林匹克体育中心多功能馆" if exp_id == "EXP_PREWARM_BUFFER_01" else main_env_desc
     return {
         "tag": f"exp_learn_{exp_id}",
         "template_id": "T2-1",
@@ -160,7 +161,7 @@ def make_experience_learn_slot(exp_id: str, main_mt: dict, sub_01: dict, base_du
         "type": "experience_learning",
         "dur": dur_val,
         "base_dur": base_dur,
-        "env": main_env_desc,
+        "env": env_val,
         "action": "crystallize_experience_pitfall",
         "experience_id": exp_id,
         "round_count": 3,

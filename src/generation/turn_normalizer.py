@@ -48,6 +48,17 @@ def _normalize_user_template_constraints(u_text: str, turn_idx: int, role: str, 
     if tid == "T1-2":
         return get_fallback_user_utterance(s_plan, turn_idx, role)
 
+    if tid == "X-1":
+        sh_t = tp.get("start_timestamp", "").split("日")[-1]
+        eh_t = tp.get("end_timestamp", "").split("日")[-1]
+        dur_num = tp.get("duration", "").replace("min", "")
+        has_time = (sh_t in u_text or sh_t.replace("时", ":")[:5] in u_text or sh_t.replace("时", "点")[:3] in u_text) and (
+            eh_t in u_text or eh_t.replace("时", ":")[:5] in u_text or eh_t.replace("时", "点")[:3] in u_text
+        )
+        has_dur = tp.get("duration", "") in u_text or (dur_num and f"{dur_num}分钟" in u_text)
+        if not (has_time and has_dur and tp.get("resolution", "") in u_text and tp.get("rtt", "") in u_text):
+            return get_fallback_user_utterance(s_plan, turn_idx, role)
+
     if tid == "T1-1" or s_plan.get("blueprint_type") == "distractor":
         if s_plan.get("retrieval_challenge_type") == "negation_contrast":
             neg_app = s_plan.get("contrast_negated_app") or ""
