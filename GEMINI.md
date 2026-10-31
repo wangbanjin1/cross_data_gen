@@ -1,6 +1,6 @@
 # Project Memory & Architecture Guide (`cross_memory_data`)
 
-本文件为 `D:\coding\cross_memory_data`（远端仓库：`https://github.com/wangbanjin1/cross_data_gen.git`，当前主力开发分支：`feature/cognitive-memory-evolution`）的项目级记忆与开发准则。
+本文件为 `D:\coding\cross_memory_data`（远端仓库：`https://github.com/wangbanjin1/cross_data_gen.git`，主干基线分支：`main`，基线 Tag：`v2.0.0-three-tier-baseline`）的项目级记忆与开发准则。
 
 ---
 
@@ -10,7 +10,7 @@
 - **核心职责**：自动化生成高拟真、跨会话、长周期的多轮认知记忆评测数据集（涵盖**事实记忆**、**工作记忆**与**经验记忆**三大维度，储存在 `data/cognitive_samples` 与 `data/generated`）。
 - **Python 解释器**：`C:\Users\Administrator\AppData\Local\Programs\Python\Python312\python.exe`
 - **对话渲染模型**：必须真实调用 **`deepseek-v4.1-flash` (`deepseek-flash`)** 等百炼 API 进行自然语言对话渲染，**严禁跳过 API 直接使用本地静态模板伪造输出**。
-- **Git 分支注意**：认知记忆演进相关代码与样本默认提交并推送到远端 **`feature/cognitive-memory-evolution`** 分支（推送前务必核对分支，切勿误推 `main`）。
+- **Git 分支工作流**：`main` 分支已归档当前三层认知记忆稳定基线（`v2.0.0-three-tier-baseline`）；后续任何新特性开发（如 `TODO #01 信息隔离的双向渲染`）**必须先从 `main` 单独拉取 `feature/<topic>` 分支进行开发验证**，严禁直接在 `main` 上裸写实验代码。
 
 ---
 
