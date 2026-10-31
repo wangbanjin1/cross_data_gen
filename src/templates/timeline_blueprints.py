@@ -45,7 +45,7 @@ def get_session_blueprints(
     period_type = main_mt.get("period_type", "weekly")
     days = main_mt.get("days", [])
     tc = resolve_blueprint_time_context(main_mt, sub_01, sub_02, dist_01, dist_02, main_env_desc)
-    slot_learn_map, slot_test_map = plan_experience_slot_pairs(selected_exp_ids)
+    slot_learn_map, slot_test_map = plan_experience_slot_pairs(selected_exp_ids, seed_val=tc.get("seed_val", 1))
 
     ctx = {
         "main_mt": main_mt,
@@ -93,6 +93,8 @@ def get_session_blueprints(
         ood_e=tc["ood_e"],
         dn_s=tc["dn_s"],
         dn_e=tc["dn_e"],
+        seed_val=tc.get("seed_val", 1),
+        rehearsal_mins=tc.get("rehearsal_mins", 30),
     )
 
 

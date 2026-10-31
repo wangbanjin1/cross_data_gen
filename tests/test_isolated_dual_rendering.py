@@ -217,12 +217,16 @@ def test_three_round_confirmation_closure_for_turn2_modifications() -> None:
         exp_bank = ExperienceBank()
         plans = DynamicTimelinePlanner.plan(persona=mock_persona, working_ledger=ledger, experience_bank=exp_bank)
 
-    target_by_sid = {p["session_id"]: p for p in plans}
-
     # All sessions where user introduces new/modified/corrected parameters in Turn 2 must be 3 rounds
-    for sid in ("S-USER_001-04", "S-USER_001-05", "S-USER_001-06", "S-USER_001-07", "S-USER_001-09", "S-USER_001-12"):
-        p = target_by_sid[sid]
-        assert p["round_count"] == 3, f"{sid} expected round_count=3, got {p['round_count']}"
+    mod_sessions = [
+        p for p in plans
+        if p["blueprint_type"] in ("working_record_reuse", "experience_learning", "event_override")
+        or p["template_id"] in ("T2-3", "T2-5")
+    ]
+    assert len(mod_sessions) >= 4
+    for p in mod_sessions:
+        sid = p["session_id"]
+        assert p["round_count"] == 3, f"{sid} ({p['blueprint_type']}/{p['template_id']}) expected round_count=3, got {p['round_count']}"
 
         events = []
         for t in range(1, 4):

@@ -1,10 +1,11 @@
 """
 声明式会话蓝图槽位规范模块 (Declarative Session Blueprint Specs).
-将 20 轮认知演进蓝图的预设时区、经验配对计划与各阶段槽位字典从时间线计算器中彻底解耦。
+基于画像特征种子 (seed_val) 动态规划经验配对槽位、多意图源组合与因果约束下的拓扑重排。
 """
 
 from __future__ import annotations
 
+import random
 from src.templates.blueprint_helpers import _parse_time_range
 
 SUB1_TIME_PRESETS: list[tuple[str, str, str, str, str, str]] = [
@@ -38,14 +39,6 @@ DIST_NORM_PRESETS: list[tuple[str, str, str, str]] = [
     ("15:30", "16:30", "60min", "园区商务访客洽谈室"),
     ("16:30", "18:00", "90min", "市民中心便民等候区"),
 ]
-
-NATURAL_TEST_SLOTS: dict[str, int] = {
-    "EXP_CALENDAR_HOLIDAY_EXCEPTION_01": 6,
-    "EXP_PREWARM_BUFFER_01": 8,
-    "EXP_MULTI_INTENT_PARTITION_01": 10,
-    "EXP_ORDER_QUALITY_DISAMBIGUATION_01": 12,
-    "EXP_OVERLAPPING_ORDER_RESOLUTION_01": 13,
-}
 
 
 def resolve_blueprint_time_context(
@@ -87,8 +80,11 @@ def resolve_blueprint_time_context(
     pw_sh_tot = (sh_val * 60 + sm_val) - 30
     if pw_sh_tot < 0:
         pw_sh_tot += 24 * 60
+    rehearsal_mins = [30, 45, 60][(seed_val // 11) % 3]
 
     return {
+        "seed_val": seed_val,
+        "rehearsal_mins": rehearsal_mins,
         "sh_str": sh_str,
         "eh_str": eh_str,
         "ref_str": ref_str,
@@ -120,30 +116,27 @@ def resolve_blueprint_time_context(
     }
 
 
-def plan_experience_slot_pairs(selected_exp_ids: list[str] | None) -> tuple[dict[int, str], dict[int, str]]:
-    """建立每个被挑选经验的 (学习铺垫轮 learn_slot, 迁移测试轮 test_slot) 配对映射。"""
-    sorted_exps = sorted(selected_exp_ids or [], key=lambda x: NATURAL_TEST_SLOTS.get(x, 99))
-    exp_plan: dict[str, dict[str, int]] = {}
-    if len(sorted_exps) == 1:
-        e1 = sorted_exps[0]
-        t1 = NATURAL_TEST_SLOTS.get(e1, 8)
-        exp_plan[e1] = {"learn_slot": 4 if t1 == 6 else 5, "test_slot": t1}
-    elif len(sorted_exps) >= 2:
-        e1, e2 = sorted_exps[0], sorted_exps[1]
-        t1 = NATURAL_TEST_SLOTS.get(e1, 8)
-        t2 = NATURAL_TEST_SLOTS.get(e2, 10)
-        if t1 == 6 and t2 == 8:
-            exp_plan[e1] = {"learn_slot": 4, "test_slot": 6}
-            exp_plan[e2] = {"learn_slot": 5, "test_slot": 8}
-        elif t1 == 6:
-            exp_plan[e1] = {"learn_slot": 5, "test_slot": 6}
-            exp_plan[e2] = {"learn_slot": 8, "test_slot": t2}
-        else:
-            exp_plan[e1] = {"learn_slot": 5, "test_slot": t1}
-            exp_plan[e2] = {"learn_slot": 6, "test_slot": t2}
+def plan_experience_slot_pairs(selected_exp_ids: list[str] | None, seed_val: int = 1) -> tuple[dict[int, str], dict[int, str]]:
+    """基于 seed_val 动态分配每个经验的 (learn_slot, test_slot) 配对，满足 learn_slot < test_slot。"""
+    exps = list(selected_exp_ids or [])
+    rng = random.Random(seed_val)
+    learn_pool = [4, 5, 6, 7]
+    test_pool = [8, 9, 10, 11, 12, 13, 14]
+    rng.shuffle(learn_pool)
+    rng.shuffle(test_pool)
 
-    slot_learn_map = {v["learn_slot"]: k for k, v in exp_plan.items()}
-    slot_test_map = {v["test_slot"]: k for k, v in exp_plan.items()}
+    slot_learn_map: dict[int, str] = {}
+    slot_test_map: dict[int, str] = {}
+    chosen_learns = sorted(learn_pool[: len(exps)])
+    chosen_tests = sorted(test_pool[: len(exps)])
+
+    for idx, exp_id in enumerate(exps):
+        l_slot = chosen_learns[idx]
+        t_slot = max(chosen_tests[idx], l_slot + 2)
+        while t_slot in slot_test_map or t_slot in slot_learn_map:
+            t_slot += 1
+        slot_learn_map[l_slot] = exp_id
+        slot_test_map[t_slot] = exp_id
     return slot_learn_map, slot_test_map
 
 
@@ -177,41 +170,54 @@ def make_experience_learn_slot(exp_id: str, main_mt: dict, sub_01: dict, base_du
     }
 
 
-def _build_phase1_slots(ctx: dict) -> list[dict]:
-    """构建第 1~7 轮（主线建联、支线1建联、主线强化、早期工作/经验记忆与时长延长）蓝图槽位。"""
-    main_mt, sub_01 = ctx["main_mt"], ctx["sub_01"]
-    tc, learn_map, test_map = ctx["tc"], ctx["slot_learn_map"], ctx["slot_test_map"]
-    decl_mode, trig_type = ctx["decl_mode"], ctx["storyline_trigger_type"]
-    main_env, main_trig = ctx["main_env_desc"], ctx["main_trigger_desc"]
-    base_dur, ext_dur = tc["base_dur"], tc["ext_dur"]
-
-    s4 = make_experience_learn_slot(learn_map[4], main_mt, sub_01, base_dur, ext_dur, main_env) if 4 in learn_map else {
-        "tag": "wm_reuse", "template_id": "T2-6", "memory_tier": "working_memory", "role": "reuse_session",
-        "source": main_mt, "type": "working_record_reuse", "dur": base_dur, "env": main_env,
-        "action": "retrieve_working_record_reuse", "round_count": 3, "cold_hot_type": None, "agility_factor": None, "time_kind": "main",
-    }
-    s5 = make_experience_learn_slot(learn_map[5], main_mt, sub_01, base_dur, ext_dur, main_env) if 5 in learn_map else {
-        "tag": "wm_reschedule", "template_id": "T2-7", "memory_tier": "working_memory", "role": "reuse_session",
-        "source": main_mt, "type": "working_record_reschedule", "dur": base_dur, "env": main_env,
-        "action": "reschedule_working_record", "round_count": 2, "cold_hot_type": None, "agility_factor": None, "time_kind": "main",
-    }
-    if 6 in learn_map:
-        s6 = make_experience_learn_slot(learn_map[6], main_mt, sub_01, base_dur, ext_dur, main_env)
-    elif 6 in test_map:
-        s6 = {
+def make_experience_test_slot(exp_id: str, main_mt: dict, base_dur: str, ext_dur: str, main_env: str, reh_dur: str = "30min") -> dict:
+    """根据经验 ID 动态构建对应的经验迁移测试轮槽位字典。"""
+    if exp_id == "EXP_CALENDAR_HOLIDAY_EXCEPTION_01":
+        return {
             "tag": "exp_holiday", "template_id": "T2-1", "memory_tier": "experiential_memory", "role": "reuse_session",
             "source": main_mt, "type": "proactive_experience", "dur": base_dur, "env": main_env,
-            "action": "holiday_avoidance_reschedule", "experience_id": "EXP_CALENDAR_HOLIDAY_EXCEPTION_01",
-            "learning_source_session_tag": "exp_learn_EXP_CALENDAR_HOLIDAY_EXCEPTION_01",
-            "round_count": 2, "cold_hot_type": None, "agility_factor": None, "time_kind": "holiday",
+            "action": "holiday_avoidance_reschedule", "experience_id": exp_id,
+            "learning_source_session_tag": f"exp_learn_{exp_id}", "round_count": 2,
+            "cold_hot_type": None, "agility_factor": None, "time_kind": "holiday",
         }
-    else:
-        s6 = {
-            "tag": "wm_reuse_6", "template_id": "T2-6", "memory_tier": "working_memory", "role": "reuse_session",
-            "source": main_mt, "type": "working_record_reuse", "dur": base_dur, "env": main_env,
-            "action": "retrieve_working_record_reuse", "round_count": 3, "cold_hot_type": None, "agility_factor": None, "time_kind": "main",
+    if exp_id == "EXP_PREWARM_BUFFER_01":
+        return {
+            "tag": "exp_prewarm", "template_id": "T2-9", "memory_tier": "experiential_memory", "role": "reuse_session",
+            "source": main_mt, "type": "proactive_experience", "dur": ext_dur, "base_dur": base_dur,
+            "env": "奥林匹克体育中心多功能馆", "action": "prewarm_buffer_calculation", "experience_id": exp_id,
+            "learning_source_session_tag": f"exp_learn_{exp_id}", "round_count": 2,
+            "cold_hot_type": None, "agility_factor": None, "time_kind": "prewarm",
         }
+    if exp_id == "EXP_MULTI_INTENT_PARTITION_01":
+        return {
+            "tag": "exp_multi_intent", "template_id": "T2-4", "memory_tier": "experiential_memory", "role": "reuse_session",
+            "source": main_mt, "second_source": main_mt, "type": "multi_intent_experience", "multi_intent_mode": "heterogeneous",
+            "dur": reh_dur, "base_dur": base_dur, "env": main_env, "action": "multi_intent_delay_isolation",
+            "experience_id": exp_id, "learning_source_session_tag": f"exp_learn_{exp_id}",
+            "round_count": 2, "cold_hot_type": None, "agility_factor": None, "time_kind": "multi_intent",
+        }
+    if exp_id == "EXP_ORDER_QUALITY_DISAMBIGUATION_01":
+        return {
+            "tag": "exp_quality", "template_id": "T2-6", "memory_tier": "experiential_memory", "role": "reuse_session",
+            "source": main_mt, "type": "working_record_disambig", "dur": base_dur, "env": main_env,
+            "action": "quality_log_disambiguation", "experience_id": exp_id,
+            "learning_source_session_tag": f"exp_learn_{exp_id}", "round_count": 2,
+            "cold_hot_type": None, "agility_factor": None, "time_kind": "main",
+        }
+    return {
+        "tag": "exp_overlap", "template_id": "T2-10", "memory_tier": "experiential_memory", "role": "reuse_session",
+        "source": main_mt, "type": "overlapping_experience", "dur": base_dur, "env": main_env,
+        "action": "overlapping_order_handoff", "experience_id": exp_id,
+        "learning_source_session_tag": f"exp_learn_{exp_id}", "round_count": 2,
+        "cold_hot_type": None, "agility_factor": None, "time_kind": "overlap",
+    }
 
+
+def _build_foundational_slots(ctx: dict) -> list[dict]:
+    """构建前 3 轮基础事实记忆建联与强化槽位（S-01 ~ S-03）。"""
+    main_mt, sub_01, tc = ctx["main_mt"], ctx["sub_01"], ctx["tc"]
+    decl_mode, trig_type = ctx["decl_mode"], ctx["storyline_trigger_type"]
+    main_env, main_trig, base_dur = ctx["main_env_desc"], ctx["main_trigger_desc"], tc["base_dur"]
     return [
         {
             "tag": "main_evidence", "template_id": "T2-1", "memory_tier": "factual_memory", "role": "evidence_session",
@@ -234,138 +240,89 @@ def _build_phase1_slots(ctx: dict) -> list[dict]:
             "declaration_mode": decl_mode, "storyline_trigger_type": trig_type, "trigger_condition": main_trig,
             "round_count": 2, "cold_hot_type": "hot_start", "agility_factor": 0.5, "time_kind": "main",
         },
-        s4,
-        s5,
-        s6,
-        {
-            "tag": "main_amend", "template_id": "T2-5", "memory_tier": "factual_memory", "role": "reuse_session",
-            "source": main_mt, "type": "main", "dur": ext_dur, "base_dur": base_dur, "env": main_env,
-            "action": "extend_duration_amend", "storyline_trigger_type": trig_type, "trigger_condition": main_trig,
-            "round_count": 3, "cold_hot_type": "hot_start", "agility_factor": 0.5, "time_kind": "main_amend",
-        },
     ]
 
 
-def _build_phase2_slots(ctx: dict) -> list[dict]:
-    """构建第 8~14 轮（经验迁移测试、突发事件临时纠正与恢复、工作记忆改期）蓝图槽位。"""
-    main_mt, sub_01, evt_01 = ctx["main_mt"], ctx["sub_01"], ctx["evt_01"]
-    tc, learn_map, test_map = ctx["tc"], ctx["slot_learn_map"], ctx["slot_test_map"]
-    decl_mode, trig_type = ctx["decl_mode"], ctx["storyline_trigger_type"]
-    main_env, main_trig = ctx["main_env_desc"], ctx["main_trigger_desc"]
+def _build_flexible_middle_pool(ctx: dict) -> list[dict]:
+    """构建动态可重排的中段候选池（涵盖同类双意图 T1-3、非同类双意图 T2-4、混合意图 X-1、工作记忆及时长延长）。"""
+    main_mt, sub_01, sub_02, dist_01, evt_01 = ctx["main_mt"], ctx["sub_01"], ctx["sub_02"], ctx["dist_01"], ctx["evt_01"]
+    tc, test_map = ctx["tc"], ctx["slot_test_map"]
+    seed_val = tc.get("seed_val", 1)
+    trig_type, main_env, main_trig = ctx["storyline_trigger_type"], ctx["main_env_desc"], ctx["main_trigger_desc"]
     base_dur, ext_dur = tc["base_dur"], tc["ext_dur"]
 
-    if 8 in learn_map:
-        s8 = make_experience_learn_slot(learn_map[8], main_mt, sub_01, base_dur, ext_dur, main_env)
-    elif 8 in test_map:
-        s8 = {
-            "tag": "exp_prewarm", "template_id": "T2-9", "memory_tier": "experiential_memory", "role": "reuse_session",
-            "source": main_mt, "type": "proactive_experience", "dur": ext_dur, "base_dur": base_dur,
-            "env": "奥林匹克体育中心多功能馆", "action": "prewarm_buffer_calculation", "experience_id": "EXP_PREWARM_BUFFER_01",
-            "learning_source_session_tag": "exp_learn_EXP_PREWARM_BUFFER_01", "round_count": 2,
-            "cold_hot_type": None, "agility_factor": None, "time_kind": "prewarm",
-        }
-    else:
-        s8 = {
-            "tag": "main_reinf_8", "template_id": "T2-1", "memory_tier": "factual_memory", "role": "reinforcement_session",
-            "source": main_mt, "type": "main", "dur": base_dur, "env": main_env,
-            "action": "reinforce_explicit_memory" if decl_mode == "explicit_declaration" else "crystallize_implicit_memory",
-            "declaration_mode": decl_mode, "storyline_trigger_type": trig_type, "trigger_condition": main_trig,
-            "round_count": 2, "cold_hot_type": "hot_start", "agility_factor": 0.5, "time_kind": "main",
-        }
-    s10 = {
-        "tag": "exp_multi_intent", "template_id": "T2-4", "memory_tier": "experiential_memory", "role": "reuse_session",
-        "source": main_mt, "second_source": main_mt, "type": "multi_intent_experience", "multi_intent_mode": "heterogeneous",
-        "dur": "30min", "base_dur": base_dur, "env": main_env, "action": "multi_intent_delay_isolation",
-        "experience_id": "EXP_MULTI_INTENT_PARTITION_01", "learning_source_session_tag": "exp_learn_EXP_MULTI_INTENT_PARTITION_01",
-        "round_count": 2, "cold_hot_type": None, "agility_factor": None, "time_kind": "multi_intent",
-    } if 10 in test_map else {
-        "tag": "sub1_reuse_10", "template_id": "T2-4", "memory_tier": "factual_memory", "role": "reuse_session",
-        "source": sub_01, "second_source": main_mt, "type": "multi_intent_heterogeneous", "multi_intent_mode": "heterogeneous",
-        "dur": tc["sub1_dur"], "base_dur": base_dur, "env": tc["sub1_env"],
-        "action": "reuse_sub_storyline_1", "round_count": 2, "cold_hot_type": "hot_start", "agility_factor": 0.5, "time_kind": "multi_intent_hetero",
-    }
-    s12 = {
-        "tag": "exp_quality", "template_id": "T2-6", "memory_tier": "experiential_memory", "role": "reuse_session",
-        "source": main_mt, "type": "working_record_disambig", "dur": base_dur, "env": main_env,
-        "action": "quality_log_disambiguation", "experience_id": "EXP_ORDER_QUALITY_DISAMBIGUATION_01",
-        "learning_source_session_tag": "exp_learn_EXP_ORDER_QUALITY_DISAMBIGUATION_01", "round_count": 2,
-        "cold_hot_type": None, "agility_factor": None, "time_kind": "main",
-    } if 12 in test_map else {
-        "tag": "wm_reuse_12", "template_id": "T2-6", "memory_tier": "working_memory", "role": "reuse_session",
-        "source": main_mt, "type": "working_record_reuse", "dur": base_dur, "env": main_env,
-        "action": "retrieve_working_record_reuse", "round_count": 3, "cold_hot_type": None, "agility_factor": None, "time_kind": "main",
-    }
-    s13 = {
-        "tag": "exp_overlap", "template_id": "T2-10", "memory_tier": "experiential_memory", "role": "reuse_session",
-        "source": main_mt, "type": "overlapping_experience", "dur": base_dur, "env": main_env,
-        "action": "overlapping_order_handoff", "experience_id": "EXP_OVERLAPPING_ORDER_RESOLUTION_01",
-        "learning_source_session_tag": "exp_learn_EXP_OVERLAPPING_ORDER_RESOLUTION_01", "round_count": 2,
-        "cold_hot_type": None, "agility_factor": None, "time_kind": "overlap",
-    } if 13 in test_map else {
-        "tag": "wm_reschedule_13", "template_id": "T2-7", "memory_tier": "working_memory", "role": "reuse_session",
-        "source": main_mt, "type": "working_record_reschedule", "dur": base_dur, "env": main_env,
-        "action": "reschedule_working_record", "round_count": 2, "cold_hot_type": None, "agility_factor": None, "time_kind": "main",
-    }
+    homo_sources = [(main_mt, main_env), (sub_01, tc["sub1_env"]), (dist_01, tc["dn_env"])]
+    homo_src, homo_env = homo_sources[seed_val % len(homo_sources)]
+    hetero_pairs = [(sub_01, main_mt, tc["sub1_env"]), (main_mt, sub_01, main_env), (dist_01, main_mt, tc["dn_env"]), (sub_02, main_mt, tc["sub2_env"])]
+    het_src1, het_src2, het_env = hetero_pairs[(seed_val // 3) % len(hetero_pairs)]
     ov_pref = evt_01.get("preference_override", {"resolution": "720p", "rtt_max": "30ms"})
-    s9 = {"tag": "evt_correct", "template_id": "T2-3", "memory_tier": "factual_memory", "role": "correction_session", "source": main_mt, "type": "event_override", "dur": base_dur, "env": "沿海暴雨强对流前沿现场", "action": "override_temporary_preference", "override": ov_pref, "round_count": 3, "cold_hot_type": "hot_start", "agility_factor": 0.5, "time_kind": "main"}
-    s11 = {"tag": "evt_reuse", "template_id": "T2-1", "memory_tier": "factual_memory", "role": "reuse_session", "source": main_mt, "type": "event_reuse", "dur": base_dur, "env": main_env, "action": "reuse_long_term_rule_after_correction", "round_count": 2, "cold_hot_type": "hot_start", "agility_factor": 0.5, "time_kind": "main"}
-    s14 = {"tag": "wm_reschedule_2", "template_id": "T2-7", "memory_tier": "working_memory", "role": "reuse_session", "source": main_mt, "type": "working_record_reschedule", "dur": base_dur, "env": main_env, "action": "reschedule_working_record", "round_count": 2, "cold_hot_type": None, "agility_factor": None, "time_kind": "main"}
-    return [s8, s9, s10, s11, s12, s13, s14]
+
+    pool: list[dict] = [
+        {"tag": "wm_reuse", "template_id": "T2-6", "memory_tier": "working_memory", "role": "reuse_session", "source": main_mt, "type": "working_record_reuse", "dur": base_dur, "env": main_env, "action": "retrieve_working_record_reuse", "round_count": 3, "cold_hot_type": None, "agility_factor": None, "time_kind": "main"},
+        {"tag": "wm_reschedule", "template_id": "T2-7", "memory_tier": "working_memory", "role": "reuse_session", "source": main_mt, "type": "working_record_reschedule", "dur": base_dur, "env": main_env, "action": "reschedule_working_record", "round_count": 2, "cold_hot_type": None, "agility_factor": None, "time_kind": "main"},
+        {"tag": "main_amend", "template_id": "T2-5", "memory_tier": "factual_memory", "role": "reuse_session", "source": main_mt, "type": "main", "dur": ext_dur, "base_dur": base_dur, "env": main_env, "action": "extend_duration_amend", "storyline_trigger_type": trig_type, "trigger_condition": main_trig, "round_count": 3, "cold_hot_type": "hot_start", "agility_factor": 0.5, "time_kind": "main_amend"},
+        {"tag": "multi_intent_homo", "template_id": "T1-3", "memory_tier": "factual_memory", "role": "distractor_session", "source": homo_src, "second_source": dist_01, "type": "multi_intent_homogeneous", "multi_intent_mode": "homogeneous", "dur": tc["dn_dur"], "env": homo_env, "action": "parallel_homogeneous_multi_intent", "round_count": 1, "cold_hot_type": None, "agility_factor": None, "time_kind": "multi_intent_homo"},
+        {"tag": "dist_mixed", "template_id": "X-1", "memory_tier": "factual_memory", "role": "distractor_session", "source": main_mt, "type": "distractor_mixed", "dur": tc["dn_dur"], "env": tc["dn_env"], "action": "handle_normal_and_reject_ood", "ood_goal": tc["ood_goal"], "round_count": 1, "cold_hot_type": None, "agility_factor": None, "time_kind": "dist_mixed"},
+        {"tag": "wm_reschedule_2", "template_id": "T2-7", "memory_tier": "working_memory", "role": "reuse_session", "source": main_mt, "type": "working_record_reschedule", "dur": base_dur, "env": main_env, "action": "reschedule_working_record", "round_count": 2, "cold_hot_type": None, "agility_factor": None, "time_kind": "main"},
+        {"tag": "evt_correct", "template_id": "T2-3", "memory_tier": "factual_memory", "role": "correction_session", "source": main_mt, "type": "event_override", "dur": base_dur, "env": "沿海暴雨强对流前沿现场", "action": "override_temporary_preference", "override": ov_pref, "round_count": 3, "cold_hot_type": "hot_start", "agility_factor": 0.5, "time_kind": "main"},
+        {"tag": "evt_reuse", "template_id": "T2-1", "memory_tier": "factual_memory", "role": "reuse_session", "source": main_mt, "type": "event_reuse", "dur": base_dur, "env": main_env, "action": "reuse_long_term_rule_after_correction", "round_count": 2, "cold_hot_type": "hot_start", "agility_factor": 0.5, "time_kind": "main"},
+    ]
+    if "EXP_MULTI_INTENT_PARTITION_01" not in test_map.values():
+        pool[5] = {
+            "tag": "sub1_reuse_10", "template_id": "T2-4", "memory_tier": "factual_memory", "role": "reuse_session",
+            "source": het_src1, "second_source": het_src2, "type": "multi_intent_heterogeneous", "multi_intent_mode": "heterogeneous",
+            "dur": tc["sub1_dur"], "base_dur": base_dur, "env": het_env,
+            "action": "reuse_sub_storyline_1", "round_count": 2, "cold_hot_type": "hot_start", "agility_factor": 0.5, "time_kind": "multi_intent_hetero",
+        }
+    return pool
 
 
-def _build_phase3_slots(ctx: dict) -> list[dict]:
-    """构建第 15~20 轮（域外拒识、工作记忆多候选消歧、支线2建联与复用、单次干扰、终局极速闭环）蓝图槽位。"""
-    main_mt, sub_02, dist_01 = ctx["main_mt"], ctx["sub_02"], ctx["dist_01"]
-    tc = ctx["tc"]
-    trig_type = ctx["storyline_trigger_type"]
-    main_env, main_trig = ctx["main_env_desc"], ctx["main_trigger_desc"]
-    base_dur = tc["base_dur"]
-
+def _build_tail_slots(ctx: dict) -> list[dict]:
+    """构建尾部槽位（工作记忆多候选消歧 + 拓展会话 17~20）。"""
+    main_mt, sub_02, dist_01, tc = ctx["main_mt"], ctx["sub_02"], ctx["dist_01"], ctx["tc"]
+    trig_type, main_env, main_trig, base_dur = ctx["storyline_trigger_type"], ctx["main_env_desc"], ctx["main_trigger_desc"], tc["base_dur"]
     return [
-        {
-            "tag": "multi_intent_homo", "template_id": "T1-3", "memory_tier": "factual_memory", "role": "distractor_session",
-            "source": main_mt, "second_source": dist_01, "type": "multi_intent_homogeneous", "multi_intent_mode": "homogeneous",
-            "dur": tc["dn_dur"], "env": tc["dn_env"], "action": "parallel_homogeneous_multi_intent", "round_count": 1,
-            "cold_hot_type": None, "agility_factor": None, "time_kind": "multi_intent_homo",
-        },
-        {
-            "tag": "wm_disambig", "template_id": "T2-6", "memory_tier": "working_memory", "role": "reuse_session",
-            "source": main_mt, "type": "working_record_disambig", "dur": base_dur, "env": main_env,
-            "action": "disambiguate_working_record", "round_count": 3, "cold_hot_type": None, "agility_factor": None, "time_kind": "main",
-        },
-        {
-            "tag": "dist_ood", "template_id": "T1-2", "memory_tier": "factual_memory", "role": "distractor_session",
-            "source": main_mt, "type": "distractor_ood", "dur": tc["ood_dur"], "env": tc["ood_env"],
-            "action": "reject_out_of_domain", "ood_goal": tc["ood_goal"], "round_count": 1,
-            "cold_hot_type": None, "agility_factor": None, "time_kind": "dist_ood",
-        },
-        {
-            "tag": "sub2", "template_id": "T2-1", "memory_tier": "factual_memory", "role": "evidence_session",
-            "source": sub_02, "type": "sub_02", "dur": tc["sub2_dur"], "env": tc["sub2_env"],
-            "action": "establish_sub_storyline_2", "declaration_mode": "implicit_induction",
-            "storyline_trigger_type": "location_environment", "trigger_condition": tc["sub2_env"],
-            "round_count": 3, "cold_hot_type": "cold_start", "agility_factor": 0.0, "time_kind": "sub2",
-        },
-        {
-            "tag": "sub2_reuse", "template_id": "T2-1", "memory_tier": "factual_memory", "role": "reuse_session",
-            "source": sub_02, "type": "sub_02", "dur": tc["sub2_dur"], "env": tc["sub2_env"],
-            "action": "reuse_sub_storyline_2", "storyline_trigger_type": "location_environment", "trigger_condition": tc["sub2_env"],
-            "round_count": 2, "cold_hot_type": "hot_start", "agility_factor": 0.5, "time_kind": "sub2",
-        },
-        {
-            "tag": "dist_normal", "template_id": "T1-1", "memory_tier": "factual_memory", "role": "distractor_session",
-            "source": dist_01, "type": "distractor_normal", "dur": tc["dn_dur"], "env": tc["dn_env"],
-            "action": "single_standard_assurance", "round_count": 1, "cold_hot_type": None, "agility_factor": None, "time_kind": "dist_normal",
-        },
-        {
-            "tag": "main_final", "template_id": "T2-1", "memory_tier": "factual_memory", "role": "reuse_session",
-            "source": main_mt, "type": "main_recovery", "dur": base_dur, "env": main_env,
-            "action": "recover_long_term_rule", "storyline_trigger_type": trig_type, "trigger_condition": main_trig,
-            "round_count": 1, "cold_hot_type": "hot_start", "agility_factor": 1.0, "time_kind": "main",
-        },
+        {"tag": "wm_disambig", "template_id": "T2-6", "memory_tier": "working_memory", "role": "reuse_session", "source": main_mt, "type": "working_record_disambig", "dur": base_dur, "env": main_env, "action": "disambiguate_working_record", "round_count": 3, "cold_hot_type": None, "agility_factor": None, "time_kind": "main"},
+        {"tag": "dist_ood", "template_id": "T1-2", "memory_tier": "factual_memory", "role": "distractor_session", "source": main_mt, "type": "distractor_ood", "dur": tc["ood_dur"], "env": tc["ood_env"], "action": "reject_out_of_domain", "ood_goal": tc["ood_goal"], "round_count": 1, "cold_hot_type": None, "agility_factor": None, "time_kind": "dist_ood"},
+        {"tag": "sub2", "template_id": "T2-1", "memory_tier": "factual_memory", "role": "evidence_session", "source": sub_02, "type": "sub_02", "dur": tc["sub2_dur"], "env": tc["sub2_env"], "action": "establish_sub_storyline_2", "declaration_mode": "implicit_induction", "storyline_trigger_type": "location_environment", "trigger_condition": tc["sub2_env"], "round_count": 3, "cold_hot_type": "cold_start", "agility_factor": 0.0, "time_kind": "sub2"},
+        {"tag": "sub2_reuse", "template_id": "T2-1", "memory_tier": "factual_memory", "role": "reuse_session", "source": sub_02, "type": "sub_02", "dur": tc["sub2_dur"], "env": tc["sub2_env"], "action": "reuse_sub_storyline_2", "storyline_trigger_type": "location_environment", "trigger_condition": tc["sub2_env"], "round_count": 2, "cold_hot_type": "hot_start", "agility_factor": 0.5, "time_kind": "sub2"},
+        {"tag": "dist_normal", "template_id": "T1-1", "memory_tier": "factual_memory", "role": "distractor_session", "source": dist_01, "type": "distractor_normal", "dur": tc["dn_dur"], "env": tc["dn_env"], "action": "single_standard_assurance", "round_count": 1, "cold_hot_type": None, "agility_factor": None, "time_kind": "dist_normal"},
+        {"tag": "main_final", "template_id": "T2-1", "memory_tier": "factual_memory", "role": "reuse_session", "source": main_mt, "type": "main_recovery", "dur": base_dur, "env": main_env, "action": "recover_long_term_rule", "storyline_trigger_type": trig_type, "trigger_condition": main_trig, "round_count": 1, "cold_hot_type": "hot_start", "agility_factor": 1.0, "time_kind": "main"},
     ]
 
 
 def build_raw_blueprint_specs(ctx: dict) -> list[dict]:
-    """组合全部 3 个演化阶段的声明式蓝图槽位规范列表。"""
-    return _build_phase1_slots(ctx) + _build_phase2_slots(ctx) + _build_phase3_slots(ctx)
+    """动态排布并组合完整认知演进蓝图（打破固定 Slot 序号，保证因果拓扑约束）。"""
+    main_mt, sub_01, tc = ctx["main_mt"], ctx["sub_01"], ctx["tc"]
+    learn_map, test_map = ctx["slot_learn_map"], ctx["slot_test_map"]
+    base_dur, ext_dur, main_env = tc["base_dur"], tc["ext_dur"], ctx["main_env_desc"]
+    reh_dur = f"{tc.get('rehearsal_mins', 30)}min"
+
+    foundational = _build_foundational_slots(ctx)
+    middle_pool = _build_flexible_middle_pool(ctx)
+    tail_slots = _build_tail_slots(ctx)
+
+    evt_pair = [s for s in middle_pool if s["tag"] in ("evt_correct", "evt_reuse")]
+    free_items = [s for s in middle_pool if s["tag"] not in ("evt_correct", "evt_reuse")]
+    rng = random.Random(tc.get("seed_val", 1))
+    rng.shuffle(free_items)
+
+    insert_pos = rng.randint(1, max(1, len(free_items) - 1))
+    ordered_free = free_items[:insert_pos] + evt_pair + free_items[insert_pos:]
+
+    slots_4_to_15: list[dict] = []
+    free_iter = iter(ordered_free)
+    for slot_num in range(4, 16):
+        if slot_num in learn_map:
+            slots_4_to_15.append(make_experience_learn_slot(learn_map[slot_num], main_mt, sub_01, base_dur, ext_dur, main_env))
+        elif slot_num in test_map:
+            slots_4_to_15.append(make_experience_test_slot(test_map[slot_num], main_mt, base_dur, ext_dur, main_env, reh_dur=reh_dur))
+        else:
+            nxt = next(free_iter, None)
+            if nxt is not None:
+                slots_4_to_15.append(nxt)
+
+    for rem in free_iter:
+        slots_4_to_15.append(rem)
+
+    return foundational + slots_4_to_15[:12] + tail_slots

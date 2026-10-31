@@ -391,24 +391,36 @@ class DynamicTimelinePlanner:
 
     @staticmethod
     def _resolve_second_target_params(cfg: dict, src: dict, main_mt: dict, base_res: str, base_rtt: str) -> dict | None:
-        """为多意图模版 (T1-3 / T2-4) 解析第 2 个正常意图 (I2) 的完整参数字典。"""
+        """为多意图模版 (T1-3 / T2-4) 动态解析第 2 个正常意图 (I2) 的完整参数字典。"""
         if cfg.get("template_id") not in ("T1-3", "T2-4"):
             return None
         mode = cfg.get("multi_intent_mode", "heterogeneous")
         start2 = cfg.get("start2") or cfg.get("start", "")
         end2 = cfg.get("end2") or cfg.get("end", "")
         dur2 = cfg.get("dur2") or cfg.get("base_dur") or cfg.get("dur", "60min")
+        idx_seed = int(cfg.get("idx", 1)) * 31 + sum(ord(c) for c in str(src.get("application_name", "")))
+        res_choices = ["1080p", "720p"]
+        rtt_choices = ["30ms", "50ms", "80ms"]
+
         if mode == "homogeneous":
             srv2 = src["service_name"]
-            peer_map = {
-                "抖音": "快手", "快手": "抖音", "哔哩哔哩": "抖音",
-                "腾讯会议": "钉钉", "钉钉": "腾讯会议", "飞书": "腾讯会议",
-                "微信": "钉钉",
-            }
-            app2 = peer_map.get(src["application_name"], "快手" if "直播" in srv2 else "钉钉")
+            if "直播" in srv2:
+                pool = ["抖音", "快手", "哔哩哔哩", "小红书", "虎牙", "斗鱼"]
+            elif "会议" in srv2:
+                pool = ["腾讯会议", "钉钉", "飞书", "云视讯"]
+            elif "通话" in srv2:
+                pool = ["微信", "钉钉", "QQ"]
+            elif "游戏" in srv2:
+                pool = ["王者荣耀", "和平精英", "原神", "三角洲"]
+            else:
+                pool = ["抖音", "快手", "腾讯会议", "钉钉"]
+            candidates = [a for a in pool if a != src["application_name"]] or ["快手"]
+            app2 = candidates[idx_seed % len(candidates)]
+            res2 = base_res if (idx_seed % 2 == 0) else res_choices[(idx_seed // 2) % len(res_choices)]
+            rtt2 = base_rtt if (idx_seed % 2 == 0) else rtt_choices[(idx_seed // 3) % len(rtt_choices)]
             return {
                 "application_name": app2, "service_name": srv2,
-                "resolution": base_res, "rtt": base_rtt,
+                "resolution": res2, "rtt": rtt2,
                 "start_timestamp": start2, "end_timestamp": end2, "duration": dur2,
             }
         if cfg.get("experience_id") == "EXP_MULTI_INTENT_PARTITION_01":
@@ -423,13 +435,16 @@ class DynamicTimelinePlanner:
         sec = cfg.get("second_source") or main_mt
         app2 = sec.get("application_name", "抖音")
         srv2 = sec.get("service_name", "开直播")
-        if srv2 == src["service_name"]:
-            srv2 = "视频通话" if src["service_name"] != "视频通话" else "视频会议"
-            app2 = "微信" if srv2 == "视频通话" else "腾讯会议"
+        if srv2 == src["service_name"] or app2 == src["application_name"]:
+            het_options = [("微信", "视频通话"), ("腾讯会议", "视频会议"), ("钉钉", "视频会议"), ("抖音", "开直播"), ("快手", "开直播")]
+            valid_het = [(a, s) for a, s in het_options if a != src["application_name"] and s != src["service_name"]]
+            app2, srv2 = valid_het[idx_seed % len(valid_het)]
         sec_p = sec.get("preferred_params") or sec.get("params") or {}
+        res2 = sec_p.get("resolution") or res_choices[idx_seed % len(res_choices)]
+        rtt2 = sec_p.get("rtt_max") or rtt_choices[(idx_seed // 2) % len(rtt_choices)]
         return {
             "application_name": app2, "service_name": srv2,
-            "resolution": sec_p.get("resolution", base_res), "rtt": sec_p.get("rtt_max", base_rtt),
+            "resolution": res2, "rtt": rtt2,
             "start_timestamp": start2, "end_timestamp": end2, "duration": dur2,
         }
 

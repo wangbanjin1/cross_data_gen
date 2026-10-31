@@ -161,9 +161,13 @@ def _apply_slot_timestamp(item: dict, d_str: str, ts_ctx: dict) -> None:
             item["base_end"] = item["end"] = item["end2"] = _m_time(d_str, eh_str)
             item["base_dur"] = item["dur"] = item["dur2"] = base_dur
         else:
-            item["start"] = _m_time(d_str, ts_ctx["pw_s_str"])
+            reh_mins = ts_ctx.get("rehearsal_mins", 30)
+            sh_m, sm_m = map(int, sh_str.split(":"))
+            reh_start_tot = (sh_m * 60 + sm_m - reh_mins) % (24 * 60)
+            reh_s_str = f"{reh_start_tot // 60:02d}:{reh_start_tot % 60:02d}"
+            item["start"] = _m_time(d_str, reh_s_str)
             item["end"] = _m_time(d_str, sh_str)
-            item["dur"] = "30min"
+            item["dur"] = f"{reh_mins}min"
             item["start2"] = _m_time(d_str, sh_str)
             item["base_end"] = item["end2"] = _m_time(d_str, eh_str)
             item["base_dur"] = item["dur2"] = base_dur
@@ -174,6 +178,40 @@ def _apply_slot_timestamp(item: dict, d_str: str, ts_ctx: dict) -> None:
         item["nominal_dur"] = item["dur"] = base_dur
     else:
         _apply_secondary_slot_timestamp(item, d_str, ts_ctx)
+
+
+def _compute_dynamic_dual_windows(d_str: str, seed_val: int, idx: int) -> dict[str, str]:
+    """基于 seed_val 与会话序号动态生成多分布双意图时间窗（覆盖不同起止时刻、时长与间隔）。"""
+    h_seed = seed_val + idx * 37
+    start_hours = [(9, 0), (9, 30), (10, 0), (10, 30), (13, 30), (14, 0), (14, 30), (15, 0), (15, 30)]
+    dur1_choices = [30, 45, 60, 90, 120]
+    gap_choices = [0, 30, 60, 90, 120, 180]
+    dur2_choices = [30, 45, 60, 90, 120]
+
+    sh1, sm1 = start_hours[h_seed % len(start_hours)]
+    d1 = dur1_choices[(h_seed // 3) % len(dur1_choices)]
+    gap = gap_choices[(h_seed // 7) % len(gap_choices)]
+    d2 = dur2_choices[(h_seed // 11) % len(dur2_choices)]
+
+    s1_tot = sh1 * 60 + sm1
+    e1_tot = s1_tot + d1
+    s2_tot = e1_tot + gap
+    if s2_tot + d2 > 23 * 60:
+        s2_tot = max(e1_tot, 20 * 60)
+        d2 = min(d2, 90)
+    e2_tot = s2_tot + d2
+    ref_tot = max(0, s1_tot - 15)
+
+    fmt = lambda m: f"{(m // 60) % 24:02d}:{m % 60:02d}"
+    return {
+        "ref_time": _m_time(d_str, fmt(ref_tot)),
+        "start": _m_time(d_str, fmt(s1_tot)),
+        "end": _m_time(d_str, fmt(e1_tot)),
+        "dur": f"{d1}min",
+        "start2": _m_time(d_str, fmt(s2_tot)),
+        "end2": _m_time(d_str, fmt(e2_tot)),
+        "dur2": f"{d2}min",
+    }
 
 
 def _apply_secondary_slot_timestamp(item: dict, d_str: str, ts_ctx: dict) -> None:
@@ -191,8 +229,9 @@ def _apply_secondary_slot_timestamp(item: dict, d_str: str, ts_ctx: dict) -> Non
         item["ref_time"] = item["start"] = _m_time(d_str, ts_ctx["ood_s"])
         item["end"] = _m_time(d_str, ts_ctx["ood_e"])
     elif t_kind == "dist_mixed":
-        item["ref_time"] = item["start"] = f"{d_str}12时30分"
-        item["end"] = f"{d_str}13时30分"
+        item["ref_time"] = item["start"] = _m_time(d_str, ts_ctx["dn_s"])
+        item["end"] = _m_time(d_str, ts_ctx["dn_e"])
+        item["dur"] = ts_ctx.get("dn_dur", item.get("dur", "60min"))
         m_date = re.search(r'(\d{4})年(\d{1,2})月(\d{1,2})日', d_str)
         if m_date:
             dt = datetime(int(m_date.group(1)), int(m_date.group(2)), int(m_date.group(3)))
@@ -202,21 +241,9 @@ def _apply_secondary_slot_timestamp(item: dict, d_str: str, ts_ctx: dict) -> Non
     elif t_kind == "dist_normal":
         item["ref_time"] = item["start"] = _m_time(d_str, ts_ctx["dn_s"])
         item["end"] = _m_time(d_str, ts_ctx["dn_e"])
-    elif t_kind == "multi_intent_hetero":
-        item["ref_time"] = _m_time(d_str, ts_ctx["sub1_ref"])
-        item["start"] = _m_time(d_str, ts_ctx["sub1_s"])
-        item["end"] = _m_time(d_str, ts_ctx["sub1_e"])
-        item["start2"] = _m_time(d_str, ts_ctx["sh_str"])
-        item["end2"] = _m_time(d_str, ts_ctx["eh_str"])
-        item["dur2"] = ts_ctx["base_dur"]
-    elif t_kind == "multi_intent_homo":
-        item["ref_time"] = item["start"] = _m_time(d_str, ts_ctx["dn_s"])
-        item["end"] = _m_time(d_str, ts_ctx["dn_e"])
-        item["start2"] = _m_time(d_str, ts_ctx["sub1_s"])
-        item["end2"] = _m_time(d_str, ts_ctx["sub1_e"])
-        sh_m, sm_m = map(int, ts_ctx["sub1_s"].split(":"))
-        eh_m, em_m = map(int, ts_ctx["sub1_e"].split(":"))
-        item["dur2"] = f"{max(30, (eh_m * 60 + em_m) - (sh_m * 60 + sm_m))}min"
+    elif t_kind in ("multi_intent_hetero", "multi_intent_homo"):
+        dual_w = _compute_dynamic_dual_windows(d_str, ts_ctx.get("seed_val", 1), item.get("idx", 1))
+        item.update(dual_w)
 
 
 def assign_blueprint_timestamps(
@@ -239,6 +266,8 @@ def assign_blueprint_timestamps(
     ood_e: str,
     dn_s: str,
     dn_e: str,
+    seed_val: int = 1,
+    rehearsal_mins: int = 30,
 ) -> list[dict]:
     """填充每个蓝图槽位的具体起止时间与流水编号。"""
     ts_ctx = {
@@ -247,6 +276,7 @@ def assign_blueprint_timestamps(
         "sub1_ref": sub1_ref, "sub1_s": sub1_s, "sub1_e": sub1_e,
         "sub2_ref": sub2_ref, "sub2_s": sub2_s, "sub2_e": sub2_e,
         "ood_s": ood_s, "ood_e": ood_e, "dn_s": dn_s, "dn_e": dn_e,
+        "seed_val": seed_val, "rehearsal_mins": rehearsal_mins,
     }
     final_blueprints = []
     for i, s in enumerate(selected):
