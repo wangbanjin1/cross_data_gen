@@ -325,7 +325,6 @@ class FactualAssemblerMixin:
     @staticmethod
     def _populate_standard_non_evidence_events(events: list[dict], b_type: str, exp_id: str | None, exp_c: dict, src: dict, vals: dict, intents: list[dict]) -> None:
         is_exp_learn = b_type == "experience_learning"
-        is_other_learn = is_exp_learn and exp_id != "EXP_PREWARM_BUFFER_01"
         events[0]["requested_params"] = []
         events[0]["turn_intents"] = [
             {
@@ -337,8 +336,8 @@ class FactualAssemblerMixin:
                 "params": {
                     "application_name": {"value": vals["app"], "source_type": src["app"][0], "source_ref": src["app"][1]},
                     "service_name": {"value": vals["srv"], "source_type": src["srv"][0], "source_ref": src["srv"][1]},
-                    "resolution": {"min_value": {"value": "1080p" if is_other_learn else vals["res"], "source_type": "Turn" if is_exp_learn else src["res"][0], "source_ref": "U1" if is_exp_learn else src["res"][1]}},
-                    "rtt": {"max_value": {"value": "50ms" if is_other_learn else vals["rtt"], "source_type": "Turn" if is_exp_learn else src["rtt"][0], "source_ref": "U1" if is_exp_learn else src["rtt"][1]}},
+                    "resolution": {"min_value": {"value": vals["res"], "source_type": "Turn" if is_exp_learn else src["res"][0], "source_ref": "U1" if is_exp_learn else src["res"][1]}},
+                    "rtt": {"max_value": {"value": vals["rtt"], "source_type": "Turn" if is_exp_learn else src["rtt"][0], "source_ref": "U1" if is_exp_learn else src["rtt"][1]}},
                     "timestamp": {
                         "start_timestamp": {"value": vals["t1_start"], "source_type": "Turn" if is_exp_learn else src["start"][0], "source_ref": "U1" if is_exp_learn else src["start"][1]},
                         "end_timestamp": {"value": vals["t1_end"], "source_type": "Turn" if is_exp_learn else src["end"][0], "source_ref": "U1" if is_exp_learn else src["end"][1]},

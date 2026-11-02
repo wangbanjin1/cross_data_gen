@@ -126,6 +126,19 @@ class SessionAssembler(
             tp["end_timestamp"],
             tp["duration"],
         )
+        tid = s_plan["template_id"]
+        role = s_plan["memory_role"]
+        rel_ids = ["I1", "I2"] if tid in ["X-1", "T1-3", "T2-4"] else ["I1"]
+        for idx, ev in enumerate(event_sequence, start=1):
+            if "related_intent_ids" not in ev:
+                ev["related_intent_ids"] = list(rel_ids)
+            if "requested_params" not in ev:
+                if idx == 1 and role == "evidence_session":
+                    ev["requested_params"] = ["resolution", "rtt", "duration"]
+                elif idx == 2 and tid == "T3-1":
+                    ev["requested_params"] = ["resolution"]
+                else:
+                    ev["requested_params"] = []
         tail_args = (event_sequence, snapshot_before, memory_events, gold_after)
         res = cls._dispatch_specialized_template(s_plan["template_id"], base_args, tp_args, tail_args, s_plan)
         if res is None:
