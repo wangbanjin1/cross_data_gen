@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="parchment">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>“联接”Agent 混合数据集（网元实时单据 + 自然语言对话）故事线与时间链系统构造方法论</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ],
+      throwOnError: false
+    });"></script>
+  <style>
+    :root, [data-theme="parchment"] {
+      --bg-page: #FBF7F0;
+      --bg-card: #FFFDF9;
+      --bg-elevated: #F5EFE4;
+      --bg-code: #F2ECE1;
+      --text-main: #2C2520;
+      --text-secondary: #5C5248;
+      --text-muted: #8A7E72;
+      --border-color: #E2D9C8;
+      --border-strong: #C9BBA6;
+      --accent-primary: #8C4A27;
+      --accent-secondary: #2B5B6C;
+      --semantic-red-bg: #FDF2F2;
+      --semantic-red-border: #E5A9A9;
+      --semantic-red-text: #8B2626;
+      --semantic-green-bg: #F1F8F4;
+      --semantic-green-border: #9BC9AE;
+      --semantic-green-text: #1E5E3A;
+      --semantic-blue-bg: #F0F6FA;
+      --semantic-blue-border: #A3C4DC;
+      --semantic-blue-text: #1F4E70;
+      --semantic-amber-bg: #FEF8EC;
+      --semantic-amber-border: #E6C88A;
+      --semantic-amber-text: #7D5211;
+      --shadow-sm: 0 2px 6px rgba(44, 37, 32, 0.05);
+      --shadow-md: 0 4px 14px rgba(44, 37, 32, 0.08);
+    }
+
+    [data-theme="github"] {
+      --bg-page: #F6F8FA;
+      --bg-card: #FFFFFF;
+      --bg-elevated: #EEF2F6;
+      --bg-code: #F6F8FA;
+      --text-main: #1F2328;
+      --text-secondary: #4D5562;
+      --text-muted: #6E7781;
+      --border-color: #D0D7DE;
+      --border-strong: #AFB8C1;
+      --accent-primary: #0969DA;
+      --accent-secondary: #1A7F37;
+      --semantic-red-bg: #FFEBE9;
+      --semantic-red-border: #FF818266;
+      --semantic-red-text: #CF222E;
+      --semantic-green-bg: #DAFBE1;
+      --semantic-green-border: #4AC26B66;
+      --semantic-green-text: #1A7F37;
+      --semantic-blue-bg: #DDF4FF;
+      --semantic-blue-border: #54AEFF66;
+      --semantic-blue-text: #0969DA;
+      --semantic-amber-bg: #FFF8C5;
+      --semantic-amber-border: #D4A72C66;
+      --semantic-amber-text: #9A6700;
+      --shadow-sm: 0 1px 3px rgba(31, 35, 40, 0.06);
+      --shadow-md: 0 4px 12px rgba(31, 35, 40, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      line-height: 1.68;
+      font-size: 15px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 28px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+    .topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .topbar-badge {
+      background: var(--accent-primary);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 5px;
+      letter-spacing: 0.4px;
+    }
+    .topbar-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .topbar-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn-group {
+      display: inline-flex;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .btn-toggle {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-toggle.active {
+      background: var(--accent-primary);
+      color: #fff;
+    }
+
+    .chapter-nav {
+      max-width: 1380px;
+      margin: 16px auto 0;
+      padding: 0 24px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .chap-tab {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 8px 15px;
+      border-radius: 6px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .chap-tab:hover {
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+    }
+    .chap-tab.active {
+      background: var(--accent-primary);
+      color: #fff;
+      border-color: var(--accent-primary);
+    }
+
+    .container {
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 20px 24px 64px;
+    }
+
+    .hero-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-left: 5px solid var(--accent-primary);
+      border-radius: 10px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .hero-title {
+      font-size: 23px;
+      font-weight: 800;
+      margin: 0 0 10px;
+      color: var(--text-main);
+    }
+    .hero-sub {
+      color: var(--text-secondary);
+      margin: 0 0 16px;
+      font-size: 14.5px;
+    }
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .kpi-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 16px;
+    }
+    .kpi-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .kpi-val {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--accent-primary);
+      margin-top: 4px;
+    }
+    .kpi-desc {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      margin-top: 3px;
+    }
+
+    .chapter-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 28px;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-sm);
+    }
+    .chapter-section.hidden-chapter {
+      display: none;
+    }
+    .sec-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 14px;
+      margin-bottom: 22px;
+    }
+    .sec-num {
+      background: var(--accent-secondary);
+      color: #fff;
+      font-weight: 800;
+      font-size: 14px;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+    .sec-title {
+      font-size: 20px;
+      font-weight: 800;
+      margin: 0;
+    }
+    h3 {
+      font-size: 16.5px;
+      font-weight: 700;
+      margin: 24px 0 12px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h3::before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 16px;
+      background: var(--accent-primary);
+      border-radius: 2px;
+    }
+
+    .dual-compare {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      gap: 18px;
+      margin: 16px 0 22px;
+    }
+    .compare-box {
+      border-radius: 8px;
+      padding: 18px 20px;
+      border: 1px solid;
+    }
+    .compare-box.pain {
+      background: var(--semantic-red-bg);
+      border-color: var(--semantic-red-border);
+    }
+    .compare-box.target {
+      background: var(--semantic-green-bg);
+      border-color: var(--semantic-green-border);
+    }
+    .compare-header {
+      font-weight: 800;
+      font-size: 15px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .compare-box.pain .compare-header { color: var(--semantic-red-text); }
+    .compare-box.target .compare-header { color: var(--semantic-green-text); }
+    .compare-list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 14px;
+    }
+    .compare-list li {
+      margin-bottom: 7px;
+    }
+
+    .arch-flow-wrapper {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 18px 0;
+    }
+    .arch-stage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      align-items: stretch;
+    }
+    .arch-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 15px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+    }
+    .arch-card.top-brown { border-top: 4px solid var(--accent-primary); }
+    .arch-card.top-teal { border-top: 4px solid var(--accent-secondary); }
+    .arch-card.top-green { border-top: 4px solid var(--semantic-green-text); }
+    .arch-card.top-amber { border-top: 4px solid var(--semantic-amber-text); }
+    .arch-card.top-red { border-top: 4px solid var(--semantic-red-text); }
+
+    .arch-card-title {
+      font-weight: 700;
+      font-size: 14.5px;
+      margin-bottom: 8px;
+      color: var(--text-main);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+    }
+    .arch-card-body {
+      font-size: 13.2px;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+    .arch-card-foot {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border-color);
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: "JetBrains Mono", Consolas, monospace;
+    }
+    .svg-connector-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 8px 0;
+      color: var(--accent-primary);
+      font-size: 12.5px;
+      font-weight: 600;
+      gap: 8px;
+    }
+
+    .formula-block {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--accent-secondary);
+      border-radius: 8px;
+      padding: 18px 22px;
+      margin: 18px 0;
+    }
+    .formula-title {
+      font-weight: 700;
+      font-size: 14.5px;
+      color: var(--accent-secondary);
+      margin-bottom: 8px;
+    }
+    .symbol-list {
+      margin: 12px 0 0;
+      padding: 12px 16px 12px 28px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 13.5px;
+      color: var(--text-secondary);
+    }
+    .symbol-list li {
+      margin-bottom: 6px;
+    }
+
+    pre, code {
+      font-family: "JetBrains Mono", "Fira Code", Consolas, "Courier New", monospace;
+    }
+    code {
+      background: var(--bg-code);
+      border: 1px solid var(--border-color);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: var(--accent-primary);
+    }
+    pre {
+      background: var(--bg-code);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 14px 16px;
+      overflow-x: auto;
+      font-size: 12.8px;
+      line-height: 1.55;
+      color: var(--text-main);
+      margin: 10px 0;
+    }
+    pre code {
+      border: none;
+      padding: 0;
+      background: transparent;
+      color: inherit;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin: 14px 0 20px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+      background: var(--bg-card);
+    }
+    th {
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      font-weight: 700;
+      text-align: left;
+      padding: 11px 14px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    td {
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+      color: var(--text-secondary);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg-elevated); }
+
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11.5px;
+      font-weight: 700;
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+    .pill-ticket { background: var(--semantic-blue-bg); color: var(--semantic-blue-text); border: 1px solid var(--semantic-blue-border); }
+    .pill-dlg { background: var(--semantic-amber-bg); color: var(--semantic-amber-text); border: 1px solid var(--semantic-amber-border); }
+    .pill-err { background: var(--semantic-red-bg); color: var(--semantic-red-text); border: 1px solid var(--semantic-red-border); }
+    .pill-ok { background: var(--semantic-green-bg); color: var(--semantic-green-text); border: 1px solid var(--semantic-green-border); }
+
+    .dim-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-top: 4px solid var(--accent-primary);
+      border-radius: 10px;
+      padding: 20px 22px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .dim-block.teal { border-top-color: var(--accent-secondary); }
+    .dim-block.green { border-top-color: var(--semantic-green-text); }
+    .dim-block.amber { border-top-color: var(--semantic-amber-text); }
+    .dim-block.red { border-top-color: var(--semantic-red-text); }
+
+    .dim-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .dim-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin: 0;
+    }
+    .dim-desc {
+      font-size: 13.8px;
+      color: var(--text-secondary);
+      margin: 0 0 14px;
+    }
+
+    .footer-note {
+      margin-top: 32px;
+      padding: 16px 20px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+    a {
+      color: var(--accent-primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-brand">
+      <span class="topbar-badge">STORYLINE METHODOLOGY v3.0</span>
+      <span class="topbar-title">“联接”Agent 多会话混合数据集（网元实时单据 + 自然语言对话）故事线与时间链系统构造方法论</span>
+    </div>
+    <div class="topbar-controls">
+      <div class="btn-group" role="group" aria-label="视图模式切换">
+        <button class="btn-toggle active" id="btn-view-all" onclick="setViewMode('all')">长卷通览</button>
+        <button class="btn-toggle" id="btn-view-focus" onclick="setViewMode('focus')">分章聚焦</button>
+      </div>
+      <div class="btn-group" role="group" aria-label="主题切换">
+        <button class="btn-toggle active" id="btn-theme-parchment" onclick="setTheme('parchment')">暖阳米纸 (#FBF7F0)</button>
+        <button class="btn-toggle" id="btn-theme-github" onclick="setTheme('github')">GitHub 简洁 (#F6F8FA)</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Chapter Navigation -->
+  <nav class="chapter-nav" id="chapter-nav">
+    <button class="chap-tab active" onclick="selectChapter(0)">一、文献范式对比与方法论演进</button>
+    <button class="chap-tab" onclick="selectChapter(1)">二、四层自顶向下故事线逆向合成体系</button>
+    <button class="chap-tab" onclick="selectChapter(2)">三、七大构造维度 × 28 项影响因子全景矩阵</button>
+    <button class="chap-tab" onclick="selectChapter(3)">四、时间链动力学与信息熵数学建模</button>
+    <button class="chap-tab" onclick="selectChapter(4)">五、单用户双轨故事线完整编排样本推演</button>
+  </nav>
+
+  <main class="container">
+
+    <!-- Hero Summary -->
+    <section class="hero-card">
+      <h1 class="hero-title">聚焦核心问题：当“网元实时单据（占多数，数据增强）+ 自然语言对话（占少数）”混合时，如何系统化构造故事线与时间链？</h1>
+      <p class="hero-sub">
+        在传统的 <code>PersonaMem-v1/v2</code> 思路中，故事线是一条<strong>单轨的纯自然语言聊天剧本</strong>（每个记忆点都必须靠用户和 Agent 聊一轮天来埋入或测试）。而在通信网络保障垂域（“联接”Agent）中，网元（UPF/PCF/NWDAF/gNodeB）会在用户每次实际保障或用网时发出<strong>实时单据（记录保障了什么业务、起止时间、小区/场馆、协商档位与实测无线 QoE）</strong>作为记忆系统的数据增强。这意味着故事线不再是“单轨对话链”，而是<strong>以“目标记忆演化图谱”为顶层约束、由“高频网元实时单据流（70%~80%）+ 低频异常/需求驱动的自然语言对话流（20%~30%）”双轨交织耦合而成的异步事件网</strong>。本报告系统化梳理故事线构造的四层生成架构、七大核心设计维度与 28 项影响因子。
+      </p>
+      <div class="kpi-strip">
+        <div class="kpi-box">
+          <div class="kpi-label">方法论核心范式</div>
+          <div class="kpi-val">记忆图谱逆向锚定</div>
+          <div class="kpi-desc">先定义待测记忆点的“建联→增强→冲突→衰减→复用”状态图，再向双轨时间链投射事件节点</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">双轨证据载体分工</div>
+          <div class="kpi-val">网元单据 75% : 对话 25%</div>
+          <div class="kpi-desc">网元单据负责高频客观数据增强与事实沉淀；对话负责主观意图表达、模糊指代与慢路径澄清</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">正交构造因子空间</div>
+          <div class="kpi-val">7 大维度 × 28 项因子</div>
+          <div class="kpi-desc">覆盖叙事拓扑、双通道证据分配、时间链动力学、单据-对话因果耦合、指代消歧、认知推理与噪声控制</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">核心泛化性保障</div>
+          <div class="kpi-val">消除位置与字面捷径</div>
+          <div class="kpi-desc">打破“1会话=1单据”的刚性对齐与近邻偏差（Recency Bias），强制跨流检索与多维推理</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- CHAPTER 1: 文献范式对比与方法论演进 -->
+    <!-- ===================================================================== -->
+    <section class="chapter-section" data-chapter="0">
+      <div class="sec-header">
+        <span class="sec-num">01</span>
+        <h2 class="sec-title">从 <code>PersonaMem-v2</code> 到“双轨事件图驱动”：故事线构造方法论的学术演进</h2>
+      </div>
+
+      <!-- 1. 痛点 vs 目标双栏对比 -->
+      <div class="dual-compare">
+        <div class="compare-box pain">
+          <div class="compare-header">❌ 纯对话故事线范式（PersonaMem-v1/v2 直接迁移）的四大结构性缺陷</div>
+          <ul class="compare-list">
+            <li><strong>缺陷 1：证据载体单一化（Single-Modality Bottleneck）</strong>：所有记忆点（周期习惯、场景档位、历史工单）只能通过“用户亲口在对话中说出来”来建联，违背了通信网中“用户绝大多数时候默默用网、由网元实时上报保障单据作为客观数据增强”的业务实质。</li>
+            <li><strong>缺陷 2：会话与单据 1:1 刚性捆绑（1-to-1 Lockstep Coupling）</strong>：每轮对话硬性绑定生成 1 张单据，导致时间轴上没有独立的网元单据流；模型只需寻找“上一轮对话说了什么”就能变相猜中单据内容，工作记忆检索退化为简单的上下文回溯。</li>
+            <li><strong>缺陷 3：对话触发缺乏客观物理动因（Unmotivated Dialogue Turns）</strong>：为什么用户在第 $k$ 天突然找 Agent 改参数或要求提前预热？纯对话剧本只能靠生硬的 Prompt 设定；而在真实网元增强体系下，<strong>前序网元单据上报的实测无线劣化（如 PRB 拥塞 95%、掉帧 8 次）才是触发后续对话的客观物理因</strong>。</li>
+            <li><strong>缺陷 4：时间链呈机械均匀网格（Rigid Temporal Grid）</strong>：缺乏“高频网元单据日常脉冲 + 偶发对话穿插 + 赛会日多单爆发簇 + 休假静默衰减期”的多尺度时间动力学结构。</li>
+          </ul>
+        </div>
+        <div class="compare-box target">
+          <div class="compare-header">✅ 双轨耦合故事线范式（网元实时单据增强 + 自然语言对话）的核心突破</div>
+          <ul class="compare-list">
+            <li><strong>突破 1：跨通道证据互补与增强（Cross-Channel Evidence Augmentation）</strong>：记忆点的证据被拆解分配到双轨上——对话提供“主观口语黑话与意图框架”，网元实时单据提供“高频客观执行记录、真实持续时长与无线测量指标”，两者联合才能拼出完整记忆图景。</li>
+            <li><strong>突破 2：非对称密度编排（Asymmetric Density，单据占 70%~80%）</strong>：在两轮自然语言会话之间，铺设多张无对话伴随的网元实时单据（`Dialogue-Free NE Tickets`），既用于后台隐式强化/更新用户画像，又作为后续对话跨流指代的锚点池。</li>
+            <li><strong>突破 3：网元单据驱动的因果闭环（NE-Ticket Driven Causality）</strong>：每一次慢路径消歧或经验学习对话，都在前序网元单据流中埋有客观伏笔（例如：前序同场馆上报了 2 张不同档位的网元单据 $\to$ 必然触发同场馆多单消歧；前序网元单据上报 `sla_degraded` $\to$ 必然触发预热或降档经验学习）。</li>
+            <li><strong>突破 4：多因子正交采样控制（Multi-Factor Orthogonal Control）</strong>：将时长、周期抖动、单据通道、无线状态、指代距离、语义脱钩度全部参数化为可独立采样的正交因子。</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 2. 实证文献方法论对照表 -->
+      <h3>业界代表性论文的故事线构造方法论剖析（基于 <code>literature-search-arxiv</code> 实证检索）</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 22%;">代表性工作与真实链接</th>
+              <th style="width: 38%;">论文中的故事线与时间链构造方法论</th>
+              <th style="width: 40%;">提炼融入我们“网元单据+对话”故事线的设计算子/机制</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong>PersonaMem-v1 / v2 / v3</strong><br/>
+                Bowen Jiang, Dan Roth 等<br/>
+                • <a href="https://arxiv.org/abs/2504.14225v2" target="_blank">arXiv:2504.14225v2</a> (v1)<br/>
+                • <a href="https://arxiv.org/abs/2512.06688v1" target="_blank">arXiv:2512.06688v1</a> (v2)<br/>
+                • <a href="https://arxiv.org/abs/2608.21381v2" target="_blank">arXiv:2608.21381v2</a> (v3, 2026-07)
+              </td>
+              <td>
+                • <strong>v1/v2</strong>：先采样静态画像 + 动态偏好演变弧（Preference Evolution Arcs：新增、修改、细化），再按线性会话序列渲染多轮聊天。<br/>
+                • <strong>v3（Omni-Platform 升级）</strong>：引入<strong>“隐式行为日志流（Implicit Engagement Logs，占绝大多数）+ 显式交互（Chatbot/Calendar）”</strong>双层时间轴，专门构造跨平台证据融合、时空上下文迁移（Geo-Temporal Shift）与过时偏好抑制测试点。
+              </td>
+              <td>
+                <strong>提炼机制：隐式单据流与显式对话流的双轨编排（Dual-Track Seeding）</strong><br/>
+                将原本在 v2 中全部塞进对话里的偏好演化弧，拆分为<strong>“网元单据隐式行为漂移弧”</strong>（如连续 5 张网元保障单据体现用户在某场地固定使用 1080p）与<strong>“对话显式声明/修正弧”</strong>，评测 Agent 跨单据与对话的综合归纳能力。
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>LoCoMo &amp; LoCoMo-Plus</strong><br/>
+                Adyasha Maharana 等 / Yifei Li 等<br/>
+                • <a href="https://arxiv.org/abs/2402.17753v1" target="_blank">arXiv:2402.17753v1</a> (ACL 2024)<br/>
+                • <a href="https://arxiv.org/abs/2602.10715v1" target="_blank">arXiv:2602.10715v1</a> (2026-02)
+              </td>
+              <td>
+                • <strong>LoCoMo</strong>：提出<strong>“底层时序因果事件图（Temporal Causal Event Graph）驱动表层会话生成”</strong>——先用有向无环图（DAG）生成人物在数月内的客观事件链（含因果边 $e_i \to e_j$），再从事件图的子集采样生成对话。<br/>
+                • <strong>LoCoMo-Plus</strong>：在故事线埋点端（Cue）与测试触发端（Trigger）之间强制施加<strong>字面语义脱钩（Semantic Disconnect）</strong>。
+              </td>
+              <td>
+                <strong>提炼机制：客观事件图全量映射为网元单据，稀疏采样映射为对话</strong><br/>
+                底层因果事件图 $\mathcal{G}=(\mathcal{E}, \mathcal{A})$ 中的每一个保障事件节点 $e_i$ 都<strong>全量生成网元实时单据</strong>（形成连续客观数据增强流），而仅在具有因果分叉、冲突或新场景节点的子集 $\mathcal{E}_{\text{dlg}} \subset \mathcal{E}$ 上派生自然语言对话，并在单据标准字段与用户口语之间施加语义脱钩。
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>LongMemEval &amp; DCPM</strong><br/>
+                Di Wu 等 (ICLR 2025) / Tianxiang Fei 等<br/>
+                • <a href="https://arxiv.org/abs/2410.10813v2" target="_blank">arXiv:2410.10813v2</a><br/>
+                • <a href="https://arxiv.org/abs/2606.09483v1" target="_blank">arXiv:2606.09483v1</a> (2026-06)
+              </td>
+              <td>
+                • <strong>LongMemEval</strong>：将故事线探针系统化划分为 5 类原子任务：单点抽取、跨会话多跳聚合、时序先后/间隔推理、版本覆盖更新（Knowledge Update）、未知拒识（Abstention），并通过注入任意比例的同分布干扰历史控制大海捞针难度。<br/>
+                • <strong>DCPM</strong>：区分同步版本覆盖链（System 1 `supersedes`）与异步跨事件模式归纳（System 2 Schema Induction）。
+              </td>
+              <td>
+                <strong>提炼机制：五类记忆生命周期算子与干扰间距控制</strong><br/>
+                在故事线编排时，强制确保每个用户的双轨时间链完整覆盖：<strong>① 跨多张网元单据的频次聚合归纳、② 时序相对窗口定位、③ 显/隐式参数覆写链、④ 跨单据与对话的冲突消解、⑤ 背景废单/跨域拒识</strong>。
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>CTBench &amp; TelcoAgent-Bench</strong><br/>
+                Xingyu Yan 等 / Lina Bariah 等<br/>
+                • <a href="https://arxiv.org/abs/2608.12002v2" target="_blank">arXiv:2608.12002v2</a> (2026-08)<br/>
+                • <a href="https://arxiv.org/abs/2604.06209v1" target="_blank">arXiv:2604.06209v1</a> (2026-03)
+              </td>
+              <td>
+                面向真实电信网络环境，构建<strong>“用户自然语言症状描述 + 网元多维遥测/配置单据（Golden Evidence Trajectories）”</strong>联合演进场景，强调单凭用户口语具有部分可观测性（Partial Observability），必须关联网元遥测证据才能完成根因诊断与策略修正。
+              </td>
+              <td>
+                <strong>提炼机制：网元遥测指标与对话意图的互补信息差设计（Information Asymmetry）</strong><br/>
+                构造故事线时，故意让用户在对话中隐藏或省略客观无线参数（用户只说体感或模糊时间锚点），将精确的业务参数、小区负载与故障根因放置在网元实时单据中，逼迫 Agent 依赖单据数据增强。
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>LAMP &amp; Language-TPP &amp; EasyTPP</strong><br/>
+                Xiaoming Shi 等 / Quyu Kong 等<br/>
+                • <a href="https://arxiv.org/abs/2305.16646v2" target="_blank">arXiv:2305.16646v2</a> (NeurIPS 2023)<br/>
+                • <a href="https://arxiv.org/abs/2502.07139v2" target="_blank">arXiv:2502.07139v2</a> (WWW 2026)<br/>
+                • <a href="https://arxiv.org/abs/2307.08097v3" target="_blank">arXiv:2307.08097v3</a> (ICLR 2024)
+              </td>
+              <td>
+                将异步离散事件流建模为带文本/结构化标记的<strong>时间点过程（Marked Temporal Point Process）</strong>，刻画周期基线到达与突发事件自激发/互激发簇拥（Hawkes Process），并在事件流上执行因果溯因推理（Abductive Reasoning）。
+              </td>
+              <td>
+                <strong>提炼机制：非均匀霍克斯时间链生成器</strong><br/>
+                用“昼夜/周历周期基线 + 异常单据互激发脉冲 + 跨周休眠空窗”替代固定步长日期生成，使故事线的时间分布具备真实的疏密节奏感。
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- CHAPTER 2: 四层自顶向下故事线逆向合成方法论 -->
+    <!-- ===================================================================== -->
+    <section class="chapter-section" data-chapter="1">
+      <div class="sec-header">
+        <span class="sec-num">02</span>
+        <h2 class="sec-title">整体系统方法论：四层自顶向下“记忆点逆向锚定 + 双轨编排”故事线架构</h2>
+      </div>
+
+      <p style="color: var(--text-secondary);">
+        构造“网元实时单据 + 自然语言对话”混合故事线，核心原则是<strong>“从终局评测目标（记忆点）逆向推导事件图，再将事件图按信息属性分流至网元单据轨与自然语言对话轨”</strong>。整体方法论分为自顶向下的四个正交层级：
+      </p>
+
+      <!-- 四层方法论防溢出架构图 -->
+      <div class="arch-flow-wrapper">
+        <div class="arch-stage-grid">
+          <div class="arch-card top-brown">
+            <div>
+              <div class="arch-card-title">
+                <span>Layer 1: 目标记忆点演化图谱</span>
+                <span class="pill pill-ok">What to Test</span>
+              </div>
+              <div class="arch-card-body">
+                先给定待考察的三层记忆集合 $\mathcal{M}^*$ 及其生命周期状态转移链：<br/>
+                • <strong>事实记忆节点</strong>：五类正交事实（`service_to_app`、`periodic_preference`、`preferred_value`、`scene_preference`、`expression`）<br/>
+                • <strong>工作记忆节点</strong>：待复刻/改签/消歧的目标历史保障事件<br/>
+                • <strong>经验记忆节点</strong>：待归纳的无线环境避坑与参数修正规则（如场馆预热、多流隔离、重叠顺延）
+              </div>
+            </div>
+            <div class="arch-card-foot">输出：记忆点状态演化有向图 (Memory Evolution DAG)</div>
+          </div>
+
+          <div class="arch-card top-teal">
+            <div>
+              <div class="arch-card-title">
+                <span>Layer 2: 宏观多线叙事拓扑层</span>
+                <span class="pill pill-ok">Macro Storylines</span>
+              </div>
+              <div class="arch-card-body">
+                围绕用户职业画像生成 60~90 天的多线生活/作业叙事骨架：<br/>
+                • <strong>1 条周期常驻主线 ($L_{\text{main}}$)</strong>：高频稳定的日常主业保障<br/>
+                • <strong>2 条移动/异地支线 ($L_{\text{sub1}}, L_{\text{sub2}}$)</strong>：不同场馆、通勤走廊与差异化业务<br/>
+                • <strong>$M$ 个外生环境冲击窗 ($W_{\text{evt}}$)</strong>：暴雨、大型赛会拥塞、法定节假日调休
+              </div>
+            </div>
+            <div class="arch-card-foot">输出：60~80 个底层业务活动事件序列 $\mathcal{E} = \{e_1, \dots, e_N\}$</div>
+          </div>
+
+          <div class="arch-card top-amber">
+            <div>
+              <div class="arch-card-title">
+                <span>Layer 3: 中观单据+对话双轨分流层</span>
+                <span class="pill pill-ticket">Dual-Track Routing</span>
+              </div>
+              <div class="arch-card-body">
+                将底层事件序列 $\mathcal{E}$ 投射到两条互补的观测轨道上：<br/>
+                • <strong>轨道 A：网元实时单据轨（占 70%~80%）</strong>：每次保障执行或背景用网均由网元发出实时结构化单据（提供高频数据增强、实测时长、小区位置与无线 QoE）<br/>
+                • <strong>轨道 B：自然语言对话轨（占 20%~30%）</strong>：仅在新场景建联、网元单据劣化追责、跨单模糊指代或改期冲突时派生多轮对话
+              </div>
+            </div>
+            <div class="arch-card-foot">输出：耦合双轨序列 $(\mathcal{R}_{\text{NE}}, \mathcal{S}_{\text{dlg}})$ 及跨轨外键指针</div>
+          </div>
+
+          <div class="arch-card top-green">
+            <div>
+              <div class="arch-card-title">
+                <span>Layer 4: 微观时间链与语义扰动层</span>
+                <span class="pill pill-dlg">Micro Perturbation</span>
+              </div>
+              <div class="arch-card-body">
+                对双轨节点施加微观多样性与防捷径扰动：<br/>
+                • <strong>时间动力学</strong>：周期微抖动 ($\pm 15\text{min}$)、赛事日多单爆发簇、跨周遗忘空窗、多分布随机时长<br/>
+                • <strong>语义脱钩</strong>：网元标准字段 vs. 用户口语黑话/体感描述脱钩<br/>
+                • <strong>噪声注入</strong>：短时未保障背景话单、闪断碎片单、同场馆异参干扰单
+              </div>
+            </div>
+            <div class="arch-card-foot">输出：高泛化、零硬编码的多会话混合数据集</div>
+          </div>
+        </div>
+
+        <div class="svg-connector-row">
+          <svg width="22" height="16" viewBox="0 0 22 16" fill="none"><path d="M1 8H20M20 8L14 2M20 8L14 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>核心方法论准则：每一个测试对话节点 $S_m$ 的标准答案，必须依赖于“前序网元单据流 $\mathcal{R}_{&lt;t}$ 的数据增强 $\oplus$ 历史对话流 $\mathcal{S}_{&lt;t}$ 的规则沉淀”联合推理得出</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- CHAPTER 3: 七大构造维度 × 28 项影响因子全景矩阵 -->
+    <!-- ===================================================================== -->
+    <section class="chapter-section" data-chapter="2">
+      <div class="sec-header">
+        <span class="sec-num">03</span>
+        <h2 class="sec-title">故事线构造的七大核心维度与 28 项影响因子全景设计矩阵（7D-28F Matrix）</h2>
+      </div>
+
+      <p style="color: var(--text-secondary);">
+        为了避免生成出千篇一律、被模型轻易通过表面统计规律（Shortcut Learning）刷高分的数据集，我们将故事线与时间链的构造解耦为以下 <strong>7 个正交设计维度、28 项可独立采样控制的影响因子</strong>：
+      </p>
+
+      <!-- 维度一 -->
+      <div class="dim-block">
+        <div class="dim-header">
+          <h4 class="dim-title">维度一：宏观叙事拓扑与多线交织维度（Narrative Topology &amp; Multi-Thread Interleaving）</h4>
+          <span class="pill pill-ok">决定故事线的宏观骨架结构（因子 F1.1 ~ F1.4）</span>
+        </div>
+        <p class="dim-desc">控制单个用户生命周期内多条业务故事线（常驻主线、移动转场支线、异地差旅支线、突发事件线）在时间轴上的穿插拓扑关系。</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 18%;">影响因子名称</th>
+                <th style="width: 28%;">因子取值空间（Value Space）</th>
+                <th style="width: 30%;">在“网元单据+对话”中的具体表现形式</th>
+                <th style="width: 24%;">对数据集泛化性与防捷径的作用</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>F1.1 多线交织拓扑模式</strong><br/>(Thread Interleaving Mode)</td>
+                <td>
+                  • <code>Alternating</code>（主支线高频交替）<br/>
+                  • <code>Nested_Block</code>（主线中嵌套连续多日异地差旅支线块）<br/>
+                  • <code>Concurrent_Day</code>（同日早晚主支线并行）<br/>
+                  • <code>Role_Swap</code>（支线在中后期晋升为新主线）
+                </td>
+                <td>
+                  例如在 <code>Nested_Block</code> 模式下，用户前 10 天网元持续上报滑雪基地主线单据，中间 7 天赴外地参赛连续上报奥体中心与高铁支线单据，第 18 天回到主线场地。
+                </td>
+                <td>
+                  打破“主线永远按固定轮次间隔出现”的机械规律，检验长期记忆在经历长段异地支线刷屏后能否精准恢复（Long-Range Recovery）。
+                </td>
+              </tr>
+              <tr>
+                <td><strong>F1.2 故事线物理触发源类型</strong><br/>(Storyline Trigger Physics)</td>
+                <td>
+                  • <code>Time_Periodic</code>（纯日历时钟触发）<br/>
+                  • <code>Geo_Mobility</code>（空间围栏/交通工具移动触发）<br/>
+                  • <code>Radio_Event</code>（突发无线负荷/极端天气触发）<br/>
+                  • <code>Joint_SpatioTemporal</code>（时间 $\land$ 场馆联合触发）
+                </td>
+                <td>
+                  网元单据天然携带 `start_timestamp`（时间）与 `cell_location`（空间基站）；不同故事线分别绑定时间窗路由 (`periodic_preference`) 或特定场地覆写 (`scene_preference`)。
+                </td>
+                <td>
+                  迫使检索模块同时具备时间窗口匹配与地点短词向量余弦相似度检索能力，防止单靠时间或单靠地点一招鲜。
+                </td>
+              </tr>
+              <tr>
+                <td><strong>F1.3 跨业务意图并发结构</strong><br/>(Multi-Intent Concurrency)</td>
+                <td>
+                  • <code>Single_Flow</code>（单业务流独立保障）<br/>
+                  • <code>Homo_Parallel</code>（同质双应用先后/并行保障）<br/>
+                  • <code>Hetero_Main_Bg</code>（核心低时延主流 + 后台大吞吐辅流并发）
+                </td>
+                <td>
+                  网元在同一时间窗内同时发出两张关联流单据（如 `抖音开直播 1080p/50ms` + `网盘素材回传 720p/200ms`），还原真实多任务用网现场。
+                </td>
+                <td>
+                  支撑异构双意图时延分流隔离（`EXP_MULTI_INTENT_PARTITION_01`），防止辅流挤占主流专网配额或主流高配参数错误传染给辅流。
+                </td>
+              </tr>
+              <tr>
+                <td><strong>F1.4 故事线演化跨度与总密度</strong><br/>(Horizon &amp; Event Density)</td>
+                <td>
+                  • 短跨度高密：$30\text{ 天} / 60\text{ 事件}$<br/>
+                  • 标准跨度：$60\text{ 天} / 70\text{ 事件}$<br/>
+                  • 超长跨季度：$120\text{ 天} / 95\text{ 事件}$
+                </td>
+                <td>
+                  灵活调整单用户的总时间跨度与网元单据总量，使相对时间指代（“上个月”、“两周前”、“前天”）跨越不同的日历尺度。
+                </td>
+                <td>
+                  提升时间解析引擎 (`TemporalEngine`) 在跨月、跨季、跨节假日推算上的泛化性。
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 维度二 -->
+      <div class="dim-block teal">
+        <div class="dim-header">
+          <h4 class="dim-title">维度二：记忆点埋点与双通道证据分配维度（Memory Seeding &amp; Dual-Channel Evidence Allocation）</h4>
+          <span class="pill pill-ticket">核心创新维度：如何利用网元单据做数据增强（因子 F2.1 ~ F2.4）</span>
+        </div>
+        <p class="dim-desc">决定每一个目标记忆点（事实偏好、工作历史、经验规则）是通过“自然语言对话口述”、“网元实时单据静默上报”还是“双通道互补拼图”写入记忆库。</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 18%;">影响因子名称</th>
+                <th style="width: 28%;">因子取值空间（Value Space）</th>
+                <th style="width: 30%;">在“网元单据+对话”中的具体表现形式</th>
+                <th style="width: 24%;">对数据集泛化性与防捷径的作用</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>F2.1 记忆证据通道分配模式</strong><br/>(Evidence Modality Split)</td>
+                <td>
+                  • <code>Dialogue_Explicit</code>（纯对话显式声明，占 $25\%$）<br/>
+                  • <code>NE_Ticket_Implicit</code>（纯网元单据静默归纳，占 $40\%$）<br/>
+                  • <code>Cross_Modal_Puzzle</code>（对话+网元单据互补拼图，占 $35\%$）
+                </td>
+                <td>
+                  • <strong>纯网元归纳</strong>：用户从未在对话里提过晚间会议习惯，但网元连续上报 5 张周二晚 `20:00 腾讯会议 1080p/50ms` 单据；<br/>
+                  • <strong>互补拼图</strong>：对话只说黑话别名（`“阿抖开播用超清”`），而标准时段与场馆位置由伴随的网元实时单据增强补齐。
+                </td>
+                <td>
+                  <strong>彻底打破纯对话数据集局限</strong>：如果 Agent 不消费网元实时单据做数据增强，将直接丢失 $40\%+$ 的隐式事实记忆与 $35\%$ 的互补槽位！
+                </td>
+              </tr>
+              <tr>
+                <td><strong>F2.2 隐式单据证据累积曲线</strong><br/>(Implicit Accumulation Curve)</td>
+                <td>
+                  • <code>Fast_Consolidation</code>（连续 $3$ 张同参网元单据即成习）<br/>
+                  • <code>Gradual_Noisy</code>（$5\sim 7$ 张单据中夹杂 $1$ 张偶发异参单，靠主频次归纳）<br/>
+                  • <code>Sub_Threshold_Probe</code>（仅 $1\sim 2$ 张单据，尚未构成稳定习惯）
+                </td>
+                <td>
+                  控制网元单据流中同一 `(time_window, location, app, service, qos)` 组合的出现频次与纯度。
+                </td>
+                <td>
+                  检验记忆萃取模块能否区分“偶发一次性用网单据（归入工作记忆）”与“高频重复规律单据（晋升为事实记忆 `periodic_preference` / `preferred_value`）”。
+                </td>
+              </tr>
+              <tr>
+                <td><strong>F2.3 记忆状态非单调演进轨迹</strong><br/>(Non-Monotonic Evolution Arc)</td>
+                <td>
+                  • <code>Static_Reinforce</code>（建联后持续强化不变）<br/>
+                  • <code>Stepwise_Upgrade</code>（如分辨率从 `720p` $\to$ `1080p` $\to$ `4K` 阶梯演进）<br/>
+                  • <code>Temp_Override_Revert</code>（突发事件临时降级后自动回退原基线）<br/>
+                  • <code>Abrupt_Supersede</code>（用户职业/设备变更导致旧偏好彻底作废）
+                </td>
+                <td>
+                  在 60 天故事线中，某主线偏好并非一成不变，而是伴随设备升级、场馆更换或天气事件发生版本演进。
+                </td>
+                <td>
+                  全面评测 `LongMemEval` 与 `DCPM` 强调的<strong>版本覆盖链（Supersedes Chain）</strong>与<strong>临时覆写隔离能力</strong>，防止陈旧记忆僵化。
+                </td>
+              </tr>
+              <tr>
+                <td><strong>F2.4 言行偏差与跨模态校准</strong><br/>(Verbal vs. NE-Ticket Drift)</td>
+                <td>
+                  • <code>Consistent</code>（对话口述与网元单据完全一致）<br/>
+                  • <code>Duration_Creep</code>（口头说保 `60min`，但近期网元单据实测每次都播满 `90min`）<br/>
+                  • <code>Silent_Gear_Shift</code>（早期对话定 `720p`，但近 6 张网元保障单据均已升档为 `1080p`）
+                </td>
+                <td>
+                  模拟真实用户“嘴上说的老印象”与“网元实时记录的近期真实高频行为”发生偏移。
+                </td>
+                <td>
+                  体现<strong>网元实时单据作为客观数据增强的核心价值</strong>：利用网元高频实测数据校准用户过时的口头声明，或在对话中主动向用户发起确认。
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 维度三 -->
+      <div class="dim-block green">
+        <div class="dim-header">
+          <h4 class="dim-title">维度三：时间链动力学与节律弹性维度（Timeline Dynamics &amp; Temporal Elasticity）</h4>
+          <span class="pill pill-ok">决定时间戳、间隔与时长的灵活度（因子 F3.1 ~ F3.4）</span>
+        </div>
+        <p class="dim-desc">摒弃固定 `120min` 时长或等间距日期排布，通过随机过程赋予时间链高度真实的生物钟抖动、簇拥爆发与遗忘衰减特性。</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 18%;">影响因子名称</th>
+                <th style="width: 28%;">因子取值空间（Value Space）</th>
+                <th style="width: 30%;">在“网元单据+对话”中的具体表现形式</th>
+                <th style="width: 24%;">对数据集泛化性与防捷径的作用</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>F3.1 多模态时长弹性分布</strong><br/>(Flexible Duration Mixture)</td>
+                <td>
+                  • 短促快单：$\{15, 20, 30, 45\}\text{ min}$<br/>
+                  • 标准业务单：$\{60, 75, 90, 105, 120\}\text{ min}$<br/>
+                  • 长程赛事/会议单：$\{135, 150, 180, 240\}\text{ min}$<br/>
+                  • 网元实测非整刻钟波动：如实测 `58min` / `93min`
+                </td>
+                <td>
+                  根据业务类型（如短视频上传 `20min`、日常直播 `60~90min`、大型赛事转播 `180min`）从多峰分布动态采样，且严格保证 `end - start == duration`。
+                </td>
+                <td>
+                  彻底根除任何固定时长（如写死 `120min`）的硬编码偏差，迫使模型从记忆槽位或网元单据中精确读取真实 `duration`。
+                </td>
+              </tr>
+              <tr>
+                <td><strong>F3.2 周期起止时间微抖动</strong><br/>(Circadian Window Jitter $\pm \delta_t$)</td>
+                <td>
+                  • 零抖动理想锚点：$\delta_t = 0\text{ min}$<br/>
+                  • 轻度日常波动：$\delta_t \sim \mathcal{U}(-10, +10)\text{ min}$<br/>
+                  • 场次顺延波动：$\delta_t \sim \mathcal{U}(-20, +30)\text{ min}$
+                </td>
+                <td>
+                  例如用户主线习惯为午间 `12:30-13:30`，网元连续 5 天上报的实际单据起止时间分别为 `12:25-13:25`、`12:32-13:32`、`12:30-13:30` 等。
+                </td>
+                <td>
+                  检验周期时间窗归纳算法的时间容差聚类能力（Time-Window Clustering），防止因几分钟的自然波动导致周期记忆无法命中。
+                </td>
+              </tr>
+              <tr>
+                <td><strong>F3.3 霍克斯短时爆发簇与休眠期</strong><br/>(Hawkes Burst vs. Dormancy Gap)</td>
+                <td>
+                  • <code>Routine_Steady</code>（日均 $1$ 单稳态）<br/>
+                  • <code>Event_Burst_Cluster</code>（单日内连续爆发 $3\sim 5$ 张网元单据 + $2$ 轮对话）<br/>
+                  • <code>Decay_Dormancy</code>（连续 $8\sim 14$ 天无事件休眠空窗）
+                </td>
+                <td>
+                  在巡回赛会日构造“早彩排单 $\to$ 午直播单 $\to$ 晚大巴转场单”的高密爆发簇；在休赛期构造长达两周的静默期。
+                </td>
+                <td>
+                  一方面通过同日多单爆发簇制造高难度的同日工单消歧；另一方面通过长休眠期真实检验艾宾浩斯遗忘曲线对临时偏好的清理作用。
+                </td>
+              </tr>
+              <tr>
+                <td><strong>F3.4 单据时间窗拓扑关系</strong><br/>(Allen's Interval Topology)</td>
+                <td>
+                  • <code>Disjoint</code>（时间窗完全相离）<br/>
+                  • <code>Meets / Back-to-Back</code>（首尾无缝相接，如 `18:00` 结束上一单，`18:00` 开启下一单）<br/>
+                  • <code>Overlaps</code>（新请求与既有周期保障单时间窗重叠冲突）
+                </td>
+                <td>
+                  在时间链上刻意编排新业务请求与后台即将生效的周期自动保障单发生 $30\text{ min}$ 重叠，或两场保障首尾紧接。
+                </td>
+                <td>
+                  自然衍生出 `EXP_OVERLAPPING_ORDER_RESOLUTION_01`（重叠工单冲突顺延/无缝切换经验），使时间推理不再局限于孤立单点。
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 维度四 -->
+      <div class="dim-block amber">
+        <div class="dim-header">
+          <h4 class="dim-title">维度四：网元单据与自然语言对话的因果耦合维度（NE-Ticket $\leftrightarrow$ Dialogue Causal Coupling）</h4>
+          <span class="pill pill-dlg">决定“何时只发单据、何时触发对话”及其因果距离（因子 F4.1 ~ F4.4）</span>
+        </div>
+        <p class="dim-desc">定义网元实时单据流 $\mathcal{R}$ 与自然语言对话流 $\mathcal{S}$ 之间的双向因果触发机理与跨时间步依赖距离。</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 18%;">影响因子名称</th>
+                <th style="width: 28%;">因子取值空间（Value Space）</th>
+                <th style="width: 30%;">在“网元单据+对话”中的具体表现形式</th>
+                <th style="width: 24%;">对数据集泛化性与防捷径的作用</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>F4.1 网元单据与对话配比因子</strong><br/>(Ticket-to-Dialogue Ratio $\rho_{\text{NE}}$)</td>
+                <td>
+                  • 轻度增强配比：$2:1$（$\rho_{\text{NE}} = 67\%$）<br/>
+                  • 标准增强配比：$3:1$（$\rho_{\text{NE}} = 75\%$）<br/>
+                  • 重度静默配比：$4.5:1$（$\rho_{\text{NE}} = 82\%$）
+                </td>
+                <td>
+                  每生成 1 轮自然语言对话，时间链上平均伴随生成 $3\sim 4$ 张无对话的网元实时保障单据（`source_session_id = null`）。
+                </td>
+                <td>
+                  高度还原真实电信网“网元单据占绝大多数、对话占少数”的流量分布，使工作记忆账本规模达到 $50\sim 80$ 笔/用户。
+                </td>
+              </tr>
+              <tr>
+                <td><strong>F4.2 网元异常单据前导激发模式</strong><br/>(NE-Anomaly Triggered Dialogue)</td>
+                <td>
+                  • <code>PRB_Congestion_Freeze</code>（场馆高负载未预热导致开播初卡顿）<br/>
+                  • <code>Mobility_Handover_Jitter</code>（高速移动走廊连续切换丢包）<br/>
+                  • <code>Uplink_BW_Squeeze</code>（并发后台大流量抢占上行导致掉帧）
+                </td>
+                <td>
+                  时刻 $t_1$ 网元 `NWDAF` 上报一张 `sla_verdict="sla_degraded"` 的实时诊断单据 $\longrightarrow$ 触发时刻 $t_2$ 用户在对话中抱怨卡顿并与 Agent 协商修正策略。
+                </td>
+                <td>
+                  <strong>为经验记忆（Experience Memory）提供坚实的物理因果链</strong>：经验规则不再凭空捏造，而是源于前序网元异常单据的客观诊断特征！
+                </td>
+              </tr>
+              <tr>
+                <td><strong>F4.3 对话后置网元实测回执增强</strong><br/>(Post-Dialogue NE Augmentation)</td>
+                <td>
+                  • <code>Exact_Match_Receipt</code>（按对话目标参数完美执行）<br/>
+                  • <code>Overrun_Extension_Receipt</code>（实际用网超时延长，网元单据记录真实长时长）<br/>
+                  • <code>Auto_Fallback_Receipt</code>（因无线突发受限，网元单据记录实际降级档位）
+                </td>
+                <td>
+                  用户在会话 $S_m$ 申办保障后，网元在业务结束时发出的单据 $R_k$ 不仅确认执行，还补充了对话结束后的<strong>真实完结状态与实测时长</strong>。
+                </td>
+                <td>
+                  当后续会话指代“上次那笔实际跑了多久/实际用的什么档位”时，必须以网元实测回执单据为准，而非仅看早期对话申请值。
+                </td>
+              </tr>
+              <tr>
+                <td><strong>F4.4 因果依赖跨度距离</strong><br/>(Causal Lag Distance $\Delta k$)</td>
+                <td>
+                  • 近邻依赖：$\Delta k = 1\sim 2$ 个事件步<br/>
+                  • 中距跨周依赖：$\Delta k = 5\sim 12$ 个事件步（中间穿插多张其他网元单据）<br/>
+                  • 远距跨月依赖：$\Delta k = 15\sim 35$ 个事件步
+                </td>
+                <td>
+                  在第 $t$ 天的网元单据中埋下某场馆保障记录，中间穿插 10 张日常主线单据与 3 轮其他对话后，在第 $t+14$ 天的对话中突然指代召回。
+                </td>
+                <td>
+                  <strong>彻底摧毁近邻位置偏差（Recency Bias）</strong>：任何只取最近 $1\sim 3$ 条记录的启发式策略必败，强制模型执行全局时序+向量混合检索。
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 维度五 -->
+      <div class="dim-block">
+        <div class="dim-header">
+          <h4 class="dim-title">维度五：跨流指代拓扑与消歧复杂度维度（Cross-Stream Referential &amp; Disambiguation Complexity）</h4>
+          <span class="pill pill-ticket">决定工作记忆检索与慢路径澄清的难度梯度（因子 F5.1 ~ F5.4）</span>
+        </div>
+        <p class="dim-desc">控制用户在自然语言对话中如何指代历史网元单据，以及候选网元单据集合的结构歧义度。</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 18%;">影响因子名称</th>
+                <th style="width: 28%;">因子取值空间（Value Space）</th>
+                <th style="width: 30%;">在“网元单据+对话”中的具体表现形式</th>
+                <th style="width: 24%;">对数据集泛化性与防捷径的作用</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>F5.1 指代目标单据的起源属性</strong><br/>(Target Ticket Provenance)</td>
+                <td>
+                  • <code>Dialogue_Linked_Ticket</code>（指代曾通过对话办理的单据，占 $40\%$）<br/>
+                  • <code>Pure_NE_Silent_Ticket</code>（<strong>指代无对应对话的纯网元实时单据</strong>，占 $60\%$）
+                </td>
+                <td>
+                  用户说：“帮我按上周四下午在奥体中心网元保障的那笔参数走”——而上周四下午并无任何对话记录，只有网元实时上报的保障单据！
+                </td>
+                <td>
+                  <strong>最核心的跨流验证探针</strong>：直接检验 Agent 是否真正打通了网元单据流工作记忆，若只检索历史对话文本则召回率为 $0\%$。
+                </td>
+              </tr>
+              <tr>
+                <td><strong>F5.2 指代锚点组合模态</strong><br/>(Referential Anchor Combination)</td>
+                <td>
+                  • <code>Time + Venue</code>（相对时间窗 + 场馆名）<br/>
+                  • <code>Venue + Service + Ordinal</code>（“上次在滑雪场开直播前做的那次会议单”）<br/>
+                  • <code>Venue + QoE_Verdict</code>（<strong>“上次在大巴上没掉帧卡顿的那笔保障”</strong>）
+                </td>
+                <td>
+                  利用网元单据独有的 `sla_verdict` 与 `video_freeze_count` 字段，支持用户按“保障体验好坏”进行正向复刻或负向排他指代。
+                </td>
+                <td>
+                  检验否定子句分离与权重衰减过滤（如“别按卡顿那笔，按稳住 50ms 那笔”）以及对网元 QoE 增强字段的结构化过滤能力。
+                </td>
+              </tr>
+              <tr>
+                <td><strong>F5.3 候选单据碰撞度与消歧分支</strong><br/>(Candidate Collision Multiplicity)</td>
+                <td>
+                  • $|\mathcal{C}| = 1$（唯一命中 $\to$ 快路径一步闭环）<br/>
+                  • $|\mathcal{C}| = 2$（双单碰撞 $\to$ 2 轮慢路径澄清）<br/>
+                  • $|\mathcal{C}| \ge 3$（多单簇碰撞 $\to$ 结合时间段+画质档位联合消歧）
+                </td>
+                <td>
+                  在故事线前序节点中，刻意安排同一天/同一场馆网元上报多张不同参数或不同业务的保障单据（如上午 `720p` 彩排单 + 下午 `1080p` 正式单）。
+                </td>
+                <td>
+                  让慢路径消歧（Slow-Path Clarification）不再是生硬的固定模板，而是由底层网元单据库中真实存在的 $|\mathcal{C}| \ge 2$ 异参候选集自然触发！
+                </td>
+              </tr>
+              <tr>
+                <td><strong>F5.4 线索-触发跨模态语义脱钩度</strong><br/>(Cue-Trigger Semantic Disconnect)</td>
+                <td>
+                  • <code>Lv1_Lexical</code>（字面包含，如 `奥体中心` $\leftrightarrow$ `奥体中心`）<br/>
+                  • <code>Lv2_Alias</code>（个性化黑话映射，如 `阿抖推流` $\leftrightarrow$ `抖音:开直播`）<br/>
+                  • <code>Lv3_Physical_Colloquial</code>（网元基站标准名 $\leftrightarrow$ 用户口语场景描述）
+                </td>
+                <td>
+                  网元单据 `location` 记录为 `京礼高速太子城隧道群移动走廊`，用户对话口语说 `上次去崇礼路上钻山洞信号老断那段`，零字面重合。
+                </td>
+                <td>
+                  遵循 `LoCoMo-Plus` 思想，淘汰死板的字符串匹配或正则切词，强制依赖高纯度短窗口向量相似度检索与同行槽位提取。
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 维度六 & 维度七 双栏并列或上下展示 -->
+      <div class="dim-block teal">
+        <div class="dim-header">
+          <h4 class="dim-title">维度六：认知推理深度与槽位修正复杂度维度（Cognitive Reasoning &amp; Slot Revision Complexity）</h4>
+          <span class="pill pill-ok">决定召回记忆后的二次推理与参数计算难度（因子 F6.1 ~ F6.4）</span>
+        </div>
+        <p class="dim-desc">即使检索命中了正确的网元单据或事实/经验记忆，模型仍需结合当前会话语境执行参数差分覆写、经验缓冲计算或多规则优先级裁决。</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 18%;">影响因子名称</th>
+                <th style="width: 28%;">因子取值空间（Value Space）</th>
+                <th style="width: 30%;">在“网元单据+对话”中的具体表现形式</th>
+                <th style="width: 24%;">对数据集泛化性与防捷径的作用</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>F6.1 单据基准上的槽位差分修正</strong><br/>(Ticket-Anchored Slot Diffing)</td>
+                <td>
+                  • <code>Full_Clone</code>（全槽位原样照搬）<br/>
+                  • <code>Partial_Override</code>（继承网元单据的 App/画质/时延，修改时长或起点）<br/>
+                  • <code>Cross_App_Transfer</code>（继承历史单据的场馆高规格 QoS 档位，迁移至新应用）
+                </td>
+                <td>
+                  用户说：“照搬周三网元保的那笔大巴会议的时延和画质档位，但今天换用钉钉开会，时长延长到 90 分钟。”
+                </td>
+                <td>
+                  防止模型无脑将检索到的历史网元单据全盘复制输出，要求精细对齐“历史单据继承槽位”与“当前对话显式覆写槽位”。
+                </td>
+              </tr>
+              <tr>
+                <td><strong>F6.2 经验规则的参数调整计算</strong><br/>(Experience Slot Revision Math)</td>
+                <td>
+                  • 前置预热缓冲：$t_{\text{start}}' = t_{\text{start}} - \Delta t_{\text{buf}}, \; d' = d + \Delta t_{\text{buf}}$<br/>
+                  • 重叠顺延切分：$t_{\text{start,2}}' = t_{\text{end,1}}$<br/>
+                  • 异构双流时延隔离：主流 $\text{rtt}_1=30\text{ms}$, 辅流 $\text{rtt}_2=150\text{ms}$
+                </td>
+                <td>
+                  预热缓冲时长 $\Delta t_{\text{buf}} \in \{15, 20, 30, 45\}\text{ min}$ 根据画像与场馆规模动态设定（非固定 30min），模型需根据沉淀的经验卡动态计算起止时间。
+                </td>
+                <td>
+                  检验模型对参数调整规则（Slot Revision Rule）的泛化算术推理能力，杜绝背诵固定时间偏移量。
+                </td>
+              </tr>
+              <tr>
+                <td><strong>F6.3 多层记忆冲突裁决优先级</strong><br/>(Cross-Tier Priority Resolution)</td>
+                <td>
+                  `当前显式口令` $&gt;$ `突发事件临时覆盖 (Event Override)` $&gt;$ `特定场馆经验/场景偏好 (Scene + Exp)` $&gt;$ `通用周期默认偏好 (Preferred Value)`
+                </td>
+                <td>
+                  当用户在日常周期时段（习惯在滑雪场用 `1080p/50ms`）临时身处暴雨抢险现场或高铁弱网走廊时，故事线同时激活周期记忆与场景/事件记忆。
+                </td>
+                <td>
+                  检验三层记忆融合时的<strong>作用域特异性优先级（Specificity Precedence）</strong>，防止通用默认参数错误覆盖特殊无线场景要求。
+                </td>
+              </tr>
+              <tr>
+                <td><strong>F6.4 快慢双路径动态切换门控</strong><br/>(Fast vs. Slow Path Switching)</td>
+                <td>
+                  • <code>Fast_Path_1Turn</code>（信息完备且唯一命中，首轮直接闭环）<br/>
+                  • <code>Slow_Path_2Turn</code>（存在 1 项歧义或缺口，澄清 1 轮后闭环）<br/>
+                  • <code>Slow_Path_3Turn</code>（多单冲突 + 经验参数确认，3 轮交互闭环）
+                </td>
+                <td>
+                  故事线中同一类记忆任务同时设置“首轮给齐条件（测快路径）”与“首轮故意隐去场馆或具体场次（测慢路径）”的对偶评测节点。
+                </td>
+                <td>
+                  防止模型养成“不管三七二十一先反问一轮”或“不管有没有歧义盲目瞎猜输出”的极端偏置。
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 维度七 -->
+      <div class="dim-block red">
+        <div class="dim-header">
+          <h4 class="dim-title">维度七：网元背景流噪声与边界拒识控制维度（NE Background Noise &amp; Abstention Control）</h4>
+          <span class="pill pill-err">决定大海捞针信噪比与抗污染能力（因子 F7.1 ~ F7.4）</span>
+        </div>
+        <p class="dim-desc">真实网元每时每刻都在产生海量信令与背景流量话单；在故事线中可控地注入高拟真网元噪声单据，是检验记忆系统过滤纯度与鲁棒性的关键。</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 18%;">影响因子名称</th>
+                <th style="width: 28%;">因子取值空间（Value Space）</th>
+                <th style="width: 30%;">在“网元单据+对话”中的具体表现形式</th>
+                <th style="width: 24%;">对数据集泛化性与防捷径的作用</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>F7.1 短时未保障背景流量单据</strong><br/>(Transient Unassured XDR Noise)</td>
+                <td>
+                  噪声占比 $\rho_{\text{noise}} \in [10\%, 25\%]$，单据时长 $d \in [1, 8]\text{ min}$，标记 `assurance_flag=false`
+                </td>
+                <td>
+                  用户在休息间隙刷了 4 分钟抖音短视频、发了 3 分钟微信语音，网元 DPI 照常生成短时流量话单混入账本。
+                </td>
+                <td>
+                  防止记忆系统将用户“随手刷 3 分钟抖音”误归纳为“开直播周期偏好”，或在进行工作记忆检索时被短时碎片话单干扰。
+                </td>
+              </tr>
+              <tr>
+                <td><strong>F7.2 无线闪断导致的分裂子单据</strong><br/>(Radio Drop Split Sub-Tickets)</td>
+                <td>
+                  单次完整业务因进出隧道/电梯断流 $1\sim 2\text{ min}$，被网元切分为两张紧邻子单据 $R_{k,a}, R_{k,b}$
+                </td>
+                <td>
+                  例如 `12:30-12:52 (22min)` 与 `12:53-13:30 (37min)` 两张同小区同业务单据，实际对应一次 `60min` 的完整直播。
+                </td>
+                <td>
+                  考察记忆预处理与工作记忆聚合层对<strong>网元碎片话单会话合并（Sessionization / De-fragmentation）</strong>的工程鲁棒性。
+                </td>
+              </tr>
+              <tr>
+                <td><strong>F7.3 提单即退订/未生效废单</strong><br/>(Aborted / Rejected Glitch Tickets)</td>
+                <td>
+                  `sla_verdict` 取值为 `aborted_within_1min` 或 `resource_admission_rejected`
+                </td>
+                <td>
+                  某次保障因用户临时取消或瞬间信令超时未实际执行，网元单据状态标记为无效废单。
+                </td>
+                <td>
+                  当用户说“按上次成功保障完的那笔办”时，检索器必须过滤掉状态为 `aborted / rejected` 的废单。
+                </td>
+              </tr>
+              <tr>
+                <td><strong>F7.4 垂域外运维/资费拒识探针</strong><br/>(Out-of-Domain Abstention Probes)</td>
+                <td>
+                  • 纯 OOD 会话（如查话费账单、报修家庭宽带光纤）<br/>
+                  • 混合意图会话（前半句办无线直播保障 + 后半句退订国际漫游套餐）
+                </td>
+                <td>
+                  在故事线中随机穿插 $1\sim 2$ 轮纯 OOD 或混合 OOD 请求。
+                </td>
+                <td>
+                  检验 `LongMemEval` 中的<strong>弃权拒识能力（Abstention）</strong>：既要精准提取无线 QoS 保障意图，又要严密拒识非联接保障域请求。
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- CHAPTER 4: 时间链动力学与信息熵数学建模 -->
+    <!-- ===================================================================== -->
+    <section class="chapter-section" data-chapter="3">
+      <div class="sec-header">
+        <span class="sec-num">04</span>
+        <h2 class="sec-title">故事线与时间链生成的形式化数学模型（Mathematical Formulation）</h2>
+      </div>
+
+      <div class="formula-block">
+        <div class="formula-title">公式 1：基于记忆演化有向图 $\mathcal{G}_{\text{mem}}$ 的双轨事件序列生成模型（Memory-Graph Grounded Dual-Stream Process）</div>
+        $$
+        P\bigl(\mathcal{R}_{\text{NE}}, \mathcal{S}_{\text{dlg}} \;\big|\; \mathcal{G}_{\text{mem}}, \Theta_{\text{persona}}\bigr) = \prod_{i=1}^{N} \underbrace{P_{\text{time}}\bigl(t_i, \Delta t_i \mid \mathcal{H}_{&lt;t_i}, \Theta_{\text{persona}}\bigr)}_{\text{非均匀霍克斯时间链生成}} \cdot \underbrace{P_{\text{NE}}\bigl(r_i \mid e_i, \mathbf{z}_i^{\text{radio}}\bigr)}_{\text{网元实时单据生成 (100% 伴随)}} \cdot \underbrace{P_{\text{gate}}\bigl(\mathbb{I}_{\text{dlg}}^{(i)} \mid e_i, r_{&lt;i}, \mathcal{G}_{\text{mem}}\bigr)}_{\text{对话轨道稀疏触发门控 (20%~30%)}}
+        $$
+        <ul class="symbol-list">
+          <li>$\mathcal{G}_{\text{mem}} = (\mathcal{V}_{\text{mem}}, \mathcal{A}_{\text{evol}})$：顶层设计的<strong>目标记忆点演化图谱</strong>，顶点 $\mathcal{V}_{\text{mem}}$ 包含该用户待考察的所有事实偏好、工作历史锚点与经验规则，有向边 $\mathcal{A}_{\text{evol}}$ 定义“建联（Seed）$\to$ 单据强化（NE-Reinforce）$\to$ 异常激发（Anomaly-Excite）$\to$ 冲突消歧（Disambiguate）$\to$ 远距复用（Long-Range Reuse）”的拓扑约束。</li>
+          <li>$P_{\text{time}}(t_i, \Delta t_i \mid \mathcal{H}_{&lt;t_i}, \Theta_{\text{persona}})$：第 $i$ 个业务事件的发生时刻 $t_i$ 与持续时长 $\Delta t_i$ 的联合分布，融合昼夜/周历周期高斯核、微抖动 $\delta_t \sim \mathcal{U}(-15, +15)\text{ min}$ 与多峰时长分布。</li>
+          <li>$P_{\text{NE}}(r_i \mid e_i, \mathbf{z}_i^{\text{radio}})$：给定业务事件 $e_i$ 与当时基站无线状态 $\mathbf{z}_i^{\text{radio}}$（PRB 利用率、移动速度、切换频次），由网元模拟器生成结构化实时单据 $r_i \in \mathcal{R}_{\text{NE}}$。</li>
+          <li>$P_{\text{gate}}(\mathbb{I}_{\text{dlg}}^{(i)} \mid e_i, r_{&lt;i}, \mathcal{G}_{\text{mem}})$：决定第 $i$ 个事件是否同时派生自然语言对话会话 $s_i \in \mathcal{S}_{\text{dlg}}$ 的伯努利门控函数；当 $\mathbb{I}_{\text{dlg}}^{(i)} = 0$（占 $70\%\sim 80\%$）时，该节点仅生成网元实时单据 $r_i$ 作为后台数据增强。</li>
+        </ul>
+      </div>
+
+      <div class="formula-block">
+        <div class="formula-title">公式 2：故事线跨通道协同度与防捷径信息增益指标（Cross-Modal Synergy &amp; Anti-Shortcut Information Gain）</div>
+        $$
+        \text{IG}_{\text{NE}}\bigl(Y_{\text{target}} \;\big|\; \mathcal{S}_{&lt;t}, \mathcal{R}_{&lt;t}\bigr) = H\bigl(Y_{\text{target}} \mid \mathcal{S}_{&lt;t}\bigr) - H\bigl(Y_{\text{target}} \mid \mathcal{S}_{&lt;t}, \mathcal{R}_{&lt;t}\bigr) \ge \gamma_{\min}
+        $$
+        <ul class="symbol-list">
+          <li>$Y_{\text{target}}$：测试会话节点的目标输出保障参数集合（`application, service, start_time, end_time, duration, resolution, rtt_max`）。</li>
+          <li>$H(Y_{\text{target}} \mid \mathcal{S}_{&lt;t})$：<strong>仅给定历史自然语言对话流 $\mathcal{S}_{&lt;t}$</strong>（屏蔽网元实时单据流 $\mathcal{R}_{&lt;t}$）时，目标保障参数的条件信息熵。</li>
+          <li>$H(Y_{\text{target}} \mid \mathcal{S}_{&lt;t}, \mathcal{R}_{&lt;t})$：<strong>同时给定历史对话流 $\mathcal{S}_{&lt;t}$ 与网元实时单据数据增强流 $\mathcal{R}_{&lt;t}$</strong> 时的条件信息熵。</li>
+          <li>$\text{IG}_{\text{NE}} \ge \gamma_{\min}$：<strong>网元单据数据增强的必要信息增益约束</strong>（默认阈值 $\gamma_{\min} = 1.5\text{ bits}$）。该公式从信息论上保证：故事线中设计的评测节点，<strong>绝不能单靠阅读历史对话文本就猜出全部正确槽位</strong>，必须通过检索与消费网元实时单据流 $\mathcal{R}_{&lt;t}$ 获得关键信息增益（如无对话单据的档位、实测时长或无线劣化诊断）才能消解不确定性！</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- CHAPTER 5: 单用户双轨故事线完整编排样本推演 -->
+    <!-- ===================================================================== -->
+    <section class="chapter-section" data-chapter="4">
+      <div class="sec-header">
+        <span class="sec-num">05</span>
+        <h2 class="sec-title">真实样本举例：单用户 30 天“网元单据增强轨 + 自然语言对话轨”双轨故事线编排全景表</h2>
+      </div>
+
+      <p style="color: var(--text-secondary);">
+        下面以用户 <code>mobile_persona_001</code>（巡回活动讲者）在 30 天内的一个浓缩故事线切片（包含 <strong>15 张网元实时单据 `NE-01 ~ NE-15` + 5 轮自然语言对话 `S-01 ~ S-05`</strong>，单据:对话 = $3:1$）为例，直观展示上述 <strong>七大维度与 28 项影响因子</strong> 是如何具体落点并交织成一条严密故事线的：
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 12%;">时间轴节点</th>
+              <th style="width: 18%;">轨道 A：网元实时单据流 $\mathcal{R}_{\text{NE}}$<br/>(高频客观数据增强，100% 在轨)</th>
+              <th style="width: 22%;">轨道 B：自然语言对话流 $\mathcal{S}_{\text{dlg}}$<br/>(稀疏触发，仅占 25%)</th>
+              <th style="width: 24%;">激活的故事线构造维度与影响因子</th>
+              <th style="width: 24%;">对三层认知记忆的数据增强与评测作用</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong>Day 01 (周一)</strong><br/>
+                <code>12:25 - 13:25</code><br/>
+                (时长 <code>60min</code>)
+              </td>
+              <td>
+                <span class="pill pill-ticket">NE-01 (伴随回执单)</span><br/>
+                <code>PCF_UPF_JOINT_TICKET</code><br/>
+                • 业务：`抖音 | 开直播`<br/>
+                • 档位：`1080p | 50ms`<br/>
+                • 基站位置：`露天高山滑雪训练基地`<br/>
+                • 实测：`rtt_p95=36ms, sla_met`
+              </td>
+              <td>
+                <span class="pill pill-dlg">对话 S-01 (冷启动建联)</span><br/>
+                用户首次用口语黑话声明：“以后每天午休十二点半在滑雪基地用阿抖推流一小时，给我锁定 1080p 超清、50ms 内。”
+              </td>
+              <td>
+                • <strong>F1.2</strong>：`Time_Periodic` 主线锚定<br/>
+                • <strong>F2.1</strong>：`Cross_Modal_Puzzle`（对话提供黑话映射 `阿抖->抖音`，网元单据确认基站位置与实测达标）
+              </td>
+              <td>
+                • <strong>事实记忆建联</strong>：写入 `expression`、`service_to_app`、`periodic_preference (12:30-13:30)` 与 `preferred_value (1080p/50ms)`。<br/>
+                • <strong>工作记忆</strong>：落盘首张网元单据 `NE-01`。
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Day 02 ~ Day 05</strong><br/>
+                (周二至周五)<br/>
+                时长：<code>60m / 75m / 45m / 90m</code>
+              </td>
+              <td>
+                <span class="pill pill-ticket">NE-02 ~ NE-07 (纯网元单据流)</span><br/>
+                • `NE-02, 04, 06`：午间 `12:28~12:35` 滑雪基地抖音直播单（带 $\pm 5\text{min}$ 周期微抖动，`sla_met`）；<br/>
+                • <strong>`NE-03, 05`（周二/周四 18:15-19:30, `75min`）</strong>：网元上报用户在 `大巴跨城转场高速公路` 运行 `腾讯会议 720p/100ms` 保障单；<br/>
+                • <strong>`NE-07`（周五 15:10, `3min`）</strong>：刷短视频未保障背景噪声单 (`assurance=false`)。
+              </td>
+              <td>
+                <strong>【无自然语言对话】</strong><br/>
+                <em>（这 4 天用户完全没有找 Agent 说话，全部由网元实时单据在后台持续上报数据增强！）</em>
+              </td>
+              <td>
+                • <strong>F2.1 &amp; F2.2</strong>：`NE_Ticket_Implicit`（纯靠网元单据隐式归纳支线 1）<br/>
+                • <strong>F3.1 &amp; F3.2</strong>：多粒度时长 (`75min/3min`) + 周期微抖动<br/>
+                • <strong>F7.1</strong>：注入 `3min` 短时背景流噪声单 `NE-07`
+              </td>
+              <td>
+                • <strong>核心数据增强效果</strong>：<br/>
+                1. `NE-02,04,06` 持续为午间直播主线提供频次保鲜增强；<br/>
+                2. <strong>`NE-03,05` 在零对话情况下，让记忆系统通过网元单据归纳出“大巴转场 $\to$ 腾讯会议 720p/100ms”的场景偏好</strong>；<br/>
+                3. 噪声单 `NE-07` 检验萃取器对短时非保障流量的过滤。
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Day 08 (下周一)</strong><br/>
+                <code>18:10</code>
+              </td>
+              <td>
+                <span class="pill pill-ticket">NE-08 (伴随回执单)</span><br/>
+                会话结束后网元上报：`18:15-19:30 (75min) 腾讯会议 720p/100ms`，`sla_met`。
+              </td>
+              <td>
+                <span class="pill pill-dlg">对话 S-02 (指代纯网元单据)</span><br/>
+                <strong>用户</strong>：“今天 18:15 又要坐大巴跨城转场了，帮我按上周四傍晚车上网元保障的那套会议配置再来一单。”
+              </td>
+              <td>
+                • <strong>F5.1</strong>：`Pure_NE_Silent_Ticket`（指代从未在对话中出现过的 `NE-05`）<br/>
+                • <strong>F4.4</strong>：跨多张单据的中距因果召回 ($\Delta k = 3$)
+              </td>
+              <td>
+                • <strong>验证公式 2 ($\text{IG}_{\text{NE}} &gt; 0$)</strong>：由于上周四完全没有对话，模型必须检索网元单据表命中 `NE-05`，读取同行槽位列 `75min | 720p | 100ms` 完成快路径闭环。
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Day 10 (周三赛事日)</strong><br/>
+                单日 3 单爆发簇<br/>
+                (`45m / 90m / 120m`)
+              </td>
+              <td>
+                <span class="pill pill-ticket">NE-09, NE-10, NE-11 (同日三单簇)</span><br/>
+                均位于 `奥林匹克体育中心多功能馆`：<br/>
+                • <strong>`NE-09` (09:30-10:15, `45min`)</strong>：抖音开直播 `720p/80ms`（上午空载彩排，`sla_met, freeze=0`）；<br/>
+                • <strong>`NE-10` (12:30-14:00, `90min`)</strong>：抖音开直播 `1080p/50ms`（<strong>`NWDAF` 上报 `sla_degraded`：入场高峰 PRB 负载 96%，未提前预热导致前 15 分钟卡顿 8 次</strong>）；<br/>
+                • <strong>`NE-11` (14:05-14:06, `1min`)</strong>：误触即退订废单 (`aborted_within_1min`)。
+              </td>
+              <td>
+                <strong>【无自然语言对话】</strong><br/>
+                <em>（赛事日当天网元密集上报了“达标彩排单 + 劣化正式单 + 1分钟退订废单”三张同场馆单据，埋下双重伏笔！）</em>
+              </td>
+              <td>
+                • <strong>F3.3</strong>：`Event_Burst_Cluster`（霍克斯同日多单爆发簇）<br/>
+                • <strong>F4.2</strong>：`PRB_Congestion_Freeze` 网元劣化诊断埋点<br/>
+                • <strong>F5.3 &amp; F7.3</strong>：同场馆多单碰撞 + 退订废单干扰
+              </td>
+              <td>
+                • 在工作记忆账本中同一天、同一场馆构造了 3 张状态与参数截然不同的网元单据，为后续的<strong>慢路径质量消歧</strong>与<strong>经验规则归纳</strong>提供高拟真物理现场。
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Day 12 (周五)</strong><br/>
+                <code>11:40</code>
+              </td>
+              <td>
+                <span class="pill pill-ticket">NE-12 (预热修正后回执单)</span><br/>
+                网元上报：`12:00-14:00 (120min)` 抖音开直播 `1080p/50ms`，因提前 30min 预留资源池，实测 `rtt_p95=41ms, freeze=0, sla_met`！
+              </td>
+              <td>
+                <span class="pill pill-dlg">对话 S-03 (网元异常激发经验学习)</span><br/>
+                <strong>用户</strong>：“前天中午在奥体中心那场正式直播刚开播卡得厉害，今天 12:30 我还在奥体多功能馆播一个半钟头，你查查前天网元单据诊断是啥原因，今天给我提前半小时预热锁好通道！”
+              </td>
+              <td>
+                • <strong>F4.2</strong>：网元异常单据 `NE-10` 激发自然语言复盘对话<br/>
+                • <strong>F6.2</strong>：参数调整规则计算（`12:30-14:00 (90min)` $\xrightarrow{-30\text{min}}$ `12:00-14:00 (120min)`）
+              </td>
+              <td>
+                • <strong>慢路径交互归纳与经验规则沉淀</strong>：Agent 检索 `NE-10` 的网元诊断列（`PRB=96%, 未提前30min预热`）对齐用户指令，沉淀出经验卡片 `EXP_PREWARM_BUFFER_01`，并由 `NE-12` 的 `sla_met` 正向验证经验有效性！
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Day 13 ~ Day 22</strong><br/>
+                (跨周演进与漂移)
+              </td>
+              <td>
+                <span class="pill pill-ticket">NE-13 ~ NE-14</span><br/>
+                连续上报用户在滑雪基地午间直播时，实际推流时长均从早期的 `60min` 延长至 `90min (12:30-14:00)`。
+              </td>
+              <td>
+                <span class="pill pill-dlg">对话 S-04 (同场馆多单质量消歧)</span><br/>
+                <strong>Turn 1 用户</strong>：“今天下午两点在奥体中心走场，帮我按上周三（Day 10）在奥体办的那笔参数来。”<br/>
+                <strong>Agent（慢路径澄清）</strong>：滤除废单 `NE-11` 后，指出上周三奥体中心有上午 `720p/45min` 达标彩排单与中午 `1080p/90min` 正式单，询问选哪套。<br/>
+                <strong>Turn 2 用户</strong>：“按上午没卡顿的那笔彩排低配档位走，但时长改成 60 分钟。”
+              </td>
+              <td>
+                • <strong>F5.2 &amp; F5.3</strong>：同场馆多单碰撞 + 网元 QoE 状态筛选 + 废单排除<br/>
+                • <strong>F6.1</strong>：单据锚定下的局部槽位差分（继承 `NE-09` 的 `720p/80ms`，覆写 `duration=60min`）
+              </td>
+              <td>
+                • 全面检验工作记忆的<strong>多维复合检索（时间 + 地点向量 + 排除 `aborted` 废单）$\to$ 慢路径多候选澄清 $\to$ 二次槽位差分覆写</strong>全链路能力。
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Day 25</strong><br/>
+                <code>11:50</code>
+              </td>
+              <td>
+                <span class="pill pill-ticket">NE-15 (终局闭环单据)</span><br/>
+                `12:00-13:45 (105min)` 奥体中心抖音开直播 `1080p/50ms, sla_met`。
+              </td>
+              <td>
+                <span class="pill pill-dlg">对话 S-05 (经验快路径迁移复用)</span><br/>
+                <strong>用户</strong>：“今天 12:30 到 13:45 在奥体中心多功能馆给阿抖开播，按老规矩超清档位走。”<br/>
+                <em>（用户未提预热，测试 Agent 能否自动激活 `EXP_PREWARM_BUFFER_01` 将起点前置到 12:00、时长算为 105min！）</em>
+              </td>
+              <td>
+                • <strong>F6.2 &amp; F6.4</strong>：经验规则快路径自动触发 + 灵活时长 (`75min + 30min = 105min`)<br/>
+                • <strong>F5.4</strong>：黑话别名 (`阿抖/超清`) + 场景经验联合推理
+              </td>
+              <td>
+                • <strong>终局综合检验</strong>：融合事实记忆（`阿抖->抖音`, `超清->1080p/50ms`）与经验记忆（奥体中心自动提前 30min 预热：`12:30-13:45 (75min)` $\to$ `12:00-13:45 (105min)`），一步快路径闭环。
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- License & Citation Footer -->
+      <div class="footer-note">
+        <strong>开源合规声明与实证文献归属（License &amp; Empirical Citation Notice）</strong><br/>
+        本报告中的学术调研部分调用了 <code>literature-search-arxiv</code> 技能（Copyright Google LLC, Apache License 2.0, <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">https://www.apache.org/licenses/LICENSE-2.0</a>），检索元数据源自 arXiv.org API（遵循 <a href="https://info.arxiv.org/help/api/tou.html" target="_blank">arXiv API Terms of Use</a>）。许可证文件已落盘至 <code>D:\coding\memory_system\.licenses\literature_search_arxiv_LICENSE.txt</code>。
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    let currentViewMode = 'all';
+    let currentChapter = 0;
+
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.getElementById('btn-theme-parchment').classList.toggle('active', theme === 'parchment');
+      document.getElementById('btn-theme-github').classList.toggle('active', theme === 'github');
+    }
+
+    function setViewMode(mode) {
+      currentViewMode = mode;
+      document.getElementById('btn-view-all').classList.toggle('active', mode === 'all');
+      document.getElementById('btn-view-focus').classList.toggle('active', mode === 'focus');
+      updateChapterVisibility();
+    }
+
+    function selectChapter(idx) {
+      currentChapter = idx;
+      const tabs = document.querySelectorAll('.chap-tab');
+      tabs.forEach((t, i) => t.classList.toggle('active', i === idx));
+      if (currentViewMode === 'all') {
+        const sections = document.querySelectorAll('.chapter-section');
+        if (sections[idx]) {
+          sections[idx].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      } else {
+        updateChapterVisibility();
+      }
+    }
+
+    function updateChapterVisibility() {
+      const sections = document.querySelectorAll('.chapter-section');
+      sections.forEach((sec, idx) => {
+        if (currentViewMode === 'all') {
+          sec.classList.remove('hidden-chapter');
+        } else {
+          sec.classList.toggle('hidden-chapter', idx !== currentChapter);
+        }
+      });
+    }
+  </script>
+</body>
+</html>
