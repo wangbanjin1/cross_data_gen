@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="parchment">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>真实样本子页：单用户 30 天“单据融合对话”故事线示例</title>
+  <style>
+    :root, [data-theme="parchment"] {
+      --bg-page: #FBF7F0;
+      --bg-card: #FFFDF9;
+      --bg-elevated: #F5EFE4;
+      --bg-code: #F2ECE1;
+      --text-main: #2C2520;
+      --text-secondary: #5C5248;
+      --text-muted: #8A7E72;
+      --border-color: #E2D9C8;
+      --border-strong: #C9BBA6;
+      --accent-primary: #8C4A27;
+      --accent-secondary: #2B5B6C;
+      --semantic-red-bg: #FDF2F2;
+      --semantic-red-border: #E5A9A9;
+      --semantic-red-text: #8B2626;
+      --semantic-green-bg: #F1F8F4;
+      --semantic-green-border: #9BC9AE;
+      --semantic-green-text: #1E5E3A;
+      --semantic-blue-bg: #F0F6FA;
+      --semantic-blue-border: #A3C4DC;
+      --semantic-blue-text: #1F4E70;
+      --semantic-amber-bg: #FEF8EC;
+      --semantic-amber-border: #E6C88A;
+      --semantic-amber-text: #7D5211;
+      --shadow-sm: 0 2px 6px rgba(44, 37, 32, 0.05);
+    }
+
+    [data-theme="github"] {
+      --bg-page: #F6F8FA;
+      --bg-card: #FFFFFF;
+      --bg-elevated: #EEF2F6;
+      --bg-code: #F6F8FA;
+      --text-main: #1F2328;
+      --text-secondary: #4D5562;
+      --text-muted: #6E7781;
+      --border-color: #D0D7DE;
+      --border-strong: #AFB8C1;
+      --accent-primary: #0969DA;
+      --accent-secondary: #1A7F37;
+      --semantic-red-bg: #FFEBE9;
+      --semantic-red-border: #FF818266;
+      --semantic-red-text: #CF222E;
+      --semantic-green-bg: #DAFBE1;
+      --semantic-green-border: #4AC26B66;
+      --semantic-green-text: #1A7F37;
+      --semantic-blue-bg: #DDF4FF;
+      --semantic-blue-border: #54AEFF66;
+      --semantic-blue-text: #0969DA;
+      --semantic-amber-bg: #FFF8C5;
+      --semantic-amber-border: #D4A72C66;
+      --semantic-amber-text: #9A6700;
+      --shadow-sm: 0 1px 3px rgba(31, 35, 40, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.65;
+      font-size: 14.5px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+    .topbar-brand { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-strong);
+      color: var(--accent-primary);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .back-btn:hover { background: var(--accent-primary); color: #fff; text-decoration: none; }
+    .topbar-badge {
+      background: var(--semantic-green-text);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .topbar-title { font-size: 15.5px; font-weight: 700; }
+    .topbar-controls { display: flex; align-items: center; gap: 8px; }
+
+    .btn-group {
+      display: inline-flex;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .btn-toggle {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 5px 11px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-toggle.active { background: var(--accent-primary); color: #fff; }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 20px 24px 48px; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card.hero { border-left: 5px solid var(--semantic-green-text); }
+
+    h1 { font-size: 20px; font-weight: 800; margin: 0 0 8px; }
+    h2 {
+      font-size: 17px;
+      font-weight: 800;
+      margin: 0 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .sample-split {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
+      gap: 16px;
+      margin-top: 12px;
+    }
+    pre, code { font-family: "JetBrains Mono", Consolas, monospace; }
+    code {
+      background: var(--bg-code);
+      border: 1px solid var(--border-color);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: var(--accent-primary);
+    }
+    pre {
+      background: var(--bg-code);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 13px 15px;
+      overflow-x: auto;
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: var(--text-main);
+      margin: 8px 0 0;
+    }
+    pre code { border: none; padding: 0; background: transparent; color: inherit; }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; background: var(--bg-card); }
+    th {
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      font-weight: 700;
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+      color: var(--text-secondary);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg-elevated); }
+
+    .pill {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 11.5px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .pill-ticket { background: var(--semantic-blue-bg); color: var(--semantic-blue-text); border: 1px solid var(--semantic-blue-border); }
+    .pill-dlg { background: var(--semantic-amber-bg); color: var(--semantic-amber-text); border: 1px solid var(--semantic-amber-border); }
+
+    @media print {
+      @page { margin: 12mm; }
+      html, body { background: #FFFFFF !important; }
+      .topbar { position: static; box-shadow: none; }
+      .topbar-controls { display: none; }
+      .card { box-shadow: none; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">
+      <a href="hybrid_ticket_dialogue_storyline_methodology.html" class="back-btn">← 返回主页</a>
+      <span class="topbar-badge">SAMPLE WALKTHROUGH</span>
+      <span class="topbar-title">单用户 30 天“单据融合对话”故事线真实样本示例</span>
+    </div>
+    <div class="topbar-controls">
+      <div class="btn-group">
+        <button class="btn-toggle active" id="btn-theme-parchment" onclick="setTheme('parchment')">暖阳米纸</button>
+        <button class="btn-toggle" id="btn-theme-github" onclick="setTheme('github')">GitHub 简洁</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="card hero">
+      <h1>单用户 30 天“单据融合对话”样本示例（<code>mobile_persona_001</code>）</h1>
+      <p style="margin: 0; color: var(--text-secondary);">
+        本页以一位活动解说用户在 30 天内的 15 张网元实时单据与 5 轮自然语言对话（单据与对话比例为 <code>3:1</code>）为例，直观展示单据流与对话流的数据格式、时间轴穿插过程，以及它们如何共同更新事实记忆、工作记忆与经验记忆。
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>一、输入单据 JSON 与沉淀后的记忆状态快照</h2>
+      <div class="sample-split">
+        <div>
+          <strong>网元实时单据 JSON 示例（含正常保障单与拥塞劣化单）</strong>
+          <pre><code>{
+  "persona_id": "mobile_persona_001",
+  "ne_tickets": [
+    {
+      "ticket_id": "NE-01",
+      "date": "Day 01 (Mon)",
+      "time_window": "12:25-13:25",
+      "duration_min": 60,
+      "source_session_id": "S-01",
+      "assurance_flag": true,
+      "cell_location": "露天高山滑雪训练基地",
+      "application": "抖音",
+      "service": "开直播",
+      "qos_profile": {"resolution": "1080p", "rtt_max_ms": 50},
+      "radio_telemetry": {"prb_load": "42%", "rtt_p95_ms": 36, "freeze_cnt": 0, "sla_verdict": "sla_met"}
+    },
+    {
+      "ticket_id": "NE-03",
+      "date": "Day 02 (Tue)",
+      "time_window": "18:15-19:30",
+      "duration_min": 75,
+      "source_session_id": null,
+      "assurance_flag": true,
+      "cell_location": "大巴跨城转场高速公路",
+      "application": "腾讯会议",
+      "service": "开会",
+      "qos_profile": {"resolution": "720p", "rtt_max_ms": 100},
+      "radio_telemetry": {"prb_load": "51%", "rtt_p95_ms": 68, "freeze_cnt": 0, "sla_verdict": "sla_met"}
+    },
+    {
+      "ticket_id": "NE-10",
+      "date": "Day 10 (Wed)",
+      "time_window": "12:30-14:00",
+      "duration_min": 90,
+      "source_session_id": null,
+      "assurance_flag": true,
+      "cell_location": "奥林匹克体育中心多功能馆",
+      "application": "抖音",
+      "service": "开直播",
+      "qos_profile": {"resolution": "1080p", "rtt_max_ms": 50},
+      "radio_telemetry": {
+        "prb_load": "96%",
+        "rtt_p95_ms": 145,
+        "freeze_cnt": 8,
+        "sla_verdict": "sla_degraded",
+        "root_cause": "场馆入场高峰PRB过载，未提前30min预留通道"
+      }
+    }
+  ]
+}</code></pre>
+        </div>
+
+        <div>
+          <strong>Day 12 沉淀后的标准记忆状态快照（Ground-Truth Memory Snapshot）</strong>
+          <pre><code>{
+  "fact_memory_tables": {
+    "expression": [
+      {"user_expr": "阿抖推流", "mapped_target": "抖音:开直播", "source": "S-01"},
+      {"user_expr": "超清档", "mapped_target": "1080p|50ms", "source": "S-01"}
+    ],
+    "periodic_preference": [
+      {
+        "time_slot": "12:30-13:30 (±10min)",
+        "location": "露天高山滑雪训练基地",
+        "application": "抖音",
+        "service": "开直播",
+        "resolution": "1080p",
+        "rtt_max_ms": 50,
+        "derived_from": ["S-01", "NE-01", "NE-02", "NE-04", "NE-06"]
+      }
+    ],
+    "scene_preference": [
+      {
+        "location": "大巴跨城转场高速公路",
+        "application": "腾讯会议",
+        "service": "开会",
+        "resolution": "720p",
+        "rtt_max_ms": 100,
+        "duration_min": 75,
+        "derived_from": ["NE-03", "NE-05", "NE-08"]
+      }
+    ]
+  },
+  "experience_memory_cards": [
+    {
+      "exp_id": "EXP_PREWARM_BUFFER_01",
+      "venue_anchor": "奥林匹克体育中心多功能馆",
+      "trigger_condition": "抖音:开直播",
+      "slot_revision_rule": "start_time -= 30min; duration += 30min",
+      "derived_from": "NE-10 拥塞记录与 S-03 对话复盘"
+    }
+  ]
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-bottom: 0;">
+      <h2>二、单用户 30 天“单据融合对话”逐节点过程表</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 13%;">时间节点</th>
+              <th style="width: 28%;">网元实时单据记录</th>
+              <th style="width: 28%;">自然语言对话记录</th>
+              <th style="width: 31%;">体现的设计维度与记忆更新过程</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong>Day 01 (周一)</strong><br/>
+                <code>12:25 - 13:25</code><br/>
+                (时长 <code>60min</code>)
+              </td>
+              <td>
+                <span class="pill pill-ticket">NE-01 (执行回执单)</span><br/>
+                • 业务：<code>抖音 | 开直播</code><br/>
+                • 档位：<code>1080p | 50ms</code><br/>
+                • 位置：<code>露天高山滑雪训练基地</code><br/>
+                • 状态：<code>rtt_p95=36ms, sla_met</code>
+              </td>
+              <td>
+                <span class="pill pill-dlg">对话 S-01</span><br/>
+                用户：“以后每天午休十二点半在滑雪基地用阿抖推流一小时，给我定 1080p 超清、50ms 内。”
+              </td>
+              <td>
+                • <strong>对话与单据互补 + 个性化表达</strong>：对话记录了用户的个性化表达（<code>阿抖→抖音</code>、<code>超清档→1080p/50ms</code>），网元单据补充了实际基站位置与执行状态；<br/>
+                • <strong>记忆更新</strong>：写入个性化表述映射表（<code>expression</code>）与周期偏好候选记录。
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <strong>Day 02 ~ Day 05</strong><br/>
+                (周二至周五)<br/>
+                时长：<code>60m / 75m / 3m</code>
+              </td>
+              <td>
+                <span class="pill pill-ticket">NE-02 ~ NE-07 (纯网元单据)</span><br/>
+                • <code>NE-02, 04, 06</code>：午间 <code>12:28~12:35</code> 滑雪基地抖音直播单（时间带 <code>±5min</code> 微幅浮动，<code>sla_met</code>）；<br/>
+                • <code>NE-03, 05</code>（周二/周四 18:15-19:30, <code>75min</code>）：在 <code>大巴跨城转场高速公路</code> 运行 <code>腾讯会议 720p/100ms</code> 保障单；<br/>
+                • <code>NE-07</code>（周五 15:10, <code>3min</code>）：未开启保障的日常刷视频话单（<code>assurance_flag=false</code>）。
+              </td>
+              <td>
+                <strong>无对话交互</strong><br/>
+                （这 4 天用户没有发起对话，仅由网元持续产生实际运行单据）
+              </td>
+              <td>
+                • <strong>单据静默归纳 + 多次重复确认</strong>：<code>NE-02, 04, 06</code> 使午间直播累计满 4 次，正式确认为长期周期习惯；<code>NE-03, 05</code> 在无对话情况下记录了“大巴转场开腾讯会议”的支线习惯；<br/>
+                • <strong>背景流量过滤</strong>：3 分钟的 <code>NE-07</code> 被识别为日常背景流量并过滤，不写入偏好表。
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <strong>Day 08 (下周一)</strong><br/>
+                <code>18:10</code>
+              </td>
+              <td>
+                <span class="pill pill-ticket">NE-08 (执行回执单)</span><br/>
+                会话后网元记录：<code>18:15-19:30 (75min) 腾讯会议 720p/100ms</code>，<code>sla_met</code>。
+              </td>
+              <td>
+                <span class="pill pill-dlg">对话 S-02</span><br/>
+                用户：“今天 18:15 又要坐大巴跨城转场了，帮我按上周四傍晚车上那套会议配置再来一单。”
+              </td>
+              <td>
+                • <strong>指代纯网元单据</strong>：上周四并没有发生过对话，模型必须从工作记忆的网元单据表中找到 <code>NE-05</code>，提取同行结构化槽位列（<code>75min | 720p | 100ms</code>）完成参数补全。
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <strong>Day 10 (周三赛事日)</strong><br/>
+                同日 3 张单据<br/>
+                (<code>45m / 90m / 1m</code>)
+              </td>
+              <td>
+                <span class="pill pill-ticket">NE-09, NE-10, NE-11 (同日同场馆多单)</span><br/>
+                均位于 <code>奥林匹克体育中心多功能馆</code>：<br/>
+                • <code>NE-09</code> (09:30-10:15, <code>45min</code>)：抖音开直播 <code>720p/80ms</code>（上午彩排，<code>sla_met, freeze=0</code>）；<br/>
+                • <code>NE-10</code> (12:30-14:00, <code>90min</code>)：抖音开直播 <code>1080p/50ms</code>（<strong>入场高峰基站负载 96%，未提前预热导致卡顿 8 次，<code>sla_degraded</code></strong>）；<br/>
+                • <code>NE-11</code> (14:05-14:06, <code>1min</code>)：刚下发即退订的无效单（<code>aborted</code>）。
+              </td>
+              <td>
+                <strong>无对话交互</strong><br/>
+                （比赛日当天产生“正常彩排单、卡顿正式单、1分钟退订无效单”三张同场馆单据）
+              </td>
+              <td>
+                • <strong>同日密集触发 + 同地点多单并存 + 无效单过滤</strong>：先过滤 1 分钟退订的无效单 <code>NE-11</code>，在工作记忆中保留同场馆两张不同状态的单据（<code>NE-09</code> 与 <code>NE-10</code>），为后续对话中的异常复盘和单据区分埋下依据。
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <strong>Day 12 (周五)</strong><br/>
+                <code>11:40</code>
+              </td>
+              <td>
+                <span class="pill pill-ticket">NE-12 (预热调整后回执单)</span><br/>
+                网元记录：<code>12:00-14:00 (120min)</code> 抖音开直播 <code>1080p/50ms</code>，提前 30 分钟预留通道后 <code>freeze=0, sla_met</code>。
+              </td>
+              <td>
+                <span class="pill pill-dlg">对话 S-03</span><br/>
+                用户：“前天中午在奥体中心那场直播刚开播卡得厉害，今天 12:30 我还在奥体多功能馆播一个半钟头，你查查前天单据是啥原因，今天给我提前半小时预热！”
+              </td>
+              <td>
+                • <strong>网元异常引发后续对话 + 经验规则沉淀</strong>：模型关联前天 <code>NE-10</code> 的拥塞记录（<code>PRB=96%</code>）与用户指令，将计划时段 <code>12:30-14:00 (90min)</code> 调整为 <code>12:00-14:00 (120min)</code>，并在经验记忆中沉淀出“奥体中心开直播需提前 30 分钟预热”的参数调整规则。
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <strong>Day 13 ~ Day 22</strong><br/>
+                (跨周更新与单据区分)
+              </td>
+              <td>
+                <span class="pill pill-ticket">NE-13 ~ NE-14</span><br/>
+                用户在滑雪基地的午间直播单据时长从早期的 <code>60min</code> 稳定变为 <code>90min (12:30-14:00)</code>。
+              </td>
+              <td>
+                <span class="pill pill-dlg">对话 S-04</span><br/>
+                • <strong>用户第 1 轮</strong>：“今天下午两点在奥体中心走场，帮我按上周三（Day 10）在奥体办的那笔参数来。”<br/>
+                • <strong>助手澄清</strong>：排除无效单 <code>NE-11</code> 后，提示上周三奥体中心有上午 <code>720p/45min</code> 彩排单与中午 <code>1080p/90min</code> 正式单，询问选择哪套。<br/>
+                • <strong>用户第 2 轮</strong>：“按上午没卡顿的那笔彩排档位走，但时长改成 60 分钟。”
+              </td>
+              <td>
+                • <strong>偏好随时间变化</strong>：<code>NE-13, 14</code> 更新了日常午间直播的默认时长（<code>60min → 90min</code>）；<br/>
+                • <strong>同地点多单区分 + 局部修改参数</strong>：准确区分同一天的彩排单与正式单，复用 <code>NE-09</code> 的 <code>720p/80ms</code> 并将时长局部修改为 <code>60min</code>。
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <strong>Day 25</strong><br/>
+                <code>11:50</code>
+              </td>
+              <td>
+                <span class="pill pill-ticket">NE-15 (执行回执单)</span><br/>
+                <code>12:00-13:45 (105min)</code> 奥体中心抖音开直播 <code>1080p/50ms, sla_met</code>。
+              </td>
+              <td>
+                <span class="pill pill-dlg">对话 S-05</span><br/>
+                用户：“今天 12:30 到 13:45 在奥体中心多功能馆给阿抖开播，按老规矩超清档位走。”
+              </td>
+              <td>
+                • <strong>个性化表达 + 经验规则自动复用</strong>：模型解析“阿抖 / 超清档”映射为 <code>抖音 | 开直播 | 1080p | 50ms</code>，同时自动调用 Day 12 沉淀的奥体中心提前 30 分钟预热规则，将 <code>12:30-13:45 (75min)</code> 调整为 <code>12:00-13:45 (105min)</code>。
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.getElementById('btn-theme-parchment').classList.toggle('active', theme === 'parchment');
+      document.getElementById('btn-theme-github').classList.toggle('active', theme === 'github');
+    }
+  </script>
+</body>
+</html>
