@@ -88,6 +88,8 @@ class SessionAssembler(
                 *base_args, *tp_args, *tail_args,
                 experience_citation=s_plan.get("experience_citation", {}),
                 learning_source_session=s_plan.get("learning_source_session"),
+                nominal_start=s_plan.get("nominal_start"),
+                nominal_dur=s_plan.get("nominal_dur"),
             )
         if tid == "T2-10":
             return cls._assemble_t2_10(

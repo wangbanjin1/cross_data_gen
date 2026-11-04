@@ -4,8 +4,8 @@
   "persona_summary": "外勤型项目申报人员",
   "static_profile": {
     "user_id": "USER_004",
-    "identity": "公益项目申报专员（grant writer），擅长利用线上平台吸引捐赠方；日常在活动现场、街区采访点、临时拍摄地与转场途中完成需求记录、佐证材料拍摄、申请文本与预算附件同步，全程以手机4G/5G直接联网，不依赖固网或普通Wi-Fi，便携终端联网时用手机热点。",
-    "devices": "主力：5G智能手机；辅助：随身拍摄设备（运动相机/口袋云台）、便携补光与领夹麦",
+    "identity": "公益项目申报专员兼内容采编，长期在外勤现场（公益活动、街区采访点、临时拍摄地、突发事件现场）记录需求、拍摄佐证材料，并把申请文本与预算附件同步给协作团队；全程以手机4G/5G直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi，便携终端确需联网时开手机热点。",
+    "devices": "主力：5G智能手机（直播与素材回传）；辅助：随身拍摄设备（运动相机/口袋云台）、便携麦克风、备用充电宝",
     "apps": [
       "抖音",
       "微信",
@@ -15,23 +15,23 @@
     ],
     "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "干练务实、节奏偏快，习惯用工程化口吻交代参数与时间点，遇到网络问题先给结论再补原因",
+      "tone": "干练直接、带点催促感，习惯用工程化口语把网络指标说成现场行话",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
         "先保上行",
-        "这条能续传吧"
+        "这条能续上吧"
       ],
-      "typical_habits": "开播前先口头确认画质档位与时延底线，转场路上用语音给协作团队同步进度，事后用一句话复盘网络表现"
+      "typical_habits": "开工前先问一句'信号稳不稳'，转场路上习惯用语音消息同步进度，遇到弱覆盖会先降画质保推流，事后复盘时爱用'老时间''老规矩'指代固定档期"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "周二与周六晚间公益项目路演直播与素材回传",
+      "name": "周二周六晚间公益项目现场直播与素材回传",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每周二与周六晚间20:00-22:30的公益项目路演直播，向捐赠方展示项目进展并同步申请材料",
+      "trigger_condition": "每周二与周六晚间20:00-22:30的公益项目现场直播档期，在活动现场或街区采访点用手机直接开播并同步回传拍摄素材",
       "period_type": "weekly",
       "days": [
         "Tuesday",
@@ -47,11 +47,12 @@
       "aliases": {
         "app_aliases": [
           "阿抖",
-          "抖音"
+          "抖家"
         ],
         "service_aliases": [
           "开播",
-          "推流"
+          "推流",
+          "上直播"
         ],
         "resolution_aliases": [
           "1080p原画",
@@ -74,15 +75,15 @@
         ]
       },
       "declaration_mode": "implicit_induction",
-      "evidence_pattern": "隐式单次保障并随后固化"
+      "evidence_pattern": "隐式单次保障并随后固化：首次现场直播靠临时降档保稳，之后固定为周二周六晚间1080p/50ms档"
     },
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨城公益项目考察与捐赠方连线周",
+        "name": "跨城公益项目考察与连续直播周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "连续跨城转场，途经弱覆盖路段与户外临时拍摄点，直播需在移动中保持画面稳定并支持断点续传",
+        "scene_description": "跨城转场途中经过弱覆盖路段与山区临时拍摄点，基站切换频繁，需保证直播不断流、素材可续传",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -92,14 +93,14 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "转场途中协作团队视频通话对齐",
+        "name": "转场途中团队视频通话对齐进度",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "拍摄转场或临时采访点间隙，需与协作团队快速对齐申请文本与预算附件",
+        "trigger_condition": "每次转场路上或拍摄间隙，与协作团队快速对齐素材清单与预算附件",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -121,14 +122,14 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "项目复盘与捐赠方远程会议",
+        "name": "晚间素材复盘与云端协作会议",
         "application_name": "腾讯会议",
         "service_name": "会议",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "活动结束后或阶段性节点，与捐赠方及团队复盘素材与申报进度",
+        "trigger_condition": "非直播日的晚间或直播收工后，与项目组开短会复盘拍摄素材与申报文本",
         "aliases": {
           "app_aliases": [
             "tencentmeeting",
@@ -152,9 +153,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "候场时单次刷短视频放松",
-        "application_name": "钉钉",
-        "service_name": "会议",
+        "scenario": "候场时单次刷短视频打发时间",
+        "application_name": "快手",
+        "service_name": "短视频",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -162,8 +163,8 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次观看同行公益直播参考话术",
-        "application_name": "快手",
+        "scenario": "单次观看同行公益直播做参考",
+        "application_name": "哔哩哔哩",
         "service_name": "看直播",
         "params": {
           "resolution": "720p",

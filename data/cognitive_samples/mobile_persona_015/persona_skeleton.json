@@ -4,8 +4,8 @@
   "persona_summary": "移动训练与参赛人员",
   "static_profile": {
     "user_id": "USER_015",
-    "identity": "海岸警卫队搜救游泳员候选人，日常在道路、巡逻区域、临时处置现场及夜间值守点进行高强度体能训练与赛事转场，习惯用手机移动核心网记录运动数据、查看路线赛程、上传训练视频并接收团队临时通知，便携终端联网时开热点共享。",
-    "devices": "5G智能手机（主力）＋随身运动拍摄设备（辅助）",
+    "identity": "立志加入海岸警卫队搜救游泳员的体能训练者与参赛选手，日常在道路、巡逻区域、临时处置现场及夜间值守点进行户外训练与赛事转场，全程依赖手机移动核心网（4G/5G）联网，不依赖固网或普通Wi-Fi，便携终端联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备（运动相机/胸挂记录仪），便携终端通过手机热点联网。",
     "apps": [
       "微信",
       "钉钉",
@@ -14,22 +14,22 @@
     ],
     "speech_archetype": "athlete_speaker",
     "speech_style": {
-      "tone": "干脆利落、带点训练口令味，语速偏快，喜欢用短句确认",
+      "tone": "干脆利落、带训练口令感的直给口吻，讲效率不绕弯",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "稳住"
+        "稳住节奏"
       ],
-      "typical_habits": "出发前先报路线和时段，训练中习惯用语音短句同步位置，收队后统一复盘上传，遇到弱覆盖会先喊'先存着，出去再传'"
+      "typical_habits": "习惯用短句下达和确认任务，报参数时爱用口语档位（如'高清''低时延'），转场前必先口头对齐时间与画质要求。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "巡逻路段训练数据回传与团队位置调度",
+      "name": "户外训练与赛事转场现场取证回传",
       "storyline_trigger_type": "location_environment",
-      "trigger_condition": "身处巡逻路段临时处置现场或夜间值守点附近的弱覆盖区域（道路弯道、桥下集结区、事故现场围挡旁），手机移动核心网信号衰减时触发",
+      "trigger_condition": "身处道路巡逻区域、临时处置现场或应急集结区等户外移动现场，进入弱覆盖路段（如高架桥下、隧道口、密集楼宇遮挡区）的10:00-11:00时段，需现场取证并即时回传",
       "period_type": "location_driven",
       "days": [
         "location_specific"
@@ -79,12 +79,12 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨城搜救游泳选拔赛赛事周",
+        "name": "海岸警卫队搜救游泳员选拔赛周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "赛事周在陌生水域与临时集结区转场，现场围挡与看台造成局部弱覆盖，需临时压低画质保证位置共享与指令及时送达",
+        "scene_description": "赛事周在沿海开放水域与临时集结区转场，现场人员密集、基站拥塞且部分路段弱覆盖，需临时降低画质保连通与消息及时送达",
         "preference_override": {
-          "resolution": "540p",
+          "resolution": "720p",
           "rtt_max": "30ms"
         }
       }
@@ -92,43 +92,14 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "训练视频复盘上传",
-        "application_name": "抖音",
-        "service_name": "短视频",
-        "preferred_params": {
-          "resolution": "1080p",
-          "rtt_max": "100ms"
-        },
-        "trigger_condition": "训练结束回到集结区，用手机热点把随身拍摄设备素材上传复盘",
-        "aliases": {
-          "app_aliases": [
-            "douyin",
-            "阿抖"
-          ],
-          "service_aliases": [
-            "看短视频",
-            "刷视频"
-          ],
-          "resolution_aliases": [
-            "1080p原画",
-            "1080p"
-          ],
-          "rtt_aliases": [
-            "100ms以内",
-            "100毫秒以内"
-          ]
-        }
-      },
-      {
-        "storyline_id": "SUB_02",
-        "name": "团队临时通知与位置共享",
+        "name": "训练视频复盘与团队沟通",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
-          "rtt_max": "80ms"
+          "rtt_max": "100ms"
         },
-        "trigger_condition": "夜间值守点交接班前，团队群内发起位置共享与短时视频确认",
+        "trigger_condition": "训练结束后在值守点或集结区与教练、队友复盘动作细节并沟通次日安排",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -143,6 +114,35 @@
             "高清"
           ],
           "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "训练视频上传与赛程查看",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "转场途中上传训练视频、查看路线与赛程并接收团队临时通知",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
             "80ms以内",
             "80毫秒以内"
           ]
@@ -152,9 +152,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次赛前动员会线上参会",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "scenario": "单次夜间值守点与家人报平安的视频通话",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -162,7 +162,7 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "休息间隙刷训练教学短视频",
+        "scenario": "单次休息时刷训练教学短视频",
         "application_name": "抖音",
         "service_name": "短视频",
         "params": {

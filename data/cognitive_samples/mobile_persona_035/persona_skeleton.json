@@ -4,8 +4,8 @@
   "persona_summary": "移动执勤人员",
   "static_profile": {
     "user_id": "USER_035",
-    "identity": "前信德团（Sindh Regiment）军官，现从事公共安全与移动执勤工作，长期在城市道路、巡逻区域、临时处置现场及夜间值守点、事故现场、应急集结区之间高频流动，全程依赖手机4G/5G移动核心网直接联网，不依赖家庭宽带、公司固网或普通Wi-Fi，重点完成地图导航、位置共享与任务调度、现场取证、即时通信与事件上报，便携终端确需联网时以手机热点兜底。",
-    "devices": "主力设备为5G智能手机（随身携带、全天候在线）；辅助设备为便携执法记录仪与随身热点终端，用于现场取证与临时组网。",
+    "identity": "前信德团（Sindh Regiment）退役军官，现从事移动执勤与现场处置工作，长期在道路、巡逻区域、临时处置现场及夜间值守点、事故现场、应急集结区之间高频流动，全程依赖手机4G/5G移动核心网直接联网，不依赖家庭宽带或固定Wi-Fi，重点完成地图导航、位置共享与任务调度、现场取证、即时通信与事件上报。",
+    "devices": "主力设备为5G智能手机；便携终端（如随身记录仪、平板）确需联网时通过手机热点共享网络。",
     "apps": [
       "微信",
       "钉钉",
@@ -14,23 +14,23 @@
     ],
     "speech_archetype": "field_officer_speaker",
     "speech_style": {
-      "tone": "干脆利落、命令式与汇报式夹杂，习惯用军旅与执勤行话，讲求时效与确定性，不爱绕弯子。",
+      "tone": "干脆利落、指令式口吻，带军旅作风，讲求时效与确认回执",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "按点报位",
-        "信号别断"
+        "收到请回复",
+        "现场为准"
       ],
-      "typical_habits": "布置任务前先确认覆盖与链路，行动中频繁报位与回传现场画面，事后习惯复盘录像；对时延和消息送达极为敏感，遇到弱覆盖路段会主动要求续传或切换备份链路。"
+      "typical_habits": "习惯用简短口令布置任务并复述确认，强调时间节点与位置坐标，遇到弱覆盖路段会主动说明续传安排。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "巡逻现场视频回传与任务调度",
+      "name": "巡逻现场视频通话与位置共享调度",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "执行巡逻区域及临时处置现场任务时，需与指挥中心视频通话汇报现场态势、共享位置并回传取证画面，触发移动核心网下的实时视频调度业务",
+      "trigger_condition": "执行巡逻区域及临时处置现场的移动执勤任务时，需与指挥中心视频通话汇报现场态势、共享实时位置并接收任务调度指令",
       "period_type": "task_driven",
       "days": [
         "task_specific"
@@ -45,14 +45,12 @@
       "aliases": {
         "app_aliases": [
           "微信",
-          "企微",
-          "微讯"
+          "企微"
         ],
         "service_aliases": [
           "打视讯",
           "连麦汇报",
-          "视频对讲",
-          "现场连线"
+          "视频对讲"
         ],
         "resolution_aliases": [
           "1080p原画",
@@ -86,24 +84,24 @@
         "name": "跨区域应急集结与事故现场处置周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "跨区域应急集结期间，执勤人员频繁进出弱覆盖路段与事故现场临时管制区，基站切换密集、上行带宽波动明显，需优先保障消息及时送达与画面稳定续传，画质与码率临时下调以换取链路连续性。",
+        "scene_description": "跨区域应急集结期间，现场人员密集、多路段弱覆盖与网络拥塞并存，需在移动中保持视频通话与位置共享的连续可用，优先保障消息及时送达与画面稳定。",
         "preference_override": {
-          "resolution": "720p",
-          "rtt_max": "30ms"
+          "resolution": "540p",
+          "rtt_max": "80ms"
         }
       }
     ],
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "夜间值守点位置共享与任务调度",
+        "name": "现场取证素材回传与事件上报",
         "application_name": "钉钉",
         "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "夜间值守点交接班或临时任务调度时，需多人语音会议对齐点位与分工，环境以户外夜间弱光与移动网络为主",
+        "trigger_condition": "事故现场或临时处置现场完成拍照、短视频取证后，需向值班室回传素材并视频确认事件上报内容",
         "aliases": {
           "app_aliases": [
             "dingding",
@@ -125,14 +123,14 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "现场取证录像复盘与事件上报",
+        "name": "夜间值守点交接班会议",
         "application_name": "哔哩哔哩",
         "service_name": "开直播",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "事故现场处置结束后，需与指挥中心共享取证录像并复盘事件经过、上报处置结论",
+        "trigger_condition": "夜间值守点交接班前，与班组进行短会通报值守情况、人员位置与次日任务安排",
         "aliases": {
           "app_aliases": [
             "bilibili",
@@ -156,9 +154,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次任务场景：临时参加跨部门应急联动线上会议",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "scenario": "单次任务场景：休息间隙在值守点用手机刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -166,9 +164,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次任务场景：休整间隙刷短视频放松",
-        "application_name": "抖音",
-        "service_name": "短视频",
+        "scenario": "单次任务场景：临时参加上级组织的线上通报会",
+        "application_name": "飞书",
+        "service_name": "会议",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

@@ -4,60 +4,63 @@
   "persona_summary": "户外视觉创作者",
   "static_profile": {
     "user_id": "USER_011",
-    "identity": "阿曼籍平面设计师，长期跨城采风与拍摄，常驻高速公路服务区、车站、港区或机场外场等临时停靠点，以手机5G直连核心网完成远程协作与素材回传，不依赖固网或普通Wi-Fi。",
-    "devices": "主力为5G智能手机，辅以手机热点为便携终端（平板/笔记本）提供联网。",
+    "identity": "阿曼籍平面设计师，长期跨城采风与户外拍摄，为展览、品牌与客户提供视觉设计稿与高清成片；工作流以手机为核心，在高速公路服务区、车站、港区或机场外场等临时停靠点完成参考检索、作品预览与设计稿上传。",
+    "devices": "主力为5G智能手机，辅以手机热点为便携终端（平板/笔记本）提供联网；不依赖家庭宽带、公司固网或普通Wi-Fi。",
     "apps": [
       "微信",
       "钉钉",
       "高德地图",
-      "腾讯会议"
+      "百度网盘"
     ],
     "speech_archetype": "outdoor_creator_speaker",
     "speech_style": {
-      "tone": "干脆利落、带点现场指挥感，习惯用短句确认进度",
+      "tone": "干脆利落、带点现场指挥感，喜欢用短句确认进度，对网络稳定性敏感。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "我这边信号稳着呢"
+        "我这边信号还行"
       ],
-      "typical_habits": "开工前先报位置和网络状态，任务中反复确认上传进度与定位是否及时，收尾时口头复盘一遍参数。"
+      "typical_habits": "出发前先确认路线与上传窗口，现场用语音消息同步进度，遇到切换区域会主动报备网络状态。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "采风现场设计稿远程评审与高清素材回传",
+      "name": "跨城采风现场设计稿回传与客户视频对齐",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "在跨城采风或拍摄现场完成一轮素材采集后，于临时停靠点通过手机5G发起与客户的远程评审会议，同步预览设计稿并上传高清图片与源文件",
+      "trigger_condition": "在跨城采风或展览拍摄现场完成一轮素材采集后，于临时停靠点通过手机热点连接便携终端，与客户视频通话对齐设计稿并上传高清图片与电子单据。",
       "period_type": "task_driven",
       "days": [
         "task_specific"
       ],
       "time_range": "14:00-16:30",
-      "application_name": "腾讯会议",
-      "service_name": "会议",
+      "application_name": "微信",
+      "service_name": "视频通话",
       "preferred_params": {
-        "resolution": "720p",
-        "rtt_max": "100ms"
+        "resolution": "1080p",
+        "rtt_max": "30ms"
       },
       "aliases": {
         "app_aliases": [
-          "企鹅会议",
-          "腾讯会议"
+          "微信",
+          "小绿标",
+          "那个绿色图标"
         ],
         "service_aliases": [
-          "对齐开会",
-          "连麦过稿",
-          "远程过稿"
+          "打视讯",
+          "视频对稿",
+          "连麦看稿"
         ],
         "resolution_aliases": [
-          "720p",
-          "高清"
+          "1080p原画",
+          "1080p",
+          "超清"
         ],
         "rtt_aliases": [
-          "100ms以内",
-          "100毫秒以内"
+          "30ms以内",
+          "30毫秒以内",
+          "超低时延"
         ],
         "duration_aliases": [
           "两个半小时",
@@ -76,10 +79,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨城采风季高速沿线连续作业",
+        "name": "跨城展览布展周现场回传保障",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "连续多日沿高速公路跨城采风，频繁在服务区与偏远路段临时停靠，基站切换密集、高速移动下覆盖波动，需优先保证评审会议不中断与素材上传不超时",
+        "scene_description": "展览布展周期间频繁往返港区与展馆外场，基站切换密集、人流拥塞，需优先保证设计稿回传与客户视频对齐不中断。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -89,22 +92,21 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "途中与客户视频通话确认拍摄需求",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "name": "途中路线复核与位置共享",
+        "application_name": "哔哩哔哩",
+        "service_name": "视频",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "跨城途中接到客户临时改稿或补拍需求，在服务区停靠时发起视频通话快速对齐画面细节",
+        "trigger_condition": "跨城途中临时改道或客户需要确认到达时间时，边导航边与对接人视频确认位置。",
         "aliases": {
           "app_aliases": [
-            "weixin",
-            "wx"
+            "bilibili",
+            "哔站"
           ],
           "service_aliases": [
-            "打视频",
-            "连线"
+            "视频"
           ],
           "resolution_aliases": [
             "720p",
@@ -118,22 +120,22 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "采风花絮短视频发布与直播预热",
-        "application_name": "小红书",
-        "service_name": "短视频",
+        "name": "采风素材云端归档与客户简报",
+        "application_name": "咪咕快游",
+        "service_name": "云游戏",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "拍摄间隙整理现场花絮，剪辑后上传短视频维持账号更新，并为下一场户外直播做预热",
+        "trigger_condition": "每日采风结束后在服务区或车站整理素材，与客户开短会同步归档进度与次日拍摄计划。",
         "aliases": {
           "app_aliases": [
-            "xiaohongshu",
-            "红薯"
+            "migukuaiyou",
+            "咪咕游戏"
           ],
           "service_aliases": [
-            "看短视频",
-            "刷视频"
+            "玩云游戏",
+            "免下载游戏"
           ],
           "resolution_aliases": [
             "1080p原画",
@@ -149,9 +151,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "夜间在酒店休息时单次观看设计类直播课程",
-        "application_name": "哔哩哔哩",
-        "service_name": "看直播",
+        "scenario": "候车时刷同行作品找灵感",
+        "application_name": "小红书",
+        "service_name": "短视频",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -159,9 +161,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "候车时单次刷短视频打发时间",
-        "application_name": "抖音",
-        "service_name": "短视频",
+        "scenario": "夜间休息时看设计类直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

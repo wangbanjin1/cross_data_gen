@@ -6,18 +6,43 @@ class WorkingMemoryAssemblerMixin:
 
     @staticmethod
     def _build_t2_6_exp_turns(app, srv, res, rtt, start, end, dur, exp_id, exp_c, wm_ptr, closure_path, intents, events):
+        rec_id = (wm_ptr or {}).get("target_record_id") or "REC_PRIOR"
+        t1_params = {
+            "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
+            "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
+            "timestamp": {
+                "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
+            },
+        }
+        t2_params = {
+            "resolution": {"min_value": {"value": res, "source_type": "WorkingRecord", "source_ref": rec_id}},
+            "rtt": {"max_value": {"value": rtt, "source_type": "WorkingRecord", "source_ref": rec_id}},
+            "timestamp": {
+                "end_timestamp": {"value": end, "source_type": "Experience", "source_ref": exp_id},
+                "duration": {"value": dur, "source_type": "Experience", "source_ref": exp_id},
+            },
+        }
         slot_updates = [
             {
                 "intent_id": "I1",
                 "turn_updates": [
-                    {"turn": 1, "params": intents[0]["params"]},
-                    {"turn": 2, "params": {}},
+                    {"turn": 1, "params": t1_params},
+                    {"turn": 2, "params": t2_params},
                 ],
             }
         ]
         if events and len(events) >= 2:
-            events[0]["requested_params"] = []
-            events[0]["turn_intents"] = [{**intents[0], "status": "in_progress"}]
+            events[0]["requested_params"] = ["duration", "resolution", "rtt"]
+            events[0]["turn_intents"] = [
+                {
+                    "intent_id": "I1",
+                    "status": "in_progress",
+                    "closure_path": closure_path,
+                    "expression_level": 1,
+                    "intent": f"{app}{srv}保障",
+                    "params": t1_params,
+                }
+            ]
             events[0]["working_memory_pointer"] = wm_ptr
             events[0]["experience_citation"] = exp_c
             events[1]["requested_params"] = []
@@ -36,8 +61,6 @@ class WorkingMemoryAssemblerMixin:
             "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
             "timestamp": {
                 "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
-                "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
-                "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"},
             },
         }
         t2_params = {
@@ -45,6 +68,10 @@ class WorkingMemoryAssemblerMixin:
             "service_name": {"value": srv, "source_type": "WorkingRecord", "source_ref": rec_id},
             "resolution": {"min_value": {"value": res, "source_type": "WorkingRecord", "source_ref": rec_id}},
             "rtt": {"max_value": {"value": rtt, "source_type": "WorkingRecord", "source_ref": rec_id}},
+            "timestamp": {
+                "end_timestamp": {"value": end, "source_type": "WorkingRecord", "source_ref": rec_id},
+                "duration": {"value": dur, "source_type": "WorkingRecord", "source_ref": rec_id},
+            },
         }
         slot_updates = [{"intent_id": "I1", "turn_updates": [{"turn": 1, "params": t1_params}, {"turn": 2, "params": t2_params}, {"turn": 3, "params": {}}]}]
         events[0]["requested_params"] = ["target_record_id"]
@@ -203,22 +230,46 @@ class WorkingMemoryAssemblerMixin:
         wm_ptr = working_memory_pointer or {}
         rec_id = wm_ptr.get("target_record_id") or "REC_PRIOR"
         sig = f"T2-7|{len(events)}|1|I1:{app}/{srv}/1/working_record_reschedule/resolved|none"
+        t1_params = {
+            "application_name": {"value": app, "source_type": "WorkingRecord", "source_ref": rec_id},
+            "service_name": {"value": srv, "source_type": "WorkingRecord", "source_ref": rec_id},
+            "resolution": {"min_value": {"value": res, "source_type": "WorkingRecord", "source_ref": rec_id}},
+            "rtt": {"max_value": {"value": rtt, "source_type": "WorkingRecord", "source_ref": rec_id}},
+            "timestamp": {
+                "duration": {"value": dur, "source_type": "WorkingRecord", "source_ref": rec_id},
+            },
+        }
+        t2_params = {
+            "timestamp": {
+                "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U2"},
+                "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U2"},
+            }
+        }
         params = {
             "application_name": {"value": app, "source_type": "WorkingRecord", "source_ref": rec_id},
             "service_name": {"value": srv, "source_type": "WorkingRecord", "source_ref": rec_id},
             "resolution": {"min_value": {"value": res, "source_type": "WorkingRecord", "source_ref": rec_id}},
             "rtt": {"max_value": {"value": rtt, "source_type": "WorkingRecord", "source_ref": rec_id}},
             "timestamp": {
-                "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
-                "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
+                "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U2"},
+                "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U2"},
                 "duration": {"value": dur, "source_type": "WorkingRecord", "source_ref": rec_id},
             },
         }
         intents = [{"intent_id": "I1", "status": "resolved", "closure_path": "working_record_reschedule", "expression_level": 1, "intent": f"{app}{srv}保障", "params": params}]
-        slot_updates = [{"intent_id": "I1", "turn_updates": [{"turn": 1, "params": params}, {"turn": 2, "params": {}}]}]
+        slot_updates = [{"intent_id": "I1", "turn_updates": [{"turn": 1, "params": t1_params}, {"turn": 2, "params": t2_params}]}]
         if events and len(events) >= 2:
-            events[0]["requested_params"] = []
-            events[0]["turn_intents"] = [{**intents[0], "status": "in_progress"}]
+            events[0]["requested_params"] = ["start_timestamp", "end_timestamp"]
+            events[0]["turn_intents"] = [
+                {
+                    "intent_id": "I1",
+                    "status": "in_progress",
+                    "closure_path": "working_record_reschedule",
+                    "expression_level": 1,
+                    "intent": f"{app}{srv}保障",
+                    "params": t1_params,
+                }
+            ]
             events[0]["working_memory_pointer"] = wm_ptr
             events[1]["requested_params"] = []
             events[1]["turn_intents"] = intents

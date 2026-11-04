@@ -342,3 +342,98 @@ def test_x1_and_prewarm_experience_learning_alignment() -> None:
     assert "1080p" in u_x1 and "30ms" in u_x1
 
 
+def test_prior_memory_multi_turn_slot_progression_ratio() -> None:
+    import tempfile
+    from pathlib import Path
+    from src.core.experience_bank import ExperienceBank
+    from src.core.memory_tracker import MemoryTracker
+    from src.core.timeline_planner import DynamicTimelinePlanner
+    from src.core.working_records_ledger import WorkingRecordsLedger
+    from src.generation.session_assembler import SessionAssembler
+    from src.templates.prompts.dialogue_fallbacks import (
+        get_fallback_agent_utterance,
+        get_fallback_user_utterance,
+        get_normalized_action_types,
+    )
+
+    mock_persona = {
+        "static_profile": {
+            "user_id": "USER_001",
+            "identity": "户外直播达人",
+            "speech_style": {"tone": "自然", "catchphrases": ["老规矩"], "typical_habits": "简洁"},
+        },
+        "dynamic_profile": {
+            "periodic_main_storyline": {
+                "application_name": "抖音",
+                "service_name": "开直播",
+                "period_type": "daily",
+                "time_range": "12:30-13:30",
+                "preferred_params": {"resolution": "1080p", "rtt_max": "50ms"},
+            },
+            "scenario_events": [
+                {
+                    "event_name": "高山强风极限直播",
+                    "scene_description": "高山露天训练场强风加大人流拥塞",
+                    "preference_override": {"resolution": "720p", "rtt_max": "100ms"},
+                }
+            ],
+            "sub_storylines": [
+                {
+                    "application_name": "腾讯会议",
+                    "service_name": "视频会议",
+                    "params": {"resolution": "720p", "rtt_max": "80ms"},
+                }
+            ],
+            "distractor_pool": [{"application_name": "王者荣耀", "service_name": "游戏加速"}],
+        },
+    }
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        ledger = WorkingRecordsLedger(user_id="USER_001", storage_path=Path(tmp_dir) / "working_records.jsonl")
+        exp_bank = ExperienceBank()
+        plans = DynamicTimelinePlanner.plan(persona=mock_persona, working_ledger=ledger, experience_bank=exp_bank)
+        records = ledger.get_all_records()
+
+    assert len(records) > 0
+    assert all(r.get("source_session_id") is not None for r in records)
+
+    # Verify Prior-Memory + True Multi-Turn Slot-Evolving ratio > 65% (and 100% among multi-turn reuse/reinforcement/correction)
+    tracker = MemoryTracker()
+    true_mem_multiturn = 0
+    reuse_multiturn_total = 0
+    reuse_multiturn_evolving = 0
+    for p in plans:
+        snap, mem_ev, gold = tracker.process_session(p)
+        rc = p["round_count"]
+        events = []
+        for t in range(1, rc + 1):
+            is_last = t == rc
+            u_act, a_act = get_normalized_action_types(p, t, p["memory_role"], is_last, [], [])
+            events.append({
+                "turn": t,
+                "user": {"utterance": get_fallback_user_utterance(p, t, p["memory_role"]), "action_types": u_act},
+                "agent": {"utterance": get_fallback_agent_utterance(p, t, p["memory_role"], is_last), "action_types": a_act},
+            })
+        s_obj = SessionAssembler.assemble(p, snap, mem_ev, gold, events)
+        has_prior_mem = bool(snap) or bool(p.get("working_memory_pointer")) or bool((p.get("experience_citation") or {}).get("experience_id"))
+        t2_plus_updates = any(
+            tu.get("turn", 1) >= 2 and bool(tu.get("params"))
+            for su in s_obj.get("slot_updates", [])
+            for tu in su.get("turn_updates", [])
+        )
+        if has_prior_mem and p["memory_role"] != "evidence_session" and rc >= 2 and t2_plus_updates:
+            true_mem_multiturn += 1
+        if p["memory_role"] in ("reinforcement_session", "reuse_session", "correction_session") and rc >= 2:
+            reuse_multiturn_total += 1
+            if t2_plus_updates:
+                reuse_multiturn_evolving += 1
+
+    assert reuse_multiturn_evolving == reuse_multiturn_total
+    assert true_mem_multiturn / len(plans) >= 0.60
+    fast_closure_mem = sum(
+        1 for p in plans if p["memory_role"] == "reuse_session" and p["round_count"] == 1 and p.get("agility_factor") == 1.0
+    )
+    assert fast_closure_mem >= 2
+
+
+

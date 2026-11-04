@@ -4,32 +4,33 @@
   "persona_summary": "户外创作与演出人员",
   "static_profile": {
     "user_id": "USER_022",
-    "identity": "一位拥有丰富木材经验、能推荐优质供应商的室内设计师，同时活跃于户外创作与演出领域，常在城市户外演出点、展览布置区、城市采风路线及音乐节、街头活动或临时排练现场进行现场音视频采集、直播与作品上传、云端素材同步、社交发布与团队沟通，全程依赖手机4G/5G直接联网，不依赖家庭宽带或公司固网。",
-    "devices": "主力设备为5G智能手机，辅助设备包括可穿戴设备（如智能手表）及便携终端（通过手机热点联网）。",
+    "identity": "资深室内设计师兼户外创作演出人员，擅长木质材料工艺与供应商资源对接，日常在城市户外演出点、展览布置区、音乐节与街头活动现场进行音视频采集、直播推流与云端素材同步，全程依赖手机移动核心网（4G/5G）直连，不依赖固网或普通Wi-Fi。",
+    "devices": "主力设备为5G智能手机，辅助设备为可穿戴设备（智能手表/无线麦克风），便携终端确需联网时使用手机热点。",
     "apps": [
-      "微信",
       "抖音",
+      "微信",
       "腾讯会议",
+      "小红书",
       "哔哩哔哩"
     ],
     "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "干脆利落、带点江湖气，习惯用行话和简称，语速偏快，喜欢用“老规矩”来指代固定安排。",
+      "tone": "干脆利落、带点匠人式的务实与现场感，习惯用短句确认参数与时间",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "稳一手"
+        "按原画推"
       ],
-      "typical_habits": "在布置现场或演出前习惯先确认网络和推流参数，口头禅式地提醒团队“别掉链子”；遇到弱覆盖会立刻说“稳一手，先续传”；周期任务前爱说“老时间老地方”。"
+      "typical_habits": "开工前先口头对齐画质与时延档位，习惯用'老时间''老规矩'指代固定周期任务，遇到弱覆盖会强调'续传别断'。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "每周二、周四下午户外创作直播与素材同步",
+      "name": "每周二、周四下午户外创作直播推流",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每周二与周四下午14:00-15:30的常规户外创作直播与研讨时段，固定进行现场音视频采集、直播推流与云端素材同步。",
+      "trigger_condition": "每周二与周四下午14:00-15:30的常规户外创作直播与作品推流时段，在户外演出点或展览布置区开播并同步云端素材",
       "period_type": "weekly",
       "days": [
         "Tuesday",
@@ -48,8 +49,8 @@
           "抖家"
         ],
         "service_aliases": [
-          "推流",
-          "开播"
+          "开播",
+          "推流"
         ],
         "resolution_aliases": [
           "1080p原画",
@@ -80,10 +81,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "城市音乐节密集人群直播保障周",
+        "name": "秋季城市音乐节密集演出周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "音乐节现场人群密集、基站负载高，且演出点位于临时搭建区域，存在弱覆盖路段，需优先保证连接可用与音视频上行稳定，允许适当降低画质以换取流畅推流。",
+        "scene_description": "音乐节现场人群密集、基站负载高，户外演出点与临时排练现场交替，需保证音视频上行稳定与直播互动低时延，弱覆盖路段需可续传。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -93,14 +94,14 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "演出后团队视频复盘会",
+        "name": "团队远程对齐与素材复盘会议",
         "application_name": "腾讯会议",
         "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "每次户外演出或直播结束后当晚，与团队进行视频复盘沟通，回顾现场素材与直播表现。",
+        "trigger_condition": "演出或布展结束后与团队远程对齐进度、复盘现场素材时",
         "aliases": {
           "app_aliases": [
             "tencentmeeting",
@@ -122,14 +123,14 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "跨城采风途中与供应商视频沟通",
+        "name": "作品短视频剪辑发布与社交沟通",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "在城市采风或跨区域出行途中，需要与木材供应商或客户进行视频通话确认材料细节与方案。",
+        "trigger_condition": "与供应商或客户就木质材料方案进行视频通话沟通时",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -153,9 +154,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "临时在街头活动间隙刷短视频放松",
-        "application_name": "小红书",
-        "service_name": "开直播",
+        "scenario": "单次观看同行音乐节直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -163,9 +164,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次观看同行音乐节直播参考布景",
-        "application_name": "快手",
-        "service_name": "看直播",
+        "scenario": "单次浏览小红书短视频找布展灵感",
+        "application_name": "小红书",
+        "service_name": "短视频",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

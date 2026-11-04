@@ -4,61 +4,60 @@
   "persona_summary": "移动训练与参赛人员",
   "static_profile": {
     "user_id": "USER_028",
-    "identity": "退役的阿尔斯特橄榄球运动员，现为青训教练与赛事保障顾问，常带孙辈参与社区体育活动，习惯在户外训练场、客场转场途中和赛事集结区用手机处理训练记录、团队调度与视频上传。",
-    "devices": "主力设备为5G智能手机，辅助设备为随身运动相机与便携拍摄设备；外出时以手机热点为其他便携终端提供联网。",
+    "identity": "退役的阿尔斯特橄榄球运动员，现常与孙辈分享往昔赛场故事；仍保持每日晨间训练与赛事转播关注习惯，活动范围覆盖露天训练场、球场及赛事集结区，全程依赖手机移动核心网联网。",
+    "devices": "主力设备为5G智能手机，辅助设备为随身拍摄设备（运动相机/手机云台），便携终端确需联网时使用手机热点。",
     "apps": [
       "微信",
-      "腾讯会议",
       "抖音",
+      "腾讯会议",
       "哔哩哔哩"
     ],
     "speech_archetype": "athlete_speaker",
     "speech_style": {
-      "tone": "直爽、带点老派教练的调侃，喜欢用橄榄球行话，对孙辈说话时温和耐心。",
+      "tone": "爽朗直率、带点老派教练腔，喜欢用球场行话和家常比喻，讲起旧比赛眉飞色舞。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "当年我们那会儿"
+        "当年我在场上那会儿"
       ],
-      "typical_habits": "习惯在固定时段先确认团队通知，再开视频或直播；讲训练安排时爱用短句和口令式表达，回忆往事时语速放慢。"
+      "typical_habits": "习惯用口语化简称指代应用和业务，谈参数时爱用'原画''低时延''俩钟头'这类说法；安排事情先定时间点，再强调'别卡'。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "晨间训练数据同步与团队视频调度",
+      "name": "晨间训练直播与团队调度",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每天早高峰通勤与晨间例行业务：08:30-10:00在前往训练场或赛事集结区途中，用手机完成团队视频调度、训练数据回传与路线确认。",
+      "trigger_condition": "每天早高峰晨间例行训练时段，在露天训练场开直播记录训练并同步团队调度",
       "period_type": "daily",
       "days": [
         "daily"
       ],
       "time_range": "08:30-10:00",
-      "application_name": "腾讯会议",
-      "service_name": "会议",
+      "application_name": "抖音",
+      "service_name": "开直播",
       "preferred_params": {
-        "resolution": "720p",
-        "rtt_max": "50ms"
+        "resolution": "1080p",
+        "rtt_max": "100ms"
       },
       "aliases": {
         "app_aliases": [
-          "企鹅会议",
-          "腾讯开会"
+          "阿抖",
+          "抖子"
         ],
         "service_aliases": [
-          "对齐开会",
-          "连麦碰头",
-          "开个短会"
+          "开播",
+          "推流"
         ],
         "resolution_aliases": [
-          "720p",
-          "高清"
+          "1080p原画",
+          "1080p",
+          "超清"
         ],
         "rtt_aliases": [
-          "50ms以内",
-          "50毫秒以内",
-          "低时延"
+          "100ms以内",
+          "100毫秒以内"
         ],
         "duration_aliases": [
           "一个半小时",
@@ -79,10 +78,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨城橄榄球邀请赛赛事周",
+        "name": "跨城橄榄球元老赛周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "赛事周期间在露天球场与临时休息点之间频繁转场，人群密集、移动网络波动大，需优先保障团队调度与训练视频回传的连续性。",
+        "scene_description": "赛事集结区与客场转场途中人群密集，网络拥塞，需临时降低画质并收紧时延保障直播与调度连续。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -92,22 +91,22 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "大巴转场视频调度",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "name": "大巴转场视频调度会",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "客场转场途中在大巴上临时确认集合点与人员到齐情况时发起群视频通话。",
+        "trigger_condition": "客场转场大巴途中临时召集团队调度会，需稳定连麦对齐行程",
         "aliases": {
           "app_aliases": [
-            "weixin",
-            "wx"
+            "tencentmeeting",
+            "会议通"
           ],
           "service_aliases": [
-            "打视频",
-            "连线"
+            "开会",
+            "进会议室"
           ],
           "resolution_aliases": [
             "720p",
@@ -122,21 +121,21 @@
       {
         "storyline_id": "SUB_02",
         "name": "训练录像复盘上传",
-        "application_name": "抖音",
-        "service_name": "短视频",
+        "application_name": "快手",
+        "service_name": "看直播",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "训练结束后在临时休息点回看并上传训练片段，供团队复盘与孙辈观看。",
+        "trigger_condition": "训练结束后上传录像片段供团队复盘与孙辈观看",
         "aliases": {
           "app_aliases": [
-            "douyin",
-            "阿抖"
+            "kuaishou",
+            "快手视频"
           ],
           "service_aliases": [
-            "看短视频",
-            "刷视频"
+            "观赛",
+            "刷直播"
           ],
           "resolution_aliases": [
             "1080p原画",
@@ -152,9 +151,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次任务场景：在赛事集结区临时用抖音看一场橄榄球直播。",
-        "application_name": "抖音",
-        "service_name": "看直播",
+        "scenario": "单次与孙辈视频通话",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -162,9 +161,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次任务场景：在户外热身区用微信给孙辈开一次短视频分享。",
-        "application_name": "微信",
-        "service_name": "短视频",
+        "scenario": "单次观看赛事直播",
+        "application_name": "快手",
+        "service_name": "看直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

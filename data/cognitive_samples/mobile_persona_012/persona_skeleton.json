@@ -4,32 +4,33 @@
   "persona_summary": "户外内容创作者",
   "static_profile": {
     "user_id": "USER_012",
-    "identity": "户外内容创作者兼新手博主，每周3至5次外出任务，在城市采风、街区采访点、活动现场及临时拍摄地拍摄短视频、发起移动直播、查看互动数据并分段回传素材；全程以5G智能手机＋随身拍摄设备直接接入移动核心网，不依赖家庭宽带或固定Wi-Fi，便携终端联网时用手机热点。",
-    "devices": "5G智能手机（主力，直播与上传）＋随身拍摄设备（运动相机/口袋云台）＋手机热点为辅助终端供网",
+    "identity": "户外内容创作者兼新手博主，每周3至5次外出采编任务，在城市活动现场、街区采访点、临时拍摄地与转场途中完成短视频拍摄上传、移动直播、素材回传与云端协作，全程仅以手机4G/5G直接联网，便携设备联网时开手机热点。",
+    "devices": "主力：5G智能手机；辅助：随身拍摄设备（运动相机/口袋云台）、便携麦克风、备用充电宝",
     "apps": [
       "抖音",
       "快手",
       "微信",
-      "哔哩哔哩"
+      "哔哩哔哩",
+      "小红书"
     ],
     "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "直爽利落、带点自嘲的户外博主口吻，讲效率、怕掉链子，习惯用行话报参数",
+      "tone": "语速偏快、直给，带点自嘲的博主腔，讲效率不讲客套，遇到网络问题会边吐槽边报参数",
       "catchphrases": [
         "老规矩",
         "别掉链子",
-        "对齐一下",
-        "这条得原画推上去"
+        "先推上去再说",
+        "这段别断啊"
       ],
-      "typical_habits": "开播前先口头确认画质和时延档位，转场路上反复叮嘱素材别断传，遇到弱覆盖会先降档保连续再补传"
+      "typical_habits": "开播前先念叨一遍画质和时延要求，转场路上习惯用语音跟搭档对齐进度，事后爱复盘哪段卡了、哪段传得顺"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "午间街区采风移动直播与素材回传",
+      "name": "街区采访点午间移动直播与素材回传",
       "storyline_trigger_type": "location_environment",
-      "trigger_condition": "中午11:00-13:30进入街区采访点、活动现场或临时拍摄地，在楼宇遮挡与人群密集的弱覆盖路段架机开播并同步分段回传素材时触发",
+      "trigger_condition": "中午11:00-13:30在街区采访点、临时拍摄地或活动现场周边老城区窄巷与地下通道口一带，手机信号在楼宇遮挡和转场切换中波动，需就地开直播并同步分段回传素材",
       "period_type": "location_driven",
       "days": [
         "location_specific"
@@ -44,7 +45,7 @@
       "aliases": {
         "app_aliases": [
           "阿抖",
-          "抖子"
+          "抖家"
         ],
         "service_aliases": [
           "开播",
@@ -76,10 +77,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "秋季城市采风节连续外拍周",
+        "name": "城市秋季市集活动周连续外拍直播",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "采风节期间街区人流暴增、临时舞台与展棚密集遮挡，午间直播点周边基站拥塞，上行波动明显，需降档保连续推流",
+        "scene_description": "市集设在老城区广场与地下展销通道交界处，人流密集、基站拥塞，转场需穿过地下通道弱覆盖段，直播与素材回传同时进行",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -89,14 +90,14 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "转场途中素材分段回传与云端协作",
+        "name": "转场途中与搭档视频通话对齐拍摄脚本",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "拍摄结束转场乘车或步行途中，与剪辑搭档视频通话对齐素材分段与云端目录时触发",
+        "trigger_condition": "在两个拍摄点之间步行或乘车转场、需要临时对齐机位和采访问题时",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -118,14 +119,14 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "晚间素材复盘与成片预览",
+        "name": "收工后素材云端协作与剪辑沟通",
         "application_name": "咪咕快游",
         "service_name": "云游戏",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "收工回到临时落脚点后，用手机流量刷成片预览、核对画质与节奏时触发",
+        "trigger_condition": "傍晚收工回到临时落脚点，用手机热点上传粗剪片段并与合作剪辑师核对版本时",
         "aliases": {
           "app_aliases": [
             "migukuaiyou",
@@ -149,9 +150,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "临时接到品牌方需求，单次开腾讯会议沟通脚本与投放档期",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "scenario": "等采访对象时在街边刷同行直播找选题灵感",
+        "application_name": "快手",
+        "service_name": "看直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -159,9 +160,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "等转场车时单次刷快手看同行直播找选题灵感",
-        "application_name": "快手",
-        "service_name": "看直播",
+        "scenario": "临时被活动主办方拉进线上协调会说明拍摄安排",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

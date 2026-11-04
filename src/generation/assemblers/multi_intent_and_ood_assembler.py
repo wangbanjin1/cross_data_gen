@@ -118,8 +118,8 @@ class MultiIntentAndOODAssemblerMixin:
                 },
             }
         ]
-        if cross_turn and len(events) >= 3:
-            events[1]["requested_params"] = ["resolution"]
+        if len(events) >= 3:
+            events[1]["requested_params"] = []
             events[1]["turn_intents"] = [
                 {
                     "intent_id": "I1",
@@ -127,16 +127,7 @@ class MultiIntentAndOODAssemblerMixin:
                     "closure_path": "clarify",
                     "expression_level": 1,
                     "intent": f"{app}{srv}保障",
-                    "params": {
-                        "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
-                        "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
-                        "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U2"}},
-                        "timestamp": {
-                            "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
-                            "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U2"},
-                            "duration": {"value": dur, "source_type": "Turn", "source_ref": "U2"},
-                        },
-                    },
+                    "params": intents[0]["params"],
                 }
             ]
             events[2]["requested_params"] = []
@@ -149,7 +140,7 @@ class MultiIntentAndOODAssemblerMixin:
     def _assemble_t2_2(cls, sid, uid, ref_time, tid, role, b_type, env, act, app, srv, res, rtt, start, end, dur, events, snap, mems, gold, evidence_mode="explicit_declaration"):
         cross_turn = evidence_mode == "cross_turn_clarification" or len(events) == 3 or tid == "T3-1"
         actual_tid = "T3-1" if cross_turn else tid
-        resolution_ref = "U3" if cross_turn else "U2"
+        resolution_ref = "U2"
         sig = f"{actual_tid}|{len(events)}|1|I1:{app}/{srv}/1/clarified/resolved|none"
         intents = [
             {
@@ -197,9 +188,8 @@ class MultiIntentAndOODAssemblerMixin:
                 ],
             }
         ]
-        if cross_turn:
-            slot_updates[0]["turn_updates"][1]["params"].pop("resolution", None)
-            slot_updates[0]["turn_updates"].append({"turn": 3, "params": {"resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U3"}}}})
+        if len(events) >= 3:
+            slot_updates[0]["turn_updates"].append({"turn": 3, "params": {}})
         cls._populate_t2_2_events(events, cross_turn, app, srv, rtt, start, end, dur, intents)
         return {
             "session_id": sid,
@@ -319,16 +309,43 @@ class MultiIntentAndOODAssemblerMixin:
             {"intent_id": "I1", "status": "resolved", "closure_path": i1_closure, "expression_level": 1, "intent": f"{app}{srv}保障", "params": p1},
             {"intent_id": "I2", "status": "resolved", "closure_path": i2_closure, "expression_level": 1, "intent": f"{app2}{srv2}保障", "params": p2},
         ]
-        slot_updates = [
-            {"intent_id": "I1", "turn_updates": [{"turn": 1, "params": p1}, {"turn": 2, "params": {}}]},
-            {"intent_id": "I2", "turn_updates": [{"turn": 1, "params": p2}, {"turn": 2, "params": {}}]},
-        ]
+        if has_exp:
+            p1_t1 = p1
+            p1_t2 = {
+                "application_name": {"value": app, "source_type": "Experience", "source_ref": exp_id},
+                "service_name": {"value": srv, "source_type": "Experience", "source_ref": exp_id},
+            }
+            slot_updates = [
+                {"intent_id": "I1", "turn_updates": [{"turn": 1, "params": p1_t1}, {"turn": 2, "params": p1_t2}]},
+                {"intent_id": "I2", "turn_updates": [{"turn": 1, "params": p2}, {"turn": 2, "params": {}}]},
+            ]
+        else:
+            p1_t1 = {
+                "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
+                "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
+                "timestamp": {
+                    "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
+                    "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
+                    "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"},
+                },
+            }
+            p1_t2 = {
+                "resolution": {"min_value": {"value": res, "source_type": "Memory", "source_ref": "SUB_001"}},
+                "rtt": {"max_value": {"value": rtt, "source_type": "Memory", "source_ref": "SUB_001"}},
+            }
+            slot_updates = [
+                {"intent_id": "I1", "turn_updates": [{"turn": 1, "params": p1_t1}, {"turn": 2, "params": p1_t2}]},
+                {"intent_id": "I2", "turn_updates": [{"turn": 1, "params": p2}, {"turn": 2, "params": {}}]},
+            ]
         rel_type = "sequential_heterogeneous" if multi_intent_mode == "heterogeneous" else "parallel_homogeneous"
         relations = [{"relation_id": "R1", "type": rel_type, "source_intent_id": "I1", "target_intent_id": "I2"}]
         if events and len(events) >= 2:
-            events[0]["requested_params"] = []
+            events[0]["requested_params"] = ["application_name", "service_name"] if has_exp else ["resolution", "rtt"]
             events[0]["related_intent_ids"] = ["I1", "I2"]
-            events[0]["turn_intents"] = [{**intents[0], "status": "in_progress"}, {**intents[1], "status": "in_progress"}]
+            events[0]["turn_intents"] = [
+                {**intents[0], "status": "in_progress", "params": p1_t1},
+                {**intents[1], "status": "in_progress"},
+            ]
             if has_exp:
                 events[0]["experience_citation"] = exp_c
             events[1]["requested_params"] = []

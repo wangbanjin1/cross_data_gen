@@ -4,32 +4,32 @@
   "persona_summary": "户外公益与社群组织者",
   "static_profile": {
     "user_id": "USER_026",
-    "identity": "年轻工会成员，受布克事迹激励投身公共事务；日常以户外公益与社群组织为主业，负责社区走访、公益现场协调、志愿者调度与政策资料查询，全程依赖手机移动核心网（4G/5G）直接联网，不依赖家庭宽带或固网。",
-    "devices": "主力为5G智能手机，辅助为便携工作终端（需联网时使用手机热点共享）",
+    "identity": "年轻工会成员，受布克事迹激励，长期从事户外公益与社群组织工作；日常在社区走访点、公共活动现场、户外调研点与临时会议区之间高频移动，负责发布通知、直播活动、收集电子反馈并协调志愿者位置，全程以手机移动核心网直接联网。",
+    "devices": "主力为5G智能手机，辅助为便携工作终端（确需联网时使用手机热点）",
     "apps": [
       "腾讯会议",
       "微信",
       "钉钉",
-      "飞书"
+      "抖音"
     ],
     "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "干练直接、带现场指挥感，语速偏快，习惯用短句确认进度",
+      "tone": "干脆利落、带现场指挥感，语速偏快，习惯用短句确认进度",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "现场情况我盯着"
+        "现场情况我随时同步"
       ],
-      "typical_habits": "出发前先在群里喊一声集合，现场边走动边用语音消息同步位置，遇到关键节点会主动发起视频会议对齐，收尾时习惯回传材料并口头确认'都收到了吧'"
+      "typical_habits": "出发前先在群里喊人确认位置，现场用语音快速布置任务，遇到信号问题先问'卡不卡'再决定是否降画质"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "晨间外勤现场协调会与材料回传",
+      "name": "晨间外勤公益现场视频会议与材料回传",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "在社区走访点或公益活动现场开工前，组织志愿者与协作方召开晨间视频会议，同步当日走访路线、人员分工，并回传现场记录与电子表单",
+      "trigger_condition": "在社区走访点或公共活动现场执行晨间外勤公益任务时，需与后方志愿者骨干召开视频会议对齐当日分工，并回传现场记录与电子表单材料",
       "period_type": "task_driven",
       "days": [
         "task_specific"
@@ -44,14 +44,12 @@
       "aliases": {
         "app_aliases": [
           "企鹅会议",
-          "腾讯会",
-          "小企鹅开会"
+          "腾讯会议"
         ],
         "service_aliases": [
           "对齐开会",
           "开个碰头会",
-          "连麦对一下",
-          "拉个会"
+          "连麦对进度"
         ],
         "resolution_aliases": [
           "720p",
@@ -84,7 +82,7 @@
         "name": "跨区公益联动周现场直播保障",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "跨区公益联动周期间，多个社区走访点同时开展活动，现场人流密集、基站负载高，需在移动中稳定直播活动实况并回传材料，网络波动明显",
+        "scene_description": "跨区公益联动周期间，多个社区走访点与公共活动现场同时开展，人员密集、移动网络拥塞，需在户外临时点位持续直播活动并同步协调志愿者位置，网络波动明显",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -94,14 +92,14 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "志愿者位置调度与即时通信",
+        "name": "志愿者群即时通信与位置协调",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "走访途中志愿者位置分散、需临时调整分工时，发起一对一或群组视频通话确认位置与任务",
+        "trigger_condition": "外勤途中志愿者位置临时变动或现场反馈需快速核实，用微信视频通话直接连线确认",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -123,22 +121,22 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "活动实况直播与社群扩散",
+        "name": "活动精彩片段短视频发布",
         "application_name": "抖音",
-        "service_name": "开直播",
+        "service_name": "短视频",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "公益活动现场进入高潮环节或需要扩大社群影响力时，开启直播向公众展示现场并收集线上反馈",
+        "trigger_condition": "公共活动现场出现值得传播的公益瞬间，随手拍摄并剪辑发布短视频扩大社群影响",
         "aliases": {
           "app_aliases": [
             "douyin",
             "阿抖"
           ],
           "service_aliases": [
-            "推流",
-            "开播"
+            "看短视频",
+            "刷视频"
           ],
           "resolution_aliases": [
             "1080p原画",
@@ -154,9 +152,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "午休时在通勤途中刷短视频放松",
-        "application_name": "快手",
-        "service_name": "短视频",
+        "scenario": "临时接到通知需远程参加一次工会内部线上会议",
+        "application_name": "钉钉",
+        "service_name": "会议",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -164,8 +162,8 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "晚间在家观看公益主题直播回放",
-        "application_name": "哔哩哔哩",
+        "scenario": "休息间隙在通勤途中刷公益类直播了解同行活动动态",
+        "application_name": "快手",
         "service_name": "看直播",
         "params": {
           "resolution": "720p",

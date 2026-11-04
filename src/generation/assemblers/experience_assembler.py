@@ -30,9 +30,28 @@ class ExperienceAssemblerMixin:
             events[0]["experience_citation"] = exp_c
 
     @classmethod
-    def _assemble_t2_9_prewarm(cls, app, srv, res, rtt, start, end, dur, events, exp_c, exp_id, learning_source_session):
+    def _assemble_t2_9_prewarm(cls, app, srv, res, rtt, start, end, dur, events, exp_c, exp_id, learning_source_session, nominal_start=None, nominal_dur=None):
         closure_path = "proactive_prewarm"
         sig = f"T2-9|{len(events)}|1|I1:{app}/{srv}/1/{closure_path}/resolved|none"
+        init_start = nominal_start or start
+        init_dur = nominal_dur or dur
+        t1_params = {
+            "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
+            "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
+            "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}},
+            "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}},
+            "timestamp": {
+                "start_timestamp": {"value": start, "source_type": "Experience", "source_ref": exp_id},
+                "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
+                "duration": {"value": dur, "source_type": "Experience", "source_ref": exp_id},
+            },
+        }
+        t2_params = {
+            "timestamp": {
+                "start_timestamp": {"value": start, "source_type": "Experience", "source_ref": exp_id},
+                "duration": {"value": dur, "source_type": "Experience", "source_ref": exp_id},
+            }
+        }
         params = {
             "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
             "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
@@ -45,8 +64,10 @@ class ExperienceAssemblerMixin:
             },
         }
         intents = [{"intent_id": "I1", "status": "resolved", "closure_path": closure_path, "expression_level": 1, "intent": f"{app}{srv}保障", "params": params}]
-        slot_updates = [{"intent_id": "I1", "turn_updates": [{"turn": 1, "params": params}, {"turn": 2, "params": {}}]}]
-        cls._populate_experience_two_turn_events(events, closure_path, app, srv, intents, exp_c)
+        slot_updates = [{"intent_id": "I1", "turn_updates": [{"turn": 1, "params": t1_params}, {"turn": 2, "params": t2_params}]}]
+        cls._populate_experience_two_turn_events(events, closure_path, app, srv, intents, exp_c, t1_params=t1_params)
+        if events and len(events) >= 2:
+            events[0]["requested_params"] = ["start_timestamp", "duration"]
         u_prompt = events[0]["user"]["utterance"] if events and "user" in events[0] else ""
         branching_info = cls._build_experience_branching(
             scenario_type="prewarm_buffer",
@@ -116,7 +137,7 @@ class ExperienceAssemblerMixin:
         return sig, intents, slot_updates, branching_info
 
     @classmethod
-    def _assemble_t2_9(cls, sid, uid, ref_time, tid, role, b_type, env, act, app, srv, res, rtt, start, end, dur, events, snap, mems, gold, experience_citation=None, learning_source_session=None):
+    def _assemble_t2_9(cls, sid, uid, ref_time, tid, role, b_type, env, act, app, srv, res, rtt, start, end, dur, events, snap, mems, gold, experience_citation=None, learning_source_session=None, nominal_start=None, nominal_dur=None):
         """T2-9: 经验记忆 ReasoningBank 主动经验提议 (2 轮 / 3 轮协商 / 负反例边界)"""
         exp_c = experience_citation or {}
         exp_id = exp_c.get("experience_id") or "EXP_PREWARM_BUFFER_01"
@@ -124,7 +145,7 @@ class ExperienceAssemblerMixin:
         is_counter = exp_c.get("counterexample_applied", False) or exp_c.get("strategy_type") == "negative_counterexample"
         if is_prewarm:
             sig, intents, slot_updates, branching_info = cls._assemble_t2_9_prewarm(
-                app, srv, res, rtt, start, end, dur, events, exp_c, exp_id, learning_source_session
+                app, srv, res, rtt, start, end, dur, events, exp_c, exp_id, learning_source_session, nominal_start=nominal_start, nominal_dur=nominal_dur
             )
         else:
             sig, intents, slot_updates, branching_info = cls._assemble_t2_9_proactive(
@@ -164,11 +185,38 @@ class ExperienceAssemblerMixin:
             srv_src, srv_ref = "Experience", exp_id
             res_src, res_ref = "Turn", "U1"
             rtt_src, rtt_ref = "Turn", "U1"
+            t1_params = {
+                "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
+                "service_name": {"value": "看直播", "source_type": "Turn", "source_ref": "U1"},
+                "resolution": {"min_value": {"value": res, "source_type": "Turn", "source_ref": "U1"}},
+                "rtt": {"max_value": {"value": rtt, "source_type": "Turn", "source_ref": "U1"}},
+                "timestamp": {
+                    "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
+                    "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
+                    "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"},
+                },
+            }
+            t2_params = {
+                "service_name": {"value": srv, "source_type": "Experience", "source_ref": exp_id},
+            }
         else:
             closure_path = "empirical_recall"
             srv_src, srv_ref = "Turn", "U1"
             res_src, res_ref = "Experience", exp_id
             rtt_src, rtt_ref = "Experience", exp_id
+            t1_params = {
+                "application_name": {"value": app, "source_type": "Turn", "source_ref": "U1"},
+                "service_name": {"value": srv, "source_type": "Turn", "source_ref": "U1"},
+                "timestamp": {
+                    "start_timestamp": {"value": start, "source_type": "Turn", "source_ref": "U1"},
+                    "end_timestamp": {"value": end, "source_type": "Turn", "source_ref": "U1"},
+                    "duration": {"value": dur, "source_type": "Turn", "source_ref": "U1"},
+                },
+            }
+            t2_params = {
+                "resolution": {"min_value": {"value": res, "source_type": "Experience", "source_ref": exp_id}},
+                "rtt": {"max_value": {"value": rtt, "source_type": "Experience", "source_ref": exp_id}},
+            }
 
         sig = f"T2-10|{len(events)}|1|I1:{app}/{srv}/1/{closure_path}/resolved|none"
         params = {
@@ -183,8 +231,10 @@ class ExperienceAssemblerMixin:
             },
         }
         intents = [{"intent_id": "I1", "status": "resolved", "closure_path": closure_path, "expression_level": 1, "intent": f"{app}{srv}保障", "params": params}]
-        slot_updates = [{"intent_id": "I1", "turn_updates": [{"turn": 1, "params": params}, {"turn": 2, "params": {}}]}]
-        cls._populate_experience_two_turn_events(events, closure_path, app, srv, intents, exp_c)
+        slot_updates = [{"intent_id": "I1", "turn_updates": [{"turn": 1, "params": t1_params}, {"turn": 2, "params": t2_params}]}]
+        cls._populate_experience_two_turn_events(events, closure_path, app, srv, intents, exp_c, t1_params=t1_params)
+        if events and len(events) >= 2:
+            events[0]["requested_params"] = ["service_name"] if is_overlap else ["resolution", "rtt"]
         u_prompt = events[0]["user"]["utterance"] if events and "user" in events[0] else ""
         branching_info = cls._build_experience_branching(
             scenario_type="overlapping_resolution",

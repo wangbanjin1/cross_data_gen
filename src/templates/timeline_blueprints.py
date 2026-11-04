@@ -63,7 +63,10 @@ def get_session_blueprints(
         "slot_test_map": slot_test_map,
     }
     candidate_slots = build_raw_blueprint_specs(ctx)
-    selected = [dict(slot) for slot in candidate_slots[:target_count]]
+    if target_count < len(candidate_slots):
+        selected = [dict(slot) for slot in candidate_slots[: target_count - 1]] + [dict(candidate_slots[-1])]
+    else:
+        selected = [dict(slot) for slot in candidate_slots[:target_count]]
     dates = _generate_timeline_dates(storyline_trigger_type, period_type, days, count=len(selected))
 
     evt_corr_idx = next((i for i, s in enumerate(selected) if s["tag"] == "evt_correct"), 10)

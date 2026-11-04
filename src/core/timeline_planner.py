@@ -517,7 +517,7 @@ class DynamicTimelinePlanner:
             "working_memory_pointer": working_memory_pointer, "working_memory_query": working_memory_query,
             "experience_citation": experience_citation, "is_counterexample": cfg.get("is_counterexample", False),
             "is_disambiguation": tag == "wm_disambig", "second_source": cfg.get("second_source"),
-            "nominal_start": cfg.get("nominal_start"), "nominal_dur": cfg.get("nominal_dur"),
+            "nominal_start": cfg.get("nominal_start"), "nominal_end": cfg.get("nominal_end"), "nominal_dur": cfg.get("nominal_dur"),
             "holiday_defer_date": cfg.get("holiday_defer_date"), "learning_source_session": learning_source_session,
             "experience_id": cfg.get("experience_id"), "retrieval_challenge_type": challenge_type,
             "contrast_negated_app": neg_app, "contrast_negated_service": neg_srv,

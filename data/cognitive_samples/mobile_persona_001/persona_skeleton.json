@@ -4,32 +4,32 @@
   "persona_summary": "巡回活动讲者",
   "static_profile": {
     "user_id": "USER_001",
-    "identity": "前残奥高山滑雪运动员，现为励志巡回演讲者，常年跨城转场，在户外公益活动、赛事集结区与临时休息点之间移动办公，全程依赖手机移动核心网完成直播、调度与素材回传。",
-    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时统一使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "identity": "前残奥高山滑雪运动员，现为励志巡回演讲者，常年跨城转场参加户外公益活动、赛事集结与训练营，全程以手机4G/5G直接联网，不依赖固网或普通Wi-Fi，便携终端联网时使用手机热点。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑（经手机热点联网）",
     "apps": [
       "微信",
       "抖音",
       "腾讯会议",
-      "钉钉"
+      "快手"
     ],
     "speech_archetype": "athlete_speaker",
     "speech_style": {
-      "tone": "干脆利落、带运动员的节奏感，讲效率不绕弯，习惯用训练场上的口令式表达",
+      "tone": "干脆利落、带运动员的节奏感，讲效率也讲人情，习惯用短句和行动指令",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "稳住上行"
+        "稳住，能上"
       ],
-      "typical_habits": "开口先定时间和档位，再确认网络与设备状态；习惯把复杂流程压缩成一句口令，讲完就催着执行。"
+      "typical_habits": "开口先定时间和地点，再确认设备和网络；喜欢用'老时间''老规矩'指代固定安排，遇到网络问题会直接要求'降一档画质先保住推流'"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "午间户外公益演讲移动直播",
+      "name": "午间户外公益直播与演讲片段回传",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每天午间休息与午间复盘业务：12:30-13:30在户外活动点或转场临时休息点开直播，同步接收活动流程并回传演讲片段与观众反馈",
+      "trigger_condition": "每天午间休息与午间复盘业务：12:30-13:30在户外热身区或临时休息点开直播分享励志内容，并回传上午演讲片段与观众反馈",
       "period_type": "daily",
       "days": [
         "daily"
@@ -79,10 +79,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨城公益巡讲周暨赛事集结区联合活动",
+        "name": "跨城公益演讲周暨赛事集结直播",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "连续跨城转场，活动点位于露天赛道旁与赛事集结区，人群密集、基站负载高，转场途中需保持直播与调度通信连续，临时将画质降档并收紧时延以保稳定。",
+        "scene_description": "连续跨城转场，赛事集结区与露天场地人群密集、基站负载高，移动转场中需保持通信连续，视频上行带宽紧张",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -92,22 +92,22 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "转场大巴上的团队视频调度会",
-        "application_name": "腾讯会议",
-        "service_name": "会议",
+        "name": "转场大巴上的团队视频调度",
+        "application_name": "微信",
+        "service_name": "视频通话",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "跨城转场途中在车上与团队对齐当日流程与人员分工时发起",
+        "trigger_condition": "客场转场途中在移动大巴上与团队对齐行程、场地与设备安排",
         "aliases": {
           "app_aliases": [
-            "tencentmeeting",
-            "会议通"
+            "weixin",
+            "wx"
           ],
           "service_aliases": [
-            "开会",
-            "进会议室"
+            "打视频",
+            "连线"
           ],
           "resolution_aliases": [
             "720p",
@@ -121,22 +121,22 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "训练与演讲录像回放复盘",
-        "application_name": "微信",
-        "service_name": "视频通话",
+        "name": "训练与演讲录像复盘会",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "晚间休息点与教练或搭档逐段回放录像、逐帧点评动作与表达时使用",
+        "trigger_condition": "晚间在临时休息点与教练团队开复盘会，回放训练视频与演讲录像并记录数据",
         "aliases": {
           "app_aliases": [
-            "weixin",
-            "wx"
+            "tencentmeeting",
+            "会议通"
           ],
           "service_aliases": [
-            "打视频",
-            "连线"
+            "开会",
+            "进会议室"
           ],
           "resolution_aliases": [
             "1080p原画",
@@ -152,7 +152,7 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "候场时单次刷短视频打发时间",
+        "scenario": "候场时单次刷短视频放松",
         "application_name": "快手",
         "service_name": "短视频",
         "params": {
@@ -162,7 +162,7 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "临时观看合作方公益活动的单次直播",
+        "scenario": "单次观看合作方赛事直播",
         "application_name": "哔哩哔哩",
         "service_name": "看直播",
         "params": {

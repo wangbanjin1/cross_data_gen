@@ -4,34 +4,34 @@
   "persona_summary": "高频移动网络使用者",
   "static_profile": {
     "user_id": "USER_021",
-    "identity": "资深立法起草人，常年在外勤现场（户外等候区、临时停留点、兴趣活动现场、城市街区、公共活动现场及跨区域出行途中）为团队草案提供指导与反馈，全程依赖手机4G/5G移动核心网直连，不依赖固网或普通Wi-Fi，便携工作终端确需联网时以手机热点兜底。",
-    "devices": "5G智能手机（主力）＋便携工作终端（辅助，经手机热点联网）",
+    "identity": "资深立法起草人，常年携带草案文本在城市街区、公共活动现场、户外等候区与跨区域出行途中移动办公，为团队与外部合作方提供草案指导与反馈，全程依赖手机4G/5G直接联网，不依赖固网或普通Wi-Fi。",
+    "devices": "5G智能手机为主力，便携工作终端为辅；便携终端确需联网时使用手机热点。",
     "apps": [
       "微信",
       "腾讯会议",
       "钉钉",
       "抖音",
-      "高德地图"
+      "高德地图",
+      "小红书"
     ],
-    "speech_archetype": "legislative_drafter_speaker",
+    "speech_archetype": "legislative_advisor",
     "speech_style": {
-      "tone": "沉稳严谨、条理分明，习惯先定框架再抠条文，对时限与措辞极为敏感",
+      "tone": "沉稳、条理清晰，习惯先给结论再补条款依据，语速不快但用词精确",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "这条得再抠抠",
-        "按流程走"
+        "这条得再抠一抠"
       ],
-      "typical_habits": "开口先确认时间地点与接入方式，习惯用'老规矩''老时间'指代固定安排；对画质与时延有明确口头档位要求，反馈意见时逐条对照草案条款。"
+      "typical_habits": "喜欢用'对齐''过一遍''抠条款'等行话推进协作，遇到网络不稳会先确认消息是否送达，再决定是否改用语音或热点。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "户外现场草案远程评审会",
+      "name": "户外临时停留点远程草案评审会",
       "storyline_trigger_type": "location_environment",
-      "trigger_condition": "身处城市街区公共活动现场或户外等候区等临时停留点、移动核心网信号偏弱的户外区域时，就地发起草案远程评审与意见反馈",
+      "trigger_condition": "身处城市街区公共活动现场或户外等候区弱网区域，临时停留并需要与起草团队远程过草案条款时触发",
       "period_type": "location_driven",
       "days": [
         "location_specific"
@@ -46,14 +46,12 @@
       "aliases": {
         "app_aliases": [
           "企鹅会议",
-          "腾讯会议",
-          "小企鹅开会"
+          "腾讯会议"
         ],
         "service_aliases": [
           "对齐开会",
-          "过草案",
-          "远程评审",
-          "连麦对条文"
+          "过一遍草案",
+          "连麦过条款"
         ],
         "resolution_aliases": [
           "720p",
@@ -82,12 +80,12 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "跨城立法听证巡回路演周",
+        "name": "跨城立法调研周现场协作",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "连续跨城转场，多在露天广场与临时搭建的听证点停留，移动核心网拥塞、信号波动明显，需临时下调画质并收紧时延以保障评审会不掉线",
+        "scene_description": "跨城调研期间频繁在公共活动现场与户外等候区停留，移动核心网覆盖波动明显，需临时下调画质并收紧时延以保障条款讨论不中断。",
         "preference_override": {
-          "resolution": "720p",
+          "resolution": "540p",
           "rtt_max": "30ms"
         }
       }
@@ -95,22 +93,22 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "移动途中草案要点语音沟通",
+        "name": "现场照片与短视频回传留档",
         "application_name": "微信",
-        "service_name": "视频通话",
+        "service_name": "短视频",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "跨区域出行途中或临时停留点，需与起草组成员快速核对条文要点时发起",
+        "trigger_condition": "在公共活动现场或临时停留点拍到调研素材，需要即时回传给起草团队留档时",
         "aliases": {
           "app_aliases": [
             "weixin",
             "wx"
           ],
           "service_aliases": [
-            "打视频",
-            "连线"
+            "看短视频",
+            "刷视频"
           ],
           "resolution_aliases": [
             "720p",
@@ -124,22 +122,22 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "现场素材回传与短视频留档",
-        "application_name": "抖音",
-        "service_name": "短视频",
+        "name": "跨区域出行途中位置共享与导航",
+        "application_name": "小红书",
+        "service_name": "开直播",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "在公共活动现场采集现场影像并上传留档、同步给团队时使用",
+        "trigger_condition": "跨区域出行途中与对接人共享实时位置并临时视频确认会合点时",
         "aliases": {
           "app_aliases": [
-            "douyin",
-            "阿抖"
+            "xiaohongshu",
+            "红薯"
           ],
           "service_aliases": [
-            "看短视频",
-            "刷视频"
+            "推流",
+            "开播"
           ],
           "resolution_aliases": [
             "1080p原画",
@@ -155,9 +153,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次临时参加外部线上研讨会",
-        "application_name": "钉钉",
-        "service_name": "会议",
+        "scenario": "单次在户外等候区刷短视频打发时间",
+        "application_name": "抖音",
+        "service_name": "短视频",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -165,7 +163,7 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "等候间隙单次观看政策解读直播",
+        "scenario": "单次观看立法相关公开直播活动",
         "application_name": "哔哩哔哩",
         "service_name": "看直播",
         "params": {

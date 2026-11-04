@@ -4,32 +4,32 @@
   "persona_summary": "高频移动网络使用者",
   "static_profile": {
     "user_id": "USER_007",
-    "identity": "一名休闲棒球爱好者，长期参加本地梦幻棒球联赛（fantasy baseball league），高度依赖博客预测与数据更新来调整阵容；日常在城市街区、公共活动现场、跨区域出行途中与户外等候点活动，全程以手机4G/5G直接联网，不依赖家庭宽带或公司固网，便携终端需要联网时开手机热点。",
-    "devices": "5G智能手机（主力）＋可穿戴设备（辅助，用于消息提醒与位置记录）",
+    "identity": "休闲棒球爱好者，依赖博客预测经营梦幻棒球联盟；日常在城市街区、公共活动现场与跨区域出行途中活动，全程以手机4G/5G直接联网，不依赖固网或普通Wi-Fi，便携终端联网时开手机热点。",
+    "devices": "5G智能手机（主力）＋可穿戴设备（辅助）",
     "apps": [
       "微信",
-      "腾讯会议",
       "抖音",
+      "腾讯会议",
       "小红书"
     ],
     "speech_archetype": "casual_fan_mobile_user",
     "speech_style": {
-      "tone": "随性、口语化，带点球迷式的调侃与催促感，谈网络时喜欢用行话短句",
+      "tone": "随性直白、带点球迷式的调侃，讲效率不爱绕弯子",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "这个点必须稳"
+        "稳一点就行"
       ],
-      "typical_habits": "习惯在固定时间点主动声明自己的网络与画质偏好，先报参数再干活；遇到弱覆盖会先抱怨一句再要求续传恢复，说话直接、重结果。"
+      "typical_habits": "出门前先确认网络和电量，习惯用口语化的简称指代应用和画质档位，遇到弱覆盖会先抱怨一句再要求续传恢复"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "月度梦幻棒球阵容盘点与线上对齐会",
+      "name": "月度梦幻棒球数据盘点与联盟线上沟通",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每月逢十（10号、20号）下午三点到六点，例行做梦幻棒球阵容综合盘点，并与联赛伙伴开线上对齐会同步交易与预测",
+      "trigger_condition": "每月逢十（10日、20日）下午三点到六点，例行做梦幻棒球联盟的月度数据盘点与线上沟通，边看博客预测边和联盟伙伴开会核对阵容",
       "period_type": "monthly",
       "days": [
         "10th",
@@ -45,14 +45,12 @@
       "aliases": {
         "app_aliases": [
           "企鹅会议",
-          "腾讯会议那个",
-          "小企鹅开会"
+          "腾讯会议"
         ],
         "service_aliases": [
           "对齐开会",
-          "线上碰一下",
-          "开个会过阵容",
-          "连麦盘阵容"
+          "连麦对阵容",
+          "开个会"
         ],
         "resolution_aliases": [
           "720p",
@@ -82,10 +80,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "梦幻棒球联赛季后赛冲刺周（跨城观赛＋移动复盘）",
+        "name": "梦幻棒球季后赛冲刺周（跨城观赛＋联盟冲刺沟通）",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "季后赛冲刺周，用户跨城出行并在球场周边户外等候区、临时停留点高频联网，现场人流密集、基站拥塞且部分路段弱覆盖，需要临时下调画质并收紧时延以保障会议与消息及时送达",
+        "scene_description": "季后赛冲刺周跨城出行观赛，常在球场周边户外等候区与临时停留点用手机热点联网，人流密集、基站负载高且偶有弱覆盖路段，需保证会议与消息稳定续传",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -95,14 +93,14 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "赛前博客预测速览与短视频刷看",
+        "name": "赛前博客预测短视频复盘",
         "application_name": "抖音",
         "service_name": "短视频",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "每次联赛开赛前在户外等候区或通勤途中快速刷看博客预测与集锦短视频，要求加载快、可容忍稍高时延",
+        "trigger_condition": "每次联盟比赛日前在户外等候区或临时停留点刷博客预测与集锦短视频做阵容复盘",
         "aliases": {
           "app_aliases": [
             "douyin",
@@ -124,14 +122,14 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "与联赛伙伴视频通话沟通交易",
+        "name": "联盟伙伴即时沟通与位置共享",
         "application_name": "微信",
         "service_name": "视频通话",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "临时起意或交易截止前与联赛伙伴一对一视频通话，确认球员交易与阵容调整，要求画面清晰、音视频稳定",
+        "trigger_condition": "跨区域出行途中或现场临时需要和联盟伙伴共享位置、快速视频沟通交易与阵容调整",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -155,9 +153,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次任务：在公共活动现场临时开直播分享观赛氛围",
-        "application_name": "抖音",
-        "service_name": "开直播",
+        "scenario": "单次在公共活动现场用小红书看直播分享现场氛围",
+        "application_name": "小红书",
+        "service_name": "看直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -165,9 +163,9 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次任务：跨区域出行途中用小红书看直播了解现场情况",
-        "application_name": "小红书",
-        "service_name": "看直播",
+        "scenario": "单次在出行途中用抖音开直播和球友临时聊赛况",
+        "application_name": "抖音",
+        "service_name": "开直播",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"

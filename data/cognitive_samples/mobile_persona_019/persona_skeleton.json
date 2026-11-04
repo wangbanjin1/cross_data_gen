@@ -4,32 +4,33 @@
   "persona_summary": "户外视觉创作者",
   "static_profile": {
     "user_id": "USER_019",
-    "identity": "脾气火爆但才华横溢的音乐制作人兼户外视觉创作者，长期在户外演出点、展览布置区、城市采风路线及音乐节、街头活动、临时排练现场工作，全程依赖手机4G/5G移动核心网直连，不依赖家庭宽带或公司固网，便携终端联网时使用手机热点。",
-    "devices": "5G智能手机（主力）＋平板电脑（辅助预览与素材管理）",
+    "identity": "一位脾气火爆但才华横溢的音乐制作人兼户外视觉创作者，常年在户外演出点、展览布置区、城市采风路线及音乐节、街头活动、临时排练现场之间移动办公。白天进行街区采风、展览拍摄与设计稿预览，晚间黄金档集中进行现场音视频采集、直播推流与作品上传，全程依赖手机4G/5G移动核心网直连，不依赖家庭宽带或公司固网，便携终端需要联网时以手机热点补充。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑，便携终端确需联网时使用手机热点共享。",
     "apps": [
       "抖音",
-      "哔哩哔哩",
+      "快手",
       "微信",
-      "腾讯会议"
+      "哔哩哔哩"
     ],
     "speech_archetype": "outdoor_streamer",
     "speech_style": {
-      "tone": "直率火爆、节奏快、带命令式口吻，对画质和时延极为挑剔，习惯用行话压任务。",
+      "tone": "语速快、语气冲、带命令式口吻，对画质和时延极其挑剔，习惯用行话和口头禅压缩表达。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
         "对齐一下",
-        "这条必须给我顶住"
+        "推流稳住",
+        "这个点必须给我顶住"
       ],
-      "typical_habits": "开工前先口头声明今晚的固定直播安排和画质时延要求，现场用行话催团队对齐参数，遇到弱覆盖路段会强调续传和快速恢复。"
+      "typical_habits": "布置任务前先甩一句口头禅定调，强调时间点和参数档位，遇到网络波动会直接点名要求续传或快速恢复，习惯用'老时间''老规矩'指代固定晚间直播档。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "晚间黄金档户外演出直播与作品上传",
+      "name": "晚间黄金档户外演出直播推流",
       "storyline_trigger_type": "time_periodic",
-      "trigger_condition": "每天晚间黄金档高频长时段业务：户外演出点或临时排练现场开直播并同步上传高清作品",
+      "trigger_condition": "每天晚间黄金档高频长时段业务，音乐制作人在户外演出点或临时排练现场开直播推流，进行现场音视频采集与作品上传",
       "period_type": "daily",
       "days": [
         "daily"
@@ -48,7 +49,8 @@
         ],
         "service_aliases": [
           "开播",
-          "推流"
+          "推流",
+          "上播"
         ],
         "resolution_aliases": [
           "720p",
@@ -79,7 +81,7 @@
         "name": "跨城音乐节巡演周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "跨城音乐节密集人群现场，基站拥塞且部分路段弱覆盖，直播需降档保连接并支持续传恢复。",
+        "scene_description": "跨城音乐节巡演期间，演出点位于密集人群与临时搭建舞台区域，基站负载高、弱覆盖路段多，直播互动需保证连接可用与音视频上行稳定，进入弱覆盖路段后任务需能续传或快速恢复。",
         "preference_override": {
           "resolution": "720p",
           "rtt_max": "30ms"
@@ -96,7 +98,7 @@
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "排练结束后与团队远程复盘录像、对齐剪辑修改意见时",
+        "trigger_condition": "临时排练现场结束后与团队远程复盘录像、对齐演出细节时发起视频通话",
         "aliases": {
           "app_aliases": [
             "weixin",
@@ -118,14 +120,14 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "客户与团队方案对齐会议",
+        "name": "客户设计稿云端同步沟通",
         "application_name": "腾讯会议",
         "service_name": "会议",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "展览布置前或采风后与客户、团队对齐设计稿与交付方案时",
+        "trigger_condition": "展览布置区或采风路线上需要向客户预览高清图片与设计稿、同步云端素材时发起会议",
         "aliases": {
           "app_aliases": [
             "tencentmeeting",
@@ -149,9 +151,9 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "单次街头活动间隙刷短视频找参考素材",
-        "application_name": "钉钉",
-        "service_name": "会议",
+        "scenario": "单次任务：在街头活动间隙刷短视频放松",
+        "application_name": "快手",
+        "service_name": "短视频",
         "params": {
           "resolution": "720p",
           "rtt_max": "80ms"
@@ -159,8 +161,8 @@
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次观看同行音乐节直播学习运镜",
-        "application_name": "快手",
+        "scenario": "单次任务：临时查看同行音乐节直播",
+        "application_name": "哔哩哔哩",
         "service_name": "看直播",
         "params": {
           "resolution": "720p",

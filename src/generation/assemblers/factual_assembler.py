@@ -226,23 +226,35 @@ class FactualAssemblerMixin:
     @staticmethod
     def _build_standard_slot_updates(round_count: int, role: str, b_type: str, exp_id: str | None, src: dict, vals: dict) -> list[dict]:
         slot_updates_turn = []
-        is_prewarm_learn = b_type == "experience_learning" and exp_id == "EXP_PREWARM_BUFFER_01"
+        is_prewarm_or_holiday_learn = b_type == "experience_learning" and exp_id in ("EXP_PREWARM_BUFFER_01", "EXP_CALENDAR_HOLIDAY_EXCEPTION_01")
+        is_other_exp_learn = b_type == "experience_learning" and not is_prewarm_or_holiday_learn
+        is_holiday_exp = exp_id == "EXP_CALENDAR_HOLIDAY_EXCEPTION_01" and b_type != "experience_learning"
+        is_two_turn_mem_reuse = (
+            round_count >= 2
+            and role in ["reinforcement_session", "reuse_session"]
+            and b_type in ["main", "sub_01", "sub_02", "event_reuse"]
+        )
         for t_idx in range(1, round_count + 1):
             if t_idx == 1:
                 t_params = {
                     "application_name": {"value": vals["app"], "source_type": src["app"][0], "source_ref": src["app"][1]},
                     "service_name": {"value": vals["srv"], "source_type": src["srv"][0], "source_ref": src["srv"][1]},
                 }
-                if role == "evidence_session":
-                    t_params["timestamp"] = {"start_timestamp": {"value": vals["start"], "source_type": "Turn", "source_ref": "U1"}}
-                elif is_prewarm_learn:
+                if role == "evidence_session" or is_two_turn_mem_reuse:
+                    st_src, st_ref = ("Turn", "U1") if role == "evidence_session" else src["start"]
+                    t_params["timestamp"] = {"start_timestamp": {"value": vals["start"], "source_type": st_src, "source_ref": st_ref}}
+                elif is_prewarm_or_holiday_learn:
                     t_params["timestamp"] = {
                         "start_timestamp": {"value": vals["t1_start"], "source_type": "Turn", "source_ref": "U1"},
                         "end_timestamp": {"value": vals["t1_end"], "source_type": "Turn", "source_ref": "U1"},
                         "duration": {"value": vals["t1_dur"], "source_type": "Turn", "source_ref": "U1"},
                     }
-                    t_params["resolution"] = {"min_value": {"value": vals["res"], "source_type": src["res"][0], "source_ref": src["res"][1]}}
-                    t_params["rtt"] = {"max_value": {"value": vals["rtt"], "source_type": src["rtt"][0], "source_ref": src["rtt"][1]}}
+                elif is_other_exp_learn:
+                    t_params["timestamp"] = {
+                        "start_timestamp": {"value": vals["start"], "source_type": "Turn", "source_ref": "U1"},
+                        "end_timestamp": {"value": vals["end"], "source_type": "Turn", "source_ref": "U1"},
+                        "duration": {"value": vals["dur"], "source_type": "Turn", "source_ref": "U1"},
+                    }
                 else:
                     t_params["timestamp"] = {
                         "start_timestamp": {"value": vals["start"], "source_type": src["start"][0], "source_ref": src["start"][1]},
@@ -255,14 +267,33 @@ class FactualAssemblerMixin:
                 slot_updates_turn.append({"turn": 1, "params": t_params})
             elif t_idx == 2:
                 t_params = {}
-                if is_prewarm_learn:
+                if is_prewarm_or_holiday_learn:
                     t_params = {
+                        "resolution": {"min_value": {"value": vals["res"], "source_type": src["res"][0], "source_ref": src["res"][1]}},
+                        "rtt": {"max_value": {"value": vals["rtt"], "source_type": src["rtt"][0], "source_ref": src["rtt"][1]}},
                         "timestamp": {
                             "start_timestamp": {"value": vals["start"], "source_type": "Turn", "source_ref": "U2"},
+                            "end_timestamp": {"value": vals["end"], "source_type": "Turn", "source_ref": "U2"},
                             "duration": {"value": vals["dur"], "source_type": "Turn", "source_ref": "U2"},
+                        },
+                    }
+                elif is_holiday_exp:
+                    t_params = {
+                        "timestamp": {
+                            "start_timestamp": {"value": vals["start"], "source_type": "Experience", "source_ref": exp_id},
+                            "end_timestamp": {"value": vals["end"], "source_type": "Experience", "source_ref": exp_id},
                         }
                     }
-                elif role in ["evidence_session", "correction_session"]:
+                elif is_two_turn_mem_reuse:
+                    t_params = {
+                        "resolution": {"min_value": {"value": vals["res"], "source_type": src["res"][0], "source_ref": src["res"][1]}},
+                        "rtt": {"max_value": {"value": vals["rtt"], "source_type": src["rtt"][0], "source_ref": src["rtt"][1]}},
+                        "timestamp": {
+                            "end_timestamp": {"value": vals["end"], "source_type": src["end"][0], "source_ref": src["end"][1]},
+                            "duration": {"value": vals["dur"], "source_type": src["dur"][0], "source_ref": src["dur"][1]},
+                        },
+                    }
+                elif role in ["evidence_session", "correction_session"] or is_other_exp_learn:
                     t_params = {
                         "resolution": {"min_value": {"value": vals["res"], "source_type": src["res"][0], "source_ref": src["res"][1]}},
                         "rtt": {"max_value": {"value": vals["rtt"], "source_type": src["rtt"][0], "source_ref": src["rtt"][1]}},
@@ -323,9 +354,9 @@ class FactualAssemblerMixin:
             events[1]["turn_intents"] = intents
 
     @staticmethod
-    def _populate_standard_non_evidence_events(events: list[dict], b_type: str, exp_id: str | None, exp_c: dict, src: dict, vals: dict, intents: list[dict]) -> None:
+    def _populate_standard_non_evidence_events(events: list[dict], b_type: str, exp_id: str | None, exp_c: dict, src: dict, vals: dict, intents: list[dict], t1_params: dict | None = None) -> None:
         is_exp_learn = b_type == "experience_learning"
-        events[0]["requested_params"] = []
+        events[0]["requested_params"] = ["resolution", "rtt", "duration"] if (t1_params and "resolution" not in t1_params) else []
         events[0]["turn_intents"] = [
             {
                 "intent_id": "I1",
@@ -333,7 +364,7 @@ class FactualAssemblerMixin:
                 "closure_path": src["closure_path"],
                 "expression_level": 1,
                 "intent": f"{vals['app']}{vals['srv']}保障",
-                "params": {
+                "params": t1_params if t1_params is not None else {
                     "application_name": {"value": vals["app"], "source_type": src["app"][0], "source_ref": src["app"][1]},
                     "service_name": {"value": vals["srv"], "source_type": src["srv"][0], "source_ref": src["srv"][1]},
                     "resolution": {"min_value": {"value": vals["res"], "source_type": "Turn" if is_exp_learn else src["res"][0], "source_ref": "U1" if is_exp_learn else src["res"][1]}},
@@ -362,15 +393,16 @@ class FactualAssemblerMixin:
         exp_c = experience_citation or {}
         exp_id = exp_c.get("experience_id")
         src = cls._resolve_standard_sources(role, b_type, snap or {}, exp_id, small_memory_type)
-        is_prewarm_learn = b_type == "experience_learning" and exp_id == "EXP_PREWARM_BUFFER_01"
+        has_nominal = (b_type == "experience_learning" and exp_id in ("EXP_PREWARM_BUFFER_01", "EXP_CALENDAR_HOLIDAY_EXCEPTION_01")) or (exp_id == "EXP_CALENDAR_HOLIDAY_EXCEPTION_01" and b_type != "experience_learning")
         vals = {
             "app": app, "srv": srv, "res": res, "rtt": rtt,
             "start": start, "end": end, "dur": dur,
-            "t1_start": (nominal_start or start) if is_prewarm_learn else start,
-            "t1_end": (nominal_end or end) if is_prewarm_learn else end,
-            "t1_dur": (nominal_dur or dur) if is_prewarm_learn else dur,
+            "t1_start": (nominal_start or start) if has_nominal else start,
+            "t1_end": (nominal_end or end) if has_nominal else end,
+            "t1_dur": (nominal_dur or dur) if has_nominal else dur,
         }
         slot_updates_turn = cls._build_standard_slot_updates(round_count, role, b_type, exp_id, src, vals)
+        t1_p = slot_updates_turn[0]["params"] if slot_updates_turn else None
         sig = f"{tid}|{len(events)}|1|I1:{app}/{srv}/1/{src['closure_path']}/resolved|none"
         if role == "evidence_session":
             src["end"] = ("Turn", "U2")
@@ -402,7 +434,7 @@ class FactualAssemblerMixin:
             if role == "evidence_session":
                 cls._populate_standard_evidence_events(events, vals, intents)
             else:
-                cls._populate_standard_non_evidence_events(events, b_type, exp_id, exp_c, src, vals, intents)
+                cls._populate_standard_non_evidence_events(events, b_type, exp_id, exp_c, src, vals, intents, t1_params=t1_p)
         ret = {
             "session_id": sid,
             "user_id": uid,

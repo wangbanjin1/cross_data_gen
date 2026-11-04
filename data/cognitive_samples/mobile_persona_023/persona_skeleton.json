@@ -4,8 +4,8 @@
   "persona_summary": "野外生态调查人员",
   "static_profile": {
     "user_id": "USER_023",
-    "identity": "微生物学研究者，专注极端微生物遗传适应性研究，长期在偏远山区、林区、河岸与农田样地开展野外生态调查与采样，沿样线导航定位、采集带坐标照片与观测数据，并在临时观测点分批回传调查记录与传感数据。",
-    "devices": "主力为5G智能手机，辅以可穿戴设备（定位/体征记录）与便携传感终端；便携终端联网时使用手机热点，不依赖家庭宽带或固定Wi-Fi。",
+    "identity": "极端微生物方向微生物学家，长期在偏远山区、林区、河岸与农田样地开展野外生态调查与采样，沿样线导航定位、采集带坐标的照片与观测数据，并在临时观测点分批回传调查记录与传感数据，同时接受远程专家指导。",
+    "devices": "5G智能手机（主力，全程4G/5G直连移动核心网）＋可穿戴设备（定位与体征记录）；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
     "apps": [
       "微信",
       "腾讯会议",
@@ -14,22 +14,22 @@
     ],
     "speech_archetype": "field_researcher",
     "speech_style": {
-      "tone": "务实、简洁、带野外作业的干练口吻，习惯用数据和坐标说话",
+      "tone": "干脆务实、带野外作业的紧迫感，习惯用简短指令和确认式短句，对信号与电量格外敏感。",
       "catchphrases": [
         "老规矩",
         "别掉链子",
-        "对齐一下",
-        "按样线走"
+        "信号还在不在",
+        "先回传再走"
       ],
-      "typical_habits": "出发前口头确认设备与网络状态，任务中偏好用短句同步进度，回传前习惯先报参数档位再执行"
+      "typical_habits": "出发前先报点位和时段，现场用口语化简称指代应用与画质档位，回传前习惯确认一遍时延和电量，收工后统一复盘。"
     }
   },
   "dynamic_profile": {
     "periodic_main_storyline": {
       "storyline_id": "MAIN_MT_01",
-      "name": "野外样线调查记录分批回传与远程指导",
+      "name": "野外样线采样现场远程指导与观测数据回传",
       "storyline_trigger_type": "task_activity",
-      "trigger_condition": "在偏远采样路线或临时观测点完成一段样线调查后，需将带坐标的现场照片、样本记录与传感数据回传，并与实验室进行远程指导沟通",
+      "trigger_condition": "在偏远采样路线或临时观测点完成样线导航定位与样本采集后，需向后方实验室专家发起视频通话，实时展示样本与显微观察画面并回传带坐标的观测记录",
       "period_type": "task_driven",
       "days": [
         "task_specific"
@@ -48,8 +48,8 @@
         ],
         "service_aliases": [
           "打视讯",
-          "连麦对一下",
-          "视频对现场"
+          "连麦看样本",
+          "视频对一下"
         ],
         "resolution_aliases": [
           "1080p原画",
@@ -79,10 +79,10 @@
     "scenario_events": [
       {
         "event_id": "EVT_2026_01",
-        "name": "高山样地极端微生物专项采样周",
+        "name": "高山极端环境样地集中采样周",
         "start_time": "2026年11月01日00时00分",
         "end_time": "2026年11月10日23时59分",
-        "scene_description": "深入弱覆盖高山区连续采样，临时观测点信号波动大、供电受限，需降低画质并收紧时延以保障定位与数据上报稳定",
+        "scene_description": "连续多日在高海拔弱覆盖样地作业，基站距离远、山体遮挡严重，临时观测点仅靠手机热点支撑多设备，电量与信号双重紧张，需优先保证定位与数据上报链路稳定。",
         "preference_override": {
           "resolution": "540p",
           "rtt_max": "80ms"
@@ -92,18 +92,18 @@
     "sub_storylines": [
       {
         "storyline_id": "SUB_01",
-        "name": "临时观测点调查记录批量回传",
-        "application_name": "钉钉",
+        "name": "样地影像与显微画面远程会诊",
+        "application_name": "腾讯会议",
         "service_name": "会议",
         "preferred_params": {
           "resolution": "720p",
           "rtt_max": "100ms"
         },
-        "trigger_condition": "在临时观测点汇总当日样本记录与传感数据，与团队分批核对并回传调查台账",
+        "trigger_condition": "遇到疑似新菌株或培养异常，需与实验室团队共享显微画面并逐帧讨论时",
         "aliases": {
           "app_aliases": [
-            "dingding",
-            "钉"
+            "tencentmeeting",
+            "会议通"
           ],
           "service_aliases": [
             "开会",
@@ -121,14 +121,14 @@
       },
       {
         "storyline_id": "SUB_02",
-        "name": "样线导航与坐标照片即时同步",
+        "name": "调查记录与传感数据分批回传",
         "application_name": "抖音",
         "service_name": "短视频",
         "preferred_params": {
           "resolution": "1080p",
           "rtt_max": "80ms"
         },
-        "trigger_condition": "沿样线导航定位时与同伴共享实时位置并核对带坐标照片的采集点",
+        "trigger_condition": "临时观测点汇总当日样本记录与传感数据，需向项目组口头汇报并同步现场照片时",
         "aliases": {
           "app_aliases": [
             "douyin",
@@ -152,22 +152,22 @@
     "distractor_pool": [
       {
         "distractor_id": "DIST_01",
-        "scenario": "收工后在临时驻地单次刷短视频放松",
+        "scenario": "收工后在临时驻点刷短视频放松",
         "application_name": "抖音",
         "service_name": "短视频",
         "params": {
           "resolution": "720p",
-          "rtt_max": "80ms"
+          "rtt_max": "100ms"
         }
       },
       {
         "distractor_id": "DIST_02",
-        "scenario": "单次观看同行极端微生物野外采样直播",
+        "scenario": "单次观看同行野外采样直播",
         "application_name": "哔哩哔哩",
         "service_name": "看直播",
         "params": {
           "resolution": "720p",
-          "rtt_max": "80ms"
+          "rtt_max": "100ms"
         }
       }
     ]
