@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="parchment">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LoCoMo 与 LoCoMo-Plus 论文总结：时序因果事件图与字面语义脱钩评测</title>
+  <style>
+    :root, [data-theme="parchment"] {
+      --bg-page: #FBF7F0;
+      --bg-card: #FFFDF9;
+      --bg-elevated: #F5EFE4;
+      --bg-code: #F2ECE1;
+      --text-main: #2C2520;
+      --text-secondary: #5C5248;
+      --text-muted: #8A7E72;
+      --border-color: #E2D9C8;
+      --border-strong: #C9BBA6;
+      --accent-primary: #8C4A27;
+      --accent-secondary: #2B5B6C;
+      --semantic-red-bg: #FDF2F2;
+      --semantic-red-border: #E5A9A9;
+      --semantic-red-text: #8B2626;
+      --semantic-green-bg: #F1F8F4;
+      --semantic-green-border: #9BC9AE;
+      --semantic-green-text: #1E5E3A;
+      --semantic-blue-bg: #F0F6FA;
+      --semantic-blue-border: #A3C4DC;
+      --semantic-blue-text: #1F4E70;
+      --semantic-amber-bg: #FEF8EC;
+      --semantic-amber-border: #E6C88A;
+      --semantic-amber-text: #7D5211;
+      --shadow-sm: 0 2px 6px rgba(44, 37, 32, 0.05);
+    }
+
+    [data-theme="github"] {
+      --bg-page: #F6F8FA;
+      --bg-card: #FFFFFF;
+      --bg-elevated: #EEF2F6;
+      --bg-code: #F6F8FA;
+      --text-main: #1F2328;
+      --text-secondary: #4D5562;
+      --text-muted: #6E7781;
+      --border-color: #D0D7DE;
+      --border-strong: #AFB8C1;
+      --accent-primary: #0969DA;
+      --accent-secondary: #1A7F37;
+      --semantic-red-bg: #FFEBE9;
+      --semantic-red-border: #FF818266;
+      --semantic-red-text: #CF222E;
+      --semantic-green-bg: #DAFBE1;
+      --semantic-green-border: #4AC26B66;
+      --semantic-green-text: #1A7F37;
+      --semantic-blue-bg: #DDF4FF;
+      --semantic-blue-border: #54AEFF66;
+      --semantic-blue-text: #0969DA;
+      --semantic-amber-bg: #FFF8C5;
+      --semantic-amber-border: #D4A72C66;
+      --semantic-amber-text: #9A6700;
+      --shadow-sm: 0 1px 3px rgba(31, 35, 40, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.66;
+      font-size: 14.5px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+    .topbar-brand { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-strong);
+      color: var(--accent-primary);
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+    .back-link:hover { background: var(--accent-primary); color: #fff; text-decoration: none; }
+    .topbar-badge {
+      background: var(--accent-secondary);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .topbar-title { font-size: 15.5px; font-weight: 700; }
+    .topbar-controls { display: flex; align-items: center; gap: 8px; }
+
+    .btn-group {
+      display: inline-flex;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .btn-toggle {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 5px 11px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-toggle.active { background: var(--accent-primary); color: #fff; }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 20px 24px 48px; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card.hero { border-left: 5px solid var(--accent-secondary); }
+
+    h1 { font-size: 20px; font-weight: 800; margin: 0 0 8px; }
+    h2 {
+      font-size: 17px;
+      font-weight: 800;
+      margin: 0 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    h3 { font-size: 15px; font-weight: 700; margin: 16px 0 8px; color: var(--text-main); }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 14px 0;
+    }
+    .kpi-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 15px;
+    }
+    .kpi-label { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+    .kpi-val { font-size: 17px; font-weight: 800; color: var(--accent-primary); margin: 3px 0; }
+    .kpi-desc { font-size: 12.5px; color: var(--text-secondary); }
+
+    .stage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+      margin: 14px 0;
+    }
+    .stage-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-top: 3px solid var(--accent-primary);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 13.5px;
+    }
+    .stage-box.teal { border-top-color: var(--accent-secondary); }
+    .stage-box.green { border-top-color: var(--semantic-green-text); }
+    .stage-box strong.stage-title { display: block; font-size: 14.2px; margin-bottom: 6px; color: var(--text-main); }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .summary-box {
+      border-radius: 8px;
+      padding: 13px 16px;
+      border: 1px solid;
+      font-size: 13.5px;
+    }
+    .summary-box.green { background: var(--semantic-green-bg); border-color: var(--semantic-green-border); }
+    .summary-box.blue { background: var(--semantic-blue-bg); border-color: var(--semantic-blue-border); }
+    .summary-box.amber { background: var(--semantic-amber-bg); border-color: var(--semantic-amber-border); }
+    .summary-box.red { background: var(--semantic-red-bg); border-color: var(--semantic-red-border); }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; background: var(--bg-card); }
+    th {
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      font-weight: 700;
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+      color: var(--text-secondary);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg-elevated); }
+
+    code {
+      font-family: "JetBrains Mono", Consolas, monospace;
+      background: var(--bg-code);
+      border: 1px solid var(--border-color);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: var(--accent-primary);
+    }
+
+    ul.tight { margin: 6px 0 0; padding-left: 18px; color: var(--text-secondary); }
+    ul.tight li { margin-bottom: 5px; }
+
+    a { color: var(--accent-primary); text-decoration: none; font-weight: 600; }
+    a:hover { text-decoration: underline; }
+
+    @media print {
+      @page { margin: 12mm; }
+      html, body { background: #FFFFFF !important; }
+      .topbar { position: static; box-shadow: none; }
+      .topbar-controls { display: none; }
+      .card { box-shadow: none; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">
+      <a class="back-link" href="../agent_evaluation_methodology.html">← 返回评测思路主页面</a>
+      <span class="topbar-badge">PAPER SUMMARY</span>
+      <span class="topbar-title">LoCoMo (ACL 2024) & LoCoMo-Plus (arXiv:2602.10715) 核心工作与评测机制</span>
+    </div>
+    <div class="topbar-controls">
+      <div class="btn-group">
+        <button class="btn-toggle active" id="btn-theme-parchment" onclick="setTheme('parchment')">暖阳米纸</button>
+        <button class="btn-toggle" id="btn-theme-github" onclick="setTheme('github')">GitHub 简洁</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="card hero">
+      <h1>一、两篇论文的主要工作与演进关系</h1>
+      <p style="margin: 0; color: var(--text-secondary);">
+        <code>LoCoMo</code>（UNC 与 Snap Research 发表，ACL 2024，<a href="https://arxiv.org/abs/2402.17753v1" target="_blank">arXiv:2402.17753v1</a>）与后续扩展工作 <code>LoCoMo-Plus</code>（西安交大与腾讯发表，<a href="https://arxiv.org/abs/2602.10715v1" target="_blank">arXiv:2602.10715v1</a>）是超长程多会话对话生成与隐式认知约束评测的代表性工作：
+      </p>
+      <ul class="tight">
+        <li><strong><code>LoCoMo</code>：用底层“时序因果事件图”驱动多会话生成</strong>：先为虚拟角色构建跨越数月的底层事件有向图（Temporal Event Graph，事件之间带因果连接），再将长跨度事件切分为最多 35 个会话（平均 300 轮、9,000 tokens），使跨会话对话具备真实的因果前因后果；</li>
+        <li><strong><code>LoCoMo-Plus</code>：从“表面字面召回”升级为“字面不一致的隐式约束评测”</strong>：指出传统评测中提问词与历史原文字面高度重合（靠简单关键词匹配就能搜出），专门设计了<strong>埋点端（Cue）与触发端（Trigger）字面语义脱钩（Semantic Disconnect）</strong>的认知记忆评测集。</li>
+      </ul>
+
+      <h3>LoCoMo 与 LoCoMo-Plus 对比</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 20%;">维度</th>
+              <th style="width: 40%;">LoCoMo (ACL 2024, arXiv:2402.17753)</th>
+              <th style="width: 40%;">LoCoMo-Plus (2026, arXiv:2602.10715)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>核心贡献</strong></td>
+              <td>提出“人物设定 + 时序因果事件图 → 多轮长会话”生成管线，并结合人工校验保证跨月一致性</td>
+              <td>提出“线索-触发语义脱钩（Cue-Trigger Semantic Disconnect）”与基于约束一致性的评测框架</td>
+            </tr>
+            <tr>
+              <td><strong>对话规模</strong></td>
+              <td>单段对话跨最多 35 个会话、平均 300 轮，时间跨度达数月</td>
+              <td>在长程多会话背景中嵌入隐式状态、目标与个人习惯约束</td>
+            </tr>
+            <tr>
+              <td><strong>检索难度设计</strong></td>
+              <td>测试单跳事实、多跳因果与跨会话事件时间顺序问答</td>
+              <td>当前提问不直接提历史关键词，要求模型理解字面完全不同但语义相关的历史约束</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>二、数据集构建方案与 AI 模型参与分工</h2>
+      <div class="stage-grid">
+        <div class="stage-box">
+          <strong class="stage-title">阶段 1：时序因果事件图（Event Graph）构建</strong>
+          <ul class="tight">
+            <li>先由大模型根据人物静态画像生成一条带日期时间戳的宏观生活/工作事件链；</li>
+            <li>事件节点之间显式建立因果边（例如：前序节点“参加滑雪比赛受阻” → 后续节点“调整训练计划与装备”），确保后续对话中的求助或变更都有前序客观事件作为起因。</li>
+          </ul>
+        </div>
+        <div class="stage-box teal">
+          <strong class="stage-title">阶段 2：按时间切片派生多轮会话与人工精修</strong>
+          <ul class="tight">
+            <li>每次会话只向 Agent 暴露截至当日已发生的事件图子集，生成日常交流；</li>
+            <li>引入人工标注员核查并修正长跨度对话中的时间矛盾，保证事件图与对话内容严格对齐。</li>
+          </ul>
+        </div>
+        <div class="stage-box green">
+          <strong class="stage-title">阶段 3：LoCoMo-Plus 线索-触发字面脱钩构造</strong>
+          <ul class="tight">
+            <li>在早期会话埋入一条事实或习惯（Cue），在数十轮后的触发会话（Trigger）中使用完全不同的日常口语或场景侧面发起请求；</li>
+            <li>淘汰传统的 ROUGE/F1 字符串匹配打分，改用约束满足一致性（Constraint Consistency）评测模型是否真正用上了历史记忆。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-bottom: 0;">
+      <h2>三、对“单据融合对话”故事线的三点参考</h2>
+      <div class="summary-grid">
+        <div class="summary-box green">
+          <strong>① 底层事件图全量生成网元单据，部分节点触发对话</strong><br/>
+          参考 LoCoMo 的事件图思路，先构建用户 30~60 天的业务事件图：图中的每个保障事件都生成网元实时单据，而只有遇到网络拥塞异常（如 <code>PRB=96%</code>）或新场景需求时才触发自然语言对话。
+        </div>
+        <div class="summary-box blue">
+          <strong>② 单据标准字段与用户个性化口语不一致</strong><br/>
+          参考 LoCoMo-Plus 的字面脱钩设计，网元单据里记录标准地名与标准业务名（如 <code>京礼高速隧道群</code>、<code>抖音:开直播</code>），而用户在对话中使用个人口语表达（如“去崇礼钻山洞那段”、“阿抖推流”），检验向量语义检索与自定义表述映射能力。
+        </div>
+        <div class="summary-box amber">
+          <strong>③ 前序异常事件自然触发后续复盘对话</strong><br/>
+          参考事件图中的因果边设计，用户不会无缘无故在对话里要求“提前 20 分钟预热”，而是因为前一天网元单据真实记录了开播初期基站拥塞掉帧，从而自然引出后续的复盘与经验沉淀。
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.getElementById('btn-theme-parchment').classList.toggle('active', theme === 'parchment');
+      document.getElementById('btn-theme-github').classList.toggle('active', theme === 'github');
+    }
+  </script>
+</body>
+</html>

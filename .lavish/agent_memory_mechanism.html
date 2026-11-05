@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="parchment">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>单据融合对话的记忆机制：设计维度与参考论文</title>
+  <style>
+    :root, [data-theme="parchment"] {
+      --bg-page: #FBF7F0;
+      --bg-card: #FFFDF9;
+      --bg-elevated: #F5EFE4;
+      --bg-code: #F2ECE1;
+      --text-main: #2C2520;
+      --text-secondary: #5C5248;
+      --text-muted: #8A7E72;
+      --border-color: #E2D9C8;
+      --border-strong: #C9BBA6;
+      --accent-primary: #8C4A27;
+      --accent-secondary: #2B5B6C;
+      --semantic-red-bg: #FDF2F2;
+      --semantic-red-border: #E5A9A9;
+      --semantic-red-text: #8B2626;
+      --semantic-green-bg: #F1F8F4;
+      --semantic-green-border: #9BC9AE;
+      --semantic-green-text: #1E5E3A;
+      --semantic-blue-bg: #F0F6FA;
+      --semantic-blue-border: #A3C4DC;
+      --semantic-blue-text: #1F4E70;
+      --semantic-amber-bg: #FEF8EC;
+      --semantic-amber-border: #E6C88A;
+      --semantic-amber-text: #7D5211;
+      --shadow-sm: 0 2px 6px rgba(44, 37, 32, 0.05);
+    }
+
+    [data-theme="github"] {
+      --bg-page: #F6F8FA;
+      --bg-card: #FFFFFF;
+      --bg-elevated: #EEF2F6;
+      --bg-code: #F6F8FA;
+      --text-main: #1F2328;
+      --text-secondary: #4D5562;
+      --text-muted: #6E7781;
+      --border-color: #D0D7DE;
+      --border-strong: #AFB8C1;
+      --accent-primary: #0969DA;
+      --accent-secondary: #1A7F37;
+      --semantic-red-bg: #FFEBE9;
+      --semantic-red-border: #FF818266;
+      --semantic-red-text: #CF222E;
+      --semantic-green-bg: #DAFBE1;
+      --semantic-green-border: #4AC26B66;
+      --semantic-green-text: #1A7F37;
+      --semantic-blue-bg: #DDF4FF;
+      --semantic-blue-border: #54AEFF66;
+      --semantic-blue-text: #0969DA;
+      --semantic-amber-bg: #FFF8C5;
+      --semantic-amber-border: #D4A72C66;
+      --semantic-amber-text: #9A6700;
+      --shadow-sm: 0 1px 3px rgba(31, 35, 40, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.65;
+      font-size: 14.5px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+    .topbar-brand { display: flex; align-items: center; gap: 10px; }
+    .topbar-badge {
+      background: var(--accent-primary);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .topbar-title { font-size: 16px; font-weight: 700; }
+    .topbar-controls { display: flex; align-items: center; gap: 8px; }
+
+    .btn-group {
+      display: inline-flex;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .btn-toggle {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 5px 11px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-toggle.active { background: var(--accent-primary); color: #fff; }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 20px 24px 48px; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card.hero { border-left: 5px solid var(--accent-primary); }
+
+    h1 { font-size: 20px; font-weight: 800; margin: 0 0 8px; }
+    h2 {
+      font-size: 17px;
+      font-weight: 800;
+      margin: 0 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .summary-box {
+      border-radius: 8px;
+      padding: 13px 16px;
+      border: 1px solid;
+      font-size: 13.5px;
+    }
+    .summary-box.green { background: var(--semantic-green-bg); border-color: var(--semantic-green-border); }
+    .summary-box.blue { background: var(--semantic-blue-bg); border-color: var(--semantic-blue-border); }
+    .summary-box.amber { background: var(--semantic-amber-bg); border-color: var(--semantic-amber-border); }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; background: var(--bg-card); }
+    th {
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      font-weight: 700;
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+      color: var(--text-secondary);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg-elevated); }
+
+    code {
+      font-family: "JetBrains Mono", Consolas, monospace;
+      background: var(--bg-code);
+      border: 1px solid var(--border-color);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: var(--accent-primary);
+    }
+
+    a { color: var(--accent-primary); text-decoration: none; font-weight: 600; }
+    a:hover { text-decoration: underline; }
+
+    @media print {
+      @page { margin: 12mm; }
+      html, body {
+        background: #FFFFFF !important;
+        background-color: #FFFFFF !important;
+      }
+      .topbar { position: static; box-shadow: none; }
+      .topbar-controls { display: none; }
+      .card { box-shadow: none; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">
+      <span class="topbar-badge">MEMORY MECHANISM &amp; LITERATURE</span>
+      <span class="topbar-title">单据融合对话的记忆机制：设计维度与参考论文</span>
+    </div>
+    <div class="topbar-controls">
+      <div class="btn-group">
+        <button class="btn-toggle active" id="btn-theme-parchment" onclick="setTheme('parchment')">暖阳米纸</button>
+        <button class="btn-toggle" id="btn-theme-github" onclick="setTheme('github')">GitHub 简洁</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="card hero">
+      <h1>单据融合对话的记忆机制核心思路（概要）</h1>
+      <p style="margin: 0; color: var(--text-secondary);">
+        为了让模型在“75% 网元单据 + 25% 自然语言对话”中既听得懂用户的口语代称，又能准确拿到历史档位、时长和场馆预热规则，采用“工作记忆 + 结构化事实记忆 + 场馆经验记忆”三层架构，并通过“向量相似度检索与同行槽位提取 + 二阶段关联表补全”完成检索（<a href="memory_sub/memory_sample_walkthrough.html">查看示例 →</a>）。核心参考论文可归纳为三类：
+      </p>
+      <div class="summary-grid">
+        <div class="summary-box green">
+          <strong style="color: var(--semantic-green-text); font-size: 15px; display: block; margin-bottom: 8px;">① 记忆分哪几层存：工作记忆、事实记忆与经验记忆各司其职 —— 参考 <a href="memory_sub/mem0_amem_deep_dive.html" title="点击查看 Mem0 与 A-MEM 论文总结"><code>Mem0</code></a>、<a href="memory_sub/mem0_amem_deep_dive.html#amem" title="点击查看 A-MEM 论文总结"><code>A-MEM</code></a>、<a href="memory_sub/dcpm_deep_dive.html" title="点击查看 DCPM 论文总结"><code>DCPM</code></a></strong>
+          <ul style="margin: 0; padding-left: 18px; color: var(--text-secondary);">
+            <li><strong>工作记忆（管当前会话）</strong>：保存最近几轮对话上下文、待填槽位表、时间冲突标记与慢路径澄清挂起状态，工单闭环后即释放。</li>
+            <li><strong>结构化事实记忆（管客观单据与固定习惯）</strong>：按结构化字段存储历史网元实测单据、常驻周期偏好（<code>periodic_preference</code>）、主辅业务映射（<code>service_to_app</code>）以及用户个性化表述映射（<code>expression</code>）。</li>
+            <li><strong>场馆与排障经验记忆（管踩坑总结）</strong>：将前序网元异常（如 <code>PRB=96%</code> 拥塞降级）复盘得出的补偿动作（如“五棵松演唱会自动提前 20 分钟预热并升至 <code>P0</code>”）存为带触发条件的经验规则。</li>
+          </ul>
+        </div>
+        <div class="summary-box blue">
+          <strong style="color: var(--semantic-blue-text); font-size: 15px; display: block; margin-bottom: 8px;">② 记忆怎么查得准：向量相似度检索与同行槽位提取 + 二阶段关联表补全 —— 参考 <a href="memory_sub/locomo_deep_dive.html" title="点击查看 LoCoMo-Plus 论文总结"><code>LoCoMo-Plus</code></a>、<a href="memory_sub/rhelm_deep_dive.html" title="点击查看 RHELM 论文总结"><code>RHELM</code></a>、<a href="memory_sub/mem0_amem_deep_dive.html#amem" title="点击查看 A-MEM 论文总结"><code>A-MEM</code></a></strong>
+          <ul style="margin: 0; padding-left: 18px; color: var(--text-secondary);">
+            <li><strong>向量相似度检索与同行槽位提取</strong>：用 <code>text-embedding-v4</code> 对用户口语提问做向量检索，定位到候选记录后，直接读取同一行里的 <code>venue</code>、<code>priority</code>、<code>duration</code> 等结构化槽位列，不做脆弱的正则切词。</li>
+            <li><strong>二阶段关联表补全</strong>：第一跳拿到主业务或场馆后，第二跳自动通过 <code>service_to_app</code> 与 <code>periodic_preference</code> 把绑定的后台辅业务（如网盘上传）和场馆经验规则一并查出来。</li>
+            <li><strong>否定子句分离与权重衰减过滤</strong>：当用户说“别用上次卡顿那回”时，先拆分否定子句，将带负向特征（<code>sla_degraded</code>）的记录做权重衰减过滤，防止因字面词重合误召回。</li>
+          </ul>
+        </div>
+        <div class="summary-box amber">
+          <strong style="color: var(--semantic-amber-text); font-size: 15px; display: block; margin-bottom: 8px;">③ 记忆怎么写进去与更新：重复门限、回执校准与新状态覆盖 —— 参考 <a href="memory_sub/personamem_v3_deep_dive.html" title="点击查看 PersonaMem-v3 论文总结"><code>PersonaMem-v3</code></a>、<a href="memory_sub/longmemeval_deep_dive.html" title="点击查看 LongMemEval 论文总结"><code>LongMemEval</code></a>、<a href="memory_sub/mem0_amem_deep_dive.html" title="点击查看 Mem0 论文总结"><code>Mem0</code></a></strong>
+          <ul style="margin: 0; padding-left: 18px; color: var(--text-secondary);">
+            <li><strong>多次重复才记为长期习惯</strong>：1~2 次偶发单据只留在单据流水表；只有同一时间规律与档位连续出现 <code>≥ 3</code> 次，才写入 <code>periodic_preference</code> 长期偏好表。</li>
+            <li><strong>断流子单合并与无效废单过滤</strong>：入库前自动过滤 1 分钟内退订的 <code>aborted</code> 废单，并将隧道/电梯断流重连切碎的相邻子单合并还原为完整单据。</li>
+            <li><strong>实测回执校准与冲突覆盖</strong>：业务结束后以网元实测回执更新实际时长与网络状态；当用户升级设备或更改习惯时，将旧记录标为 <code>superseded</code>，默认只检索最新有效记录。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-bottom: 0;">
+      <h2>
+        <span>五个记忆模块及其核心机制</span>
+        <a href="memory_sub/memory_sample_walkthrough.html" style="font-size: 13.5px; font-weight: 600;">查看示例 →</a>
+      </h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 18%;">核心维度</th>
+              <th style="width: 34%;">影响因子与业务定义</th>
+              <th style="width: 48%;">参考论文</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="2"><strong>1. 三层记忆分层存储</strong></td>
+              <td><strong>工作记忆、结构化事实记忆与经验记忆解耦</strong><br/>当轮对话状态存工作记忆，历史网元单据与常驻周期偏好存事实表，异常排障与预热补偿规则存经验表</td>
+              <td>
+                • <strong><a href="memory_sub/mem0_amem_deep_dive.html" title="点击查看 Mem0 论文总结"><code>Mem0</code></a></strong>：将对话状态、长期事实记忆与图结构关联分层维护。<br/>
+                • <strong><a href="memory_sub/dcpm_deep_dive.html" title="点击查看 DCPM 论文总结"><code>DCPM</code></a></strong>：分离管理用户的长期稳定偏好与当前会话的短期上下文状态。
+              </td>
+            </tr>
+            <tr>
+              <td><strong>个性化表述映射层（<code>expression</code>）</strong><br/>将用户的口语代称（如“去崇礼钻山洞那段”）与网元单据标准名称（<code>京礼高速隧道群</code>）建立双向绑定</td>
+              <td>
+                • <strong><a href="memory_sub/locomo_deep_dive.html" title="点击查看 LoCoMo-Plus 论文总结"><code>LoCoMo-Plus</code></a></strong>：解决用户口语提问与底层历史记录字面不一致的语义对齐问题。<br/>
+                • <strong><a href="memory_sub/personamem_v3_deep_dive.html" title="点击查看 PersonaMem-v3 论文总结"><code>PersonaMem-v3</code></a></strong>：构建用户专属口语习惯到标准业务实体的映射记忆。
+              </td>
+            </tr>
+
+            <tr>
+              <td rowspan="2"><strong>2. 混合检索与同行槽位提取</strong></td>
+              <td><strong>向量相似度检索与同行槽位提取</strong><br/>通过稠密向量定位候选记录行，命中后直接读取同行结构化槽位列（<code>venue</code>、<code>priority</code>、<code>duration</code>），兼顾语义泛化与参数精确性</td>
+              <td>
+                • <strong><a href="memory_sub/mem0_amem_deep_dive.html#amem" title="点击查看 A-MEM 论文总结"><code>A-MEM</code></a></strong>：每条记忆卡片同时包含自然语言描述向量与结构化属性标签，检索命中后直接提取结构化属性。<br/>
+                • <strong><a href="memory_sub/rhelm_deep_dive.html" title="点击查看 RHELM 论文总结"><code>RHELM</code></a></strong>：结合非结构化对话语义与结构化工单字段进行联合检索。
+              </td>
+            </tr>
+            <tr>
+              <td><strong>二阶段关联表补全</strong><br/>第一跳命中场馆或主业务后，第二跳通过 <code>service_to_app</code> 与 <code>periodic_preference</code> 自动补全关联的后台辅业务与场馆预热经验</td>
+              <td>
+                • <strong><a href="memory_sub/mem0_amem_deep_dive.html#amem" title="点击查看 A-MEM 论文总结"><code>A-MEM</code></a> / <a href="memory_sub/mem0_amem_deep_dive.html" title="点击查看 Mem0 论文总结"><code>Mem0</code></a></strong>：利用记忆节点间的双向链接与关系图谱，在第一跳召回后按关联关系拉取关联记忆。
+              </td>
+            </tr>
+
+            <tr>
+              <td><strong>3. 否定过滤与抗混淆</strong></td>
+              <td><strong>否定子句分离与权重衰减过滤</strong><br/>识别查询中的排除指代（如“不是卡顿那次”），对命中负向状态的候选单据做权重衰减过滤，避免相似单据混淆</td>
+              <td>
+                • <strong><a href="memory_sub/rhelm_deep_dive.html" title="点击查看 RHELM 论文总结"><code>RHELM</code></a></strong>：针对同地点多条相似事件，结合正负特征约束进行精确区分。
+              </td>
+            </tr>
+
+            <tr>
+              <td rowspan="2"><strong>4. 写入门控与数据清洗</strong></td>
+              <td><strong>多次重复才记为长期习惯（<code>≥ 3</code> 次）</strong><br/>单据流水中连续出现 <code>≥ 3</code> 次相同规律才晋升写入长期周期表，偶发单据仅保留在流水层</td>
+              <td>
+                • <strong><a href="memory_sub/personamem_v3_deep_dive.html" title="点击查看 PersonaMem-v3 论文总结"><code>PersonaMem-v3</code></a></strong>：通过多次重复出现的行为证据归纳长期稳定习惯，过滤偶发噪声。
+              </td>
+            </tr>
+            <tr>
+              <td><strong>断线重连子单合并与无效单过滤</strong><br/>入库前过滤 <code>aborted</code> 退订废单及日常未开保障的短流量，并将断网重连切碎的相邻子单据合并为一条完整记录</td>
+              <td>
+                • <strong><a href="memory_sub/rhelm_deep_dive.html" title="点击查看 RHELM 论文总结"><code>RHELM</code></a></strong>：对原始事件流先做有效性清洗与连续片段合并，再写入长期记忆库。
+              </td>
+            </tr>
+
+            <tr>
+              <td><strong>5. 状态覆盖与参数合成</strong></td>
+              <td><strong>新状态覆盖旧状态与多源参数优先级合成</strong><br/>用最新单据或网元实测回执覆盖旧记录；合成参数时按“当前显式指令 &gt; 突发事件 &gt; 场馆经验 &gt; 日常默认”顺序执行</td>
+              <td>
+                • <strong><a href="memory_sub/longmemeval_deep_dive.html" title="点击查看 LongMemEval 论文总结"><code>LongMemEval</code></a></strong>：通过时间戳与版本号管理记忆状态更新，确保检索时以最新状态为准。<br/>
+                • <strong><a href="memory_sub/mem0_amem_deep_dive.html" title="点击查看 Mem0 论文总结"><code>Mem0</code></a></strong>：通过 <code>ADD / UPDATE / DELETE / NOOP</code> 四类动作自动消解新旧记忆冲突。
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.getElementById('btn-theme-parchment').classList.toggle('active', theme === 'parchment');
+      document.getElementById('btn-theme-github').classList.toggle('active', theme === 'github');
+    }
+  </script>
+</body>
+</html>

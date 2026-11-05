@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="parchment">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>示例：单条评测样本如何从基础题自进化为多约束复合题与同构变体</title>
+  <style>
+    :root, [data-theme="parchment"] {
+      --bg-page: #FBF7F0;
+      --bg-card: #FFFDF9;
+      --bg-elevated: #F5EFE4;
+      --bg-code: #F2ECE1;
+      --text-main: #2C2520;
+      --text-secondary: #5C5248;
+      --text-muted: #8A7E72;
+      --border-color: #E2D9C8;
+      --border-strong: #C9BBA6;
+      --accent-primary: #8C4A27;
+      --accent-secondary: #2B5B6C;
+      --semantic-red-bg: #FDF2F2;
+      --semantic-red-border: #E5A9A9;
+      --semantic-red-text: #8B2626;
+      --semantic-green-bg: #F1F8F4;
+      --semantic-green-border: #9BC9AE;
+      --semantic-green-text: #1E5E3A;
+      --semantic-blue-bg: #F0F6FA;
+      --semantic-blue-border: #A3C4DC;
+      --semantic-blue-text: #1F4E70;
+      --semantic-amber-bg: #FEF8EC;
+      --semantic-amber-border: #E6C88A;
+      --semantic-amber-text: #7D5211;
+      --shadow-sm: 0 2px 6px rgba(44, 37, 32, 0.05);
+    }
+
+    [data-theme="github"] {
+      --bg-page: #F6F8FA;
+      --bg-card: #FFFFFF;
+      --bg-elevated: #EEF2F6;
+      --bg-code: #F6F8FA;
+      --text-main: #1F2328;
+      --text-secondary: #4D5562;
+      --text-muted: #6E7781;
+      --border-color: #D0D7DE;
+      --border-strong: #AFB8C1;
+      --accent-primary: #0969DA;
+      --accent-secondary: #1A7F37;
+      --semantic-red-bg: #FFEBE9;
+      --semantic-red-border: #FF818266;
+      --semantic-red-text: #CF222E;
+      --semantic-green-bg: #DAFBE1;
+      --semantic-green-border: #4AC26B66;
+      --semantic-green-text: #1A7F37;
+      --semantic-blue-bg: #DDF4FF;
+      --semantic-blue-border: #54AEFF66;
+      --semantic-blue-text: #0969DA;
+      --semantic-amber-bg: #FFF8C5;
+      --semantic-amber-border: #D4A72C66;
+      --semantic-amber-text: #9A6700;
+      --shadow-sm: 0 1px 3px rgba(31, 35, 40, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.66;
+      font-size: 14.5px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+    .topbar-brand { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-strong);
+      color: var(--accent-primary);
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+    .back-link:hover { background: var(--accent-primary); color: #fff; text-decoration: none; }
+    .topbar-badge {
+      background: var(--accent-secondary);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .topbar-title { font-size: 15.5px; font-weight: 700; }
+    .topbar-controls { display: flex; align-items: center; gap: 8px; }
+
+    .btn-group {
+      display: inline-flex;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .btn-toggle {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 5px 11px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-toggle.active { background: var(--accent-primary); color: #fff; }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 20px 24px 48px; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card.hero { border-left: 5px solid var(--accent-secondary); }
+
+    h1 { font-size: 20px; font-weight: 800; margin: 0 0 8px; }
+    h2 {
+      font-size: 17px;
+      font-weight: 800;
+      margin: 0 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    h3 { font-size: 15px; font-weight: 700; margin: 16px 0 8px; color: var(--text-main); }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 14px 0;
+    }
+    .kpi-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 15px;
+    }
+    .kpi-label { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+    .kpi-val { font-size: 17px; font-weight: 800; color: var(--accent-primary); margin: 3px 0; }
+    .kpi-desc { font-size: 12.5px; color: var(--text-secondary); }
+
+    .stage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+      margin: 14px 0;
+    }
+    .stage-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-top: 3px solid var(--accent-primary);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 13.5px;
+    }
+    .stage-box.teal { border-top-color: var(--accent-secondary); }
+    .stage-box.green { border-top-color: var(--semantic-green-text); }
+    .stage-box strong.stage-title { display: block; font-size: 14.2px; margin-bottom: 6px; color: var(--text-main); }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .summary-box {
+      border-radius: 8px;
+      padding: 13px 16px;
+      border: 1px solid;
+      font-size: 13.5px;
+    }
+    .summary-box.green { background: var(--semantic-green-bg); border-color: var(--semantic-green-border); }
+    .summary-box.blue { background: var(--semantic-blue-bg); border-color: var(--semantic-blue-border); }
+    .summary-box.amber { background: var(--semantic-amber-bg); border-color: var(--semantic-amber-border); }
+    .summary-box.red { background: var(--semantic-red-bg); border-color: var(--semantic-red-border); }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; background: var(--bg-card); }
+    th {
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      font-weight: 700;
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+      color: var(--text-secondary);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg-elevated); }
+
+    code {
+      font-family: "JetBrains Mono", Consolas, monospace;
+      background: var(--bg-code);
+      border: 1px solid var(--border-color);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: var(--accent-primary);
+    }
+
+    ul.tight { margin: 6px 0 0; padding-left: 18px; color: var(--text-secondary); }
+    ul.tight li { margin-bottom: 5px; }
+
+    a { color: var(--accent-primary); text-decoration: none; font-weight: 600; }
+    a:hover { text-decoration: underline; }
+
+    @media print {
+      @page { margin: 12mm; }
+      html, body { background: #FFFFFF !important; }
+      .topbar { position: static; box-shadow: none; }
+      .topbar-controls { display: none; }
+      .card { box-shadow: none; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">
+      <a class="back-link" href="../agent_self_evolution.html">← 返回评测集自进化主页面</a>
+      <span class="topbar-badge">SAMPLE WALKTHROUGH · BENCHMARK EVOLUTION</span>
+      <span class="topbar-title">示例：评测样本的同构变异、多条件叠加加难与快慢路径边界翻转</span>
+    </div>
+    <div class="topbar-controls">
+      <div class="btn-group">
+        <button class="btn-toggle active" id="btn-view-scroll" onclick="setView('scroll')">长卷通览</button>
+        <button class="btn-toggle" id="btn-view-step" onclick="setView('step')">分章聚焦</button>
+      </div>
+      <div class="btn-group">
+        <button class="btn-toggle active" id="btn-theme-parchment" onclick="setTheme('parchment')">暖阳米纸</button>
+        <button class="btn-toggle" id="btn-theme-github" onclick="setTheme('github')">GitHub 简洁</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <nav class="chapter-nav" id="chapter-nav">
+      <button class="chapter-pill active" onclick="showStep(0)">1. 论文基本信息与背景</button>
+      <button class="chapter-pill" onclick="showStep(1)">2. 数据集进化方法与机制</button>
+      <button class="chapter-pill" onclick="showStep(2)">3. 实验结论与关键发现</button>
+      <button class="chapter-pill" onclick="showStep(3)">4. 可借鉴的评测集演进做法</button>
+    </nav>
+
+
+    <section class="card hero step-section">
+      <h1>示例：单条评测样本如何从基础题自进化为多约束复合题与同构变体</h1>
+      <p style="margin: 6px 0 0; color: var(--text-secondary);">
+        本页展示故事线生成器（<code>cross_data_gen</code>）如何根据上一轮评测的错因分布，将一条模型已经答对的<strong>基础种子样本（Level 1）</strong>，通过<strong>① 同构等价变异</strong>、<strong>② 多原子条件叠加加难（Level 3）</strong>与<strong>③ 快慢路径边界翻转（Level 4）</strong>自动演化出新评测样本，并由底层状态机自动重算全部标准真值。
+      </p>
+    </section>
+
+    <section class="card step-section">
+      <h2><span class="sec-num">1</span> 触发自进化的输入：上一轮评测错因分布统计</h2>
+      <div class="grid-2">
+        <div class="subcard green-top">
+          <div class="subcard-title">上一轮评测各维度准确率与失分定位</div>
+          <pre style="background: var(--bg-code); padding: 12px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 12.5px; overflow-x: auto;">{
+  "eval_batch": "batch_v1_base",
+  "saturated_factors": [
+    {"factor": "single_ticket_direct_reuse (单跳直接复用)", "accuracy": "96.0% → 已饱和，触发加难演化"}
+  ],
+  "weak_factors": [
+    {"factor": "negative_exclusion_ref (同地点排除卡顿单)", "accuracy": "68.0% → 采样权重 ×2.5"},
+    {"factor": "venue_preheat_plus_duration_delta (预热叠加时长修改)", "accuracy": "64.0% → 采样权重 ×2.5"},
+    {"factor": "interval_overlap_slow_path (时间窗重叠触发慢路径)", "accuracy": "61.0% → 采样权重 ×3.0"}
+  ]
+}</pre>
+        </div>
+        <div class="subcard blue-top">
+          <div class="subcard-title">自动生成的下一批数据演进策略</div>
+          <pre style="background: var(--bg-code); padding: 12px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 12.5px; overflow-x: auto;">{
+  "evolution_plan": [
+    "1. 同构变异 (BSE)：替换种子题场馆实体、口语词并整体平移时间窗 +75min，检验是否表面过拟合",
+    "2. 组合加难 (Evol-Instruct & DyVal)：拉长历史间隔步数 (5步 → 28步)，同场馆注入卡顿单并叠加预热规则",
+    "3. 边界翻转 (Boundary Flip)：平移新申请单开始时间使其与周三周期单重叠，由快路径转为慢路径测试题"
+  ]
+}</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="card step-section">
+      <h2><span class="sec-num">2</span> 一条种子样本的四步自进化对比表（含底层状态机自动重算真值）</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 18%;">进化阶段</th>
+              <th style="width: 42%;">生成的故事线背景与测试轮提问</th>
+              <th style="width: 40%;">底层状态机自动重算的标准真值（Ground Truth）</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>种子样本（<code>S04_L1</code>）</strong><br/>基础单跳复用（已饱和）</td>
+              <td>
+                • 历史单据（间隔 4 步）：<code>T_02 [五棵松体育馆, 19:00~21:00 (120min), P1, 4K直播, normal]</code><br/>
+                • 测试提问：“明晚 7 点去五棵松做 4K 直播，按上次的规格保。”
+              </td>
+              <td>
+                • 应召回记录：<code>[T_02]</code><br/>
+                • 路由路径：<code>FAST_PATH</code><br/>
+                • 标准槽位：<code>venue=五棵松体育馆, 19:00~21:00, duration=120, priority=P1</code>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>演进变体 A（<code>S04_iso</code>）</strong><br/>同构等价变异（防背题）</td>
+              <td>
+                • 实体与口语替换 + 时间平移 <code>+75min</code>：<code>T_02 [京礼高速隧道群, 20:15~21:45 (90min), P1, 车载直播, normal]</code>，口语映射 <code>"钻山洞那段" → "京礼高速隧道群"</code><br/>
+                • 测试提问：“明晚 8 点一刻再去钻山洞那段直播，按上次的规格保。”
+              </td>
+              <td>
+                • 应召回记录：<code>[T_02, EXP_MAP_07]</code><br/>
+                • 路由路径：<code>FAST_PATH</code><br/>
+                • 标准槽位：<code>venue=京礼高速隧道群, 20:15~21:45, duration=90, priority=P1</code>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>演进变体 B（<code>S04_L3</code>）</strong><br/>多因子组合加难（拉长间隔 + 注入卡顿单 + 叠加预热）</td>
+              <td>
+                • 间隔拉长至 <code>28</code> 步，同场馆注入负样本 <code>T_09 [五棵松, P2, sla_degraded (卡顿)]</code> 与正样本 <code>T_14 [五棵松, 120min, P1, normal]</code>，并带场馆经验 <code>EXP_02 [五棵松提前 20min 预热, 升 P0]</code><br/>
+                • 测试提问：“明晚 7 点再去五棵松跑 4K 直播，别按上周卡顿那回，按顺畅那次来，时长多加半小时。”
+              </td>
+              <td>
+                • 应召回记录：<code>[T_14, EXP_02, S2A_03]</code>（且排除 <code>T_09</code>）<br/>
+                • 路由路径：<code>FAST_PATH</code><br/>
+                • 标准槽位：<code>venue=五棵松体育馆, 18:40~21:30, duration=170, priority=P0, aux_app=网盘回传</code>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>演进变体 C（<code>S04_L4_flip</code>）</strong><br/>快慢路径边界翻转（注入周期单重叠冲突）</td>
+              <td>
+                • 在变体 B 基础上，将提问日期设为周三，而用户已有周三常驻周期单 <code>PREF_01 [每周三 20:00~22:00 例行连麦保障]</code>，与新单 <code>18:40~21:30</code> 在 <code>20:00~21:30</code> 发生时间段重叠。<br/>
+                • 测试提问同上。
+              </td>
+              <td>
+                • 应召回记录：<code>[T_14, EXP_02, PREF_01]</code><br/>
+                • 路由路径：<strong>由 <code>FAST_PATH</code> 自动翻转为 <code>SLOW_PATH</code></strong><br/>
+                • 标准动作：暂停下发，主动指出 <code>20:00~21:30</code> 与周三例行单重叠并询问顺延或覆盖方案
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card step-section" style="margin-bottom: 0;">
+      <h2><span class="sec-num">3</span> 小结：评测集自进化带来的实际效果</h2>
+      <ul style="margin: 0; padding-left: 18px; color: var(--text-secondary);">
+        <li><strong>同一套事件状态机，持续生长出不同梯度的新题</strong>：从 <code>S04_L1</code> 到 <code>S04_L4_flip</code>，不需要人工重新编写对话剧本和手算时间差，全部由生成器调整拓扑参数自动派生。</li>
+        <li><strong>区分真泛化与表面拟合</strong>：通过成对比较 <code>S04_L1</code>（原题）、<code>S04_iso</code>（同构变体）与 <code>S04_L3 / L4</code>（加难与翻转变体）的得分，可以清楚看到模型在哪一层复杂度上开始失分。</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <script>
+    let currentView = 'scroll';
+    let currentStep = 0;
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.getElementById('btn-theme-parchment').classList.toggle('active', theme === 'parchment');
+      document.getElementById('btn-theme-github').classList.toggle('active', theme === 'github');
+    }
+    function setView(view) {
+      currentView = view;
+      document.getElementById('btn-view-scroll').classList.toggle('active', view === 'scroll');
+      document.getElementById('btn-view-step').classList.toggle('active', view === 'step');
+      document.getElementById('chapter-nav').classList.toggle('visible', view === 'step');
+      const sections = document.querySelectorAll('.step-section');
+      sections.forEach((sec, idx) => {
+        if (view === 'scroll') sec.classList.remove('hidden');
+        else sec.classList.toggle('hidden', idx !== currentStep);
+      });
+    }
+    function showStep(idx) {
+      currentStep = idx;
+      document.querySelectorAll('.chapter-pill').forEach((p, i) => p.classList.toggle('active', i === idx));
+      document.querySelectorAll('.step-section').forEach((sec, i) => sec.classList.toggle('hidden', i !== idx));
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="parchment">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LAMP、Language-TPP 与 EasyTPP 论文总结：异步事件流时间点过程与因果推理</title>
+  <style>
+    :root, [data-theme="parchment"] {
+      --bg-page: #FBF7F0;
+      --bg-card: #FFFDF9;
+      --bg-elevated: #F5EFE4;
+      --bg-code: #F2ECE1;
+      --text-main: #2C2520;
+      --text-secondary: #5C5248;
+      --text-muted: #8A7E72;
+      --border-color: #E2D9C8;
+      --border-strong: #C9BBA6;
+      --accent-primary: #8C4A27;
+      --accent-secondary: #2B5B6C;
+      --semantic-red-bg: #FDF2F2;
+      --semantic-red-border: #E5A9A9;
+      --semantic-red-text: #8B2626;
+      --semantic-green-bg: #F1F8F4;
+      --semantic-green-border: #9BC9AE;
+      --semantic-green-text: #1E5E3A;
+      --semantic-blue-bg: #F0F6FA;
+      --semantic-blue-border: #A3C4DC;
+      --semantic-blue-text: #1F4E70;
+      --semantic-amber-bg: #FEF8EC;
+      --semantic-amber-border: #E6C88A;
+      --semantic-amber-text: #7D5211;
+      --shadow-sm: 0 2px 6px rgba(44, 37, 32, 0.05);
+    }
+
+    [data-theme="github"] {
+      --bg-page: #F6F8FA;
+      --bg-card: #FFFFFF;
+      --bg-elevated: #EEF2F6;
+      --bg-code: #F6F8FA;
+      --text-main: #1F2328;
+      --text-secondary: #4D5562;
+      --text-muted: #6E7781;
+      --border-color: #D0D7DE;
+      --border-strong: #AFB8C1;
+      --accent-primary: #0969DA;
+      --accent-secondary: #1A7F37;
+      --semantic-red-bg: #FFEBE9;
+      --semantic-red-border: #FF818266;
+      --semantic-red-text: #CF222E;
+      --semantic-green-bg: #DAFBE1;
+      --semantic-green-border: #4AC26B66;
+      --semantic-green-text: #1A7F37;
+      --semantic-blue-bg: #DDF4FF;
+      --semantic-blue-border: #54AEFF66;
+      --semantic-blue-text: #0969DA;
+      --semantic-amber-bg: #FFF8C5;
+      --semantic-amber-border: #D4A72C66;
+      --semantic-amber-text: #9A6700;
+      --shadow-sm: 0 1px 3px rgba(31, 35, 40, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.66;
+      font-size: 14.5px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+    .topbar-brand { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-strong);
+      color: var(--accent-primary);
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+    .back-link:hover { background: var(--accent-primary); color: #fff; text-decoration: none; }
+    .topbar-badge {
+      background: var(--accent-secondary);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .topbar-title { font-size: 15.5px; font-weight: 700; }
+    .topbar-controls { display: flex; align-items: center; gap: 8px; }
+
+    .btn-group {
+      display: inline-flex;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .btn-toggle {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 5px 11px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-toggle.active { background: var(--accent-primary); color: #fff; }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 20px 24px 48px; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card.hero { border-left: 5px solid var(--accent-secondary); }
+
+    h1 { font-size: 20px; font-weight: 800; margin: 0 0 8px; }
+    h2 {
+      font-size: 17px;
+      font-weight: 800;
+      margin: 0 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    h3 { font-size: 15px; font-weight: 700; margin: 16px 0 8px; color: var(--text-main); }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 14px 0;
+    }
+    .kpi-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 15px;
+    }
+    .kpi-label { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+    .kpi-val { font-size: 17px; font-weight: 800; color: var(--accent-primary); margin: 3px 0; }
+    .kpi-desc { font-size: 12.5px; color: var(--text-secondary); }
+
+    .stage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+      margin: 14px 0;
+    }
+    .stage-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-top: 3px solid var(--accent-primary);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 13.5px;
+    }
+    .stage-box.teal { border-top-color: var(--accent-secondary); }
+    .stage-box.green { border-top-color: var(--semantic-green-text); }
+    .stage-box strong.stage-title { display: block; font-size: 14.2px; margin-bottom: 6px; color: var(--text-main); }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .summary-box {
+      border-radius: 8px;
+      padding: 13px 16px;
+      border: 1px solid;
+      font-size: 13.5px;
+    }
+    .summary-box.green { background: var(--semantic-green-bg); border-color: var(--semantic-green-border); }
+    .summary-box.blue { background: var(--semantic-blue-bg); border-color: var(--semantic-blue-border); }
+    .summary-box.amber { background: var(--semantic-amber-bg); border-color: var(--semantic-amber-border); }
+    .summary-box.red { background: var(--semantic-red-bg); border-color: var(--semantic-red-border); }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; background: var(--bg-card); }
+    th {
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      font-weight: 700;
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+      color: var(--text-secondary);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg-elevated); }
+
+    code {
+      font-family: "JetBrains Mono", Consolas, monospace;
+      background: var(--bg-code);
+      border: 1px solid var(--border-color);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: var(--accent-primary);
+    }
+
+    ul.tight { margin: 6px 0 0; padding-left: 18px; color: var(--text-secondary); }
+    ul.tight li { margin-bottom: 5px; }
+
+    a { color: var(--accent-primary); text-decoration: none; font-weight: 600; }
+    a:hover { text-decoration: underline; }
+
+    @media print {
+      @page { margin: 12mm; }
+      html, body { background: #FFFFFF !important; }
+      .topbar { position: static; box-shadow: none; }
+      .topbar-controls { display: none; }
+      .card { box-shadow: none; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">
+      <a class="back-link" href="../hybrid_ticket_dialogue_storyline_methodology.html">← 返回主页</a>
+      <span class="topbar-badge">PAPER SUMMARY</span>
+      <span class="topbar-title">LAMP (NeurIPS 2023) · Language-TPP (WWW 2026) · EasyTPP (ICLR 2024) 事件时间流建模</span>
+    </div>
+    <div class="topbar-controls">
+      <div class="btn-group">
+        <button class="btn-toggle active" id="btn-theme-parchment" onclick="setTheme('parchment')">暖阳米纸</button>
+        <button class="btn-toggle" id="btn-theme-github" onclick="setTheme('github')">GitHub 简洁</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="card hero">
+      <h1>一、三篇论文的主要工作与互补关系</h1>
+      <p style="margin: 0; color: var(--text-secondary);">
+        真实世界中的用户行为与网络单据不是按固定时间间隔均匀到达的，而是表现为<strong>不规则时间间隔、短时密集触发（Burst）与长间隔静默（Dormancy）</strong>的连续时间离散事件流。这三篇代表性论文分别从<strong>开放基准（EasyTPP）</strong>、<strong>时间区间编码与大模型融合（Language-TPP）</strong>以及<strong>事件因果溯因推理（LAMP）</strong>三个角度建立了完整的方法体系：
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 22%;">论文名称与发表信息</th>
+              <th style="width: 38%;">核心工作与技术机制</th>
+              <th style="width: 40%;">解决的关键问题</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td id="easytpp">
+                <strong>EasyTPP</strong><br/>
+                Siqiao Xue 等 (蚂蚁集团)<br/>
+                ICLR 2024 · <a href="https://arxiv.org/abs/2307.08097v3" target="_blank">arXiv:2307.08097v3</a>
+              </td>
+              <td>构建首个面向连续时间异步事件序列的统一开源基准库，集成霍克斯过程（Hawkes Process，自激发与互激发脉冲）与神经时间点过程模型，标准化事件到达时间预测与事件类型预测评估。</td>
+              <td>刻画真实业务事件流“平时平稳、突发事件后短时密集簇拥爆发、闲时多日静默”的非均匀时间分布规律。</td>
+            </tr>
+            <tr>
+              <td id="language-tpp">
+                <strong>Language-TPP</strong><br/>
+                Quyu Kong 等<br/>
+                WWW 2026 · <a href="https://arxiv.org/abs/2502.07139v2" target="_blank">arXiv:2502.07139v2</a>
+              </td>
+              <td>提出将连续时间间隔（<code>Δt</code>）转换为特殊字节词元（Byte-tokens），把异步到达时间戳与事件文本描述无缝融合进标准大模型架构中，联合建模“何时发生”与“发生什么内容”。</td>
+              <td>解决传统时间点过程无法理解复杂文本描述、而标准大模型对连续时间间隔长短不敏感的问题。</td>
+            </tr>
+            <tr>
+              <td id="lamp">
+                <strong>LAMP</strong><br/>
+                Xiaoming Shi 等<br/>
+                NeurIPS 2023 · <a href="https://arxiv.org/abs/2305.16646v2" target="_blank">arXiv:2305.16646v2</a>
+              </td>
+              <td>结合时间点过程与大模型的少样本溯因推理（Abductive Reasoning）：先由事件模型提出候选后续事件，再由大模型反推可能的前序原因并在历史事件流中检索匹配证据，最后打分验证因果链是否成立。</td>
+              <td>在异步事件流中建立可解释的“前序事件起因 → 后续事件触发”因果链条，提升复杂事件预测准确率。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card" style="margin-bottom: 0;">
+      <h2>二、对“单据融合对话”时间轴设计的三点参考</h2>
+      <div class="summary-grid">
+        <div class="summary-box blue">
+          <strong>① 摒弃固定步长与固定时长：引入时长随机分布与日常时间微幅浮动（<code>±10min</code>）</strong><br/>
+          参考 EasyTPP 与 Language-TPP 对真实連続时间间隔的建模，将单据保障时长设计为在 <code>15min~240min</code> 多分布间动态采样（短时连麦、日常直播、长程赛事转播），且日常周期习惯的开始时间带有 <code>±10min</code> 的自然浮动（如 <code>19:54</code>、<code>20:07</code>），避免固定写死 <code>120min</code> 或分秒不差的机械时间戳。
+        </div>
+        <div class="summary-box green">
+          <strong>② 同日多单密集爆发与多日静默空窗交替</strong><br/>
+          参考霍克斯过程（Hawkes Process）的自激发与互激发机制，在大型比赛日构造“上午彩排单 → 下午正式比赛单 → 赛后故障复盘对话 → 晚间转场单”的同日密集事件簇；在休赛期则构造连续多天无保障单的静默期。
+        </div>
+        <div class="summary-box amber">
+          <strong>③ 前序网元异常单据触发后续对话的因果闭环</strong><br/>
+          参考 LAMP 的事件溯因机制，后续对话中的每一次参数调整或预热经验沉淀，都能在前序历史事件流中找到对应的网元异常单据作为触发起因。
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.getElementById('btn-theme-parchment').classList.toggle('active', theme === 'parchment');
+      document.getElementById('btn-theme-github').classList.toggle('active', theme === 'github');
+    }
+  </script>
+</body>
+</html>

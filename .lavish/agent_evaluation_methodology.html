@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="parchment">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agent 评测思路：评测角度、核心指标与参考论文</title>
+  <style>
+    :root, [data-theme="parchment"] {
+      --bg-page: #FBF7F0;
+      --bg-card: #FFFDF9;
+      --bg-elevated: #F5EFE4;
+      --bg-code: #F2ECE1;
+      --text-main: #2C2520;
+      --text-secondary: #5C5248;
+      --text-muted: #8A7E72;
+      --border-color: #E2D9C8;
+      --border-strong: #C9BBA6;
+      --accent-primary: #8C4A27;
+      --accent-secondary: #2B5B6C;
+      --semantic-red-bg: #FDF2F2;
+      --semantic-red-border: #E5A9A9;
+      --semantic-red-text: #8B2626;
+      --semantic-green-bg: #F1F8F4;
+      --semantic-green-border: #9BC9AE;
+      --semantic-green-text: #1E5E3A;
+      --semantic-blue-bg: #F0F6FA;
+      --semantic-blue-border: #A3C4DC;
+      --semantic-blue-text: #1F4E70;
+      --semantic-amber-bg: #FEF8EC;
+      --semantic-amber-border: #E6C88A;
+      --semantic-amber-text: #7D5211;
+      --shadow-sm: 0 2px 6px rgba(44, 37, 32, 0.05);
+    }
+
+    [data-theme="github"] {
+      --bg-page: #F6F8FA;
+      --bg-card: #FFFFFF;
+      --bg-elevated: #EEF2F6;
+      --bg-code: #F6F8FA;
+      --text-main: #1F2328;
+      --text-secondary: #4D5562;
+      --text-muted: #6E7781;
+      --border-color: #D0D7DE;
+      --border-strong: #AFB8C1;
+      --accent-primary: #0969DA;
+      --accent-secondary: #1A7F37;
+      --semantic-red-bg: #FFEBE9;
+      --semantic-red-border: #FF818266;
+      --semantic-red-text: #CF222E;
+      --semantic-green-bg: #DAFBE1;
+      --semantic-green-border: #4AC26B66;
+      --semantic-green-text: #1A7F37;
+      --semantic-blue-bg: #DDF4FF;
+      --semantic-blue-border: #54AEFF66;
+      --semantic-blue-text: #0969DA;
+      --semantic-amber-bg: #FFF8C5;
+      --semantic-amber-border: #D4A72C66;
+      --semantic-amber-text: #9A6700;
+      --shadow-sm: 0 1px 3px rgba(31, 35, 40, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.65;
+      font-size: 14.5px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+    .topbar-brand { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .topbar-badge {
+      background: var(--accent-primary);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .topbar-title { font-size: 15.5px; font-weight: 700; }
+    .topbar-nav {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .nav-pill {
+      display: inline-block;
+      padding: 5px 11px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      text-decoration: none;
+    }
+    .nav-pill:hover {
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+      text-decoration: none;
+    }
+    .nav-pill.active {
+      background: var(--accent-primary);
+      color: #fff;
+      border-color: var(--accent-primary);
+    }
+    .topbar-controls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+    .btn-group {
+      display: inline-flex;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .btn-toggle {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 5px 11px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-toggle.active { background: var(--accent-primary); color: #fff; }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 20px 24px 48px; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card.hero { border-left: 5px solid var(--accent-primary); }
+
+    h1 { font-size: 20px; font-weight: 800; margin: 0 0 8px; }
+    h2 {
+      font-size: 17px;
+      font-weight: 800;
+      margin: 0 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .summary-box {
+      border-radius: 8px;
+      padding: 13px 16px;
+      border: 1px solid;
+      font-size: 13.5px;
+    }
+    .summary-box.green { background: var(--semantic-green-bg); border-color: var(--semantic-green-border); }
+    .summary-box.blue { background: var(--semantic-blue-bg); border-color: var(--semantic-blue-border); }
+    .summary-box.amber { background: var(--semantic-amber-bg); border-color: var(--semantic-amber-border); }
+    .summary-box strong.box-title { display: block; font-size: 15px; margin-bottom: 8px; }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; background: var(--bg-card); }
+    th {
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      font-weight: 700;
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+      color: var(--text-secondary);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg-elevated); }
+
+    code {
+      font-family: "JetBrains Mono", Consolas, monospace;
+      background: var(--bg-code);
+      border: 1px solid var(--border-color);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: var(--accent-primary);
+    }
+
+    a { color: var(--accent-primary); text-decoration: none; font-weight: 600; }
+    a:hover { text-decoration: underline; }
+
+    @media print {
+      @page { margin: 12mm; }
+      html, body {
+        background: #FFFFFF !important;
+        background-color: #FFFFFF !important;
+      }
+      .topbar { position: static; box-shadow: none; }
+      .topbar-controls { display: none; }
+      .card { box-shadow: none; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">
+      <span class="topbar-badge">EVALUATION &amp; METRICS</span>
+      <span class="topbar-title">Agent 评测思路：评测角度、核心指标与参考论文</span>
+    </div>
+    <div class="topbar-controls">
+      <div class="btn-group">
+        <button class="btn-toggle active" id="btn-theme-parchment" onclick="setTheme('parchment')">暖阳米纸</button>
+        <button class="btn-toggle" id="btn-theme-github" onclick="setTheme('github')">GitHub 简洁</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="card hero">
+      <h1>Agent 评测角度与指标思路</h1>
+      <p style="margin: 0; color: var(--text-secondary);">
+        评测带记忆的多轮 Agent，如果只看最终输出的工单或回复对不对，很难分清模型是“真查到了历史依据”还是“碰巧答对了常见默认值”，也看不出问题到底出在检索、快慢路径判断还是参数计算上。整体可以从<strong>“记忆检索与依据核对”、“快慢路径与参数计算”、“边界克制与运行稳定性”</strong>三个角度切入（<a href="evaluation_sub/evaluation_sample_walkthrough.html">查看示例 →</a>）：
+      </p>
+      <div class="summary-grid">
+        <div class="summary-box green">
+          <strong style="color: var(--semantic-green-text); font-size: 15px; display: block; margin-bottom: 8px;">① 记忆检索与依据核对（看查没查全、结果是不是真靠查出来的记录算的） —— 参考 <a href="evaluation_sub/groundeval_deep_dive.html" title="点击查看 GroundEval 论文拆解"><code>GroundEval</code></a>、<a href="evaluation_sub/longmemeval_deep_dive.html" title="点击查看 LongMemEval 论文拆解"><code>LongMemEval</code></a>、<a href="evaluation_sub/locomo_deep_dive.html" title="点击查看 LoCoMo-Plus 论文拆解"><code>LoCoMo-Plus</code></a>、<a href="evaluation_sub/rhelm_deep_dive.html" title="点击查看 RHELM 论文拆解"><code>RHELM</code></a></strong>
+          <ul style="margin: 0; padding-left: 18px; color: var(--text-secondary);">
+            <li><strong>多源联合召回率（<code>Joint Recall@K</code>）</strong>：一条请求往往同时用到历史单据、周期习惯和场馆经验；按任务实际依赖的记录集合统计完整召回比例，看跨源信息找没找全。</li>
+            <li><strong>有依据准确率（<code>Grounded Accuracy</code>）</strong>：先看检索有没有命中目标记录，再看生成的参数对不对；如果检索阶段没捞到对应依据，即使输出值与默认档位一致，也直接记 <code>0</code> 分。</li>
+            <li><strong>新状态覆盖率（<code>Update Override Rate</code>）</strong>：用户偏好发生过变更、言行不一致或事后有实测回执更新时，统计采纳最新有效记录、排除过期旧单和退订废单的比例。</li>
+            <li><strong>相似记录区分率（<code>Contrastive Discrimination</code>）</strong>：同一地点有多张相似单据且带正向或排除指代时，同时看目标记录召回率与负样本误召回率。</li>
+          </ul>
+        </div>
+        <div class="summary-box blue">
+          <strong style="color: var(--semantic-blue-text); font-size: 15px; display: block; margin-bottom: 8px;">② 快慢路径判断与参数规则校验（看该快则快、该问则问、加减算准） —— 参考 <a href="evaluation_sub/clarifymt_bench_deep_dive.html" title="点击查看 ClarifyMT-Bench 论文拆解"><code>ClarifyMT-Bench</code></a>、<a href="evaluation_sub/clarifymt_bench_deep_dive.html#not-correction" title="点击查看 Clarification Is Not Correction 论文拆解"><code>Clarification Is Not Correction</code></a>、<a href="evaluation_sub/ruverbench_deep_dive.html" title="点击查看 RuVerBench 论文拆解"><code>RuVerBench</code></a>、<a href="evaluation_sub/ruverbench_deep_dive.html#agent-judge" title="点击查看 Agent-as-a-Judge 论文拆解"><code>Agent-as-a-Judge</code></a></strong>
+          <ul style="margin: 0; padding-left: 18px; color: var(--text-secondary);">
+            <li><strong>快慢路径准确率（<code>Route F<sub>1</sub></code> / 过度反问率 &amp; 盲目执行率）</strong>：分开统计两类问题——信息已经够用却还在追问的<strong>过度澄清率</strong>，以及缺参数或时间段重叠却未经确认直接执行的<strong>盲目执行率</strong>。</li>
+            <li><strong>澄清命中率与收敛轮次（<code>Clarification Precision &amp; Turns</code>）</strong>：看慢路径反问能不能一次性问到缺失或冲突点上，以及平均几轮对话能把工单敲定。</li>
+            <li><strong>跨轮次槽位保持率（<code>Slot Retention Rate</code>）</strong>：用户在第 2~3 轮补充说明或只改某一个参数后，看第 1 轮已经确认好的其他槽位有没有被顺手改乱或弄丢。</li>
+            <li><strong>规则脚本校验通过率（<code>Rule-Verified Pass Rate</code>）</strong>：不用大模型主观打分，直接用脚本核对“历史基准时长 + 对话增减 + 场馆提前预热”的时间加减、多规则优先级和主辅双业务字段。</li>
+          </ul>
+        </div>
+        <div class="summary-box amber">
+          <strong style="color: var(--semantic-amber-text); font-size: 15px; display: block; margin-bottom: 8px;">③ 边界克制、抗幻觉与运行稳定性（看按需调用记忆、缺少依据时如实拒答、多次跑都稳） —— 参考 <a href="evaluation_sub/personamem_v3_deep_dive.html" title="点击查看 PersonaMem-v3 论文拆解"><code>PersonaMem-v3</code></a>、<a href="evaluation_sub/twist_deep_dive.html" title="点击查看 TWIST 论文拆解"><code>TWIST</code></a>、<a href="evaluation_sub/tau_bench_deep_dive.html" title="点击查看 τ-bench 与 τ²-bench 论文总结"><code>τ-bench / τ<sup>2</sup>-bench</code></a></strong>
+          <ul style="margin: 0; padding-left: 18px; color: var(--text-secondary);">
+            <li><strong>无关问题误触发率（<code>Over-Personalization FPR</code>）</strong>：遇到普通通信常识问答或日常闲聊时，统计强行往回复里塞个人历史单据的误触发比例（越低越好）。</li>
+            <li><strong>未知场馆拒答率与幻觉率（<code>Abstention &amp; Hallucination Rate</code>）</strong>：问到从未出现过的陌生场馆或域外话题时，看模型是如实说明无记录并反问，还是套用其他场馆的参数。</li>
+            <li><strong>多次运行一致性（<code>pass<sup>k</sup></code>）与耗时开销</strong>：同一条任务连续独立跑 <code>k</code> 次（如 <code>k=3, 5</code>）全部通过的比例（<code>pass<sup>k</sup></code>），同时统计快/慢路径的 <code>P95</code> 时延与 Token 消耗。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-bottom: 0;">
+      <h2>
+        <span>六个评测角度与具体指标</span>
+        <a href="evaluation_sub/evaluation_sample_walkthrough.html" style="font-size: 13.5px; font-weight: 600;">查看示例 →</a>
+      </h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 18%;">评测角度</th>
+              <th style="width: 38%;">核心指标与计算口径</th>
+              <th style="width: 44%;">参考论文</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="2"><strong>1. 记忆召回与依据核对</strong></td>
+              <td>
+                <strong>① 多源联合召回率（<code>Joint Recall@K</code>）与全命中率（<code>All-Hit Rate</code>）</strong><br/>
+                统计单条任务依赖的全部记忆项（历史单据、关联辅业务、场馆经验、口语映射）在检索 Top-K 中的召回比例（<code>已召回项数 / 应召回总数</code>），以及全部找齐的完整命中比例
+              </td>
+              <td>
+                • <strong><a href="evaluation_sub/personamem_v3_deep_dive.html" title="点击查看 PersonaMem-v3 论文拆解"><code>PersonaMem-v3</code></a></strong>：评测跨非对话日志与历史对话的多源信息联合召回率。<br/>
+                • <strong><a href="evaluation_sub/locomo_deep_dive.html" title="点击查看 LoCoMo-Plus 论文拆解"><code>LoCoMo-Plus</code></a></strong>：评测查询词与历史记录字面不重合时的语义召回表现。
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>② 有依据准确率（<code>Grounded Slot Accuracy</code>）与反事实敏感度</strong><br/>
+                仅当对应单据或经验在检索阶段被成功召回、且最终输出槽位等于标准值时才记 <code>1</code> 分（未召回依据直接记 <code>0</code> 分）；同时修改召回记录中的数值，看输出槽位是否跟着同步变化
+              </td>
+              <td>
+                • <strong><a href="evaluation_sub/groundeval_deep_dive.html" title="点击查看 GroundEval 论文拆解"><code>GroundEval</code></a></strong>：通过依据对齐与反事实参数替换，区分“基于召回记录得出结果”与“未命中记录但与默认值巧合一致”的情况。
+              </td>
+            </tr>
+
+            <tr>
+              <td rowspan="2"><strong>2. 时效覆盖与抗噪区分</strong></td>
+              <td>
+                <strong>① 状态更新覆盖率（<code>Update Override Rate</code>）与旧值残留率（<code>Stale Leak Rate</code>）</strong><br/>
+                在偏好升级、言行不一或事后回执修正的场景下，统计采用最新有效状态的比率，以及误输出过期参数或退订废单（<code>aborted</code>）的残留率
+              </td>
+              <td>
+                • <strong><a href="evaluation_sub/longmemeval_deep_dive.html" title="点击查看 LongMemEval 论文拆解"><code>LongMemEval</code></a></strong>：通过多时间戳状态更新题，评测新状态覆盖旧状态的准确率。<br/>
+                • <strong><a href="evaluation_sub/rhelm_deep_dive.html" title="点击查看 RHELM 论文拆解"><code>RHELM</code></a></strong>：评测事后客观执行日志更新对话预期后的最新状态追踪率。
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>② 相似记录正负区分度（<code>Positive Hit &amp; Negative Rejection Rate</code>）</strong><br/>
+                同地点多张相似单据下，统计“命中目标单据且排除负向指代单据（如卡顿单）”的比例，以及把 1~2 次偶发单据误当成长期习惯的误报率
+              </td>
+              <td>
+                • <strong><a href="evaluation_sub/rhelm_deep_dive.html" title="点击查看 RHELM 论文拆解"><code>RHELM</code></a></strong>：评测相似事件按特征筛选与排除法指代的准确率。<br/>
+                • <strong><a href="evaluation_sub/personamem_v3_deep_dive.html" title="点击查看 PersonaMem-v3 论文拆解"><code>PersonaMem-v3</code></a></strong>：评测区分单次偶发记录与多次重复长期习惯的准确率。
+              </td>
+            </tr>
+
+            <tr>
+              <td rowspan="2"><strong>3. 快慢路径与多轮澄清</strong></td>
+              <td>
+                <strong>① 路由 <code>F<sub>1</sub></code>、过度澄清率（<code>Over-Clarification</code>）与盲目执行率（<code>Premature Action</code>）</strong><br/>
+                在信息齐全样本上统计不反问直接闭环的比率；在缺槽位、时间冲突或多单歧义样本上统计主动停下并反问的比率
+              </td>
+              <td>
+                • <strong><a href="evaluation_sub/clarifymt_bench_deep_dive.html" title="点击查看 ClarifyMT-Bench 论文拆解"><code>ClarifyMT-Bench</code></a></strong>：在明确指令与欠指定/冲突指令混合集上，联合评测直接执行与主动提问的边界。<br/>
+                • <strong><a href="evaluation_sub/tau_bench_deep_dive.html" title="点击查看 τ-bench 与 τ²-bench 论文总结"><code>τ-bench / τ<sup>2</sup>-bench</code></a></strong>：考核工具调用前是否按规定先向用户确认缺失或冲突参数。
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>② 澄清问题命中率（<code>Question Targeting</code>）与已确认槽位保持率（<code>Slot Retention</code>）</strong><br/>
+                检查反问是否问准全部缺失或冲突字段（不漏问、不偏离重点追问）；在用户第 2 轮回复澄清后，核对第 1 轮已确认槽位未被篡改的比率
+              </td>
+              <td>
+                • <strong><a href="evaluation_sub/clarifymt_bench_deep_dive.html#not-correction" title="点击查看 Clarification Is Not Correction 论文拆解"><code>Clarification Is Not Correction</code></a></strong>：评测多轮澄清与局部修改过程中，已确认历史槽位的保持率。
+              </td>
+            </tr>
+
+            <tr>
+              <td rowspan="2"><strong>4. 参数计算与多规则合成</strong></td>
+              <td>
+                <strong>① 槽位精确匹配率（<code>Exact Slot Match</code>）与整单通过率（<code>Ticket EM</code>）</strong><br/>
+                逐字段核对生成工单的 <code>venue / start_time / end_time / duration / priority / primary_app / aux_app</code>：错任意一个字段即判整单未通过（<code>Ticket EM = 0</code>）
+              </td>
+              <td>
+                • <strong><a href="evaluation_sub/ruverbench_deep_dive.html" title="点击查看 RuVerBench 论文拆解"><code>RuVerBench</code></a></strong>：通过确定性规则脚本逐字段校验工具参数与复合数值约束。<br/>
+                • <strong><a href="evaluation_sub/tau_bench_deep_dive.html" title="点击查看 τ-bench 与 τ²-bench 论文总结"><code>τ-bench / τ<sup>2</sup>-bench</code></a></strong>：以最终落库状态与标准目标状态的完全相等作为核心判据。
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>② 时间加减与规则优先级合规率（<code>Arithmetic &amp; Priority Compliance</code>）</strong><br/>
+                用规则脚本校验时间加减（<code>基准时长 + 对话增减 + 场馆提前预热</code>）、时间窗重叠顺延/合并，以及多规则冲突时是否按四级优先级顺序取值
+              </td>
+              <td>
+                • <strong><a href="evaluation_sub/rhelm_deep_dive.html" title="点击查看 RHELM 论文拆解"><code>RHELM</code></a></strong>：评测多规则冲突裁决与时间区间冲突重排的准确率。<br/>
+                • <strong><a href="evaluation_sub/ruverbench_deep_dive.html" title="点击查看 RuVerBench 论文拆解"><code>RuVerBench</code></a></strong>：使用代码断言替代大模型主观打分，消除时间加减评测误差。
+              </td>
+            </tr>
+
+            <tr>
+              <td rowspan="2"><strong>5. 个性化克制与安全边界</strong></td>
+              <td>
+                <strong>① 干扰会话克制率（<code>Restraint Rate</code>）与过度个性化误触发率（<code>FPR</code>）</strong><br/>
+                在穿插的通用知识问答或日常闲聊上，检测回复中是否混入个人历史单据或业务档位，统计不强行带入无关记忆的克制比例
+              </td>
+              <td>
+                • <strong><a href="evaluation_sub/personamem_v3_deep_dive.html" title="点击查看 PersonaMem-v3 论文拆解"><code>PersonaMem-v3</code></a></strong>：设置通用问答对照题，评测模型克制不滥用个人记忆的能力。<br/>
+                • <strong><a href="evaluation_sub/twist_deep_dive.html" title="点击查看 TWIST 论文拆解"><code>TWIST</code></a></strong>：构造高表面相似度负样本，测试主动记忆助手的误触发率。
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>② 未知前提拒答率（<code>Abstention Rate</code>）与参数幻觉率（<code>Hallucination Rate</code>）</strong><br/>
+                针对历史无记录的陌生场馆或域外话题，统计如实告知无记录并引导补充的比例，以及凭空编造档位/时长的幻觉比例
+              </td>
+              <td>
+                • <strong><a href="evaluation_sub/longmemeval_deep_dive.html" title="点击查看 LongMemEval 论文拆解"><code>LongMemEval</code></a> / <a href="evaluation_sub/groundeval_deep_dive.html" title="点击查看 GroundEval 论文拆解"><code>GroundEval</code></a></strong>：加入缺失事实前提的不可回答问题，评测如实拒答率与抗幻觉能力。
+              </td>
+            </tr>
+
+            <tr>
+              <td><strong>6. 运行稳定性与错因定界</strong></td>
+              <td>
+                <strong>① 多次运行一致性（<code>pass<sup>k</sup></code>）、分阶段错因占比与耗时开销</strong><br/>
+                计算同一任务连续独立执行 <code>k</code> 次全部通过的比率（<code>pass<sup>3</sup></code>）；并对失败样本自动统计各环节占比（检索漏召回 % / 路由错 % / 时间计算错 %）及 <code>P95</code> 时延
+              </td>
+              <td>
+                • <strong><a href="evaluation_sub/tau_bench_deep_dive.html" title="点击查看 τ-bench 与 τ²-bench 论文总结"><code>τ-bench / τ<sup>2</sup>-bench</code></a></strong>：提出 <code>pass<sup>k</sup></code> 指标衡量多次独立运行的稳定性。<br/>
+                • <strong><a href="evaluation_sub/ruverbench_deep_dive.html#agent-judge" title="点击查看 Agent-as-a-Judge 论文拆解"><code>Agent-as-a-Judge</code></a></strong>：对执行轨迹做分步核查，自动定位失败发生在哪一环节。
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.getElementById('btn-theme-parchment').classList.toggle('active', theme === 'parchment');
+      document.getElementById('btn-theme-github').classList.toggle('active', theme === 'github');
+    }
+  </script>
+</body>
+</html>

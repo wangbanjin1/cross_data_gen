@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="parchment">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CTBench 论文总结：真实电信网络运维中的部分可观测性与网元遥测证据链评测</title>
+  <style>
+    :root, [data-theme="parchment"] {
+      --bg-page: #FBF7F0;
+      --bg-card: #FFFDF9;
+      --bg-elevated: #F5EFE4;
+      --bg-code: #F2ECE1;
+      --text-main: #2C2520;
+      --text-secondary: #5C5248;
+      --text-muted: #8A7E72;
+      --border-color: #E2D9C8;
+      --border-strong: #C9BBA6;
+      --accent-primary: #8C4A27;
+      --accent-secondary: #2B5B6C;
+      --semantic-red-bg: #FDF2F2;
+      --semantic-red-border: #E5A9A9;
+      --semantic-red-text: #8B2626;
+      --semantic-green-bg: #F1F8F4;
+      --semantic-green-border: #9BC9AE;
+      --semantic-green-text: #1E5E3A;
+      --semantic-blue-bg: #F0F6FA;
+      --semantic-blue-border: #A3C4DC;
+      --semantic-blue-text: #1F4E70;
+      --semantic-amber-bg: #FEF8EC;
+      --semantic-amber-border: #E6C88A;
+      --semantic-amber-text: #7D5211;
+      --shadow-sm: 0 2px 6px rgba(44, 37, 32, 0.05);
+    }
+
+    [data-theme="github"] {
+      --bg-page: #F6F8FA;
+      --bg-card: #FFFFFF;
+      --bg-elevated: #EEF2F6;
+      --bg-code: #F6F8FA;
+      --text-main: #1F2328;
+      --text-secondary: #4D5562;
+      --text-muted: #6E7781;
+      --border-color: #D0D7DE;
+      --border-strong: #AFB8C1;
+      --accent-primary: #0969DA;
+      --accent-secondary: #1A7F37;
+      --semantic-red-bg: #FFEBE9;
+      --semantic-red-border: #FF818266;
+      --semantic-red-text: #CF222E;
+      --semantic-green-bg: #DAFBE1;
+      --semantic-green-border: #4AC26B66;
+      --semantic-green-text: #1A7F37;
+      --semantic-blue-bg: #DDF4FF;
+      --semantic-blue-border: #54AEFF66;
+      --semantic-blue-text: #0969DA;
+      --semantic-amber-bg: #FFF8C5;
+      --semantic-amber-border: #D4A72C66;
+      --semantic-amber-text: #9A6700;
+      --shadow-sm: 0 1px 3px rgba(31, 35, 40, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.66;
+      font-size: 14.5px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+    .topbar-brand { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-strong);
+      color: var(--accent-primary);
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+    .back-link:hover { background: var(--accent-primary); color: #fff; text-decoration: none; }
+    .topbar-badge {
+      background: var(--accent-secondary);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .topbar-title { font-size: 15.5px; font-weight: 700; }
+    .topbar-controls { display: flex; align-items: center; gap: 8px; }
+
+    .btn-group {
+      display: inline-flex;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .btn-toggle {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 5px 11px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-toggle.active { background: var(--accent-primary); color: #fff; }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 20px 24px 48px; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card.hero { border-left: 5px solid var(--accent-secondary); }
+
+    h1 { font-size: 20px; font-weight: 800; margin: 0 0 8px; }
+    h2 {
+      font-size: 17px;
+      font-weight: 800;
+      margin: 0 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    h3 { font-size: 15px; font-weight: 700; margin: 16px 0 8px; color: var(--text-main); }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 14px 0;
+    }
+    .kpi-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 15px;
+    }
+    .kpi-label { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+    .kpi-val { font-size: 17px; font-weight: 800; color: var(--accent-primary); margin: 3px 0; }
+    .kpi-desc { font-size: 12.5px; color: var(--text-secondary); }
+
+    .stage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+      margin: 14px 0;
+    }
+    .stage-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-top: 3px solid var(--accent-primary);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 13.5px;
+    }
+    .stage-box.teal { border-top-color: var(--accent-secondary); }
+    .stage-box.green { border-top-color: var(--semantic-green-text); }
+    .stage-box strong.stage-title { display: block; font-size: 14.2px; margin-bottom: 6px; color: var(--text-main); }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .summary-box {
+      border-radius: 8px;
+      padding: 13px 16px;
+      border: 1px solid;
+      font-size: 13.5px;
+    }
+    .summary-box.green { background: var(--semantic-green-bg); border-color: var(--semantic-green-border); }
+    .summary-box.blue { background: var(--semantic-blue-bg); border-color: var(--semantic-blue-border); }
+    .summary-box.amber { background: var(--semantic-amber-bg); border-color: var(--semantic-amber-border); }
+    .summary-box.red { background: var(--semantic-red-bg); border-color: var(--semantic-red-border); }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; background: var(--bg-card); }
+    th {
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      font-weight: 700;
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+      color: var(--text-secondary);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg-elevated); }
+
+    code {
+      font-family: "JetBrains Mono", Consolas, monospace;
+      background: var(--bg-code);
+      border: 1px solid var(--border-color);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: var(--accent-primary);
+    }
+
+    ul.tight { margin: 6px 0 0; padding-left: 18px; color: var(--text-secondary); }
+    ul.tight li { margin-bottom: 5px; }
+
+    a { color: var(--accent-primary); text-decoration: none; font-weight: 600; }
+    a:hover { text-decoration: underline; }
+
+    @media print {
+      @page { margin: 12mm; }
+      html, body { background: #FFFFFF !important; }
+      .topbar { position: static; box-shadow: none; }
+      .topbar-controls { display: none; }
+      .card { box-shadow: none; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">
+      <a class="back-link" href="../hybrid_ticket_dialogue_storyline_methodology.html">← 返回主页</a>
+      <span class="topbar-badge">PAPER SUMMARY</span>
+      <span class="topbar-title">CTBench (arXiv:2608.12002) 电信网络故障排查基准：用户症状与网元遥测证据链结合</span>
+    </div>
+    <div class="topbar-controls">
+      <div class="btn-group">
+        <button class="btn-toggle active" id="btn-theme-parchment" onclick="setTheme('parchment')">暖阳米纸</button>
+        <button class="btn-toggle" id="btn-theme-github" onclick="setTheme('github')">GitHub 简洁</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="card hero">
+      <h1>一、论文的主要工作</h1>
+      <p style="margin: 0; color: var(--text-secondary);">
+        <code>CTBench</code>（<i>CTBench: Evaluating Troubleshooting Capabilities of AI Agents in Realistic Telecom Network Operations</i>，Xingyu Yan、Antonio De Domenico 等华为巴黎研究所团队发表，<a href="https://arxiv.org/abs/2608.12002v2" target="_blank">arXiv:2608.12002v2</a>）针对现有电信运维评测忽略真实网络<strong>部分可观测性（Partial Observability）与数据异构性</strong>的问题，由领域专家构建了融合用户报障描述与网元多维遥测记录的真实网络运维基准。
+      </p>
+      <div class="kpi-grid">
+        <div class="kpi-box">
+          <div class="kpi-label">评测任务</div>
+          <div class="kpi-val">根因定位 (RCA) + 路径恢复</div>
+          <div class="kpi-desc">不仅评估最终结论是否正确，还严格核查是否收集了必要的网元诊断证据</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">主要特点</div>
+          <div class="kpi-val">黄金证据轨迹 (Golden Evidence)</div>
+          <div class="kpi-desc">标注从表层症状到网元配置/性能指标的完整排查证据链</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">实验发现</div>
+          <div class="kpi-val">猜对结论 ≠ 找齐网元证据</div>
+          <div class="kpi-desc">许多模型即便偶然猜中结果，也漏查了生产规范要求的关键网元遥测单据</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>二、为什么电信场景必须将“自然语言对话”与“网元单据”结合？</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 24%;">信息来源</th>
+              <th style="width: 38%;">能提供的信息（可观测部分）</th>
+              <th style="width: 38%;">缺失的信息（不可观测部分）</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>用户自然语言对话</strong></td>
+              <td>主观体感症状（“昨晚直播前几分钟画面老卡”、“去崇礼路上掉线”）、业务诉求与口语指代。</td>
+              <td>不知道当时接入的是哪个基站小区、不知道上行 PRB 利用率是否满载、不知道真实持续了多少分钟。</td>
+            </tr>
+            <tr>
+              <td><strong>网元实时单据 / 遥测记录</strong></td>
+              <td>精确的起止时间戳、基站小区位置（<code>cell_location</code>）、协商档位、实测无线指标（如 <code>PRB=96%</code>、切换掉帧次数）与完结状态（<code>sla_verdict</code>）。</td>
+              <td>不知道用户下次打算改用什么新应用、不知道用户对各地点的个人口语习惯称呼、不知道用户的临时改期意图。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card" style="margin-bottom: 0;">
+      <h2>三、对“单据融合对话”故事线的参考</h2>
+      <div class="summary-grid">
+        <div class="summary-box amber">
+          <strong>① 网元异常单据引发后续复盘对话</strong><br/>
+          参考 CTBench“网元遥测指标定位根因”的流程，在故事线前序节点埋入网元异常单据（如记录体育馆开播高峰期 <code>PRB=96%, sla_degraded</code>），驱动用户在后续对话中询问卡顿原因，并结合网元指标沉淀出“大型场馆提前 20 分钟预热”的经验规则。
+        </div>
+        <div class="summary-box blue">
+          <strong>② 对话结束后以网元实测回执单作为客观事实记录</strong><br/>
+          对话中用户申请的只是计划值，业务执行完毕后由网元回执单记录实际执行时长与真实网络体验；后续当用户说“按上次实际跑满的时间办”或“按上次没卡顿那次办”时，系统必须查询网元实测单据。
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.getElementById('btn-theme-parchment').classList.toggle('active', theme === 'parchment');
+      document.getElementById('btn-theme-github').classList.toggle('active', theme === 'github');
+    }
+  </script>
+</body>
+</html>

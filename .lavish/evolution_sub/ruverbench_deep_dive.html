@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="parchment">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RuVerBench 与 Agent-as-a-Judge 论文总结：规则脚本验证与轨迹分步核查</title>
+  <style>
+    :root, [data-theme="parchment"] {
+      --bg-page: #FBF7F0;
+      --bg-card: #FFFDF9;
+      --bg-elevated: #F5EFE4;
+      --bg-code: #F2ECE1;
+      --text-main: #2C2520;
+      --text-secondary: #5C5248;
+      --text-muted: #8A7E72;
+      --border-color: #E2D9C8;
+      --border-strong: #C9BBA6;
+      --accent-primary: #8C4A27;
+      --accent-secondary: #2B5B6C;
+      --semantic-red-bg: #FDF2F2;
+      --semantic-red-border: #E5A9A9;
+      --semantic-red-text: #8B2626;
+      --semantic-green-bg: #F1F8F4;
+      --semantic-green-border: #9BC9AE;
+      --semantic-green-text: #1E5E3A;
+      --semantic-blue-bg: #F0F6FA;
+      --semantic-blue-border: #A3C4DC;
+      --semantic-blue-text: #1F4E70;
+      --semantic-amber-bg: #FEF8EC;
+      --semantic-amber-border: #E6C88A;
+      --semantic-amber-text: #7D5211;
+      --shadow-sm: 0 2px 6px rgba(44, 37, 32, 0.05);
+    }
+
+    [data-theme="github"] {
+      --bg-page: #F6F8FA;
+      --bg-card: #FFFFFF;
+      --bg-elevated: #EEF2F6;
+      --bg-code: #F6F8FA;
+      --text-main: #1F2328;
+      --text-secondary: #4D5562;
+      --text-muted: #6E7781;
+      --border-color: #D0D7DE;
+      --border-strong: #AFB8C1;
+      --accent-primary: #0969DA;
+      --accent-secondary: #1A7F37;
+      --semantic-red-bg: #FFEBE9;
+      --semantic-red-border: #FF818266;
+      --semantic-red-text: #CF222E;
+      --semantic-green-bg: #DAFBE1;
+      --semantic-green-border: #4AC26B66;
+      --semantic-green-text: #1A7F37;
+      --semantic-blue-bg: #DDF4FF;
+      --semantic-blue-border: #54AEFF66;
+      --semantic-blue-text: #0969DA;
+      --semantic-amber-bg: #FFF8C5;
+      --semantic-amber-border: #D4A72C66;
+      --semantic-amber-text: #9A6700;
+      --shadow-sm: 0 1px 3px rgba(31, 35, 40, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.66;
+      font-size: 14.5px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+    .topbar-brand { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-strong);
+      color: var(--accent-primary);
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+    .back-link:hover { background: var(--accent-primary); color: #fff; text-decoration: none; }
+    .topbar-badge {
+      background: var(--accent-secondary);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .topbar-title { font-size: 15.5px; font-weight: 700; }
+    .topbar-controls { display: flex; align-items: center; gap: 8px; }
+
+    .btn-group {
+      display: inline-flex;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .btn-toggle {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 5px 11px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-toggle.active { background: var(--accent-primary); color: #fff; }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 20px 24px 48px; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card.hero { border-left: 5px solid var(--accent-secondary); }
+
+    h1 { font-size: 20px; font-weight: 800; margin: 0 0 8px; }
+    h2 {
+      font-size: 17px;
+      font-weight: 800;
+      margin: 0 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    h3 { font-size: 15px; font-weight: 700; margin: 16px 0 8px; color: var(--text-main); }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 14px 0;
+    }
+    .kpi-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 15px;
+    }
+    .kpi-label { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+    .kpi-val { font-size: 17px; font-weight: 800; color: var(--accent-primary); margin: 3px 0; }
+    .kpi-desc { font-size: 12.5px; color: var(--text-secondary); }
+
+    .stage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+      margin: 14px 0;
+    }
+    .stage-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-top: 3px solid var(--accent-primary);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 13.5px;
+    }
+    .stage-box.teal { border-top-color: var(--accent-secondary); }
+    .stage-box.green { border-top-color: var(--semantic-green-text); }
+    .stage-box strong.stage-title { display: block; font-size: 14.2px; margin-bottom: 6px; color: var(--text-main); }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .summary-box {
+      border-radius: 8px;
+      padding: 13px 16px;
+      border: 1px solid;
+      font-size: 13.5px;
+    }
+    .summary-box.green { background: var(--semantic-green-bg); border-color: var(--semantic-green-border); }
+    .summary-box.blue { background: var(--semantic-blue-bg); border-color: var(--semantic-blue-border); }
+    .summary-box.amber { background: var(--semantic-amber-bg); border-color: var(--semantic-amber-border); }
+    .summary-box.red { background: var(--semantic-red-bg); border-color: var(--semantic-red-border); }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; background: var(--bg-card); }
+    th {
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      font-weight: 700;
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+      color: var(--text-secondary);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg-elevated); }
+
+    code {
+      font-family: "JetBrains Mono", Consolas, monospace;
+      background: var(--bg-code);
+      border: 1px solid var(--border-color);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: var(--accent-primary);
+    }
+
+    ul.tight { margin: 6px 0 0; padding-left: 18px; color: var(--text-secondary); }
+    ul.tight li { margin-bottom: 5px; }
+
+    a { color: var(--accent-primary); text-decoration: none; font-weight: 600; }
+    a:hover { text-decoration: underline; }
+
+    @media print {
+      @page { margin: 12mm; }
+      html, body { background: #FFFFFF !important; }
+      .topbar { position: static; box-shadow: none; }
+      .topbar-controls { display: none; }
+      .card { box-shadow: none; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">
+      <a class="back-link" href="../agent_self_evolution.html">← 返回评测集自进化主页面</a>
+      <span class="topbar-badge">PAPER SUMMARY · RUVERBENCH & AGENT-JUDGE</span>
+      <span class="topbar-title">RuVerBench & Agent-as-a-Judge：确定性规则验证与中间轨迹分步核查</span>
+    </div>
+    <div class="topbar-controls">
+      <div class="btn-group">
+        <button class="btn-toggle active" id="btn-view-scroll" onclick="setView('scroll')">长卷通览</button>
+        <button class="btn-toggle" id="btn-view-step" onclick="setView('step')">分章聚焦</button>
+      </div>
+      <div class="btn-group">
+        <button class="btn-toggle active" id="btn-theme-parchment" onclick="setTheme('parchment')">暖阳米纸</button>
+        <button class="btn-toggle" id="btn-theme-github" onclick="setTheme('github')">GitHub 简洁</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <nav class="chapter-nav" id="chapter-nav">
+      <button class="chapter-pill active" onclick="showStep(0)">1. 论文基本信息与背景</button>
+      <button class="chapter-pill" onclick="showStep(1)">2. 数据集构建与核心方法</button>
+      <button class="chapter-pill" onclick="showStep(2)">3. 评测指标与实验结论</button>
+      <button class="chapter-pill" onclick="showStep(3)">4. 可借鉴的工程与评测做法</button>
+    </nav>
+
+
+    <section class="card hero step-section">
+      <h1>RuVerBench 与 Agent-as-a-Judge 论文总结：确定性规则验证与分步轨迹核查</h1>
+      <div class="meta-bar">
+        <span><strong>RuVerBench</strong>：RuVerBench: Rule-Verified Benchmarking for Tool-Using Agents（<a href="https://arxiv.org/abs/2606.29920" target="_blank">arXiv:2606.29920</a>）</span>
+        <span><strong>Agent-as-a-Judge</strong>：Agent-as-a-Judge: Evaluate Agents with Agents（<a href="https://arxiv.org/abs/2410.10934" target="_blank">arXiv:2410.10934</a>, Zhuge et al., 2024-10）</span>
+      </div>
+      <p style="margin: 8px 0 0; color: var(--text-secondary);">
+        在评估包含数值计算、时间区间约束与多步工具调用的任务时，单纯使用大模型直接对最终回复打分（LLM-as-a-Judge）容易在时间加减或复杂优先级判断上出现评分偏差，且难以指出具体出错步骤。<code>RuVerBench</code> 主张将业务约束编写为<strong>可执行确定性验证函数</strong>；<code>Agent-as-a-Judge</code> 则通过核查中间执行轨迹（检索结果、状态更新、工具入参），按步骤定位失败原因。
+      </p>
+    </section>
+
+    <section class="card step-section">
+      <h2><span class="sec-num">1</span> RuVerBench：基于确定性规则脚本验证复合参数</h2>
+      <div class="grid-3">
+        <div class="subcard green-top">
+          <div class="subcard-title">① 时间与数值算术校验</div>
+          <p style="margin: 0; font-size: 13.5px; color: var(--text-secondary);">
+            用代码函数直接验证 <code>end_time - start_time == duration_min</code>、提前预热偏移量（<code>start_time = base_start - preheat_min</code>）以及跨午夜时间区间重叠关系，避免大模型裁判算错时间差。
+          </p>
+        </div>
+        <div class="subcard blue-top">
+          <div class="subcard-title">② 多源规则优先级核对</div>
+          <p style="margin: 0; font-size: 13.5px; color: var(--text-secondary);">
+            当同一字段存在多个候选来源（日常默认值、场馆经验值、用户当轮指定值）时，通过规则脚本核对最终取值是否符合预设优先级顺序。
+          </p>
+        </div>
+        <div class="subcard amber-top">
+          <div class="subcard-title">③ 关联字段完备性检查</div>
+          <p style="margin: 0; font-size: 13.5px; color: var(--text-secondary);">
+            验证主业务存在绑定辅业务（如高清直播关联后台网盘上传）时，输出结构中的主、辅业务槽位是否同时齐备。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card step-section" id="agent-judge">
+      <h2><span class="sec-num">2</span> Agent-as-a-Judge：面向中间执行轨迹的分步核查</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 22%;">核查环节</th>
+              <th style="width: 39%;">检查的中间状态</th>
+              <th style="width: 39%;">可分离出的具体问题类型</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>环节 1：检索层核查</strong></td>
+              <td>查询语句、向量召回候选行、二阶段关联表查询结果</td>
+              <td>区分“口语映射未命中”、“负向记录未排除”或“二阶段关联表漏查”</td>
+            </tr>
+            <tr>
+              <td><strong>环节 2：路由层核查</strong></td>
+              <td>当前已知槽位表、时间冲突检查结果、所选路径（<code>FAST / SLOW</code>）</td>
+              <td>区分“存在时间重叠或缺失参数却未发起澄清”与“信息已齐备却重复追问”</td>
+            </tr>
+            <tr>
+              <td><strong>环节 3：参数合成核查</strong></td>
+              <td>基准单据字段 + 对话修改量 + 场馆预热偏移 → 最终工单 JSON</td>
+              <td>区分“预热时间未叠加到总时长”或“多规则冲突时取错优先级”</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card step-section" style="margin-bottom: 0;">
+      <h2><span class="sec-num">3</span> 可借鉴的评测做法</h2>
+      <ul style="margin: 0; padding-left: 18px; color: var(--text-secondary);">
+        <li><strong>结构化槽位与时间计算统一采用代码校验</strong>：凡涉及字段相等、时间区间关系和时长加减的判据，均使用确定性 Python 函数评分。</li>
+        <li><strong>输出分阶段错误分布</strong>：对未通过样本按“检索漏召回”、“快慢路径判断错误”、“参数计算错误”自动归类统计，便于针对性改进对应模块。</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <script>
+    let currentView = 'scroll';
+    let currentStep = 0;
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.getElementById('btn-theme-parchment').classList.toggle('active', theme === 'parchment');
+      document.getElementById('btn-theme-github').classList.toggle('active', theme === 'github');
+    }
+    function setView(view) {
+      currentView = view;
+      document.getElementById('btn-view-scroll').classList.toggle('active', view === 'scroll');
+      document.getElementById('btn-view-step').classList.toggle('active', view === 'step');
+      document.getElementById('chapter-nav').classList.toggle('visible', view === 'step');
+      const sections = document.querySelectorAll('.step-section');
+      sections.forEach((sec, idx) => {
+        if (view === 'scroll') sec.classList.remove('hidden');
+        else sec.classList.toggle('hidden', idx !== currentStep);
+      });
+    }
+    function showStep(idx) {
+      currentStep = idx;
+      document.querySelectorAll('.chapter-pill').forEach((p, i) => p.classList.toggle('active', i === idx));
+      document.querySelectorAll('.step-section').forEach((sec, i) => sec.classList.toggle('hidden', i !== idx));
+    }
+  </script>
+</body>
+</html>

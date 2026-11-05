@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN" data-theme="parchment">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PersonaMem-v3 论文详解：主要工作、数据集构建、AI 模型参与、记忆机制与评测手段</title>
+  <title>PersonaMem-v3 论文总结：主要工作、数据集构建、AI 模型参与、记忆机制与评测手段</title>
   <style>
     :root, [data-theme="parchment"] {
       --bg-page: #FBF7F0;
@@ -254,8 +254,8 @@
 
   <header class="topbar">
     <div class="topbar-brand">
-      <a class="back-link" href="hybrid_ticket_dialogue_storyline_methodology.html">← 返回主页</a>
-      <span class="topbar-badge">PAPER DEEP DIVE</span>
+      <a class="back-link" href="../agent_memory_mechanism.html">← 返回记忆机制主页面</a>
+      <span class="topbar-badge">PAPER SUMMARY</span>
       <span class="topbar-title">PersonaMem-v3 (arXiv:2608.21381) 论文核心工作、数据构建、记忆机制与评测手段</span>
     </div>
     <div class="topbar-controls">
@@ -481,7 +481,7 @@
 
       <h3>1. 四项具体评测手段</h3>
       <ul class="tight">
-        <li><strong>严格时间截断沙箱（Time-Masking）</strong>：每道测试题对应一个测试时间戳 <code>t_test</code>，沙箱自动屏蔽 <code>t_test</code> 之后产生的所有平台记录，只允许读取此前的历史；</li>
+        <li><strong>严格时间截断沙箱（Time-Masking）</strong>：每道测试题对应一个测试时间戳 <code>t<sub>test</sub></code>，沙箱自动屏蔽 <code>t<sub>test</sub></code> 之后产生的所有平台记录，只允许读取此前的历史；</li>
         <li><strong>通用问答八项准则（4 项评分 + 4 项一票否决红线）</strong>：由评审模型对“偏好相关性、个性化适度性、社交边界得体性、个人语气匹配度”打分；同时设 <strong>4 项硬性红线（Hard Checks）</strong>——<strong>不得触碰近期点踩/划走话题、不得在无关场合泄露敏感事件、不得引用已过期或已修改的旧偏好、不得出现生硬的监控式表述</strong>（触犯任一红线即判定失败）；</li>
         <li><strong>信息流排序客观指标（<code>NDCG@5</code>）</strong>：针对社交信息流推荐任务，直接用测试时刻紧邻的 1 条真实未来正向互动帖作为正例，搭配同日 15 条真实划走/点踩帖组成候选池，计算客观排序指标 <code>NDCG@5</code>，无需大模型主观打分；</li>
         <li><strong>干扰会话克制与主动提醒双向评测</strong>：在通用知识问答（干扰会话）中，不带入个人记忆得高分、强行套用个人历史扣分；在无请求主动巡检任务中，将 6 类数据表直接交给模型（无用户提问），考察其能否在发现跨表冲突（如日历航班在纽约 JFK 机场、但聊天记录显示正准备买去新泽西 Newark 的车票）时发出提醒，而在平时空闲时刻保持安静。</li>
@@ -523,7 +523,7 @@
               <td>131.6k</td>
               <td>48.0 s</td>
               <td>66.0%<br/>(过时误用 ~37%)</td>
-              <td>工具检索精准，社区代写（54.2%）、私信摘要（65.2%）与信息流排序（35.3%）表现突出。</td>
+              <td>工具检索准确，社区代写（54.2%）、私信摘要（65.2%）与信息流排序（35.3%）表现突出。</td>
             </tr>
             <tr>
               <td><strong>GPT-5.5 + Textual Memory</strong></td>
@@ -553,19 +553,19 @@
         </table>
       </div>
 
-      <h3>3. 对我们构建“单据融合对话”数据集与记忆系统的三点参考</h3>
+      <h3>3. 对构建“单据融合对话”数据集与记忆系统的三点参考</h3>
       <div class="summary-grid">
         <div class="summary-box amber">
           <strong>① 针对向量检索 51.4% 过时误用率：单据需区分“长期习惯、中途参数升级与单次临时单据”</strong><br/>
-          单纯依赖向量余弦相似度会把单次偶发单据或已升级淘汰的旧单据当成当前习惯召回。因此我们在故事线中设计了“连续 <code>≥ 3</code> 次同参单据才晋升长期习惯”、“中途设备升级覆盖旧档位”以及“单日赛事临时单据”，并在结构化列中维护最新生效状态。
+          单纯依赖向量余弦相似度会把单次偶发单据或已升级淘汰的旧单据当成当前习惯召回。因此在故事线中设计了“连续 <code>≥ 3</code> 次同参单据才晋升长期习惯”、“中途设备升级覆盖旧档位”以及“单日赛事临时单据”，并在结构化列中维护最新生效状态。
         </div>
         <div class="summary-box green">
           <strong>② 针对个人档案在无关话题中被强行带入：引入“干扰会话与域外话题拒绝”</strong><br/>
-          实验表明浓缩进个人档案的偏好很容易在回答普通技术问题时被模型生硬套用。因此我们在数据集中加入通用通信问答等干扰会话，以及从未去过的场馆问询，检验系统能否做到“按场景条件触发记忆、无关话题不强行带入”。
+          实验表明浓缩进个人档案的偏好很容易在回答普通技术问题时被模型生直接套用用。因此在数据集中加入通用通信问答等干扰会话，以及从未去过的场馆问询，检验系统能否做到“按场景条件触发记忆、无关话题不强行带入”。
         </div>
         <div class="summary-box blue">
           <strong>③ 针对滚动自由文本摘要每次丢失 14.4% 历史细节：采用“工作记忆单据表 + 事实记忆偏好表 + 经验记忆规则卡”分层存储</strong><br/>
-          论文测出自由文本摘要在多次滚动更新后会磨损中段事件细节（中段准确率下降 7%~10%）。因此我们不采用单一自由文本摘要，而是将网元实时单据原样保留在工作记忆表中，将稳定习惯与个性化表达存入事实记忆表，将异常复盘得出的参数调整规则存入经验记忆。
+          论文测出自由文本摘要在多次滚动更新后会磨损中段事件细节（中段准确率下降 7%~10%）。因此不采用单一自由文本摘要，而是将网元实时单据原样保留在工作记忆表中，将稳定习惯与个性化表达存入事实记忆表，将异常复盘得出的参数调整规则存入经验记忆。
         </div>
       </div>
     </section>

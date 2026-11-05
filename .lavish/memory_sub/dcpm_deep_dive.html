@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="parchment">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DCPM 论文总结：双过程认知记忆架构（同步版本覆盖链 + 异步跨事件模式归纳）</title>
+  <style>
+    :root, [data-theme="parchment"] {
+      --bg-page: #FBF7F0;
+      --bg-card: #FFFDF9;
+      --bg-elevated: #F5EFE4;
+      --bg-code: #F2ECE1;
+      --text-main: #2C2520;
+      --text-secondary: #5C5248;
+      --text-muted: #8A7E72;
+      --border-color: #E2D9C8;
+      --border-strong: #C9BBA6;
+      --accent-primary: #8C4A27;
+      --accent-secondary: #2B5B6C;
+      --semantic-red-bg: #FDF2F2;
+      --semantic-red-border: #E5A9A9;
+      --semantic-red-text: #8B2626;
+      --semantic-green-bg: #F1F8F4;
+      --semantic-green-border: #9BC9AE;
+      --semantic-green-text: #1E5E3A;
+      --semantic-blue-bg: #F0F6FA;
+      --semantic-blue-border: #A3C4DC;
+      --semantic-blue-text: #1F4E70;
+      --semantic-amber-bg: #FEF8EC;
+      --semantic-amber-border: #E6C88A;
+      --semantic-amber-text: #7D5211;
+      --shadow-sm: 0 2px 6px rgba(44, 37, 32, 0.05);
+    }
+
+    [data-theme="github"] {
+      --bg-page: #F6F8FA;
+      --bg-card: #FFFFFF;
+      --bg-elevated: #EEF2F6;
+      --bg-code: #F6F8FA;
+      --text-main: #1F2328;
+      --text-secondary: #4D5562;
+      --text-muted: #6E7781;
+      --border-color: #D0D7DE;
+      --border-strong: #AFB8C1;
+      --accent-primary: #0969DA;
+      --accent-secondary: #1A7F37;
+      --semantic-red-bg: #FFEBE9;
+      --semantic-red-border: #FF818266;
+      --semantic-red-text: #CF222E;
+      --semantic-green-bg: #DAFBE1;
+      --semantic-green-border: #4AC26B66;
+      --semantic-green-text: #1A7F37;
+      --semantic-blue-bg: #DDF4FF;
+      --semantic-blue-border: #54AEFF66;
+      --semantic-blue-text: #0969DA;
+      --semantic-amber-bg: #FFF8C5;
+      --semantic-amber-border: #D4A72C66;
+      --semantic-amber-text: #9A6700;
+      --shadow-sm: 0 1px 3px rgba(31, 35, 40, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.66;
+      font-size: 14.5px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+    .topbar-brand { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-strong);
+      color: var(--accent-primary);
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+    .back-link:hover { background: var(--accent-primary); color: #fff; text-decoration: none; }
+    .topbar-badge {
+      background: var(--accent-secondary);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .topbar-title { font-size: 15.5px; font-weight: 700; }
+    .topbar-controls { display: flex; align-items: center; gap: 8px; }
+
+    .btn-group {
+      display: inline-flex;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .btn-toggle {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 5px 11px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-toggle.active { background: var(--accent-primary); color: #fff; }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 20px 24px 48px; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card.hero { border-left: 5px solid var(--accent-secondary); }
+
+    h1 { font-size: 20px; font-weight: 800; margin: 0 0 8px; }
+    h2 {
+      font-size: 17px;
+      font-weight: 800;
+      margin: 0 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    h3 { font-size: 15px; font-weight: 700; margin: 16px 0 8px; color: var(--text-main); }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 14px 0;
+    }
+    .kpi-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 15px;
+    }
+    .kpi-label { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+    .kpi-val { font-size: 17px; font-weight: 800; color: var(--accent-primary); margin: 3px 0; }
+    .kpi-desc { font-size: 12.5px; color: var(--text-secondary); }
+
+    .stage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+      margin: 14px 0;
+    }
+    .stage-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-top: 3px solid var(--accent-primary);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 13.5px;
+    }
+    .stage-box.teal { border-top-color: var(--accent-secondary); }
+    .stage-box.green { border-top-color: var(--semantic-green-text); }
+    .stage-box strong.stage-title { display: block; font-size: 14.2px; margin-bottom: 6px; color: var(--text-main); }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .summary-box {
+      border-radius: 8px;
+      padding: 13px 16px;
+      border: 1px solid;
+      font-size: 13.5px;
+    }
+    .summary-box.green { background: var(--semantic-green-bg); border-color: var(--semantic-green-border); }
+    .summary-box.blue { background: var(--semantic-blue-bg); border-color: var(--semantic-blue-border); }
+    .summary-box.amber { background: var(--semantic-amber-bg); border-color: var(--semantic-amber-border); }
+    .summary-box.red { background: var(--semantic-red-bg); border-color: var(--semantic-red-border); }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; background: var(--bg-card); }
+    th {
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      font-weight: 700;
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+      color: var(--text-secondary);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg-elevated); }
+
+    code {
+      font-family: "JetBrains Mono", Consolas, monospace;
+      background: var(--bg-code);
+      border: 1px solid var(--border-color);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: var(--accent-primary);
+    }
+
+    ul.tight { margin: 6px 0 0; padding-left: 18px; color: var(--text-secondary); }
+    ul.tight li { margin-bottom: 5px; }
+
+    a { color: var(--accent-primary); text-decoration: none; font-weight: 600; }
+    a:hover { text-decoration: underline; }
+
+    @media print {
+      @page { margin: 12mm; }
+      html, body { background: #FFFFFF !important; }
+      .topbar { position: static; box-shadow: none; }
+      .topbar-controls { display: none; }
+      .card { box-shadow: none; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">
+      <a class="back-link" href="../agent_memory_mechanism.html">← 返回记忆机制主页面</a>
+      <span class="topbar-badge">PAPER SUMMARY</span>
+      <span class="topbar-title">DCPM (arXiv:2606.09483) 双过程认知记忆系统：System 1 版本覆盖与 System 2 规律归纳</span>
+    </div>
+    <div class="topbar-controls">
+      <div class="btn-group">
+        <button class="btn-toggle active" id="btn-theme-parchment" onclick="setTheme('parchment')">暖阳米纸</button>
+        <button class="btn-toggle" id="btn-theme-github" onclick="setTheme('github')">GitHub 简洁</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="card hero">
+      <h1>一、论文的主要工作</h1>
+      <p style="margin: 0; color: var(--text-secondary);">
+        <code>DCPM</code>（<i>Memory Beyond Recall: A Dual-Process Cognitive Memory System for Self-Evolving LLM Agents</i>，Tianxiang Fei 等发表，<a href="https://arxiv.org/abs/2606.09483v1" target="_blank">arXiv:2606.09483v1</a>）指出：当前 Agent 记忆系统把“状态修改更新”、“因果关联”和“跨事件规律归纳”全部混在同一个平面检索库里，导致遇到用户习惯随时间演变或临时变动时极易召回过时信息。为此，论文借鉴认知心理学的双过程理论（Dual-Process Theory），提出了分层双过程认知记忆架构。
+      </p>
+      <div class="kpi-grid">
+        <div class="kpi-box">
+          <div class="kpi-label">认知记忆层级</div>
+          <div class="kpi-val">4 层能力进阶</div>
+          <div class="kpi-desc">原始记录/原子事实 → 历时状态演变链 → 领域规律模式 → 跨领域深层意图</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">System 1（日间同步写入）</div>
+          <div class="kpi-val">双向版本覆盖链</div>
+          <div class="kpi-desc">在线实时记录偏好更新，通过 <code>supersedes</code> 指针把新旧版本串成双向链表</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">System 2（夜间异步归纳）</div>
+          <div class="kpi-val">跨事件模式提炼</div>
+          <div class="kpi-desc">后台定期扫描多条历史事件，归纳周期规律并消解长期习惯与临时变动的冲突</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">实测收益（PersonaMem-v2）</div>
+          <div class="kpi-val">+5.20 分显著提升</div>
+          <div class="kpi-desc">在需要跨多会话隐式归纳与状态演化的任务上提升最为显著</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>二、System 1 与 System 2 双过程机制拆解</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 22%;">处理过程</th>
+              <th style="width: 38%;">核心工作机制</th>
+              <th style="width: 40%;">解决的典型错误场景</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>System 1：同步状态修正与版本链 (Daytime Writer)</strong></td>
+              <td>每次新事件或对话发生时，不直接覆盖删除旧记录，也不平铺堆放，而是建立 <code>supersedes</code>（新覆盖旧）双向版本链，明确标记当前哪个版本处于生效状态。</td>
+              <td>解决“用户已经把画质从 720p 升级到 1080p，但向量检索仍把半年前的 720p 旧记录搜出来当成当前偏好”的问题。</td>
+            </tr>
+            <tr>
+              <td><strong>System 2：异步跨事件模式归纳 (Nighttime Engine)</strong></td>
+              <td>在后台异步扫描累计的多条原始记录与状态链，将重复出现的行为提炼为领域模式（Domain Schemas），并区分“单次临时变动”与“长期稳定偏好转变”。</td>
+              <td>解决“用户平时固定在园区用 1080p，某天因为暴雨临时降为 720p，结果系统把单次临时降级误当成永久习惯修改”的问题。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card" style="margin-bottom: 0;">
+      <h2>三、对“单据融合对话”故事线与三层记忆架构的参考</h2>
+      <div class="summary-grid">
+        <div class="summary-box green">
+          <strong>① 区分“单次临时变动”与“长期档位升级”</strong><br/>
+          参考 DCPM 的设计，在故事线中同时构造了“因突发天气/临时差旅产生的单次参数变动（事后恢复原习惯）”与“因设备升级产生的长期档位覆盖”，检验系统能否正确区分临时单据与长期偏好更新。
+        </div>
+        <div class="summary-box blue">
+          <strong>② 从高频原始单据中异步归纳周期与习惯</strong><br/>
+          参考 System 2 的异步模式归纳机制，网元实时上报的单据先存入工作记忆流水表；当同一规律连续出现 <code>≥ 3</code> 次时，再归纳提炼进事实记忆表（<code>periodic_preference</code> / <code>preferred_value</code>）。
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.getElementById('btn-theme-parchment').classList.toggle('active', theme === 'parchment');
+      document.getElementById('btn-theme-github').classList.toggle('active', theme === 'github');
+    }
+  </script>
+</body>
+</html>

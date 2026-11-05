@@ -1,0 +1,583 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN" data-theme="parchment">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PersonaMem-v3 论文总结：主要工作、数据集构建、AI 模型参与、记忆机制与评测手段</title>
+  <style>
+    :root, [data-theme="parchment"] {
+      --bg-page: #FBF7F0;
+      --bg-card: #FFFDF9;
+      --bg-elevated: #F5EFE4;
+      --bg-code: #F2ECE1;
+      --text-main: #2C2520;
+      --text-secondary: #5C5248;
+      --text-muted: #8A7E72;
+      --border-color: #E2D9C8;
+      --border-strong: #C9BBA6;
+      --accent-primary: #8C4A27;
+      --accent-secondary: #2B5B6C;
+      --semantic-red-bg: #FDF2F2;
+      --semantic-red-border: #E5A9A9;
+      --semantic-red-text: #8B2626;
+      --semantic-green-bg: #F1F8F4;
+      --semantic-green-border: #9BC9AE;
+      --semantic-green-text: #1E5E3A;
+      --semantic-blue-bg: #F0F6FA;
+      --semantic-blue-border: #A3C4DC;
+      --semantic-blue-text: #1F4E70;
+      --semantic-amber-bg: #FEF8EC;
+      --semantic-amber-border: #E6C88A;
+      --semantic-amber-text: #7D5211;
+      --shadow-sm: 0 2px 6px rgba(44, 37, 32, 0.05);
+    }
+
+    [data-theme="github"] {
+      --bg-page: #F6F8FA;
+      --bg-card: #FFFFFF;
+      --bg-elevated: #EEF2F6;
+      --bg-code: #F6F8FA;
+      --text-main: #1F2328;
+      --text-secondary: #4D5562;
+      --text-muted: #6E7781;
+      --border-color: #D0D7DE;
+      --border-strong: #AFB8C1;
+      --accent-primary: #0969DA;
+      --accent-secondary: #1A7F37;
+      --semantic-red-bg: #FFEBE9;
+      --semantic-red-border: #FF818266;
+      --semantic-red-text: #CF222E;
+      --semantic-green-bg: #DAFBE1;
+      --semantic-green-border: #4AC26B66;
+      --semantic-green-text: #1A7F37;
+      --semantic-blue-bg: #DDF4FF;
+      --semantic-blue-border: #54AEFF66;
+      --semantic-blue-text: #0969DA;
+      --semantic-amber-bg: #FFF8C5;
+      --semantic-amber-border: #D4A72C66;
+      --semantic-amber-text: #9A6700;
+      --shadow-sm: 0 1px 3px rgba(31, 35, 40, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.66;
+      font-size: 14.5px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+    .topbar-brand { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-strong);
+      color: var(--accent-primary);
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+    .back-link:hover { background: var(--accent-primary); color: #fff; text-decoration: none; }
+    .topbar-badge {
+      background: var(--accent-secondary);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .topbar-title { font-size: 15.5px; font-weight: 700; }
+    .topbar-controls { display: flex; align-items: center; gap: 8px; }
+
+    .btn-group {
+      display: inline-flex;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .btn-toggle {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 5px 11px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-toggle.active { background: var(--accent-primary); color: #fff; }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 20px 24px 48px; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card.hero { border-left: 5px solid var(--accent-secondary); }
+
+    h1 { font-size: 20px; font-weight: 800; margin: 0 0 8px; }
+    h2 {
+      font-size: 17px;
+      font-weight: 800;
+      margin: 0 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    h3 { font-size: 15px; font-weight: 700; margin: 16px 0 8px; color: var(--text-main); }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 14px 0;
+    }
+    .kpi-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 15px;
+    }
+    .kpi-label { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+    .kpi-val { font-size: 17px; font-weight: 800; color: var(--accent-primary); margin: 3px 0; }
+    .kpi-desc { font-size: 12.5px; color: var(--text-secondary); }
+
+    .stage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+      margin: 14px 0;
+    }
+    .stage-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-top: 3px solid var(--accent-primary);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 13.5px;
+    }
+    .stage-box.teal { border-top-color: var(--accent-secondary); }
+    .stage-box.green { border-top-color: var(--semantic-green-text); }
+    .stage-box strong.stage-title { display: block; font-size: 14.2px; margin-bottom: 6px; color: var(--text-main); }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .summary-box {
+      border-radius: 8px;
+      padding: 13px 16px;
+      border: 1px solid;
+      font-size: 13.5px;
+    }
+    .summary-box.green { background: var(--semantic-green-bg); border-color: var(--semantic-green-border); }
+    .summary-box.blue { background: var(--semantic-blue-bg); border-color: var(--semantic-blue-border); }
+    .summary-box.amber { background: var(--semantic-amber-bg); border-color: var(--semantic-amber-border); }
+    .summary-box.red { background: var(--semantic-red-bg); border-color: var(--semantic-red-border); }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; background: var(--bg-card); }
+    th {
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      font-weight: 700;
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+      color: var(--text-secondary);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg-elevated); }
+
+    code {
+      font-family: "JetBrains Mono", Consolas, monospace;
+      background: var(--bg-code);
+      border: 1px solid var(--border-color);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: var(--accent-primary);
+    }
+
+    ul.tight { margin: 6px 0 0; padding-left: 18px; color: var(--text-secondary); }
+    ul.tight li { margin-bottom: 5px; }
+
+    a { color: var(--accent-primary); text-decoration: none; font-weight: 600; }
+    a:hover { text-decoration: underline; }
+
+    @media print {
+      @page { margin: 12mm; }
+      html, body { background: #FFFFFF !important; }
+      .topbar { position: static; box-shadow: none; }
+      .topbar-controls { display: none; }
+      .card { box-shadow: none; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">
+      <a class="back-link" href="../agent_evaluation_methodology.html">← 返回评测思路主页面</a>
+      <span class="topbar-badge">PAPER SUMMARY</span>
+      <span class="topbar-title">PersonaMem-v3 (arXiv:2608.21381) 论文核心工作、数据构建、记忆机制与评测手段</span>
+    </div>
+    <div class="topbar-controls">
+      <div class="btn-group">
+        <button class="btn-toggle active" id="btn-theme-parchment" onclick="setTheme('parchment')">暖阳米纸</button>
+        <button class="btn-toggle" id="btn-theme-github" onclick="setTheme('github')">GitHub 简洁</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- 一、论文主要工作与解决的问题 -->
+    <section class="card hero">
+      <h1>一、论文的主要工作</h1>
+      <p style="margin: 0; color: var(--text-secondary);">
+        <code>PersonaMem-v3</code>（UPenn、MIT 与 Meta AI 联合发表，<a href="https://arxiv.org/abs/2608.21381v2" target="_blank">arXiv:2608.21381v2</a>）主要解决传统长程记忆基准的三个局限：
+      </p>
+      <ul class="tight">
+        <li><strong>不再局限于单一聊天窗口的显式声明</strong>：真实用户很少在对话里主动向助手罗列自己的喜好，绝大多数偏好隐藏在非对话的日常行为日志、日程表和跨应用交互中；</li>
+        <li><strong>用真实行为时间戳替代人工固定剧本</strong>：前两代基准（v1/v2）由模型凭空编造人物设定并按固定轮次插入“偏好修改”，而 v3 基于真实脱敏用户的历史行为日志逆向提炼偏好，保留了真实世界里偏好保持、自然消退、新增与单次偶发的演化分布；</li>
+        <li><strong>同时评测“用好记忆”与“克制不用记忆”</strong>：传统评测默认召回的个人记忆越多越好，而 v3 专门测试模型在回答通用技术问题或面对敏感信息时，能否克制不强行带入个人历史记录。</li>
+      </ul>
+
+      <h3>PersonaMem 三代数据集对比（论文 Table 9）</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 16%;">对比维度</th>
+              <th style="width: 26%;">PersonaMem-v1 (2025)</th>
+              <th style="width: 26%;">PersonaMem-v2 (2025)</th>
+              <th style="width: 32%;">PersonaMem-v3 (2026)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>数据来源</strong></td>
+              <td>20 个纯合成用户（人工设定静态档案，每人 60 轮对话）</td>
+              <td>1,000 个纯合成用户（300 余个场景，128k 上下文）</td>
+              <td><strong>200 个脱敏真实用户，基于 100 万余条真实行为记录逆向构建</strong></td>
+            </tr>
+            <tr>
+              <td><strong>信号构成</strong></td>
+              <td>用户在对话中直接声明偏好</td>
+              <td>对话中隐含流露偏好</td>
+              <td><strong>95% 为非对话行为日志</strong>（浏览停留、完播、划走跳过），仅 5% 为直接交互与对话</td>
+            </tr>
+            <tr>
+              <td><strong>数据分布范围</strong></td>
+              <td>单一 Chatbot 多轮对话</td>
+              <td>单一 Chatbot 多轮对话</td>
+              <td><strong>跨 6 类应用数据表</strong>：社交动态（3 端）、对话助手、伴侣对话、日历日程与位置轨迹</td>
+            </tr>
+            <tr>
+              <td><strong>偏好变化方式</strong></td>
+              <td>人工按固定轮次插入修改指令</td>
+              <td>人工按固定轮次插入修改指令</td>
+              <td>从真实时间戳挖掘出 1,554 条轨迹：<strong>保持（77%）、消退（13%）、新增（8%）、单次偶发（1%）</strong></td>
+            </tr>
+            <tr>
+              <td><strong>边界与克制评测</strong></td>
+              <td>仅测试正向召回偏好</td>
+              <td>增加用户主动“要求忘却”测试</td>
+              <td>增加<strong>干扰会话过滤（通用问答不带入记忆）</strong>、未知事实追问澄清、无请求主动提醒与静默测试</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 二、数据集量级与六类数据表构成 -->
+    <section class="card">
+      <h2>二、数据集的量级与构成</h2>
+      <p style="margin: 0; color: var(--text-secondary);">
+        数据集底座来自 Meta 的隐私脱敏行为库 <code>GIST-Bench</code>（从约 400 万条原始行为池中，将每 10 名兴趣相近的真实用户聚合重采样为一个脱敏用户，保留真实的话题标签与时间戳分布）。核心数据量级如下：
+      </p>
+
+      <div class="kpi-grid">
+        <div class="kpi-box">
+          <div class="kpi-label">用户数与原始事件量</div>
+          <div class="kpi-val">200 人 / 100 万+ 事件</div>
+          <div class="kpi-desc">观测周期 30 天，人均约 4,000 条带时间戳的原始交互事件</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">单用户全量上下文长度</div>
+          <div class="kpi-val">~400k – 416k tokens</div>
+          <div class="kpi-desc">扩写为 6 类应用 JSON 数据表后，每位用户的完整历史约 41.6 万 tokens</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">显式与隐式信号比例</div>
+          <div class="kpi-val">5% 显式 : 95% 隐式</div>
+          <div class="kpi-desc">隐式信号中 63.8% 为快速划走跳过（Skip），其余为长停留浏览与视频完播</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">持续偏好轨迹数量</div>
+          <div class="kpi-val">1,554 条演化轨迹</div>
+          <div class="kpi-desc">77% 持续保持、13% 逐渐消退、8% 近期新增、1% 单次短期突发</div>
+        </div>
+      </div>
+
+      <h3>每位用户的 6 类后端数据表（JSON 结构）</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 22%;">数据表名称</th>
+              <th style="width: 24%;">数据类型与角色</th>
+              <th style="width: 54%;">具体包含的记录内容</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. Instagram / Facebook / Threads</strong></td>
+              <td>社交媒体三端行为与交互表</td>
+              <td>包含用户浏览过的帖子流（带停留时长或划走标记）、点赞/收藏/点踩记录、用户自己发布的动态、好友私信收件箱（DM Inbox），以及用户在评论区发出的 <code>@AI</code> 自然语言调整指令（如“以后少推这类内容”）。</td>
+            </tr>
+            <tr>
+              <td><strong>2. Chatbot</strong></td>
+              <td>日常任务助手对话表</td>
+              <td>涵盖邮件润色、代码调试、旅行规划、购物参数对比、健康/财务咨询等 10 类日常任务的多轮对话记录，体现用户在具体任务中的显式要求与用语习惯。</td>
+            </tr>
+            <tr>
+              <td><strong>3. Meta AI Studio</strong></td>
+              <td>特定主题伴侣长对话表</td>
+              <td>用户与特定主题虚拟角色的多轮闲聊记录，主要用于承载用户在公开社交平台上不会直接发布的私下兴趣、情绪倾诉与个人顾虑。</td>
+            </tr>
+            <tr>
+              <td><strong>4. Calendar + Geo-location</strong></td>
+              <td>结构化日程与地理位置表</td>
+              <td>记录 30 天内的会议、航班、聚餐、就医等日程创建与修改记录，以及后台静默记录的城市级位置变化（如从常住地出差到另一城市，用于测试跨表位置感知）。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 三、数据集构建方案与 AI 模型参与分工 -->
+    <section class="card">
+      <h2>三、数据集构建方案与 AI 模型参与分工</h2>
+      <p style="margin: 0; color: var(--text-secondary);">
+        原始行为日志只有 <code>(时间戳, 用户ID, 话题标签 Hashtags, 动作类型)</code>，没有具体文本内容。论文设计了三阶段逆向生成方案，并在不同环节引入大模型完成候选推断、防编造审计、多端扩写与自动化质检：
+      </p>
+
+      <div class="stage-grid">
+        <div class="stage-box">
+          <strong class="stage-title">阶段 1：候选偏好推断与跨事件重复验证</strong>
+          <ul class="tight">
+            <li><strong>大模型多角度候选推断</strong>：对每条非划走事件的话题标签，调用大模型生成最多 3 个不同角度的候选偏好解读，并给出初始置信度（正向偏好要求 <code>≥ 0.75</code>，负向排斥要求 <code>≥ 0.55</code>）；</li>
+            <li><strong>高频划走升级</strong>：单次划走跳过（占 63.8%）通常只是忙或随手翻页，直接忽略；只有短时间窗内对同一类话题密集重复划走，才升级为“负向排斥候选”；</li>
+            <li><strong>全历史累加过滤</strong>：在 30 天全量事件中统计同一候选偏好的重复次数（直接点赞/评论计 <code>1.0</code> 分，长停留/完播计 <code>0.5</code> 分）。<strong>长期稳定偏好需累计达 20 分（纯隐式达 50 分），短期临时需求需累计达 3 分</strong>，未达标的偶发记录全部剔除。</li>
+          </ul>
+        </div>
+
+        <div class="stage-box teal">
+          <strong class="stage-title">阶段 2：用户画像合成与“诱饵审计”质检</strong>
+          <ul class="tight">
+            <li><strong>四部分画像组装</strong>：将通过验证的偏好交给大模型组装为完整档案：① 基础人口学信息；② 四层语言表达习惯（常用词汇、句式标点、熟人/公开场合语气差异、不同应用篇幅习惯）；③ 12 类深层兴趣与私下顾虑；④ 15 类带时间窗的敏感事件（如手术、失业、分手）；</li>
+            <li><strong>AI 防编造“诱饵审计（Decoy Audit）”</strong>：为防止验证模型敷衍通过，系统故意在待审档案中混入若干没有日志依据的“虚假诱饵偏好”。审计模型必须逐条核对原始事件 ID 并成功剔除诱饵，确保留下的每条偏好都能溯源到多条真实日志。</li>
+          </ul>
+        </div>
+
+        <div class="stage-box green">
+          <strong class="stage-title">阶段 3：GPT-5.5 多端扩写与 14 维独立质检</strong>
+          <ul class="tight">
+            <li><strong>主力生成模型（<code>GPT-5.5</code>）</strong>：严格按照原始日志的时间戳顺序，将抽象行为扩写为 6 类应用的 JSON 文本。例如：某几天连续出现异地标签 → 同步在 <code>Calendar</code> 生成差旅日程、在 <code>Geo-location</code> 更新城市、在 <code>Chatbot</code> 生成当地问询对话；</li>
+            <li><strong>独立评审模型 14 维质检</strong>：使用独立评审模型对生成结果做 14 项自动检查（时间先后是否自洽、是否提前泄露未来事件、不同应用语气是否符合同一人设等），<strong>质检通过率达 96.6%，双模型评审一致率达 89.1%</strong>。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 四、记忆机制的引入方式 -->
+    <section class="card">
+      <h2>四、记忆机制的引入：论文对比了哪三类方案？</h2>
+      <p style="margin: 0; color: var(--text-secondary);">
+        为了客观评估不同记忆架构在 40 万 tokens 跨平台历史上的表现，论文在 <code>GPT-5.5</code>、<code>Claude Opus 4.8</code>、<code>Claude Sonnet 4.6</code> 与 <code>Gemini-3.5-Flash</code> 四个模型底座上，分别引入并对比了三类记忆与上下文机制：
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 20%;">记忆引入机制</th>
+              <th style="width: 16%;">单次查询 Token</th>
+              <th style="width: 38%;">具体实现方式与更新逻辑</th>
+              <th style="width: 26%;">代表配置</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. 全量长上下文</strong><br/>(Long Context)</td>
+              <td>~416.0k tokens</td>
+              <td>不引入外部记忆提炼模块，直接将该用户截至测试时刻的 6 类应用全部 JSON 历史按时间顺序拼接放入模型上下文窗口。</td>
+              <td><code>GPT-5.5 + Long Context</code><br/><code>Gemini-3.5-Flash + Long Context</code></td>
+            </tr>
+            <tr>
+              <td><strong>2A. 自演进文本档案</strong><br/>(Textual Memory)</td>
+              <td>~2k – 5k tokens<br/>(节省约 99%)</td>
+              <td>将 30 天历史按时间块分段输入，让模型滚动维护一份固定容量（2,048 ~ 8,192 tokens）的结构化文本档案，每次迭代可执行四种动作：<code>ADD</code>（新增）、<code>EDIT</code>（修改状态）、<code>REMOVE</code>（删除已过期/已反转偏好）、<code>MERGE</code>（合并同类项）。</td>
+              <td><code>GPT-5.5 + Textual Memory</code><br/><code>Gemini-3.5-Flash + Textual Memory</code></td>
+            </tr>
+            <tr>
+              <td><strong>2B. 向量检索记忆</strong><br/>(Mem0 Vector RAG)</td>
+              <td>~3k – 5k tokens<br/>(节省约 99%)</td>
+              <td>接入开源向量记忆框架 <code>Mem0</code>，将历史事件抽取为带日期的简短事实句并编码存入向量库；测试时根据当前提问计算余弦相似度，召回 Top-K 相似记忆片段注入提示词。</td>
+              <td><code>GPT-5.5 + Mem0</code></td>
+            </tr>
+            <tr>
+              <td><strong>3. Agent 文件自主检索</strong><br/>(Agentic Search)</td>
+              <td>116k – 246k tokens<br/>(多轮累计)</td>
+              <td>将 6 类应用的 JSON 数据存为本地文件，不预先拼接，而是给 Agent 提供文件检索工具（<code>Grep</code> 关键词搜索、<code>Read</code> 读取片段、<code>Bash</code> 脚本过滤），允许其在 15~30 轮预算内自主跨表查找证据。</td>
+              <td><code>Opus 4.8 + Claude Code</code><br/><code>Sonnet 4.6 + Claude Code</code><br/><code>GPT-5.5 + Codex</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 五、评测手段、指标设计与实验结果 -->
+    <section class="card" style="margin-bottom: 0;">
+      <h2>五、评测手段与主要实验结果</h2>
+
+      <h3>1. 四项具体评测手段</h3>
+      <ul class="tight">
+        <li><strong>严格时间截断沙箱（Time-Masking）</strong>：每道测试题对应一个测试时间戳 <code>t<sub>test</sub></code>，沙箱自动屏蔽 <code>t<sub>test</sub></code> 之后产生的所有平台记录，只允许读取此前的历史；</li>
+        <li><strong>通用问答八项准则（4 项评分 + 4 项一票否决红线）</strong>：由评审模型对“偏好相关性、个性化适度性、社交边界得体性、个人语气匹配度”打分；同时设 <strong>4 项硬性红线（Hard Checks）</strong>——<strong>不得触碰近期点踩/划走话题、不得在无关场合泄露敏感事件、不得引用已过期或已修改的旧偏好、不得出现生硬的监控式表述</strong>（触犯任一红线即判定失败）；</li>
+        <li><strong>信息流排序客观指标（<code>NDCG@5</code>）</strong>：针对社交信息流推荐任务，直接用测试时刻紧邻的 1 条真实未来正向互动帖作为正例，搭配同日 15 条真实划走/点踩帖组成候选池，计算客观排序指标 <code>NDCG@5</code>，无需大模型主观打分；</li>
+        <li><strong>干扰会话克制与主动提醒双向评测</strong>：在通用知识问答（干扰会话）中，不带入个人记忆得高分、强行套用个人历史扣分；在无请求主动巡检任务中，将 6 类数据表直接交给模型（无用户提问），考察其能否在发现跨表冲突（如日历航班在纽约 JFK 机场、但聊天记录显示正准备买去新泽西 Newark 的车票）时发出提醒，而在平时空闲时刻保持安静。</li>
+      </ul>
+
+      <h3>2. 八种模型与记忆配置实测对比（论文 Section 4）</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 24%;">模型与记忆配置</th>
+              <th style="width: 12%;">综合得分</th>
+              <th style="width: 14%;">单次 Token 消耗</th>
+              <th style="width: 12%;">平均耗时</th>
+              <th style="width: 16%;">偏好变化/过期准确率</th>
+              <th style="width: 22%;">主要表现与暴露出的问题</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Claude Opus 4.8 + Claude Code</strong></td>
+              <td><strong>53.7% (第 1)</strong></td>
+              <td>246.7k</td>
+              <td>80.3 s</td>
+              <td>65.7%<br/>(过时误用 ~38%)</td>
+              <td>跨表查找具体老帖、汇总私信能力最强；但耗时长，且在主动提醒任务中偏保守（常选择沉默）。</td>
+            </tr>
+            <tr>
+              <td><strong>GPT-5.5 + Long Context</strong></td>
+              <td><strong>53.4% (第 2)</strong></td>
+              <td>416.0k</td>
+              <td>22.4 s</td>
+              <td>73.1%</td>
+              <td>保留了全部原始细节，干扰会话克制得分高（75.4%）；但单次消耗 41.6 万 tokens 成本高，中段历史易遗漏。</td>
+            </tr>
+            <tr>
+              <td><strong>GPT-5.5 + Codex</strong></td>
+              <td><strong>53.2% (第 3)</strong></td>
+              <td>131.6k</td>
+              <td>48.0 s</td>
+              <td>66.0%<br/>(过时误用 ~37%)</td>
+              <td>工具检索准确，社区代写（54.2%）、私信摘要（65.2%）与信息流排序（35.3%）表现突出。</td>
+            </tr>
+            <tr>
+              <td><strong>GPT-5.5 + Textual Memory</strong></td>
+              <td>常规任务追平长上下文</td>
+              <td><strong>~3k – 5k</strong></td>
+              <td>24.4 s</td>
+              <td><strong>79.9% (最高)</strong><br/>(过时误用仅 25.7%)</td>
+              <td>靠滚动 <code>EDIT/REMOVE</code> 及时清理旧状态，追踪偏好变化最准；但丢失具体帖子原文细节，且干扰会话克制降至 71.0%。</td>
+            </tr>
+            <tr>
+              <td><strong>GPT-5.5 + Mem0 (Vector RAG)</strong></td>
+              <td>演化任务垫底</td>
+              <td><strong>~3k – 5k</strong></td>
+              <td>22.2 s</td>
+              <td><span style="color: var(--semantic-red-text); font-weight: 700;">56.9% (最低)<br/>(过时误用率 51.4%)</span></td>
+              <td>向量检索只看语义相似度，把早已消退或单次偶发的旧记录重新召回，导致超过一半的偏好变更题还在用过时信息。</td>
+            </tr>
+            <tr>
+              <td><strong>Gemini-3.5-Flash + Textual Memory</strong></td>
+              <td>优于其长上下文</td>
+              <td><strong>~2k – 4k</strong></td>
+              <td><strong>15.1 s (最快)</strong></td>
+              <td>71.1%</td>
+              <td>响应最快；相比直接看 41.6 万 tokens 原始记录，文本摘要帮其过滤了杂乱敏感信息，使敏感事件克制分从 38.0% 提升至 63.3%。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>3. 对构建“单据融合对话”数据集与记忆系统的三点参考</h3>
+      <div class="summary-grid">
+        <div class="summary-box amber">
+          <strong>① 针对向量检索 51.4% 过时误用率：单据需区分“长期习惯、中途参数升级与单次临时单据”</strong><br/>
+          单纯依赖向量余弦相似度会把单次偶发单据或已升级淘汰的旧单据当成当前习惯召回。因此在故事线中设计了“连续 <code>≥ 3</code> 次同参单据才晋升长期习惯”、“中途设备升级覆盖旧档位”以及“单日赛事临时单据”，并在结构化列中维护最新生效状态。
+        </div>
+        <div class="summary-box green">
+          <strong>② 针对个人档案在无关话题中被强行带入：引入“干扰会话与域外话题拒绝”</strong><br/>
+          实验表明浓缩进个人档案的偏好很容易在回答普通技术问题时被模型生直接套用用。因此在数据集中加入通用通信问答等干扰会话，以及从未去过的场馆问询，检验系统能否做到“按场景条件触发记忆、无关话题不强行带入”。
+        </div>
+        <div class="summary-box blue">
+          <strong>③ 针对滚动自由文本摘要每次丢失 14.4% 历史细节：采用“工作记忆单据表 + 事实记忆偏好表 + 经验记忆规则卡”分层存储</strong><br/>
+          论文测出自由文本摘要在多次滚动更新后会磨损中段事件细节（中段准确率下降 7%~10%）。因此不采用单一自由文本摘要，而是将网元实时单据原样保留在工作记忆表中，将稳定习惯与个性化表达存入事实记忆表，将异常复盘得出的参数调整规则存入经验记忆。
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.getElementById('btn-theme-parchment').classList.toggle('active', theme === 'parchment');
+      document.getElementById('btn-theme-github').classList.toggle('active', theme === 'github');
+    }
+  </script>
+</body>
+</html>

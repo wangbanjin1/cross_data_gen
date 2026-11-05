@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="parchment">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>示例：单样本四阶段评测对账示例</title>
+  <style>
+    :root, [data-theme="parchment"] {
+      --bg-page: #FBF7F0;
+      --bg-card: #FFFDF9;
+      --bg-elevated: #F5EFE4;
+      --bg-code: #F2ECE1;
+      --text-main: #2C2520;
+      --text-secondary: #5C5248;
+      --text-muted: #8A7E72;
+      --border-color: #E2D9C8;
+      --border-strong: #C9BBA6;
+      --accent-primary: #8C4A27;
+      --accent-secondary: #2B5B6C;
+      --semantic-red-bg: #FDF2F2;
+      --semantic-red-border: #E5A9A9;
+      --semantic-red-text: #8B2626;
+      --semantic-green-bg: #F1F8F4;
+      --semantic-green-border: #9BC9AE;
+      --semantic-green-text: #1E5E3A;
+      --semantic-blue-bg: #F0F6FA;
+      --semantic-blue-border: #A3C4DC;
+      --semantic-blue-text: #1F4E70;
+      --semantic-amber-bg: #FEF8EC;
+      --semantic-amber-border: #E6C88A;
+      --semantic-amber-text: #7D5211;
+      --shadow-sm: 0 2px 6px rgba(44, 37, 32, 0.05);
+    }
+
+    [data-theme="github"] {
+      --bg-page: #F6F8FA;
+      --bg-card: #FFFFFF;
+      --bg-elevated: #EEF2F6;
+      --bg-code: #F6F8FA;
+      --text-main: #1F2328;
+      --text-secondary: #4D5562;
+      --text-muted: #6E7781;
+      --border-color: #D0D7DE;
+      --border-strong: #AFB8C1;
+      --accent-primary: #0969DA;
+      --accent-secondary: #1A7F37;
+      --semantic-red-bg: #FFEBE9;
+      --semantic-red-border: #FF818266;
+      --semantic-red-text: #CF222E;
+      --semantic-green-bg: #DAFBE1;
+      --semantic-green-border: #4AC26B66;
+      --semantic-green-text: #1A7F37;
+      --semantic-blue-bg: #DDF4FF;
+      --semantic-blue-border: #54AEFF66;
+      --semantic-blue-text: #0969DA;
+      --semantic-amber-bg: #FFF8C5;
+      --semantic-amber-border: #D4A72C66;
+      --semantic-amber-text: #9A6700;
+      --shadow-sm: 0 1px 3px rgba(31, 35, 40, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.66;
+      font-size: 14.5px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+    .topbar-brand { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-strong);
+      color: var(--accent-primary);
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+    .back-link:hover { background: var(--accent-primary); color: #fff; text-decoration: none; }
+    .topbar-badge {
+      background: var(--accent-secondary);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .topbar-title { font-size: 15.5px; font-weight: 700; }
+    .topbar-controls { display: flex; align-items: center; gap: 8px; }
+
+    .btn-group {
+      display: inline-flex;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .btn-toggle {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 5px 11px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-toggle.active { background: var(--accent-primary); color: #fff; }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 20px 24px 48px; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card.hero { border-left: 5px solid var(--accent-secondary); }
+
+    h1 { font-size: 20px; font-weight: 800; margin: 0 0 8px; }
+    h2 {
+      font-size: 17px;
+      font-weight: 800;
+      margin: 0 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    h3 { font-size: 15px; font-weight: 700; margin: 16px 0 8px; color: var(--text-main); }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 14px 0;
+    }
+    .kpi-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 15px;
+    }
+    .kpi-label { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+    .kpi-val { font-size: 17px; font-weight: 800; color: var(--accent-primary); margin: 3px 0; }
+    .kpi-desc { font-size: 12.5px; color: var(--text-secondary); }
+
+    .stage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+      margin: 14px 0;
+    }
+    .stage-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-top: 3px solid var(--accent-primary);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 13.5px;
+    }
+    .stage-box.teal { border-top-color: var(--accent-secondary); }
+    .stage-box.green { border-top-color: var(--semantic-green-text); }
+    .stage-box strong.stage-title { display: block; font-size: 14.2px; margin-bottom: 6px; color: var(--text-main); }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .summary-box {
+      border-radius: 8px;
+      padding: 13px 16px;
+      border: 1px solid;
+      font-size: 13.5px;
+    }
+    .summary-box.green { background: var(--semantic-green-bg); border-color: var(--semantic-green-border); }
+    .summary-box.blue { background: var(--semantic-blue-bg); border-color: var(--semantic-blue-border); }
+    .summary-box.amber { background: var(--semantic-amber-bg); border-color: var(--semantic-amber-border); }
+    .summary-box.red { background: var(--semantic-red-bg); border-color: var(--semantic-red-border); }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; background: var(--bg-card); }
+    th {
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      font-weight: 700;
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+      color: var(--text-secondary);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg-elevated); }
+
+    code {
+      font-family: "JetBrains Mono", Consolas, monospace;
+      background: var(--bg-code);
+      border: 1px solid var(--border-color);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: var(--accent-primary);
+    }
+
+    ul.tight { margin: 6px 0 0; padding-left: 18px; color: var(--text-secondary); }
+    ul.tight li { margin-bottom: 5px; }
+
+    a { color: var(--accent-primary); text-decoration: none; font-weight: 600; }
+    a:hover { text-decoration: underline; }
+
+    @media print {
+      @page { margin: 12mm; }
+      html, body { background: #FFFFFF !important; }
+      .topbar { position: static; box-shadow: none; }
+      .topbar-controls { display: none; }
+      .card { box-shadow: none; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">
+      <a class="back-link" href="../agent_evaluation_methodology.html">← 返回评测思路主页面</a>
+      <span class="topbar-badge">SAMPLE WALKTHROUGH · EVALUATION</span>
+      <span class="topbar-title">真实样本分阶段评测对账：从检索命中、快慢路径到参数计算</span>
+    </div>
+    <div class="topbar-controls">
+      <div class="btn-group">
+        <button class="btn-toggle active" id="btn-view-scroll" onclick="setView('scroll')">长卷通览</button>
+        <button class="btn-toggle" id="btn-view-step" onclick="setView('step')">分章聚焦</button>
+      </div>
+      <div class="btn-group">
+        <button class="btn-toggle active" id="btn-theme-parchment" onclick="setTheme('parchment')">暖阳米纸</button>
+        <button class="btn-toggle" id="btn-theme-github" onclick="setTheme('github')">GitHub 简洁</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <nav class="chapter-nav" id="chapter-nav">
+      <button class="chapter-pill active" onclick="showStep(0)">1. 论文基本信息与核心工作</button>
+      <button class="chapter-pill" onclick="showStep(1)">2. 评测/方法框架与关键机制</button>
+      <button class="chapter-pill" onclick="showStep(2)">3. 真实样本与判据拆解</button>
+      <button class="chapter-pill" onclick="showStep(3)">4. 可借鉴的落地做法</button>
+    </nav>
+
+
+    <section class="card hero step-section">
+      <h1>示例：单样本四阶段评测对账全流程示例（样本 <code>EVAL_S04_T19</code>）</h1>
+      <p style="margin: 6px 0 0; color: var(--text-secondary);">
+        本页展示如何对一条“个性化口语指代 + 排除卡顿废单 + 叠加场馆预热经验 + 延长半小时”的真实测试样本，按<strong>① 检索召回核对 → ② 快慢路径核对 → ③ 参数调整规则计算核对 → ④ 最终工单槽位对账</strong>四个阶段逐项打分。
+      </p>
+    </section>
+
+    <section class="card step-section">
+      <h2><span class="sec-num">1</span> 测试样本输入与底层标准记忆快照（Ground-Truth Snapshot）</h2>
+      <div class="grid-2">
+        <div class="subcard green-top">
+          <div class="subcard-title">当前用户提问（Turn 19，时间：2026-03-21 18:00）</div>
+          <pre style="background: var(--bg-code); padding: 12px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 12.5px; overflow-x: auto;">{
+  "sample_id": "EVAL_S04_T19",
+  "user_utterance": "明晚7点再去五棵松跑一场4K直播，别按上周五卡顿那回，按周三顺畅那次的规格来，时长比那次多加半小时。",
+  "expected_route": "FAST_PATH_DIRECT_ORDER"
+}</pre>
+        </div>
+        <div class="subcard blue-top">
+          <div class="subcard-title">底层历史单据与经验库中的相关记录</div>
+          <pre style="background: var(--bg-code); padding: 12px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 12.5px; overflow-x: auto;">[
+  {"id": "T_09", "venue": "五棵松体育馆", "date": "上周五", "priority": "P2", "duration": 120, "status": "sla_degraded (卡顿负样本，需排除)"},
+  {"id": "T_14", "venue": "五棵松体育馆", "date": "本周三", "priority": "P1", "duration": 120, "app": "4K高清直播", "status": "normal (目标基准单)"},
+  {"id": "S2A_03", "primary_app": "4K高清直播", "aux_app": "网盘素材回传", "aux_priority": "P3 (二阶段关联辅业务)"},
+  {"id": "EXP_02", "venue": "五棵松体育馆", "rule": "提前20分钟开启预热保障，档位升至P0"}
+]</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="card step-section">
+      <h2><span class="sec-num">2</span> 分阶段逐项对账表（对比：模型 A 碰巧答对部分参数 vs. 模型 B 全链路通过）</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 18%;">评测阶段</th>
+              <th style="width: 28%;">标准答案判据（Ground Truth）</th>
+              <th style="width: 27%;">模型 A（漏召回经验 + 未排除废单）</th>
+              <th style="width: 27%;">模型 B（全链路命中并算对）</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>阶段 1：跨源检索与排除</strong></td>
+              <td>必须同时命中 <code>T_14</code>、<code>S2A_03</code>、<code>EXP_02</code>，且将负向单据 <code>T_09</code> 排除在参考源之外</td>
+              <td>召回了 <code>T_14</code> 和 <code>T_09</code>，漏掉了场馆经验 <code>EXP_02</code> → <strong>检索阶段判未通过（0.5 / 1.0）</strong></td>
+              <td>完整命中 <code>T_14 + S2A_03 + EXP_02</code>，且通过否定子句过滤排除了 <code>T_09</code> → <strong>通过（1.0 / 1.0）</strong></td>
+            </tr>
+            <tr>
+              <td><strong>阶段 2：快慢路径决策</strong></td>
+              <td>地点、时间、基准单据均已明确且无时间冲突 → 应直接走<strong>快路径（<code>FAST_PATH</code>）</strong></td>
+              <td>走 <code>FAST_PATH</code> → <strong>通过（1.0 / 1.0）</strong></td>
+              <td>走 <code>FAST_PATH</code> → <strong>通过（1.0 / 1.0）</strong></td>
+            </tr>
+            <tr>
+              <td><strong>阶段 3：参数调整规则计算</strong></td>
+              <td>
+                • 基准时长 <code>120min</code> + 对话加 <code>30min</code> = <code>150min</code>（<code>19:00~21:30</code>）<br/>
+                • 叠加 <code>EXP_02</code> 提前 <code>20min</code> 预热 → 开始时间 <code>18:40</code>，总时长 <code>170min</code><br/>
+                • 档位按 <code>EXP_02</code> 升至 <code>P0</code>
+              </td>
+              <td>未叠加提前 20 分钟预热，输出 <code>19:00~21:30 (150min), P1</code> → <strong>起止时间与档位算错（0.33 / 1.0）</strong></td>
+              <td>精确算出 <code>start=18:40, end=21:30, duration=170, priority=P0, aux_app=网盘素材回传</code> → <strong>通过（1.0 / 1.0）</strong></td>
+            </tr>
+            <tr>
+              <td><strong>阶段 4：自动错误归因标签</strong></td>
+              <td>无错误（<code>PASS</code>）</td>
+              <td>自动标记：<code>[RETRIEVAL_MISS: EXP_02]</code> → 导致下游预热时间与 <code>P0</code> 档位缺失</td>
+              <td><code>[ALL_CHECKS_PASSED]</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card step-section" style="margin-bottom: 0;">
+      <h2><span class="sec-num">3</span> 为什么这样评测一眼就能看懂问题在哪？</h2>
+      <ul style="margin: 0; padding-left: 18px; color: var(--text-secondary);">
+        <li>如果只看传统端到端准确率，模型 A 只知道“错了”，但不知道是检索没找着经验规则，还是大模型不会做时间加减法。</li>
+        <li>通过分阶段对账，评测脚本直接指出模型 A 的失败原因是<strong>二阶段关联检索漏掉了场馆经验 <code>EXP_02</code></strong>，而它的对话增量加法（<code>120 + 30 = 150min</code>）其实是算对了的，工程修复立刻更有针对性。</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <script>
+    let currentView = 'scroll';
+    let currentStep = 0;
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.getElementById('btn-theme-parchment').classList.toggle('active', theme === 'parchment');
+      document.getElementById('btn-theme-github').classList.toggle('active', theme === 'github');
+    }
+    function setView(view) {
+      currentView = view;
+      document.getElementById('btn-view-scroll').classList.toggle('active', view === 'scroll');
+      document.getElementById('btn-view-step').classList.toggle('active', view === 'step');
+      document.getElementById('chapter-nav').classList.toggle('visible', view === 'step');
+      const sections = document.querySelectorAll('.step-section');
+      sections.forEach((sec, idx) => {
+        if (view === 'scroll') sec.classList.remove('hidden');
+        else sec.classList.toggle('hidden', idx !== currentStep);
+      });
+    }
+    function showStep(idx) {
+      currentStep = idx;
+      document.querySelectorAll('.chapter-pill').forEach((p, i) => p.classList.toggle('active', i === idx));
+      document.querySelectorAll('.step-section').forEach((sec, i) => sec.classList.toggle('hidden', i !== idx));
+    }
+  </script>
+</body>
+</html>

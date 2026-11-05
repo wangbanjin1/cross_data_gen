@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="parchment">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Benchmark Self-Evolving 论文总结：六类等价与延伸变异实现评测集自进化</title>
+  <style>
+    :root, [data-theme="parchment"] {
+      --bg-page: #FBF7F0;
+      --bg-card: #FFFDF9;
+      --bg-elevated: #F5EFE4;
+      --bg-code: #F2ECE1;
+      --text-main: #2C2520;
+      --text-secondary: #5C5248;
+      --text-muted: #8A7E72;
+      --border-color: #E2D9C8;
+      --border-strong: #C9BBA6;
+      --accent-primary: #8C4A27;
+      --accent-secondary: #2B5B6C;
+      --semantic-red-bg: #FDF2F2;
+      --semantic-red-border: #E5A9A9;
+      --semantic-red-text: #8B2626;
+      --semantic-green-bg: #F1F8F4;
+      --semantic-green-border: #9BC9AE;
+      --semantic-green-text: #1E5E3A;
+      --semantic-blue-bg: #F0F6FA;
+      --semantic-blue-border: #A3C4DC;
+      --semantic-blue-text: #1F4E70;
+      --semantic-amber-bg: #FEF8EC;
+      --semantic-amber-border: #E6C88A;
+      --semantic-amber-text: #7D5211;
+      --shadow-sm: 0 2px 6px rgba(44, 37, 32, 0.05);
+    }
+
+    [data-theme="github"] {
+      --bg-page: #F6F8FA;
+      --bg-card: #FFFFFF;
+      --bg-elevated: #EEF2F6;
+      --bg-code: #F6F8FA;
+      --text-main: #1F2328;
+      --text-secondary: #4D5562;
+      --text-muted: #6E7781;
+      --border-color: #D0D7DE;
+      --border-strong: #AFB8C1;
+      --accent-primary: #0969DA;
+      --accent-secondary: #1A7F37;
+      --semantic-red-bg: #FFEBE9;
+      --semantic-red-border: #FF818266;
+      --semantic-red-text: #CF222E;
+      --semantic-green-bg: #DAFBE1;
+      --semantic-green-border: #4AC26B66;
+      --semantic-green-text: #1A7F37;
+      --semantic-blue-bg: #DDF4FF;
+      --semantic-blue-border: #54AEFF66;
+      --semantic-blue-text: #0969DA;
+      --semantic-amber-bg: #FFF8C5;
+      --semantic-amber-border: #D4A72C66;
+      --semantic-amber-text: #9A6700;
+      --shadow-sm: 0 1px 3px rgba(31, 35, 40, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.66;
+      font-size: 14.5px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+    .topbar-brand { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-strong);
+      color: var(--accent-primary);
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+    .back-link:hover { background: var(--accent-primary); color: #fff; text-decoration: none; }
+    .topbar-badge {
+      background: var(--accent-secondary);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .topbar-title { font-size: 15.5px; font-weight: 700; }
+    .topbar-controls { display: flex; align-items: center; gap: 8px; }
+
+    .btn-group {
+      display: inline-flex;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .btn-toggle {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 5px 11px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-toggle.active { background: var(--accent-primary); color: #fff; }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 20px 24px 48px; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card.hero { border-left: 5px solid var(--accent-secondary); }
+
+    h1 { font-size: 20px; font-weight: 800; margin: 0 0 8px; }
+    h2 {
+      font-size: 17px;
+      font-weight: 800;
+      margin: 0 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    h3 { font-size: 15px; font-weight: 700; margin: 16px 0 8px; color: var(--text-main); }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 14px 0;
+    }
+    .kpi-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 15px;
+    }
+    .kpi-label { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+    .kpi-val { font-size: 17px; font-weight: 800; color: var(--accent-primary); margin: 3px 0; }
+    .kpi-desc { font-size: 12.5px; color: var(--text-secondary); }
+
+    .stage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+      margin: 14px 0;
+    }
+    .stage-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-top: 3px solid var(--accent-primary);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 13.5px;
+    }
+    .stage-box.teal { border-top-color: var(--accent-secondary); }
+    .stage-box.green { border-top-color: var(--semantic-green-text); }
+    .stage-box strong.stage-title { display: block; font-size: 14.2px; margin-bottom: 6px; color: var(--text-main); }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .summary-box {
+      border-radius: 8px;
+      padding: 13px 16px;
+      border: 1px solid;
+      font-size: 13.5px;
+    }
+    .summary-box.green { background: var(--semantic-green-bg); border-color: var(--semantic-green-border); }
+    .summary-box.blue { background: var(--semantic-blue-bg); border-color: var(--semantic-blue-border); }
+    .summary-box.amber { background: var(--semantic-amber-bg); border-color: var(--semantic-amber-border); }
+    .summary-box.red { background: var(--semantic-red-bg); border-color: var(--semantic-red-border); }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; background: var(--bg-card); }
+    th {
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      font-weight: 700;
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+      color: var(--text-secondary);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg-elevated); }
+
+    code {
+      font-family: "JetBrains Mono", Consolas, monospace;
+      background: var(--bg-code);
+      border: 1px solid var(--border-color);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: var(--accent-primary);
+    }
+
+    ul.tight { margin: 6px 0 0; padding-left: 18px; color: var(--text-secondary); }
+    ul.tight li { margin-bottom: 5px; }
+
+    a { color: var(--accent-primary); text-decoration: none; font-weight: 600; }
+    a:hover { text-decoration: underline; }
+
+    @media print {
+      @page { margin: 12mm; }
+      html, body { background: #FFFFFF !important; }
+      .topbar { position: static; box-shadow: none; }
+      .topbar-controls { display: none; }
+      .card { box-shadow: none; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">
+      <a class="back-link" href="../agent_self_evolution.html">← 返回评测集自进化主页面</a>
+      <span class="topbar-badge">PAPER SUMMARY · BENCHMARK SELF-EVOLVING</span>
+      <span class="topbar-title">Benchmark Self-Evolving：通过同构改写、干扰注入与条件翻转进化评测集</span>
+    </div>
+    <div class="topbar-controls">
+      <div class="btn-group">
+        <button class="btn-toggle active" id="btn-view-scroll" onclick="setView('scroll')">长卷通览</button>
+        <button class="btn-toggle" id="btn-view-step" onclick="setView('step')">分章聚焦</button>
+      </div>
+      <div class="btn-group">
+        <button class="btn-toggle active" id="btn-theme-parchment" onclick="setTheme('parchment')">暖阳米纸</button>
+        <button class="btn-toggle" id="btn-theme-github" onclick="setTheme('github')">GitHub 简洁</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <nav class="chapter-nav" id="chapter-nav">
+      <button class="chapter-pill active" onclick="showStep(0)">1. 论文基本信息与背景</button>
+      <button class="chapter-pill" onclick="showStep(1)">2. 数据集进化方法与机制</button>
+      <button class="chapter-pill" onclick="showStep(2)">3. 实验结论与关键发现</button>
+      <button class="chapter-pill" onclick="showStep(3)">4. 可借鉴的评测集演进做法</button>
+    </nav>
+
+
+    <section class="card hero step-section">
+      <h1>Benchmark Self-Evolving 论文总结：通过六类等价与延伸变异实现评测集自进化</h1>
+      <div class="meta-bar">
+        <span><strong>论文标题</strong>：Benchmark Self-Evolving: A Multi-Agent Framework for Dynamic LLM Evaluation</span>
+        <span><strong>作者与年份</strong>：Siyuan Wang, Zhuohan Long, Zhihao Fan et al. (Fudan &amp; Alibaba, 2024-02)</span>
+        <span><strong>arXiv</strong>：<a href="https://arxiv.org/abs/2402.11443" target="_blank">2402.11443</a></span>
+      </div>
+      <p style="margin: 8px 0 0; color: var(--text-secondary);">
+        <code>Benchmark Self-Evolving (BSE)</code> 专门研究如何让现有静态基准测试集自动演化出动态变体，以解决评测集污染、表面词块记忆（Shortcut Memorization）以及固定题目饱和问题。论文设计了多智能体协作管线（生成—校验—过滤），通过<strong>六种结构化变异操作</strong>对原测试题进行改写和延伸，并通过对比“原题得分”与“变异题得分”来衡量模型的真实泛化能力。
+      </p>
+    </section>
+
+    <section class="card step-section">
+      <h2><span class="sec-num">1</span> 六类题目自进化操作及其在故事线数据集中的对应</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 24%;">BSE 进化操作类型</th>
+              <th style="width: 38%;">原论文操作定义</th>
+              <th style="width: 38%;">在单据融合对话故事线中的具体变换</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. 上下文与实体重构（Context Reconstruction）</strong></td>
+              <td>保持底层逻辑结构不变，替换业务背景、地点名称、人物角色与表面表述。</td>
+              <td>保持单据时间拓扑与档位关系不变，将“五棵松演唱会 4K 直播”替换为“首都体育馆冰球赛多机位回传”，并同步替换口语代称。</td>
+            </tr>
+            <tr>
+              <td><strong>2. 同构数值平移（Variable / Parameter Shift）</strong></td>
+              <td>改变题目中的具体数值或时间戳，使直接背诵原答案失效，必须重新执行计算。</td>
+              <td>将历史单据与当前提问的时间窗整体平移（如 <code>20:00 / 120min → 21:30 / 90min</code>），由底层状态机重算标准起止时间。</td>
+            </tr>
+            <tr>
+              <td><strong>3. 强干扰项注入（Noise / Distractor Injection）</strong></td>
+              <td>在上下文中插入与目标问题词汇高度相似但逻辑上不满足条件的信息。</td>
+              <td>在同一场馆插入一张 1 分钟内退订的废单（<code>aborted</code>）或另一时段的卡顿单（<code>sla_degraded</code>），测试检索排除能力。</td>
+            </tr>
+            <tr>
+              <td><strong>4. 正反条件翻转（Polarity / Condition Flip）</strong></td>
+              <td>将肯定条件改为否定排除条件，或将满足阈值改为不满足阈值。</td>
+              <td>将用户提问从“按上次顺畅那回保”翻转为“别按上次卡顿那回保”，检验模型对否定排除指代的处理。</td>
+            </tr>
+            <tr>
+              <td><strong>5. 边界状态切换（Boundary State Transition）</strong></td>
+              <td>微调前提条件，使原本触发路径 A 的样本跨越边界触发路径 B。</td>
+              <td>将新申请单的开始时间提前 30 分钟，使其从“与周三周期单相离（走快路径直发）”变为“与周三周期单重叠（走慢路径澄清）”。</td>
+            </tr>
+            <tr>
+              <td><strong>6. 追问方向延伸（Sub-Question Extension）</strong></td>
+              <td>在原问题基础上进一步追问下游状态或关联影响。</td>
+              <td>在生成主业务保障参数的同时，延伸考察二阶段关联的后台辅业务（<code>service_to_app</code>）档位与时间窗顺延后的结束时间。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card step-section">
+      <h2><span class="sec-num">2</span> 自进化校验管线与核心评测发现</h2>
+      <div class="grid-3">
+        <div class="subcard green-top">
+          <div class="subcard-title">① 变异有效性与自洽性校验器</div>
+          <p style="margin: 0; font-size: 13.5px; color: var(--text-secondary);">
+            每次生成变异样本后，先由验证器检查新样本的前提条件是否自洽、答案是否唯一可解，剔除变换过程中产生歧义的无效样本。
+          </p>
+        </div>
+        <div class="subcard blue-top">
+          <div class="subcard-title">② 原题 vs. 变体得分落差（Performance Drop）</div>
+          <p style="margin: 0; font-size: 13.5px; color: var(--text-secondary);">
+            实验表明，许多在原始静态基准上得分很高的模型，在经过“强干扰注入”与“正反条件翻转”变异后，准确率普遍下降 <code>10%~25%</code>。
+          </p>
+        </div>
+        <div class="subcard amber-top">
+          <div class="subcard-title">③ 原题与变体联合一致性指标</div>
+          <p style="margin: 0; font-size: 13.5px; color: var(--text-secondary);">
+            只有当模型在原题及其同构变异题上全部答对时，才计为真正掌握该维度能力，有效过滤靠固定字面特征猜对的样本。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card step-section" style="margin-bottom: 0;">
+      <h2><span class="sec-num">3</span> 可借鉴的评测集演进做法</h2>
+      <ul style="margin: 0; padding-left: 18px; color: var(--text-secondary);">
+        <li><strong>为每条核心故事线自动生成同构变体与翻转变体</strong>：在数据生成器中内置“实体/时间平移”与“快慢路径边界切换”两个变异脚本，一键从存量种子题衍生出成对测试题。</li>
+        <li><strong>统计“原题通过但同构变体失败”的比例</strong>：用该比例直接衡量检索或提示词是否存在对特定场馆名或固定数值的硬编码依赖。</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <script>
+    let currentView = 'scroll';
+    let currentStep = 0;
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.getElementById('btn-theme-parchment').classList.toggle('active', theme === 'parchment');
+      document.getElementById('btn-theme-github').classList.toggle('active', theme === 'github');
+    }
+    function setView(view) {
+      currentView = view;
+      document.getElementById('btn-view-scroll').classList.toggle('active', view === 'scroll');
+      document.getElementById('btn-view-step').classList.toggle('active', view === 'step');
+      document.getElementById('chapter-nav').classList.toggle('visible', view === 'step');
+      const sections = document.querySelectorAll('.step-section');
+      sections.forEach((sec, idx) => {
+        if (view === 'scroll') sec.classList.remove('hidden');
+        else sec.classList.toggle('hidden', idx !== currentStep);
+      });
+    }
+    function showStep(idx) {
+      currentStep = idx;
+      document.querySelectorAll('.chapter-pill').forEach((p, i) => p.classList.toggle('active', i === idx));
+      document.querySelectorAll('.step-section').forEach((sec, i) => sec.classList.toggle('hidden', i !== idx));
+    }
+  </script>
+</body>
+</html>

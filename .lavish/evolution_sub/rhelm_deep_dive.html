@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="parchment">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RHELM 论文总结：外部记录同步、LOOP 生成流程与 7 类提问评测</title>
+  <style>
+    :root, [data-theme="parchment"] {
+      --bg-page: #FBF7F0;
+      --bg-card: #FFFDF9;
+      --bg-elevated: #F5EFE4;
+      --bg-code: #F2ECE1;
+      --text-main: #2C2520;
+      --text-secondary: #5C5248;
+      --text-muted: #8A7E72;
+      --border-color: #E2D9C8;
+      --border-strong: #C9BBA6;
+      --accent-primary: #8C4A27;
+      --accent-secondary: #2B5B6C;
+      --semantic-red-bg: #FDF2F2;
+      --semantic-red-border: #E5A9A9;
+      --semantic-red-text: #8B2626;
+      --semantic-green-bg: #F1F8F4;
+      --semantic-green-border: #9BC9AE;
+      --semantic-green-text: #1E5E3A;
+      --semantic-blue-bg: #F0F6FA;
+      --semantic-blue-border: #A3C4DC;
+      --semantic-blue-text: #1F4E70;
+      --semantic-amber-bg: #FEF8EC;
+      --semantic-amber-border: #E6C88A;
+      --semantic-amber-text: #7D5211;
+      --shadow-sm: 0 2px 6px rgba(44, 37, 32, 0.05);
+    }
+
+    [data-theme="github"] {
+      --bg-page: #F6F8FA;
+      --bg-card: #FFFFFF;
+      --bg-elevated: #EEF2F6;
+      --bg-code: #F6F8FA;
+      --text-main: #1F2328;
+      --text-secondary: #4D5562;
+      --text-muted: #6E7781;
+      --border-color: #D0D7DE;
+      --border-strong: #AFB8C1;
+      --accent-primary: #0969DA;
+      --accent-secondary: #1A7F37;
+      --semantic-red-bg: #FFEBE9;
+      --semantic-red-border: #FF818266;
+      --semantic-red-text: #CF222E;
+      --semantic-green-bg: #DAFBE1;
+      --semantic-green-border: #4AC26B66;
+      --semantic-green-text: #1A7F37;
+      --semantic-blue-bg: #DDF4FF;
+      --semantic-blue-border: #54AEFF66;
+      --semantic-blue-text: #0969DA;
+      --semantic-amber-bg: #FFF8C5;
+      --semantic-amber-border: #D4A72C66;
+      --semantic-amber-text: #9A6700;
+      --shadow-sm: 0 1px 3px rgba(31, 35, 40, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.66;
+      font-size: 14.5px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+    .topbar-brand { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-strong);
+      color: var(--accent-primary);
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+    .back-link:hover { background: var(--accent-primary); color: #fff; text-decoration: none; }
+    .topbar-badge {
+      background: var(--accent-secondary);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .topbar-title { font-size: 15.5px; font-weight: 700; }
+    .topbar-controls { display: flex; align-items: center; gap: 8px; }
+
+    .btn-group {
+      display: inline-flex;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .btn-toggle {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 5px 11px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-toggle.active { background: var(--accent-primary); color: #fff; }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 20px 24px 48px; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card.hero { border-left: 5px solid var(--accent-secondary); }
+
+    h1 { font-size: 20px; font-weight: 800; margin: 0 0 8px; }
+    h2 {
+      font-size: 17px;
+      font-weight: 800;
+      margin: 0 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    h3 { font-size: 15px; font-weight: 700; margin: 16px 0 8px; color: var(--text-main); }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 14px 0;
+    }
+    .kpi-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 15px;
+    }
+    .kpi-label { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+    .kpi-val { font-size: 17px; font-weight: 800; color: var(--accent-primary); margin: 3px 0; }
+    .kpi-desc { font-size: 12.5px; color: var(--text-secondary); }
+
+    .stage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+      margin: 14px 0;
+    }
+    .stage-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-top: 3px solid var(--accent-primary);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 13.5px;
+    }
+    .stage-box.teal { border-top-color: var(--accent-secondary); }
+    .stage-box.green { border-top-color: var(--semantic-green-text); }
+    .stage-box strong.stage-title { display: block; font-size: 14.2px; margin-bottom: 6px; color: var(--text-main); }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .summary-box {
+      border-radius: 8px;
+      padding: 13px 16px;
+      border: 1px solid;
+      font-size: 13.5px;
+    }
+    .summary-box.green { background: var(--semantic-green-bg); border-color: var(--semantic-green-border); }
+    .summary-box.blue { background: var(--semantic-blue-bg); border-color: var(--semantic-blue-border); }
+    .summary-box.amber { background: var(--semantic-amber-bg); border-color: var(--semantic-amber-border); }
+    .summary-box.red { background: var(--semantic-red-bg); border-color: var(--semantic-red-border); }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; background: var(--bg-card); }
+    th {
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      font-weight: 700;
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+      color: var(--text-secondary);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg-elevated); }
+
+    code {
+      font-family: "JetBrains Mono", Consolas, monospace;
+      background: var(--bg-code);
+      border: 1px solid var(--border-color);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: var(--accent-primary);
+    }
+
+    ul.tight { margin: 6px 0 0; padding-left: 18px; color: var(--text-secondary); }
+    ul.tight li { margin-bottom: 5px; }
+
+    a { color: var(--accent-primary); text-decoration: none; font-weight: 600; }
+    a:hover { text-decoration: underline; }
+
+    @media print {
+      @page { margin: 12mm; }
+      html, body { background: #FFFFFF !important; }
+      .topbar { position: static; box-shadow: none; }
+      .topbar-controls { display: none; }
+      .card { box-shadow: none; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">
+      <a class="back-link" href="../agent_self_evolution.html">← 返回评测集自进化主页面</a>
+      <span class="topbar-badge">PAPER SUMMARY</span>
+      <span class="topbar-title">RHELM (arXiv:2605.31086) 论文核心工作、数据构建、记忆机制与评测手段</span>
+    </div>
+    <div class="topbar-controls">
+      <div class="btn-group">
+        <button class="btn-toggle active" id="btn-theme-parchment" onclick="setTheme('parchment')">暖阳米纸</button>
+        <button class="btn-toggle" id="btn-theme-github" onclick="setTheme('github')">GitHub 简洁</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="card hero">
+      <h1>一、论文的主要工作</h1>
+      <p style="margin: 0; color: var(--text-secondary);">
+        <code>RHELM</code>（<i>Beyond Static Dialogues: Benchmarking Realistic, Heterogeneous, and Evolving Long-Term Memory</i>，Han Zhang、Yeyun Gong 等发表，<a href="https://arxiv.org/abs/2605.31086v2" target="_blank">arXiv:2605.31086v2</a>）针对现有长期记忆评测集“人物画像扁平静态、会话缺乏长程连贯性、仅限单一纯文本聊天记录”三个问题，构建了把<strong>多轮对话与外部记录（文档、邮件、日程工单）</strong>结合在一起的长期记忆评测集：
+      </p>
+      <ul class="tight">
+        <li><strong>把外部记录与对话放在同一时间轴上</strong>：用户在对话的同时会产生外部文档、邮件与日程单，回答问题需要同时结合对话内容与外部记录；</li>
+        <li><strong>提出了 <code>LOOP</code>（pLan-rOllout-evOlve-Prune）四步生成流程</strong>：先规划事件轨迹，再展开单轮对话、按事件结果更新人物状态，并删去前后矛盾的内容；</li>
+        <li><strong>设计了 7 类提问与 27 项记忆特征</strong>：包括多源信息汇总、排除法指代、相似事件区分、时间冲突检测、状态更新覆盖、条件参数微调与超范围拒答。</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>二、数据集构成与设计的 7 类提问</h2>
+      <div class="kpi-grid">
+        <div class="kpi-box">
+          <div class="kpi-label">数据生成流程</div>
+          <div class="kpi-val">LOOP 四步流程</div>
+          <div class="kpi-desc">Plan（事件规划）→ Rollout（会话展开）→ Evolve（状态演进）→ Prune（一致性修剪）</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">数据流模态</div>
+          <div class="kpi-val">对话 + 异构外部源</div>
+          <div class="kpi-desc">多轮助手对话与邮件、日程单、外部文档在统一时间轴上交替出现</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">评测问题分类</div>
+          <div class="kpi-val">7 类提问 / 27 项特征</div>
+          <div class="kpi-desc">每道测试题对应 27 项记忆特征中的 1 项或多项</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">主要实验现象</div>
+          <div class="kpi-val">跨源聚合与状态演化</div>
+          <div class="kpi-desc">主流长上下文模型与 RAG 在跨对话+外部单据聚合及相似事件消歧上失分严重</div>
+        </div>
+      </div>
+
+      <h3>RHELM 在故事线中重点评测的典型任务类别</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 22%;">任务类别</th>
+              <th style="width: 38%;">具体考察方式</th>
+              <th style="width: 40%;">对应“网元单据+对话”故事线的设计点</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. 跨源联合证据拼合</strong></td>
+              <td>问题的一半条件在聊天记录里，另一半客观数据在同步生成的外部文档或邮件记录里。</td>
+              <td>用户在对话中只说个性化表达，标准时段、小区位置与实测时长记录在网元实时单据中，需联合检索。</td>
+            </tr>
+            <tr>
+              <td><strong>2. 日常主线与差旅支线交织</strong></td>
+              <td>在长期日常工作生活中穿插出差、项目里程碑等阶段性事件，随后恢复日常节奏。</td>
+              <td>日常固定直播主线中穿插连续多日异地赛事差旅支线，差旅结束后恢复日常主线。</td>
+            </tr>
+            <tr>
+              <td><strong>3. 相似事件区分与排除指代</strong></td>
+              <td>同一周期或同一地点发生过多次相似事件，提问时通过结果好坏或排除法（“不是取消的那次”）指代。</td>
+              <td>同一场馆同日有多张单据（顺畅彩排单 vs. 卡顿正式单），支持“按没卡顿那次办”的排除指代。</td>
+            </tr>
+            <tr>
+              <td><strong>4. 状态事后变更与冲突顺延</strong></td>
+              <td>对话约定某计划后，后续外部记录显示执行时长或时间窗发生变更，或新日程与旧日程冲突。</td>
+              <td>对话结束后由网元回执单更新真实持续时长；新申请保障与既有周期单时间重叠时自动顺延。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>三、构建方案（LOOP 模块）与 AI 模型参与分工</h2>
+      <div class="stage-grid">
+        <div class="stage-box">
+          <strong class="stage-title">阶段 1：Plan & Rollout（宏观规划与多源展开）</strong>
+          <ul class="tight">
+            <li>先根据精细设计的用户档案规划跨周期的事件时间线；</li>
+            <li>大模型按时间节点同步生成多轮对话与配套的外部文档/邮件记录，确保外部记录与对话围绕同一客观事件展开，而非各自孤立生成。</li>
+          </ul>
+        </div>
+        <div class="stage-box teal">
+          <strong class="stage-title">阶段 2：Evolve（动态状态转移）</strong>
+          <ul class="tight">
+            <li>每完成一个阶段事件后，触发状态更新模块修改用户的当前状态、日程安排与阶段性偏好；</li>
+            <li>前序事件的异常或变更结果会直接作为下一阶段对话的触发原因，形成前后连贯的因果链。</li>
+          </ul>
+        </div>
+        <div class="stage-box green">
+          <strong class="stage-title">阶段 3：Prune（逻辑冲突修剪与证据链校验）</strong>
+          <ul class="tight">
+            <li>使用审计模型检查长程时间线中是否存在前后自相矛盾的事实或泄露未来信息的语句；</li>
+            <li>对每道测试题核验其所需的跨源证据链是否完整且唯一。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-bottom: 0;">
+      <h2>四、评测结论与对“单据融合对话”故事线的参考</h2>
+      <div class="summary-grid">
+        <div class="summary-box green">
+          <strong>① 外部结构化记录与对话同步演进</strong><br/>
+          借鉴 RHELM 将对话与外部记录绑在同一时间轴上的做法，在故事线中将 75% 的事件设为网元实时单据、25% 设为自然语言对话，两者共享同一用户时间轴与因果演进关系。
+        </div>
+        <div class="summary-box blue">
+          <strong>② 相似事件抗混淆与排除法指代</strong><br/>
+          借鉴 RHELM 的多源区分任务，在同一场馆埋入多张不同网络体验或不同时段的历史单据，考察系统按体验好坏（<code>sla_verdict</code>）和先后次序定位目标单据的能力。
+        </div>
+        <div class="summary-box amber">
+          <strong>③ 历史基准上的条件微调与多规则冲突裁决</strong><br/>
+          借鉴 RHELM 的上下文条件推理设计，要求模型在召回历史单据后并非原样照抄，而是结合当前对话修改项、场馆预热经验与时间窗重叠规则综合计算最终保障参数。
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.getElementById('btn-theme-parchment').classList.toggle('active', theme === 'parchment');
+      document.getElementById('btn-theme-github').classList.toggle('active', theme === 'github');
+    }
+  </script>
+</body>
+</html>

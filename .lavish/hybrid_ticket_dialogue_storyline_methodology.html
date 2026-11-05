@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>单据融合对话故事线：设计维度与参考论文</title>
+  <title>1. 数据集构造：单据融合对话的故事线设计思路</title>
   <style>
     :root, [data-theme="parchment"] {
       --bg-page: #FBF7F0;
@@ -81,10 +81,10 @@
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       box-shadow: var(--shadow-sm);
     }
-    .topbar-brand { display: flex; align-items: center; gap: 10px; }
+    .topbar-brand { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .topbar-badge {
       background: var(--accent-primary);
       color: #fff;
@@ -94,6 +94,33 @@
       border-radius: 4px;
     }
     .topbar-title { font-size: 15.5px; font-weight: 700; }
+    .topbar-nav {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .nav-pill {
+      display: inline-block;
+      padding: 5px 11px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      text-decoration: none;
+    }
+    .nav-pill:hover {
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+      text-decoration: none;
+    }
+    .nav-pill.active {
+      background: var(--accent-primary);
+      color: #fff;
+      border-color: var(--accent-primary);
+    }
     .topbar-controls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
     .btn-group {
@@ -141,8 +168,8 @@
 
     .summary-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 12px;
+      grid-template-columns: 1fr;
+      gap: 14px;
       margin-top: 14px;
     }
     .summary-box {
@@ -154,7 +181,7 @@
     .summary-box.green { background: var(--semantic-green-bg); border-color: var(--semantic-green-border); }
     .summary-box.blue { background: var(--semantic-blue-bg); border-color: var(--semantic-blue-border); }
     .summary-box.amber { background: var(--semantic-amber-bg); border-color: var(--semantic-amber-border); }
-    .summary-box strong { display: block; font-size: 14.2px; margin-bottom: 5px; }
+    .summary-box strong.box-title { display: block; font-size: 15px; margin-bottom: 8px; }
 
     .table-wrap {
       overflow-x: auto;
@@ -208,7 +235,7 @@
 
   <header class="topbar">
     <div class="topbar-brand">
-      <span class="topbar-badge">STORYLINE DESIGN</span>
+      <span class="topbar-badge">STORYLINE DESIGN &amp; LITERATURE</span>
       <span class="topbar-title">单据融合对话故事线：设计维度与参考论文</span>
     </div>
     <div class="topbar-controls">
@@ -221,25 +248,26 @@
 
   <main class="container">
 
+
     <!-- 架构背景与文献来源分类 -->
     <section class="card hero">
-      <h1>单据融合对话故事线：设计思路与参考论文</h1>
+      <h1>单据融合对话的故事线设计思路</h1>
       <p style="margin: 0; color: var(--text-secondary);">
-        面向通信网络保障场景，我们将多轮混合数据集设计为“网元实时单据（占 75%，记录实际网络指标与执行结果）融合自然语言对话（占 25%，记录用户诉求与澄清交互）”的事件序列（<a href="storyline_sample_walkthrough.html">查看 30 天单据融合对话真实样本 →</a>）。各个设计维度参考的论文可归纳为三类：
+        面向通信网络保障场景，多轮混合数据集采用“网元实时单据（占 75%，记录实际网络指标与执行结果）融合自然语言对话（占 25%，记录用户诉求与澄清交互）”的事件序列（<a href="storyline_sub/storyline_sample_walkthrough.html">查看示例 →</a>）。各个设计维度参考的论文可归纳为三类：
       </p>
       <div class="summary-grid" style="grid-template-columns: 1fr; gap: 14px;">
         <div class="summary-box green">
-          <strong style="color: var(--semantic-green-text); font-size: 15px; margin-bottom: 8px;">① 用户记忆怎么提、怎么变、怎么找准 —— 参考 <a href="personamem_v3_deep_dive.html" title="点击查看 PersonaMem-v3 论文深度拆解"><code>PersonaMem-v3</code></a>、<code>RHELM</code>、<code>LoCoMo / LoCoMo-Plus</code>、<code>LongMemEval</code>、<code>DCPM</code>、<code>TWIST</code></strong>
+          <strong style="color: var(--semantic-green-text); font-size: 15px; margin-bottom: 8px;">① 用户记忆怎么提、怎么变、怎么找准 —— 参考 <a href="storyline_sub/personamem_v3_deep_dive.html" title="点击查看 PersonaMem-v3 论文总结"><code>PersonaMem-v3</code></a>、<a href="storyline_sub/rhelm_deep_dive.html" title="点击查看 RHELM 论文总结"><code>RHELM</code></a>、<a href="storyline_sub/locomo_deep_dive.html" title="点击查看 LoCoMo 与 LoCoMo-Plus 论文总结"><code>LoCoMo / LoCoMo-Plus</code></a>、<a href="storyline_sub/longmemeval_deep_dive.html" title="点击查看 LongMemEval 论文总结"><code>LongMemEval</code></a>、<a href="storyline_sub/dcpm_deep_dive.html" title="点击查看 DCPM 论文总结"><code>DCPM</code></a>、<a href="storyline_sub/twist_deep_dive.html" title="点击查看 TWIST 论文总结"><code>TWIST</code></a></strong>
           <ul style="margin: 0; padding-left: 18px; color: var(--text-secondary);">
             <li><strong>单据与对话联合提取</strong>：用户习惯很多时候不会在嘴上说，而是直接体现在历史网元单据里（如每周三晚都有固定直播保障单），必须把单据和对话合在一起看。</li>
             <li><strong>多次重复才记为长期习惯</strong>：偶尔 1 次的单据（如临时在医院开视频会）只是偶发事件；只有连续出现 <code>≥ 3</code> 次相同规律的单据，才归纳为长期固定习惯。</li>
             <li><strong>偏好随时间变化</strong>：用户习惯会更新（如换了 4K 设备后从 <code>P2</code> 升级为 <code>P1</code>），或嘴上说“按老规矩”但近期单据已变，需用最新状态覆盖旧印象。</li>
             <li><strong>相似单据区分与个性化表达</strong>：同一场馆同日有多张单据（下午彩排正常、晚上正式比赛卡顿），需支持按好坏/次序准确区分；单据写标准名（<code>京礼高速隧道群</code>），用户使用个性化表达（“去崇礼钻山洞那段”），需靠语义关联对上。</li>
-            <li><strong>干扰会话与域外话题拒绝</strong>：穿插普通通信常识等干扰会话时直接正常回答，不强行塞入个人历史单据；遇到未记录场馆或域外话题时如实拒绝并澄清，不乱编参数。</li>
+            <li><strong>干扰会话与域外话题拒绝</strong>：穿插普通通信常识等干扰会话时直接正常回答，不强行塞入个人历史单据；遇到未记录场馆或域外话题时如实拒绝并澄清，不凭空生成参数。</li>
           </ul>
         </div>
         <div class="summary-box blue">
-          <strong style="color: var(--semantic-blue-text); font-size: 15px; margin-bottom: 8px;">② 事件在时间轴上怎么分布、时间段是否会发生碰撞 —— 参考 <code>LAMP</code>、<code>Language-TPP</code>、<code>EasyTPP</code>、<code>Allen's Interval Algebra</code></strong>
+          <strong style="color: var(--semantic-blue-text); font-size: 15px; margin-bottom: 8px;">② 事件在时间轴上怎么分布、时间段是否会发生碰撞 —— 参考 <a href="storyline_sub/tpp_event_models_deep_dive.html#lamp" title="点击查看 LAMP 论文总结"><code>LAMP</code></a>、<a href="storyline_sub/tpp_event_models_deep_dive.html#language-tpp" title="点击查看 Language-TPP 论文总结"><code>Language-TPP</code></a>、<a href="storyline_sub/tpp_event_models_deep_dive.html#easytpp" title="点击查看 EasyTPP 论文总结"><code>EasyTPP</code></a>、<a href="storyline_sub/allen_interval_algebra_deep_dive.html" title="点击查看 Allen 区间代数详解"><code>Allen's Interval Algebra</code></a></strong>
           <ul style="margin: 0; padding-left: 18px; color: var(--text-secondary);">
             <li><strong>保障时长随机变化</strong>：真实业务不会每次都恰好 120 分钟，短时连麦可能仅 25 分钟，大型赛事转播可达 210 分钟。</li>
             <li><strong>日常开始时间小幅浮动（<code>±10min</code>）</strong>：即使习惯每周三晚 20:00 直播，真实单据也是有时 <code>19:54</code> 触发、有时 <code>20:07</code> 触发，不会分秒不差。</li>
@@ -248,7 +276,7 @@
           </ul>
         </div>
         <div class="summary-box amber">
-          <strong style="color: var(--semantic-amber-text); font-size: 15px; margin-bottom: 8px;">③ 通信网络特有的单据现象与多业务并发 —— 参考 <code>CTBench</code>、<code>TelcoAgent-Bench</code></strong>
+          <strong style="color: var(--semantic-amber-text); font-size: 15px; margin-bottom: 8px;">③ 通信网络特有的单据现象与多业务并发 —— 参考 <a href="storyline_sub/ctbench_deep_dive.html" title="点击查看 CTBench 论文总结"><code>CTBench</code></a>、<a href="storyline_sub/telcoagent_bench_deep_dive.html" title="点击查看 TelcoAgent-Bench 论文总结"><code>TelcoAgent-Bench</code></a></strong>
           <ul style="margin: 0; padding-left: 18px; color: var(--text-secondary);">
             <li><strong>前台与后台双业务同时运行</strong>：同一时段内前台跑“低时延高清直播”（主业务）、后台跑“网盘素材上传”（辅业务），需分别匹配档位，防止后台上传抢占直播上行带宽。</li>
             <li><strong>网络异常引发后续对话</strong>：前一天网元单据出现基站拥塞降级（如 <code>PRB=96%</code>、卡顿），驱动用户第二天来问原因，从而顺理成章沉淀出“下次提前 20 分钟预热”的经验。</li>
@@ -263,7 +291,7 @@
     <section class="card" style="margin-bottom: 0;">
       <h2>
         <span>七个设计维度及其影响因子</span>
-        <a href="storyline_sample_walkthrough.html" style="font-size: 13.5px; font-weight: 600;">查看 30 天单据融合对话真实样本 →</a>
+        <a href="storyline_sub/storyline_sample_walkthrough.html" style="font-size: 13.5px; font-weight: 600;">查看示例 →</a>
       </h2>
       <div class="table-wrap">
         <table>
@@ -280,15 +308,15 @@
               <td rowspan="2"><strong>1. 多条事件线交织</strong></td>
               <td><strong>日常主线与差旅支线穿插</strong><br/>日常固定习惯主线中穿插连续多日的异地差旅支线，差旅结束后恢复日常主线</td>
               <td>
-                • <strong><code>RHELM</code></strong>：将日常例行日程与长期差旅、里程碑事件交织生成多会话数据。<br/>
-                • <strong><a href="personamem_v3_deep_dive.html" title="点击查看 PersonaMem-v3 论文深度拆解"><code>PersonaMem-v3</code></a></strong>：建模用户多条兴趣线随时间的关注度转移与恢复。<br/>
-                • <strong><code>LoCoMo</code></strong>：基于长程事件图谱生成跨多轮会话的长期交织对话。
+                • <strong><a href="storyline_sub/rhelm_deep_dive.html" title="点击查看 RHELM 论文总结"><code>RHELM</code></a></strong>：将日常例行日程与长期差旅、里程碑事件交织生成多会话数据。<br/>
+                • <strong><a href="storyline_sub/personamem_v3_deep_dive.html" title="点击查看 PersonaMem-v3 论文总结"><code>PersonaMem-v3</code></a></strong>：建模用户多条兴趣线随时间的关注度转移与恢复。<br/>
+                • <strong><a href="storyline_sub/locomo_deep_dive.html" title="点击查看 LoCoMo 论文总结"><code>LoCoMo</code></a></strong>：基于长程事件图谱生成跨多轮会话的长期交织对话。
               </td>
             </tr>
             <tr>
               <td><strong>主辅业务同时运行</strong><br/>同一时间段内前台低时延直播与后台网盘大文件上传同时执行</td>
               <td>
-                • <strong><code>TelcoAgent-Bench</code></strong>：面向电信网络多业务并发与资源调度的多轮智能体评测集。
+                • <strong><a href="storyline_sub/telcoagent_bench_deep_dive.html" title="点击查看 TelcoAgent-Bench 论文总结"><code>TelcoAgent-Bench</code></a></strong>：面向电信网络多业务并发与资源调度的多轮智能体评测集。
               </td>
             </tr>
 
@@ -297,22 +325,22 @@
               <td rowspan="3"><strong>2. 偏好来源与动态变化</strong></td>
               <td><strong>单据归纳、对话声明与两者互补</strong><br/>40% 记忆直接从历史单据中归纳，35% 需要结合对话与单据拼齐，25% 由用户在对话中直接说明</td>
               <td>
-                • <strong><a href="personamem_v3_deep_dive.html" title="点击查看 PersonaMem-v3 论文深度拆解"><code>PersonaMem-v3</code></a></strong>：结合 95% 非对话行为日志与 5% 对话交互构建用户偏好记忆。<br/>
-                • <strong><code>RHELM</code></strong>：设计对话记录与外部结构化日志结合的跨源联合问答。
+                • <strong><a href="storyline_sub/personamem_v3_deep_dive.html" title="点击查看 PersonaMem-v3 论文总结"><code>PersonaMem-v3</code></a></strong>：结合 95% 非对话行为日志与 5% 对话交互构建用户偏好记忆。<br/>
+                • <strong><a href="storyline_sub/rhelm_deep_dive.html" title="点击查看 RHELM 论文总结"><code>RHELM</code></a></strong>：设计对话记录与外部结构化日志结合的跨源联合问答。
               </td>
             </tr>
             <tr>
               <td><strong>多次重复才记为长期习惯</strong><br/>连续 <code>≥ 3</code> 张相同参数的单据才归结为长期习惯，1~2 次偶发单据只作为短期记录</td>
               <td>
-                • <strong><a href="personamem_v3_deep_dive.html" title="点击查看 PersonaMem-v3 论文深度拆解"><code>PersonaMem-v3</code></a></strong>：要求隐式行为在多次事件中重复出现后，才确认为稳定的长期偏好。
+                • <strong><a href="storyline_sub/personamem_v3_deep_dive.html" title="点击查看 PersonaMem-v3 论文总结"><code>PersonaMem-v3</code></a></strong>：要求隐式行为在多次事件中重复出现后，才确认为稳定的长期偏好。
               </td>
             </tr>
             <tr>
               <td><strong>偏好变化与言行不一致</strong><br/>包含习惯保持、逐渐弃用、参数升级、单次临时变动，以及用户口头说法与近期实际单据不一致</td>
               <td>
-                • <strong><a href="personamem_v3_deep_dive.html" title="点击查看 PersonaMem-v3 论文深度拆解"><code>PersonaMem-v3</code></a></strong>：归纳偏好保持、消退、新增与单次偶发四类变化过程。<br/>
-                • <strong><code>LongMemEval</code></strong>：评估长程多会话中用户状态多次更新后的信息覆盖能力。<br/>
-                • <strong><code>DCPM</code></strong>：区分用户的长期稳定偏好与当前上下文的临时偏好。
+                • <strong><a href="storyline_sub/personamem_v3_deep_dive.html" title="点击查看 PersonaMem-v3 论文总结"><code>PersonaMem-v3</code></a></strong>：归纳偏好保持、消退、新增与单次偶发四类变化过程。<br/>
+                • <strong><a href="storyline_sub/longmemeval_deep_dive.html" title="点击查看 LongMemEval 论文总结"><code>LongMemEval</code></a></strong>：评估长程多会话中用户状态多次更新后的信息覆盖能力。<br/>
+                • <strong><a href="storyline_sub/dcpm_deep_dive.html" title="点击查看 DCPM 论文总结"><code>DCPM</code></a></strong>：区分用户的长期稳定偏好与当前上下文的临时偏好。
               </td>
             </tr>
 
@@ -321,14 +349,14 @@
               <td rowspan="2"><strong>3. 时间分布与时间窗关系</strong></td>
               <td><strong>时长随机、日常时间微幅浮动与疏密交替</strong><br/>单据时长在 <code>15min~240min</code> 间变化，日常起止时间带 <code>±10min</code> 浮动，忙时同日多单、闲时多天无单</td>
               <td>
-                • <strong><code>LAMP</code> / <code>Language-TPP</code> / <code>EasyTPP</code></strong>：利用时间点过程建模真实事件流的不规则时间间隔、短时密集触发与长间隔静默。
+                • <strong><a href="storyline_sub/tpp_event_models_deep_dive.html#lamp" title="点击查看 LAMP 论文总结"><code>LAMP</code></a> / <a href="storyline_sub/tpp_event_models_deep_dive.html#language-tpp" title="点击查看 Language-TPP 论文总结"><code>Language-TPP</code></a> / <a href="storyline_sub/tpp_event_models_deep_dive.html#easytpp" title="点击查看 EasyTPP 论文总结"><code>EasyTPP</code></a></strong>：利用时间点过程建模真实事件流的不规则时间间隔、短时密集触发与长间隔静默。
               </td>
             </tr>
             <tr>
               <td><strong>单据时间窗的相邻与重叠</strong><br/>包含两张单据时间段互不重叠、首尾无缝衔接、以及时间段部分重叠冲突</td>
               <td>
-                • <strong><code>Allen's Interval Algebra</code></strong>：定义时间区间的相离、衔接与重叠等基础时间关系。<br/>
-                • <strong><code>RHELM</code></strong>：在多轮日程与工单规划中引入时间冲突检测与顺延调整。
+                • <strong><a href="storyline_sub/allen_interval_algebra_deep_dive.html" title="点击查看 Allen 区间代数详解"><code>Allen's Interval Algebra</code></a></strong>：定义时间区间的相离、衔接与重叠等基础时间关系。<br/>
+                • <strong><a href="storyline_sub/rhelm_deep_dive.html" title="点击查看 RHELM 论文总结"><code>RHELM</code></a></strong>：在多轮日程与工单规划中引入时间冲突检测与顺延调整。
               </td>
             </tr>
 
@@ -337,21 +365,21 @@
               <td rowspan="3"><strong>4. 单据与对话的前后关联</strong></td>
               <td><strong>网元异常单据引发后续对话</strong><br/>前序单据记录网络拥塞与卡顿（<code>PRB=96%, sla_degraded</code>），促使在后续对话中复盘原因并商定提前预热</td>
               <td>
-                • <strong><code>LoCoMo</code> / <code>RHELM</code></strong>：根据前序事件的异常或失败结果，自然触发后续对话中的求助与调整。<br/>
-                • <strong><code>CTBench</code></strong>：结合网络遥测指标与用户对话记录，进行故障原因定位与复盘。
+                • <strong><a href="storyline_sub/locomo_deep_dive.html" title="点击查看 LoCoMo 论文总结"><code>LoCoMo</code></a> / <a href="storyline_sub/rhelm_deep_dive.html" title="点击查看 RHELM 论文总结"><code>RHELM</code></a></strong>：根据前序事件的异常或失败结果，自然触发后续对话中的求助与调整。<br/>
+                • <strong><a href="storyline_sub/ctbench_deep_dive.html" title="点击查看 CTBench 论文总结"><code>CTBench</code></a></strong>：结合网络遥测指标与用户对话记录，进行故障原因定位与复盘。
               </td>
             </tr>
             <tr>
               <td><strong>历史记录与当前提问相隔多步 (<code>5~35</code> 步)</strong><br/>关键历史单据与当前提问之间穿插多张日常单据和其他对话</td>
               <td>
-                • <strong><code>LongMemEval</code> / <a href="personamem_v3_deep_dive.html" title="点击查看 PersonaMem-v3 论文深度拆解"><code>PersonaMem-v3</code></a></strong>：拉长历史记录与当前提问之间的间隔步数，测试模型在长历史中准确找回早期信息的能力。
+                • <strong><a href="storyline_sub/longmemeval_deep_dive.html" title="点击查看 LongMemEval 论文总结"><code>LongMemEval</code></a> / <a href="storyline_sub/personamem_v3_deep_dive.html" title="点击查看 PersonaMem-v3 论文总结"><code>PersonaMem-v3</code></a></strong>：拉长历史记录与当前提问之间的间隔步数，测试模型在长历史中准确找回早期信息的能力。
               </td>
             </tr>
             <tr>
               <td><strong>对话结束后生成网元实测回执</strong><br/>对话中仅确定计划时长和档位，业务结束后由网元回执单记录实际执行时长与真实网络状态</td>
               <td>
-                • <strong><code>RHELM</code></strong>：评估事件状态在对话后发生改变时，模型能否以最新状态为准。<br/>
-                • <strong><code>CTBench</code></strong>：以网元端实际生成的监测回执作为网络状态的客观记录。
+                • <strong><a href="storyline_sub/rhelm_deep_dive.html" title="点击查看 RHELM 论文总结"><code>RHELM</code></a></strong>：评估事件状态在对话后发生改变时，模型能否以最新状态为准。<br/>
+                • <strong><a href="storyline_sub/ctbench_deep_dive.html" title="点击查看 CTBench 论文总结"><code>CTBench</code></a></strong>：以网元端实际生成的监测回执作为网络状态的客观记录。
               </td>
             </tr>
 
@@ -360,14 +388,14 @@
               <td rowspan="2"><strong>5. 多单据指代与个性化表达</strong></td>
               <td><strong>同地点多张单据区分与排除指代</strong><br/>同一天同一场馆有多张不同状态的单据（如顺畅的彩排单与卡顿的正式单），用户按好坏或先后顺序指代</td>
               <td>
-                • <strong><code>RHELM</code></strong>：设计相似事件区分、排除法指代（“不是卡顿那次”）与按特征定位任务，测试检索抗混淆能力。
+                • <strong><a href="storyline_sub/rhelm_deep_dive.html" title="点击查看 RHELM 论文总结"><code>RHELM</code></a></strong>：设计相似事件区分、排除法指代（“不是卡顿那次”）与按特征定位任务，测试检索抗混淆能力。
               </td>
             </tr>
             <tr>
               <td><strong>单据标准名称与用户个性化表达不一致</strong><br/>单据记录标准地名或业务名（如 <code>京礼高速隧道群</code>），用户对话时使用个性化表达（如 <code>去崇礼钻山洞那段</code>）</td>
               <td>
-                • <strong><code>LoCoMo-Plus</code></strong>：让历史记录与测试提问使用完全不同的字面词汇，测试语义理解而非关键词匹配。<br/>
-                • <strong><a href="personamem_v3_deep_dive.html" title="点击查看 PersonaMem-v3 论文深度拆解"><code>PersonaMem-v3</code></a></strong>：模拟用户的个人口语习惯与特定表达方式。
+                • <strong><a href="storyline_sub/locomo_deep_dive.html" title="点击查看 LoCoMo-Plus 论文总结"><code>LoCoMo-Plus</code></a></strong>：让历史记录与测试提问使用完全不同的字面词汇，测试语义理解而非关键词匹配。<br/>
+                • <strong><a href="storyline_sub/personamem_v3_deep_dive.html" title="点击查看 PersonaMem-v3 论文总结"><code>PersonaMem-v3</code></a></strong>：模拟用户的个人口语习惯与特定表达方式。
               </td>
             </tr>
 
@@ -376,14 +404,14 @@
               <td rowspan="2"><strong>6. 参数微调、优先级与按需使用</strong></td>
               <td><strong>复用历史单据并局部修改参数、多规则优先级判断</strong><br/>照搬历史单据大部分参数并只修改当前指定项，叠加场馆提前预热时间，按“当前指令、突发事件、场馆经验、日常默认”的先后顺序决定参数</td>
               <td>
-                • <strong><code>RHELM</code></strong>：评测召回历史记录后结合当前修改条件微调参数，以及在多条规则冲突时按优先级决策的能力。
+                • <strong><a href="storyline_sub/rhelm_deep_dive.html" title="点击查看 RHELM 论文总结"><code>RHELM</code></a></strong>：评测召回历史记录后结合当前修改条件微调参数，以及在多条规则冲突时按优先级决策的能力。
               </td>
             </tr>
             <tr>
-              <td><strong>干扰会话过滤（不强行带入个人记忆）</strong><br/>穿插通用通信知识问答或日常闲聊等干扰会话时，直接正常回答，不生硬套用个人历史保障记录</td>
+              <td><strong>干扰会话过滤（不强行带入个人记忆）</strong><br/>穿插通用通信知识问答或日常闲聊等干扰会话时，直接正常回答，不生直接套用用个人历史保障记录</td>
               <td>
-                • <strong><a href="personamem_v3_deep_dive.html" title="点击查看 PersonaMem-v3 论文深度拆解"><code>PersonaMem-v3</code></a></strong>：评估模型在通用问答场景下克制不乱用个人记忆的能力。<br/>
-                • <strong><code>TWIST</code></strong>：通过构造表面相似但无需调用记忆的样本，测试主动记忆助手的误触发率。
+                • <strong><a href="storyline_sub/personamem_v3_deep_dive.html" title="点击查看 PersonaMem-v3 论文总结"><code>PersonaMem-v3</code></a></strong>：评估模型在通用问答场景下克制不不当调用个人记忆的能力。<br/>
+                • <strong><a href="storyline_sub/twist_deep_dive.html" title="点击查看 TWIST 论文总结"><code>TWIST</code></a></strong>：通过构造表面相似但无需调用记忆的样本，测试主动记忆助手的误触发率。
               </td>
             </tr>
 
@@ -392,15 +420,15 @@
               <td rowspan="2"><strong>7. 噪声过滤与域外话题拒绝</strong></td>
               <td><strong>日常短时背景流量过滤与域外话题拒绝</strong><br/>混入 <code>1~8min</code> 未开启保障的日常刷视频、语音话单；穿插未记录场馆提问或非网络保障的域外话题</td>
               <td>
-                • <strong><a href="personamem_v3_deep_dive.html" title="点击查看 PersonaMem-v3 论文深度拆解"><code>PersonaMem-v3</code></a></strong>：在数据流中混入大量日常偶发浏览记录，测试从背景噪声中筛选有效偏好的能力。<br/>
-                • <strong><code>LongMemEval</code> / <code>RHELM</code></strong>：加入历史中不存在的前提或超出范围的问题，测试模型如实拒答与反问澄清的能力。
+                • <strong><a href="storyline_sub/personamem_v3_deep_dive.html" title="点击查看 PersonaMem-v3 论文总结"><code>PersonaMem-v3</code></a></strong>：在数据流中混入大量日常偶发浏览记录，测试从背景噪声中筛选有效偏好的能力。<br/>
+                • <strong><a href="storyline_sub/longmemeval_deep_dive.html" title="点击查看 LongMemEval 论文总结"><code>LongMemEval</code></a> / <a href="storyline_sub/rhelm_deep_dive.html" title="点击查看 RHELM 论文总结"><code>RHELM</code></a></strong>：加入历史中不存在的前提或超出范围的问题，测试模型如实拒答与反问澄清的能力。
               </td>
             </tr>
             <tr>
               <td><strong>断线重连子单合并与退订无效单过滤</strong><br/>进出隧道或电梯断网重连产生的相邻子单据（如 <code>22min</code> 与 <code>37min</code>）合并为一单计算，并过滤 1 分钟内退订或失败的无效单据</td>
               <td>
-                • <strong><code>RHELM</code></strong>：评测按有效状态筛选历史记录并进行合并统计的能力。<br/>
-                • <strong><code>TelcoAgent-Bench</code></strong>：包含通信异常中断话单过滤与多段会话记录合并处理。
+                • <strong><a href="storyline_sub/rhelm_deep_dive.html" title="点击查看 RHELM 论文总结"><code>RHELM</code></a></strong>：评测按有效状态筛选历史记录并进行合并统计的能力。<br/>
+                • <strong><a href="storyline_sub/telcoagent_bench_deep_dive.html" title="点击查看 TelcoAgent-Bench 论文总结"><code>TelcoAgent-Bench</code></a></strong>：包含通信异常中断话单过滤与多段会话记录合并处理。
               </td>
             </tr>
           </tbody>
@@ -408,6 +436,7 @@
       </div>
     </section>
 
+  
   </main>
 
   <script>

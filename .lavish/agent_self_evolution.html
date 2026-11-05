@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="parchment">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>评测集自进化思路：进化维度与参考论文</title>
+  <style>
+    :root, [data-theme="parchment"] {
+      --bg-page: #FBF7F0;
+      --bg-card: #FFFDF9;
+      --bg-elevated: #F5EFE4;
+      --bg-code: #F2ECE1;
+      --text-main: #2C2520;
+      --text-secondary: #5C5248;
+      --text-muted: #8A7E72;
+      --border-color: #E2D9C8;
+      --border-strong: #C9BBA6;
+      --accent-primary: #8C4A27;
+      --accent-secondary: #2B5B6C;
+      --semantic-red-bg: #FDF2F2;
+      --semantic-red-border: #E5A9A9;
+      --semantic-red-text: #8B2626;
+      --semantic-green-bg: #F1F8F4;
+      --semantic-green-border: #9BC9AE;
+      --semantic-green-text: #1E5E3A;
+      --semantic-blue-bg: #F0F6FA;
+      --semantic-blue-border: #A3C4DC;
+      --semantic-blue-text: #1F4E70;
+      --semantic-amber-bg: #FEF8EC;
+      --semantic-amber-border: #E6C88A;
+      --semantic-amber-text: #7D5211;
+      --shadow-sm: 0 2px 6px rgba(44, 37, 32, 0.05);
+    }
+
+    [data-theme="github"] {
+      --bg-page: #F6F8FA;
+      --bg-card: #FFFFFF;
+      --bg-elevated: #EEF2F6;
+      --bg-code: #F6F8FA;
+      --text-main: #1F2328;
+      --text-secondary: #4D5562;
+      --text-muted: #6E7781;
+      --border-color: #D0D7DE;
+      --border-strong: #AFB8C1;
+      --accent-primary: #0969DA;
+      --accent-secondary: #1A7F37;
+      --semantic-red-bg: #FFEBE9;
+      --semantic-red-border: #FF818266;
+      --semantic-red-text: #CF222E;
+      --semantic-green-bg: #DAFBE1;
+      --semantic-green-border: #4AC26B66;
+      --semantic-green-text: #1A7F37;
+      --semantic-blue-bg: #DDF4FF;
+      --semantic-blue-border: #54AEFF66;
+      --semantic-blue-text: #0969DA;
+      --semantic-amber-bg: #FFF8C5;
+      --semantic-amber-border: #D4A72C66;
+      --semantic-amber-text: #9A6700;
+      --shadow-sm: 0 1px 3px rgba(31, 35, 40, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.65;
+      font-size: 14.5px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+    .topbar-brand { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .topbar-badge {
+      background: var(--accent-primary);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .topbar-title { font-size: 15.5px; font-weight: 700; }
+    .topbar-nav {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .nav-pill {
+      display: inline-block;
+      padding: 5px 11px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      text-decoration: none;
+    }
+    .nav-pill:hover {
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+      text-decoration: none;
+    }
+    .nav-pill.active {
+      background: var(--accent-primary);
+      color: #fff;
+      border-color: var(--accent-primary);
+    }
+    .topbar-controls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+    .btn-group {
+      display: inline-flex;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .btn-toggle {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 5px 11px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-toggle.active { background: var(--accent-primary); color: #fff; }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 20px 24px 48px; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card.hero { border-left: 5px solid var(--accent-primary); }
+
+    h1 { font-size: 20px; font-weight: 800; margin: 0 0 8px; }
+    h2 {
+      font-size: 17px;
+      font-weight: 800;
+      margin: 0 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .summary-box {
+      border-radius: 8px;
+      padding: 13px 16px;
+      border: 1px solid;
+      font-size: 13.5px;
+    }
+    .summary-box.green { background: var(--semantic-green-bg); border-color: var(--semantic-green-border); }
+    .summary-box.blue { background: var(--semantic-blue-bg); border-color: var(--semantic-blue-border); }
+    .summary-box.amber { background: var(--semantic-amber-bg); border-color: var(--semantic-amber-border); }
+    .summary-box strong.box-title { display: block; font-size: 15px; margin-bottom: 8px; }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; background: var(--bg-card); }
+    th {
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      font-weight: 700;
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+      color: var(--text-secondary);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg-elevated); }
+
+    code {
+      font-family: "JetBrains Mono", Consolas, monospace;
+      background: var(--bg-code);
+      border: 1px solid var(--border-color);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: var(--accent-primary);
+    }
+
+    a { color: var(--accent-primary); text-decoration: none; font-weight: 600; }
+    a:hover { text-decoration: underline; }
+
+    @media print {
+      @page { margin: 12mm; }
+      html, body {
+        background: #FFFFFF !important;
+        background-color: #FFFFFF !important;
+      }
+      .topbar { position: static; box-shadow: none; }
+      .topbar-controls { display: none; }
+      .card { box-shadow: none; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">
+      <span class="topbar-badge">BENCHMARK SELF-EVOLUTION</span>
+      <span class="topbar-title">评测集自进化思路：进化维度与参考论文</span>
+    </div>
+    <div class="topbar-controls">
+      <div class="btn-group">
+        <button class="btn-toggle active" id="btn-theme-parchment" onclick="setTheme('parchment')">暖阳米纸</button>
+        <button class="btn-toggle" id="btn-theme-github" onclick="setTheme('github')">GitHub 简洁</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="card hero">
+      <h1>评测集的自进化思路</h1>
+      <p style="margin: 0; color: var(--text-secondary);">
+        固定不变的静态评测集在经过几轮迭代后，容易出现分数饱和、针对固定样本调参过拟合，或覆盖不到新暴露出的薄弱场景。基于联接 Agent 背景和相关论文来看，评测集自进化主要从三个方向展开：<strong>定向扩充薄弱样本</strong>、<strong>组合条件逐步加难</strong>、以及<strong>改写样本并自动重算答案</strong>（<a href="evolution_sub/evolution_sample_walkthrough.html">查看示例 →</a>）：
+      </p>
+      <div class="summary-grid">
+        <div class="summary-box green">
+          <strong style="color: var(--semantic-green-text); font-size: 15px; display: block; margin-bottom: 8px;">① 定向扩充薄弱样本（哪类题容易错，就多生成哪类题） —— 参考 <a href="evolution_sub/autobencher_deep_dive.html" title="点击查看 AutoBencher 论文总结"><code>AutoBencher</code></a>、<a href="evolution_sub/dyval_deep_dive.html#dyval2" title="点击查看 DyVal 2 论文总结"><code>DyVal 2</code></a>、<a href="evolution_sub/ruverbench_deep_dive.html#agent-judge" title="点击查看 Agent-as-a-Judge 论文总结"><code>Agent-as-a-Judge</code></a></strong>
+          <ul style="margin: 0; padding-left: 18px; color: var(--text-secondary);">
+            <li><strong>按失分率调整生成比例</strong>：每轮评测后统计哪类问题失分最多（如“跨午夜时间重叠”、“同地点多单排除”、“口语与单据名称不一致”），下一批生成时自动调高这类题的比例。</li>
+            <li><strong>微调错题参数测边界</strong>：针对模型刚做错的样本，微调它的关键参数（如把提前预热时间从 <code>20min</code> 改为跨整点的 <code>25min</code>、或改变两张单据的时间重叠长度），看模型在什么临界点上容易出错。</li>
+            <li><strong>线上异常与澄清样本回流</strong>：把线上实际触发过慢路径澄清或发生网络拥塞降级的脱敏记录提取出来，补充进评测集。</li>
+          </ul>
+        </div>
+        <div class="summary-box blue">
+          <strong style="color: var(--semantic-blue-text); font-size: 15px; display: block; margin-bottom: 8px;">② 组合条件逐步加难（简单题做熟之后，自动加大难度） —— 参考 <a href="evolution_sub/dyval_deep_dive.html" title="点击查看 DyVal 论文总结"><code>DyVal</code></a>、<a href="evolution_sub/evol_instruct_deep_dive.html" title="点击查看 Evol-Instruct 论文总结"><code>Evol-Instruct</code></a>、<a href="evolution_sub/tau_bench_deep_dive.html#tau2" title="点击查看 τ²-bench 论文总结"><code>τ<sup>2</sup>-bench</code></a>、<a href="evolution_sub/longmemeval_deep_dive.html" title="点击查看 LongMemEval 论文总结"><code>LongMemEval</code></a></strong>
+          <ul style="margin: 0; padding-left: 18px; color: var(--text-secondary);">
+            <li><strong>拉长历史记录与提问的间隔</strong>：当间隔 <code>5</code> 步以内的基础题准确率超过 <code>90%</code> 后，自动把目标单据与当前提问的间隔拉长到 <code>25~35</code> 步，并在中间穿插日常短流量单据和普通问答。</li>
+            <li><strong>同一地点增加相似干扰单</strong>：在同一场馆、相近日期多放几张只有局部状态不同的单据（如顺畅的彩排单 vs. 卡顿的正式单、同主业务不同辅业务），加大筛选难度。</li>
+            <li><strong>把多个条件叠在一起考</strong>：把原本只考单个条件的基础题，组合成同时包含“个性化口语 + 排除卡顿单 + 场馆提前预热 + 时间段重叠”的复合题。</li>
+          </ul>
+        </div>
+        <div class="summary-box amber">
+          <strong style="color: var(--semantic-amber-text); font-size: 15px; display: block; margin-bottom: 8px;">③ 改写样本并自动重算答案（防止过拟合，也不用人工重标答案） —— 参考 <a href="evolution_sub/bse_deep_dive.html" title="点击查看 Benchmark Self-Evolving 论文总结"><code>Benchmark Self-Evolving</code></a>、<a href="evolution_sub/livebench_deep_dive.html" title="点击查看 LiveBench 论文总结"><code>LiveBench</code></a>、<a href="evolution_sub/rhelm_deep_dive.html" title="点击查看 RHELM 论文总结"><code>RHELM</code></a>、<a href="evolution_sub/ruverbench_deep_dive.html" title="点击查看 RuVerBench 论文总结"><code>RuVerBench</code></a></strong>
+          <ul style="margin: 0; padding-left: 18px; color: var(--text-secondary);">
+            <li><strong>换场馆、换口语、平移时间窗</strong>：保持题目逻辑不变，自动替换场馆名称与口语说法、整体平移时间段（如 <code>20:00 → 21:15</code>）、改动时长加减数；如果原题做对、换个名称或时间就做错，说明存在表面过拟合。</li>
+            <li><strong>正反问法互换与快慢路径切换</strong>：把“按顺畅那次保”改成“别按卡顿那次保”，或把无冲突的快路径样本平移时间使其与周三例行单重叠（变成慢路径澄清题），看模型能不能跟着变。</li>
+            <li><strong>用规则自动重算答案并淘汰满分旧题</strong>：不管怎么改时间或叠条件，标准答案（应召回单据、快慢路径、7 个工单槽位）都由底层规则直接算出，不用人工重标；连续多轮全对的简单旧题自动归档，保持评测集精简。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-bottom: 0;">
+      <h2>
+        <span>评测集自进化的六个维度</span>
+        <a href="evolution_sub/evolution_sample_walkthrough.html" style="font-size: 13.5px; font-weight: 600;">查看示例 →</a>
+      </h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 18%;">进化维度</th>
+              <th style="width: 44%;">参考论文</th>
+              <th style="width: 38%;">具体做法与触发条件</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="2"><strong>1. 按错题分布定向扩充</strong></td>
+              <td>
+                • <strong><a href="evolution_sub/autobencher_deep_dive.html" title="点击查看 AutoBencher 论文总结"><code>AutoBencher</code></a></strong>：找出被测模型错误率较高的题型区域，自动生成区分度更高的新测试题。<br/>
+                • <strong><a href="evolution_sub/ruverbench_deep_dive.html#agent-judge" title="点击查看 Agent-as-a-Judge 论文总结"><code>Agent-as-a-Judge</code></a></strong>：通过分步轨迹核查定位具体失分环节，指导下一轮数据生成。
+              </td>
+              <td>
+                <strong>① 按失分率上调对应类型的生成比例</strong><br/>
+                每轮评测后统计各维度的错误率，将失分较多的类型（如“跨午夜时间窗重叠”、“言行不一致”）在下一批生成中的采样比例调高 <code>2~3</code> 倍，重点扩充薄弱样本
+              </td>
+            </tr>
+            <tr>
+              <td>
+                • <strong><a href="evolution_sub/livebench_deep_dive.html" title="点击查看 LiveBench 论文总结"><code>LiveBench</code></a></strong>：持续引入新的外部真实数据更新测试集，避免测试场景固定老化。
+              </td>
+              <td>
+                <strong>② 线上异常单据与澄清记录回流</strong><br/>
+                从线上脱敏流水中筛选触发过慢路径澄清或发生网络拥塞降级的真实记录，提取时间关系与业务组合补充到生成模板中
+              </td>
+            </tr>
+
+            <tr>
+              <td rowspan="2"><strong>2. 错题边界微调与干扰扩充</strong></td>
+              <td>
+                • <strong><a href="evolution_sub/dyval_deep_dive.html#dyval2" title="点击查看 DyVal 2 论文总结"><code>DyVal 2</code></a></strong>：根据被测模型的回答表现，针对性地围绕原题生成变体与追问探测题。
+              </td>
+              <td>
+                <strong>① 微调错题参数测试边界条件</strong><br/>
+                围绕失败样本的参数临界点（如日常开始时间浮动 <code>±10min</code>、连续重复次数 <code>2次 vs. 3次</code>），自动生成一组微调对照样本，看模型具体在哪一边界出错
+              </td>
+            </tr>
+            <tr>
+              <td>
+                • <strong><a href="evolution_sub/twist_deep_dive.html" title="点击查看 TWIST 论文总结"><code>TWIST</code></a></strong>：构造字面相似但无需调用记忆的对照样本，测试误触发率。<br/>
+                • <strong><a href="evolution_sub/bse_deep_dive.html" title="点击查看 Benchmark Self-Evolving 论文总结"><code>Benchmark Self-Evolving</code></a></strong>：在原题上下文中加入语义相近的干扰信息，测试抗干扰能力。
+              </td>
+              <td>
+                <strong>② 增加字面相似的负样本</strong><br/>
+                针对不该用记忆却强行带入、或相似单据混淆的问题，在同场馆或相近词汇下自动构造表面说法相似但无需调用记忆（或需排除）的对照样本
+              </td>
+            </tr>
+
+            <tr>
+              <td rowspan="2"><strong>3. 拉长跨度与增加干扰单</strong></td>
+              <td>
+                • <strong><a href="evolution_sub/dyval_deep_dive.html" title="点击查看 DyVal 论文总结"><code>DyVal</code></a></strong>：基于有向图结构动态调整推理步数与中间干扰节点数量。<br/>
+                • <strong><a href="evolution_sub/longmemeval_deep_dive.html" title="点击查看 LongMemEval 论文总结"><code>LongMemEval</code></a></strong>：支持自由调整历史会话长度与关键记录位置，按需加大记忆跨度。
+              </td>
+              <td>
+                <strong>① 拉长历史记录与当前提问的间隔步数（<code>5 步 → 35 步</code>）</strong><br/>
+                当短间隔样本准确率较高后，自动拉长目标单据与测试提问之间的事件步数，并在中间穿插日常偶发单据与多轮闲聊
+              </td>
+            </tr>
+            <tr>
+              <td>
+                • <strong><a href="evolution_sub/rhelm_deep_dive.html" title="点击查看 RHELM 论文总结"><code>RHELM</code></a></strong>：在长事件流中增加同类事件的出现频率与状态变更，加大状态追踪难度。
+              </td>
+              <td>
+                <strong>② 同一地点增加多张不同状态的单据</strong><br/>
+                把同一场馆下的历史单据从单张扩展为多张不同日期、不同状态（正常、拥塞降级、1分钟内退订、断流切碎子单）的混合记录，加大清洗与筛选难度
+              </td>
+            </tr>
+
+            <tr>
+              <td rowspan="2"><strong>4. 多条件组合加难</strong></td>
+              <td>
+                • <strong><a href="evolution_sub/evol_instruct_deep_dive.html" title="点击查看 Evol-Instruct 论文总结"><code>Evol-Instruct</code></a></strong>：通过逐步增加限制条件与推理步骤，将简单样本自动升级为复杂样本。<br/>
+                • <strong><a href="evolution_sub/tau_bench_deep_dive.html#tau2" title="点击查看 τ²-bench 论文总结"><code>τ<sup>2</sup>-bench</code></a></strong>：通过组合基础原子条件生成可验证的复合任务，控制任务难度。
+              </td>
+              <td>
+                <strong>① 多个单一条件叠成复合题</strong><br/>
+                当单条件基础题得分饱和后，自动把多个条件叠到同一轮提问中（如“口语代称映射 + 排除卡顿单 + 叠加场馆提前 20 分钟预热 + 延长半小时”）
+              </td>
+            </tr>
+            <tr>
+              <td>
+                • <strong><a href="evolution_sub/rhelm_deep_dive.html" title="点击查看 RHELM 论文总结"><code>RHELM</code></a></strong>：组合多条存在先后优先级的规则，评测冲突条件下的决策准确性。
+              </td>
+              <td>
+                <strong>② 多条规则冲突时的优先级组合</strong><br/>
+                在样本中有意同时放入“日常默认档位（<code>P2</code>）”、“场馆经验规则（升 <code>P0</code>）”与“用户当面指定（<code>P1</code>）”，测试多规则冲突时的取舍是否正确
+              </td>
+            </tr>
+
+            <tr>
+              <td rowspan="2"><strong>5. 样本改写与正反条件切换</strong></td>
+              <td>
+                • <strong><a href="evolution_sub/bse_deep_dive.html" title="点击查看 Benchmark Self-Evolving 论文总结"><code>Benchmark Self-Evolving</code></a></strong>：对原题做背景重构与数值替换，通过对比原题与改写题得分检验泛化性。<br/>
+                • <strong><a href="evolution_sub/dyval_deep_dive.html" title="点击查看 DyVal 论文总结"><code>DyVal</code></a></strong>：每次运行动态替换节点数值与文字表述，防止固定题目过拟合。
+              </td>
+              <td>
+                <strong>① 替换场馆、口语与平移时间窗</strong><br/>
+                保持题目内在逻辑不变，自动替换场馆名称与口语词、整体平移时间段（如推迟 <code>75min</code>）、替换时长加减数值；对比原题与改写题得分是否一致
+              </td>
+            </tr>
+            <tr>
+              <td>
+                • <strong><a href="evolution_sub/bse_deep_dive.html" title="点击查看 Benchmark Self-Evolving 论文总结"><code>Benchmark Self-Evolving</code></a></strong>：通过翻转提问条件或改变关键前提生成延伸题，检验模型对条件变化的敏感度。
+              </td>
+              <td>
+                <strong>② 正反问法互换与快慢路径切换</strong><br/>
+                把正向指代（“按周三顺畅那次”）改成排除指代（“别按周五卡顿那次”）；或调整新申请单的开始时间使其从“无冲突（走快路径）”变成“与周期单重叠（走慢路径）”
+              </td>
+            </tr>
+
+            <tr>
+              <td rowspan="2"><strong>6. 自动重算答案与旧题淘汰</strong></td>
+              <td>
+                • <strong><a href="evolution_sub/livebench_deep_dive.html" title="点击查看 LiveBench 论文总结"><code>LiveBench</code></a> / <a href="evolution_sub/ruverbench_deep_dive.html" title="点击查看 RuVerBench 论文总结"><code>RuVerBench</code></a></strong>：由确定性程序从底层状态直接算出标准答案与校验条件，省去人工标注并避免评分误差。
+              </td>
+              <td>
+                <strong>① 底层规则直接重算标准答案</strong><br/>
+                无论样本经过时间平移、名称替换还是多条件叠加，标准答案（应召回单据 ID、快慢路径、最终 7 个工单槽位）都由底层规则直接算出，不用人工重标
+              </td>
+            </tr>
+            <tr>
+              <td>
+                • <strong><a href="evolution_sub/autobencher_deep_dive.html" title="点击查看 AutoBencher 论文总结"><code>AutoBencher</code></a></strong>：按区分度筛选题目，淘汰所有模型都拿满分的饱和题，保持评测集精简。
+              </td>
+              <td>
+                <strong>② 连续满分简单题归档与错题锁入回归集</strong><br/>
+                对连续多轮迭代均 <code>100%</code> 通过、无区分度的简单题自动降低采样或归档；将新发现的高失分题加入固定回归集
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.getElementById('btn-theme-parchment').classList.toggle('active', theme === 'parchment');
+      document.getElementById('btn-theme-github').classList.toggle('active', theme === 'github');
+    }
+  </script>
+</body>
+</html>
