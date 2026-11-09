@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_014",
+  "category": "移动学习与教育协作",
+  "persona_summary": "移动教学人员",
+  "static_profile": {
+    "user_id": "USER_014",
+    "identity": "小学教师，负责班级教学与课外实践活动组织，常在校园户外区域、校际通勤途中及实习点、运动场、社会实践地或临时教学现场开展移动教学，全程以手机4G/5G直接联网，不依赖固网或普通Wi-Fi，便携终端联网时使用手机热点。",
+    "devices": "5G智能手机为主力终端，随身拍摄设备（运动相机/便携摄录设备）为辅助采集终端",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "teacher_mobile_speaker",
+    "speech_style": {
+      "tone": "亲切务实、带点催促感的教师口吻，讲效率也讲稳妥",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先稳住再说"
+      ],
+      "typical_habits": "习惯用简短指令组织学生和同事，先确认网络与进度再推进任务，遇到切换或弱覆盖会强调续传和恢复"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "户外实践课视频答疑与资料上传",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在校园户外区域、运动场或社会实践地组织完实践环节后，于14:00-15:30使用手机移动网络发起视频答疑、查看学生提交并上传教学资料与拍摄素材",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "14:00-15:30",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "720p",
+        "rtt_max": "100ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会",
+          "开会那个"
+        ],
+        "service_aliases": [
+          "开个视频答疑",
+          "连麦对一下",
+          "线上碰一下"
+        ],
+        "resolution_aliases": [
+          "720p",
+          "高清"
+        ],
+        "rtt_aliases": [
+          "100ms以内",
+          "100毫秒以内"
+        ],
+        "duration_aliases": [
+          "一个半小时",
+          "一个半钟头",
+          "90分钟",
+          "一个半小时左右"
+        ],
+        "period_aliases": [
+          "老规矩",
+          "老时间",
+          "按习惯来",
+          "照旧"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "校际实践周户外直播与资料回传",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "校际实践周期间在运动场与社会实践地连续开展户外活动，现场人流密集、移动网络覆盖波动，需在通勤切换与弱覆盖路段保障视频会话连续与大文件续传",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "实践录像复盘短视频回看",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "实践课结束后在通勤途中或临时教学现场回看拍摄的实践录像片段，用于课堂复盘与素材筛选",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "家校即时沟通与作业提交检查",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "在校园户外区域或实习点需要与家长或同事即时沟通、核对作业提交情况时发起视频通话",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时线上教研会议，与日常实践课主线无关",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次观看校外公开课直播，非固定教学任务",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

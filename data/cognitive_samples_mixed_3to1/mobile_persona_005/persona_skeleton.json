@@ -1,0 +1,176 @@
+{
+  "persona_id": "mobile_persona_005",
+  "category": "文化创作与移动演出",
+  "persona_summary": "户外视觉创作者",
+  "static_profile": {
+    "user_id": "USER_005",
+    "identity": "退休音乐人兼户外视觉创作者，长期从事词曲创作与音乐制作，具备丰富现场演出与教学经验，现活跃于街区采风、展览布置、音乐节与街头临时排练现场，通过移动网络完成现场音视频采集、直播、作品上传与团队协作，并乐于向年轻创作者传授经验。",
+    "devices": "主力为5G智能手机，辅助为平板电脑；便携终端需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "抖音",
+      "微信",
+      "哔哩哔哩",
+      "小红书"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "老练随性、带点舞台腔，讲效率也讲感觉，习惯用行话把技术参数说成现场经验。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "这条得留原画"
+      ],
+      "typical_habits": "开工前先确认上行和时延，习惯用口语别名交代画质与时长，遇到弱覆盖会强调续传和快速恢复。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "晨间户外采风直播与素材回传",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在户外演出点、展览布置区或城市采风路线执行晨间现场音视频采集与直播任务，需将现场画面实时推流并同步高清素材给团队与客户。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "08:30-10:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "30ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流",
+          "上直播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "30ms以内",
+          "30毫秒以内",
+          "超低时延"
+        ],
+        "duration_aliases": [
+          "一个半小时",
+          "一个半钟头",
+          "90分钟",
+          "一个半小时左右"
+        ],
+        "period_aliases": [
+          "老规矩",
+          "老时间",
+          "按习惯来",
+          "照旧"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "城市音乐节密集人群现场直播周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "音乐节现场人群密集、基站负载高，户外演出点与临时排练区连接波动明显，需优先保证直播互动低时延与上行稳定。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "排练录像复盘视频通话",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "临时排练或街头活动结束后，与乐队成员或年轻创作者远程复盘录像、对齐编曲与走位。",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "客户设计稿云端同步沟通",
+        "application_name": "飞书",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "展览布置区或采风现场需向客户展示高清设计稿与参考视频，并进行云端素材同步和方案沟通。",
+        "aliases": {
+          "app_aliases": [
+            "feishu",
+            "lark"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时团队语音对齐，非固定主线任务",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次休息时刷短视频找编曲与视觉参考",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

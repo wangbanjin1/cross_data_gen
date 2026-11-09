@@ -1,0 +1,174 @@
+{
+  "persona_id": "mobile_persona_020",
+  "category": "移动生活与现场协作",
+  "persona_summary": "高频移动网络使用者",
+  "static_profile": {
+    "user_id": "USER_020",
+    "identity": "录音棚主理人，专注基督教敬拜专辑制作，常在城市街区、教堂、户外敬拜活动现场及跨区域出行途中进行现场收音、远程协作与素材回传，全程依赖手机4G/5G直连，不依赖固网或普通Wi-Fi。",
+    "devices": "5G智能手机（主力）＋平板电脑（辅助监听与素材预览），便携终端联网时使用手机热点。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "抖音",
+      "钉钉"
+    ],
+    "speech_archetype": "studio_producer_speaker",
+    "speech_style": {
+      "tone": "沉稳务实、带点行业老手的干脆，习惯用录音棚行话沟通，强调稳定与不掉链子。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "这条轨得续上"
+      ],
+      "typical_habits": "布置任务前先确认网络与设备状态，习惯用简短口语下达参数要求，遇到弱覆盖会立刻提醒备份续传。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "敬拜专辑现场收音远程监棚直播",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在教堂或户外敬拜活动现场执行敬拜专辑现场收音任务，需通过手机5G向远程制作人开直播同步监听音轨与画面，并实时对齐录音参数。",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "07:30-10:30",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "720p",
+        "rtt_max": "80ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流监棚",
+          "开直播对轨"
+        ],
+        "resolution_aliases": [
+          "720p",
+          "高清"
+        ],
+        "rtt_aliases": [
+          "80ms以内",
+          "80毫秒以内"
+        ],
+        "duration_aliases": [
+          "三个小时",
+          "三钟头",
+          "180分钟",
+          "3小时"
+        ],
+        "period_aliases": [
+          "老规矩",
+          "老时间",
+          "按习惯来",
+          "照旧"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城敬拜特会现场收音周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城特会期间在大型场馆与户外广场连续收音，场馆内人流密集、户外路段弱覆盖频发，需降低画质并收紧时延以保障远程监棚连续不中断。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "录音素材远程复盘会议",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "收工后在临时停留点与混音师、乐手复盘当日音轨，需共享屏幕对齐剪辑点与音准问题。",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "现场花絮短视频回传",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "敬拜现场间隙拍摄花絮并上传短视频，用于专辑预热与团队同步。",
+        "aliases": {
+          "app_aliases": [
+            "kuaishou",
+            "快手视频"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次与外地乐手视频通话确认编曲细节",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在出行途中观看同行敬拜直播参考编排",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_009",
+  "category": "移动生活与现场协作",
+  "persona_summary": "高频移动网络使用者",
+  "static_profile": {
+    "user_id": "USER_009",
+    "identity": "常年在城市街区、公共活动现场与跨区域出行途中活动的移动内容记录者与现场协作者，随身携带5G智能手机与便携拍摄设备，全程依赖手机移动核心网直接联网，不依赖家庭宽带或固定Wi-Fi，习惯在户外等候区、临时停留点与兴趣活动现场完成信息检索、位置共享、即时通信与短视频上传。",
+    "devices": "5G智能手机（主力）＋随身拍摄设备（辅助），便携终端确需联网时使用手机热点共享",
+    "apps": [
+      "微信",
+      "抖音",
+      "高德地图",
+      "腾讯会议"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "随性直接、带点现场感的口语化表达，喜欢用短句和行话，强调别掉链子",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "这个点必须稳"
+      ],
+      "typical_habits": "习惯用口语别名指代应用与业务，谈网络时爱用低时延、原画这类行话，遇到弱覆盖路段会反复确认能不能续传"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "晚间户外活动现场短视频上传与远程协作",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处城市街区公共活动现场或户外临时停留点，20:00-22:00活动收尾时段需要把现场拍摄的短视频上传并同步远程协作",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "20:00-22:00",
+      "application_name": "抖音",
+      "service_name": "短视频",
+      "preferred_params": {
+        "resolution": "720p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "某音"
+        ],
+        "service_aliases": [
+          "刷短视频",
+          "传片子",
+          "推短视频"
+        ],
+        "resolution_aliases": [
+          "720p",
+          "高清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "两小时",
+          "两个小时"
+        ],
+        "period_aliases": [
+          "老规矩",
+          "老时间",
+          "按习惯来",
+          "照旧"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城兴趣活动现场周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城参加兴趣活动现场，晚间在户外等候区与临时停留点之间移动，弱覆盖路段频繁，需要保证短视频上传与远程协作不断线",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "现场远程协作对齐",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "活动现场需要与远程同伴对齐拍摄计划或素材交接时发起短会",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "通勤途中位置共享与即时通信",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨区域出行途中需要共享位置或临时视频确认现场情况",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次活动现场临时开直播分享",
+        "application_name": "快手",
+        "service_name": "开直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "户外等候时单次刷直播打发时间",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

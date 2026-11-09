@@ -1,0 +1,177 @@
+{
+  "persona_id": "mobile_persona_016",
+  "category": "移动生活与现场协作",
+  "persona_summary": "户外观赛与兴趣社群用户",
+  "static_profile": {
+    "user_id": "USER_016",
+    "identity": "中年高达模型爱好者兼观赛社群活跃分子，常在城市球场周边、观赛集结点、漫展与模型交流活动现场活动，全程依赖手机4G/5G移动核心网直连，不依赖固网或普通Wi-Fi，便携拍摄设备需联网时开手机热点。",
+    "devices": "5G智能手机（主力）＋随身运动相机/口袋云台（辅助拍摄，经手机热点联网）",
+    "apps": [
+      "微信",
+      "抖音",
+      "哔哩哔哩",
+      "腾讯会议",
+      "高德地图"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "爽快直接、带点老玩家腔调，喜欢用行话和简称，讲效率不爱绕弯",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "原画走起",
+        "低时延才稳"
+      ],
+      "typical_habits": "开口先定时间和画质档位，习惯用'老时间''老规矩'指代固定安排，催人时强调'别掉链子'，协作前必说'对齐一下'"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "月初观赛社群直播与远程复盘会",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每月月初1-2号上午9点到10点，例行开启观赛社群月度直播并同步远程复盘会，固定老时间老规矩",
+      "period_type": "monthly",
+      "days": [
+        "1st",
+        "2nd"
+      ],
+      "time_range": "09:00-10:00",
+      "application_name": "哔哩哔哩",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "80ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "小破站",
+          "B站"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流开直播"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "80ms以内",
+          "80毫秒以内"
+        ],
+        "duration_aliases": [
+          "一个钟头",
+          "一小时",
+          "60分钟",
+          "一个小时"
+        ],
+        "period_aliases": [
+          "月初例行",
+          "每月老时间",
+          "月度固定配置",
+          "照旧按月度标准"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城高达模型展与观赛集结周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城参展期间在展馆与球场周边人流密集区活动，基站拥塞、移动切换频繁，需临时降画质保连续覆盖与音视频稳定",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "赛后录像复盘视频通话",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "观赛或模型交流活动结束后，与社群伙伴一对一视频通话复盘现场录像",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "出行途中地图导航与位置共享",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨区域出行途中与集结点伙伴共享实时位置并语音确认路线",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次临时与展会主办方远程对齐布展事项",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在等候区刷现场短视频打发时间",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

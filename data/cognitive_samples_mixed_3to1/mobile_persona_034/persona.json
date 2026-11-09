@@ -1,0 +1,177 @@
+{
+  "persona_id": "mobile_persona_034",
+  "category": "技术研发与现场支持",
+  "persona_summary": "户外内容创作者",
+  "static_profile": {
+    "user_id": "USER_034",
+    "identity": "资深影视制片人，正在探索区块链技术在内容分发中的应用；日常以户外采风、活动现场拍摄短视频与直播为主，同时承担远程终端与日志查询、视频协作、工单处理与文件传输等现场支持工作，活动范围覆盖客户现场、设备机房外围、跨园区通勤路线与外场测试点。",
+    "devices": "主力为5G智能手机，辅以平板电脑；便携终端确需联网时以手机热点共享，全程不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "抖音",
+      "快手",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "outdoor_streamer",
+    "speech_style": {
+      "tone": "干练直接、带现场指挥感，习惯用短句确认进度，语速偏快但条理清晰。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "先保连接再谈画质"
+      ],
+      "typical_habits": "开口先确认网络与设备状态，再谈业务参数；习惯用'老时间''老规矩'指代固定周期任务，对画质和时延喜欢用档位口语而非技术术语。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "月末28-29号夜间直播推流与素材回传冲刺",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每月月末28-29号例行封账冲刺与月度大复盘，20:00-22:00在活动现场或临时工位用手机5G开直播并分段回传原始素材",
+      "period_type": "monthly",
+      "days": [
+        "28th",
+        "29th"
+      ],
+      "time_range": "20:00-22:00",
+      "application_name": "抖音",
+      "service_name": "开直播",
+      "preferred_params": {
+        "resolution": "720p",
+        "rtt_max": "30ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "阿抖",
+          "抖音"
+        ],
+        "service_aliases": [
+          "开播",
+          "推流"
+        ],
+        "resolution_aliases": [
+          "720p",
+          "高清"
+        ],
+        "rtt_aliases": [
+          "30ms以内",
+          "30毫秒以内",
+          "超低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "两小时",
+          "两个小时"
+        ],
+        "period_aliases": [
+          "月初例行",
+          "每月老时间",
+          "月度固定配置",
+          "照旧按月度标准"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨城影视展会现场直播与素材回传周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨城参展期间展馆人流密集、基站拥塞，机房外围与临时工位信号波动，需在弱覆盖路段保持直播不断流并保证日志与素材可靠续传。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "外场测试点远程终端与日志查询",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "外场测试点或故障处置现场需要远程终端、代码与日志查询时发起",
+        "aliases": {
+          "app_aliases": [
+            "dingding",
+            "钉"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨园区通勤途中的视频协作对齐",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨园区通勤路线或临时工位上需要与制作团队视频协作、对齐进度时",
+        "aliases": {
+          "app_aliases": [
+            "kuaishou",
+            "快手视频"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "活动现场间隙单次刷短视频查看互动数据",
+        "application_name": "快手",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "临时工位单次观看行业直播参考竞品内容",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_024",
+  "category": "野外科研与农业作业",
+  "persona_summary": "野外生态调查人员",
+  "static_profile": {
+    "user_id": "USER_024",
+    "identity": "环境科学家，创办了聚焦气候变化健康影响的研究所，长期带队在农田、林区、河岸与生态调查样地开展野外生态调查，沿样线导航定位、采集带坐标照片与观测数据，并在临时观测点分批回传调查记录，同时通过即时通信接受远程指导。",
+    "devices": "主力设备为5G智能手机，辅助便携终端（平板/传感采集棒）确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "哔哩哔哩"
+    ],
+    "speech_archetype": "field_researcher_speaker",
+    "speech_style": {
+      "tone": "干脆务实、带野外作业的紧迫感，习惯用短句确认状态与位置，对网络和电量格外敏感。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "先保数据后保画质",
+        "这段路信号邪门"
+      ],
+      "typical_habits": "出发前先报点位和预计时段，遇到弱覆盖路段会提前说明并约定续传，回传前习惯先问一句“能连上不”。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "午后样线调查数据回传与远程会商",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "身处林区河岸样地至临时观测点之间的偏远采样路线弱覆盖区间，需在13:30-15:00时段内完成样本记录与传感数据上传、现场图片回传，并与研究所同事进行远程指导会商",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "13:30-15:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "720p",
+        "rtt_max": "100ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会",
+          "会议那个"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦会商",
+          "远程指导会"
+        ],
+        "resolution_aliases": [
+          "720p",
+          "高清"
+        ],
+        "rtt_aliases": [
+          "100ms以内",
+          "100毫秒以内"
+        ],
+        "duration_aliases": [
+          "一个半小时",
+          "一个半钟头",
+          "90分钟",
+          "一个半小时左右"
+        ],
+        "period_aliases": [
+          "老规矩",
+          "老时间",
+          "按习惯来",
+          "照旧"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "秋季跨区域生态样地联合调查周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "联合调查周期间队伍进入山区多点位连续采样，午后弱覆盖路段更频繁，需优先保证定位与数据上报稳定、低电量下长时间连接，会议画质临时下调以换取续传与快速恢复。",
+        "preference_override": {
+          "resolution": "540p",
+          "rtt_max": "100ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "现场图片与观测记录即时回传沟通",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在临时观测点整理完一批带坐标照片与观测记录后，需与研究所同事快速核对样本信息并接受远程指导",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "调查方法培训与复盘短视频学习",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "返回驻地或通勤途中，利用碎片时间观看生态调查方法与设备操作复盘短视频",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次任务：在临时观测点用钉钉参加研究所内部行政例会",
+        "application_name": "钉钉",
+        "service_name": "会议",
+        "params": {
+          "resolution": "540p",
+          "rtt_max": "100ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次任务：休息时用微信刷短视频放松",
+        "application_name": "微信",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

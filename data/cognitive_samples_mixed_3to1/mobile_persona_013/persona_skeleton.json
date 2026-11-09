@@ -1,0 +1,178 @@
+{
+  "persona_id": "mobile_persona_013",
+  "category": "公共安全与移动执勤",
+  "persona_summary": "移动执勤人员",
+  "static_profile": {
+    "user_id": "USER_013",
+    "identity": "一线执勤警务人员，具备较强领导与现场决策能力，依据数据分析人员的研判结果在巡逻、值守与突发事件处置中做出关键处置决定；全程以手机移动核心网（4G/5G）直接联网，不依赖家庭宽带、单位固网或普通Wi-Fi，便携终端确需联网时使用手机热点。",
+    "devices": "主力为5G智能手机，辅助为可穿戴设备（执法记录/定位类穿戴终端）",
+    "apps": [
+      "微信",
+      "钉钉",
+      "腾讯会议",
+      "高德地图"
+    ],
+    "speech_archetype": "field_commander_speaker",
+    "speech_style": {
+      "tone": "干脆利落、指令式，带现场指挥的压迫感与节奏感，习惯用短句确认与复述",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "收到请回复",
+        "按这个来"
+      ],
+      "typical_habits": "先复述任务要点再下达分工，习惯用'老时间''老规矩'指代固定安排，对时延和回传稳定性极为敏感，常以'能不能稳定回传'作为方案取舍标准"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "每周夜间值守点视频调度与现场回传复盘",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每周四与周日复盘与专场互动：19:30-21:30在夜间值守点或应急集结区，用微信发起视频通话，向指挥中心与数据分析人员同步现场情况、核对人员车辆信息并复盘当班取证回传质量",
+      "period_type": "weekly",
+      "days": [
+        "Thursday",
+        "Sunday"
+      ],
+      "time_range": "19:30-21:30",
+      "application_name": "微信",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "100ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "微信",
+          "企微隔壁那个绿图标",
+          "老微"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "连麦对一下",
+          "视频点名"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "100ms以内",
+          "100毫秒以内"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "两小时",
+          "两个小时"
+        ],
+        "period_aliases": [
+          "每周老时间",
+          "周例行时段",
+          "照上周的来",
+          "每周固定这个时候"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好：'每周四、周日晚上七点半到九点半，老规矩微信打视讯，1080p原画，时延压在50毫秒以内，别掉链子'"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨区联合专项整治行动周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "多警种跨区联合整治，现场位于道路卡口与临时处置点，人员密集、基站负载高且移动频繁，需在移动过程中保持连续覆盖与即时通信，现场图片与执法记录需稳定回传",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "执勤录像与现场取证复盘会",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "案件处置结束或阶段性行动收尾后，需与数据分析人员及带队领导回放执法记录、核对取证材料时临时发起",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "巡逻途中人员车辆信息即时查询与位置共享",
+        "application_name": "斗鱼直播",
+        "service_name": "开直播",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "巡逻或设卡过程中需向指挥中心实时共享位置、核对可疑人员车辆信息并接受任务调度时发起",
+        "aliases": {
+          "app_aliases": [
+            "douyu",
+            "斗鱼"
+          ],
+          "service_aliases": [
+            "推流",
+            "开播"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次任务场景：休班在家用手机看赛事直播放松",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次任务场景：换班间隙刷几条短视频解乏",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

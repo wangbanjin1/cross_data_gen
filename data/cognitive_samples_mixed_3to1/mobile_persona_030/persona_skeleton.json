@@ -1,0 +1,176 @@
+{
+  "persona_id": "mobile_persona_030",
+  "category": "移动学习与教育协作",
+  "persona_summary": "通勤与实践型学生",
+  "static_profile": {
+    "user_id": "USER_030",
+    "identity": "一名立志成为像Henrietta Hill那样法律界知名人物的年轻女性法学生，日常往返于校园户外区域、校际通勤途中与实习点之间，高频使用手机移动核心网完成在线课程、资料检索、作业提交与小组协作，便携终端需联网时以手机热点兜底，不依赖家庭宽带或固定Wi-Fi。",
+    "devices": "主力为5G智能手机，辅助为便携工作终端（通过手机热点联网）",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "哔哩哔哩",
+      "钉钉"
+    ],
+    "speech_archetype": "law_student_speaker",
+    "speech_style": {
+      "tone": "利落干脆、带点学生气的较真，习惯用法律思维把话说清楚，语速偏快",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "这个得留痕"
+      ],
+      "typical_habits": "讨论前先确认时间地点和任务分工，遇到网络问题会先问'能不能续传'，习惯把口头约定复述一遍确认无误"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "实习点返程通勤途中的晚间小组视频研讨",
+      "storyline_trigger_type": "location_environment",
+      "trigger_condition": "结束实习点实践记录整理后，身处校际通勤途中（地铁/公交沿线及校园户外接驳路段）的移动弱覆盖时段，用手机5G直接联网参加小组视频研讨并同步协作文档",
+      "period_type": "location_driven",
+      "days": [
+        "location_specific"
+      ],
+      "time_range": "20:00-22:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "720p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会",
+          "小企鹅"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦讨论",
+          "开个视频会"
+        ],
+        "resolution_aliases": [
+          "720p",
+          "高清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "俩小时",
+          "两钟头",
+          "两小时",
+          "两个小时"
+        ],
+        "period_aliases": [
+          "老规矩",
+          "老时间",
+          "按习惯来",
+          "照旧"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "模拟法庭备赛周·跨校区集训通勤",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "模拟法庭备赛周期间每日跨校区集训，晚间返程在地铁换乘站与校园户外接驳段遭遇弱覆盖，需在移动中稳定参加备赛组视频会议并上传大体积书状与证据材料",
+        "preference_override": {
+          "resolution": "540p",
+          "rtt_max": "100ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "实习点实践记录与书状大文件回传",
+        "application_name": "抖音",
+        "service_name": "开直播",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在实习点或社会实践地完成实践记录后，于返程途中通过钉钉与导师短会确认材料并回传大文件，弱覆盖路段需支持续传",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "推流",
+            "开播"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "通勤途中观看法律课程回放",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "50ms"
+        },
+        "trigger_condition": "校际通勤途中利用碎片时间观看法律课程回放与案例讲解短视频，切换基站时要求播放连续不中断",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "50ms以内",
+            "50毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "某次在运动场边临时参加学院线上宣讲，单次使用微信视频通话",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "某晚在临时教学现场休息时单次刷小红书看法律职业经验分享直播",
+        "application_name": "小红书",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

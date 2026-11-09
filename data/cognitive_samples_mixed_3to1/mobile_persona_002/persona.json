@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_002",
+  "category": "移动经营与客户服务",
+  "persona_summary": "外访型金融顾问",
+  "static_profile": {
+    "user_id": "USER_002",
+    "identity": "外访型金融顾问，主要协助客户维护资金并办理跨境转账至中国。日常在市集、门店外摆区、客户拜访点、配送路线、展会现场与商圈户外区域流动办公，全程以5G智能手机直连移动核心网，不依赖固网或普通Wi-Fi，便携终端需联网时以手机热点兜底。核心业务包括移动支付、订单处理与库存查询、客户沟通、短视频营销与远程协作。",
+    "devices": "主力设备为5G智能手机，辅助设备为便携平板（通过手机热点联网）",
+    "apps": [
+      "微信",
+      "钉钉",
+      "抖音",
+      "腾讯会议"
+    ],
+    "speech_archetype": "business_advisor",
+    "speech_style": {
+      "tone": "干练务实、语速偏快，习惯用业务行话压缩沟通成本，对网络质量敏感时会直接点名要求",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "这个得留痕"
+      ],
+      "typical_habits": "出发前先确认信号与电量，任务中边核对账户边口头复述关键信息，结束后习惯性补一句'留个记录'；遇到弱覆盖会先切热点再续传，不轻易中断客户流程"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "客户拜访点跨境转账资料核验与电子签署回传",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "外访金融顾问在15:00-16:00客户拜访点现场，通过微信与客户视频通话核对跨境转账账户资料，同步在钉钉上传电子签署文件并确认转账指令回执",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "15:00-16:00",
+      "application_name": "微信",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "100ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "微信",
+          "企微"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "连麦核对",
+          "视频对账"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "100ms以内",
+          "100毫秒以内"
+        ],
+        "duration_aliases": [
+          "一个钟头",
+          "一小时",
+          "60分钟",
+          "一个小时"
+        ],
+        "period_aliases": [
+          "老规矩",
+          "老时间",
+          "按习惯来",
+          "照旧"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨境金融产品展会现场集中签约周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "展会现场人流密集、无线环境拥挤，客户集中咨询跨境转账与资金维护方案，需在展位外摆区连续进行视频核验与电子签署回传，网络上行压力显著增大",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "门店外摆区短视频营销素材拍摄与上传",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "在门店外摆区或商圈户外区域拍摄跨境资金服务宣传短视频，需快速上传发布并检查播放效果",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "配送路线途中远程协作会议",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "外访途中接到团队临时对齐需求，在配送路线停车点通过手机热点接入腾讯会议汇报客户进展",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "展会间隙在展位用手机观看行业直播了解跨境政策解读",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "客户拜访结束后在休息点与同事单次视频通话闲聊",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

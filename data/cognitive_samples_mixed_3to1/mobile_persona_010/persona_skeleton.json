@@ -1,0 +1,177 @@
+{
+  "persona_id": "mobile_persona_010",
+  "category": "科研调查与移动协作",
+  "persona_summary": "外业科研协作人员",
+  "static_profile": {
+    "user_id": "USER_010",
+    "identity": "一名严谨细致的实验物理学家，长期在外业调查点、临时实验现场、博物馆外场与资料采集点之间移动，负责精密测量、观测记录与数据上传，并频繁与团队远程复核与讨论。",
+    "devices": "主力设备为5G智能手机，辅助设备为平板电脑；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "腾讯会议",
+      "微信",
+      "钉钉",
+      "飞书"
+    ],
+    "speech_archetype": "meticulous_researcher",
+    "speech_style": {
+      "tone": "严谨、克制、注重细节，说话喜欢带具体数值和确认性追问",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "数据先别丢",
+        "再核一遍"
+      ],
+      "typical_habits": "习惯在固定时段主动发起远程连线，先确认网络与上传状态，再逐项核对观测数据与影像文件，遇到弱覆盖会立刻要求续传或重连。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "每日下午外勤巡检与团队连线复核",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每天下午16:00-17:30外勤巡检收尾时，在采样点或临时实验现场通过手机5G发起团队视频会议并上传观测数据与影像供复核",
+      "period_type": "daily",
+      "days": [
+        "daily"
+      ],
+      "time_range": "16:00-17:30",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "720p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议",
+          "小企鹅开会"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连线复核",
+          "打视讯对数据",
+          "远程过一遍"
+        ],
+        "resolution_aliases": [
+          "720p",
+          "高清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "一个半小时",
+          "一个半钟头",
+          "90分钟",
+          "一个半小时左右"
+        ],
+        "period_aliases": [
+          "每天这个时候",
+          "老时间",
+          "日常例行",
+          "每天照旧"
+        ]
+      },
+      "declaration_mode": "implicit_induction",
+      "evidence_pattern": "隐式单次保障并随后固化"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "跨校联合外场测量与数据汇交周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "跨校联合外场测量周期间，团队分散在多个临时实验现场与博物馆外场，现场人员密集、弱覆盖路段增多，需频繁视频连线并即时上传原始观测文件与影像。",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "外场采集数据与影像回传复核",
+        "application_name": "腾讯视频",
+        "service_name": "视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "采样点完成一批观测记录后，需要与后方同事快速核对文件完整性并确认上传结果时",
+        "aliases": {
+          "app_aliases": [
+            "tencentvideo",
+            "腾讯"
+          ],
+          "service_aliases": [
+            "视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "跨机构协作文档与远程讨论",
+        "application_name": "咪咕快游",
+        "service_name": "云游戏",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨校通勤途中或资料采集点临时需要与协作方对齐实验方案与文档修改时",
+        "aliases": {
+          "app_aliases": [
+            "migukuaiyou",
+            "咪咕游戏"
+          ],
+          "service_aliases": [
+            "玩云游戏",
+            "免下载游戏"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "午间休息时在通勤车上单次刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "临时观看学术活动线上直播一次",
+        "application_name": "微信",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

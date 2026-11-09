@@ -1,0 +1,176 @@
+{
+  "persona_id": "mobile_persona_007",
+  "category": "移动生活与现场协作",
+  "persona_summary": "高频移动网络使用者",
+  "static_profile": {
+    "user_id": "USER_007",
+    "identity": "休闲棒球爱好者，依赖博客预测经营梦幻棒球联盟；日常在城市街区、公共活动现场与跨区域出行途中活动，全程以手机4G/5G直接联网，不依赖固网或普通Wi-Fi，便携终端联网时开手机热点。",
+    "devices": "5G智能手机（主力）＋可穿戴设备（辅助）",
+    "apps": [
+      "微信",
+      "抖音",
+      "腾讯会议",
+      "小红书"
+    ],
+    "speech_archetype": "casual_fan_mobile_user",
+    "speech_style": {
+      "tone": "随性直白、带点球迷式的调侃，讲效率不爱绕弯子",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "对齐一下",
+        "稳一点就行"
+      ],
+      "typical_habits": "出门前先确认网络和电量，习惯用口语化的简称指代应用和画质档位，遇到弱覆盖会先抱怨一句再要求续传恢复"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "月度梦幻棒球数据盘点与联盟线上沟通",
+      "storyline_trigger_type": "time_periodic",
+      "trigger_condition": "每月逢十（10日、20日）下午三点到六点，例行做梦幻棒球联盟的月度数据盘点与线上沟通，边看博客预测边和联盟伙伴开会核对阵容",
+      "period_type": "monthly",
+      "days": [
+        "10th",
+        "20th"
+      ],
+      "time_range": "15:00-18:00",
+      "application_name": "腾讯会议",
+      "service_name": "会议",
+      "preferred_params": {
+        "resolution": "720p",
+        "rtt_max": "50ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "企鹅会议",
+          "腾讯会议"
+        ],
+        "service_aliases": [
+          "对齐开会",
+          "连麦对阵容",
+          "开个会"
+        ],
+        "resolution_aliases": [
+          "720p",
+          "高清"
+        ],
+        "rtt_aliases": [
+          "50ms以内",
+          "50毫秒以内",
+          "低时延"
+        ],
+        "duration_aliases": [
+          "三个小时",
+          "三钟头",
+          "180分钟",
+          "3小时"
+        ],
+        "period_aliases": [
+          "月初例行",
+          "每月老时间",
+          "月度固定配置",
+          "照旧按月度标准"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "梦幻棒球季后赛冲刺周（跨城观赛＋联盟冲刺沟通）",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "季后赛冲刺周跨城出行观赛，常在球场周边户外等候区与临时停留点用手机热点联网，人流密集、基站负载高且偶有弱覆盖路段，需保证会议与消息稳定续传",
+        "preference_override": {
+          "resolution": "720p",
+          "rtt_max": "30ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "赛前博客预测短视频复盘",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "每次联盟比赛日前在户外等候区或临时停留点刷博客预测与集锦短视频做阵容复盘",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "联盟伙伴即时沟通与位置共享",
+        "application_name": "微信",
+        "service_name": "视频通话",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "跨区域出行途中或现场临时需要和联盟伙伴共享位置、快速视频沟通交易与阵容调整",
+        "aliases": {
+          "app_aliases": [
+            "weixin",
+            "wx"
+          ],
+          "service_aliases": [
+            "打视频",
+            "连线"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "单次在公共活动现场用小红书看直播分享现场氛围",
+        "application_name": "小红书",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次在出行途中用抖音开直播和球友临时聊赛况",
+        "application_name": "抖音",
+        "service_name": "开直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "80ms"
+        }
+      }
+    ]
+  }
+}

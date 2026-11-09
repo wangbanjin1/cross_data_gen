@@ -1,0 +1,175 @@
+{
+  "persona_id": "mobile_persona_023",
+  "category": "野外科研与农业作业",
+  "persona_summary": "野外生态调查人员",
+  "static_profile": {
+    "user_id": "USER_023",
+    "identity": "极端微生物方向微生物学家，长期在偏远山区、林区、河岸与农田样地开展野外生态调查与采样，沿样线导航定位、采集带坐标的照片与观测数据，并在临时观测点分批回传调查记录与传感数据，同时接受远程专家指导。",
+    "devices": "5G智能手机（主力，全程4G/5G直连移动核心网）＋可穿戴设备（定位与体征记录）；便携终端确需联网时使用手机热点，不依赖家庭宽带、公司固网或普通Wi-Fi。",
+    "apps": [
+      "微信",
+      "腾讯会议",
+      "钉钉",
+      "高德地图"
+    ],
+    "speech_archetype": "field_researcher",
+    "speech_style": {
+      "tone": "干脆务实、带野外作业的紧迫感，习惯用简短指令和确认式短句，对信号与电量格外敏感。",
+      "catchphrases": [
+        "老规矩",
+        "别掉链子",
+        "信号还在不在",
+        "先回传再走"
+      ],
+      "typical_habits": "出发前先报点位和时段，现场用口语化简称指代应用与画质档位，回传前习惯确认一遍时延和电量，收工后统一复盘。"
+    }
+  },
+  "dynamic_profile": {
+    "periodic_main_storyline": {
+      "storyline_id": "MAIN_MT_01",
+      "name": "野外样线采样现场远程指导与观测数据回传",
+      "storyline_trigger_type": "task_activity",
+      "trigger_condition": "在偏远采样路线或临时观测点完成样线导航定位与样本采集后，需向后方实验室专家发起视频通话，实时展示样本与显微观察画面并回传带坐标的观测记录",
+      "period_type": "task_driven",
+      "days": [
+        "task_specific"
+      ],
+      "time_range": "15:00-16:00",
+      "application_name": "微信",
+      "service_name": "视频通话",
+      "preferred_params": {
+        "resolution": "1080p",
+        "rtt_max": "80ms"
+      },
+      "aliases": {
+        "app_aliases": [
+          "微信",
+          "微讯"
+        ],
+        "service_aliases": [
+          "打视讯",
+          "连麦看样本",
+          "视频对一下"
+        ],
+        "resolution_aliases": [
+          "1080p原画",
+          "1080p",
+          "超清"
+        ],
+        "rtt_aliases": [
+          "80ms以内",
+          "80毫秒以内"
+        ],
+        "duration_aliases": [
+          "一个钟头",
+          "一小时",
+          "60分钟",
+          "一个小时"
+        ],
+        "period_aliases": [
+          "老规矩",
+          "老时间",
+          "按习惯来",
+          "照旧"
+        ]
+      },
+      "declaration_mode": "explicit_declaration",
+      "evidence_pattern": "显式口述固定偏好"
+    },
+    "scenario_events": [
+      {
+        "event_id": "EVT_2026_01",
+        "name": "高山极端环境样地集中采样周",
+        "start_time": "2026年11月01日00时00分",
+        "end_time": "2026年11月10日23时59分",
+        "scene_description": "连续多日在高海拔弱覆盖样地作业，基站距离远、山体遮挡严重，临时观测点仅靠手机热点支撑多设备，电量与信号双重紧张，需优先保证定位与数据上报链路稳定。",
+        "preference_override": {
+          "resolution": "540p",
+          "rtt_max": "80ms"
+        }
+      }
+    ],
+    "sub_storylines": [
+      {
+        "storyline_id": "SUB_01",
+        "name": "样地影像与显微画面远程会诊",
+        "application_name": "腾讯会议",
+        "service_name": "会议",
+        "preferred_params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        },
+        "trigger_condition": "遇到疑似新菌株或培养异常，需与实验室团队共享显微画面并逐帧讨论时",
+        "aliases": {
+          "app_aliases": [
+            "tencentmeeting",
+            "会议通"
+          ],
+          "service_aliases": [
+            "开会",
+            "进会议室"
+          ],
+          "resolution_aliases": [
+            "720p",
+            "高清"
+          ],
+          "rtt_aliases": [
+            "100ms以内",
+            "100毫秒以内"
+          ]
+        }
+      },
+      {
+        "storyline_id": "SUB_02",
+        "name": "调查记录与传感数据分批回传",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "preferred_params": {
+          "resolution": "1080p",
+          "rtt_max": "80ms"
+        },
+        "trigger_condition": "临时观测点汇总当日样本记录与传感数据，需向项目组口头汇报并同步现场照片时",
+        "aliases": {
+          "app_aliases": [
+            "douyin",
+            "阿抖"
+          ],
+          "service_aliases": [
+            "看短视频",
+            "刷视频"
+          ],
+          "resolution_aliases": [
+            "1080p原画",
+            "1080p"
+          ],
+          "rtt_aliases": [
+            "80ms以内",
+            "80毫秒以内"
+          ]
+        }
+      }
+    ],
+    "distractor_pool": [
+      {
+        "distractor_id": "DIST_01",
+        "scenario": "收工后在临时驻点刷短视频放松",
+        "application_name": "抖音",
+        "service_name": "短视频",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        }
+      },
+      {
+        "distractor_id": "DIST_02",
+        "scenario": "单次观看同行野外采样直播",
+        "application_name": "哔哩哔哩",
+        "service_name": "看直播",
+        "params": {
+          "resolution": "720p",
+          "rtt_max": "100ms"
+        }
+      }
+    ]
+  }
+}
